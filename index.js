@@ -1,7 +1,12 @@
 const app = require('./app'); // Import the main app from app.js
 
-// You can add additional setup code here if needed
+// Define the port for the application
+const PORT = process.env.PORT || 3000;
 
 // Optionally, you could run database migrations or seed your database here
+// Example: await runMigrations(); or await seedDatabase();
 
-// The app is already listening for connections in app.js, so nothing more is needed here.
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});

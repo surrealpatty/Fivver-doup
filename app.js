@@ -14,10 +14,10 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-    secret: process.env.JWT_SECRET,
+    secret: process.env.JWT_SECRET || 'defaultSecret', // Add a default secret for development
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to true in production if using HTTPS
+    cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production if using HTTPS
 }));
 
 // Serve static files from the public directory
@@ -32,15 +32,26 @@ app.use('/users', userRoutes);
 app.use('/', authRoutes); // For registration and login
 
 // Database synchronization
-sequelize.sync()
-    .then(() => {
-        console.log('Database synchronized');
-    })
-    .catch(err => {
+const syncDatabase = async () => {
+    try {
+        await sequelize.sync();
+        console.log('Database synchronized successfully.');
+    } catch (err) {
         console.error('Error synchronizing database:', err);
-    });
+    }
+};
 
 // Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+const startServer = () => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+};
+
+// Initialize the app
+const init = async () => {
+    await syncDatabase(); // Sync the database before starting the server
+    startServer();
+};
+
+init(); // Call the init function to start everything
