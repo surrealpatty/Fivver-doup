@@ -1,20 +1,19 @@
-const express = require('express');
-const authMiddleware = require('../middleware/authMiddleware');
-const User = require('../models/user'); // Adjust the path if necessary
-const router = express.Router();
+const jwt = require('jsonwebtoken');
 
-// Protected Route Example
-router.get('/api/users/profile', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findByPk(req.user.id); // Get user info from the database
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json({ user: { id: user.id, email: user.email } }); // Return user profile
-    } catch (error) {
-        console.error('Error fetching profile:', error);
-        res.status(500).json({ message: 'Server error' });
+const authMiddleware = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+        return res.status(401).send({ message: 'Access denied. No token provided.' });
     }
-});
 
-module.exports = router;  
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = verified; // Optionally attach user data to req
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        res.status(400).send({ message: 'Invalid token.' });
+    }
+};
+
+module.exports = authMiddleware;
