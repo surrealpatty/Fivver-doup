@@ -1,10 +1,48 @@
-const app = require('./app'); // Import the main app from app.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const path = require('path');
+const { sequelize } = require('./config/database');
+const authRoutes = require('./routes/auth');
+const authMiddleware = require('./middleware/authMiddleware');
+require('dotenv').config();
 
-// Define the port for the application
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Optionally, you could run database migrations or seed your database here
-// Example: await runMigrations(); or await seedDatabase();
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true in production if using HTTPS
+}));
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Routes
+app.use('/auth', authRoutes); // Authentication routes
+
+// Example of a protected route
+app.get('/profile', authMiddleware, (req, res) => {
+    res.json({ message: `Welcome User ${req.userId}` });
+});
+
+// Database synchronization
+sequelize.sync()
+    .then(() => {
+        console.log('Database synchronized');
+    })
+    .catch(err => {
+        console.error('Error synchronizing database:', err);
+    });
 
 // Start the server
 app.listen(PORT, () => {
