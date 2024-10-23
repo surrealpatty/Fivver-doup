@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "your_dev_password",
+    "database": "fivver_doup",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "your_test_password",
+    "database": "fivver_doup_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "your_prod_password",
+    "database": "fivver_doup_prod",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
