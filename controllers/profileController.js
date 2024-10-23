@@ -1,23 +1,42 @@
-const User = require('../models/user');
+// controllers/profileController.js
+const { User } = require('../models'); // Adjust the path according to your project structure
 
-exports.getUserProfile = async (req, res) => {
+// Get user profile
+exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.id);
-        res.render('profile', { user });
+        const userId = req.user.id; // Assuming the user ID is stored in req.user by the middleware
+        const user = await User.findByPk(userId, { attributes: ['id', 'username', 'email', 'createdAt'] });
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        res.status(200).json({ user });
     } catch (error) {
-        console.error('Error fetching user profile:', error);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ message: 'Internal server error.', error });
     }
 };
 
-exports.updateUserProfile = async (req, res) => {
+// Update user profile
+exports.updateProfile = async (req, res) => {
+    const userId = req.user.id; // Get user ID from the authenticated user
+
+    const { username, email } = req.body;
+
     try {
-        const { name, email, profilePicture } = req.body;
-        const user = await User.findByPk(req.user.id);
-        await user.update({ name, email, profilePicture });
-        res.redirect('/profile');
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Update user details
+        user.username = username || user.username;
+        user.email = email || user.email;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Profile updated successfully.', user });
     } catch (error) {
-        console.error('Error updating user profile:', error);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ message: 'Internal server error.', error });
     }
 };
