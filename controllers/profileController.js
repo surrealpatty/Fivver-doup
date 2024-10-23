@@ -1,42 +1,34 @@
-// controllers/profileController.js
-const { User } = require('../models'); // Adjust the path according to your project structure
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); // Make sure you have bcrypt installed for password hashing
+const { User } = require('../models/user'); // Adjust the path as necessary
 
-// Get user profile
-exports.getProfile = async (req, res) => {
+// User login function
+exports.login = async (req, res) => {
+    const { username, password } = req.body;
+
     try {
-        const userId = req.user.id; // Assuming the user ID is stored in req.user by the middleware
-        const user = await User.findByPk(userId, { attributes: ['id', 'username', 'email', 'createdAt'] });
+        // Find the user by username
+        const user = await User.findOne({ where: { username } });
         
         if (!user) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json({ user });
+        // Compare the password with the stored hash
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        // Create and sign the JWT token
+        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
+            expiresIn: '1h' // Token expiration time
+        });
+
+        res.json({ token });
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error.', error });
+        console.error('Error logging in:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
-// Update user profile
-exports.updateProfile = async (req, res) => {
-    const userId = req.user.id; // Get user ID from the authenticated user
-
-    const { username, email } = req.body;
-
-    try {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found.' });
-        }
-
-        // Update user details
-        user.username = username || user.username;
-        user.email = email || user.email;
-
-        await user.save();
-
-        res.status(200).json({ message: 'Profile updated successfully.', user });
-    } catch (error) {
-        res.status(500).json({ message: 'Internal server error.', error });
-    }
-};
