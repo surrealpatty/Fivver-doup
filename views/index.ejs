@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fivver Doup</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS -->
+    <script src="/js/script.js" defer></script> <!-- Link to your JavaScript -->
+</head>
+<body>
+    <header>
+        <h1>Welcome to Fivver Doup</h1>
+    </header>
+
+    <main>
+        <section id="registration">
+            <h2>Register</h2>
+            <form id="registrationForm" action="/users/register" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit">Register</button>
+            </form>
+        </section>
+
+        <section id="login">
+            <h2>Login</h2>
+            <form id="loginForm" action="/users/login" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="loginUsername" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="loginPassword" name="password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Fivver Doup. All rights reserved.</p>
+    </footer>
+</body>
+</html>
