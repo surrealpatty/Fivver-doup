@@ -21,8 +21,10 @@ const testConnection = async () => {
     }
 };
 
-// Call the test function
-testConnection();
+// Call the test function if this file is run directly
+if (require.main === module) {
+    testConnection();
+}
 
 // Export the Sequelize instance for use in other modules
 module.exports = sequelize; // Exporting just the sequelize instance is sufficient

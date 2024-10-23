@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const sequelize = require('./config/database'); // Adjusted to import sequelize instance directly
+const sequelize = require('./config/database'); // Ensure this imports the sequelize instance
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 require('dotenv').config();
@@ -32,6 +32,11 @@ app.set('views', path.join(__dirname, 'views'));
 // Routes
 app.use('/', authRoutes);
 app.use('/', profileRoutes);
+
+// Add a root route for better user experience
+app.get('/', (req, res) => {
+    res.send('Welcome to the Fiverr Clone API!'); // Or render a view if you have one
+});
 
 // Synchronize database and start server
 const startServer = async () => {
