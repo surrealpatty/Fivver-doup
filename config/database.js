@@ -1,14 +1,21 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config');
+const config = require('./config/config'); // Make sure this path is correct
 
 const environment = process.env.NODE_ENV || 'development';
 const dbConfig = config[environment];
+
+// Check if the database config is defined
+if (!dbConfig) {
+    console.error(`No configuration found for environment: ${environment}`);
+    process.exit(1); // Exit if no config found
+}
 
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
 });
 
+// Function to test the database connection
 const testConnection = async () => {
     try {
         await sequelize.authenticate();
@@ -18,6 +25,7 @@ const testConnection = async () => {
     }
 };
 
+// Run the connection test
 testConnection();
 
 module.exports = sequelize;
