@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config'); // Ensure this points to the correct config file
+const config = require('./config/config'); // Ensure this points to the correct config file
 
 // Determine the environment (development, production, etc.)
 const environment = process.env.NODE_ENV || 'development';
