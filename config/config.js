@@ -1,7 +1,7 @@
 module.exports = {
   development: {
-      username: 'your_db_username',
-      password: 'your_db_password',
+      username: 'fivver_doup', // Your actual database username
+      password: 'new_password', // Your actual database password
       database: 'fivver_doup_db',
       host: 'localhost',
       dialect: 'mysql',
