@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database');
+const sequelize = require('../config/database'); // Directly import the sequelize instance
 
 class User extends Model {}
 
@@ -27,7 +27,7 @@ User.init({
         allowNull: true,
     },
 }, {
-    sequelize,
+    sequelize, // Pass the sequelize instance correctly
     modelName: 'User',
 });
 
