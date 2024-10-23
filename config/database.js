@@ -1,7 +1,8 @@
+// config/database.js
 const { Sequelize } = require('sequelize');
-const config = require('./config/config'); // Make sure this path is correct
+const config = require('./config'); // Adjust the path if needed
 
-const environment = process.env.NODE_ENV || 'development';
+const environment = process.env.NODE_ENV || 'development'; // Default to development
 const dbConfig = config[environment];
 
 // Check if the database config is defined
