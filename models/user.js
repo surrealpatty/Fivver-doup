@@ -1,33 +1,25 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Directly import the sequelize instance
+const sequelize = require('../config/database');
 
 class User extends Model {}
 
 User.init({
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true,
+        allowNull: false,
     },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    profilePicture: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
 }, {
-    sequelize, // Pass the sequelize instance correctly
+    sequelize,
     modelName: 'User',
 });
 

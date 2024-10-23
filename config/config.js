@@ -1,10 +1,10 @@
 module.exports = {
   development: {
-      username: "your_db_username",
-      password: "your_db_password",
-      database: "fiverr_clone",
-      host: "127.0.0.1",
-      dialect: "mysql",
+      username: 'your_db_username',
+      password: 'your_db_password',
+      database: 'fivver_doup_db',
+      host: 'localhost',
+      dialect: 'mysql',
   },
-  // Add production settings as needed
+  // Add production configuration if needed
 };

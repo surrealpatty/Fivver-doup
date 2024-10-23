@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const sequelize = require('./config/database'); // Ensure this imports the sequelize instance
+const sequelize = require('./config/database');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 require('dotenv').config();
@@ -16,12 +16,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Session setup (optional, if you plan to use sessions)
+// Session setup
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' } // Use secure cookies in production
+    cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
 // Static files and view engine setup
@@ -33,15 +33,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/', authRoutes);
 app.use('/', profileRoutes);
 
-// Add a root route for better user experience
-app.get('/', (req, res) => {
-    res.send('Welcome to the Fiverr Clone API!'); // Or render a view if you have one
-});
-
 // Synchronize database and start server
 const startServer = async () => {
     try {
-        await sequelize.sync(); // Ensure the database is synced before starting the server
+        await sequelize.sync();
         console.log('Database synchronized');
         app.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);

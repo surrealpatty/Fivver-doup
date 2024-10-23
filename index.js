@@ -1,5 +1,7 @@
-const app = require('./app');
+const app = require('./app'); // Import the app
+const PORT = process.env.PORT || 3000;
 
-// You can add additional setup code here if needed
-
-// The app is already listening for connections in app.js, so nothing more is needed here.
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
