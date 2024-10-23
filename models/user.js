@@ -1,5 +1,7 @@
+// models/user.js
+
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Correct database configuration import
+const { sequelize } = require('../config/database'); // Correctly import your database configuration
 
 class User extends Model {}
 
