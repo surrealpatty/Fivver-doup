@@ -1,14 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/Service'); // Ensure the path is correct
+const { body, validationResult } = require('express-validator'); // For input validation
+
+// Middleware for input validation
+const serviceValidationRules = [
+    body('title').notEmpty().withMessage('Title is required'),
+    body('description').notEmpty().withMessage('Description is required'),
+    body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
+];
 
 // Create a new service
-router.post('/', async (req, res) => {
+router.post('/', serviceValidationRules, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const newService = await Service.create(req.body);
         res.status(201).json(newService);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: 'Error creating service: ' + error.message });
     }
 });
 
@@ -18,7 +31,7 @@ router.get('/', async (req, res) => {
         const services = await Service.findAll();
         res.status(200).json(services);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error fetching services: ' + error.message });
     }
 });
 
@@ -32,12 +45,17 @@ router.get('/:id', async (req, res) => {
             res.status(404).json({ error: 'Service not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error fetching service: ' + error.message });
     }
 });
 
 // Update a service by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', serviceValidationRules, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const [updated] = await Service.update(req.body, {
             where: { id: req.params.id },
@@ -49,7 +67,7 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({ error: 'Service not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error updating service: ' + error.message });
     }
 });
 
@@ -65,7 +83,7 @@ router.delete('/:id', async (req, res) => {
             res.status(404).json({ error: 'Service not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error deleting service: ' + error.message });
     }
 });
 
