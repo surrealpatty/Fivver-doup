@@ -100,22 +100,37 @@ router.get('/profile', authenticateToken, async (req, res) => {
 });
 
 // Route to create a new service
-router.post('/services', authenticateToken, async (req, res) => {
-    const { title, description, price, category } = req.body;
+router.post('/services',
+    authenticateToken,
+    [
+        check('title', 'Title is required').notEmpty(),
+        check('description', 'Description is required').notEmpty(),
+        check('price', 'Price must be a number').isNumeric(),
+        check('category', 'Category is required').notEmpty(),
+    ],
+    async (req, res) => {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-    try {
-        const newService = await Service.create({
-            title,
-            description,
-            price,
-            category,
-            userId: req.user.id, // Assuming `req.user.id` is available from the authenticated token
-        });
-        res.status(201).json(newService);
-    } catch (error) {
-        console.error('Error creating service:', error);
-        res.status(500).json({ message: 'Failed to create service' });
+        const { title, description, price, category } = req.body;
+
+        try {
+            const newService = await Service.create({
+                title,
+                description,
+                price,
+                category,
+                userId: req.user.id, // Assuming `req.user.id` is available from the authenticated token
+            });
+            res.status(201).json(newService);
+        } catch (error) {
+            console.error('Error creating service:', error);
+            res.status(500).json({ message: 'Failed to create service' });
+        }
     }
-});
+);
 
 module.exports = router; // Ensure this line is present

@@ -1,7 +1,9 @@
 const express = require('express');
-const usersRouter = require('./routes/users'); // Existing user routes
-const profileRouter = require('./routes/profile'); // Profile routes
-const servicesRouter = require('./routes/services'); // New service routes
+const dotenv = require('dotenv'); // For managing environment variables
+const apiRouter = require('./routes/api'); // Import the combined API routes
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000; // Define the port
@@ -9,10 +11,8 @@ const PORT = process.env.PORT || 3000; // Define the port
 // Middleware
 app.use(express.json()); // Parse JSON requests
 
-// Use the routes
-app.use('/api/users', usersRouter); // Ensure usersRouter is correctly defined
-app.use('/api/profile', profileRouter); // Ensure profileRouter is correctly defined
-app.use('/api/services', servicesRouter); // Ensure servicesRouter is correctly defined
+// Use the combined routes
+app.use('/api', apiRouter); // Mount the API routes at /api
 
 // Handle 404 errors for undefined routes
 app.use((req, res, next) => {
@@ -27,5 +27,5 @@ app.use((err, req, res, next) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`); // Change for clarity
 });
