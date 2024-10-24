@@ -1,29 +1,95 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// routes/services.js
+const express = require('express');
+const Service = require('../models/service');
+const router = express.Router();
+const authenticateToken = require('../middleware/auth'); // Ensure your authentication middleware is imported
 
-class Service extends Model {}
+// Create a Service
+router.post('/', authenticateToken, async (req, res) => {
+    const { title, description, price, category } = req.body;
 
-Service.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    price: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-    },
-}, {
-    sequelize,
-    modelName: 'Service',
+    try {
+        const newService = await Service.create({
+            title,
+            description,
+            price,
+            category,
+            userId: req.user.id, // Ensure this matches your user ID property
+        });
+        res.status(201).json(newService);
+    } catch (error) {
+        console.error('Error creating service:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
-module.exports = Service;
+// Get All Services
+router.get('/', async (req, res) => {
+    try {
+        const services = await Service.findAll();
+        res.json(services);
+    } catch (error) {
+        console.error('Error retrieving services:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get a Specific Service
+router.get('/:id', async (req, res) => {
+    try {
+        const service = await Service.findByPk(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+        res.json(service);
+    } catch (error) {
+        console.error('Error retrieving service:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update a Service
+router.put('/:id', authenticateToken, async (req, res) => {
+    const { title, description, price, category } = req.body;
+
+    try {
+        const service = await Service.findByPk(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        // Ensure only the service owner can update
+        if (service.userId !== req.user.id) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+
+        await service.update({ title, description, price, category });
+        res.json(service);
+    } catch (error) {
+        console.error('Error updating service:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a Service
+router.delete('/:id', authenticateToken, async (req, res) => {
+    try {
+        const service = await Service.findByPk(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        // Ensure only the service owner can delete
+        if (service.userId !== req.user.id) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+
+        await service.destroy();
+        res.status(204).send();
+    } catch (error) {
+        console.error('Error deleting service:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+module.exports = router;
