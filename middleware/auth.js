@@ -1,10 +1,13 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
+const JWT_SECRET = config.JWT_SECRET; // Access secret from config
+const JWT_EXPIRATION = config.JWT_EXPIRATION || '1h'; // Set default expiration if not defined
+
 // Middleware to generate a JWT token
 exports.generateToken = (userId) => {
-    return jwt.sign({ id: userId }, config.JWT_SECRET, { // Access secret from config
-        expiresIn: config.JWT_EXPIRATION, // Access expiration from config
+    return jwt.sign({ id: userId }, JWT_SECRET, {
+        expiresIn: JWT_EXPIRATION, // Access expiration from config
     });
 };
 
@@ -16,9 +19,9 @@ exports.verifyToken = (req, res, next) => {
         return res.status(403).json({ message: 'No token provided' });
     }
 
-    jwt.verify(token, config.JWT_SECRET, (err, decoded) => { // Use the correct config key for secret
+    jwt.verify(token, JWT_SECRET, (err, decoded) => { // Use the correct config key for secret
         if (err) {
-            return res.status(401).json({ message: 'Unauthorized' });
+            return res.status(401).json({ message: 'Unauthorized', error: err.message });
         }
         req.userId = decoded.id; // Store user ID in request for future use
         next(); // Proceed to the next middleware or route handler
