@@ -1,18 +1,14 @@
+// models/user.js
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 class User extends Model {}
 
 User.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    email: {
+    username: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
+        unique: true,
     },
     password: {
         type: DataTypes.STRING,
