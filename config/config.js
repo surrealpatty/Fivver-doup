@@ -1,18 +1,19 @@
-// config/config.js
 module.exports = {
   development: {
-      username: 'root', // Update with your MySQL username
-      password: 'X^SE4Jzp$qfd1Fs2qfT*', // Update with your MySQL password
-      database: 'fivver_doup_db', // Your database name
-      host: 'localhost', // Database host
-      dialect: 'mysql', // Database dialect (mysql, sqlite, postgres, etc.)
+    username: process.env.DB_USERNAME || 'root', // Use environment variable or default to 'root'
+    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Environment variable for the password
+    database: process.env.DB_NAME || 'fivver_doup_db', // Environment variable or default to database name
+    host: process.env.DB_HOST || 'localhost', // Environment variable for the host
+    dialect: 'mysql', // Database dialect
   },
   production: {
-      username: 'root', // Update with your production MySQL username
-      password: 'X^SE4Jzp$qfd1Fs2qfT*', // Update with your production MySQL password
-      database: 'fivver_doup_db', // Your production database name
-      host: 'localhost', // Production database host
-      dialect: 'mysql', // Production database dialect
+    username: process.env.DB_USERNAME || 'root', // Same for production environment
+    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*',
+    database: process.env.DB_NAME || 'fivver_doup_db',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
   },
-  // Add more environments if needed
+  jwt: {
+    secret: process.env.JWT_SECRET || 'yourSuperSecretKeyHere' // Add JWT secret here for token verification
+  }
 };
