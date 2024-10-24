@@ -11,6 +11,10 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, config[process.env.NODE_ENV].jwt.secret, (err, decoded) => {
         if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return res.status(401).json({ message: 'Token expired' });
+            }
+            console.error('JWT verification error:', err);
             return res.status(401).json({ message: 'Unauthorized' });
         }
         req.user = decoded; // Assuming `decoded` contains user information

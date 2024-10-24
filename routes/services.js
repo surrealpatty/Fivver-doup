@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Service = require('../models/service');
+const Service = require('../models/service'); // Ensure this path is correct
 const authenticateToken = require('../middleware/authenticateToken');
 
 // Route to create a new service
@@ -22,4 +22,4 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router; // Ensure this line is present
