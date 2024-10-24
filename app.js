@@ -13,10 +13,15 @@ app.use(bodyParser.json()); // Parse JSON requests
 app.use('/api/users', usersRouter);
 app.use('/api/profile', profileRouter); // Ensure the path is correct
 
+// Handle 404 errors for undefined routes
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Route not found' });
+});
+
 // Error handling middleware (optional but recommended)
 app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack trace
-    res.status(500).json({ message: 'Something broke!' }); // Send a generic error response
+    console.error('Error:', err.stack); // Log the error stack trace
+    res.status(500).json({ message: 'Something broke!', error: err.message });
 });
 
 // Start the server
