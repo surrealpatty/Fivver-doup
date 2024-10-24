@@ -1,22 +1,14 @@
-const express = require('express');
+// handlers/userHandlers.js
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const authenticateToken = require('../middleware/auth'); // Ensure you have this middleware
-const router = express.Router();
+const User = require('../models/user'); // Ensure the path is correct
 
 // User Registration
-router.post('/register', async (req, res) => {
+exports.register = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Check if the user already exists
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(409).json({ message: 'User already exists' });
-        }
-
-        // Hash the password and create the new user
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await User.create({ email, password: hashedPassword });
         res.status(201).json({ message: 'User created', userId: newUser.id });
@@ -24,10 +16,10 @@ router.post('/register', async (req, res) => {
         console.error('Registration error:', error);
         res.status(500).json({ message: 'Server error' });
     }
-});
+};
 
 // User Login
-router.post('/login', async (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -41,7 +33,6 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        // Generate JWT token
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
@@ -51,13 +42,12 @@ router.post('/login', async (req, res) => {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
-});
+};
 
 // Example of a Protected Route
-router.get('/profile', authenticateToken, async (req, res) => {
+exports.getProfile = async (req, res) => {
     try {
-        // Use req.userId set by authenticateToken middleware
-        const user = await User.findByPk(req.user.id); // Ensure the middleware sets req.user correctly
+        const user = await User.findByPk(req.userId); // Ensure req.userId is set by your middleware
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -66,6 +56,4 @@ router.get('/profile', authenticateToken, async (req, res) => {
         console.error('Profile retrieval error:', error);
         res.status(500).json({ message: 'Server error' });
     }
-});
-
-module.exports = router;
+};
