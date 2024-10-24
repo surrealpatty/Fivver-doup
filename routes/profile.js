@@ -1,10 +1,10 @@
 const express = require('express');
-const authMiddleware = require('../middleware/authMiddleware'); // Ensure this is correct
-const User = require('../models/user'); // Adjust the path if necessary
+const { authenticateToken } = require('../middleware/authMiddleware'); // Ensure this is the correct import for the middleware
+const { User } = require('../models/user'); // Use destructuring to import User model if using Sequelize
 const router = express.Router();
 
 // Protected Route for User Profile
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get('/profile', authenticateToken, async (req, res) => {
     try {
         // Fetch user from database using the ID from the authMiddleware
         const user = await User.findByPk(req.user.id);
