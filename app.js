@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const usersRouter = require('./routes/users'); // Existing user routes
 const profileRouter = require('./routes/profile'); // Profile routes
+const servicesRouter = require('./routes/services'); // New service routes
 
 const app = express();
 const PORT = process.env.PORT || 3000; // Define the port
@@ -12,6 +13,7 @@ app.use(bodyParser.json()); // Parse JSON requests
 // Use the routes
 app.use('/api/users', usersRouter);
 app.use('/api/profile', profileRouter); // Ensure the path is correct
+app.use('/api/services', servicesRouter); // Added services routes
 
 // Handle 404 errors for undefined routes
 app.use((req, res, next) => {
