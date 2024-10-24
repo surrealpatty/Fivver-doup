@@ -23,10 +23,14 @@ Service.init({
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: { // Assuming you have a User model, this adds a foreign key constraint
+            model: 'Users',
+            key: 'id',
+        },
     },
 }, {
     sequelize,
     modelName: 'Service',
 });
 
-module.exports = Service; // Ensure this line is present
+module.exports = Service;
