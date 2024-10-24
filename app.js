@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Set your JWT secret in .env file
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Ensure you set this in your .env file
 
 // Middleware
 app.use(express.json()); // To parse JSON requests
