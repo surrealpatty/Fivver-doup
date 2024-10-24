@@ -1,6 +1,4 @@
-// routes/services.js
 const express = require('express');
-const Service = require('../models/service');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth'); // Ensure your authentication middleware is imported
 
