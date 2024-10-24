@@ -1,35 +1,31 @@
-// models/user.js
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database'); // Adjust the path as needed
 
 class User extends Model {}
 
-User.init(
-    {
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true, // Ensure username is unique
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true, // Ensure email is unique
-            validate: {
-                isEmail: true, // Validate that the input is a valid email
-            },
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false, // Ensure password is required
-        },
+User.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
-    {
-        sequelize, // Pass the connection instance
-        modelName: 'User', // Model name
-        tableName: 'users', // Table name in the database
-        timestamps: true, // Adds createdAt and updatedAt fields
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
-);
+}, {
+    sequelize,
+    modelName: 'User',
+    timestamps: true // This ensures createdAt and updatedAt are added
+});
 
-module.exports = User; // Export the User model
+module.exports = User;
