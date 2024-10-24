@@ -1,10 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // Ensure the path is correct
-const Service = require('../models/service'); // Ensure the path is correct
-const { check, validationResult } = require('express-validator'); // For input validation
-const authenticateToken = require('../middleware/authenticateToken'); // Middleware for token authentication
+const { check, validationResult } = require('express-validator'); // Input validation
+const User = require('../models/user'); // Ensure path is correct
+const Service = require('../models/service'); // Ensure path is correct
+const authenticateToken = require('../middleware/authenticateToken'); // Authentication middleware
 
 const router = express.Router();
 
@@ -12,13 +12,12 @@ const router = express.Router();
 router.post(
     '/register',
     [
-        // Validate the input fields
+        // Input validation
         check('username', 'Username is required').notEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
     ],
     async (req, res) => {
-        // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -40,10 +39,10 @@ router.post(
             const newUser = await User.create({
                 username,
                 email,
-                password: hashedPassword, // Store the hashed password
+                password: hashedPassword, // Store hashed password
             });
 
-            // Respond with user info (avoid sending password)
+            // Respond with user info, excluding password
             res.status(201).json({
                 message: 'User created successfully',
                 user: {
@@ -86,13 +85,15 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Example of a Protected Route for User Profile
+// Protected Profile Route
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.id); // Use req.user.id set by the middleware
+        const user = await User.findByPk(req.user.id); // Use req.user.id from the middleware
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+
+        // Send user data (without password)
         res.json({ id: user.id, username: user.username, email: user.email });
     } catch (error) {
         console.error('Profile retrieval error:', error);
@@ -100,8 +101,9 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
-// Route to create a new service
-router.post('/services', 
+// Route to create a new service (Protected)
+router.post(
+    '/services',
     authenticateToken,
     [
         check('title', 'Title is required').notEmpty(),
@@ -110,7 +112,6 @@ router.post('/services',
         check('category', 'Category is required').notEmpty(),
     ],
     async (req, res) => {
-        // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -125,7 +126,7 @@ router.post('/services',
                 description,
                 price,
                 category,
-                userId: req.user.id, // Assuming `req.user.id` is available from the authenticated token
+                userId: req.user.id, // The authenticated user's ID
             });
             res.status(201).json(newService);
         } catch (error) {
@@ -135,4 +136,4 @@ router.post('/services',
     }
 );
 
-module.exports = router; // Ensure this line is present
+module.exports = router;
