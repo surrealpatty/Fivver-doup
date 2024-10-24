@@ -1,13 +1,17 @@
 const { Sequelize } = require('sequelize');
 const config = require('./config'); // Adjust the path if necessary
 
+// Set the environment (default to 'development' if NODE_ENV is not set)
+const env = process.env.NODE_ENV || 'development';
+
+// Create a new Sequelize instance using the environment-specific configuration
 const sequelize = new Sequelize(
-    config[process.env.NODE_ENV || 'development'].database,
-    config[process.env.NODE_ENV || 'development'].username,
-    config[process.env.NODE_ENV || 'development'].password,
+    config[env].database,
+    config[env].username,
+    config[env].password,
     {
-        host: config[process.env.NODE_ENV || 'development'].host,
-        dialect: config[process.env.NODE_ENV || 'development'].dialect,
+        host: config[env].host,
+        dialect: config[env].dialect,
     }
 );
 
