@@ -84,7 +84,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
         }
 
         await service.destroy();
-        res.status(204).send();
+        res.status(204).send(); // No content response
     } catch (error) {
         console.error('Error deleting service:', error);
         res.status(500).json({ message: 'Server error' });
