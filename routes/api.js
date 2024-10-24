@@ -2,8 +2,10 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user'); // Adjust the path if necessary
+const Service = require('../models/service'); // Ensure this path is correct
 const { check, validationResult } = require('express-validator'); // For input validation
-const authenticateToken = require('../middleware/authenticateToken'); // Ensure you have this middleware
+const authenticateToken = require('../middleware/authenticateToken'); // Middleware for token authentication
+
 const router = express.Router();
 
 // User Registration Route
@@ -83,10 +85,10 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Example of a Protected Route
+// Example of a Protected Route for User Profile
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findByPk(req.userId); // Use req.userId set by the middleware
+        const user = await User.findByPk(req.user.id); // Use req.user.id set by the middleware
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -97,4 +99,23 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+// Route to create a new service
+router.post('/services', authenticateToken, async (req, res) => {
+    const { title, description, price, category } = req.body;
+
+    try {
+        const newService = await Service.create({
+            title,
+            description,
+            price,
+            category,
+            userId: req.user.id, // Assuming `req.user.id` is available from the authenticated token
+        });
+        res.status(201).json(newService);
+    } catch (error) {
+        console.error('Error creating service:', error);
+        res.status(500).json({ message: 'Failed to create service' });
+    }
+});
+
+module.exports = router; // Ensure this line is present

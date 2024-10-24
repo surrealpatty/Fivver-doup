@@ -10,9 +10,9 @@ const PORT = process.env.PORT || 3000; // Define the port
 app.use(express.json()); // Parse JSON requests
 
 // Use the routes
-app.use('/api/users', usersRouter);
-app.use('/api/profile', profileRouter); // Ensure the path is correct
-app.use('/api/services', servicesRouter); // Added services routes
+app.use('/api/users', usersRouter); // Ensure usersRouter is correctly defined
+app.use('/api/profile', profileRouter); // Ensure profileRouter is correctly defined
+app.use('/api/services', servicesRouter); // Ensure servicesRouter is correctly defined
 
 // Handle 404 errors for undefined routes
 app.use((req, res, next) => {
