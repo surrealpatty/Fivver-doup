@@ -7,6 +7,7 @@ const sequelize = require('./config/database'); // Ensure this path is correct
 const authRoutes = require('./routes/auth'); // Adjust based on your folder structure
 const profileRoutes = require('./routes/profile'); // Adjust based on your folder structure
 const usersRouter = require('./routes/users'); // Ensure this is included
+const servicesRouter = require('./routes/services'); // New services router
 require('dotenv').config();
 
 const app = express(); // Initialize Express app
@@ -33,6 +34,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Use the routes
 app.use('/api/users', usersRouter); // User routes
 app.use('/api', profileRoutes); // Profile routes
+app.use('/api/services', servicesRouter); // Service routes
 app.use('/', authRoutes); // Auth routes
 
 // Synchronize database and start server
