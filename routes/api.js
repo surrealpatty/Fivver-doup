@@ -1,8 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // Adjust the path if necessary
-const Service = require('../models/service'); // Ensure this path is correct
+const User = require('../models/user'); // Ensure the path is correct
+const Service = require('../models/service'); // Ensure the path is correct
 const { check, validationResult } = require('express-validator'); // For input validation
 const authenticateToken = require('../middleware/authenticateToken'); // Middleware for token authentication
 
@@ -74,6 +74,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
+        // Generate JWT token
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
@@ -100,7 +101,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
 });
 
 // Route to create a new service
-router.post('/services',
+router.post('/services', 
     authenticateToken,
     [
         check('title', 'Title is required').notEmpty(),
@@ -118,6 +119,7 @@ router.post('/services',
         const { title, description, price, category } = req.body;
 
         try {
+            // Create new service
             const newService = await Service.create({
                 title,
                 description,
