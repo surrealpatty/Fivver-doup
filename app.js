@@ -1,18 +1,87 @@
 const express = require('express');
-const dotenv = require('dotenv'); // For managing environment variables
-const apiRouter = require('./routes/api'); // Import the combined API routes
-
-// Load environment variables from .env file
-dotenv.config();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { check, validationResult } = require('express-validator');
+const User = require('./models/user'); // Adjust the path based on your directory structure
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Define the port
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json()); // Parse JSON requests
 
-// Use the combined routes
-app.use('/api', apiRouter); // Mount the API routes at /api
+// User Registration Route
+app.post(
+    '/api/register',
+    [
+        check('username', 'Username is required').notEmpty(),
+        check('email', 'Please include a valid email').isEmail(),
+        check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { username, email, password } = req.body;
+
+        try {
+            // Check if user already exists
+            const existingUser = await User.findOne({ where: { email } });
+            if (existingUser) {
+                return res.status(400).json({ message: 'User already exists' });
+            }
+
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Create new user in the database
+            const newUser = await User.create({
+                username,
+                email,
+                password: hashedPassword,
+            });
+
+            // Respond with user info (avoid sending password)
+            res.status(201).json({
+                message: 'User created successfully',
+                user: {
+                    id: newUser.id,
+                    username: newUser.username,
+                    email: newUser.email,
+                },
+            });
+        } catch (error) {
+            console.error('Error creating user:', error);
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+);
+
+// User Login Route
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign({ id: user.id, email: user.email }, 'your_jwt_secret', { expiresIn: '1h' });
+
+        res.status(200).json({ token });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Handle 404 errors for undefined routes
 app.use((req, res, next) => {
@@ -21,11 +90,11 @@ app.use((req, res, next) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error('Error:', err.stack); // Log the error stack trace
-    res.status(500).json({ message: 'Something broke!', error: err.message });
+    console.error('Error:', err.stack);
+    res.status(500).json({ message: 'Something broke!' });
 });
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`); // Change for clarity
+    console.log(`Server is running on port ${PORT}`);
 });
