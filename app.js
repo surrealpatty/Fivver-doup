@@ -29,12 +29,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Import routes
-const userRoutes = require('./routes/user'); // Adjust the path if necessary
-
-// Use routes
-app.use('/api/users', userRoutes);
-
 // User Registration Route
 app.post(
     '/api/register',
@@ -113,6 +107,16 @@ app.post('/api/login', async (req, res) => {
         console.error('Login error:', error.message);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+// Profile Route (GET)
+app.get('/api/profile', authenticateToken, (req, res) => {
+    // Respond with user profile info
+    res.json({
+        id: req.user.id,       // Assuming `id` is available in `req.user`
+        email: req.user.email, // Assuming `email` is available in `req.user`
+        username: req.user.username // Assuming `username` is available in `req.user`
+    });
 });
 
 // Handle 404 errors for undefined routes
