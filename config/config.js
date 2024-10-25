@@ -1,3 +1,6 @@
+// config.js
+require('dotenv').config(); // Load environment variables from .env file
+
 module.exports = {
     development: {
         username: process.env.DB_USERNAME || 'root',
