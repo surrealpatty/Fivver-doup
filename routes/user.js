@@ -12,7 +12,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Respond with user information
+        // Respond with user information (omit password)
         res.json({
             id: user.id,
             username: user.username,
@@ -28,6 +28,11 @@ router.get('/profile', authenticateToken, async (req, res) => {
 router.put('/profile/update', authenticateToken, async (req, res) => {
     const { username, email } = req.body;
 
+    // Input validation
+    if (!username && !email) {
+        return res.status(400).json({ message: 'No fields to update' });
+    }
+
     try {
         // Find the user in the database
         const user = await User.findByPk(req.user.id);
@@ -35,12 +40,14 @@ router.put('/profile/update', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Update the user information
-        user.username = username || user.username;
-        user.email = email || user.email;
+        // Update the user information if provided
+        if (username) user.username = username;
+        if (email) user.email = email;
+
+        // Save the updated user data
         await user.save();
 
-        res.json({ message: 'Profile updated successfully' });
+        res.json({ message: 'Profile updated successfully', user: { id: user.id, username: user.username, email: user.email } });
     } catch (error) {
         console.error('Error updating profile:', error.message);
         res.status(500).json({ message: 'Server error' });
