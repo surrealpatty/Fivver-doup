@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const User = require('./models/user'); // Adjust the path if necessary
 const dotenv = require('dotenv');
+const sequelize = require('./config'); // Import Sequelize instance
 
 // Load environment variables from .env file
 dotenv.config();
@@ -28,6 +29,15 @@ const authenticateToken = (req, res, next) => {
         next(); // Proceed to the next middleware or route
     });
 };
+
+// Test the database connection when starting the server
+sequelize.authenticate()
+    .then(() => {
+        console.log('Database connection established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 // User Registration Route
 app.post(
@@ -110,12 +120,15 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Profile Route (GET)
-app.get('/api/profile', authenticateToken, (req, res) => {
+app.get('/api/profile', authenticateToken, async (req, res) => {
     // Respond with user profile info
+    const user = await User.findByPk(req.user.id); // Fetch user by ID
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
     res.json({
-        id: req.user.id,       // Assuming `id` is available in `req.user`
-        email: req.user.email, // Assuming `email` is available in `req.user`
-        username: req.user.username // Assuming `username` is available in `req.user`
+        id: user.id,       // User ID
+        email: user.email, // User email
+        username: user.username // User username
     });
 });
 
