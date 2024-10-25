@@ -1,16 +1,16 @@
+// app.js
+const dotenv = require('dotenv');
+dotenv.config(); // Load environment variables
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const User = require('./models/user'); // Adjust the path if necessary
-const dotenv = require('dotenv');
 const sequelize = require('./config'); // Import Sequelize instance
 
-// Load environment variables from .env file
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Use PORT from .env
 const JWT_SECRET = process.env.JWT_SECRET; // Ensure this is set in your .env file
 
 // Middleware
