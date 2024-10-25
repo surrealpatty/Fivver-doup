@@ -1,3 +1,5 @@
+// routes/auth.js
+
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -19,6 +21,8 @@ router.post('/register', async (req, res) => {
         // Hash the password and create the new user
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await User.create({ email, password: hashedPassword });
+        
+        // Send success response
         res.status(201).json({ message: 'User created', userId: newUser.id });
     } catch (error) {
         console.error('Registration error:', error);
@@ -36,6 +40,7 @@ router.post('/login', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Compare the provided password with the hashed password in the database
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
@@ -46,6 +51,7 @@ router.post('/login', async (req, res) => {
             expiresIn: '1h',
         });
 
+        // Send token in response
         res.status(200).json({ token });
     } catch (error) {
         console.error('Login error:', error);
@@ -56,11 +62,13 @@ router.post('/login', async (req, res) => {
 // Example of a Protected Route
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
-        // Use req.userId set by authenticateToken middleware
+        // Ensure req.user is set by authenticateToken middleware
         const user = await User.findByPk(req.user.id); // Ensure the middleware sets req.user correctly
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+        
+        // Send user profile information
         res.json({ id: user.id, email: user.email });
     } catch (error) {
         console.error('Profile retrieval error:', error);
