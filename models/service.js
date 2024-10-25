@@ -25,15 +25,23 @@ Service.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Users', // Adjust this to match your actual user table name
+            model: 'Users', // Make sure this matches your actual user table name
             key: 'id',
         },
     },
 }, {
     sequelize,
     modelName: 'Service',
-    tableName: 'services', // Optionally set a custom table name
-    timestamps: true, // Enable timestamps if you want createdAt and updatedAt fields
+    tableName: 'services', // This will define the table name in your database
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
 });
+
+// If you're using associations (e.g., defining relationships between models), do that here
+Service.associate = (models) => {
+    Service.belongsTo(models.User, {
+        foreignKey: 'userId', // This should match the foreign key in the Service model
+        as: 'user', // This alias can be used when fetching related data
+    });
+};
 
 module.exports = Service; // Ensure this line is present
