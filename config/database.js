@@ -1,17 +1,39 @@
+// config/database.js
 const { Sequelize } = require('sequelize');
-const config = require('./config'); // Adjust the path if necessary
+
+// Configuration object containing database settings for different environments
+const config = {
+    development: {
+        db: {
+            database: process.env.DB_NAME,    // Database name from environment variable
+            username: process.env.DB_USER,    // Database username from environment variable
+            password: process.env.DB_PASSWORD, // Database password from environment variable
+            host: process.env.DB_HOST,         // Database host from environment variable
+            dialect: 'mysql',                   // Database dialect (MySQL)
+        }
+    },
+    production: {
+        db: {
+            database: process.env.DB_NAME,    // Production DB name
+            username: process.env.DB_USER,    // Production DB user
+            password: process.env.DB_PASSWORD, // Production DB password
+            host: process.env.DB_HOST,         // Production DB host
+            dialect: 'mysql',                   // Production DB dialect
+        }
+    }
+};
 
 // Set the environment (default to 'development' if NODE_ENV is not set)
 const env = process.env.NODE_ENV || 'development';
 
 // Create a new Sequelize instance using the environment-specific configuration
 const sequelize = new Sequelize(
-    config[env].db.database,   // Adjusted to use 'db' for config structure
-    config[env].db.username,   // Adjusted to use 'db' for config structure
-    config[env].db.password,   // Adjusted to use 'db' for config structure
+    config[env].db.database,
+    config[env].db.username,
+    config[env].db.password,
     {
-        host: config[env].db.host,         // Adjusted to use 'db' for config structure
-        dialect: config[env].db.dialect,  // Adjusted to use 'db' for config structure
+        host: config[env].db.host,
+        dialect: config[env].db.dialect,
     }
 );
 

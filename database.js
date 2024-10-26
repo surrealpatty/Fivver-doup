@@ -1,10 +1,11 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config(); // Load environment variables
 
 // Update the path according to your directory structure
 const config = require('./config'); // Ensure this path is correct
 
 const environment = process.env.NODE_ENV || 'development';
-const dbConfig = config[environment];
+const dbConfig = config[environment].db; // Access db config correctly
 
 // Check if the database config is defined
 if (!dbConfig) {
@@ -12,6 +13,7 @@ if (!dbConfig) {
     process.exit(1); // Exit if no config found
 }
 
+// Create a new Sequelize instance using the environment-specific configuration
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
