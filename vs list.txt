@@ -1,0 +1,51 @@
+config/config.js
+config/database.js
+controllers/authcontroller.js
+controllers/profileController.js
+docs/API_Documentation.md
+handlers/userHandlers.js
+middleware/auth.js
+middleware/authenticateToken.js
+middleware/authMiddleware.js
+migrations/20241023224026-create-users-table.js
+migrations/20241024023704-create-users.js
+models/service.js
+models/user.js
+my-node-app/node_modules/
+my-node-app/app.js
+my-node-app/package-lock.json
+my-node-app/package.json
+node_modules/
+public/css/responsive.css
+public/css/styles.css
+public/images/services/service1.jpg
+public/images/services/service2.jpg
+public/images/banner.jpg
+public/images/logo.png
+public/js/script.js
+public/js/vendor.js
+public/layout.css
+routes/api.js
+routes/auth.js
+routes/profile.js
+routes/services.js
+routes/user.js
+views/layout.ejs
+views/login.ejs
+views/profile.ejs
+views/register.ejs
+.env
+.gitignore
+.sequelizerc
+app.js
+database.js
+h origin feature-name
+index.js
+newfile.txt
+package-lock.json
+package.json
+README.md
+
+which folders/files should i delete?
+am i missing any folders/files?
+what should be in every folder/file
