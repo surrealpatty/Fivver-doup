@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 307e623b35942ac978cc9a831ba2c73649e8735d surrealpatty <patty@surrealsystems.ca> 1729984348 -0700	branch: Created from HEAD
+307e623b35942ac978cc9a831ba2c73649e8735d 1d2737e80386ed40c3e38d460b618e0fd6ed841d surrealpatty <patty@surrealsystems.ca> 1729984348 -0700	commit: Recreate .gitignore
+1d2737e80386ed40c3e38d460b618e0fd6ed841d 4f281b3681672e30a507410266c48e549d2b2d59 surrealpatty <patty@surrealsystems.ca> 1729984578 -0700	commit: Update .gitignore with additional suggestions and project-specific exclusions
