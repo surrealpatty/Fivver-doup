@@ -2,28 +2,42 @@
 node_modules/                 # Exclude the directory where npm packages are installed
 
 # Logs
-logs/                         # Exclude logs directory
-*.log                         # Exclude all log files
-npm-debug.log*               # Exclude npm debug log files
+logs/                          # Exclude logs directory
+*.log                          # Exclude all log files
+npm-debug.log*                # Exclude npm debug log files
+yarn-debug.log                # Exclude Yarn debug logs
+yarn-error.log                # Exclude Yarn error logs
 
 # Environment variables
-.env                          # Exclude environment variable file (sensitive data)
+.env                           # Exclude environment variable file (sensitive data)
 
 # Build directories
-dist/                         # Exclude distribution build directory
-build/                        # Exclude build directory
+dist/                          # Exclude distribution build directory
+build/                         # Exclude build directory
 
 # Dependency directories
-bower_components/             # Exclude Bower dependency directory (if applicable)
+bower_components/              # Exclude Bower dependency directory (if applicable)
 
 # IDE/Editor specific files
-.vscode/                      # Exclude Visual Studio Code settings
-.idea/                        # Exclude JetBrains IDE settings
+.vscode/                       # Exclude Visual Studio Code settings
+.idea/                         # Exclude JetBrains IDE settings
 
 # OS-specific files
-.DS_Store                     # Exclude macOS metadata files
-Thumbs.db                    # Exclude Windows thumbnail cache files
+.DS_Store                      # Exclude macOS metadata files
+Thumbs.db                     # Exclude Windows thumbnail cache files
 
 # Temporary files
-*.tmp                         # Exclude all temporary files
-*.temp                        # Exclude all temp files
+*.tmp                          # Exclude temporary files
+*.temp                         # Exclude temp files
+*.bak                          # Exclude backup files
+*.orig                         # Exclude original files
+
+# TypeScript
+*.tsbuildinfo                 # Exclude TypeScript build info files
+
+# Coverage reports
+coverage/                     # Exclude coverage reports
+*.lcov                        # Exclude lcov files
+
+# Miscellaneous
+*.swp                         # Exclude swap files from editors
