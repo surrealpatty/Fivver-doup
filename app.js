@@ -21,10 +21,10 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Get the token from Bearer token
 
-    if (!token) return res.sendStatus(401); // If no token, unauthorized
+    if (!token) return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403); // If token invalid, forbidden
+        if (err) return res.status(403).json({ message: 'Invalid token' }); // If token invalid, forbidden
         req.user = user; // Attach user information to request
         next(); // Proceed to the next middleware or route
     });
@@ -37,6 +37,7 @@ sequelize.authenticate()
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err);
+        process.exit(1); // Exit the application if the database connection fails
     });
 
 // User Registration Route
@@ -121,15 +122,20 @@ app.post('/api/login', async (req, res) => {
 
 // Profile Route (GET)
 app.get('/api/profile', authenticateToken, async (req, res) => {
-    // Respond with user profile info
-    const user = await User.findByPk(req.user.id); // Fetch user by ID
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    try {
+        // Respond with user profile info
+        const user = await User.findByPk(req.user.id); // Fetch user by ID
+        if (!user) return res.status(404).json({ message: 'User not found' });
 
-    res.json({
-        id: user.id,       // User ID
-        email: user.email, // User email
-        username: user.username // User username
-    });
+        res.json({
+            id: user.id,       // User ID
+            email: user.email, // User email
+            username: user.username // User username
+        });
+    } catch (error) {
+        console.error('Error fetching profile:', error.message);
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // Handle 404 errors for undefined routes
