@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 const sequelize = require('./config/database'); // Ensure this path is correct
 const User = require('./models/user'); // User model
 const UserProfile = require('./models/UserProfile'); // Ensure this model is correct
@@ -19,6 +20,11 @@ const sequelize = require('./config'); // Import Sequelize instance
 >>>>>>> origin/feature-name
 
 dotenv.config(); // Load environment variables
+=======
+const sequelize = require('./config/database'); // Ensure this path is correct
+const User = require('./models/user'); // User model
+const UserProfile = require('./models/UserProfile'); // Ensure this model is correct
+>>>>>>> feature-update
 
 dotenv.config(); // Load environment variables
 
@@ -37,6 +43,7 @@ const authenticateToken = (req, res, next) => {
     if (!token) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return res.status(401).json({ message: 'No token provided' });
 =======
         return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
@@ -44,10 +51,14 @@ const authenticateToken = (req, res, next) => {
 =======
         return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
 >>>>>>> feature-name
+=======
+        return res.status(401).json({ message: 'No token provided' });
+>>>>>>> feature-update
     }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             return res.status(403).json({ message: 'Invalid token' });
@@ -62,6 +73,12 @@ const authenticateToken = (req, res, next) => {
         req.user = user; // Attach user information to request
         next(); // Proceed to the next middleware or route
 >>>>>>> origin/feature-name
+=======
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+        req.user = user;
+        next();
+>>>>>>> feature-update
     });
 };
 
@@ -74,6 +91,9 @@ sequelize.authenticate()
         console.error('Unable to connect to the database:', err);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feature-update
         process.exit(1);
     });
 
@@ -84,10 +104,13 @@ sequelize.sync({ alter: true })
     })
     .catch((error) => {
         console.error('Error syncing database:', error);
+<<<<<<< HEAD
     });
 
 =======
         process.exit(1); // Exit the application if the database connection fails
+=======
+>>>>>>> feature-update
     });
 
 >>>>>>> origin/feature-name
@@ -181,6 +204,7 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         // Respond with user profile info
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         const user = await User.findByPk(req.user.id);
 =======
         const user = await User.findByPk(req.user.id); // Fetch user by ID
@@ -188,11 +212,15 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
 =======
         const user = await User.findByPk(req.user.id); // Fetch user by ID
 >>>>>>> feature-name
+=======
+        const user = await User.findByPk(req.user.id);
+>>>>>>> feature-update
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         res.json({
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             id: user.id,
@@ -208,6 +236,11 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
             email: user.email, // User email
             username: user.username // User username
 >>>>>>> feature-name
+=======
+            id: user.id,
+            email: user.email,
+            username: user.username
+>>>>>>> feature-update
         });
     } catch (error) {
         console.error('Error fetching profile:', error.message);

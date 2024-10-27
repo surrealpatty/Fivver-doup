@@ -108,6 +108,7 @@ coverage/                     # Exclude coverage reports
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # Project-Specific Exclusions
 # Add any additional files or directories specific to your project below.
@@ -130,6 +131,8 @@ coverage/                     # Exclude coverage reports
 
 # Miscellaneous build artifacts
 >>>>>>> feature-name
+=======
+>>>>>>> feature-update
 *.class                       # Exclude Java class files
 *.o                           # Exclude object files
 *.exe                         # Exclude executables
