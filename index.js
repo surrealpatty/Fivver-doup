@@ -4,9 +4,16 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
+<<<<<<< HEAD
 const sequelize = require('./config/database'); // Ensure this path is correct
 const User = require('./models/user'); // User model
 const UserProfile = require('./models/UserProfile'); // Ensure this model is correct
+
+dotenv.config(); // Load environment variables
+=======
+const User = require('./models/user'); // Ensure this path is correct
+const sequelize = require('./config'); // Import Sequelize instance
+>>>>>>> origin/feature-name
 
 dotenv.config(); // Load environment variables
 
@@ -23,15 +30,26 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
+<<<<<<< HEAD
         return res.status(401).json({ message: 'No token provided' });
+=======
+        return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
+>>>>>>> origin/feature-name
     }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
+<<<<<<< HEAD
             return res.status(403).json({ message: 'Invalid token' });
         }
         req.user = user;
         next();
+=======
+            return res.status(403).json({ message: 'Invalid token' }); // If token invalid, forbidden
+        }
+        req.user = user; // Attach user information to request
+        next(); // Proceed to the next middleware or route
+>>>>>>> origin/feature-name
     });
 };
 
@@ -42,6 +60,7 @@ sequelize.authenticate()
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err);
+<<<<<<< HEAD
         process.exit(1);
     });
 
@@ -54,6 +73,11 @@ sequelize.sync({ alter: true })
         console.error('Error syncing database:', error);
     });
 
+=======
+        process.exit(1); // Exit the application if the database connection fails
+    });
+
+>>>>>>> origin/feature-name
 // Input validation middleware
 const validateRegistration = [
     check('username', 'Username is required').notEmpty(),
@@ -137,15 +161,25 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/profile', authenticateToken, async (req, res) => {
     try {
         // Respond with user profile info
+<<<<<<< HEAD
         const user = await User.findByPk(req.user.id);
+=======
+        const user = await User.findByPk(req.user.id); // Fetch user by ID
+>>>>>>> origin/feature-name
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         res.json({
+<<<<<<< HEAD
             id: user.id,
             email: user.email,
             username: user.username
+=======
+            id: user.id,       // User ID
+            email: user.email, // User email
+            username: user.username // User username
+>>>>>>> origin/feature-name
         });
     } catch (error) {
         console.error('Error fetching profile:', error.message);
