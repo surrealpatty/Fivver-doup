@@ -18,7 +18,10 @@ User.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true, // Ensures the email is unique
+            unique: {
+                args: true,
+                msg: 'Email address already in use!' // Custom error message
+            },
             validate: {
                 isEmail: { msg: 'Please provide a valid email address' } // Validate email format
             },
@@ -45,7 +48,8 @@ User.init(
 // Sync the model with the database (optional, consider using migrations)
 const syncUserModel = async () => {
     try {
-        await sequelize.sync();
+        // You might want to use `force: false` to avoid dropping the table if it already exists
+        await sequelize.sync({ force: false }); // Change this to true only in development if you want to recreate the table
         console.log('User model synced with the database.');
     } catch (error) {
         console.error('Error syncing User model:', error.message);

@@ -4,7 +4,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const User = require('./models/user'); // Adjust the path if necessary
+const User = require('./models/user'); // Ensure this path is correct
 const sequelize = require('./config'); // Import Sequelize instance
 
 dotenv.config(); // Load environment variables
@@ -21,10 +21,14 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Get the token from Bearer token
 
-    if (!token) return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
+    }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Invalid token' }); // If token invalid, forbidden
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' }); // If token invalid, forbidden
+        }
         req.user = user; // Attach user information to request
         next(); // Proceed to the next middleware or route
     });
@@ -124,7 +128,9 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
     try {
         // Respond with user profile info
         const user = await User.findByPk(req.user.id); // Fetch user by ID
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
         res.json({
             id: user.id,       // User ID
