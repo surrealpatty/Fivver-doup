@@ -10,6 +10,7 @@ yarn-error.log                # Exclude Yarn error logs
 
 # Environment variables
 .env                           # Exclude environment variable file (sensitive data)
+.env.local                    # Exclude local environment variable overrides
 
 # Build directories
 dist/                          # Exclude distribution build directory
@@ -41,3 +42,14 @@ coverage/                     # Exclude coverage reports
 
 # Miscellaneous
 *.swp                         # Exclude swap files from editors
+
+# Miscellaneous build artifacts
+*.class                       # Exclude Java class files
+*.o                           # Exclude object files
+*.exe                         # Exclude executables
+
+# npm package lock file
+package-lock.json             # Exclude npm package lock file
+
+# Yarn lock file
+yarn.lock                     # Exclude Yarn lock file
