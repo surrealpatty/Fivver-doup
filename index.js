@@ -4,8 +4,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const User = require('./models/user'); // Ensure this path is correct
-const sequelize = require('./config'); // Import Sequelize instance
+const sequelize = require('./config/database'); // Ensure this path is correct
+const User = require('./models/user'); // User model
+const UserProfile = require('./models/UserProfile'); // Ensure this model is correct
 
 dotenv.config(); // Load environment variables
 
@@ -19,29 +20,38 @@ app.use(express.json()); // To parse JSON requests
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Get the token from Bearer token
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' }); // If no token, unauthorized
+        return res.status(401).json({ message: 'No token provided' });
     }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Invalid token' }); // If token invalid, forbidden
+            return res.status(403).json({ message: 'Invalid token' });
         }
-        req.user = user; // Attach user information to request
-        next(); // Proceed to the next middleware or route
+        req.user = user;
+        next();
     });
 };
 
-// Test the database connection when starting the server
+// Test the database connection
 sequelize.authenticate()
     .then(() => {
         console.log('Database connection established successfully.');
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err);
-        process.exit(1); // Exit the application if the database connection fails
+        process.exit(1);
+    });
+
+// Sync the UserProfile model with the database
+sequelize.sync({ alter: true })
+    .then(() => {
+        console.log('Database synced with UserProfile model');
+    })
+    .catch((error) => {
+        console.error('Error syncing database:', error);
     });
 
 // Input validation middleware
@@ -112,8 +122,8 @@ app.post('/api/login', async (req, res) => {
         // Generate JWT
         const token = jwt.sign(
             { id: user.id, email: user.email },
-            JWT_SECRET, // Use your secret key
-            { expiresIn: '1h' } // Set expiration for the token
+            JWT_SECRET,
+            { expiresIn: '1h' }
         );
 
         res.status(200).json({ token });
@@ -127,15 +137,15 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/profile', authenticateToken, async (req, res) => {
     try {
         // Respond with user profile info
-        const user = await User.findByPk(req.user.id); // Fetch user by ID
+        const user = await User.findByPk(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         res.json({
-            id: user.id,       // User ID
-            email: user.email, // User email
-            username: user.username // User username
+            id: user.id,
+            email: user.email,
+            username: user.username
         });
     } catch (error) {
         console.error('Error fetching profile:', error.message);
