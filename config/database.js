@@ -1,7 +1,4 @@
 const { Sequelize } = require('sequelize');
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 require('dotenv').config(); // Load environment variables from .env file
 
 // Define configuration for different environments
@@ -29,47 +26,6 @@ const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
 // Initialize Sequelize with the selected configuration
-=======
-=======
->>>>>>> feature-name
-require('dotenv').config(); 
-
-=======
-require('dotenv').config(); // Load environment variables from .env file
->>>>>>> feature-update
-
-// Define configuration for different environments
-const config = {
-    development: {
-        database: process.env.DB_NAME || 'default_dev_db',
-        username: process.env.DB_USER || 'default_user',
-        password: process.env.DB_PASSWORD || 'default_password',
-        host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql',
-        logging: console.log, 
-    },
-    production: {
-        database: process.env.DB_NAME,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
-        logging: false, 
-    }
-};
-
-// Determine the current environment and select the appropriate configuration
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env];
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> origin/feature-name
-=======
->>>>>>> feature-name
-=======
-
-// Initialize Sequelize with the selected configuration
->>>>>>> feature-update
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
@@ -83,19 +39,7 @@ sequelize.authenticate()
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err.message);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         process.exit(1); // Exit if unable to connect to the database
-=======
-        process.exit(1); 
->>>>>>> origin/feature-name
-=======
-        process.exit(1); 
->>>>>>> feature-name
-=======
-        process.exit(1); // Exit if unable to connect to the database
->>>>>>> feature-update
     });
 
 module.exports = sequelize;
