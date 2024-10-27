@@ -42,8 +42,6 @@ coverage/                     # Exclude coverage reports
 
 # Miscellaneous
 *.swp                         # Exclude swap files from editors
-
-# Miscellaneous build artifacts
 *.class                       # Exclude Java class files
 *.o                           # Exclude object files
 *.exe                         # Exclude executables

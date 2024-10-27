@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); 
+require('dotenv').config(); // Load environment variables from .env file
 
-
+// Define configuration for different environments
 const config = {
     development: {
         database: process.env.DB_NAME || 'default_dev_db',
@@ -21,22 +21,25 @@ const config = {
     }
 };
 
+// Determine the current environment and select the appropriate configuration
 const env = process.env.NODE_ENV || 'development';
-
 const dbConfig = config[env];
+
+// Initialize Sequelize with the selected configuration
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
     logging: dbConfig.logging,
 });
 
+// Test the database connection
 sequelize.authenticate()
     .then(() => {
         console.log(`Database connection established successfully in ${env} mode.`);
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err.message);
-        process.exit(1); 
+        process.exit(1); // Exit if unable to connect to the database
     });
 
 module.exports = sequelize;
