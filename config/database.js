@@ -1,27 +1,45 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config'); // Adjust the path if necessary
+require('dotenv').config(); // Load environment variables from .env file
 
-// Set the environment (default to 'development' if NODE_ENV is not set)
-const env = process.env.NODE_ENV || 'development';
-
-// Create a new Sequelize instance using the environment-specific configuration
-const sequelize = new Sequelize(
-    config[env].db.database,   // Adjusted to use 'db' for config structure
-    config[env].db.username,   // Adjusted to use 'db' for config structure
-    config[env].db.password,   // Adjusted to use 'db' for config structure
-    {
-        host: config[env].db.host,         // Adjusted to use 'db' for config structure
-        dialect: config[env].db.dialect,  // Adjusted to use 'db' for config structure
+// Define configuration for different environments
+const config = {
+    development: {
+        database: process.env.DB_NAME || 'default_dev_db',
+        username: process.env.DB_USER || 'default_user',
+        password: process.env.DB_PASSWORD || 'default_password',
+        host: process.env.DB_HOST || 'localhost',
+        dialect: 'mysql',
+        logging: console.log, 
+    },
+    production: {
+        database: process.env.DB_NAME,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        dialect: 'mysql',
+        logging: false, 
     }
-);
+};
+
+// Determine the current environment and select the appropriate configuration
+const env = process.env.NODE_ENV || 'development';
+const dbConfig = config[env];
+
+// Initialize Sequelize with the selected configuration
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    logging: dbConfig.logging,
+});
 
 // Test the database connection
 sequelize.authenticate()
     .then(() => {
-        console.log('Database connection established successfully.');
+        console.log(`Database connection established successfully in ${env} mode.`);
     })
     .catch(err => {
-        console.error('Unable to connect to the database:', err);
+        console.error('Unable to connect to the database:', err.message);
+        process.exit(1); // Exit if unable to connect to the database
     });
 
 module.exports = sequelize;

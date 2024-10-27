@@ -1,4 +1,3 @@
-// config.js
 const config = {
     development: {
         db: {
@@ -26,4 +25,22 @@ const config = {
     },
 };
 
+// Validation function to ensure required database configuration keys are set
+const validateConfig = (envConfig) => {
+    const requiredKeys = ['username', 'password', 'database', 'host', 'dialect'];
+    for (const key of requiredKeys) {
+        if (!envConfig[key]) {
+            console.error(`Missing configuration key: ${key}`);
+            process.exit(1); // Exit the process if a required key is missing
+        }
+    }
+};
+
+// Validate configurations for both environments
+validateConfig(config.development.db);
+validateConfig(config.production.db);
+
+// Export the configuration object
 module.exports = config;
+// Temporary comment to force commit
+// This is a test comment
