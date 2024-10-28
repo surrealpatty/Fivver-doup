@@ -19,12 +19,13 @@ fs.readdirSync(__dirname)
         );
     })
     .forEach(file => {
-        const { Service, initService } = require(path.join(__dirname, file));
-        models[Service.name] = Service; // Add model to models object
+        const model = require(path.join(__dirname, file));
+        const modelName = Object.keys(model)[0]; // Get the model name from the exports
+        models[modelName] = model[modelName]; // Add model to models object
 
         // Call the initialization function if it exists
-        if (initService) {
-            initService(sequelize);
+        if (model[`init${modelName}`]) {
+            model[`init${modelName}`](sequelize);
         }
     });
 
