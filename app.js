@@ -1,12 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const sequelize = require('./config/database'); // Path to the Sequelize instance
-const userRoutes = require('./routes/userRoutes'); // Updated user routes import
-const serviceRoutes = require('./routes/servicesRoute'); // Updated service routes import
-const reviewRoutes = require('./routes/review'); // Review routes
-const cors = require('cors'); // Import CORS
-const User = require('./models/user'); // Import User model
-const Service = require('./models/services'); // Import Service model
+const cors = require('cors');
+const sequelize = require('./config/database'); // Sequelize instance
+const userRoutes = require('./routes/userRoutes');
+const serviceRoutes = require('./routes/servicesRoute');
+const reviewRoutes = require('./routes/review');
+const User = require('./models/user');
+const Service = require('./models/services');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -14,8 +14,8 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Use CORS to enable cross-origin resource sharing
-app.use(cors()); // Enable CORS for all routes
+// Enable CORS for all routes
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -23,18 +23,23 @@ app.use(express.json());
 // Middleware to log requests
 app.use((req, res, next) => {
     console.log(`${req.method} request for '${req.url}'`);
-    next(); // Pass control to the next middleware
+    next();
 });
 
-// Set up routes
-app.use('/api/users', userRoutes); // Prefix for user routes
-app.use('/api/reviews', reviewRoutes); // Prefix for review routes
-app.use('/api/services', serviceRoutes); // Prefix for service routes
+// Set up routes with prefixes
+app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/services', serviceRoutes);
 
 // Initialize model associations
 const initializeModels = () => {
-    User.associate({ Service }); // Associate User with Service
-    Service.associate({ User }); // Associate Service with User
+    // Add associations here if more models are associated
+    User.associate = (models) => {
+        User.hasMany(models.Service, { foreignKey: 'userId' });
+    };
+    Service.associate = (models) => {
+        Service.belongsTo(models.User, { foreignKey: 'userId' });
+    };
 };
 
 // Test and synchronize the database connection
@@ -46,8 +51,8 @@ const initializeDatabase = async () => {
         // Initialize model associations
         initializeModels();
 
-        // Synchronize models with the database (optional)
-        await sequelize.sync(); // You can also add { force: true } if you want to reset the database
+        // Sync models with the database
+        await sequelize.sync(); // Use { force: true } if you need to reset tables
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err);
@@ -55,19 +60,16 @@ const initializeDatabase = async () => {
     }
 };
 
-// Call the function to initialize the database
+// Start the database and server
 initializeDatabase().then(() => {
-    // Define the server port
-    const PORT = process.env.PORT || 3000; // Use PORT from environment variables or default to 3000
-
-    // Start the server
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
 });
 
 // Catch-all route for handling 404 errors
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).json({ message: 'Resource not found' });
 });
 
