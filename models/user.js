@@ -2,9 +2,20 @@ const { Model, DataTypes } = require('sequelize');
 
 class User extends Model {
     static associate(models) {
+        // Define association with the Service model
         User.hasMany(models.Service, {
             foreignKey: 'userId',
             as: 'userServices', // Use a unique alias
+            onDelete: 'CASCADE', // Optional: define delete behavior
+            onUpdate: 'CASCADE', // Optional: define update behavior
+        });
+
+        // Define association with the UserProfile model (if applicable)
+        User.hasOne(models.UserProfile, {
+            foreignKey: 'user_id',
+            as: 'profile', // Use a unique alias
+            onDelete: 'CASCADE', // Optional: define delete behavior
+            onUpdate: 'CASCADE', // Optional: define update behavior
         });
     }
 }
