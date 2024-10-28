@@ -1,7 +1,8 @@
-// models/UserProfile.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Adjust path to your database config
+const User = require('./User'); // Import the User model to set up the association
 
+// Define the UserProfile model
 const UserProfile = sequelize.define('UserProfile', {
   userId: {
     type: DataTypes.INTEGER,
@@ -35,6 +36,12 @@ const UserProfile = sequelize.define('UserProfile', {
     type: DataTypes.BOOLEAN,
     defaultValue: false, // Flag for paid profiles
   },
+});
+
+// Define the association with onDelete: 'CASCADE'
+UserProfile.belongsTo(User, {
+  foreignKey: 'userId',
+  onDelete: 'CASCADE', // Enable cascading delete
 });
 
 module.exports = UserProfile;
