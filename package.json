@@ -18,8 +18,8 @@
   "author": "Patty Uren",
   "license": "ISC",
   "dependencies": {
-    "@vue/cli-plugin-router": "^5.1.0",
-    "@vue/cli-plugin-vuex": "^5.1.0",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
@@ -40,10 +40,10 @@
     "vue": "^3.5.12",
     "vue-loader": "^17.4.2",
     "vue-router": "^4.4.5",
-    "vue-template-compiler": "^3.5.12",  // Updated to match vue version
+    "vue-template-compiler": "^2.7.16",  // Keep this compatible with Vue 2.x if you're using Vue 3.x.
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-service": "^5.1.0" // Updated to the latest version
+    "@vue/cli-service": "^5.0.8"
   }
 }
