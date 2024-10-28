@@ -1,11 +1,13 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Ensure this path is correct
-const UserProfile = require('./UserProfile'); // Import UserProfile model
 
 class User extends Model {
     static associate(models) {
         // Define one-to-many association with Service
-        User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
+        User.hasMany(models.Service, {
+            foreignKey: 'userId',
+            as: 'services',
+        });
 
         // Define one-to-one association with UserProfile
         User.hasOne(models.UserProfile, {
