@@ -4,9 +4,9 @@ const { Review, User, Service } = require('../models'); // Import models
 exports.createReview = async (req, res) => {
     try {
         const { rating, comment, serviceId } = req.body;
-        const userId = req.user.id; // Assuming you're using JWT to get the user's ID from the token
+        const userId = req.user.id; // Assuming user ID is retrieved from JWT in the request
 
-        // Check if the service exists before creating a review
+        // Check if the service exists
         const serviceExists = await Service.findByPk(serviceId);
         if (!serviceExists) {
             return res.status(404).json({ error: 'Service not found' });
@@ -17,6 +17,7 @@ exports.createReview = async (req, res) => {
             return res.status(400).json({ error: 'Rating and comment are required' });
         }
 
+        // Create the review
         const review = await Review.create({
             rating,
             comment,
@@ -30,17 +31,18 @@ exports.createReview = async (req, res) => {
     }
 };
 
-// Get reviews for a service
+// Get reviews for a specific service
 exports.getReviewsForService = async (req, res) => {
     try {
         const { serviceId } = req.params;
 
-        // Check if the service exists before fetching reviews
+        // Check if the service exists
         const serviceExists = await Service.findByPk(serviceId);
         if (!serviceExists) {
             return res.status(404).json({ error: 'Service not found' });
         }
 
+        // Fetch reviews for the service with user details
         const reviews = await Review.findAll({
             where: { serviceId },
             include: [{ model: User, as: 'user', attributes: ['id', 'name'] }],
@@ -57,19 +59,20 @@ exports.updateReview = async (req, res) => {
     try {
         const { reviewId } = req.params;
         const { rating, comment } = req.body;
+        const userId = req.user.id; // User ID from JWT
 
+        // Find the review
         const review = await Review.findByPk(reviewId);
         if (!review) {
             return res.status(404).json({ error: 'Review not found' });
         }
 
-        // Ensure the user is authorized to update the review
-        const userId = req.user.id;
+        // Authorization check
         if (review.userId !== userId) {
             return res.status(403).json({ error: 'You do not have permission to update this review' });
         }
 
-        // Validate fields before updating
+        // Update fields if provided
         if (rating !== undefined) review.rating = rating;
         if (comment !== undefined) review.comment = comment;
 
@@ -85,21 +88,22 @@ exports.updateReview = async (req, res) => {
 exports.deleteReview = async (req, res) => {
     try {
         const { reviewId } = req.params;
+        const userId = req.user.id; // User ID from JWT
 
+        // Find the review
         const review = await Review.findByPk(reviewId);
         if (!review) {
             return res.status(404).json({ error: 'Review not found' });
         }
 
-        // Ensure the user is authorized to delete the review
-        const userId = req.user.id;
+        // Authorization check
         if (review.userId !== userId) {
             return res.status(403).json({ error: 'You do not have permission to delete this review' });
         }
 
         await review.destroy();
 
-        return res.status(204).send(); // No content to send back
+        return res.status(204).send(); // No content response
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
