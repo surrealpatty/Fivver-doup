@@ -3,12 +3,12 @@ const config = require('../config/database'); // Adjust the path if necessary
 
 // Initialize Sequelize instance
 const sequelize = new Sequelize(
-    config.DB_NAME,
-    config.DB_USERNAME,
-    config.DB_PASSWORD,
+    config.DB_NAME, // Ensure this exists in your config
+    config.DB_USERNAME, // Ensure this exists in your config
+    config.DB_PASSWORD, // Ensure this exists in your config
     {
-        host: config.DB_HOST,
-        dialect: config.DB_DIALECT, // MySQL or other dialect
+        host: config.DB_HOST, // Ensure this exists in your config
+        dialect: config.DB_DIALECT || 'mysql', // Default to MySQL if not specified
     }
 );
 
