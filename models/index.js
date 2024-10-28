@@ -48,5 +48,6 @@ sequelize.authenticate()
 // Export sequelize instance and models
 module.exports = {
     sequelize,
-    ...models,
+    User: models.User,     // Explicitly export the User model
+    Service: models.Service, // Explicitly export the Service model
 };
