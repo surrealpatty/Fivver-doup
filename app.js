@@ -1,5 +1,3 @@
-// app.js
-
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database'); // Path to the Sequelize instance
@@ -12,7 +10,7 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware to parse JSON
+// Middleware to parse JSON requests
 app.use(express.json());
 
 // Set up routes
