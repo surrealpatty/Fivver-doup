@@ -1,7 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Ensure this path is correct
 
-class User extends Model {}
+class User extends Model {
+    static associate(models) {
+        User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
+    }
+}
 
 // Initialize the User model
 User.init(
@@ -52,23 +56,7 @@ User.init(
     }
 );
 
-// Define associations
-User.associate = (models) => {
-    User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
-};
-
-// Sync the model with the database (optional, consider using migrations)
-const syncUserModel = async () => {
-    try {
-        // Sync the User model with the database
-        await sequelize.sync({ force: false }); // Change to true only in development to recreate the table
-        console.log('User model synced with the database.');
-    } catch (error) {
-        console.error('Error syncing User model:', error.message);
-    }
-};
-
-// Uncomment the line below to sync the model when this file is run
-// syncUserModel();
+// No need to sync the model here
+// Instead, manage syncing in your app.js or migration files.
 
 module.exports = User;

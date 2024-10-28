@@ -3,10 +3,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database'); // Path to the Sequelize instance
-const userRoutes = require('./routes/userRoutes'); // User routes
-const serviceRoutes = require('./routes/serviceRoutes'); // Service routes (if needed)
+const userRoutes = require('./routes/user'); // User routes
+const serviceRoutes = require('./routes/service'); // Service routes
 const reviewRoutes = require('./routes/review'); // Review routes
 const cors = require('cors'); // Import CORS
+const User = require('./models/user'); // Import User model
+const Service = require('./models/services'); // Import Service model
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,7 +31,13 @@ app.use((req, res, next) => {
 // Set up routes
 app.use('/api/users', userRoutes); // Prefix for user routes
 app.use('/api/reviews', reviewRoutes); // Prefix for review routes
-app.use('/api/services', serviceRoutes); // Prefix for service routes (if needed)
+app.use('/api/services', serviceRoutes); // Prefix for service routes
+
+// Initialize model associations
+const initializeModels = () => {
+    User.associate({ Service }); // Associate User with Service
+    Service.associate({ User }); // Associate Service with User
+};
 
 // Test and synchronize the database connection
 const initializeDatabase = async () => {
@@ -37,7 +45,10 @@ const initializeDatabase = async () => {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
 
-        // Synchronize models with the database
+        // Initialize model associations
+        initializeModels();
+
+        // Synchronize models with the database (optional)
         await sequelize.sync(); 
         console.log('Database synchronized successfully.');
     } catch (err) {
@@ -69,4 +80,4 @@ app.listen(PORT, () => {
 });
 
 // Export the app instance for testing purposes
-module.exports = app; 
+module.exports = app;
