@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Service = require('../models/service'); // Ensure path to the model is correct
+const Service = require('../models/services'); // Ensure path to the model is correct
 const { body, validationResult } = require('express-validator'); // For input validation
 const authMiddleware = require('../middlewares/authMiddleware'); // Ensure this is the correct path
 
