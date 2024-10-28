@@ -1,4 +1,3 @@
-// controllers/reviewController.js
 const { Review, User, Service } = require('../models'); // Import models
 
 // Create a new review
@@ -11,6 +10,11 @@ exports.createReview = async (req, res) => {
         const serviceExists = await Service.findByPk(serviceId);
         if (!serviceExists) {
             return res.status(404).json({ error: 'Service not found' });
+        }
+
+        // Validate required fields
+        if (!rating || !comment) {
+            return res.status(400).json({ error: 'Rating and comment are required' });
         }
 
         const review = await Review.create({
@@ -59,14 +63,15 @@ exports.updateReview = async (req, res) => {
             return res.status(404).json({ error: 'Review not found' });
         }
 
-        // Ensure the user is authorized to update the review (optional)
+        // Ensure the user is authorized to update the review
         const userId = req.user.id;
         if (review.userId !== userId) {
             return res.status(403).json({ error: 'You do not have permission to update this review' });
         }
 
-        review.rating = rating;
-        review.comment = comment;
+        // Validate fields before updating
+        if (rating !== undefined) review.rating = rating;
+        if (comment !== undefined) review.comment = comment;
 
         await review.save();
 
@@ -86,7 +91,7 @@ exports.deleteReview = async (req, res) => {
             return res.status(404).json({ error: 'Review not found' });
         }
 
-        // Ensure the user is authorized to delete the review (optional)
+        // Ensure the user is authorized to delete the review
         const userId = req.user.id;
         if (review.userId !== userId) {
             return res.status(403).json({ error: 'You do not have permission to delete this review' });
@@ -94,7 +99,7 @@ exports.deleteReview = async (req, res) => {
 
         await review.destroy();
 
-        return res.status(204).send();
+        return res.status(204).send(); // No content to send back
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
