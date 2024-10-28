@@ -1,54 +1,39 @@
-const { Sequelize } = require('sequelize');
-const config = require('../config/database'); // Adjust the path if necessary
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-// Initialize Sequelize instance
-const sequelize = new Sequelize(
-    config.DB_NAME,
-    config.DB_USERNAME,
-    config.DB_PASSWORD,
-    {
-        host: config.DB_HOST,
-        dialect: config.DB_DIALECT || 'mysql',
-    }
-);
+// Create an object to hold the models
+const models = {};
 
-// Import models
-const { User, initUser } = require('./user'); 
-const { Service, initService } = require('./services');
+// Dynamically import all model files
+fs.readdirSync(__dirname)
+    .filter(file => {
+        return (
+            file.indexOf('.') !== 0 &&
+            file !== basename &&
+            file.slice(-3) === '.js'
+        );
+    })
+    .forEach(file => {
+        const { Service, initService } = require(path.join(__dirname, file));
+        models[Service.name] = Service; // Add model to models object
 
-// Initialize models and store them in an object
-const models = {
-    User: initUser(sequelize),
-    Service: initService(sequelize),
-};
+        // Call the initialization function if it exists
+        if (initService) {
+            initService(sequelize);
+        }
+    });
 
-// Log initialized models for debugging
+// Call associate method for each model
 Object.keys(models).forEach(modelName => {
-    console.log(`Model initialized: ${modelName}`, models[modelName] ? '✓' : '✗');
-});
-
-// Set up model associations
-Object.keys(models).forEach(modelName => {
-    if (models[modelName] && models[modelName].associate) {
+    if (models[modelName].associate) {
         models[modelName].associate(models);
-        console.log(`Associations set up for model: ${modelName}`);
-    } else if (!models[modelName]) {
-        console.error(`Model ${modelName} is undefined`);
-    } else {
-        console.warn(`No associate method found for model: ${modelName}`);
     }
 });
 
-// Optional: Sync models with the database (uncomment if you want to sync at startup)
-// sequelize.sync({ alter: true })
-
-// Test the database connection
-sequelize.authenticate()
-    .then(() => console.log('Database connected successfully.'))
-    .catch(err => console.error('Unable to connect to the database:', err));
-
-// Export sequelize instance and models
-module.exports = {
-    sequelize,
-    ...models,
-};
+// Export the models and the sequelize instance
+module.exports = { sequelize, models };
