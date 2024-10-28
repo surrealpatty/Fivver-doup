@@ -32,11 +32,11 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/services', serviceRoutes);
 
 // Initialize models
-initUser(sequelize); // Initialize User model
-initService(sequelize); // Initialize Service model
+const initModels = () => {
+    initUser(sequelize); // Initialize User model
+    initService(sequelize); // Initialize Service model
 
-// Initialize model associations
-const initializeModels = () => {
+    // Initialize model associations
     User.associate({ Service });
     Service.associate({ User });
 };
@@ -47,8 +47,7 @@ const initializeDatabase = async () => {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
 
-        // Initialize model associations
-        initializeModels();
+        initModels(); // Call to initialize models and associations
 
         // Sync models with the database
         await sequelize.sync(); // Use { force: true } if you need to reset tables
