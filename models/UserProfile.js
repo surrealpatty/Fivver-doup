@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Adjust path to your database config
-const User = require('./User'); // Import the User model to set up the association
+const User = require('./user'); // Import the User model to set up the association
 
 // Define the UserProfile model
 const UserProfile = sequelize.define('UserProfile', {
