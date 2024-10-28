@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Ensure the path is correct
 
 class Service extends Model {
     static associate(models) {
@@ -11,45 +10,47 @@ class Service extends Model {
     }
 }
 
-// Initialize the Service model
-Service.init(
-    {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-            validate: {
-                min: 0, // Ensure price cannot be negative
+// Function to initialize the Service model
+const initService = (sequelize) => {
+    Service.init(
+        {
+            title: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            price: {
+                type: DataTypes.FLOAT,
+                allowNull: false,
+                validate: {
+                    min: 0, // Ensure price cannot be negative
+                },
+            },
+            category: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            userId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'users', // Use lowercase for the table name
+                    key: 'id',
+                },
             },
         },
-        category: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Users', // Reference to the User model (not the table name)
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize,
-        modelName: 'Service',
-        tableName: 'services', // Define the table name in your database
-        timestamps: true, // Automatically adds createdAt and updatedAt fields
-        underscored: true, // Converts camelCase fields to snake_case in the database
-    }
-);
+        {
+            sequelize,
+            modelName: 'Service',
+            tableName: 'services', // Define the table name in your database
+            timestamps: true, // Automatically adds createdAt and updatedAt fields
+            underscored: true, // Converts camelCase fields to snake_case in the database
+        }
+    );
+};
 
-// Export the Service model
-module.exports = Service;
+// Export the Service model and the initialization function
+module.exports = { Service, initService };
