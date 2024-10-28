@@ -4,7 +4,7 @@ class Service extends Model {
     static associate(models) {
         Service.belongsTo(models.User, {
             foreignKey: 'userId',
-            as: 'user',
+            as: 'user', // This can remain as 'user'
         });
     }
 }
@@ -12,50 +12,30 @@ class Service extends Model {
 const initService = (sequelize) => {
     Service.init(
         {
-            title: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Title cannot be empty',
-                    },
-                },
-            },
-            description: {
-                type: DataTypes.TEXT,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Description cannot be empty',
-                    },
-                },
-            },
-            price: {
-                type: DataTypes.FLOAT,
-                allowNull: false,
-                validate: {
-                    min: {
-                        args: 0,
-                        msg: 'Price cannot be negative',
-                    },
-                },
-            },
-            category: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Category cannot be empty',
-                    },
-                },
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
             },
             userId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'users',
+                    model: 'users', // Ensure this matches your table name
                     key: 'id',
                 },
+            },
+            title: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            price: {
+                type: DataTypes.FLOAT,
+                allowNull: false,
             },
         },
         {
