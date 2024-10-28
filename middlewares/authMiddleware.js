@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     // Remove 'Bearer' prefix and get the token
-    const token = authHeader.replace('Bearer ', '').trim();
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : authHeader.trim();
 
     // Check if token is provided
     if (!token) {

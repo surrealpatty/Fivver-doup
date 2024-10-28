@@ -13,7 +13,7 @@ exports.createReview = async (req, res) => {
         }
 
         // Validate required fields
-        if (!rating || !comment) {
+        if (rating === undefined || !comment) {
             return res.status(400).json({ error: 'Rating and comment are required' });
         }
 
