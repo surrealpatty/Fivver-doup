@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
 );
 
 // Import models
-const Service = require('./service');
+const Service = require('./services');
 const User = require('./user'); // Assuming you have a user model
 
 // Initialize models
