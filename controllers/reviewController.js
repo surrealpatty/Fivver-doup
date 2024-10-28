@@ -13,8 +13,13 @@ exports.createReview = async (req, res) => {
         }
 
         // Validate required fields
-        if (rating === undefined || !comment) {
+        if (rating === undefined || comment === undefined) {
             return res.status(400).json({ error: 'Rating and comment are required' });
+        }
+
+        // Validate rating is within acceptable range (1-5)
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ error: 'Rating must be between 1 and 5' });
         }
 
         // Create the review
@@ -27,7 +32,8 @@ exports.createReview = async (req, res) => {
 
         return res.status(201).json(review);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -50,7 +56,8 @@ exports.getReviewsForService = async (req, res) => {
 
         return res.status(200).json(reviews);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -73,14 +80,21 @@ exports.updateReview = async (req, res) => {
         }
 
         // Update fields if provided
-        if (rating !== undefined) review.rating = rating;
+        if (rating !== undefined) {
+            // Validate rating is within acceptable range (1-5)
+            if (rating < 1 || rating > 5) {
+                return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+            }
+            review.rating = rating;
+        }
         if (comment !== undefined) review.comment = comment;
 
         await review.save();
 
         return res.status(200).json(review);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -105,6 +119,7 @@ exports.deleteReview = async (req, res) => {
 
         return res.status(204).send(); // No content response
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
