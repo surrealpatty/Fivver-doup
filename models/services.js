@@ -21,17 +21,31 @@ const initService = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'Users', // Use the model name with an uppercase first letter for consistency
+                    model: 'users', // Use lowercase 'users' to match your database table name
                     key: 'id',
                 },
             },
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: 'Title cannot be empty', // Validation for non-empty title
+                    },
+                    len: {
+                        args: [3, 100], // Ensure title length is reasonable
+                        msg: 'Title must be between 3 and 100 characters long',
+                    },
+                },
             },
             description: {
                 type: DataTypes.TEXT,
                 allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: 'Description cannot be empty', // Validation for non-empty description
+                    },
+                },
             },
             price: {
                 type: DataTypes.FLOAT,
