@@ -4,26 +4,26 @@ require('dotenv').config(); // Load environment variables from .env file
 // Define configuration for different environments
 const config = {
     development: {
-        database: process.env.DB_NAME || 'default_dev_db',
-        username: process.env.DB_USER || 'default_user',
-        password: process.env.DB_PASSWORD || 'default_password',
-        host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql',
-        logging: console.log, 
+        database: process.env.DB_NAME || 'default_dev_db', // Default dev database name
+        username: process.env.DB_USER || 'default_user',   // Default dev username
+        password: process.env.DB_PASSWORD || 'default_password', // Default dev password
+        host: process.env.DB_HOST || 'localhost',           // Default dev host
+        dialect: 'mysql',                                   // Database dialect
+        logging: console.log,                               // Enable logging for SQL queries
     },
     production: {
-        database: process.env.DB_NAME,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
-        logging: false, 
-    }
+        database: process.env.DB_NAME,                     // Production database name
+        username: process.env.DB_USER,                     // Production username
+        password: process.env.DB_PASSWORD,                 // Production password
+        host: process.env.DB_HOST,                         // Production host
+        dialect: 'mysql',                                  // Database dialect
+        logging: false,                                    // Disable logging in production
+    },
 };
 
 // Determine the current environment and select the appropriate configuration
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env];
+const env = process.env.NODE_ENV || 'development'; // Default to development if NODE_ENV is not set
+const dbConfig = config[env]; // Get the configuration for the current environment
 
 // Initialize Sequelize with the selected configuration
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
@@ -42,4 +42,5 @@ sequelize.authenticate()
         process.exit(1); // Exit if unable to connect to the database
     });
 
+// Export the sequelize instance for use in other files
 module.exports = sequelize;
