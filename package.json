@@ -40,11 +40,10 @@
     "vue": "^3.5.12",
     "vue-loader": "^17.4.2",
     "vue-router": "^4.4.5",
-    "vue-template-compiler": "^3.5.12", // Updated to match Vue version
+    "vue-template-compiler": "^2.7.16",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-service": "^5.0.8",
-    "postcss": "^8.4.31" // Added postcss to resolve vulnerability
+    "@vue/cli-service": "^5.0.8"
   }
 }
