@@ -47,7 +47,7 @@ const initializeDatabase = async () => {
         initializeModels();
 
         // Synchronize models with the database (optional)
-        await sequelize.sync();
+        await sequelize.sync(); // You can also add { force: true } if you want to reset the database
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err);
@@ -56,7 +56,15 @@ const initializeDatabase = async () => {
 };
 
 // Call the function to initialize the database
-initializeDatabase();
+initializeDatabase().then(() => {
+    // Define the server port
+    const PORT = process.env.PORT || 3000; // Use PORT from environment variables or default to 3000
+
+    // Start the server
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+});
 
 // Catch-all route for handling 404 errors
 app.use((req, res, next) => {
@@ -67,14 +75,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'An internal server error occurred', error: err.message });
-});
-
-// Define the server port
-const PORT = process.env.PORT || 3000; // Use PORT from environment variables or default to 3000
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
 });
 
 // Export the app instance for testing purposes
