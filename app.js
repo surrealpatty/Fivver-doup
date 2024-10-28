@@ -1,10 +1,8 @@
-// app.js
-
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database'); // Path to the Sequelize instance
-const userRoutes = require('./routes/user'); // User routes
-const serviceRoutes = require('./routes/service'); // Service routes
+const userRoutes = require('./routes/userRoutes'); // Updated user routes import
+const serviceRoutes = require('./routes/servicesRoute'); // Updated service routes import
 const reviewRoutes = require('./routes/review'); // Review routes
 const cors = require('cors'); // Import CORS
 const User = require('./models/user'); // Import User model
@@ -16,11 +14,11 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
 // Use CORS to enable cross-origin resource sharing
 app.use(cors()); // Enable CORS for all routes
+
+// Middleware to parse JSON requests
+app.use(express.json());
 
 // Middleware to log requests
 app.use((req, res, next) => {
@@ -49,7 +47,7 @@ const initializeDatabase = async () => {
         initializeModels();
 
         // Synchronize models with the database (optional)
-        await sequelize.sync({ alter: true }); // Use { alter: true } to sync without dropping existing tables
+        await sequelize.sync();
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err);
@@ -61,7 +59,7 @@ const initializeDatabase = async () => {
 initializeDatabase();
 
 // Catch-all route for handling 404 errors
-app.use((req, res) => {
+app.use((req, res, next) => {
     res.status(404).json({ message: 'Resource not found' });
 });
 
