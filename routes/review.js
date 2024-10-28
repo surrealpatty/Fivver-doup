@@ -1,20 +1,23 @@
 // routes/review.js
 const express = require('express');
-const { createReview, getReviewsForService, updateReview, deleteReview } = require('../controllers/reviewController');
-const { authenticate } = require('../middlewares/authMiddleware');
-
 const router = express.Router();
 
-// Create a new review
+// Importing controller functions
+const { createReview, getReviewsForService, updateReview, deleteReview } = require('../controllers/reviewController');
+
+// Importing authentication middleware
+const { authenticate } = require('../middlewares/authMiddleware');
+
+// Route to create a new review
 router.post('/', authenticate, createReview);
 
-// Get reviews for a specific service
+// Route to get reviews for a specific service
 router.get('/:serviceId', getReviewsForService);
 
-// Update a review
+// Route to update a review
 router.put('/:reviewId', authenticate, updateReview);
 
-// Delete a review
+// Route to delete a review
 router.delete('/:reviewId', authenticate, deleteReview);
 
 module.exports = router;
