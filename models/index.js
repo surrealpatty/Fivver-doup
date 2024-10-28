@@ -22,15 +22,28 @@ const models = {
     Service: initService(sequelize), // Pass the sequelize instance to initialize the Service model
 };
 
+// Log initialized models for debugging
+Object.keys(models).forEach(modelName => {
+    console.log(`Model initialized: ${modelName}`, models[modelName] ? '✓' : '✗');
+});
+
 // Set up model associations
 Object.keys(models).forEach(modelName => {
     if (models[modelName].associate) {
         models[modelName].associate(models);
+        console.log(`Associations set up for model: ${modelName}`);
+    } else {
+        console.warn(`No associate method found for model: ${modelName}`);
     }
 });
 
 // Optional: Sync models with the database (uncomment if you want to sync at startup)
 // sequelize.sync({ alter: true }) // Use 'force: true' with caution, as it drops tables!
+
+// Test the database connection
+sequelize.authenticate()
+    .then(() => console.log('Database connected successfully.'))
+    .catch(err => console.error('Unable to connect to the database:', err));
 
 // Export sequelize instance and models
 module.exports = {

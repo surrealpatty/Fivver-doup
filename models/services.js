@@ -5,7 +5,7 @@ class Service extends Model {
         // Define the association with the User model
         Service.belongsTo(models.User, {
             foreignKey: 'userId',
-            as: 'user',
+            as: 'user', // Alias for the association
         });
     }
 }
@@ -17,10 +17,16 @@ const initService = (sequelize) => {
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                validate: {
+                    notEmpty: true, // Ensure title is not empty
+                },
             },
             description: {
                 type: DataTypes.TEXT,
                 allowNull: false,
+                validate: {
+                    notEmpty: true, // Ensure description is not empty
+                },
             },
             price: {
                 type: DataTypes.FLOAT,
@@ -32,13 +38,16 @@ const initService = (sequelize) => {
             category: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                validate: {
+                    notEmpty: true, // Ensure category is not empty
+                },
             },
             userId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
                     model: 'users', // Reference to the User model (table name in lowercase)
-                    key: 'id',
+                    key: 'id', // Primary key in the referenced model
                 },
             },
         },

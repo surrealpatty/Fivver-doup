@@ -12,7 +12,7 @@ class User extends Model {
         User.hasOne(models.UserProfile, {
             foreignKey: 'userId',
             as: 'userProfile',
-            onDelete: 'CASCADE', // Enable cascading delete
+            onDelete: 'CASCADE', // Enable cascading delete for related user profile
         });
     }
 }
@@ -31,7 +31,16 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 unique: {
                     args: true,
-                    msg: 'Username already taken',
+                    msg: 'Username already taken', // Custom error message for unique constraint
+                },
+                validate: {
+                    notEmpty: {
+                        msg: 'Username cannot be empty', // Validate that username is not empty
+                    },
+                    len: {
+                        args: [3, 30], // Enforce username length
+                        msg: 'Username must be between 3 and 30 characters long',
+                    },
                 },
             },
             email: {
@@ -39,11 +48,14 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 unique: {
                     args: true,
-                    msg: 'Email address already in use!', // Custom error message
+                    msg: 'Email address already in use!', // Custom error message for unique constraint
                 },
                 validate: {
                     isEmail: {
                         msg: 'Please provide a valid email address', // Validate email format
+                    },
+                    notEmpty: {
+                        msg: 'Email cannot be empty', // Validate that email is not empty
                     },
                 },
             },
@@ -55,6 +67,9 @@ const initUser = (sequelize) => {
                         args: [6, 100], // Enforce password length
                         msg: 'Password must be at least 6 characters long',
                     },
+                    notEmpty: {
+                        msg: 'Password cannot be empty', // Validate that password is not empty
+                    },
                 },
             },
         },
@@ -63,7 +78,7 @@ const initUser = (sequelize) => {
             modelName: 'User',
             tableName: 'users', // Explicitly set the table name
             timestamps: true, // Automatically adds createdAt and updatedAt fields
-            underscored: true, // Uses snake_case in the database
+            underscored: true, // Use snake_case for columns in the database
         }
     );
 };
