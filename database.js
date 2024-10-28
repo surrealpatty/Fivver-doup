@@ -4,8 +4,9 @@ require('dotenv').config(); // Load environment variables
 // Update the path according to your directory structure
 const config = require('./config'); // Ensure this path is correct
 
+// Determine the environment (development by default)
 const environment = process.env.NODE_ENV || 'development';
-const dbConfig = config[environment].db; // Access db config correctly
+const dbConfig = config[environment]?.db; // Use optional chaining to safely access db config
 
 // Check if the database config is defined
 if (!dbConfig) {
@@ -33,4 +34,5 @@ const testConnection = async () => {
 // Run the connection test
 testConnection();
 
+// Export the sequelize instance
 module.exports = sequelize;
