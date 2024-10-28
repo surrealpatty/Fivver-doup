@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/authenticateToken'); // Adjust if path is different
+const authenticateToken = require('../middlewares/authenticateToken'); // Adjust if path is different
 const User = require('../models/user'); // Adjust if path is different
 
 // Profile route (GET)
@@ -27,6 +27,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
 router.put('/profile/update', authenticateToken, async (req, res) => {
     const { username, email } = req.body;
 
+    // Ensure at least one field is provided to update
     if (!username && !email) {
         return res.status(400).json({ message: 'No fields to update' });
     }
