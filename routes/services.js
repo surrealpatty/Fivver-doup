@@ -1,11 +1,15 @@
+// routes/service.js
+
 const express = require('express');
 const router = express.Router();
-const Service = require('../models/service'); // Ensure the path to the model is correct
-const { body, validationResult } = require('express-validator'); // Import express-validator for validation
+const Service = require('../models/service'); // Ensure path to the model is correct
+const { body, validationResult } = require('express-validator'); // For input validation
+const authMiddleware = require('../middlewares/authMiddleware'); // Ensure this is the correct path
 
-// Create a new service
+// 1. Create a new service
 router.post(
     '/',
+    authMiddleware, // Protect the route
     [
         // Validate input data
         body('title').notEmpty().withMessage('Title is required'),
@@ -13,6 +17,7 @@ router.post(
         body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
     ],
     async (req, res) => {
+        // Handle validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -20,32 +25,37 @@ router.post(
 
         const { title, description, price } = req.body;
         try {
+            // Ensure userId is attached from authMiddleware
+            const userId = req.user.id;
+
+            // Create the service
             const service = await Service.create({
                 title,
                 description,
                 price,
-                userId: req.user.id, // Ensure you're using the correct field name for the user ID
+                userId,
             });
+
             res.status(201).json(service);
         } catch (error) {
             console.error('Error creating service:', error.message);
-            res.status(500).json({ message: 'Error creating service' });
+            res.status(500).json({ message: 'Error creating service', error: error.message });
         }
     }
 );
 
-// Get all services
+// 2. Get all services
 router.get('/', async (req, res) => {
     try {
         const services = await Service.findAll();
         res.json(services);
     } catch (error) {
         console.error('Error fetching services:', error.message);
-        res.status(500).json({ message: 'Error fetching services' });
+        res.status(500).json({ message: 'Error fetching services', error: error.message });
     }
 });
 
-// Get a service by ID
+// 3. Get a service by ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -56,14 +66,16 @@ router.get('/:id', async (req, res) => {
         res.json(service);
     } catch (error) {
         console.error('Error fetching service:', error.message);
-        res.status(500).json({ message: 'Error fetching service' });
+        res.status(500).json({ message: 'Error fetching service', error: error.message });
     }
 });
 
-// Update a service
+// 4. Update a service
 router.put(
     '/:id',
+    authMiddleware, // Protect the route
     [
+        // Validate fields if provided
         body('title').optional().notEmpty().withMessage('Title cannot be empty if provided'),
         body('description').optional().notEmpty().withMessage('Description cannot be empty if provided'),
         body('price').optional().isFloat({ gt: 0 }).withMessage('Price must be a positive number if provided'),
@@ -80,28 +92,34 @@ router.put(
             if (!service) {
                 return res.status(404).json({ message: 'Service not found' });
             }
+            if (service.userId !== req.user.id) {
+                return res.status(403).json({ message: 'Unauthorized to update this service' });
+            }
             await service.update(req.body); // Update with all fields in the body
             res.json(service);
         } catch (error) {
             console.error('Error updating service:', error.message);
-            res.status(500).json({ message: 'Error updating service' });
+            res.status(500).json({ message: 'Error updating service', error: error.message });
         }
     }
 );
 
-// Delete a service
-router.delete('/:id', async (req, res) => {
+// 5. Delete a service
+router.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const service = await Service.findByPk(id);
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }
+        if (service.userId !== req.user.id) {
+            return res.status(403).json({ message: 'Unauthorized to delete this service' });
+        }
         await service.destroy();
-        res.json({ message: 'Service deleted' });
+        res.json({ message: 'Service deleted successfully' });
     } catch (error) {
         console.error('Error deleting service:', error.message);
-        res.status(500).json({ message: 'Error deleting service' });
+        res.status(500).json({ message: 'Error deleting service', error: error.message });
     }
 });
 

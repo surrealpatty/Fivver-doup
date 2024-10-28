@@ -1,0 +1,25 @@
+const createService = async (req, res) => {
+    const { title, description, price } = req.body;
+
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        // Create the service in the database
+        const service = await Service.create({
+            title,
+            description,
+            price,
+            userId: req.user.id, // Attach the authenticated user’s ID to the service
+        });
+
+        // Send back the created service with a success status
+        res.status(201).json(service);
+    } catch (error) {
+        console.error('Error creating service:', error.message);
+        res.status(500).json({ message: 'Error creating service' });
+    }
+};

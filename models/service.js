@@ -16,6 +16,9 @@ Service.init({
     price: {
         type: DataTypes.FLOAT,
         allowNull: false,
+        validate: {
+            min: 0, // Ensure price cannot be negative
+        },
     },
     category: {
         type: DataTypes.STRING,
@@ -32,7 +35,7 @@ Service.init({
 }, {
     sequelize,
     modelName: 'Service',
-    tableName: 'services', // This will define the table name in your database
+    tableName: 'services', // Define the table name in your database
     timestamps: true, // Automatically adds createdAt and updatedAt fields
     underscored: true, // Converts camelCase fields to snake_case in the database
 });
