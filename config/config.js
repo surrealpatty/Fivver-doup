@@ -1,3 +1,5 @@
+require('dotenv').config(); // Ensure this is at the top to load environment variables
+
 const config = {
     development: {
         db: {
@@ -5,7 +7,7 @@ const config = {
             password: process.env.DB_PASSWORD || 'your_db_password',
             database: process.env.DB_NAME || 'fivver_doup_db',
             host: process.env.DB_HOST || 'localhost',
-            dialect: 'mysql',
+            dialect: 'mysql', // Specify the database dialect
         },
         jwt: {
             secret: process.env.JWT_SECRET || 'your_jwt_secret',
@@ -17,7 +19,7 @@ const config = {
             password: process.env.PROD_DB_PASSWORD || 'your_prod_db_password',
             database: process.env.DB_NAME || 'fivver_doup_db',
             host: process.env.DB_HOST || 'localhost',
-            dialect: 'mysql',
+            dialect: 'mysql', // Specify the database dialect
         },
         jwt: {
             secret: process.env.PROD_JWT_SECRET || 'your_prod_jwt_secret',
@@ -40,7 +42,8 @@ const validateConfig = (envConfig) => {
 validateConfig(config.development.db);
 validateConfig(config.production.db);
 
-// Export the configuration object
-module.exports = config;
-// Temporary comment to force commit
-// This is a test comment
+// Export the configuration object in the format Sequelize expects
+module.exports = {
+    development: config.development.db,
+    production: config.production.db,
+};
