@@ -40,7 +40,7 @@
     "vue": "^3.5.12",
     "vue-loader": "^17.4.2",
     "vue-router": "^4.4.5",
-    "vue-template-compiler": "^2.7.16",  // Keep this compatible with Vue 2.x if you're using Vue 3.x.
+    "vue-template-compiler": "^2.7.16",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
