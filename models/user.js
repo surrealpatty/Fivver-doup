@@ -83,5 +83,5 @@ const initUser = (sequelize) => {
     );
 };
 
-// Export the User model and initialization function
+// Export the initialization function separately to avoid circular dependency issues
 module.exports = { User, initUser };

@@ -1,50 +1,86 @@
-// models/review.js
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const express = require('express');
+const router = express.Router();
+const { Review } = require('../models'); // Ensure you are importing the Review model
 
-class Review extends Model {}
+// Create a new review
+router.post('/', async (req, res) => {
+    const { rating, comment, userId, serviceId } = req.body;
 
-// Initialize the Review model
-Review.init({
-    rating: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            min: 1,
-            max: 5,
-        },
-    },
-    comment: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Users', // Make sure this matches the name of your User model
-            key: 'id',
-        },
-    },
-    serviceId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Services', // Make sure this matches the name of your Service model
-            key: 'id',
-        },
-    },
-}, {
-    sequelize,
-    modelName: 'Review',
-    tableName: 'reviews', // Specify table name if not pluralized by Sequelize
-    timestamps: true, // Enables createdAt and updatedAt fields
+    try {
+        const review = await Review.create({ rating, comment, userId, serviceId });
+        res.status(201).json(review);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-// Define associations
-Review.associate = (models) => {
-    Review.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-    Review.belongsTo(models.Service, { foreignKey: 'serviceId', as: 'service' });
-};
+// Get all reviews
+router.get('/', async (req, res) => {
+    try {
+        const reviews = await Review.findAll({
+            include: [
+                { model: User, as: 'user' },
+                { model: Service, as: 'service' }
+            ]
+        });
+        res.status(200).json(reviews);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
-module.exports = Review;
+// Get a single review by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const review = await Review.findByPk(req.params.id, {
+            include: [
+                { model: User, as: 'user' },
+                { model: Service, as: 'service' }
+            ]
+        });
+        if (review) {
+            res.status(200).json(review);
+        } else {
+            res.status(404).json({ message: 'Review not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update a review
+router.put('/:id', async (req, res) => {
+    const { rating, comment } = req.body;
+
+    try {
+        const [updated] = await Review.update(
+            { rating, comment },
+            { where: { id: req.params.id } }
+        );
+
+        if (updated) {
+            const updatedReview = await Review.findByPk(req.params.id);
+            res.status(200).json(updatedReview);
+        } else {
+            res.status(404).json({ message: 'Review not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Delete a review
+router.delete('/:id', async (req, res) => {
+    try {
+        const deleted = await Review.destroy({ where: { id: req.params.id } });
+        if (deleted) {
+            res.status(204).send();
+        } else {
+            res.status(404).json({ message: 'Review not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;
