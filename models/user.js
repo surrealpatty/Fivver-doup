@@ -2,22 +2,19 @@ const { Model, DataTypes } = require('sequelize');
 
 class User extends Model {
     static associate(models) {
-        // Define one-to-many association with Service
         User.hasMany(models.Service, {
             foreignKey: 'userId',
-            as: 'services', // Alias for the services association
+            as: 'services',
         });
 
-        // Define one-to-one association with UserProfile
         User.hasOne(models.UserProfile, {
             foreignKey: 'userId',
             as: 'userProfile',
-            onDelete: 'CASCADE', // Enable cascading delete for related user profile
+            onDelete: 'CASCADE',
         });
     }
 }
 
-// Initialize the User model
 const initUser = (sequelize) => {
     User.init(
         {
@@ -31,14 +28,14 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 unique: {
                     args: true,
-                    msg: 'Username already taken', // Custom error message for unique constraint
+                    msg: 'Username already taken',
                 },
                 validate: {
                     notEmpty: {
-                        msg: 'Username cannot be empty', // Validate that username is not empty
+                        msg: 'Username cannot be empty',
                     },
                     len: {
-                        args: [3, 30], // Enforce username length
+                        args: [3, 30],
                         msg: 'Username must be between 3 and 30 characters long',
                     },
                 },
@@ -48,14 +45,14 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 unique: {
                     args: true,
-                    msg: 'Email address already in use!', // Custom error message for unique constraint
+                    msg: 'Email address already in use!',
                 },
                 validate: {
                     isEmail: {
-                        msg: 'Please provide a valid email address', // Validate email format
+                        msg: 'Please provide a valid email address',
                     },
                     notEmpty: {
-                        msg: 'Email cannot be empty', // Validate that email is not empty
+                        msg: 'Email cannot be empty',
                     },
                 },
             },
@@ -64,11 +61,11 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 validate: {
                     len: {
-                        args: [6, 100], // Enforce password length
+                        args: [6, 100],
                         msg: 'Password must be at least 6 characters long',
                     },
                     notEmpty: {
-                        msg: 'Password cannot be empty', // Validate that password is not empty
+                        msg: 'Password cannot be empty',
                     },
                 },
             },
@@ -76,12 +73,11 @@ const initUser = (sequelize) => {
         {
             sequelize,
             modelName: 'User',
-            tableName: 'users', // Explicitly set the table name
-            timestamps: true, // Automatically adds createdAt and updatedAt fields
-            underscored: true, // Use snake_case for columns in the database
+            tableName: 'users',
+            timestamps: true,
+            underscored: true,
         }
     );
 };
 
-// Export the initialization function separately to avoid circular dependency issues
 module.exports = { User, initUser };
