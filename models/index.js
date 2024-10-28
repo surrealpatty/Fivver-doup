@@ -13,13 +13,13 @@ const sequelize = new Sequelize(
 );
 
 // Import models
-const Service = require('./services');
-const User = require('./user'); // Assuming you have a user model
+const { User, initUser } = require('./user'); // Import the User model and init function
+const { Service, initService } = require('./services'); // Import the Service model and init function
 
 // Initialize models
 const models = {
-    Service: Service.init(sequelize, Sequelize.DataTypes),
-    User: User.init(sequelize, Sequelize.DataTypes),
+    User: initUser(sequelize), // Pass the sequelize instance to initialize the User model
+    Service: initService(sequelize), // Pass the sequelize instance to initialize the Service model
 };
 
 // Set up model associations
@@ -29,7 +29,7 @@ Object.keys(models).forEach(modelName => {
     }
 });
 
-// Sync models with the database (optional, uncomment if you want to sync at startup)
+// Optional: Sync models with the database (uncomment if you want to sync at startup)
 // sequelize.sync({ alter: true }) // Use 'force: true' with caution, as it drops tables!
 
 // Export sequelize instance and models
