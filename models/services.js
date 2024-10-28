@@ -4,13 +4,13 @@ class Service extends Model {
     static associate(models) {
         // Define the association with the User model
         Service.belongsTo(models.User, {
-            foreignKey: 'userId', // Match the foreign key in the Service model
-            as: 'user', // Alias for the User relationship
+            foreignKey: 'userId',
+            as: 'user',
         });
     }
 }
 
-// Function to initialize the Service model
+// Initialize the Service model
 const initService = (sequelize) => {
     Service.init(
         {
@@ -37,7 +37,7 @@ const initService = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'users', // Use lowercase for the table name
+                    model: 'users', // Reference to the User model (table name in lowercase)
                     key: 'id',
                 },
             },
@@ -52,5 +52,5 @@ const initService = (sequelize) => {
     );
 };
 
-// Export the Service model and the initialization function
+// Export the Service model and initialization function
 module.exports = { Service, initService };
