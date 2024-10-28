@@ -1,14 +1,20 @@
+// app.js
+
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database'); // Path to the Sequelize instance
 const userRoutes = require('./routes/user'); // User routes
 const reviewRoutes = require('./routes/review'); // Review routes
+const cors = require('cors'); // Import CORS
 
 // Load environment variables from .env file
 dotenv.config();
 
 // Initialize Express app
 const app = express();
+
+// Use CORS to enable cross-origin resource sharing
+app.use(cors()); // Enable CORS for all routes
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -34,6 +40,11 @@ const initializeDatabase = async () => {
 
 // Call the function to initialize the database
 initializeDatabase();
+
+// Catch-all route for handling 404 errors
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Resource not found' });
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
