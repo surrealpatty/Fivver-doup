@@ -4,7 +4,7 @@ class Service extends Model {
     static associate(models) {
         Service.belongsTo(models.User, {
             foreignKey: 'userId',
-            as: 'user', // This can remain as 'user'
+            as: 'user', // You can keep this as 'user' or change it to something more descriptive
         });
     }
 }
@@ -21,7 +21,7 @@ const initService = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'users', // Ensure this matches your table name
+                    model: 'Users', // Use the model name with an uppercase first letter for consistency
                     key: 'id',
                 },
             },
@@ -36,6 +36,15 @@ const initService = (sequelize) => {
             price: {
                 type: DataTypes.FLOAT,
                 allowNull: false,
+                validate: {
+                    isFloat: {
+                        msg: 'Price must be a valid number',
+                    },
+                    min: {
+                        args: 0,
+                        msg: 'Price must be greater than or equal to zero',
+                    },
+                },
             },
         },
         {
