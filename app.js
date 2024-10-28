@@ -5,8 +5,8 @@ const sequelize = require('./config/database'); // Ensure you are importing the 
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/servicesRoute');
 const reviewRoutes = require('./routes/review');
-const { User, initUser } = require('./models/user'); // Ensure you are importing the initUser function
-const { Service, initService } = require('./models/services'); // Ensure you are importing the initService function
+const { User, initUser } = require('./models/user'); // Import User model and initUser function
+const { Service, initService } = require('./models/services'); // Import Service model and initService function
 
 // Load environment variables from .env file
 dotenv.config();
@@ -31,12 +31,12 @@ app.use('/api/users', userRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/services', serviceRoutes);
 
-// Initialize models
+// Initialize models and their associations
 const initModels = () => {
     initUser(sequelize); // Initialize User model
     initService(sequelize); // Initialize Service model
 
-    // Initialize model associations
+    // Set up model associations
     User.associate({ Service });
     Service.associate({ User });
 };
