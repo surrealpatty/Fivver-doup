@@ -6,7 +6,7 @@ class User extends Model {
         // Define one-to-many association with Service
         User.hasMany(models.Service, {
             foreignKey: 'userId',
-            as: 'services',
+            as: 'services', // Alias for the services association
         });
 
         // Define one-to-one association with UserProfile
@@ -70,4 +70,5 @@ User.init(
 // No need to sync the model here
 // Instead, manage syncing in your app.js or migration files.
 
+// Export the User model
 module.exports = User;

@@ -37,7 +37,7 @@ Service.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Users', // Reference to the User model (not table name)
+                model: 'Users', // Reference to the User model (not the table name)
                 key: 'id',
             },
         },
@@ -51,7 +51,5 @@ Service.init(
     }
 );
 
-// No need to sync the model here
-// Instead, manage syncing in your app.js or migration files.
-
+// Export the Service model
 module.exports = Service;

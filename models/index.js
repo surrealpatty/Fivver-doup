@@ -29,6 +29,9 @@ Object.keys(models).forEach(modelName => {
     }
 });
 
+// Sync models with the database (optional, uncomment if you want to sync at startup)
+// sequelize.sync({ alter: true }) // Use 'force: true' with caution, as it drops tables!
+
 // Export sequelize instance and models
 module.exports = {
     sequelize,
