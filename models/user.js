@@ -14,16 +14,20 @@ User.init(
         username: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Username already taken',
+            },
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: {
                 args: true,
-                msg: 'Email address already in use!' // Custom error message
+                msg: 'Email address already in use!', // Custom error message
             },
             validate: {
-                isEmail: { msg: 'Please provide a valid email address' } // Validate email format
+                isEmail: { msg: 'Please provide a valid email address' }, // Validate email format
             },
         },
         password: {
@@ -32,8 +36,8 @@ User.init(
             validate: {
                 len: {
                     args: [6, 100], // Enforce password length
-                    msg: 'Password must be at least 6 characters long'
-                }
+                    msg: 'Password must be at least 6 characters long',
+                },
             },
         },
     },
@@ -42,14 +46,21 @@ User.init(
         modelName: 'User',
         tableName: 'users', // Optional: Explicitly set the table name
         timestamps: true, // Automatically adds createdAt and updatedAt fields
+        underscored: true, // Uses snake_case in the database
     }
 );
+
+// Define associations if needed
+User.associate = (models) => {
+    // Define any associations here, like:
+    // User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
+};
 
 // Sync the model with the database (optional, consider using migrations)
 const syncUserModel = async () => {
     try {
-        // You might want to use `force: false` to avoid dropping the table if it already exists
-        await sequelize.sync({ force: false }); // Change this to true only in development if you want to recreate the table
+        // Consider using `force: false` to avoid dropping the table if it already exists
+        await sequelize.sync({ force: false }); // Change to true only in development to recreate the table
         console.log('User model synced with the database.');
     } catch (error) {
         console.error('Error syncing User model:', error.message);
