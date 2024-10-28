@@ -2,9 +2,9 @@
 
 const express = require('express');
 const dotenv = require('dotenv');
-const sequelize = require('./config/database'); // Ensure the path is correct for the Sequelize instance
-const userRoutes = require('./routes/user'); // Ensure the path is correct for user routes
-const reviewRoutes = require('./routes/review'); // Import review routes
+const sequelize = require('./config/database'); // Path to the Sequelize instance
+const userRoutes = require('./routes/user'); // User routes
+const reviewRoutes = require('./routes/review'); // Review routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,15 +16,17 @@ const app = express();
 app.use(express.json());
 
 // Set up routes
-app.use('/api/users', userRoutes); // Prefix '/api/users' to organize user routes
-app.use('/api/reviews', reviewRoutes); // Prefix '/api/reviews' for review routes
+app.use('/api/users', userRoutes); // Prefix for user routes
+app.use('/api/reviews', reviewRoutes); // Prefix for review routes
 
-// Test the database connection
+// Test and synchronize the database connection
 const initializeDatabase = async () => {
     try {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
-        await sequelize.sync(); // Ensure models are synced to the database
+
+        // Synchronize models with the database
+        await sequelize.sync(); 
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err);
@@ -32,6 +34,7 @@ const initializeDatabase = async () => {
     }
 };
 
+// Call the function to initialize the database
 initializeDatabase();
 
 // Error handling middleware

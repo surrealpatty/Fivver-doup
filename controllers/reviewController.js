@@ -1,13 +1,17 @@
 // controllers/reviewController.js
-const { Review } = require('../models');
-const { User } = require('../models');
-const { Service } = require('../models');
+const { Review, User, Service } = require('../models'); // Import models
 
 // Create a new review
 exports.createReview = async (req, res) => {
     try {
         const { rating, comment, serviceId } = req.body;
         const userId = req.user.id; // Assuming you're using JWT to get the user's ID from the token
+
+        // Check if the service exists before creating a review
+        const serviceExists = await Service.findByPk(serviceId);
+        if (!serviceExists) {
+            return res.status(404).json({ error: 'Service not found' });
+        }
 
         const review = await Review.create({
             rating,
@@ -26,6 +30,12 @@ exports.createReview = async (req, res) => {
 exports.getReviewsForService = async (req, res) => {
     try {
         const { serviceId } = req.params;
+
+        // Check if the service exists before fetching reviews
+        const serviceExists = await Service.findByPk(serviceId);
+        if (!serviceExists) {
+            return res.status(404).json({ error: 'Service not found' });
+        }
 
         const reviews = await Review.findAll({
             where: { serviceId },
@@ -49,6 +59,12 @@ exports.updateReview = async (req, res) => {
             return res.status(404).json({ error: 'Review not found' });
         }
 
+        // Ensure the user is authorized to update the review (optional)
+        const userId = req.user.id;
+        if (review.userId !== userId) {
+            return res.status(403).json({ error: 'You do not have permission to update this review' });
+        }
+
         review.rating = rating;
         review.comment = comment;
 
@@ -68,6 +84,12 @@ exports.deleteReview = async (req, res) => {
         const review = await Review.findByPk(reviewId);
         if (!review) {
             return res.status(404).json({ error: 'Review not found' });
+        }
+
+        // Ensure the user is authorized to delete the review (optional)
+        const userId = req.user.id;
+        if (review.userId !== userId) {
+            return res.status(403).json({ error: 'You do not have permission to delete this review' });
         }
 
         await review.destroy();
