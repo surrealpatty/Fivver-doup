@@ -27,7 +27,9 @@ User.init(
                 msg: 'Email address already in use!', // Custom error message
             },
             validate: {
-                isEmail: { msg: 'Please provide a valid email address' }, // Validate email format
+                isEmail: {
+                    msg: 'Please provide a valid email address', // Validate email format
+                },
             },
         },
         password: {
@@ -44,22 +46,21 @@ User.init(
     {
         sequelize,
         modelName: 'User',
-        tableName: 'users', // Optional: Explicitly set the table name
+        tableName: 'users', // Explicitly set the table name
         timestamps: true, // Automatically adds createdAt and updatedAt fields
         underscored: true, // Uses snake_case in the database
     }
 );
 
-// Define associations if needed
+// Define associations
 User.associate = (models) => {
-    // Define any associations here, like:
-    // User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
+    User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
 };
 
 // Sync the model with the database (optional, consider using migrations)
 const syncUserModel = async () => {
     try {
-        // Consider using `force: false` to avoid dropping the table if it already exists
+        // Sync the User model with the database
         await sequelize.sync({ force: false }); // Change to true only in development to recreate the table
         console.log('User model synced with the database.');
     } catch (error) {
