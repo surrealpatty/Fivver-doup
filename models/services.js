@@ -7,6 +7,9 @@ class Service extends Model {
             foreignKey: 'userId',
             as: 'user', // Alias for the association
         });
+
+        // You can add additional associations here if needed, e.g., with Review
+        // Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
     }
 }
 
