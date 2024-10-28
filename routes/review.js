@@ -5,9 +5,16 @@ const { authenticate } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/', authenticate, createReview); // Create a new review
-router.get('/:serviceId', getReviewsForService); // Get reviews for a specific service
-router.put('/:reviewId', authenticate, updateReview); // Update a review
-router.delete('/:reviewId', authenticate, deleteReview); // Delete a review
+// Create a new review
+router.post('/', authenticate, createReview);
+
+// Get reviews for a specific service
+router.get('/:serviceId', getReviewsForService);
+
+// Update a review
+router.put('/:reviewId', authenticate, updateReview);
+
+// Delete a review
+router.delete('/:reviewId', authenticate, deleteReview);
 
 module.exports = router;
