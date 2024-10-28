@@ -6,12 +6,6 @@ class User extends Model {
             foreignKey: 'userId',
             as: 'services',
         });
-
-        User.hasOne(models.UserProfile, {
-            foreignKey: 'userId',
-            as: 'userProfile',
-            onDelete: 'CASCADE',
-        });
     }
 }
 
