@@ -8,7 +8,7 @@ const UserProfile = sequelize.define('UserProfile', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Users', // name of the User table
+      model: User, // Reference the User model directly instead of the table name
       key: 'id'
     }
   },
@@ -36,12 +36,15 @@ const UserProfile = sequelize.define('UserProfile', {
     type: DataTypes.BOOLEAN,
     defaultValue: false, // Flag for paid profiles
   },
+}, {
+  tableName: 'user_profiles', // Optional: specify the table name
 });
 
-// Define the association with onDelete: 'CASCADE'
+// Define the association with User, ensuring proper referencing
 UserProfile.belongsTo(User, {
   foreignKey: 'userId',
   onDelete: 'CASCADE', // Enable cascading delete
 });
 
+// Export the UserProfile model
 module.exports = UserProfile;
