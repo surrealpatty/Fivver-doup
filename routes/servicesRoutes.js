@@ -1,8 +1,8 @@
-// routes/service.js
+// routes/servicesRoute.js
 
 const express = require('express');
 const router = express.Router();
-const Service = require('../models/services'); // Ensure path to the model is correct
+const Service = require('../models/services'); // Ensure the path to the model is correct
 const { body, validationResult } = require('express-validator'); // For input validation
 const authMiddleware = require('../middlewares/authMiddleware'); // Ensure this is the correct path
 
@@ -24,6 +24,7 @@ router.post(
         }
 
         const { title, description, price } = req.body;
+
         try {
             // Ensure userId is attached from authMiddleware
             const userId = req.user.id;
@@ -82,6 +83,8 @@ router.put(
     ],
     async (req, res) => {
         const { id } = req.params;
+
+        // Handle validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
