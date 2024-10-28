@@ -18,28 +18,37 @@ const initService = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // Ensure title is not empty
+                    notEmpty: {
+                        msg: 'Title cannot be empty', // Custom error message
+                    },
                 },
             },
             description: {
                 type: DataTypes.TEXT,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // Ensure description is not empty
+                    notEmpty: {
+                        msg: 'Description cannot be empty', // Custom error message
+                    },
                 },
             },
             price: {
                 type: DataTypes.FLOAT,
                 allowNull: false,
                 validate: {
-                    min: 0, // Ensure price cannot be negative
+                    min: {
+                        args: 0,
+                        msg: 'Price cannot be negative', // Custom error message
+                    },
                 },
             },
             category: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // Ensure category is not empty
+                    notEmpty: {
+                        msg: 'Category cannot be empty', // Custom error message
+                    },
                 },
             },
             userId: {
