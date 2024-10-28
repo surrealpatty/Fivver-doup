@@ -4,7 +4,7 @@ class User extends Model {
     static associate(models) {
         User.hasMany(models.Service, {
             foreignKey: 'userId',
-            as: 'services',
+            as: 'userServices', // Use a unique alias
         });
     }
 }
@@ -74,9 +74,4 @@ const initUser = (sequelize) => {
     );
 };
 
-// Ensure the model associations are defined properly
-const defineAssociations = (models) => {
-    User.associate(models);
-};
-
-module.exports = { User, initUser, defineAssociations };
+module.exports = { User, initUser };
