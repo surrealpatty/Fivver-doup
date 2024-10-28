@@ -5,8 +5,8 @@ const sequelize = require('./config/database'); // Sequelize instance
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/servicesRoute');
 const reviewRoutes = require('./routes/review');
-const User = require('./models/user');
-const Service = require('./models/services');
+const { User, initUser } = require('./models/user');
+const { Service, initService } = require('./models/services');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,13 +33,8 @@ app.use('/api/services', serviceRoutes);
 
 // Initialize model associations
 const initializeModels = () => {
-    // Add associations here if more models are associated
-    User.associate = (models) => {
-        User.hasMany(models.Service, { foreignKey: 'userId' });
-    };
-    Service.associate = (models) => {
-        Service.belongsTo(models.User, { foreignKey: 'userId' });
-    };
+    User.associate({ Service });
+    Service.associate({ User });
 };
 
 // Test and synchronize the database connection

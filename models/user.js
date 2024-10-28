@@ -74,4 +74,9 @@ const initUser = (sequelize) => {
     );
 };
 
-module.exports = { User, initUser };
+// Ensure the model associations are defined properly
+const defineAssociations = (models) => {
+    User.associate(models);
+};
+
+module.exports = { User, initUser, defineAssociations };
