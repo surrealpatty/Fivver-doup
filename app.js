@@ -3,7 +3,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database'); // Path to the Sequelize instance
-const userRoutes = require('./routes/user'); // User routes
+const userRoutes = require('./routes/userRoutes'); // User routes
+const serviceRoutes = require('./routes/serviceRoutes'); // Service routes (if needed)
 const reviewRoutes = require('./routes/review'); // Review routes
 const cors = require('cors'); // Import CORS
 
@@ -19,9 +20,16 @@ app.use(cors()); // Enable CORS for all routes
 // Middleware to parse JSON requests
 app.use(express.json());
 
+// Middleware to log requests
+app.use((req, res, next) => {
+    console.log(`${req.method} request for '${req.url}'`);
+    next(); // Pass control to the next middleware
+});
+
 // Set up routes
 app.use('/api/users', userRoutes); // Prefix for user routes
 app.use('/api/reviews', reviewRoutes); // Prefix for review routes
+app.use('/api/services', serviceRoutes); // Prefix for service routes (if needed)
 
 // Test and synchronize the database connection
 const initializeDatabase = async () => {
@@ -60,4 +68,5 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-module.exports = app; // Export the app instance
+// Export the app instance for testing purposes
+module.exports = app; 
