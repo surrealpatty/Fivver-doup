@@ -25,7 +25,7 @@ Service.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Users', // Make sure this matches your actual user table name
+            model: 'Users', // Ensure this matches the exact table name of your User model
             key: 'id',
         },
     },
@@ -34,14 +34,15 @@ Service.init({
     modelName: 'Service',
     tableName: 'services', // This will define the table name in your database
     timestamps: true, // Automatically adds createdAt and updatedAt fields
+    underscored: true, // Converts camelCase fields to snake_case in the database
 });
 
-// If you're using associations (e.g., defining relationships between models), do that here
+// Define associations if needed
 Service.associate = (models) => {
     Service.belongsTo(models.User, {
-        foreignKey: 'userId', // This should match the foreign key in the Service model
-        as: 'user', // This alias can be used when fetching related data
+        foreignKey: 'userId', // Match the foreign key in the Service model
+        as: 'user', // Alias for the User relationship
     });
 };
 
-module.exports = Service; // Ensure this line is present
+module.exports = Service;
