@@ -1,14 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { Model: User } = require('../models/user'); // Adjust path as necessary
+const { Model: User } = require('../models/user'); // Ensure the path is correct
 const { check, validationResult } = require('express-validator');
 
+// Middleware for validation
+const validateUser = [
+    check('username')
+        .isLength({ min: 3, max: 30 })
+        .withMessage('Username must be between 3 and 30 characters long'),
+    check('email')
+        .isEmail()
+        .withMessage('Please provide a valid email address'),
+    check('password')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long'),
+];
+
 // Create a new user
-router.post('/', [
-    check('username').isLength({ min: 3, max: 30 }).withMessage('Username must be between 3 and 30 characters long'),
-    check('email').isEmail().withMessage('Please provide a valid email address'),
-    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-], async (req, res) => {
+router.post('/', validateUser, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -18,7 +27,8 @@ router.post('/', [
         const user = await User.create(req.body);
         res.status(201).json({ user });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating user', error });
+        console.error('Error creating user:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Error creating user', error: error.message });
     }
 });
 
@@ -28,7 +38,8 @@ router.get('/', async (req, res) => {
         const users = await User.findAll();
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: 'Error retrieving users', error });
+        console.error('Error retrieving users:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Error retrieving users', error: error.message });
     }
 });
 
@@ -41,12 +52,13 @@ router.get('/:id', async (req, res) => {
         }
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: 'Error retrieving user', error });
+        console.error('Error retrieving user:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Error retrieving user', error: error.message });
     }
 });
 
 // Update a user
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateUser, async (req, res) => {
     try {
         const [updated] = await User.update(req.body, {
             where: { id: req.params.id }
@@ -59,7 +71,8 @@ router.put('/:id', async (req, res) => {
         const updatedUser = await User.findByPk(req.params.id);
         res.status(200).json({ user: updatedUser });
     } catch (error) {
-        res.status(500).json({ message: 'Error updating user', error });
+        console.error('Error updating user:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Error updating user', error: error.message });
     }
 });
 
@@ -74,9 +87,10 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(204).send();
+        res.status(204).send(); // 204 No Content
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting user', error });
+        console.error('Error deleting user:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Error deleting user', error: error.message });
     }
 });
 
