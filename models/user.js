@@ -5,18 +5,20 @@ class User extends Model {
         // Define association with the Service model
         User.hasMany(models.Service, {
             foreignKey: 'userId',
-            as: 'userServices', // Use a unique alias for better clarity
-            onDelete: 'CASCADE', // Optional: define delete behavior
-            onUpdate: 'CASCADE', // Optional: define update behavior
+            as: 'userServices', // Unique alias for better clarity
+            onDelete: 'CASCADE', // Define delete behavior
+            onUpdate: 'CASCADE', // Define update behavior
         });
 
         // Define association with the UserProfile model (if applicable)
         User.hasOne(models.UserProfile, {
             foreignKey: 'user_id', // Ensure this matches your UserProfile model's foreign key
-            as: 'profile', // Use a unique alias for better clarity
-            onDelete: 'CASCADE', // Optional: define delete behavior
-            onUpdate: 'CASCADE', // Optional: define update behavior
+            as: 'profile', // Unique alias for better clarity
+            onDelete: 'CASCADE', // Define delete behavior
+            onUpdate: 'CASCADE', // Define update behavior
         });
+
+        // Add any other associations as needed
     }
 }
 
@@ -85,4 +87,5 @@ const initUser = (sequelize) => {
     );
 };
 
+// Export the model and the initialization function
 module.exports = { User, initUser };
