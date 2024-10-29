@@ -1,78 +1,84 @@
-const { Model, DataTypes } = require('sequelize');
+const express = require('express');
+const router = express.Router();
+const { Model: Service } = require('../models/service'); // Adjust path as necessary
+const { check, validationResult } = require('express-validator');
 
-class Service extends Model {
-    static associate(models) {
-        Service.belongsTo(models.User, {
-            foreignKey: 'userId',
-            as: 'user', // You can keep this as 'user' or change it to something more descriptive
-        });
+// Create a new service
+router.post('/', [
+    check('title').isLength({ min: 3, max: 100 }).withMessage('Title must be between 3 and 100 characters long'),
+    check('description').notEmpty().withMessage('Description cannot be empty'),
+    check('price').isFloat({ min: 0 }).withMessage('Price must be a valid number greater than or equal to zero'),
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
-}
 
-const initService = (sequelize) => {
-    Service.init(
-        {
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true,
-            },
-            userId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'users', // Use lowercase 'users' to match your database table name
-                    key: 'id',
-                },
-            },
-            title: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Title cannot be empty', // Validation for non-empty title
-                    },
-                    len: {
-                        args: [3, 100], // Ensure title length is reasonable
-                        msg: 'Title must be between 3 and 100 characters long',
-                    },
-                },
-            },
-            description: {
-                type: DataTypes.TEXT,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Description cannot be empty', // Validation for non-empty description
-                    },
-                },
-            },
-            price: {
-                type: DataTypes.FLOAT,
-                allowNull: false,
-                validate: {
-                    isFloat: {
-                        msg: 'Price must be a valid number',
-                    },
-                    min: {
-                        args: 0,
-                        msg: 'Price must be greater than or equal to zero',
-                    },
-                },
-            },
-        },
-        {
-            sequelize,
-            modelName: 'Service',
-            tableName: 'services',
-            timestamps: true,
-            underscored: true,
+    try {
+        const service = await Service.create(req.body);
+        res.status(201).json({ service });
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating service', error });
+    }
+});
+
+// Get all services
+router.get('/', async (req, res) => {
+    try {
+        const services = await Service.findAll();
+        res.status(200).json(services);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving services', error });
+    }
+});
+
+// Get a single service by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const service = await Service.findByPk(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
         }
-    );
-};
+        res.status(200).json(service);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving service', error });
+    }
+});
 
-// Exporting both the init function and the Service model
-module.exports = {
-    init: initService,
-    Model: Service, // Changed from Service to Model for consistency
-};
+// Update a service
+router.put('/:id', async (req, res) => {
+    try {
+        const [updated] = await Service.update(req.body, {
+            where: { id: req.params.id }
+        });
+
+        if (!updated) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        const updatedService = await Service.findByPk(req.params.id);
+        res.status(200).json({ service: updatedService });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating service', error });
+    }
+});
+
+// Delete a service
+router.delete('/:id', async (req, res) => {
+    try {
+        const deleted = await Service.destroy({
+            where: { id: req.params.id }
+        });
+
+        if (!deleted) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting service', error });
+    }
+});
+
+// Export the router
+module.exports = router;
