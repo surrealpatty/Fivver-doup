@@ -2,28 +2,20 @@ require('dotenv').config(); // Ensure this is at the top to load environment var
 
 const config = {
     development: {
-        db: {
-            username: process.env.DB_USERNAME || 'your_db_username',
-            password: process.env.DB_PASSWORD || 'your_db_password',
-            database: process.env.DB_NAME || 'fivver_doup_db',
-            host: process.env.DB_HOST || 'localhost',
-            dialect: 'mysql', // Specify the database dialect
-        },
-        jwt: {
-            secret: process.env.JWT_SECRET || 'your_jwt_secret',
-        },
+        username: process.env.DB_USERNAME || 'your_db_username',
+        password: process.env.DB_PASSWORD || 'your_db_password',
+        database: process.env.DB_NAME || 'fivver_doup_db',
+        host: process.env.DB_HOST || 'localhost',
+        dialect: process.env.DB_DIALECT || 'mysql', // Specify the database dialect
+        jwtSecret: process.env.JWT_SECRET || 'your_jwt_secret', // Optional for JWT usage
     },
     production: {
-        db: {
-            username: process.env.PROD_DB_USERNAME || 'your_prod_db_username',
-            password: process.env.PROD_DB_PASSWORD || 'your_prod_db_password',
-            database: process.env.DB_NAME || 'fivver_doup_db',
-            host: process.env.DB_HOST || 'localhost',
-            dialect: 'mysql', // Specify the database dialect
-        },
-        jwt: {
-            secret: process.env.PROD_JWT_SECRET || 'your_prod_jwt_secret',
-        },
+        username: process.env.PROD_DB_USERNAME || 'your_prod_db_username',
+        password: process.env.PROD_DB_PASSWORD || 'your_prod_db_password',
+        database: process.env.PROD_DB_NAME || 'fivver_doup_db',
+        host: process.env.PROD_DB_HOST || 'localhost',
+        dialect: process.env.DB_DIALECT || 'mysql', // Specify the database dialect
+        jwtSecret: process.env.PROD_JWT_SECRET || 'your_prod_jwt_secret', // Optional for JWT usage
     },
 };
 
@@ -39,11 +31,8 @@ const validateConfig = (envConfig) => {
 };
 
 // Validate configurations for both environments
-validateConfig(config.development.db);
-validateConfig(config.production.db);
+validateConfig(config.development);
+validateConfig(config.production);
 
 // Export the configuration object in the format Sequelize expects
-module.exports = {
-    development: config.development.db,
-    production: config.production.db,
-};
+module.exports = config;

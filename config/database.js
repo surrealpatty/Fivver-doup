@@ -4,19 +4,19 @@ require('dotenv').config(); // Load environment variables from .env file
 // Define configuration for different environments
 const config = {
     development: {
-        DB_NAME: process.env.DB_NAME || 'default_dev_db',            // Default dev database name
-        DB_USERNAME: process.env.DB_USER || 'default_user',          // Default dev username (changed from DB_USERNAME for consistency with .env variable)
-        DB_PASSWORD: process.env.DB_PASSWORD || 'default_password',  // Default dev password
-        DB_HOST: process.env.DB_HOST || 'localhost',                 // Default dev host
-        DB_DIALECT: process.env.DB_DIALECT || 'mysql',               // Database dialect
-        logging: console.log,                                         // Enable logging for SQL queries
+        database: process.env.DB_NAME || 'default_dev_db',            // Development database name
+        username: process.env.DB_USERNAME || 'default_user',          // Development username
+        password: process.env.DB_PASSWORD || 'default_password',      // Development password
+        host: process.env.DB_HOST || 'localhost',                     // Development host
+        dialect: process.env.DB_DIALECT || 'mysql',                   // Database dialect
+        logging: console.log,                                         // Enable logging for SQL queries in development
     },
     production: {
-        DB_NAME: process.env.DB_NAME,                                // Production database name
-        DB_USERNAME: process.env.DB_USER,                            // Production username (changed from DB_USERNAME for consistency with .env variable)
-        DB_PASSWORD: process.env.DB_PASSWORD,                        // Production password
-        DB_HOST: process.env.DB_HOST,                                // Production host
-        DB_DIALECT: process.env.DB_DIALECT || 'mysql',               // Database dialect
+        database: process.env.DB_NAME,                                // Production database name
+        username: process.env.DB_USERNAME,                            // Production username
+        password: process.env.DB_PASSWORD,                            // Production password
+        host: process.env.DB_HOST,                                    // Production host
+        dialect: process.env.DB_DIALECT || 'mysql',                   // Database dialect
         logging: false,                                               // Disable logging in production
     },
 };
@@ -26,9 +26,9 @@ const env = process.env.NODE_ENV || 'development';                   // Default 
 const dbConfig = config[env];                                        // Get the configuration for the current environment
 
 // Initialize Sequelize with the selected configuration
-const sequelize = new Sequelize(dbConfig.DB_NAME, dbConfig.DB_USERNAME, dbConfig.DB_PASSWORD, {
-    host: dbConfig.DB_HOST,
-    dialect: dbConfig.DB_DIALECT,
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
     logging: dbConfig.logging,
 });
 
