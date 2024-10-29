@@ -1,13 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const sequelize = require('./config/database'); // Ensure you are importing the sequelize instance correctly
+const sequelize = require('./config/database'); // Import sequelize instance
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/servicesRoute');
 const reviewRoutes = require('./routes/review');
 const { init: initUser, Model: User } = require('./models/user'); // Import User model and initUser function
 const { init: initService, Model: Service } = require('./models/services'); // Import Service model and initService function
-const { init: initUserProfile, Model: UserProfile } = require('./models/userProfile'); // Import UserProfile model and initUserProfile function
+const { init: initUserProfile, Model: UserProfile } = require('./models/UserProfile'); // Import UserProfile model and initUserProfile function
 
 // Load environment variables from .env file
 dotenv.config();
@@ -53,7 +53,7 @@ const initializeDatabase = async () => {
         initModels(); // Call to initialize models and associations
 
         // Sync models with the database
-        await sequelize.sync(); // Use { force: true } if you need to reset tables
+        await sequelize.sync({ alter: true }); // Use { force: true } if you need to reset tables
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err.message);

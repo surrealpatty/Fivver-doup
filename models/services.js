@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Model: Service } = require('../models/service'); // Adjust path as necessary
+const { Model: Service } = require('../models/services'); // Ensure this points to the correct file
 const { check, validationResult } = require('express-validator');
 
 // Create a new service
