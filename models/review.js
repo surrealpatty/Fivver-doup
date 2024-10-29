@@ -1,20 +1,22 @@
 const { Model, DataTypes } = require('sequelize');
 
 class Review extends Model {
+    // Associate the Review model with other models
     static associate(models) {
         Review.belongsTo(models.User, {
             foreignKey: 'userId',
-            as: 'user', // Optional: You can give it an alias
+            as: 'user', // Alias for the User
             onDelete: 'CASCADE',
         });
         Review.belongsTo(models.Service, {
             foreignKey: 'serviceId',
-            as: 'service', // Optional: You can give it an alias
+            as: 'service', // Alias for the Service
             onDelete: 'CASCADE',
         });
     }
 }
 
+// Initialize the Review model
 const initReview = (sequelize) => {
     Review.init(
         {
@@ -69,13 +71,16 @@ const initReview = (sequelize) => {
         },
         {
             sequelize,
-            modelName: 'Review',
+            modelName: 'Review', // This is the name of the model
             tableName: 'reviews', // Ensure this matches your database table name
             timestamps: true, // Enable timestamps if needed
-            underscored: true, // Enable underscored column names if needed
+            underscored: true, // Use snake_case for column names
         }
     );
 };
 
-// Export the model and the initialization function
-module.exports = { Review, initReview };
+// Export the model and the initialization function correctly
+module.exports = {
+    Review, // Export the Review model class
+    initReview, // Export the initialization function
+};

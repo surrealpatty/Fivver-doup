@@ -23,15 +23,15 @@ fs.readdirSync(__dirname)
     })
     .forEach(file => {
         // Require the model and get both the model and init function
-        const { init, model } = require(path.join(__dirname, file));
+        const { initReview, Review } = require(path.join(__dirname, file));
 
-        // Call the init function with the Sequelize instance
-        if (typeof init === 'function') {
-            init(sequelize); // Ensure that init is called if it exists
+        // Call the init function with the Sequelize instance if it exists
+        if (typeof initReview === 'function') {
+            initReview(sequelize); // Ensure that init is called if it exists
         }
 
         // Store the model in the models object
-        models[model.name] = model; // Using the model's name as the key
+        models[Review.name] = Review; // Use the model's name as the key
     });
 
 // Now that all models are initialized, set up associations
