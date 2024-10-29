@@ -1,80 +1,60 @@
-const express = require('express');
-const router = express.Router();
-const { Review } = require('../models'); // Ensure you're importing the Review model correctly
-
-// Route for creating a review
-router.post('/', async (req, res) => {
-    try {
-        const { rating, comment, userId, serviceId } = req.body;
-
-        // Validate required fields
-        if (rating == null || comment == null || userId == null || serviceId == null) {
-            return res.status(400).json({ error: 'All fields are required' });
+module.exports = (sequelize, DataTypes) => {
+    const Review = sequelize.define('Review', {
+        rating: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Rating cannot be null'
+                },
+                min: {
+                    args: [1],
+                    msg: 'Rating must be at least 1'
+                },
+                max: {
+                    args: [5],
+                    msg: 'Rating must be at most 5'
+                }
+            }
+        },
+        comment: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Comment cannot be null'
+                },
+                len: {
+                    args: [1, 500],
+                    msg: 'Comment must be between 1 and 500 characters long'
+                }
+            }
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'User ID cannot be null'
+                }
+            }
+        },
+        serviceId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Service ID cannot be null'
+                }
+            }
         }
+    });
 
-        const newReview = await Review.create({ rating, comment, userId, serviceId });
-        res.status(201).json(newReview);
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
-    }
-});
+    Review.associate = (models) => {
+        // Associate Review with User and Service
+        Review.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+        Review.belongsTo(models.Service, { foreignKey: 'serviceId', onDelete: 'CASCADE' });
+    };
 
-// Route for retrieving all reviews
-router.get('/', async (req, res) => {
-    try {
-        const reviews = await Review.findAll();
-        res.status(200).json(reviews);
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
-    }
-});
-
-// Route for retrieving a review by ID
-router.get('/:id', async (req, res) => {
-    try {
-        const review = await Review.findByPk(req.params.id);
-        if (!review) {
-            return res.status(404).json({ error: 'Review not found' });
-        }
-        res.status(200).json(review);
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
-    }
-});
-
-// Route for updating a review
-router.put('/:id', async (req, res) => {
-    try {
-        const { rating, comment } = req.body;
-        const review = await Review.findByPk(req.params.id);
-        if (!review) {
-            return res.status(404).json({ error: 'Review not found' });
-        }
-
-        // Update the review only if provided
-        if (rating !== undefined) review.rating = rating;
-        if (comment !== undefined) review.comment = comment;
-
-        await review.save();
-        res.status(200).json(review);
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
-    }
-});
-
-// Route for deleting a review
-router.delete('/:id', async (req, res) => {
-    try {
-        const review = await Review.findByPk(req.params.id);
-        if (!review) {
-            return res.status(404).json({ error: 'Review not found' });
-        }
-
-        await review.destroy();
-        res.status(204).send(); // No content to send back
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
-    }
-});
-
-module.exports = router;
+    return Review;
+};
