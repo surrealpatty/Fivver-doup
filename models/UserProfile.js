@@ -1,6 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Adjust the path to your database config
-const User = require('./user'); // Import the User model to set up the association
 
 // Define the UserProfile model
 class UserProfile extends Model {
@@ -14,16 +13,17 @@ class UserProfile extends Model {
 }
 
 // Initialize the UserProfile model
-const initUserProfile = (sequelize) => {
+const initUserProfile = () => {
     UserProfile.init(
         {
             userId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: User, // Reference the User model directly
+                    model: 'users', // Use lowercase for the table name
                     key: 'id',
                 },
+                unique: true, // Ensure one profile per user
             },
             name: {
                 type: DataTypes.STRING,
@@ -51,7 +51,7 @@ const initUserProfile = (sequelize) => {
             },
         },
         {
-            sequelize,
+            sequelize, // Pass sequelize instance
             modelName: 'UserProfile',
             tableName: 'user_profiles', // Specify the table name
             timestamps: true, // Automatically adds createdAt and updatedAt fields
