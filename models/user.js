@@ -2,23 +2,18 @@ const { Model, DataTypes } = require('sequelize');
 
 class User extends Model {
     static associate(models) {
-        // Define association with the Service model
         User.hasMany(models.Service, {
             foreignKey: 'userId',
-            as: 'userServices', // Unique alias for better clarity
-            onDelete: 'CASCADE', // Define delete behavior
-            onUpdate: 'CASCADE', // Define update behavior
+            as: 'userServices',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         });
-
-        // Define association with the UserProfile model (if applicable)
         User.hasOne(models.UserProfile, {
-            foreignKey: 'user_id', // Ensure this matches your UserProfile model's foreign key
-            as: 'profile', // Unique alias for better clarity
-            onDelete: 'CASCADE', // Define delete behavior
-            onUpdate: 'CASCADE', // Define update behavior
+            foreignKey: 'user_id',
+            as: 'profile',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         });
-
-        // Add any other associations as needed
     }
 }
 
@@ -88,5 +83,5 @@ const initUser = (sequelize) => {
     );
 };
 
-// Export an object containing the User model and the init function
-module.exports = { User, initUser };
+// Exporting both the User model and the init function
+module.exports = { init: initUser, model: User };
