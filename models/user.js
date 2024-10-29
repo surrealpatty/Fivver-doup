@@ -22,6 +22,7 @@ class User extends Model {
     }
 }
 
+// Initialization function for the User model
 const initUser = (sequelize) => {
     User.init(
         {
@@ -87,5 +88,5 @@ const initUser = (sequelize) => {
     );
 };
 
-// Export the model and the initialization function
+// Export an object containing the User model and the init function
 module.exports = { User, initUser };
