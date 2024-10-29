@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize'); // Destructure Sequelize from the module
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -23,10 +23,13 @@ fs.readdirSync(__dirname)
     })
     .forEach(file => {
         // Require the model and initialize it with Sequelize
-        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+        const { init, model } = require(path.join(__dirname, file)); // Destructure the exported init function and model
 
-        // Use the model's name if available, otherwise use the filename
-        const modelName = model.name || file.slice(0, -3); // Use the filename without the extension
+        // Initialize the model with Sequelize
+        init(sequelize); // Call the init function with the Sequelize instance
+
+        // Use the model's name
+        const modelName = model.name; // Use the name defined in the model class
 
         // Store the model in the models object
         models[modelName] = model;
