@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -22,16 +22,18 @@ fs.readdirSync(__dirname)
         );
     })
     .forEach(file => {
-        // Require the model and get both the model and init function
+        // Require the model and get both the init function and model class
         const { initReview, Review } = require(path.join(__dirname, file));
 
-        // Call the init function with the Sequelize instance if it exists
-        if (typeof initReview === 'function') {
-            initReview(sequelize); // Ensure that init is called if it exists
+        // Check if both the init function and model class exist before proceeding
+        if (initReview && Review) {
+            // Call the init function with the Sequelize instance
+            initReview(sequelize);
+            // Store the model in the models object using the model's name as the key
+            models[Review.name] = Review;
+        } else {
+            console.warn(`Skipping file: ${file}. Ensure it exports both initReview and Review.`);
         }
-
-        // Store the model in the models object
-        models[Review.name] = Review; // Use the model's name as the key
     });
 
 // Now that all models are initialized, set up associations
