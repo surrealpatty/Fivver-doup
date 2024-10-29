@@ -71,4 +71,8 @@ const initService = (sequelize) => {
     );
 };
 
-module.exports = { Service, initService };
+// Exporting both the init function and the Service model
+module.exports = {
+    init: initService,
+    Model: Service, // Changed from Service to Model for consistency
+};

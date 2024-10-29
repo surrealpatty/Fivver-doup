@@ -79,8 +79,8 @@ const initReview = (sequelize) => {
     );
 };
 
-// Export the model and the initialization function correctly
+// Exporting both the init function and the Review model correctly
 module.exports = {
-    Review, // Export the Review model class
-    initReview, // Export the initialization function
+    init: initReview, // Export the initialization function
+    Model: Review,    // Export the Review model class
 };

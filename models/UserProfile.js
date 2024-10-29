@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Adjust the path to your database config
 
 // Define the UserProfile model
 class UserProfile extends Model {
@@ -13,7 +12,7 @@ class UserProfile extends Model {
 }
 
 // Initialize the UserProfile model
-const initUserProfile = () => {
+const initUserProfile = (sequelize) => {
     UserProfile.init(
         {
             userId: {
@@ -60,5 +59,8 @@ const initUserProfile = () => {
     );
 };
 
-// Export the UserProfile model and the init function
-module.exports = { UserProfile, initUserProfile };
+// Export the init function and the UserProfile model correctly
+module.exports = {
+    init: initUserProfile, // Export the initialization function
+    Model: UserProfile,     // Export the UserProfile model class
+};
