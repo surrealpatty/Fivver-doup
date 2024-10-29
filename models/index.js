@@ -22,17 +22,17 @@ fs.readdirSync(__dirname)
         );
     })
     .forEach(file => {
-        // Require the model and get both the init function and model class
-        const { initReview, Review } = require(path.join(__dirname, file));
+        // Require the model
+        const modelModule = require(path.join(__dirname, file));
 
-        // Check if both the init function and model class exist before proceeding
-        if (initReview && Review) {
+        // Check if both the init function and model class exist
+        if (modelModule.init && modelModule.Model) {
             // Call the init function with the Sequelize instance
-            initReview(sequelize);
+            modelModule.init(sequelize);
             // Store the model in the models object using the model's name as the key
-            models[Review.name] = Review;
+            models[modelModule.Model.name] = modelModule.Model;
         } else {
-            console.warn(`Skipping file: ${file}. Ensure it exports both initReview and Review.`);
+            console.warn(`Skipping file: ${file}. Ensure it exports both init and Model.`);
         }
     });
 

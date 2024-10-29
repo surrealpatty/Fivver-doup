@@ -84,4 +84,7 @@ const initUser = (sequelize) => {
 };
 
 // Exporting both the init function and the User model
-module.exports = { init: initUser, model: User };
+module.exports = {
+    init: initUser,
+    Model: User, // Changed from model to Model for consistency
+};
