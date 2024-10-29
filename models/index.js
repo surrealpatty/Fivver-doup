@@ -13,19 +13,19 @@ const models = {};
 fs.readdirSync(__dirname)
     .filter(file => {
         return (
-            file.indexOf('.') !== 0 &&
-            file !== basename &&
-            file.slice(-3) === '.js'
+            file.indexOf('.') !== 0 && // Ignore dotfiles
+            file !== basename && // Ignore the index.js file itself
+            file.slice(-3) === '.js' // Only include .js files
         );
     })
     .forEach(file => {
         const model = require(path.join(__dirname, file));
-        const modelName = Object.keys(model)[0]; // Get the model name from the exports
-        models[modelName] = model[modelName]; // Add model to models object
+        const modelName = model.name || Object.keys(model)[0]; // Get the model name from the exports
+        models[modelName] = model(sequelize, Sequelize.DataTypes); // Initialize model with sequelize and data types
 
         // Call the initialization function if it exists
-        if (model[`init${modelName}`]) {
-            model[`init${modelName}`](sequelize);
+        if (typeof models[modelName].init === 'function') {
+            models[modelName].init(sequelize);
         }
     });
 
