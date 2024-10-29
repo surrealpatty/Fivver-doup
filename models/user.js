@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Model: User } = require('../models/user'); // Ensure the path is correct
+const { User } = require('../models'); // Adjusted the import to directly reference User
 const { check, validationResult } = require('express-validator');
 
 // Middleware for validation
