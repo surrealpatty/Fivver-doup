@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Model: Service } = require('../models/services'); // Ensure this points to the correct file
+const { Service } = require('../models'); // Adjusted the import to directly reference the Service model
 const { check, validationResult } = require('express-validator');
 
 // Middleware for validation
