@@ -7,7 +7,7 @@ const serviceRoutes = require('./routes/servicesRoute');
 const reviewRoutes = require('./routes/review');
 const { User, initUser } = require('./models/user'); // Import User model and initUser function
 const { Service, initService } = require('./models/services'); // Import Service model and initService function
-const { UserProfile, initUserProfile } = require('./models/userProfile'); // Import UserProfile model and initUserProfile function
+const { UserProfile, initUserProfile } = require('./models/UserProfile'); // Import UserProfile model and initUserProfile function
 
 // Load environment variables from .env file
 dotenv.config();
@@ -41,7 +41,7 @@ const initModels = () => {
     // Set up model associations
     User.associate({ Service, UserProfile });
     Service.associate({ User });
-    UserProfile.associate({ User }); // Ensure UserProfile is associated correctly
+    UserProfile.associate({ User });
 };
 
 // Test and synchronize the database connection

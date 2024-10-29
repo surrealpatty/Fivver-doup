@@ -7,15 +7,15 @@ router.post('/', async (req, res) => {
     try {
         const { rating, comment, userId, serviceId } = req.body;
 
-        // Validate required fields (optional)
-        if (!rating || !comment || !userId || !serviceId) {
+        // Validate required fields
+        if (rating == null || comment == null || userId == null || serviceId == null) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
         const newReview = await Review.create({ rating, comment, userId, serviceId });
         res.status(201).json(newReview);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
     }
 });
 
@@ -25,11 +25,11 @@ router.get('/', async (req, res) => {
         const reviews = await Review.findAll();
         res.status(200).json(reviews);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
     }
 });
 
-// Route for retrieving a review by ID (optional)
+// Route for retrieving a review by ID
 router.get('/:id', async (req, res) => {
     try {
         const review = await Review.findByPk(req.params.id);
@@ -38,11 +38,11 @@ router.get('/:id', async (req, res) => {
         }
         res.status(200).json(review);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
     }
 });
 
-// Route for updating a review (optional)
+// Route for updating a review
 router.put('/:id', async (req, res) => {
     try {
         const { rating, comment } = req.body;
@@ -51,18 +51,18 @@ router.put('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Review not found' });
         }
 
-        // Update the review
-        review.rating = rating !== undefined ? rating : review.rating; // Update only if provided
-        review.comment = comment !== undefined ? comment : review.comment;
+        // Update the review only if provided
+        if (rating !== undefined) review.rating = rating;
+        if (comment !== undefined) review.comment = comment;
 
         await review.save();
         res.status(200).json(review);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
     }
 });
 
-// Route for deleting a review (optional)
+// Route for deleting a review
 router.delete('/:id', async (req, res) => {
     try {
         const review = await Review.findByPk(req.params.id);
@@ -73,7 +73,7 @@ router.delete('/:id', async (req, res) => {
         await review.destroy();
         res.status(204).send(); // No content to send back
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message }); // Changed to 500 for server errors
     }
 });
 
