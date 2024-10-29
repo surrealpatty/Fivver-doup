@@ -40,6 +40,16 @@ const initUser = (sequelize) => {
                     },
                 },
             },
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW, // Set default to current timestamp
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW, // Set default to current timestamp
+            },
         },
         {
             sequelize,
