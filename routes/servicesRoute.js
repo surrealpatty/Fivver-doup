@@ -1,5 +1,3 @@
-// routes/servicesRoute.js
-
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/services'); // Ensure the path to the model is correct
@@ -14,7 +12,9 @@ router.post(
         // Validate input data
         body('title').notEmpty().withMessage('Title is required'),
         body('description').notEmpty().withMessage('Description is required'),
-        body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
+        body('price')
+            .isFloat({ gt: 0 })
+            .withMessage('Price must be a positive number'),
     ],
     async (req, res) => {
         // Handle validation errors
@@ -126,4 +126,5 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 });
 
+// Export the router
 module.exports = router;

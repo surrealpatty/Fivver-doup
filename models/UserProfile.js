@@ -19,7 +19,7 @@ const initUserProfile = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'users', // Use lowercase for the table name
+                    model: 'users', // Ensure this matches the actual table name
                     key: 'id',
                 },
                 unique: true, // Ensure one profile per user
