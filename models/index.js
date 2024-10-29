@@ -25,19 +25,21 @@ fs.readdirSync(__dirname)
         // Require the model and get both the model and init function
         const { init, model } = require(path.join(__dirname, file));
 
-        // Store the model in the models object
-        models[model.name] = model; // Using the model's name as the key
-
         // Call the init function with the Sequelize instance
         if (typeof init === 'function') {
             init(sequelize); // Ensure that init is called if it exists
         }
-        
-        // Call the associate method if it exists
-        if (typeof model.associate === 'function') {
-            model.associate(models);
-        }
+
+        // Store the model in the models object
+        models[model.name] = model; // Using the model's name as the key
     });
+
+// Now that all models are initialized, set up associations
+Object.keys(models).forEach(modelName => {
+    if (typeof models[modelName].associate === 'function') {
+        models[modelName].associate(models);
+    }
+});
 
 // Export the models and the Sequelize instance
 module.exports = { sequelize, models };

@@ -2,10 +2,10 @@ const { Review, User, Service } = require('../models'); // Import models
 
 // Create a new review
 exports.createReview = async (req, res) => {
-    try {
-        const { rating, comment, serviceId } = req.body;
-        const userId = req.user.id; // Assuming user ID is retrieved from JWT in the request
+    const { rating, comment, serviceId } = req.body;
+    const userId = req.user.id; // Assuming user ID is retrieved from JWT in the request
 
+    try {
         // Check if the service exists
         const serviceExists = await Service.findByPk(serviceId);
         if (!serviceExists) {
@@ -39,9 +39,9 @@ exports.createReview = async (req, res) => {
 
 // Get reviews for a specific service
 exports.getReviewsForService = async (req, res) => {
-    try {
-        const { serviceId } = req.params;
+    const { serviceId } = req.params;
 
+    try {
         // Check if the service exists
         const serviceExists = await Service.findByPk(serviceId);
         if (!serviceExists) {
@@ -63,11 +63,11 @@ exports.getReviewsForService = async (req, res) => {
 
 // Update a review
 exports.updateReview = async (req, res) => {
-    try {
-        const { reviewId } = req.params;
-        const { rating, comment } = req.body;
-        const userId = req.user.id; // User ID from JWT
+    const { reviewId } = req.params;
+    const { rating, comment } = req.body;
+    const userId = req.user.id; // User ID from JWT
 
+    try {
         // Find the review
         const review = await Review.findByPk(reviewId);
         if (!review) {
@@ -100,10 +100,10 @@ exports.updateReview = async (req, res) => {
 
 // Delete a review
 exports.deleteReview = async (req, res) => {
-    try {
-        const { reviewId } = req.params;
-        const userId = req.user.id; // User ID from JWT
+    const { reviewId } = req.params;
+    const userId = req.user.id; // User ID from JWT
 
+    try {
         // Find the review
         const review = await Review.findByPk(reviewId);
         if (!review) {
