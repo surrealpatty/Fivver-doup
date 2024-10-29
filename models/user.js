@@ -9,7 +9,7 @@ class User extends Model {
             onUpdate: 'CASCADE',
         });
         User.hasOne(models.UserProfile, {
-            foreignKey: 'user_id',
+            foreignKey: 'user_id', // Ensure this matches the actual UserProfile foreign key
             as: 'profile',
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
@@ -83,5 +83,5 @@ const initUser = (sequelize) => {
     );
 };
 
-// Exporting both the User model and the init function
+// Exporting both the init function and the User model
 module.exports = { init: initUser, model: User };
