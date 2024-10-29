@@ -50,10 +50,18 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
 
+    // Associations
     Review.associate = (models) => {
-        // Associate Review with User and Service
-        Review.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE' });
-        Review.belongsTo(models.Service, { foreignKey: 'serviceId', onDelete: 'CASCADE' });
+        Review.belongsTo(models.User, {
+            foreignKey: 'userId',
+            as: 'user', // Optional: You can give it an alias
+            onDelete: 'CASCADE',
+        });
+        Review.belongsTo(models.Service, {
+            foreignKey: 'serviceId',
+            as: 'service', // Optional: You can give it an alias
+            onDelete: 'CASCADE',
+        });
     };
 
     return Review;
