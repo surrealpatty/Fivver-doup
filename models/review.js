@@ -6,12 +6,12 @@ class Review extends Model {
         Review.belongsTo(models.User, {
             foreignKey: 'userId',
             as: 'user', // Alias for the User
-            onDelete: 'CASCADE',
+            onDelete: 'CASCADE', // Delete reviews when the associated user is deleted
         });
         Review.belongsTo(models.Service, {
             foreignKey: 'serviceId',
             as: 'service', // Alias for the Service
-            onDelete: 'CASCADE',
+            onDelete: 'CASCADE', // Delete reviews when the associated service is deleted
         });
     }
 }
