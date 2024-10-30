@@ -5,13 +5,12 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const sequelize = require('./config/database'); // Ensure this path is correct
 const User = require('./models/user'); // Adjust this model if needed
-const UserProfile = require('./models/UserProfile'); // Ensure this model exists and is correct
 
 dotenv.config(); // Load environment variables
 
 const app = express();
 const PORT = process.env.PORT || 3000; // Use PORT from .env
-const JWT_SECRET = process.env.JWT_SECRET; // Ensure JWT_SECRET is set in .env file
+const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; // Ensure JWT_SECRET is set in .env file
 
 // Middleware
 app.use(express.json()); // Parse JSON requests
@@ -42,7 +41,7 @@ sequelize.authenticate()
         process.exit(1); // Exit the application if DB connection fails
     });
 
-// Sync the database and UserProfile model
+// Sync the database
 sequelize.sync({ alter: true })
     .then(() => console.log('Database synced with models'))
     .catch((error) => {
@@ -141,7 +140,7 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         res.json({
             id: user.id,
             email: user.email,
-            username: user.username
+            username: user.username,
         });
     } catch (error) {
         console.error('Error fetching profile:', error.message);
