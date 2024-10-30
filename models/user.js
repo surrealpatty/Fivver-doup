@@ -16,7 +16,7 @@ const initUser = (sequelize) => {
                 validate: {
                     len: {
                         args: [3, 30],
-                        msg: 'Username must be between 3 and 30 characters long',
+                        msg: 'Username must be between 3 and 30 characters long.',
                     },
                 },
             },
@@ -26,7 +26,7 @@ const initUser = (sequelize) => {
                 unique: true,
                 validate: {
                     isEmail: {
-                        msg: 'Please provide a valid email address',
+                        msg: 'Please provide a valid email address.',
                     },
                 },
             },
@@ -36,7 +36,7 @@ const initUser = (sequelize) => {
                 validate: {
                     len: {
                         args: [6],
-                        msg: 'Password must be at least 6 characters long',
+                        msg: 'Password must be at least 6 characters long.',
                     },
                 },
             },
@@ -59,18 +59,8 @@ const initUser = (sequelize) => {
                 defaultValue: 0,
             },
             serviceOfferings: {
-                type: DataTypes.JSONB, // This can store an array of services the user offers
+                type: DataTypes.JSONB, // Stores an array of services the user offers
                 allowNull: true,
-            },
-            createdAt: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW, // Set default to current timestamp
-            },
-            updatedAt: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW, // Set default to current timestamp
             },
         },
         {

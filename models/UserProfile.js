@@ -27,17 +27,23 @@ const initUserProfile = (sequelize) => {
             name: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                validate: {
+                    len: {
+                        args: [3, 50], // Ensure name is between 3 and 50 characters long
+                        msg: 'Name must be between 3 and 50 characters long.',
+                    },
+                },
             },
             profilePicture: {
                 type: DataTypes.STRING, // Store the image URL
                 allowNull: true,
             },
             skills: {
-                type: DataTypes.TEXT, // For a comma-separated list or JSON string
+                type: DataTypes.JSON, // Store an array of skills
                 allowNull: true,
             },
             services: {
-                type: DataTypes.TEXT,
+                type: DataTypes.JSON, // Store an array of services
                 allowNull: true,
             },
             experience: {

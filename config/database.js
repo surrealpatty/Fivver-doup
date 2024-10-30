@@ -5,7 +5,7 @@ require('dotenv').config(); // Load environment variables from .env file
 const config = {
     development: {
         database: process.env.DB_NAME || 'default_dev_db',            // Development database name
-        username: process.env.DB_USERNAME || 'default_user',          // Development username
+        username: process.env.DB_USER || 'default_user',             // Development username
         password: process.env.DB_PASSWORD || 'default_password',      // Development password
         host: process.env.DB_HOST || 'localhost',                     // Development host
         dialect: process.env.DB_DIALECT || 'mysql',                   // Database dialect
@@ -13,7 +13,7 @@ const config = {
     },
     production: {
         database: process.env.DB_NAME,                                // Production database name
-        username: process.env.DB_USERNAME,                            // Production username
+        username: process.env.DB_USER,                                // Production username
         password: process.env.DB_PASSWORD,                            // Production password
         host: process.env.DB_HOST,                                    // Production host
         dialect: process.env.DB_DIALECT || 'mysql',                   // Database dialect
