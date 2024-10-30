@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const helmet = require('helmet'); // Import Helmet for security headers
 const sequelize = require('./config/database'); // Import sequelize instance
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/servicesRoute');
@@ -17,6 +18,17 @@ const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
+
+// Use helmet to set security headers, including CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      objectSrc: ["'none'"],
+    },
+  },
+}));
 
 // Middleware to parse JSON requests
 app.use(express.json());
