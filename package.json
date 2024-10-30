@@ -6,13 +6,13 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "vue": "^2.6.14"
+    "vue": "^3.5.12"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.5.0",
-    "@vue/test-utils": "^1.0.0",
-    "babel-jest": "^26.0.0",
-    "jest": "^26.0.0",
+    "@vue/cli-service": "^5.0.0", 
+    "@vue/test-utils": "^2.0.0",  
+    "babel-jest": "^27.0.0",
+    "jest": "^27.0.0",
     "jest-environment-jsdom": "^28.0.0",
     "vue-jest": "^5.0.0"
   },
@@ -34,9 +34,7 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {
-      
-    }
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
