@@ -2,20 +2,18 @@ require('dotenv').config(); // Ensure this is at the top to load environment var
 
 const config = {
     development: {
-        username: process.env.DB_USERNAME || 'your_db_username',
+        username: process.env.DB_USER || 'your_db_username',
         password: process.env.DB_PASSWORD || 'your_db_password',
         database: process.env.DB_NAME || 'fivver_doup_db',
         host: process.env.DB_HOST || 'localhost',
         dialect: process.env.DB_DIALECT || 'mysql', // Specify the database dialect
-        jwtSecret: process.env.JWT_SECRET || 'your_jwt_secret', // Optional for JWT usage
     },
     production: {
-        username: process.env.PROD_DB_USERNAME || 'your_prod_db_username',
+        username: process.env.PROD_DB_USER || 'your_prod_db_username',
         password: process.env.PROD_DB_PASSWORD || 'your_prod_db_password',
         database: process.env.PROD_DB_NAME || 'fivver_doup_db',
         host: process.env.PROD_DB_HOST || 'localhost',
         dialect: process.env.DB_DIALECT || 'mysql', // Specify the database dialect
-        jwtSecret: process.env.PROD_JWT_SECRET || 'your_prod_jwt_secret', // Optional for JWT usage
     },
 };
 
@@ -30,8 +28,10 @@ const validateConfig = (envConfig) => {
     }
 };
 
-// Validate configurations for both environments
+// Validate configurations for development environment
 validateConfig(config.development);
+
+// Validate configurations for production environment
 validateConfig(config.production);
 
 // Export the configuration object in the format Sequelize expects
