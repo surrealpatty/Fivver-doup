@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2020",  // or "ESNext"
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": ["ES2020", "DOM"], // or "ESNext", "DOM"
-    "outDir": "./dist",
-    "types": ["node"],
-    "incremental": true
+    "target": "ES2020",                       // You can also use "ESNext" if you want the latest features
+    "module": "commonjs",                     // Use "ESNext" if you're targeting ES modules
+    "esModuleInterop": true,                  // Allows default imports from modules with no default export
+    "forceConsistentCasingInFileNames": true, // Enforces consistent file casing
+    "strict": true,                            // Enables all strict type-checking options
+    "skipLibCheck": true,                     // Skips type checking of declaration files
+    "lib": ["ES2020", "DOM"],                 // Specifies library files to include
+    "outDir": "./dist",                       // Output directory for compiled files
+    "types": ["node"],                         // Includes type definitions for Node.js
+    "incremental": true                        // Enables incremental compilation
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts"],                     // Include all TypeScript files
+  "exclude": ["node_modules"]                 // Exclude node_modules from compilation
 }
