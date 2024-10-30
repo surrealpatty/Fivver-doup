@@ -40,6 +40,28 @@ const initUser = (sequelize) => {
                     },
                 },
             },
+            profilePicture: {
+                type: DataTypes.STRING, // URL to the profile picture
+                allowNull: true,
+            },
+            bio: {
+                type: DataTypes.TEXT, // Short biography of the user
+                allowNull: true,
+            },
+            ratings: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+                defaultValue: 0.0,
+            },
+            reviewsCount: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                defaultValue: 0,
+            },
+            serviceOfferings: {
+                type: DataTypes.JSONB, // This can store an array of services the user offers
+                allowNull: true,
+            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,
