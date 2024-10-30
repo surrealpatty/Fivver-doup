@@ -1,36 +1,41 @@
-# Dependency directories
-node_modules/                 # npm packages
-bower_components/             # Bower dependencies (if applicable)
+# .gitignore
+# This file specifies files and directories that should be ignored by Git.
+# It helps keep the repository clean from unnecessary files.
+
+# Node modules
+node_modules/                 # Exclude the directory where npm packages are installed
 
 # Logs
-logs/                         # Log directory
-*.log                         # Log files
-npm-debug.log*                # npm debug logs
-yarn-debug.log                # Yarn debug logs
-yarn-error.log                # Yarn error logs
+logs/                         # Exclude logs directory
+*.log                         # Exclude all log files
+npm-debug.log*               # Exclude npm debug log files
+yarn-debug.log                # Exclude Yarn debug logs
+yarn-error.log                # Exclude Yarn error logs
 
 # Environment variables
-.env                          # Main environment file
-.env.local                    # Local overrides
+.env                           # Exclude environment variable file (sensitive data)
+.env.local                    # Exclude local environment variable overrides
 
 # Build directories
-dist/                         # Distribution build
-build/                        # Build directory
+dist/                          # Exclude distribution build directory
+build/                         # Exclude build directory
+
+# Dependency directories
+bower_components/             # Exclude Bower dependency directory (if applicable)
 
 # IDE/Editor specific files
-.vscode/                      # Visual Studio Code settings
-.idea/                        # JetBrains IDE settings
+.vscode/                      # Exclude Visual Studio Code settings
+.idea/                        # Exclude JetBrains IDE settings
 
 # OS-specific files
-.DS_Store                     # macOS metadata
-Thumbs.db                     # Windows thumbnail cache
+.DS_Store                     # Exclude macOS metadata files
+Thumbs.db                     # Exclude Windows thumbnail cache files
 
 # Temporary files
-*.tmp                         # Temporary files
-*.temp                        # Temp files
-*.bak                         # Backup files
-*.orig                        # Original files
-*.swp                         # Swap files from editors
+*.tmp                         # Exclude all temporary files
+*.temp                        # Exclude all temp files
+*.bak                         # Exclude backup files
+*.orig                        # Exclude original files
 
 # TypeScript
 *.tsbuildinfo                 # TypeScript build info files
@@ -45,12 +50,10 @@ docs/*.msi                    # Exclude .msi files in the docs directory
 # Miscellaneous build artifacts
 *.class                       # Java class files
 *.o                           # Object files
-*.exe                         # Executables
+*.exe                         # Exclude executables
 
 # Lock files
 package-lock.json             # npm package lock file
 yarn.lock                     # Yarn lock file
 
 # Regular updates (review this as the project evolves)
-node_modules
-

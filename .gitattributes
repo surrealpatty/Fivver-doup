@@ -1,2 +1,5 @@
 * text=auto
+<<<<<<< HEAD
 docs/mysql-9.1.0-winx64.msi filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> 3e127564add52bd6d194c002d2d4546b9c1691f6
