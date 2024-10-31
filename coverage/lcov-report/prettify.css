@@ -1,1 +1,52 @@
-.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:1px solid #888}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+/* Base styles */
+.pln {
+    color: #000;
+}
+
+/* Media queries */
+@media screen {
+    .str { color: #080; }  /* String literals */
+    .kwd { color: #008; }  /* Keywords */
+    .com { color: #800; }  /* Comments */
+    .typ { color: #606; }  /* Types */
+    .lit { color: #066; }  /* Literals */
+    .pun, .opn, .clo { color: #660; }  /* Punctuation */
+    .tag { color: #008; }  /* Tags */
+    .atn { color: #606; }  /* Attributes */
+    .atv { color: #080; }  /* Attribute values */
+    .dec, .var { color: #606; }  /* Declarations and Variables */
+    .fun { color: red; }  /* Functions */
+}
+
+@media print, projection {
+    .str { color: #060; }  /* String literals */
+    .kwd { color: #006; font-weight: bold; }  /* Keywords */
+    .com { color: #600; font-style: italic; }  /* Comments */
+    .typ { color: #404; font-weight: bold; }  /* Types */
+    .lit { color: #044; }  /* Literals */
+    .pun, .opn, .clo { color: #440; }  /* Punctuation */
+    .tag { color: #006; font-weight: bold; }  /* Tags */
+    .atn { color: #404; }  /* Attributes */
+    .atv { color: #060; }  /* Attribute values */
+}
+
+/* Preformatted text styles */
+pre.prettyprint {
+    padding: 2px;
+    border: 1px solid #888;
+}
+
+/* Line number styles */
+ol.linenums {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
+    list-style-type: none;
+}
+
+li.L1, li.L3, li.L5, li.L7, li.L9 {
+    background: #eee;
+}
+
