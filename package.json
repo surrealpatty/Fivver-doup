@@ -8,6 +8,8 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
     "@vue/compiler-sfc": "^3.5.12",
     "@vue/component-compiler-utils": "^3.3.0",
     "audit": "^0.0.6",
