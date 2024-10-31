@@ -3,39 +3,20 @@
   "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build",  // Added build script
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@vue/cli-plugin-router": "^5.0.8",
-    "@vue/cli-plugin-vuex": "^5.0.8",
-    "@vue/compiler-sfc": "^3.5.12",
-    "@vue/component-compiler-utils": "^3.3.0",
-    "audit": "^0.0.6",
     "axios": "^1.7.7",
-    "cacache": "^19.0.1",
-    "copy-webpack-plugin": "^12.0.2",
-    "ejs": "^3.1.10",
-    "glob": "^11.0.0",
-    "html-webpack-plugin": "^5.6.3",
-    "json5": "^2.2.3",
-    "npm": "^10.9.0",
-    "postcss": "^8.4.47",
-    "rimraf": "^6.0.1",
-    "serialize-javascript": "^6.0.2",
-    "ssri": "^12.0.0",
-    "vue": "^3.5.12",
-    "vue-loader": "^17.4.2",
-    "vue-template-compiler": "^2.7.16"
+    "vue": "^3.5.12"
   },
   "devDependencies": {
     "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "^2.4.6",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "jest-environment-jsdom": "^29.7.0" 
   },
   "jest": {
     "transform": {
