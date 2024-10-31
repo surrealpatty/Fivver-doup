@@ -2,23 +2,48 @@
 
 /* Reset/Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif; /* Base font */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    line-height: 1.6; /* Improve readability */
+    background-color: #f9f9f9; /* Light background for better contrast */
 }
 
 /* Layout Styles */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 1200px; /* Limit container width */
+    margin: 0 auto; /* Center container */
+    padding: 20px; /* Inner spacing */
 }
 
 .header {
-    background: #f8f9fa;
-    padding: 10px 0;
-    text-align: center;
+    background: #f8f9fa; /* Light grey background */
+    padding: 10px 0; /* Vertical padding */
+    text-align: center; /* Center text */
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center; /* Center text alignment utility */
+}
+
+.mt-20 {
+    margin-top: 20px; /* Margin utility */
 }
 
 /* Component Styles */
 /* Add any other component styles here */
+.button {
+    display: inline-block; /* Make buttons inline */
+    padding: 10px 15px; /* Button padding */
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

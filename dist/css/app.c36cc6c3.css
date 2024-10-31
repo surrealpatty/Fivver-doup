@@ -1,1 +1,19 @@
-h1[data-v-ebe75784]{color:#42b983}
+/* Base styles */
+h1[data-v-ebe75784] {
+    color: #42b983; /* Green color for the h1 element */
+}
+
+/* You can add additional styles below */
+
+/* Example of other potential styles */
+body {
+    font-family: Arial, sans-serif; /* Example font style */
+    background-color: #f9f9f9; /* Light background */
+}
+
+p {
+    color: #333; /* Dark color for paragraphs */
+    line-height: 1.6; /* Improved readability */
+}
+
+/* Add any other specific styles or reset rules here */
