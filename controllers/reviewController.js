@@ -32,7 +32,7 @@ exports.createReview = async (req, res) => {
 
         return res.status(201).json(review);
     } catch (error) {
-        console.error(error);
+        console.error('Error creating review:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -56,7 +56,7 @@ exports.getReviewsForService = async (req, res) => {
 
         return res.status(200).json(reviews);
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching reviews:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -93,7 +93,7 @@ exports.updateReview = async (req, res) => {
 
         return res.status(200).json(review);
     } catch (error) {
-        console.error(error);
+        console.error('Error updating review:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -119,7 +119,7 @@ exports.deleteReview = async (req, res) => {
 
         return res.status(204).send(); // No content response
     } catch (error) {
-        console.error(error);
+        console.error('Error deleting review:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
