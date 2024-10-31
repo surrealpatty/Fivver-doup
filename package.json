@@ -67,4 +67,7 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "keywords": ["fiverr", "freelance", "
+  "keywords": ["fiverr", "freelance", "vue", "web development"],
+  "author": "",
+  "license": "ISC"
+}
