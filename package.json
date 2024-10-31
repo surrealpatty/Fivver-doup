@@ -8,12 +8,13 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.5.12",
     "@vue/component-compiler-utils": "^3.3.0",
     "axios": "^1.7.7",
     "cacache": "^19.0.1",
     "ejs": "^3.1.10",
     "vue": "^3.5.12",
-    "vue-loader": "^17.4.2"
+    "vue-loader": "^15.11.1"
   },
   "devDependencies": {
     "@vue/cli-service": "^5.0.8",
