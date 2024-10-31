@@ -3,20 +3,21 @@
   "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",  
+    "build": "vue-cli-service build",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "dependencies": {
     "axios": "^1.7.7",
-    "vue": "^3.5.12"
+    "vue": "^3.5.12",
+    "vue-template-compiler": "^2.7.16"
   },
   "devDependencies": {
     "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "^2.4.6",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0" 
+    "jest-environment-jsdom": "^29.7.0"
   },
   "jest": {
     "transform": {
