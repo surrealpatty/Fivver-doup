@@ -1,18 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": ["ES2020", "DOM"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "types": ["node", "jest", "vue"],
-    "incremental": true,
-    "allowJs": true, // Allows JavaScript files to be compiled
+    "target": "ES2020",                     // Specify ECMAScript target version
+    "module": "commonjs",                   // Specify module code generation
+    "esModuleInterop": true,                // Enables emit interoperability between CommonJS and ES Modules
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
+    "strict": true,                          // Enable all strict type-checking options
+    "skipLibCheck": true,                   // Skip type checking of declaration files
+    "lib": ["ES2020", "DOM"],               // Specify library files to include
+    "outDir": "./dist",                     // Redirect output structure to the dist directory
+    "rootDir": "./src",                     // Specify the root directory of input files
+    "types": ["node", "jest", "vue"],       // Type declaration files to be included
+    "incremental": true,                     // Enable incremental compilation
+    "allowJs": true                          // Allow JavaScript files to be compiled
   },
-  "include": ["src/**/*.js", "src/**/*.vue", "config/**/*.js"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*.js",                          // Include all JS files in src
+    "src/**/*.vue"                          // Include all Vue files in src
+  ],
+  "exclude": [
+    "node_modules",                         // Exclude node_modules folder
+    "dist",                                 // Exclude dist folder
+    "config/**/*.js"                        // Exclude JS files in config folder
+  ]
 }
