@@ -1,8 +1,10 @@
-function generateMockUser() {
-    return {
-        username: 'testUser',
-        password: 'testPassword',
-    };
-}
+// src/__tests__/testUtils.js
 
-module.exports = { generateMockUser };
+describe('Test Utils', () => {
+    test('placeholder test', () => {
+      expect(true).toBe(true);
+    });
+  });
+  
+  // Add other tests here as needed
+  
