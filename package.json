@@ -23,7 +23,7 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "vue-jest": "^5.0.0"  // Updated to a version compatible with Vue 3
+    "vue-jest": "^3.0.7"
   },
   "eslintConfig": {
     "root": true,
