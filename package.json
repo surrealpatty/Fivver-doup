@@ -46,15 +46,6 @@
     "webpack": "^5",
     "webpack-bundle-analyzer": "^4.10.2"
   },
-  "jest": {
-    "testMatch": [
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[tj]s?(x)"
-    ],
-    "testEnvironment": "jest-environment-jsdom",
-    "collectCoverage": true,
-    "coverageDirectory": "coverage"
-  },
   "eslintConfig": {
     "root": true,
     "env": {
