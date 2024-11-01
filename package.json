@@ -4,6 +4,7 @@
   "description": "A Fiverr-like web application",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",  // Add the start script
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test": "jest --coverage",
