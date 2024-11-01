@@ -1,8 +1,6 @@
 // math.js
 function multiply(a, b) {
     return a * b;
-  }
-  
-  module.exports = multiply;
+}
 
-  
+export default multiply; // Use ES module export

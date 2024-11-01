@@ -14,3 +14,4 @@ describe('Math Functions', () => {
         expect(multiply(0, 5)).toBe(0);
     });
 });
+
