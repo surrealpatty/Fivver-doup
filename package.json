@@ -45,21 +45,27 @@
     "ts-jest": "^29.2.5",
     "vue-jest": "^5.0.0",
     "webpack-bundle-analyzer": "^4.10.2",
-    "typescript": "^4.9.5"  
+    "typescript": "^4.9.5"
   },
   "jest": {
     "transform": {
       "^.+\\.vue$": "vue-jest",
       "^.+\\.jsx?$": "babel-jest",
-      "^.+\\.ts$": "ts-jest" 
+      "^.+\\.ts$": "ts-jest"
     },
     "moduleFileExtensions": [
       "js",
-      "ts",  
+      "ts",
       "json",
       "vue"
     ],
-    "testEnvironment": "jest-environment-jsdom"
+    "testEnvironment": "jest-environment-jsdom",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts|jsx|tsx)$", 
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts,vue}", 
+      "!src/main.js",        
+      "!**/*.d.ts"           
+    ]
   },
   "eslintConfig": {
     "root": true,
