@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Check for required environment variables
 if (!JWT_SECRET) {
     console.error('FATAL ERROR: JWT_SECRET is not defined.');
     process.exit(1); // Exit if JWT_SECRET is missing
@@ -36,19 +37,20 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Database Connection and Sync
-sequelize.authenticate()
-    .then(() => console.log('Database connection established successfully.'))
-    .catch(err => {
+const connectToDatabase = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection established successfully.');
+        await sequelize.sync({ alter: true });
+        console.log('Database synced with models');
+    } catch (err) {
         console.error('Unable to connect to the database:', err);
         process.exit(1); // Exit on connection failure
-    });
+    }
+};
 
-sequelize.sync({ alter: true })
-    .then(() => console.log('Database synced with models'))
-    .catch(error => {
-        console.error('Error syncing database:', error);
-        process.exit(1);
-    });
+// Call the database connection function
+connectToDatabase();
 
 // Input validation for user registration
 const validateRegistration = [

@@ -19,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "express-validator": "^7.2.0",
     "glob": "^11.0.0",
     "html-webpack-plugin": "^5.6.3",
     "json5": "^2.2.3",
@@ -33,10 +34,10 @@
     "winston": "^3.15.0"
   },
   "devDependencies": {
-    "@vue/cli-service": "^3.3.1",
+    "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "^2.4.6",
-    "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
     "jest-environment-jsdom": "^29.7.0",
     "vue-jest": "5.0.0-alpha.10",
     "webpack-bundle-analyzer": "^4.10.2"
