@@ -11,4 +11,11 @@ module.exports = {
     //   // Add any necessary plugins here
     // ],
   };
-  
+  module.exports = {
+    presets: [
+      '@babel/preset-env',
+      '@babel/preset-typescript', // Uncomment if using TypeScript
+      '@vue/babel-preset-jsx'      // Uncomment if using JSX
+    ],
+  };
+    
