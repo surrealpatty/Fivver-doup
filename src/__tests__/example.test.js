@@ -22,4 +22,3 @@ describe('Example Test Suite', () => {
     expect(typeof (1 + 1)).toBe('number');
   });
 });
-
