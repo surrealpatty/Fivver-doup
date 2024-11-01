@@ -5,7 +5,7 @@ module.exports = {
   // Specify the transformers for Vue and JavaScript files
   transform: {
     '^.+\\.vue$': 'vue-jest', // Use vue-jest for .vue files
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
+    '^.+\\.jsx?$': 'babel-jest', // Use babel-jest for JavaScript and JSX files
   },
 
   // Define file extensions that Jest will look for
@@ -28,4 +28,17 @@ module.exports = {
     "/node_modules/", // Ignore node_modules directory
     "<rootDir>/src/main.js", // Ignore the main entry point if necessary
   ],
+
+  // Specify coverage thresholds (optional)
+  coverageThreshold: {
+    global: {
+      branches: 80, // Set minimum coverage threshold for branches
+      functions: 80, // Set minimum coverage threshold for functions
+      lines: 80, // Set minimum coverage threshold for lines
+      statements: 80, // Set minimum coverage threshold for statements
+    },
+  },
+
+  // Setup files to run before each test (optional)
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Adjust the path if necessary
 };
