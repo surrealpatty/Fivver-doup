@@ -1,45 +1,44 @@
-{
-  "name": "fivver_doup",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "test": "jest"
+module.exports = {
+  // Set the test environment to jsdom, suitable for testing Vue components
+  testEnvironment: 'jsdom',
+
+  // Specify the transformers for Vue and JavaScript files
+  transform: {
+    '^.+\\.vue$': 'vue-jest', // Use vue-jest for .vue files
+    '^.+\\.jsx?$': 'babel-jest', // Use babel-jest for JavaScript and JSX files
   },
-  "dependencies": {
-    "vue": "^3.5.12"
-  },
-  "devDependencies": {
-    "@vue/compiler-sfc": "^3.5.12",
-    "@babel/core": "^7.x.x", // Adjust to your Babel version
-    "babel-jest": "^26.x.x", // Ensure compatibility with your Babel version
-    "vue-jest": "^3.0.7",
-    "jest": "^27.x.x" // Use the version compatible with vue-jest
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      "^.+\\.jsx?$": "babel-jest"
+
+  // Define file extensions that Jest will look for
+  moduleFileExtensions: ['js', 'vue', 'json'],
+
+  // Define patterns for test file matching
+  testMatch: [
+    "**/__tests__/**/*.[jt]s?(x)", // Match test files in __tests__ directory
+    "**/?(*.)+(spec|test).[tj]s?(x)" // Match any .spec.js or .test.js files
+  ],
+
+  // Enable coverage collection
+  collectCoverage: true,
+
+  // Set the directory for coverage reports
+  coverageDirectory: "coverage",
+
+  // Optionally, you can exclude coverage for certain files or patterns
+  coveragePathIgnorePatterns: [
+    "/node_modules/", // Ignore node_modules directory
+    "<rootDir>/src/main.js", // Ignore the main entry point if necessary
+  ],
+
+  // Specify coverage thresholds (optional)
+  coverageThreshold: {
+    global: {
+      branches: 80, // Set minimum coverage threshold for branches
+      functions: 80, // Set minimum coverage threshold for functions
+      lines: 80, // Set minimum coverage threshold for lines
+      statements: 80, // Set minimum coverage threshold for statements
     },
-    "moduleFileExtensions": ["js", "vue", "json"],
-    "testMatch": [
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[tj]s?(x)"
-    ],
-    "collectCoverage": true,
-    "coverageDirectory": "coverage",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "<rootDir>/src/main.js"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": 80
-      }
-    },
-    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"]
-  }
-}
+  },
+
+  // Setup files to run before each test (optional)
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Adjust the path if necessary
+};
