@@ -15,7 +15,9 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^2.4.6",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "vue-jest": "^5.0.0" // Add this to compile Vue components with Jest
   },
   "eslintConfig": {
     "root": true,
@@ -44,5 +46,5 @@
     "web development"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC" // Added license field to eliminate warning
 }
