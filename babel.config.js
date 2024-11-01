@@ -1,8 +1,10 @@
 module.exports = {
     presets: [
-      '@babel/preset-env',
-      '@babel/preset-typescript', // If you're using TypeScript
-      '@vue/babel-preset-jsx' // If you're using JSX with Vue
+      '@babel/preset-env',           // Preset for compiling ES6+ down to ES5
+      // Uncomment the line below if you are using TypeScript
+      // '@babel/preset-typescript', // Preset for compiling TypeScript
+      // Uncomment the line below if you are using JSX with Vue
+      // '@vue/babel-preset-jsx'      // Preset for compiling JSX
     ],
   };
   
