@@ -13,20 +13,20 @@ module.exports = {
 
   // Define patterns for test file matching
   testMatch: [
-    "**/__tests__/**/*.[jt]s?(x)", // Match test files in __tests__ directory
-    "**/?(*.)+(spec|test).[tj]s?(x)" // Match any .spec.js or .test.js files
+    '**/__tests__/**/*.[jt]s?(x)', // Match test files in __tests__ directory
+    '**/?(*.)+(spec|test).[tj]s?(x)', // Match any .spec.js or .test.js files
   ],
 
   // Enable coverage collection
   collectCoverage: true,
 
   // Set the directory for coverage reports
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // Optionally, you can exclude coverage for certain files or patterns
   coveragePathIgnorePatterns: [
-    "/node_modules/", // Ignore node_modules directory
-    "<rootDir>/src/main.js", // Ignore the main entry point if necessary
+    '/node_modules/', // Ignore node_modules directory
+    '<rootDir>/src/main.js', // Ignore the main entry point if necessary
   ],
 
   // Specify coverage thresholds (optional)
@@ -40,5 +40,5 @@ module.exports = {
   },
 
   // Setup files to run before each test (optional)
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Adjust the path if necessary
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Ensure this file exists or adjust the path accordingly
 };
