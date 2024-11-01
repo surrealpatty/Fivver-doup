@@ -1,38 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1730400203682" clover="3.2.0">
-  <project timestamp="1730400203682" name="All files">
-    <metrics 
-      statements="0" 
-      coveredstatements="0" 
-      conditionals="0" 
-      coveredconditionals="0" 
-      methods="0" 
-      coveredmethods="0" 
-      elements="0" 
-      coveredelements="0" 
-      complexity="0" 
-      loc="0" 
-      ncloc="0" 
-      packages="0" 
-      files="0" 
-      classes="0"/>
-    
-    <packages>
-      <package name="your.package.name" timestamp="1730400203682" complexity="0" loc="0" ncloc="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0">
-        <classes>
-          <class name="YourClassName" filename="YourClassName.java" linecount="0" complexity="0">
-            <metrics 
-              statements="0" 
-              coveredstatements="0" 
-              conditionals="0" 
-              coveredconditionals="0" 
-              methods="0" 
-              coveredmethods="0"/>
-          </class>
-          <!-- Add more classes here -->
-        </classes>
-      </package>
-      <!-- Add more packages here -->
-    </packages>
+<coverage generated="1730484572340" clover="3.2.0">
+  <project timestamp="1730484572340" name="All files">
+    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
   </project>
 </coverage>
