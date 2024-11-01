@@ -2,14 +2,30 @@ const { registerUser, loginUser } = require('../src/controllers/userController')
 
 describe('User Functions', () => {
   test('should register a new user', async () => {
-    // Simulate user registration logic here
-    const result = await registerUser(/* user data */);
-    expect(result).toBe(/* expected result */);
+    const userData = {
+      username: 'testuser',
+      password: 'password123',
+    };
+    const expectedResult = {
+      success: true,
+      message: 'User registered successfully',
+    };
+
+    const result = await registerUser(userData);
+    expect(result).toEqual(expectedResult);
   });
 
   test('should login an existing user', async () => {
-    // Simulate user login logic here
-    const result = await loginUser(/* user data */);
-    expect(result).toBe(/* expected result */);
+    const userData = {
+      username: 'testuser',
+      password: 'password123',
+    };
+    const expectedResult = {
+      success: true,
+      message: 'User logged in successfully',
+    };
+
+    const result = await loginUser(userData);
+    expect(result).toEqual(expectedResult);
   });
 });
