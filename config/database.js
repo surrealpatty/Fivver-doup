@@ -1,4 +1,5 @@
-require('dotenv').config(); // Load environment variables from .env file
+
+require('dotenv').config();
 
 const development = {
     username: process.env.DB_USER || 'default_dev_user',
@@ -6,7 +7,7 @@ const development = {
     database: process.env.DB_NAME || 'fivver_doup_db',
     host: process.env.DB_HOST || 'localhost',
     dialect: process.env.DB_DIALECT || 'mysql',
-    logging: console.log, // Enable logging for SQL queries in development
+    logging: console.log, 
 };
 
 const production = {
@@ -15,7 +16,7 @@ const production = {
     database: process.env.PROD_DB_NAME || 'fivver_doup_db',
     host: process.env.PROD_DB_HOST || 'localhost',
     dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false, // Disable logging in production
+    logging: false, 
 };
 
 const test = {
@@ -24,10 +25,10 @@ const test = {
     database: process.env.TEST_DB_NAME || 'test_db',
     host: process.env.TEST_DB_HOST || 'localhost',
     dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false, // Disable logging in tests
+    logging: false, 
 };
 
-// Determine the current environment and select the appropriate configuration
+
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = {
     development,
@@ -35,19 +36,29 @@ const dbConfig = {
     test,
 }[env];
 
-// Validate configuration
+
 const validateConfig = (config) => {
     const requiredKeys = ['username', 'password', 'database', 'host', 'dialect'];
     for (const key of requiredKeys) {
         if (!config[key]) {
             console.error(`Missing configuration key: ${key}`);
-            process.exit(1); // Exit if a required key is missing
+            process.exit(1); 
         }
     }
 };
 
-// Validate the selected configuration
+
 validateConfig(dbConfig);
 
-// Export the configuration object for Sequelize
-module.exports = dbConfig;
+
+const { Sequelize } = require('sequelize');
+
+
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    logging: dbConfig.logging,
+});
+
+
+module.exports = sequelize;
