@@ -20,6 +20,14 @@ module.exports = {
   // Enable coverage collection
   collectCoverage: true,
 
+  // Specify which files to collect coverage from
+  collectCoverageFrom: [
+    'src/**/*.{js,vue}', // Collect coverage from all .js and .vue files in the src directory
+    '!src/**/*.spec.js', // Exclude test files from coverage
+    '!src/main.js', // Exclude the main entry point if necessary
+    '!src/**/index.js', // Exclude index files in subdirectories if necessary
+  ],
+
   // Set the directory for coverage reports
   coverageDirectory: 'coverage',
 
