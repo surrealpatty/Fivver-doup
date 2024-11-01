@@ -44,7 +44,7 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "vue-jest": "^5.0.0",
+    "vue-jest": "^5.0.0", // Updated to the latest version for Vue 3
     "webpack": "^5",
     "webpack-bundle-analyzer": "^4.10.2"
   },
@@ -75,5 +75,5 @@
     "web development"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC" // You can specify a different license if desired
 }
