@@ -39,7 +39,7 @@
     "@types/jest": "^29.5.14",
     "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "^2.4.6",
-    "babel-jest": "26",
+    "babel-jest": "^29.7.0",  
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.5",
@@ -47,26 +47,6 @@
     "vue-jest": "^5.0.0-alpha.10",
     "webpack": "^5",
     "webpack-bundle-analyzer": "^4.10.2"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      "^.+\\.[tj]sx?$": "babel-jest",
-      "^.+\\.ts$": "ts-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "json",
-      "vue"
-    ],
-    "testEnvironment": "jest-environment-jsdom",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts|jsx|tsx)$",
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts,vue}",
-      "!src/main.js",
-      "!**/*.d.ts"
-    ]
   },
   "eslintConfig": {
     "root": true,
