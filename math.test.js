@@ -1,8 +1,5 @@
-// test.ts
-var greeting = "Hello, TypeScript!";
-console.log(greeting);
-// math.test.js
-const multiply = require('./math'); // Adjust the path as needed
+// math.test.ts
+import multiply from './math'; // Use ES module syntax if using TypeScript
 
 describe('Math Functions', () => {
     test('multiplies 2 by 3 to equal 6', () => {
