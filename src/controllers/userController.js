@@ -91,7 +91,7 @@ exports.updateUserProfile = async (req, res) => {
             return res.status(404).json({ message: 'User not found' }); // Handle not found
         }
 
-        // Update user information
+        // Prepare the updates
         const updates = { username, email };
         if (password) {
             updates.password = await bcrypt.hash(password, 10); // Hash new password if provided
@@ -107,4 +107,22 @@ exports.updateUserProfile = async (req, res) => {
 };
 
 // 5. Delete User
-exports.deleteUser = async
+exports.deleteUser = async (req, res) => {
+    const userId = req.user.id; // Assume `authMiddleware` attaches user ID to req
+
+    try {
+        // Find the user
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' }); // Handle not found
+        }
+
+        // Delete the user
+        await user.destroy(); // Remove the user from the database
+
+        return res.status(200).json({ message: 'User deleted successfully' }); // Respond with success message
+    } catch (error) {
+        console.error('Error deleting user:', error); // Log error for debugging
+        return res.status(500).json({ message: 'Error deleting user', error: error.message });
+    }
+};
