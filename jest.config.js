@@ -14,7 +14,7 @@ module.exports = {
   // Define patterns for test file matching
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)', // Match test files in __tests__ directory
-    '**/?(*.)+(spec|test).[tj]s?(x)', // Match any .spec.js or .test.js files
+    '**/?(*.)+(spec|test).[jt]s?(x)', // Match any .spec.js or .test.js files
   ],
 
   // Enable coverage collection
@@ -37,6 +37,10 @@ module.exports = {
     '<rootDir>/src/main.js', // Ignore the main entry point if necessary
   ],
 
-  // Setup files to run before each test (optional)
+  // Setup files to run before each test
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Ensure this file exists or adjust the path accordingly
+
+  // Additional options for better debugging and reporting
+  verbose: true, // Show individual test results
+  testTimeout: 30000, // Set a timeout for tests if necessary
 };
