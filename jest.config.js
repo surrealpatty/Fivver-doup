@@ -9,7 +9,7 @@ module.exports = {
   },
 
   // Define file extensions that Jest will look for
-  moduleFileExtensions: ['js', 'vue', 'json'],
+  moduleFileExtensions: ['js', 'jsx', 'vue', 'json'],
 
   // Define patterns for test file matching
   testMatch: [
