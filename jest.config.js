@@ -4,7 +4,7 @@ module.exports = {
 
   // Specify the transformers for Vue and JavaScript files
   transform: {
-    '^.+\\.vue$': 'vue-jest', // Use vue-jest for .vue files
+    '^.+\\.vue$': 'vue3-jest', // Use vue3-jest for .vue files
     '^.+\\.(js|jsx)$': 'babel-jest', // Use babel-jest for JavaScript and JSX files
   },
 
