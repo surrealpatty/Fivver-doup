@@ -30,7 +30,7 @@
     "env": {
       "browser": true,
       "es20201": true
-      "node": true
+      
     },
     "extends": [
       "eslint:recommended"
