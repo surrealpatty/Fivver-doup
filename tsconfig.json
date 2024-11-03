@@ -9,7 +9,7 @@
     "lib": ["ES2020", "DOM"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node", "jest", "vue"],
+    "types": ["node", "vue"],
     "incremental": true,
     "allowJs": true
   },
