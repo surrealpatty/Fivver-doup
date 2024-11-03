@@ -1,12 +1,17 @@
-const sequelize = require('./config/database'); // Ensure path to Sequelize instance is correct
+// Import necessary modules
+const { registerUser, loginUser } = require('../src/controllers/userController');
+const sequelize = require('./config/database'); // Ensure the path to the Sequelize instance is correct
 const User = require('./models/user'); // Import User model
 const Service = require('./models/services'); // Import Service model
+
+console.log('User functions loaded successfully.');
 
 // Setting up model associations
 User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
 Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-const testModels = async () => {
+// Function to test user and service models
+const testUserAndServiceModels = async () => {
     try {
         // Synchronize models with the database
         await sequelize.sync({ force: true }); // Use `force: true` cautiously (for testing only)
@@ -29,6 +34,14 @@ const testModels = async () => {
         });
         console.log('Service created:', newService.toJSON());
 
+        // Test User Registration
+        const registeredUser = await registerUser(newUser);
+        console.log('User registered via registerUser:', registeredUser);
+
+        // Test User Login
+        const loggedInUser = await loginUser(newUser.email, newUser.password);
+        console.log('User logged in via loginUser:', loggedInUser);
+
     } catch (error) {
         console.error('Error testing models:', error);
     } finally {
@@ -38,4 +51,4 @@ const testModels = async () => {
 };
 
 // Call the test function
-testModels();
+testUserAndServiceModels();
