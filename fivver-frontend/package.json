@@ -26,14 +26,17 @@
     "typescript": "^5.6.3"
   },
   "eslintConfig": {
+    "env":{
     "root": true,
     "env": {
       "browser": true,
-      "es20201": true
-      
+      "es20201": true,
+      "node": true
+    }
     },
     "extends": [
-      "eslint:recommended"
+      "eslint:recommended",
+  "rules"
     ],
     "parserOptions": {
       "ecmaVersion":12,
