@@ -1,16 +1,22 @@
-// Load environment variables
-require('dotenv').config();
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import helmet from 'helmet'; // Import Helmet for security headers
+import sequelize from './config/database'; // Import sequelize instance
+import userRoutes from './routes/userRoutes';
+import serviceRoutes from './routes/servicesRoute';
+import reviewRoutes from './routes/review';
+import { init as initUser, Model as User } from './models/user'; // Import User model and initUser function
+import { init as initService, Model as Service } from './models/services'; // Import Service model and initService function
+import { init as initUserProfile, Model as UserProfile } from './models/UserProfile'; // Import UserProfile model and initUserProfile function
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { check, validationResult } from 'express-validator';
 
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
-const sequelize = require('./config/database'); // Adjust this path if needed
-const User = require('./models/user'); // Adjust this path if needed
+dotenv.config(); // Load environment variables
 
-// Set up application and configurations
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app = express(); // Initialize Express app
+const PORT = process.env.PORT || 3000; // Set port
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Check for required environment variables
@@ -19,8 +25,29 @@ if (!JWT_SECRET) {
     process.exit(1); // Exit if JWT_SECRET is missing
 }
 
-// Middleware to parse JSON
+// Middleware
+app.use(cors());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            objectSrc: ["'none'"],
+        },
+    },
+}));
 app.use(express.json());
+
+// Middleware to log requests
+app.use((req, res, next) => {
+    console.log(`${req.method} request for '${req.url}'`);
+    next();
+});
+
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/services', serviceRoutes);
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -36,21 +63,34 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Database Connection and Sync
-const connectToDatabase = async () => {
+// Initialize models and their associations
+const initModels = () => {
+    initUser(sequelize); // Initialize User model
+    initService(sequelize); // Initialize Service model
+    initUserProfile(sequelize); // Initialize UserProfile model
+
+    // Set up model associations
+    User.associate({ Service, UserProfile });
+    Service.associate({ User });
+    UserProfile.associate({ User });
+};
+
+// Test and synchronize the database connection
+const initializeDatabase = async () => {
     try {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
-        await sequelize.sync({ alter: true });
-        console.log('Database synced with models');
+
+        initModels(); // Call to initialize models and associations
+
+        // Sync models with the database
+        await sequelize.sync({ alter: true }); // Use { force: true } if you need to reset tables
+        console.log('Database synchronized successfully.');
     } catch (err) {
-        console.error('Unable to connect to the database:', err);
-        process.exit(1); // Exit on connection failure
+        console.error('Unable to connect to the database:', err.message);
+        process.exit(1); // Exit if unable to connect
     }
 };
-
-// Call the database connection function
-connectToDatabase();
 
 // Input validation for user registration
 const validateRegistration = [
@@ -117,16 +157,21 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
 
 // 404 Handler for undefined routes
 app.use((req, res) => {
-    res.status(404).json({ message: 'Route not found' });
+    res.status(404).json({ message: 'Resource not found' });
 });
 
 // General Error Handler
 app.use((err, req, res, next) => {
     console.error('Error:', err.stack);
-    res.status(500).json({ message: 'Something broke!' });
+    res.status(500).json({ message: 'An internal server error occurred', error: err.message });
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Start the database and server
+initializeDatabase().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
 });
+
+// Export the app instance for testing purposes
+export default app;
