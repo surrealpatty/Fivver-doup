@@ -26,7 +26,10 @@
     "typescript": "^5.6.3"
   },
   "eslintConfig": {
-    "extends":["rules"],
+    "extends": [
+      "eslint:recommended",
+      "rules"
+    ],
     "env": {
       "root": true,
       "env": {
@@ -35,10 +38,6 @@
         "node": true
       }
     },
-    "extends": [
-      "eslint:recommended",
-      "rules"
-    ],
     "parserOptions": {
       "ecmaVersion": 12,
       "sourceType": "module",
