@@ -14,4 +14,12 @@ module.exports = {
     rules: {
         // your custom rules
     },
+    overrides: [
+        {
+            files: ['*.vue'],
+            rules: {
+                // Add any specific rules for .vue files here
+            }
+        }
+    ],
 };

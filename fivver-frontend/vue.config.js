@@ -1,8 +1,4 @@
-// vue.config.js
-const { defineConfig } = require('@vue/cli-service');
-
-// Base configuration object
-const config = {
+let config = {
   transpileDependencies: [
     // List your dependencies here if needed
     // Example: 'dependency-name'
@@ -14,5 +10,15 @@ const config = {
   // },
 };
 
-// Use defineConfig if available, otherwise fall back to standard exports
-module.exports = defineConfig ? defineConfig(config) : config;
+try {
+  const { defineConfig } = require('@vue/cli-service');
+  if (typeof defineConfig === 'function') {
+    module.exports = defineConfig(config);
+  } else {
+    console.warn('defineConfig is not a function, using regular module export.');
+    module.exports = config;
+  }
+} catch (error) {
+  console.warn('Error loading @vue/cli-service, falling back to regular module export:', error.message);
+  module.exports = config;
+}
