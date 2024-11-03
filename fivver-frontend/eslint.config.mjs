@@ -1,22 +1,17 @@
-import globals from 'globals';
+import { defineConfig } from 'eslint-define-config';
 
-export default {
-    env: {
-        browser: true,
-        es2021: true,
-    },
-    extends: [
-        'eslint:recommended',
-        'plugin:vue/vue3-recommended', // Adjust this if you're using a different version of Vue
-    ],
-    parserOptions: {
-        ecmaVersion: 12,
-        sourceType: 'module',
-    },
-    rules: {
-        // Add your custom rules here
-    },
+export default defineConfig({
+  // Language options
+  languageOptions: {
     globals: {
-        ...globals,
+      // Define your global variables here, for example:
+      // myGlobalVariable: 'readonly', // or 'writable'
     },
-};
+  },
+  // Add your rules and settings here
+  rules: {
+    // Example rule
+    'no-console': 'warn',
+  },
+  // Other configurations
+});
