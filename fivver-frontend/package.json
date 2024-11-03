@@ -21,25 +21,26 @@
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
-    "eslint": "^9.14.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-vue": "^9.30.0",
     "typescript": "^5.6.3"
   },
   "eslintConfig": {
-    "env":{
-    "root": true,
+    "extends":["rules"],
     "env": {
-      "browser": true,
-      "es20201": true,
-      "node": true
-    }
+      "root": true,
+      "env": {
+        "browser": true,
+        "es20201": true,
+        "node": true
+      }
     },
     "extends": [
       "eslint:recommended",
-  "rules"
+      "rules"
     ],
     "parserOptions": {
-      "ecmaVersion":12,
+      "ecmaVersion": 12,
       "sourceType": "module",
       "parser": "@babel/eslint-parser"
     },
