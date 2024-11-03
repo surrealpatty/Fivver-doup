@@ -12,13 +12,15 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
-        // your custom rules
+        'no-console': 'warn',
+        'semi': ['error', 'always'],
     },
     overrides: [
         {
-            files: ['*.vue'],
+            files: ['*.vue', '*.js'], // Specify both .vue and .js files
             rules: {
-                // Add any specific rules for .vue files here
+                'vue/no-unused-components': 'warn',
+                'vue/script-setup-uses-vars': 'error',
             }
         }
     ],
