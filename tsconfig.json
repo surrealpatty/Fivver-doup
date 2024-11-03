@@ -9,12 +9,13 @@
     "lib": ["ES2020", "DOM"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node", "vue"],
+    "types": [],
     "incremental": true,
     "allowJs": true
   },
   "include": [
     "src/**/*.js",
+    "src/**/*.ts",
     "src/**/*.vue"
   ],
   "exclude": [
