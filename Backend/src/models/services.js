@@ -52,7 +52,15 @@ const initService = (sequelize) => {
     );
 };
 
-module.exports = {
-    init: initService,
-    Model: Service,
+// src/models/services.js
+
+// Define your model (this is just a placeholder)
+export const Model = {
+    name: "Service Model",
+    description: "This is a service model."
+};
+
+// Function to initialize your model
+export const init = () => {
+    console.log("Service model initialized");
 };
