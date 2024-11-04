@@ -1,4 +1,4 @@
-// jest.config.js
+// jest.config.mjs
 export default {
   // Set the test environment to jsdom
   testEnvironment: 'jsdom',
@@ -39,7 +39,7 @@ export default {
   ],
 
   // Setup files to run before each test
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Ensure this file exists or remove it if not needed
 
   // Additional options for better debugging and reporting
   verbose: true,
