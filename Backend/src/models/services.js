@@ -51,10 +51,9 @@ const initService = (sequelize) => {
         }
     );
 };
-
 // src/models/services.js
 
-// Define your model (this is just a placeholder)
+// Check if Model is already declared in the file and ensure it's declared only once
 export const Model = {
     name: "Service Model",
     description: "This is a service model."
