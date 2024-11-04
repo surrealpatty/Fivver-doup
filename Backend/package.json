@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Fiverr-like web application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "serve": "vue-cli-service serve",
