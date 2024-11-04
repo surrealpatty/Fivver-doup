@@ -15,6 +15,8 @@ import { check, validationResult } from 'express-validator';
 import database from './config/database'; // Ensure this matches the actual file path
 import database from './config/database.js';
 
+console.log(database);
+
 dotenv.config(); // Load environment variables
 
 const app = express(); // Initialize Express app
