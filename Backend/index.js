@@ -12,6 +12,7 @@ import { init as initUserProfile, Model as UserProfile } from './models/UserProf
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
+import database from './config/database'; // Ensure this matches the actual file path
 
 dotenv.config(); // Load environment variables
 
