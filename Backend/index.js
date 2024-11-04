@@ -126,7 +126,9 @@ app.post('/api/register', validateRegistration, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 // User Login Route
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
