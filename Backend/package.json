@@ -40,44 +40,6 @@
     "globals": "^15.12.0",
     "html-webpack-plugin": "^5.6.3",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "npm-force-resolutions": "^0.0.10",
-    "postcss": "^8.4.47",
-    "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.13.0",
-    "vue": "^3.5.12",
-    "vue-loader": "^17.4.2",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
-  },
-  "resolutions": {
-    "braces": "^3.0.3"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true,
-      "es6": true
-    },
-    "extends": [
-      "plugin:vue/vue3-recommended",
-      "eslint:recommended"
-    ],
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "keywords": [
-    "fiverr",
-    "web",
-    "application"
-  ]
-}
+    "jest-environment-jsdom": "^29.7
+  }
+    
