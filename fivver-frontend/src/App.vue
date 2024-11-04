@@ -7,11 +7,11 @@
 import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
+  name: 'App', // Add semicolon here
   components: {
     HelloWorld
-  }
-}
+  } // Add semicolon here
+} // Add semicolon here
 </script>
 
 <style>
