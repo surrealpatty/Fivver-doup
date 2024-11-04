@@ -1,26 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="hello">
+    <h1>{{ msg }}</h1>
+    <p>Welcome to your Vue.js application!</p>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App', // Add semicolon here
-  components: {
-    HelloWorld
-  } // Add semicolon here
-} // Add semicolon here
+  name: 'HelloWorld', // Add semicolon here
+  props: {
+    msg: String,
+  }, // Add semicolon here
+}; // Add semicolon here
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+h1 {
+  color: #42b983;
 }
 </style>
