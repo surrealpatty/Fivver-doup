@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet'; // Import Helmet for security headers
 import sequelize from './config/database.js'; // Ensure correct import with .js extension
-import userRoutes from './routes/userRoutes.js'; // Include .js extension for route imports
-import serviceRoutes from './routes/servicesRoute.js'; // Include .js extension for route imports
-import reviewRoutes from './routes/review.js'; // Include .js extension for route imports
+import userRoutes from './src/routes/userRoutes.js';
+import serviceRoutes from './src/routes/servicesRoute.js';
+import reviewRoutes from './src/routes/review.js';
 import { init as initUser, Model as User } from './models/user.js'; // Include .js extension for model imports
 import { init as initService, Model as Service } from './models/services.js'; // Include .js extension for model imports
 import { init as initUserProfile, Model as UserProfile } from './models/UserProfile.js'; // Include .js extension for model imports
