@@ -2,20 +2,16 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet'; // Import Helmet for security headers
-import sequelize from './config/database'; // Import sequelize instance
-import userRoutes from './routes/userRoutes';
-import serviceRoutes from './routes/servicesRoute';
-import reviewRoutes from './routes/review';
-import { init as initUser, Model as User } from './models/user'; // Import User model and initUser function
-import { init as initService, Model as Service } from './models/services'; // Import Service model and initService function
-import { init as initUserProfile, Model as UserProfile } from './models/UserProfile'; // Import UserProfile model and initUserProfile function
+import sequelize from './config/database.js'; // Ensure correct import with .js extension
+import userRoutes from './routes/userRoutes.js'; // Include .js extension for route imports
+import serviceRoutes from './routes/servicesRoute.js'; // Include .js extension for route imports
+import reviewRoutes from './routes/review.js'; // Include .js extension for route imports
+import { init as initUser, Model as User } from './models/user.js'; // Include .js extension for model imports
+import { init as initService, Model as Service } from './models/services.js'; // Include .js extension for model imports
+import { init as initUserProfile, Model as UserProfile } from './models/UserProfile.js'; // Include .js extension for model imports
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
-import database from './config/database.js'; // Ensure this matches the actual file path
-
-
-console.log(database);
 
 dotenv.config(); // Load environment variables
 
@@ -31,15 +27,7 @@ if (!JWT_SECRET) {
 
 // Middleware
 app.use(cors());
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
-            objectSrc: ["'none'"],
-        },
-    },
-}));
+app.use(helmet());
 app.use(express.json());
 
 // Middleware to log requests
@@ -126,9 +114,7 @@ app.post('/api/register', validateRegistration, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+
 // User Login Route
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
@@ -180,7 +166,6 @@ initializeDatabase().then(() => {
 }).catch(err => {
     console.error('Failed to initialize database or start server:', err.message);
 });
-
 
 // Export the app instance for testing purposes
 export default app;
