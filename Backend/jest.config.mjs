@@ -1,4 +1,5 @@
-module.exports = {
+// jest.config.mjs
+export default {
   // Set the test environment to jsdom, suitable for testing Vue components
   testEnvironment: 'jsdom',
 
