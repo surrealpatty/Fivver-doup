@@ -1,12 +1,11 @@
 import { defineConfig } from 'eslint-define-config';
 
 export default defineConfig({
-  env: {
-    browser: true, // Enables browser global variables
-    es2021: true,  // Specifies ECMAScript 2021 features
-  },
   languageOptions: {
-    // Define global variables here
+    parserOptions: {
+      ecmaVersion: 2021, // Specify the ECMAScript version
+      sourceType: 'module', // Specify source type if using ES modules
+    },
     globals: {
       window: 'readonly',  // 'window' is a read-only global variable
       document: 'readonly', // 'document' is a read-only global variable
@@ -14,11 +13,9 @@ export default defineConfig({
       // Add more global variables as needed
     },
   },
-  // Rules and settings
   rules: {
     'no-console': 'warn', // Warns on console usage
     'semi': ['error', 'always'], // Enforce semicolons
     // Add other rules here
   },
-  // Additional configurations can go here
 });
