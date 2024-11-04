@@ -7,11 +7,14 @@
 
 <script>
 export default {
-  name: 'HelloWorld', // Add semicolon here
+  name: 'HelloWorld',
   props: {
-    msg: String,
-  }, // Add semicolon here
-}; // Add semicolon here
+    msg: {
+      type: String,
+      default: 'Default message', // Provide a default value here
+    },
+  },
+}; 
 </script>
 
 <style scoped>
