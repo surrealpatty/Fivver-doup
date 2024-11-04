@@ -1,4 +1,8 @@
 module.exports = {
+    // Other configurations
+  // Remove the extensions property if it exists
+  // extensions: ["js", "vue"], // Remove or comment this line
+  // Add other relevant configurations
     env: {
         browser: true,
         es2021: true,
