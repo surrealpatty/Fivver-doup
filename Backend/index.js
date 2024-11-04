@@ -166,12 +166,15 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'An internal server error occurred', error: err.message });
 });
 
-// Start the database and server
+// Call to initialize the database and start the server
 initializeDatabase().then(() => {
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+        console.log(`Server is running on http://localhost:${PORT}`);
     });
+}).catch(err => {
+    console.error('Failed to initialize database or start server:', err.message);
 });
+
 
 // Export the app instance for testing purposes
 export default app;
