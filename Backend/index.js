@@ -6,9 +6,9 @@ import sequelize from './config/database.js'; // Ensure correct import with .js 
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
-import { init as initUser, Model as User } from './src/models/user.js'; // Adjusted path
-import { init as initService, Model as Service } from './src/models/services.js'; // Adjusted path
-import { init as initUserProfile, Model as UserProfile } from './src/models/UserProfile.js'; // Adjusted path
+import { init as initUser, User } from './src/models/user.js'; // Adjusted import
+import { initService, Service } from './src/models/services.js';
+import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js'; // Adjusted import
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
