@@ -15,7 +15,7 @@ export default defineConfig({
   },
   rules: {
     'no-console': 'warn', // Warns on console usage
-    'semi': ['error', 'always'], // Enforce semicolons
+    'semi': ['off'], // Enforce semicolons
     // Add other rules here
   },
 });
