@@ -1,3 +1,4 @@
+// src/models/services.js
 const { Model, DataTypes } = require('sequelize');
 
 class Service extends Model {
@@ -51,15 +52,7 @@ const initService = (sequelize) => {
         }
     );
 };
-// src/models/services.js
 
-// Check if Model is already declared in the file and ensure it's declared only once
-export const Model = {
-    name: "Service Model",
-    description: "This is a service model."
-};
+// Export the Service model and the initService function
+module.exports = { Service, initService };
 
-// Function to initialize your model
-export const init = () => {
-    console.log("Service model initialized");
-};
