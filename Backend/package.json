@@ -18,6 +18,8 @@
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "helmet": "^8.0.0",
+    "mysql2": "^3.11.3",
+    "sequelize": "^6.37.5",
     "vue": "^3.5.12",
     "webpack-bundle-analyzer": "^4.10.2"
   },
