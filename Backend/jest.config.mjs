@@ -1,12 +1,12 @@
-// jest.config.mjs
+// jest.config.js
 export default {
-  // Set the test environment to jsdom, suitable for testing Vue components
+  // Set the test environment to jsdom
   testEnvironment: 'jsdom',
 
   // Specify the transformers for Vue and JavaScript files
   transform: {
-    '^.+\\.vue$': 'vue-jest', // Use vue-jest for .vue files
-    '^.+\\.(js|jsx)$': 'babel-jest', // Use babel-jest for JavaScript and JSX files
+    '^.+\\.vue$': 'vue-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
 
   // Define file extensions that Jest will look for
@@ -14,8 +14,8 @@ export default {
 
   // Define patterns for test file matching
   testMatch: [
-    '**/__tests__/**/*.[jt]s?(x)', // Match test files in __tests__ directory
-    '**/?(*.)+(spec|test).[jt]s?(x)', // Match any .spec.js or .test.js files
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)',
   ],
 
   // Enable coverage collection
@@ -23,10 +23,10 @@ export default {
 
   // Specify which files to collect coverage from
   collectCoverageFrom: [
-    'src/**/*.{js,vue}', // Collect coverage from all .js and .vue files in the src directory
-    '!src/**/*.spec.js', // Exclude test files from coverage
-    '!src/main.js', // Exclude the main entry point if necessary
-    '!src/**/index.js', // Exclude index files in subdirectories if necessary
+    'src/**/*.{js,vue}',
+    '!src/**/*.spec.js',
+    '!src/main.js',
+    '!src/**/index.js',
   ],
 
   // Set the directory for coverage reports
@@ -34,14 +34,14 @@ export default {
 
   // Exclude coverage for certain files or patterns
   coveragePathIgnorePatterns: [
-    '/node_modules/', // Ignore node_modules directory
-    '<rootDir>/src/main.js', // Ignore the main entry point if necessary
+    '/node_modules/',
+    '<rootDir>/src/main.js',
   ],
 
   // Setup files to run before each test
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // Ensure this file exists or adjust the path accordingly
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
 
   // Additional options for better debugging and reporting
-  verbose: true, // Show individual test results
-  testTimeout: 30000, // Set a timeout for tests if necessary
+  verbose: true,
+  testTimeout: 30000,
 };
