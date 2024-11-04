@@ -50,7 +50,7 @@
     "typescript-eslint": "^8.13.0",
     "vue": "^3.5.12",
     "vue-loader": "^17.4.2",
-    "vue-jest": "^5.2.0",  
+    "vue-jest": "^5.2.0",  // Add vue-jest here
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
   },
