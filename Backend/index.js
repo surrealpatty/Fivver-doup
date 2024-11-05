@@ -11,6 +11,8 @@ import { initService, Service } from './src/models/services.js';
 import { initUser, User } from './src/models/user.js';
 import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
 import jwt from 'jsonwebtoken';
+import UserProfile, { init as initUserProfile } from './src/models/UserProfile.js';
+
 
 // Load environment variables
 dotenv.config(); // Load environment variables from .env file

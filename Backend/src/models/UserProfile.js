@@ -15,10 +15,11 @@ const UserProfile = sequelize.define('UserProfile', {
     // Add other fields as necessary
 });
 
-// Function to initialize the UserProfile model
+// You can initialize the model with any additional settings if necessary
+// This function is optional unless you have specific init logic
 const init = () => {
-    UserProfile.init({}, { sequelize, modelName: 'UserProfile' });
+    // If you have any special initialization logic, you can add it here
 };
 
 // Export the init function and the UserProfile model
-module.exports = { init, UserProfile }; // Use CommonJS syntax for export
+module.exports = { init, UserProfile };
