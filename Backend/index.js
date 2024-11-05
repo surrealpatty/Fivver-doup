@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 // Import route files
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
-import reviewRoutes from './src/routes/reviews.js'; // Corrected path
+import reviewRoutes from './src/routes/reviews.js'; // Ensure the path is correct
 
 // Import model initializers
 import { init as initService, Service } from './src/models/services.js'; // Ensure Service is imported correctly
@@ -71,14 +71,14 @@ app.use('/api/services', serviceRoutes);
 
 // Initialize models and set up associations
 const initModels = () => {
-    const user = initUser(sequelize); // Initialize User
-    const service = initService(sequelize); // Initialize Service
-    const userProfile = initUserProfile(sequelize); // Initialize UserProfile
+    const User = initUser(sequelize); // Initialize User
+    const Service = initService(sequelize); // Initialize Service
+    const UserProfile = initUserProfile(sequelize); // Initialize UserProfile
 
     // Set up associations if defined
-    if (user.associate) user.associate({ service, userProfile });
-    if (service.associate) service.associate({ user });
-    if (userProfile.associate) userProfile.associate({ user });
+    if (User.associate) User.associate({ Service, UserProfile });
+    if (Service.associate) Service.associate({ User });
+    if (UserProfile.associate) UserProfile.associate({ User });
 };
 
 // Test and synchronize the database connection
