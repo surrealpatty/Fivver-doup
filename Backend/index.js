@@ -7,14 +7,14 @@ import { Sequelize } from 'sequelize';
 import jwt from 'jsonwebtoken';
 
 // Import route files
-import userRoutes from './src/routes/userRoutes.js';
-import serviceRoutes from './src/routes/servicesRoute.js';
-import reviewRoutes from './src/routes/reviews.js';
+import userRoutes from './src/routes/userRoutes.js'; // Ensure this file exists and is correctly named
+import serviceRoutes from './src/routes/servicesRoute.js'; // Ensure this file exists and is correctly named
+import reviewRoutes from './src/routes/reviews.js'; // Ensure this file exists and is correctly named
 
 // Import model initializers
-import { init as initService } from './src/models/services.js';
-import { init as initUser } from './src/models/user.js';
-import { init as initUserProfile } from './src/models/UserProfile.js';
+import { init as initService } from './src/models/services.js'; // Ensure this file exists and is correctly named
+import { init as initUser } from './src/models/user.js'; // Ensure this file exists and is correctly named
+import { init as initUserProfile } from './src/models/UserProfile.js'; // Ensure this file exists and is correctly named
 
 // Load environment variables
 dotenv.config();
