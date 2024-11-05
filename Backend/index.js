@@ -11,6 +11,7 @@ import { initUser, User } from './src/models/user.js'; // Adjusted to correctly 
 import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
+import bcrypt from 'bcrypt'; // Ensure bcrypt is imported for password hashing
 
 dotenv.config(); // Load environment variables
 
@@ -101,7 +102,7 @@ app.post('/api/register', validateRegistration, async (req, res) => {
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10); // Ensure bcrypt is available
         const newUser = await User.create({ username, email, password: hashedPassword });
 
         res.status(201).json({
@@ -159,4 +160,12 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Resource not found' });
 });
 
-// General E
+// Start the application
+const startApp = async () => {
+    await initializeDatabase(); // Initialize the database connection and models
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+};
+
+startApp(); // Start the application
