@@ -15,11 +15,11 @@ const UserProfile = sequelize.define('UserProfile', {
     // Add other fields as necessary
 });
 
-// You can initialize the model with any additional settings if necessary
-// This function is optional unless you have specific init logic
+// Optional: Initialize the UserProfile model
 const init = () => {
     // If you have any special initialization logic, you can add it here
+    UserProfile.sync(); // This will create the table if it doesn't exist
 };
 
-// Export the init function and the UserProfile model
-module.exports = { init, UserProfile };
+// Export the UserProfile model and the init function
+module.exports = { UserProfile, init };
