@@ -2,18 +2,22 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import helmet from 'helmet'; // Import Helmet for security headers
-import { Sequelize } from 'sequelize'; // Import Sequelize
+import helmet from 'helmet';
+import { Sequelize } from 'sequelize';
+import jwt from 'jsonwebtoken';
+
+// Import route files
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
+
+// Import model initializers and models
 import { initService, Service } from './src/models/services.js';
 import { initUser, User } from './src/models/user.js';
 import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
-import jwt from 'jsonwebtoken';
 
 // Load environment variables
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
 // Database configuration using environment variables
 const dbConfig = {
@@ -52,12 +56,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
-app.use('/api/users', userRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/services', serviceRoutes);
-
-// Middleware to authenticate token
+// Token authentication middleware
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -71,13 +70,17 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Initialize models and their associations
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/services', serviceRoutes);
+
+// Initialize models and set up associations
 const initModels = () => {
     initUser(sequelize);
     initService(sequelize);
     initUserProfile(sequelize);
 
-    // Set up model associations (assuming these association methods are defined in the models)
     if (User.associate) User.associate({ Service, UserProfile });
     if (Service.associate) Service.associate({ User });
     if (UserProfile.associate) UserProfile.associate({ User });
@@ -90,7 +93,6 @@ const initializeDatabase = async () => {
         console.log('Database connection established successfully.');
 
         initModels();
-
         await sequelize.sync({ alter: true });
         console.log('Database synchronized successfully.');
     } catch (err) {
@@ -99,7 +101,7 @@ const initializeDatabase = async () => {
     }
 };
 
-// Call the database initialization function
+// Initialize the database
 initializeDatabase();
 
 // Start the server

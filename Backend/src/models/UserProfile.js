@@ -3,7 +3,6 @@ const sequelize = require('../config/database.js'); // Import the sequelize inst
 
 // Define the UserProfile model
 const UserProfile = sequelize.define('UserProfile', {
-    // Define your model attributes here
     bio: {
         type: DataTypes.TEXT,
         allowNull: true,
@@ -13,12 +12,18 @@ const UserProfile = sequelize.define('UserProfile', {
         allowNull: true,
     },
     // Add other fields as necessary
+}, {
+    // Optional model options here, if needed
 });
 
 // Optional: Initialize the UserProfile model
-const init = () => {
-    // If you have any special initialization logic, you can add it here
-    UserProfile.sync(); // This will create the table if it doesn't exist
+const init = async () => {
+    try {
+        await UserProfile.sync(); // Create the table if it doesn't exist
+        console.log("UserProfile table created successfully.");
+    } catch (error) {
+        console.error("Error creating UserProfile table:", error);
+    }
 };
 
 // Export the UserProfile model and the init function
