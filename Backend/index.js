@@ -7,7 +7,7 @@ import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
 import { init as initUser, Model as User } from './src/models/user.js'; // Adjusted path
-import { initService, Model as Service } from './src/models/services.js'; // Correctly import Service model
+import { initService, Service } from './src/models/services.js'; // Correct import
 import { init as initUserProfile, Model as UserProfile } from './src/models/UserProfile.js'; // Adjusted path
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
