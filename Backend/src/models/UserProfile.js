@@ -66,4 +66,4 @@ const initUserProfile = (sequelize) => {
 };
 
 // Export the init function and the UserProfile model correctly
-export { initUserProfile, UserProfile }; // Use ES6 export syntax
+export { initUserProfile, UserProfile }; // Ensure this matches your import in index.js
