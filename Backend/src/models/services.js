@@ -1,5 +1,5 @@
 // src/models/services.js
-const { Model, DataTypes } = require('sequelize');
+import { Model, DataTypes } from 'sequelize';
 
 class Service extends Model {
     static associate(models) {
@@ -54,4 +54,4 @@ const initService = (sequelize) => {
 };
 
 // Export the Service model and the initService function
-module.exports = { Service, initService };
+export { Service, initService };
