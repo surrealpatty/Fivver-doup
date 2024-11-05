@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js", 
+    "dev": "nodemon index.js",
     "build": "vue-cli-service build",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -46,7 +46,7 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0",
-    "vue-jest": "^5.0.0-alpha.6",
+    "vue-jest": "^5.0.0-alpha.10",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
   },
