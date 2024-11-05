@@ -14,7 +14,8 @@ import reviewRoutes from './src/routes/review.js';
 // Import model initializers
 import { initService } from './src/models/services.js';
 import { initUser } from './src/models/user.js';
-import { init as initUserProfile } from './src/models/UserProfile.js';
+const { init: initUserProfile } = require('./src/models/UserProfile');
+
 
 // Load environment variables
 dotenv.config();
