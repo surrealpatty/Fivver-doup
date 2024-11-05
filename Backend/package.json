@@ -49,7 +49,8 @@
     "typescript-eslint": "^8.13.0",
     "vue-jest": "^5.0.0-alpha.10",
     "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "nodemon": "^2.0.22"  // Ensure nodemon is included in devDependencies
   },
   "resolutions": {
     "braces": "^3.0.3"
@@ -64,7 +65,10 @@
       "plugin:vue/vue3-recommended",
       "eslint:recommended"
     ],
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "warn",  // Add a rule to warn about unused variables
+      "no-console": "off"         // Allow console statements for development
+    }
   },
   "browserslist": [
     "> 1%",
