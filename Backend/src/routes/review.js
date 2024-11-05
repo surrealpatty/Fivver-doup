@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 // Importing controller functions
-const { createReview, getReviewsForService, updateReview, deleteReview } = require('../controllers/reviewController');
+const {
+    createReview,
+    getReviewsForService,
+    updateReview,
+    deleteReview,
+} = require('../controllers/reviewController');
 
 // Importing authentication middleware
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -19,4 +24,5 @@ router.put('/:reviewId', authMiddleware, updateReview);
 // Route to delete a review
 router.delete('/:reviewId', authMiddleware, deleteReview);
 
+// Exporting the router
 module.exports = router;
