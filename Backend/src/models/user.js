@@ -15,21 +15,25 @@ const initUser = (sequelize) => {
                 allowNull: false,
                 unique: true,
                 validate: {
-                    notEmpty: {
-                        msg: 'Username cannot be empty',
+                    len: {
+                        args: [3, 30],
+                        msg: 'Username must be between 3 and 30 characters long',
                     },
                 },
             },
             password: {
                 type: DataTypes.STRING,
                 allowNull: false,
+            },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false,
                 validate: {
-                    notEmpty: {
-                        msg: 'Password cannot be empty',
+                    isEmail: {
+                        msg: 'Must be a valid email address',
                     },
                 },
             },
-            // Add other fields as necessary
         },
         {
             sequelize,
@@ -42,4 +46,4 @@ const initUser = (sequelize) => {
 };
 
 // Export the User model and the initUser function
-module.exports = { User, initUser };
+module.exports = { initUser, Model: User }; // Ensure 'Model' is exported correctly
