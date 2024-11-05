@@ -1,28 +1,19 @@
-const express = require('express');
+import express from 'express';
+import { createReview, getReviewsForService, updateReview, deleteReview } from '../controllers/reviewController.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
+
 const router = express.Router();
 
-// Importing controller functions
-const {
-    createReview,
-    getReviewsForService,
-    updateReview,
-    deleteReview,
-} = require('../controllers/reviewController');
-
-// Importing authentication middleware
-const authMiddleware = require('../middlewares/authMiddleware');
-
-// Route to create a new review
+// Route to create a new review (requires authentication)
 router.post('/', authMiddleware, createReview);
 
 // Route to get reviews for a specific service
 router.get('/:serviceId', getReviewsForService);
 
-// Route to update a review
+// Route to update a review (requires authentication)
 router.put('/:reviewId', authMiddleware, updateReview);
 
-// Route to delete a review
+// Route to delete a review (requires authentication)
 router.delete('/:reviewId', authMiddleware, deleteReview);
 
-// Exporting the router
-module.exports = router;
+export default router;
