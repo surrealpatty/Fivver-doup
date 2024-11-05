@@ -1,9 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator'); // Input validation
-const User = require('../models/user'); // Ensure path is correct
-const Service = require('../models/service'); // Ensure path is correct
+const { check, validationResult } = require('express-validator');
+const { User } = require('../models/user'); // Ensure path and import style is correct
+const { Service } = require('../models/service'); // Ensure path and import style is correct
 const authenticateToken = require('../middleware/authenticateToken'); // Authentication middleware
 
 const router = express.Router();
@@ -12,7 +12,6 @@ const router = express.Router();
 router.post(
     '/register',
     [
-        // Input validation
         check('username', 'Username is required').notEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
@@ -42,7 +41,6 @@ router.post(
                 password: hashedPassword, // Store hashed password
             });
 
-            // Respond with user info, excluding password
             res.status(201).json({
                 message: 'User created successfully',
                 user: {
@@ -52,7 +50,7 @@ router.post(
                 },
             });
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error creating user:', error.message); // Improved error logging
             res.status(500).json({ message: 'Server error' });
         }
     }
@@ -80,7 +78,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200).json({ token });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Login error:', error.message); // Improved error logging
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -93,10 +91,9 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Send user data (without password)
         res.json({ id: user.id, username: user.username, email: user.email });
     } catch (error) {
-        console.error('Profile retrieval error:', error);
+        console.error('Profile retrieval error:', error.message); // Improved error logging
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -108,7 +105,7 @@ router.post(
     [
         check('title', 'Title is required').notEmpty(),
         check('description', 'Description is required').notEmpty(),
-        check('price', 'Price must be a number').isNumeric(),
+        check('price', 'Price must be a valid number').isFloat({ min: 0 }), // Use isFloat for price
         check('category', 'Category is required').notEmpty(),
     ],
     async (req, res) => {
@@ -130,7 +127,7 @@ router.post(
             });
             res.status(201).json(newService);
         } catch (error) {
-            console.error('Error creating service:', error);
+            console.error('Error creating service:', error.message); // Improved error logging
             res.status(500).json({ message: 'Failed to create service' });
         }
     }

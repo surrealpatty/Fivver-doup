@@ -1,6 +1,8 @@
+// routes/profile.js
+
 const express = require('express');
 const { authenticateToken } = require('../middleware/authMiddleware'); // Ensure this is the correct import for middleware
-const User = require('../models/user'); // Ensure the correct path and import method for User model
+const User = require('../models/user'); // Ensure the correct path for User model
 const router = express.Router();
 
 // Protected Route for User Profile
@@ -15,14 +17,14 @@ router.get('/profile', authenticateToken, async (req, res) => {
         }
 
         // Send only necessary user details
-        res.json({
+        res.status(200).json({
             id: user.id,
             username: user.username,
             email: user.email,
         });
     } catch (error) {
-        console.error('Error fetching profile:', error.message); // Log the error message
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error fetching profile:', error); // Log the error message
+        res.status(500).json({ message: 'Server error', error: error.message }); // Optionally include the error message
     }
 });
 

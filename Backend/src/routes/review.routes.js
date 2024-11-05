@@ -37,12 +37,15 @@ router.post(
     }
 );
 
-// 2. Get all reviews for a service
+// 2. Get all reviews for a specific service
 router.get('/service/:serviceId', async (req, res) => {
     const { serviceId } = req.params;
 
     try {
         const reviews = await Review.findAll({ where: { serviceId } });
+        if (!reviews.length) {
+            return res.status(404).json({ message: 'No reviews found for this service' });
+        }
         res.json(reviews);
     } catch (error) {
         console.error('Error fetching reviews:', error.message);
