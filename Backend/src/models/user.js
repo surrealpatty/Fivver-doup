@@ -24,5 +24,5 @@ export const init = (sequelize) => {
     return User; // Return the model instance
 };
 
-// Export the User model directly as a function
+// Export the model directly for other files to import
 export const getUserModel = () => User; // This function returns the User model

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Sequelize } from 'sequelize';
-import config from '../../config/config.js'; // Adjusted path to import config
+import config from '../config/config.js'; // Adjusted path
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -14,7 +14,7 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 const models = {};
 
 // Dynamically import all model files
-fs.readdirSync(__dirname)
+fs.readdirSync(path.join(__dirname, 'models')) // Adjusted to read models from the models directory
     .filter(file => {
         return (
             file.indexOf('.') !== 0 && // Ignore dotfiles
@@ -24,7 +24,7 @@ fs.readdirSync(__dirname)
     })
     .forEach(file => {
         // Import the model
-        const modelModule = require(path.join(__dirname, file));
+        const modelModule = require(path.join(__dirname, 'models', file));
 
         // Check if the module has the init function
         if (modelModule.init && typeof modelModule.init === 'function') {
