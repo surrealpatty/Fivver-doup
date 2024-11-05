@@ -1,15 +1,16 @@
-// routes/profile.js
+// src/routes/profile.js
 
 const express = require('express');
-const { authenticateToken } = require('../middleware/authMiddleware'); // Ensure this is the correct import for middleware
-const User = require('../models/user'); // Ensure the correct path for User model
+const authenticateToken = require('../middleware/authMiddleware'); // Correct import for the middleware function
+const User = require('../models/user'); // Correct import path for User model
+
 const router = express.Router();
 
 // Protected Route for User Profile
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
         // Fetch user from the database using the ID from the authMiddleware
-        const user = await User.findByPk(req.user.id);
+        const user = await User.findByPk(req.user.id); // Ensure req.user.id is available (provided by authenticateToken middleware)
 
         // Check if the user exists
         if (!user) {
