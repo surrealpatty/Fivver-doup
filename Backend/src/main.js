@@ -1,13 +1,14 @@
-import Vue from 'vue';
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router/index.js'; // Ensure you create this file
-import store from './store/index.js'; // Ensure you create this file
+import router from './router/index.js'; // Ensure this file exists
+import store from './store/index.js'; // Ensure this file exists
 
-createApp(App).use(router).use(store).mount('#app');
+// Create the Vue application
+const app = createApp(App);
 
-Vue.config.productionTip = false;
+// Use the router and store
+app.use(router);
+app.use(store);
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app');
+// Mount the app to the DOM
+app.mount('#app');
