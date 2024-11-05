@@ -1,5 +1,5 @@
 // src/models/user.js
-import { Model, DataTypes } from 'sequelize';
+const { Model, DataTypes } = require('sequelize');
 
 class User extends Model {
     static associate(models) {
@@ -13,6 +13,7 @@ const initUser = (sequelize) => {
             username: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                unique: true,
                 validate: {
                     notEmpty: {
                         msg: 'Username cannot be empty',
@@ -28,6 +29,7 @@ const initUser = (sequelize) => {
                     },
                 },
             },
+            // Add other fields as necessary
         },
         {
             sequelize,
@@ -40,4 +42,4 @@ const initUser = (sequelize) => {
 };
 
 // Export the User model and the initUser function
-export { initUser, User };
+module.exports = { User, initUser };
