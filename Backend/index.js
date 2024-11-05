@@ -19,6 +19,15 @@ import { init as initUserProfile } from './src/models/UserProfile.js'; // Ensure
 // Load environment variables
 dotenv.config();
 
+// Check for required environment variables
+const requiredEnvVars = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT', 'JWT_SECRET'];
+requiredEnvVars.forEach(varName => {
+    if (!process.env[varName]) {
+        console.error(`FATAL ERROR: ${varName} is not defined.`);
+        process.exit(1);
+    }
+});
+
 // Database configuration
 const dbConfig = {
     username: process.env.DB_USER,
@@ -37,13 +46,6 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET;
-
-// Check for required environment variables
-if (!JWT_SECRET) {
-    console.error('FATAL ERROR: JWT_SECRET is not defined.');
-    process.exit(1);
-}
 
 // Middleware setup
 app.use(cors());
@@ -57,7 +59,7 @@ const authenticateToken = (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: 'No token provided' });
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
         req.user = user; // Store user info in the request
         next();
@@ -65,7 +67,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Apply routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRouter);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/services', serviceRoutes);
 
