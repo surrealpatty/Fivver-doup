@@ -1,28 +1,28 @@
-// 20241028211157-create-users.js
-import { DataTypes } from 'sequelize';
+// 20241028211157-create-users.cjs
+'use strict';
 
-export default {
-    up: async (queryInterface) => {
+module.exports = {
+    up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('Users', {
             id: {
-                type: DataTypes.INTEGER,
+                type: Sequelize.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
             username: {
-                type: DataTypes.STRING,
+                type: Sequelize.STRING,
                 allowNull: false,
             },
             password: {
-                type: DataTypes.STRING,
+                type: Sequelize.STRING,
                 allowNull: false,
             },
             createdAt: {
-                type: DataTypes.DATE,
+                type: Sequelize.DATE,
                 allowNull: false,
             },
             updatedAt: {
-                type: DataTypes.DATE,
+                type: Sequelize.DATE,
                 allowNull: false,
             },
         });

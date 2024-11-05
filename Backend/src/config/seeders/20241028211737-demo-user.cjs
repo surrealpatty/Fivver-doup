@@ -1,5 +1,7 @@
-// 20241028211737-demo-user.js
-export default {
+// 20241028211737-demo-user.cjs
+'use strict';
+
+module.exports = {
     up: async (queryInterface) => {
         await queryInterface.bulkInsert('Users', [
             {
