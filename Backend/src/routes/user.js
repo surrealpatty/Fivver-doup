@@ -1,5 +1,5 @@
 // src/routes/user.js
-
+import express from 'express';
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -31,6 +31,12 @@ router.post('/login', async (req, res) => {
         console.error('Error during login:', error); // Log error for debugging
         res.status(500).json({ message: 'Server error', error });
     }
+    // Define your routes here
+router.get('/', (req, res) => {
+    res.send('User route');
+  });
+  
+ 
 });
 
 // Optional: Add a registration route or other user-related routes here
