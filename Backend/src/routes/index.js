@@ -1,28 +1,32 @@
-// src/router/index.js
+import express from 'express';  // Import express
+import cors from 'cors';        // Import cors for Cross-Origin Resource Sharing
+import bodyParser from 'body-parser'; // Import body-parser to parse incoming request bodies
+import reviewsRouter from './src/routes/reviews.js'; // Import the reviews router
 
-import { createRouter, createWebHistory } from 'vue-router';
+// Create an instance of the express application
+const app = express();
 
-// Use dynamic imports for better performance
-const Home = () => import('../views/Home.vue');
-const About = () => import('../views/About.vue');
+// Middleware
+app.use(cors()); // Enable CORS
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Define routes
-const routes = [
-  { path: '/', name: 'Home', component: Home },
-  { path: '/about', name: 'About', component: About },
-  // Catch-all route for 404 error handling
-  {
-    path: '/:catchAll(.*)', // This will catch any path that doesn't match above routes
-    name: 'NotFound',
-    component: () => import('../views/NotFound.vue'), // Ensure you have a NotFound.vue component
-  },
-];
+app.use('/api/reviews', reviewsRouter); // Use reviews router for /api/reviews endpoint
 
-// Create router instance
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
+// Optional: Health check route
+app.get('/health', (req, res) => {
+    res.json({ message: 'API is running' });
 });
 
-// Export the router
-export default router;
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log error stack
+    res.status(500).json({ message: 'Something went wrong!' }); // Generic error response
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000; // Use PORT from environment variables or default to 3000
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});

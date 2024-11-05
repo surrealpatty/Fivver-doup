@@ -7,7 +7,7 @@ import { Sequelize } from 'sequelize';
 import jwt from 'jsonwebtoken';
 
 // Import route files
-import userRoutes from './src/routes/userRoutes.js'; // Ensure this file exists and is correctly named
+import userRouter from './src/routes/user.js';
 import serviceRoutes from './src/routes/servicesRoute.js'; // Ensure this file exists and is correctly named
 import reviewRoutes from './src/routes/reviews.js'; // Ensure this file exists and is correctly named
 
