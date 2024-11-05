@@ -9,6 +9,9 @@ router.post('/', authMiddleware, createReview);
 
 // Route to get reviews for a specific service
 router.get('/:serviceId', getReviewsForService);
+router.get('/', (req, res) => {
+    res.json({ message: 'Reviews route works!' });
+});
 
 // Route to update a review (requires authentication)
 router.put('/:reviewId', authMiddleware, updateReview);

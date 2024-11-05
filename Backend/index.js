@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 // Import route files
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
-import reviewRoutes from './src/routes/reviews.js'; // Ensure the path is correct
+import reviewRoutes from './routes/reviews.js';
 
 // Import model initializers
 import { init as initService, Service } from './src/models/services.js'; // Ensure Service is imported correctly
