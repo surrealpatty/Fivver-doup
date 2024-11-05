@@ -62,7 +62,7 @@ const initModels = () => {
     initUserProfile(sequelize); // Initialize UserProfile model
 
     // Set up model associations
-    User.associate({ Service, UserProfile });
+    User.associate({ Service, UserProfile }); // User can have multiple services and one profile
     Service.associate({ User });
     UserProfile.associate({ User });
 };
@@ -140,7 +140,15 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         const user = await User.findByPk(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        res.json({ id: user.id, email: user.email, username: user.username });
+        // Fetch the user's profile details
+        const userProfile = await UserProfile.findOne({ where: { userId: user.id } });
+        
+        res.json({
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            profile: userProfile // Include user profile details in the response
+        });
     } catch (error) {
         console.error('Error fetching profile:', error.message);
         res.status(500).json({ message: 'Server error' });
@@ -152,20 +160,4 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Resource not found' });
 });
 
-// General Error Handler
-app.use((err, req, res, next) => {
-    console.error('Error:', err.stack);
-    res.status(500).json({ message: 'An internal server error occurred', error: err.message });
-});
-
-// Call to initialize the database and start the server
-initializeDatabase().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}).catch(err => {
-    console.error('Failed to initialize database or start server:', err.message);
-});
-
-// Export the app instance for testing purposes
-export default app;
+// General E
