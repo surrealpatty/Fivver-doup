@@ -1,7 +1,8 @@
 import request from 'supertest';
-import app from '../index.js'; // Adjust the path as necessary
-import sequelize from '../config/database.js';
+import app from '../src/index.js'; // Adjust the path to your app entry point
+import sequelize from '../src/config/database.js';
 import { init as initUser } from '../src/models/user.js';
+import User from '../src/models/user.js'; // Ensure you import the User model for testing
 
 beforeAll(async () => {
     await sequelize.authenticate();
@@ -22,9 +23,15 @@ describe('User Routes', () => {
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('message', 'User created successfully');
         expect(response.body.user).toHaveProperty('username', 'testuser');
+        expect(response.body.user).toHaveProperty('email', 'test@example.com'); // Verify email is returned
     });
 
     it('should login an existing user', async () => {
+        // First register the user
+        await request(app)
+            .post('/api/register')
+            .send({ username: 'testuser', email: 'test@example.com', password: 'password123' });
+
         const response = await request(app)
             .post('/api/login')
             .send({ email: 'test@example.com', password: 'password123' });

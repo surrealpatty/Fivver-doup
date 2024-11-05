@@ -1,8 +1,8 @@
 // Import necessary modules
 const { registerUser, loginUser } = require('../src/controllers/userController');
-const sequelize = require('./config/database'); // Ensure the path to the Sequelize instance is correct
-const User = require('./models/user'); // Import User model
-const Service = require('./models/services'); // Import Service model
+const sequelize = require('../src/config/database'); // Ensure the path to the Sequelize instance is correct
+const User = require('../src/models/user'); // Import User model
+const Service = require('../src/models/services'); // Import Service model
 
 console.log('User functions loaded successfully.');
 
@@ -35,7 +35,11 @@ const testUserAndServiceModels = async () => {
         console.log('Service created:', newService.toJSON());
 
         // Test User Registration
-        const registeredUser = await registerUser(newUser);
+        const registeredUser = await registerUser({
+            username: newUser.username,
+            email: newUser.email,
+            password: newUser.password,
+        });
         console.log('User registered via registerUser:', registeredUser);
 
         // Test User Login
