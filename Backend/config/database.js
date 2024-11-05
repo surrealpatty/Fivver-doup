@@ -29,5 +29,4 @@ const testConnection = async () => {
 // Call the function to test the connection
 testConnection();
 
-module.exports = sequelize;
-
+module.exports = sequelize; // Export the sequelize instance
