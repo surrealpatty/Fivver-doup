@@ -6,7 +6,6 @@ import {
     deleteReview
 } from '../controllers/reviewController.js'; // Ensure the correct import path
 import authMiddleware from '../middlewares/authMiddleware.js'; // Ensure the correct import path
-import reviewsRouter from './src/routes/reviews.js';
 
 const router = express.Router();
 

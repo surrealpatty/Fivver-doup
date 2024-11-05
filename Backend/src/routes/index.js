@@ -1,32 +1,20 @@
 import express from 'express';  // Import express
-import cors from 'cors';        // Import cors for Cross-Origin Resource Sharing
-import bodyParser from 'body-parser'; // Import body-parser to parse incoming request bodies
-import reviewsRouter from './src/routes/reviews.js'; // Import the reviews router
+import reviewsRouter from './reviews.js'; // Import the reviews router
+import userRouter from './user.js'; // Import the user router (if applicable)
+import serviceRouter from './servicesRoute.js'; // Import the services router (if applicable)
 
-// Create an instance of the express application
-const app = express();
-
-// Middleware
-app.use(cors()); // Enable CORS
-app.use(bodyParser.json()); // Parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+// Create an instance of the router
+const router = express.Router();
 
 // Define routes
-app.use('/api/reviews', reviewsRouter); // Use reviews router for /api/reviews endpoint
+router.use('/api/reviews', reviewsRouter); // Use reviews router for /api/reviews endpoint
+router.use('/api/users', userRouter); // Use user router for /api/users endpoint
+router.use('/api/services', serviceRouter); // Use services router for /api/services endpoint
 
 // Optional: Health check route
-app.get('/health', (req, res) => {
+router.get('/health', (req, res) => {
     res.json({ message: 'API is running' });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack); // Log error stack
-    res.status(500).json({ message: 'Something went wrong!' }); // Generic error response
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000; // Use PORT from environment variables or default to 3000
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Export the router
+export default router;
