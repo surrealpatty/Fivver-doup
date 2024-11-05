@@ -3,7 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet'; // Import Helmet for security headers
-import { Sequelize } from 'sequelize'; // Make sure to import Sequelize
+import { Sequelize } from 'sequelize'; // Import Sequelize
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
@@ -11,7 +11,6 @@ import { initService, Service } from './src/models/services.js';
 import { initUser, User } from './src/models/user.js';
 import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
 import jwt from 'jsonwebtoken';
-import { check, validationResult } from 'express-validator';
 
 // Load environment variables
 dotenv.config(); // Load environment variables from .env file
@@ -32,8 +31,8 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 });
 
 // Initialize Express app
-const app = express(); 
-const PORT = process.env.PORT || 3000; 
+const app = express();
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Check for required environment variables
@@ -74,12 +73,12 @@ const authenticateToken = (req, res, next) => {
 
 // Initialize models and their associations
 const initModels = () => {
-    initUser(sequelize); 
-    initService(sequelize); 
-    initUserProfile(sequelize); 
+    initUser(sequelize);
+    initService(sequelize);
+    initUserProfile(sequelize);
 
     // Set up model associations
-    User.associate({ Service, UserProfile }); 
+    User.associate({ Service, UserProfile });
     Service.associate({ User });
     UserProfile.associate({ User });
 };
@@ -90,7 +89,7 @@ const initializeDatabase = async () => {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
 
-        initModels(); 
+        initModels();
 
         await sequelize.sync({ alter: true });
         console.log('Database synchronized successfully.');
