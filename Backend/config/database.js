@@ -6,12 +6,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 // Create a new Sequelize instance
 const sequelize = new Sequelize(
-    isProduction ? process.env.PROD_DB_NAME : process.env.DB_NAME,
-    isProduction ? process.env.PROD_DB_USER : process.env.DB_USER,
-    isProduction ? process.env.PROD_DB_PASSWORD : process.env.DB_PASSWORD,
+    isProduction ? process.env.PROD_DB_NAME : process.env.DB_NAME,      // Database name
+    isProduction ? process.env.PROD_DB_USER : process.env.DB_USER,      // Username
+    isProduction ? process.env.PROD_DB_PASSWORD : process.env.DB_PASSWORD, // Password
     {
-        host: isProduction ? process.env.PROD_DB_HOST : process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT, // Use the dialect specified in .env
+        host: isProduction ? process.env.PROD_DB_HOST : process.env.DB_HOST, // Host
+        dialect: 'mysql', // Hardcoded to 'mysql', as the dialect can be set directly
         logging: false, // Set to true if you want to see SQL queries
     }
 );

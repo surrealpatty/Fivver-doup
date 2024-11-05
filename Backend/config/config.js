@@ -1,23 +1,25 @@
+require('dotenv').config(); // Load environment variables from .env file
+
 module.exports = {
     development: {
-        username: 'your_db_username',
-        password: 'your_db_password',
-        database: 'your_db_name',
-        host: '127.0.0.1',
-        dialect: 'mysql',
+        username: process.env.DB_USER || 'root', // Default to 'root' if env var is not set
+        password: process.env.DB_PASSWORD || '', // Default to empty if env var is not set
+        database: process.env.DB_NAME || 'fivver_doup_db', // Default database name
+        host: process.env.DB_HOST || 'localhost', // Default to 'localhost'
+        dialect: process.env.DB_DIALECT || 'mysql', // Default to MySQL dialect
     },
     test: {
-        username: 'your_test_db_username',
-        password: 'your_test_db_password',
-        database: 'your_test_db_name',
-        host: '127.0.0.1',
-        dialect: 'mysql',
+        username: process.env.DB_USER || 'root', // Default to 'root'
+        password: process.env.DB_PASSWORD || '', // Default to empty
+        database: 'fivver_doup_db_test', // Use a separate test database
+        host: process.env.DB_HOST || 'localhost', // Default to 'localhost'
+        dialect: process.env.DB_DIALECT || 'mysql', // Default to MySQL dialect
     },
     production: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
+        username: process.env.PROD_DB_USER || 'root', // Default to 'root'
+        password: process.env.PROD_DB_PASSWORD || '', // Default to empty
+        database: process.env.PROD_DB_NAME || 'fivver_doup_db', // Default production database name
+        host: process.env.PROD_DB_HOST || 'localhost', // Default to 'localhost'
+        dialect: process.env.DB_DIALECT || 'mysql', // Default to MySQL dialect
     },
 };
