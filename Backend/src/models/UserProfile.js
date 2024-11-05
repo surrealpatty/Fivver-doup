@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+import { Model, DataTypes } from 'sequelize';
 
 // Define the UserProfile model
 class UserProfile extends Model {
@@ -66,7 +66,4 @@ const initUserProfile = (sequelize) => {
 };
 
 // Export the init function and the UserProfile model correctly
-module.exports = {
-    init: initUserProfile, // Export the initialization function
-    Model: UserProfile,     // Export the UserProfile model class
-};
+export { initUserProfile, UserProfile }; // Use ES6 export syntax

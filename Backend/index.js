@@ -8,8 +8,8 @@ import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
 import { initService, Service } from './src/models/services.js';
 import { initUser, User } from './src/models/user.js'; // Adjusted to correctly import User model
-import { init as initUserProfile, Model as UserProfile } from './src/models/UserProfile.js'; // Adjusted path
-import bcrypt from 'bcryptjs';
+import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
+
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 
