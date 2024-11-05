@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+import { Model, DataTypes } from 'sequelize';
 
 class Review extends Model {
     static associate(models) {
@@ -32,7 +32,10 @@ const initReview = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notNull: { msg: 'Comment cannot be null' },
-                    len: { args: [1, 500], msg: 'Comment must be between 1 and 500 characters long' },
+                    len: {
+                        args: [1, 500],
+                        msg: 'Comment must be between 1 and 500 characters long',
+                    },
                 },
             },
             userId: {
@@ -60,7 +63,4 @@ const initReview = (sequelize) => {
     );
 };
 
-module.exports = {
-    initReview,
-    Review,
-};
+export { initReview, Review };

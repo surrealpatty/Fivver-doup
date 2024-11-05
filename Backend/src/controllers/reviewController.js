@@ -3,10 +3,14 @@ const { Review } = require('../models/review'); // Import the Review model
 
 // Create a new review
 exports.createReview = async (req, res) => {
-    try {
-        const { rating, comment, serviceId } = req.body; // Destructure required fields
-        const userId = req.user.id; // Get user ID from the authenticated user
+    const { rating, comment, serviceId } = req.body; // Destructure required fields
+    const userId = req.user.id; // Get user ID from the authenticated user
 
+    if (!rating || !serviceId) { // Ensure required fields are present
+        return res.status(400).json({ message: 'Rating and serviceId are required' });
+    }
+
+    try {
         const newReview = await Review.create({ rating, comment, userId, serviceId });
         return res.status(201).json(newReview);
     } catch (error) {
@@ -43,10 +47,15 @@ exports.updateReview = async (req, res) => {
             return res.status(403).json({ message: 'Forbidden: You do not own this review' });
         }
 
-        review.rating = rating !== undefined ? rating : review.rating; // Update rating if provided
-        review.comment = comment !== undefined ? comment : review.comment; // Update comment if provided
-        await review.save();
+        // Update fields only if they are provided
+        if (rating !== undefined) {
+            review.rating = rating; // Update rating if provided
+        }
+        if (comment !== undefined) {
+            review.comment = comment; // Update comment if provided
+        }
 
+        await review.save();
         return res.status(200).json(review);
     } catch (error) {
         return res.status(400).json({ message: error.message });

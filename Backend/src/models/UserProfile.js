@@ -1,6 +1,5 @@
-// src/models/UserProfile.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.js'); // Import the sequelize instance
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.js'; // Ensure you're using the correct path for the sequelize instance
 
 // Define the UserProfile model
 const UserProfile = sequelize.define('UserProfile', {
@@ -16,17 +15,16 @@ const UserProfile = sequelize.define('UserProfile', {
 }, {
     tableName: 'user_profiles', // Specify the table name
     timestamps: true, // Add createdAt and updatedAt fields
+    underscored: true, // Use snake_case for column names in the database
 });
 
-// Initialize the UserProfile model
-const init = async () => {
-    try {
-        await UserProfile.sync(); // Create the table if it doesn't exist
-        console.log("UserProfile table created successfully.");
-    } catch (error) {
-        console.error("Error creating UserProfile table:", error.message);
-    }
+// Define associations
+const associate = (models) => {
+    UserProfile.belongsTo(models.User, {
+        foreignKey: 'userId', // Specify the foreign key
+        as: 'user', // Alias for the association
+    });
 };
 
-// Export the UserProfile model and init function
-module.exports = { UserProfile, init };
+// Export the UserProfile model and associate function
+export { UserProfile, associate };

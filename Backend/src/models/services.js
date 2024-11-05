@@ -1,9 +1,9 @@
-// src/models/services.js
 import { Model, DataTypes } from 'sequelize';
 
 class Service extends Model {
     static associate(models) {
         // Define associations here if needed
+        // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
     }
 }
 

@@ -1,9 +1,9 @@
-// src/models/user.js
 import { Model, DataTypes } from 'sequelize';
 
 class User extends Model {
     static associate(models) {
         // Define associations here if needed
+        // Example: User.hasMany(models.Review, { foreignKey: 'userId', as: 'reviews' });
     }
 }
 
@@ -24,6 +24,16 @@ const initUser = (sequelize) => {
             password: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                validate: {
+                    len: {
+                        args: [8, 100],
+                        msg: 'Password must be at least 8 characters long',
+                    },
+                    is: {
+                        args: /(?=.*[0-9])(?=.*[!@#$%^&*])/,
+                        msg: 'Password must contain at least one number and one special character',
+                    },
+                },
             },
             email: {
                 type: DataTypes.STRING,
