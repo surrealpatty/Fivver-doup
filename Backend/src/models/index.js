@@ -25,14 +25,14 @@ fs.readdirSync(__dirname)
         // Require the model
         const modelModule = require(path.join(__dirname, file));
 
-        // Check if the module has the init function and model class
-        if (modelModule.init && modelModule.Model) { // Use 'Model' for your exported model class
+        // Check if the module has the init function and exports the model class
+        if (modelModule.init && typeof modelModule.init === 'function') {
             // Call the init function with the Sequelize instance
-            modelModule.init(sequelize);
+            const model = modelModule.init(sequelize);
             // Store the model in the models object using the model's name as the key
-            models[modelModule.Model.name] = modelModule.Model; // Update to match your model class
+            models[model.name] = model; // Use model.name for dynamic naming
         } else {
-            console.warn(`Skipping file: ${file}. Ensure it exports both init and the model class.`);
+            console.warn(`Skipping file: ${file}. Ensure it exports an init function.`);
         }
     });
 
