@@ -1,7 +1,9 @@
 import { DataTypes } from 'sequelize';
 
+let User; // Declare the variable to hold the model
+
 export const init = (sequelize) => {
-    const User = sequelize.define('User', {
+    User = sequelize.define('User', {
         // Define your model attributes here
         username: {
             type: DataTypes.STRING,
@@ -19,8 +21,8 @@ export const init = (sequelize) => {
     }, {
         // Additional model options can go here
     });
-    return User; // Ensure you return the model instance
+    return User; // Return the model instance
 };
 
-// If you want to export the model directly, you can use:
-export { User };
+// Export the model after the init function has been called
+export const getUserModel = () => User; // This function returns the User model
