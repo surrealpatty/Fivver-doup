@@ -14,9 +14,8 @@ const UserProfile = sequelize.define('UserProfile', {
     },
     // Add other fields as necessary
 }, {
-    // Optional model options here, if needed
-    tableName: 'user_profiles', // Optional: Specify the table name
-    timestamps: true, // Optional: Add createdAt and updatedAt fields
+    tableName: 'user_profiles', // Specify the table name
+    timestamps: true, // Add createdAt and updatedAt fields
 });
 
 // Initialize the UserProfile model
@@ -25,7 +24,7 @@ const init = async () => {
         await UserProfile.sync(); // Create the table if it doesn't exist
         console.log("UserProfile table created successfully.");
     } catch (error) {
-        console.error("Error creating UserProfile table:", error);
+        console.error("Error creating UserProfile table:", error.message);
     }
 };
 
