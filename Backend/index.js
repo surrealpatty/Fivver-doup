@@ -9,12 +9,12 @@ import jwt from 'jsonwebtoken';
 // Import route files
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
-import reviewRoutes from './src/routes/review.js';
+import reviewRoutes from './src/routes/reviews.js'; // Corrected path
 
 // Import model initializers
-import { initService } from './src/models/services.js';
-import { initUser } from './src/models/user.js';
-import { init as initUserProfile } from './src/models/UserProfile.js'; // Corrected import
+import { init as initService, Service } from './src/models/services.js'; // Ensure Service is imported correctly
+import { init as initUser, User } from './src/models/user.js'; // Ensure User is imported correctly
+import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js'; // Ensure UserProfile is imported correctly
 
 // Load environment variables
 dotenv.config();
@@ -71,14 +71,14 @@ app.use('/api/services', serviceRoutes);
 
 // Initialize models and set up associations
 const initModels = () => {
-    const User = initUser(sequelize);
-    const Service = initService(sequelize);
-    const UserProfile = initUserProfile(sequelize);
+    const user = initUser(sequelize); // Initialize User
+    const service = initService(sequelize); // Initialize Service
+    const userProfile = initUserProfile(sequelize); // Initialize UserProfile
 
-    // Set up associations
-    if (User.associate) User.associate({ Service, UserProfile });
-    if (Service.associate) Service.associate({ User });
-    if (UserProfile.associate) UserProfile.associate({ User });
+    // Set up associations if defined
+    if (user.associate) user.associate({ service, userProfile });
+    if (service.associate) service.associate({ user });
+    if (userProfile.associate) userProfile.associate({ user });
 };
 
 // Test and synchronize the database connection
@@ -87,8 +87,8 @@ const initializeDatabase = async () => {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
 
-        initModels();
-        await sequelize.sync({ alter: true });
+        initModels(); // Initialize models and their associations
+        await sequelize.sync({ alter: true }); // Sync database
         console.log('Database synchronized successfully.');
     } catch (err) {
         console.error('Unable to connect to the database:', err.message);

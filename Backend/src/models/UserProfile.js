@@ -1,4 +1,4 @@
-// Import necessary modules
+// src/models/UserProfile.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database.js'); // Import the sequelize instance
 
