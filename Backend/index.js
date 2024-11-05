@@ -14,8 +14,7 @@ import reviewRoutes from './src/routes/review.js';
 // Import model initializers
 import { initService } from './src/models/services.js';
 import { initUser } from './src/models/user.js';
-const { init: initUserProfile } = require('./src/models/UserProfile');
-
+import { init as initUserProfile } from './src/models/UserProfile.js'; // Corrected import
 
 // Load environment variables
 dotenv.config();
@@ -60,12 +59,12 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
-        req.user = user;
+        req.user = user; // Store user info in the request
         next();
     });
 };
 
-// Routes
+// Apply routes
 app.use('/api/users', userRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/services', serviceRoutes);
