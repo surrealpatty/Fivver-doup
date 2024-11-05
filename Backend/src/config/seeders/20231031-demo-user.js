@@ -1,12 +1,13 @@
-// seeders/20231031-demo-user.js
-'use strict';
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
+        const hashedPassword = await bcrypt.hash('password123', saltRounds);
         await queryInterface.bulkInsert('Users', [
             {
                 username: 'testuser',
-                password: 'password123', // Note: Hash passwords in a real application
+                password: hashedPassword, // Store the hashed password
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
