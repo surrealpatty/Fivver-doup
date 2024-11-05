@@ -1,13 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const { Sequelize } = require('sequelize');
+import fs from 'fs';
+import path from 'path';
+import { Sequelize } from 'sequelize';
+import config from '../config/config.js'; // Adjusted path to import config properly
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
+const dbConfig = config[env];
 
 // Initialize Sequelize with the configuration
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
 
 // Create an object to hold the models
 const models = {};
@@ -22,7 +23,7 @@ fs.readdirSync(__dirname)
         );
     })
     .forEach(file => {
-        // Require the model
+        // Import the model
         const modelModule = require(path.join(__dirname, file));
 
         // Check if the module has the init function
@@ -44,4 +45,4 @@ Object.keys(models).forEach(modelName => {
 });
 
 // Export the models and the Sequelize instance
-module.exports = { sequelize, models };
+export { sequelize, models };
