@@ -20,7 +20,7 @@ import { init as initUserProfile } from './src/models/UserProfile.js'; // Ensure
 dotenv.config();
 
 // Check for required environment variables
-const requiredEnvVars = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT', 'JWT_SECRET'];
+const requiredEnvVars = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT', 'JWT_SECRET', 'PORT'];
 requiredEnvVars.forEach(varName => {
     if (!process.env[varName]) {
         console.error(`FATAL ERROR: ${varName} is not defined.`);
@@ -104,4 +104,10 @@ initializeDatabase();
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`); // Include localhost for clarity
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
 });
