@@ -6,7 +6,9 @@ const config = require('./config'); // Ensure this path is correct
 
 // Determine the environment (development by default)
 const environment = process.env.NODE_ENV || 'development';
-const dbConfig = config[environment]?.db; // Use optional chaining to safely access db config
+
+// Ensure that the config object contains the database configuration for the current environment
+const dbConfig = config[environment]?.db;
 
 // Check if the database config is defined
 if (!dbConfig) {
@@ -34,5 +36,5 @@ const testConnection = async () => {
 // Run the connection test
 testConnection();
 
-// Export the sequelize instance
+// Export the sequelize instance for use in other parts of the application
 module.exports = sequelize;

@@ -9,12 +9,12 @@ import jwt from 'jsonwebtoken';
 // Import route files
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
-import reviewRoutes from './routes/reviews.js';
+import reviewRoutes from './src/routes/reviews.js';
 
 // Import model initializers
-import { init as initService, Service } from './src/models/services.js'; // Ensure Service is imported correctly
-import { init as initUser, User } from './src/models/user.js'; // Ensure User is imported correctly
-import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js'; // Ensure UserProfile is imported correctly
+import { init as initService } from './src/models/services.js';
+import { init as initUser } from './src/models/user.js';
+import { init as initUserProfile } from './src/models/UserProfile.js';
 
 // Load environment variables
 dotenv.config();
