@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "serve": "vue-cli-service serve",
+    "dev": "nodemon index.js", 
     "build": "vue-cli-service build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "test:watch": "jest --watch",
     "lint": "vue-cli-service lint",
     "format": "prettier --write '**/*.{js,vue,json,md}'"
@@ -76,5 +76,6 @@
     "fiverr",
     "web",
     "application"
-  ]
+  ],
+  "license": "MIT" 
 }

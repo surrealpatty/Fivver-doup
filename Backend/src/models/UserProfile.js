@@ -15,6 +15,8 @@ const UserProfile = sequelize.define('UserProfile', {
     // Add other fields as necessary
 }, {
     // Optional model options here, if needed
+    tableName: 'user_profiles', // Optional: Specify the table name
+    timestamps: true, // Optional: Add createdAt and updatedAt fields
 });
 
 // Initialize the UserProfile model
