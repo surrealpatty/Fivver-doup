@@ -1,49 +1,27 @@
-// src/models/user.js
-const { Model, DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
 
-class User extends Model {
-    static associate(models) {
-        // Define associations here if needed
-    }
-}
+let User; // Declare the variable to hold the model
 
-const initUser = (sequelize) => {
-    User.init(
-        {
-            username: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
-                validate: {
-                    len: {
-                        args: [3, 30],
-                        msg: 'Username must be between 3 and 30 characters long',
-                    },
-                },
-            },
-            password: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            email: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    isEmail: {
-                        msg: 'Must be a valid email address',
-                    },
-                },
-            },
+export const init = (sequelize) => {
+    User = sequelize.define('User', {
+        // Define your model attributes here
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
-        {
-            sequelize,
-            modelName: 'User',
-            tableName: 'users',
-            timestamps: true,
-            underscored: true,
-        }
-    );
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    }, {
+        // Additional model options can go here
+    });
 };
 
-// Export the User model and the initUser function
-module.exports = { initUser, Model: User }; // Ensure 'Model' is exported correctly
+// Export the model class
+export { User };
