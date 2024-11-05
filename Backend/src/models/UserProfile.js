@@ -1,3 +1,4 @@
+// Import necessary modules
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database.js'); // Import the sequelize instance
 
@@ -16,7 +17,7 @@ const UserProfile = sequelize.define('UserProfile', {
     // Optional model options here, if needed
 });
 
-// Optional: Initialize the UserProfile model
+// Initialize the UserProfile model
 const init = async () => {
     try {
         await UserProfile.sync(); // Create the table if it doesn't exist
@@ -26,5 +27,5 @@ const init = async () => {
     }
 };
 
-// Export the UserProfile model and the init function
+// Export the UserProfile model and init function
 module.exports = { UserProfile, init };

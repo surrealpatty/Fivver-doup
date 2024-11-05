@@ -11,15 +11,15 @@ import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
 
-// Import model initializers and models
-import { initService, Service } from './src/models/services.js';
-import { initUser, User } from './src/models/user.js';
-import { init as initUserProfile, UserProfile } from './src/models/UserProfile.js';
+// Import model initializers
+import { initService } from './src/models/services.js';
+import { initUser } from './src/models/user.js';
+import { init as initUserProfile } from './src/models/UserProfile.js';
 
 // Load environment variables
 dotenv.config();
 
-// Database configuration using environment variables
+// Database configuration
 const dbConfig = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -28,7 +28,7 @@ const dbConfig = {
     dialect: process.env.DB_DIALECT,
 };
 
-// Initialize Sequelize instance
+// Initialize Sequelize
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
@@ -49,12 +49,6 @@ if (!JWT_SECRET) {
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
-
-// Middleware to log requests
-app.use((req, res, next) => {
-    console.log(`${req.method} request for '${req.url}'`);
-    next();
-});
 
 // Token authentication middleware
 const authenticateToken = (req, res, next) => {
@@ -77,10 +71,11 @@ app.use('/api/services', serviceRoutes);
 
 // Initialize models and set up associations
 const initModels = () => {
-    initUser(sequelize);
-    initService(sequelize);
-    initUserProfile(sequelize);
+    const User = initUser(sequelize);
+    const Service = initService(sequelize);
+    const UserProfile = initUserProfile(sequelize);
 
+    // Set up associations
     if (User.associate) User.associate({ Service, UserProfile });
     if (Service.associate) Service.associate({ User });
     if (UserProfile.associate) UserProfile.associate({ User });
