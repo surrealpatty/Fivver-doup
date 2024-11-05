@@ -1,8 +1,10 @@
+// src/routes/user.js
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const User = require('../models/user'); // Adjust path if needed
+const User = require('../models/user'); // Ensure this path is correct
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Login Route
@@ -26,8 +28,12 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
+        console.error('Error during login:', error); // Log error for debugging
         res.status(500).json({ message: 'Server error', error });
     }
 });
 
+// Optional: Add a registration route or other user-related routes here
+
+// Export the router
 module.exports = router;
