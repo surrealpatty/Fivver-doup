@@ -1,9 +1,9 @@
 import express from 'express';
-import { 
-    createReview, 
-    getReviewsForService, 
-    updateReview, 
-    deleteReview 
+import {
+    createReview,
+    getReviewsForService,
+    updateReview,
+    deleteReview
 } from '../controllers/reviewController.js'; // Ensure the correct import path
 import authMiddleware from '../middlewares/authMiddleware.js'; // Ensure the correct import path
 
@@ -22,8 +22,8 @@ router.put('/:reviewId', authMiddleware, updateReview);
 router.delete('/:reviewId', authMiddleware, deleteReview);
 
 // Optional: Health check or confirmation route
-router.get('/', (req, res) => {
-    res.json({ message: 'Reviews route works!' });
+router.get('/health', (req, res) => {
+    res.json({ message: 'Reviews route is working!' });
 });
 
 export default router;
