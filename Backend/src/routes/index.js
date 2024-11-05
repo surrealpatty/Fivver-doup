@@ -12,7 +12,7 @@ const routes = [
   { path: '/about', name: 'About', component: About },
   // Catch-all route for 404 error handling
   {
-    path: '/:catchAll(.*)',
+    path: '/:catchAll(.*)', // This will catch any path that doesn't match above routes
     name: 'NotFound',
     component: () => import('../views/NotFound.vue'), // Ensure you have a NotFound.vue component
   },
