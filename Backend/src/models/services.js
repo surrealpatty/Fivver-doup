@@ -4,9 +4,11 @@ import { Model, DataTypes } from 'sequelize';
 class Service extends Model {
     static associate(models) {
         // Define associations here if needed
+        // For example: Service.belongsTo(models.User);
     }
 }
 
+// Function to initialize the Service model
 const initService = (sequelize) => {
     Service.init(
         {
