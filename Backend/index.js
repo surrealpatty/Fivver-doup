@@ -6,7 +6,6 @@ import sequelize from './config/database.js'; // Ensure correct import with .js 
 import userRoutes from './src/routes/userRoutes.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/review.js';
-import { init as initUser, Model as User } from './src/models/user.js'; // Adjusted path
 import { initService, Service } from './src/models/services.js';
 import { initUser, User } from './src/models/user.js'; // Adjusted to correctly import User model
 import { init as initUserProfile, Model as UserProfile } from './src/models/UserProfile.js'; // Adjusted path
