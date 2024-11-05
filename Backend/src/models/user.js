@@ -1,25 +1,50 @@
-import { DataTypes } from 'sequelize';
+// src/models/user.js
+import { Model, DataTypes } from 'sequelize';
 
-let User; // Declare the variable to hold the model
+class User extends Model {
+    static associate(models) {
+        // Define associations here if needed
+    }
+}
 
-export const init = (sequelize) => {
-    User = sequelize.define('User', {
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
+const initUser = (sequelize) => {
+    User.init(
+        {
+            username: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true,
+                validate: {
+                    len: {
+                        args: [3, 30],
+                        msg: 'Username must be between 3 and 30 characters long',
+                    },
+                },
+            },
+            password: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    isEmail: {
+                        msg: 'Email must be a valid email address',
+                    },
+                },
+            },
+            // Add other fields as needed
         },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
-    return User; // Return the model instance
+        {
+            sequelize,
+            modelName: 'User',
+            tableName: 'users',
+            timestamps: true,
+            underscored: true,
+        }
+    );
 };
 
-// This function returns the User model
-export const getUserModel = () => User;
+// Export the User model and the initUser function
+export { User, initUser };
