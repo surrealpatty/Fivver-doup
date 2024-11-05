@@ -25,7 +25,7 @@ fs.readdirSync(__dirname)
         // Require the model
         const modelModule = require(path.join(__dirname, file));
 
-        // Check if the module has the init function and exports the model class
+        // Check if the module has the init function
         if (modelModule.init && typeof modelModule.init === 'function') {
             // Call the init function with the Sequelize instance
             const model = modelModule.init(sequelize);
