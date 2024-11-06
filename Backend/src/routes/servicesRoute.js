@@ -8,6 +8,7 @@ import {
 import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
+const serviceController = require('../controllers/serviceController');
 
 // Route to create a new service (requires authentication)
 router.post('/', authMiddleware, createService);
