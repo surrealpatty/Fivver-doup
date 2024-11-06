@@ -1,39 +1,48 @@
+// src/store/index.js
 import { createStore } from 'vuex';
 
 const store = createStore({
   state: {
-    // Define your state properties
-    user: null, // Example state property to store user information
-    products: [], // Example state property to store a list of products
+    // State properties
+    user: null, // Holds user information
+    products: [], // List of products
   },
   mutations: {
-    // Define your mutations
+    // Mutation to set user
     setUser(state, user) {
-      state.user = user; // Sets the user state
+      state.user = user;
     },
+    // Mutation to add a product to the list
     addProduct(state, product) {
-      state.products.push(product); // Adds a product to the products array
+      state.products.push(product);
     },
+    // Mutation to remove a product by ID
     removeProduct(state, productId) {
-      state.products = state.products.filter(product => product.id !== productId); // Removes a product by ID
+      state.products = state.products.filter(product => product.id !== productId);
     },
   },
   actions: {
-    // Define your actions
-    fetchUser({ commit }) {
-      // Simulated async operation (e.g., API call)
-      const user = { id: 1, name: 'John Doe' }; // Simulated fetched user data
-      commit('setUser', user); // Commit mutation to set user
+    // Async action to simulate fetching user data
+    async fetchUser({ commit }) {
+      try {
+        // Simulate an API call
+        const user = { id: 1, name: 'John Doe' }; // Replace with real API response in practice
+        commit('setUser', user);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
     },
+    // Action to add a new product
     addNewProduct({ commit }, product) {
-      commit('addProduct', product); // Commit mutation to add a new product
+      commit('addProduct', product);
     },
+    // Action to remove a product
     deleteProduct({ commit }, productId) {
-      commit('removeProduct', productId); // Commit mutation to remove a product
+      commit('removeProduct', productId);
     },
   },
   modules: {
-    // Define modules if needed
+    // Define other modules here if needed
   },
 });
 
