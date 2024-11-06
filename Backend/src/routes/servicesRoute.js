@@ -5,10 +5,9 @@ import {
     updateService,
     deleteService
 } from '../controllers/serviceController.js';
-import authMiddleware from '../middlewares/authMiddleware.js';
+import authMiddleware from '../middlewares/authMiddleware.js'; // Ensure this path is correct
 
 const router = express.Router();
-const serviceController = require('../controllers/serviceController');
 
 // Route to create a new service (requires authentication)
 router.post('/', authMiddleware, createService);
