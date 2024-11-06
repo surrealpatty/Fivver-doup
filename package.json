@@ -2,7 +2,7 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",  
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
@@ -26,6 +26,7 @@
     "chokidar": "^3.6.0",
     "concat-map": "^0.0.1",
     "debug": "^4.3.7",
+    "express": "^4.21.1",
     "fill-range": "^7.1.1",
     "glob-parent": "^5.1.2",
     "has-flag": "^3.0.0",
