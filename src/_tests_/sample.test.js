@@ -16,6 +16,15 @@ describe('Sum Function', () => {
   test('adds 0 + 0 to equal 0', () => {
       expect(sum(0, 0)).toBe(0);
   });
+
+  // Additional test case
+  test('adds 100 + 200 to equal 300', () => {
+      expect(sum(100, 200)).toBe(300);
+  });
+
+  test('adds -50 + 50 to equal 0', () => {
+      expect(sum(-50, 50)).toBe(0);
+  });
 });
 
 // Export the sum function if needed in other files

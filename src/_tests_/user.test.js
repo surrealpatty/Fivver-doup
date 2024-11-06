@@ -1,5 +1,3 @@
-// src/__tests__/user.test.js
-
 const { registerUser, loginUser } = require('../src/controllers/userController');
 
 // Mock implementation of registerUser and loginUser
@@ -30,6 +28,7 @@ describe('User Functions', () => {
     const result = await registerUser(userData);
     expect(result).toEqual(expectedResult);
     expect(registerUser).toHaveBeenCalledWith(userData); // Verify the function was called with the correct arguments
+    expect(registerUser).toHaveBeenCalledTimes(1); // Verify the function was called once
   });
 
   test('should login an existing user', async () => {
@@ -48,6 +47,7 @@ describe('User Functions', () => {
     const result = await loginUser(userData);
     expect(result).toEqual(expectedResult);
     expect(loginUser).toHaveBeenCalledWith(userData); // Verify the function was called with the correct arguments
+    expect(loginUser).toHaveBeenCalledTimes(1); // Verify the function was called once
   });
 
   test('should fail to register a user with an existing username', async () => {
@@ -65,6 +65,8 @@ describe('User Functions', () => {
 
     const result = await registerUser(userData);
     expect(result).toEqual(expectedResult);
+    expect(registerUser).toHaveBeenCalledWith(userData);
+    expect(registerUser).toHaveBeenCalledTimes(1);
   });
 
   test('should fail to login with incorrect credentials', async () => {
@@ -82,5 +84,26 @@ describe('User Functions', () => {
 
     const result = await loginUser(userData);
     expect(result).toEqual(expectedResult);
+    expect(loginUser).toHaveBeenCalledWith(userData);
+    expect(loginUser).toHaveBeenCalledTimes(1);
+  });
+
+  test('should fail to login with a non-existent user', async () => {
+    const userData = {
+      username: 'nonexistentuser',
+      password: 'password123',
+    };
+    const expectedResult = {
+      success: false,
+      message: 'User does not exist',
+    };
+
+    // Mock the implementation to simulate a non-existent user
+    loginUser.mockResolvedValue(expectedResult);
+
+    const result = await loginUser(userData);
+    expect(result).toEqual(expectedResult);
+    expect(loginUser).toHaveBeenCalledWith(userData);
+    expect(loginUser).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,5 +1,4 @@
-// math.test.ts
-import multiply from './math'; // Use ES module syntax if using TypeScript
+const multiply = require('../math'); // Use require for JavaScript modules
 
 describe('Math Functions', () => {
     test('multiplies 2 by 3 to equal 6', () => {
@@ -14,4 +13,3 @@ describe('Math Functions', () => {
         expect(multiply(0, 5)).toBe(0);
     });
 });
-
