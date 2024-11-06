@@ -1,6 +1,6 @@
 // src/controllers/serviceController.js
 
-import { Service } from '../models/services.js'; // Correct the import based on your file structure
+import { Service } from '../models/services.js'; // Correct import based on your file structure
 
 // Create a new service
 export const createService = async (req, res) => {
