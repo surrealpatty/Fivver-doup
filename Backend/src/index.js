@@ -2,6 +2,8 @@ import express from 'express';
 import { sequelize, models } from './models';  // Ensure correct path to models
 import cors from 'cors';
 import dotenv from 'dotenv';
+import User from './models/User.js';
+import Service from './models/Service.js';
 
 // Initialize dotenv for environment variables
 dotenv.config();
