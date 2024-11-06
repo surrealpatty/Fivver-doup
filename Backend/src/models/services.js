@@ -11,7 +11,7 @@ Service.init(
             allowNull: false,
             validate: {
                 len: {
-                    args: [3, 100],
+                    args: [3, 100],  // Title length between 3 and 100 characters
                     msg: 'Title must be between 3 and 100 characters long',
                 },
             },
@@ -21,7 +21,7 @@ Service.init(
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: 'Description cannot be empty',
+                    msg: 'Description cannot be empty',  // Ensure description is not empty
                 },
             },
         },
@@ -30,21 +30,21 @@ Service.init(
             allowNull: false,
             validate: {
                 isFloat: {
-                    msg: 'Price must be a valid number',
+                    msg: 'Price must be a valid number',  // Validate price as a float
                 },
                 min: {
                     args: [0],
-                    msg: 'Price must be greater than or equal to zero',
+                    msg: 'Price must be greater than or equal to zero',  // Ensure non-negative price
                 },
             },
         },
     },
     {
-        sequelize,           // Ensure the sequelize instance is passed here
-        modelName: 'Service',
-        tableName: 'services',
-        timestamps: true,
-        underscored: true,
+        sequelize,           // Ensure sequelize instance is passed here
+        modelName: 'Service', // Model name should be 'Service'
+        tableName: 'services', // Table name in the database
+        timestamps: true,     // Automatically create 'createdAt' and 'updatedAt'
+        underscored: true,    // Use snake_case in the table column names
     }
 );
 

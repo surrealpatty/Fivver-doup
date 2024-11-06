@@ -1,60 +1,58 @@
 import { Model, DataTypes } from 'sequelize';
+import sequelize from '../config/database.js';  // Import sequelize instance
 
-class User extends Model {
-    static associate(models) {
-        // Define associations here if needed
-        // Example: User.hasMany(models.Review, { foreignKey: 'userId', as: 'reviews' });
-    }
-}
+class User extends Model {}
 
-const initUser = (sequelize) => {
-    User.init(
-        {
-            username: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
-                validate: {
-                    len: {
-                        args: [3, 30],
-                        msg: 'Username must be between 3 and 30 characters long',
-                    },
+// Initialize the User model
+User.init(
+    {
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,  // Ensure the username is unique
+            validate: {
+                len: {
+                    args: [3, 50],
+                    msg: 'Username must be between 3 and 50 characters long',
                 },
             },
-            password: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    len: {
-                        args: [8, 100],
-                        msg: 'Password must be at least 8 characters long',
-                    },
-                    is: {
-                        args: /(?=.*[0-9])(?=.*[!@#$%^&*])/,
-                        msg: 'Password must contain at least one number and one special character',
-                    },
-                },
-            },
-            email: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    isEmail: {
-                        msg: 'Email must be a valid email address',
-                    },
-                },
-            },
-            // Add other fields as needed
         },
-        {
-            sequelize,
-            modelName: 'User',
-            tableName: 'users',
-            timestamps: true,
-            underscored: true,
-        }
-    );
-};
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,  // Ensure the email is unique
+            validate: {
+                isEmail: {
+                    msg: 'Please provide a valid email address',
+                },
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [6, 100],  // Enforce a minimum password length
+                    msg: 'Password must be between 6 and 100 characters long',
+                },
+            },
+        },
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+    },
+    {
+        sequelize,           // Ensure the sequelize instance is passed here
+        modelName: 'User',
+        tableName: 'users',
+        timestamps: true,
+        underscored: true,
+    }
+);
 
-// Export the User model and the initUser function
-export { User, initUser };
+export default User;  // Export the model directly
