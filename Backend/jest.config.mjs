@@ -1,5 +1,6 @@
 // jest.config.mjs
 export default {
-    testMatch: ["**/?(*.)+(spec|test).[tj]s?(x)"], // ensures Jest finds your test files
+    testEnvironment: 'node', // Optional, but useful if your tests are Node-based
+    testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
   };
   
