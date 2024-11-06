@@ -1,7 +1,17 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';  // Import sequelize instance
 
-class Service extends Model {}
+class Service extends Model {
+    // Add associations if necessary (e.g., to User or Review)
+    static associate(models) {
+        // Example association with Review model (if you have this relation)
+        Service.hasMany(models.Review, {
+            foreignKey: 'serviceId',
+            as: 'reviews', // Name for the association
+            onDelete: 'CASCADE', // When service is deleted, remove related reviews
+        });
+    }
+}
 
 // Initialize the Service model
 Service.init(
@@ -40,11 +50,11 @@ Service.init(
         },
     },
     {
-        sequelize,           // Ensure sequelize instance is passed here
-        modelName: 'Service', // Model name should be 'Service'
+        sequelize,             // Ensure sequelize instance is passed here
+        modelName: 'Service',  // Model name should be 'Service'
         tableName: 'services', // Table name in the database
-        timestamps: true,     // Automatically create 'createdAt' and 'updatedAt'
-        underscored: true,    // Use snake_case in the table column names
+        timestamps: true,      // Automatically create 'createdAt' and 'updatedAt'
+        underscored: true,     // Use snake_case in the table column names
     }
 );
 

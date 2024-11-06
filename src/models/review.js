@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 class Review extends Model {
     static associate(models) {
+        // Associations with User and Service models
         Review.belongsTo(models.User, {
             foreignKey: 'userId',
             as: 'user',
@@ -15,6 +16,7 @@ class Review extends Model {
     }
 }
 
+// Initialize the Review model
 const initReview = (sequelize) => {
     Review.init(
         {
@@ -63,4 +65,5 @@ const initReview = (sequelize) => {
     );
 };
 
+// Export both the init function and the Review model class
 export { initReview, Review };

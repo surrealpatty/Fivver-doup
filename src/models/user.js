@@ -1,7 +1,25 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';  // Import sequelize instance
+import bcrypt from 'bcrypt';  // Import bcrypt for password hashing
 
-class User extends Model {}
+class User extends Model {
+    // Define associations if any
+    static associate(models) {
+        // Example association with Review (if you have a relation)
+        User.hasMany(models.Review, {
+            foreignKey: 'userId',
+            as: 'reviews',
+            onDelete: 'CASCADE',
+        });
+    }
+
+    // Password hash before saving user
+    static async hashPassword(user) {
+        if (user.password) {
+            user.password = await bcrypt.hash(user.password, 10);  // Hash password before saving
+        }
+    }
+}
 
 // Initialize the User model
 User.init(
@@ -47,12 +65,16 @@ User.init(
         },
     },
     {
-        sequelize,           // Ensure the sequelize instance is passed here
-        modelName: 'User',
-        tableName: 'users',
-        timestamps: true,
-        underscored: true,
+        sequelize,             // Ensure sequelize instance is passed here
+        modelName: 'User',     // Model name is 'User'
+        tableName: 'users',    // Table name in the database
+        timestamps: true,      // Automatically create 'createdAt' and 'updatedAt'
+        underscored: true,     // Use snake_case in the table column names
     }
 );
+
+// Hook to hash password before creating a user
+User.beforeCreate(User.hashPassword);
+User.beforeUpdate(User.hashPassword);
 
 export default User;  // Export the model directly

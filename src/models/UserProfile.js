@@ -1,5 +1,3 @@
-// src/models/UserProfile.js
-
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.js'; // Ensure you're using the correct path for the sequelize instance
 
@@ -20,16 +18,16 @@ const UserProfile = sequelize.define('UserProfile', {
     underscored: true, // Use snake_case for column names in the database
 });
 
-// Define associations
-const associate = (models) => {
+// Define associations (to be called in the User model's associate method)
+UserProfile.associate = (models) => {
     // Ensure the User model is available before defining associations
     if (models.User) {
         UserProfile.belongsTo(models.User, {
             foreignKey: 'userId', // Specify the foreign key
             as: 'user', // Alias for the association
+            onDelete: 'CASCADE', // Delete user profile if the associated user is deleted
         });
     }
 };
 
-// Export the UserProfile model and associate function
-export { UserProfile, associate };
+export default UserProfile;
