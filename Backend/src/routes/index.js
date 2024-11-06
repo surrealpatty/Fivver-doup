@@ -5,6 +5,7 @@ import serviceRouter from './servicesRoute.js'; // Import the services router (i
 
 // Create an instance of the router
 const router = express.Router();
+const reviewsRoutes = require('./src/routes/reviews');
 
 // Define routes
 router.use('/api/reviews', reviewsRouter); // Use reviews router for /api/reviews endpoint
