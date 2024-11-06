@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon src/index.js",
     "build": "vue-cli-service build",
     "test": "jest",
     "test:watch": "jest --watch",
