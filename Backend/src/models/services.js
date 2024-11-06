@@ -2,11 +2,9 @@
 
 import { Model, DataTypes } from 'sequelize';
 
-// Define the Service class
 class Service extends Model {
     static associate(models) {
         // Define associations if needed
-        // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
     }
 }
 
@@ -50,13 +48,13 @@ const initService = (sequelize) => {
         {
             sequelize, // Pass the Sequelize instance here
             modelName: 'Service',
-            tableName: 'services', // This is the name of the table
-            timestamps: true, // Enable timestamps (createdAt, updatedAt)
-            underscored: true, // Use snake_case for column names
+            tableName: 'services',
+            timestamps: true,
+            underscored: true,
         }
     );
 
-    return Service; // Return the model after initialization
+    return Service;
 };
 
-export { initService };
+export default initService;  // Export the model initialization function by default
