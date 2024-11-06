@@ -1,6 +1,7 @@
-// src/config/database.js
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-require('dotenv').config(); // Ensure .env is loaded at the start
+dotenv.config(); // Ensure .env is loaded at the start
 
 // Database configurations for different environments
 const development = {
@@ -34,40 +35,12 @@ const test = {
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = { development, production, test }[env];
 
-// Function to validate the configuration
-const validateConfig = (config) => {
-    const requiredKeys = ['username', 'password', 'database', 'host', 'dialect'];
-    for (const key of requiredKeys) {
-        if (!config[key]) {
-            console.error(`Missing configuration key: ${key}`);
-            process.exit(1); // Exit the process if a required key is missing
-        }
-    }
-};
-
-// Validate the database configuration
-validateConfig(dbConfig);
-
 // Sequelize setup and connection
-const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
     logging: dbConfig.logging,
 });
 
-// Test the connection to ensure the database is reachable
-const testConnection = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log(`Connection to the ${env} database has been established successfully.`);
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-};
-
-// Call the test connection function
-testConnection();
-
 // Export the sequelize instance for use in other parts of the application
-module.exports = sequelize;
+export default sequelize;

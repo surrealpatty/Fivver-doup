@@ -1,11 +1,11 @@
 import express from 'express';
-import { sequelize, models } from './models';  // Ensure correct path to models
 import cors from 'cors';
 import dotenv from 'dotenv';
-import User from './models/User.js';
-import Service from './models/Service.js';
+import sequelize from './config/database.js';
+import './models/User.js';  // Ensure models are imported
+import './models/Service.js';  // Ensure models are imported
 
-// Initialize dotenv for environment variables
+// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -14,13 +14,26 @@ const app = express();
 app.use(express.json());
 app.use(cors());  // Enable CORS if needed
 
-// Routes (example)
-import userRoutes from './routes/user.js';  // Assuming you have user-related routes
+// Routes
+import userRoutes from './routes/user.js';  // User-related routes
 app.use('/api/users', userRoutes);
+
+// Function to test database connection
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1);  // Exit if the database is not connected
+    }
+};
 
 // Sync DB and start the server
 const startServer = async () => {
     try {
+        await testConnection();  // Test the database connection
+
         // Sync models with the database
         await sequelize.sync();
         console.log('Database synced successfully.');
@@ -31,7 +44,7 @@ const startServer = async () => {
             console.log(`Server running on port ${PORT}`);
         });
     } catch (error) {
-        console.error('Error syncing database:', error);
+        console.error('Error starting server:', error);
     }
 };
 
