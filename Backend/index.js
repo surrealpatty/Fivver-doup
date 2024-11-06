@@ -11,7 +11,6 @@ import userRouter from './src/routes/user.js';
 import serviceRoutes from './src/routes/servicesRoute.js';
 import reviewRoutes from './src/routes/reviews.js';
 
-
 // Import model initializers
 import { init as initService } from './src/models/services.js'; // Ensure this file exists and is correctly named
 import { init as initUser } from './src/models/user.js'; // Ensure this file exists and is correctly named

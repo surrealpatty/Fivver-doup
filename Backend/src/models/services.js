@@ -7,7 +7,7 @@ class Service extends Model {
     }
 }
 
-// Function to initialize the Service model
+// Initialize the Service model
 const initService = (sequelize) => {
     Service.init(
         {
@@ -45,14 +45,15 @@ const initService = (sequelize) => {
             },
         },
         {
-            sequelize,
+            sequelize, // Pass the Sequelize instance here
             modelName: 'Service',
-            tableName: 'services',
-            timestamps: true,
-            underscored: true,
+            tableName: 'services', // This is the name of the table
+            timestamps: true, // Enable timestamps (createdAt, updatedAt)
+            underscored: true, // Use snake_case for column names
         }
     );
+
+    return Service; // Return the model after initialization
 };
 
-// Export the Service model and the initService function
-export { Service, initService };
+export { initService };
