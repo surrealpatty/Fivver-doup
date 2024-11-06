@@ -1,46 +1,36 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+require('dotenv').config(); // Load environment variables
 
-dotenv.config(); // Ensure .env is loaded at the start
+const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
 
-// Database configurations for different environments
-const development = {
-    username: process.env.DB_USER || 'default_dev_user',
-    password: process.env.DB_PASSWORD || 'default_dev_password',
-    database: process.env.DB_NAME || 'fivver_doup_db',
-    host: process.env.DB_HOST || 'localhost',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: console.log,
+// Function to validate the presence of required environment variables
+const validateEnvVars = () => {
+    for (const key of requiredKeys) {
+        if (!process.env[key]) {
+            console.error(`Missing environment variable: ${key}`);
+            process.exit(1); // Exit if a required environment variable is missing
+        }
+    }
 };
 
-const production = {
-    username: process.env.PROD_DB_USER || 'default_prod_user',
-    password: process.env.PROD_DB_PASSWORD || 'default_prod_password',
-    database: process.env.PROD_DB_NAME || 'fivver_doup_db',
-    host: process.env.PROD_DB_HOST || 'localhost',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false,
+// Validate environment variables
+validateEnvVars();
+
+const config = {
+    development: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT || 'mysql', // Default to 'mysql' if not set
+    },
+    production: {
+        username: process.env.PROD_DB_USER || process.env.DB_USER, // Fallback to dev user if prod not set
+        password: process.env.PROD_DB_PASSWORD || process.env.DB_PASSWORD, // Fallback to dev password if prod not set
+        database: process.env.PROD_DB_NAME || process.env.DB_NAME, // Fallback to dev db if prod not set
+        host: process.env.PROD_DB_HOST || process.env.DB_HOST, // Fallback to dev host if prod not set
+        dialect: process.env.DB_DIALECT || 'mysql', // Default to 'mysql' if not set
+    },
+    // You can add other environments like staging here if needed
 };
 
-const test = {
-    username: process.env.TEST_DB_USER || 'test_user',
-    password: process.env.TEST_DB_PASSWORD || 'test_password',
-    database: process.env.TEST_DB_NAME || 'test_db',
-    host: process.env.TEST_DB_HOST || 'localhost',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false,
-};
-
-// Determine the current environment and select the appropriate config
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = { development, production, test }[env];
-
-// Sequelize setup and connection
-const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-    host: dbConfig.host,
-    dialect: dbConfig.dialect,
-    logging: dbConfig.logging,
-});
-
-// Export the sequelize instance for use in other parts of the application
-export default sequelize;
+module.exports = config;

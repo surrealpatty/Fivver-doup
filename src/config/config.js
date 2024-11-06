@@ -32,5 +32,4 @@ const config = {
     },
 };
 
-// Export the configuration object in the format Sequelize expects
 module.exports = config;

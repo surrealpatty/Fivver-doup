@@ -1,7 +1,5 @@
-// src/components/MyComponent.spec.js
-
 import { mount } from '@vue/test-utils';
-import MyComponent from './MyComponent.vue'; // Ensure this path is correct
+import MyComponent from './components/MyComponent.vue'; // Adjusted path if it's inside the components folder
 
 describe('MyComponent.vue', () => {
   it('renders props.title when passed', () => {
