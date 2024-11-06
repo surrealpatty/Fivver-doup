@@ -1,54 +1,46 @@
-const { Sequelize } = require('sequelize');
-require('dotenv').config(); // Load environment variables from .env file
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Determine if we're in production mode
-const isProduction = process.env.NODE_ENV === 'production';
+dotenv.config(); // Ensure .env is loaded at the start
 
-// Set the correct environment variables based on the environment
-const dbConfig = {
-    database: isProduction ? process.env.PROD_DB_NAME : process.env.DB_NAME,
-    username: isProduction ? process.env.PROD_DB_USER : process.env.DB_USER,
-    password: isProduction ? process.env.PROD_DB_PASSWORD : process.env.DB_PASSWORD,
-    host: isProduction ? process.env.PROD_DB_HOST : process.env.DB_HOST,
-    dialect: 'mysql', // Dialect is fixed as MySQL
-    logging: false, // Turn off SQL query logging
+// Database configurations for different environments
+const development = {
+    username: process.env.DB_USER || 'default_dev_user',
+    password: process.env.DB_PASSWORD || 'default_dev_password',
+    database: process.env.DB_NAME || 'fivver_doup_db',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    logging: console.log,
 };
 
-// Check if all required environment variables are set
-const requiredEnvVars = [
-    'DB_NAME',
-    'DB_USER',
-    'DB_PASSWORD',
-    'DB_HOST',
-    'NODE_ENV',
-];
+const production = {
+    username: process.env.PROD_DB_USER || 'default_prod_user',
+    password: process.env.PROD_DB_PASSWORD || 'default_prod_password',
+    database: process.env.PROD_DB_NAME || 'fivver_doup_db',
+    host: process.env.PROD_DB_HOST || 'localhost',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    logging: false,
+};
 
-requiredEnvVars.forEach((envVar) => {
-    if (!process.env[envVar]) {
-        console.error(`FATAL ERROR: Environment variable ${envVar} is not defined.`);
-        process.exit(1); // Exit the process if any variable is missing
-    }
-});
+const test = {
+    username: process.env.TEST_DB_USER || 'test_user',
+    password: process.env.TEST_DB_PASSWORD || 'test_password',
+    database: process.env.TEST_DB_NAME || 'test_db',
+    host: process.env.TEST_DB_HOST || 'localhost',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    logging: false,
+};
 
-// Create a new Sequelize instance
+// Determine the current environment and select the appropriate config
+const env = process.env.NODE_ENV || 'development';
+const dbConfig = { development, production, test }[env];
+
+// Sequelize setup and connection
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
     logging: dbConfig.logging,
 });
 
-// Test the database connection
-const testConnection = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection to the database has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-};
-
-// Call the function to test the connection
-testConnection();
-
-// Export the sequelize instance for use in other files
-module.exports = sequelize;
+// Export the sequelize instance for use in other parts of the application
+export default sequelize;
