@@ -1,59 +1,36 @@
 import fs from 'fs';
 import path from 'path';
 import { Sequelize } from 'sequelize';
-import config from '../../config/config.js'; // Adjust the path to your config file
+import dotenv from 'dotenv';
 
-const basename = path.basename(import.meta.url); // Use import.meta.url to get the current file name
+dotenv.config(); // Load environment variables from .env file
+
+const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env];
+const dbConfig = require('../../config/config.js')[env]; // Assuming config.js contains your DB setup
 
-// Initialize Sequelize with the configuration
-const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    logging: false,
+});
 
-// Create an object to hold the models
+// Create an object to hold models
 const models = {};
 
-// Import and initialize the User model
-import { init as initUser } from './user.js'; 
-const User = initUser(sequelize);
-models.User = User; // Add User model to models object
-
-// Import and initialize the Review model
-import { init as initReview } from './review.js'; 
-const Review = initReview(sequelize);
-models.Review = Review; // Add Review model to models object
-
-// Import and initialize the Service model
-import { init as initService } from './services.js'; 
-const Service = initService(sequelize);
-models.Service = Service; // Add Service model to models object
-
-// Import and initialize the UserProfile model
-import { init as initUserProfile } from './UserProfile.js'; 
-const UserProfile = initUserProfile(sequelize);
-models.UserProfile = UserProfile; // Add UserProfile model to models object
-
-// Dynamically import model files from the current directory
-const modelFiles = fs.readdirSync(path.dirname(new URL(import.meta.url).pathname))
-    .filter(file => {
-        return (
-            file.indexOf('.') !== 0 && // Ignore dotfiles
-            file !== basename && // Ignore the index.js file itself
-            file.slice(-3) === '.js' // Only include .js files
-        );
+// Dynamically import all models in the directory
+fs.readdirSync(__dirname)
+    .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
+    .forEach((file) => {
+        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+        models[model.name] = model; // Add model to models object
     });
 
-for (const file of modelFiles) {
-    const model = await import(path.join(path.dirname(new URL(import.meta.url).pathname), file)); 
-    models[model.default.name] = model.default(sequelize, Sequelize.DataTypes); // Ensure correct model initialization
-}
-
-// Now that all models are initialized, set up associations if any
-Object.keys(models).forEach(modelName => {
+// Set up associations
+Object.keys(models).forEach((modelName) => {
     if (typeof models[modelName].associate === 'function') {
-        models[modelName].associate(models);
+        models[modelName].associate(models);  // Call associate function if exists
     }
 });
 
-// Export the models and the Sequelize instance
-export { sequelize, models };
+export { sequelize, models }; // Export sequelize and models object

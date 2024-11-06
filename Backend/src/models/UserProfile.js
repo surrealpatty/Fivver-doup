@@ -1,3 +1,5 @@
+// src/models/UserProfile.js
+
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.js'; // Ensure you're using the correct path for the sequelize instance
 
@@ -20,7 +22,7 @@ const UserProfile = sequelize.define('UserProfile', {
 
 // Define associations
 const associate = (models) => {
-    // Make sure the User model is available for association
+    // Ensure the User model is available before defining associations
     if (models.User) {
         UserProfile.belongsTo(models.User, {
             foreignKey: 'userId', // Specify the foreign key

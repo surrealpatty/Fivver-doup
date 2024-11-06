@@ -16,17 +16,17 @@ const dbConfig = {
 
 // Check if all required environment variables are set
 const requiredEnvVars = [
-    dbConfig.database,
-    dbConfig.username,
-    dbConfig.password,
-    dbConfig.host,
-    process.env.NODE_ENV, // NODE_ENV should be defined
+    'DB_NAME',
+    'DB_USER',
+    'DB_PASSWORD',
+    'DB_HOST',
+    'NODE_ENV',
 ];
 
-requiredEnvVars.forEach((varValue, index) => {
-    if (!varValue) {
-        console.error(`FATAL ERROR: Environment variable ${requiredEnvVars[index]} is not defined.`);
-        process.exit(1);
+requiredEnvVars.forEach((envVar) => {
+    if (!process.env[envVar]) {
+        console.error(`FATAL ERROR: Environment variable ${envVar} is not defined.`);
+        process.exit(1); // Exit the process if any variable is missing
     }
 });
 
@@ -50,4 +50,5 @@ const testConnection = async () => {
 // Call the function to test the connection
 testConnection();
 
-module.exports = sequelize; // Export the sequelize instance for use in other files
+// Export the sequelize instance for use in other files
+module.exports = sequelize;
