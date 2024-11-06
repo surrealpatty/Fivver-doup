@@ -1,24 +1,24 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import sequelize from './config/database.js';
-import './models/User.js';  // Ensure models are imported
-import './models/Service.js';  // Ensure models are imported
+import sequelize from './config/database.js';  // Database connection instance
+import './models/User.js';  // Import User model
+import './models/Service.js';  // Import Service model
 
-// Load environment variables
+// Load environment variables from .env
 dotenv.config();
 
 const app = express();
 
 // Middleware
-app.use(express.json());
-app.use(cors());  // Enable CORS if needed
+app.use(express.json());  // Parse JSON requests
+app.use(cors());  // Enable CORS for cross-origin requests
 
-// Routes
-import userRoutes from './routes/user.js';  // User-related routes
+// Import and use user routes
+import userRoutes from './routes/user.js';
 app.use('/api/users', userRoutes);
 
-// Function to test database connection
+// Test database connection
 const testConnection = async () => {
     try {
         await sequelize.authenticate();
@@ -29,13 +29,13 @@ const testConnection = async () => {
     }
 };
 
-// Sync DB and start the server
+// Start server and sync database
 const startServer = async () => {
     try {
-        await testConnection();  // Test the database connection
+        await testConnection();  // Test database connection
 
         // Sync models with the database
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });  // Use `alter` to match model changes without dropping tables
         console.log('Database synced successfully.');
 
         // Start the Express server
@@ -48,4 +48,5 @@ const startServer = async () => {
     }
 };
 
+// Initialize server
 startServer();
