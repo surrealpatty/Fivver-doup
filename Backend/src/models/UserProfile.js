@@ -20,10 +20,13 @@ const UserProfile = sequelize.define('UserProfile', {
 
 // Define associations
 const associate = (models) => {
-    UserProfile.belongsTo(models.User, {
-        foreignKey: 'userId', // Specify the foreign key
-        as: 'user', // Alias for the association
-    });
+    // Make sure the User model is available for association
+    if (models.User) {
+        UserProfile.belongsTo(models.User, {
+            foreignKey: 'userId', // Specify the foreign key
+            as: 'user', // Alias for the association
+        });
+    }
 };
 
 // Export the UserProfile model and associate function
