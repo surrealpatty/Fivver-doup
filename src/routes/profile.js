@@ -1,8 +1,6 @@
-// src/routes/profile.js
-
-const express = require('express');
-const authenticateToken = require('../middleware/authMiddleware'); // Correct import for the middleware function
-const User = require('../models/user'); // Correct import path for User model
+import express from 'express'; // Import express
+import authenticateToken from '../middleware/authMiddleware.js'; // Correct import for the middleware function
+import { User } from '../models/user.js'; // Correct import path for User model (if exported using named export)
 
 const router = express.Router();
 
@@ -29,4 +27,4 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router; // Use ES module export

@@ -4,7 +4,7 @@ import {
     getServices,
     updateService,
     deleteService
-} from '../controllers/serviceController.js';
+} from '../controllers/serviceController.js'; // Ensure the import path is correct
 import authMiddleware from '../middlewares/authMiddleware.js'; // Ensure this path is correct
 
 const router = express.Router();
@@ -21,7 +21,7 @@ router.put('/:serviceId', authMiddleware, updateService);
 // Route to delete a service by ID (requires authentication)
 router.delete('/:serviceId', authMiddleware, deleteService);
 
-// Optional: Health check or confirmation route
+// Optional: Health check route
 router.get('/health', (req, res) => {
     res.json({ message: 'Services route is working!' });
 });

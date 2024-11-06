@@ -1,11 +1,10 @@
 import express from 'express';  // Import express
 import reviewsRouter from './reviews.js'; // Import the reviews router
-import userRouter from './user.js'; // Import the user router (if applicable)
-import serviceRouter from './servicesRoute.js'; // Import the services router (if applicable)
+import userRouter from './user.js'; // Import the user router
+import serviceRouter from './servicesRoute.js'; // Import the services router
 
 // Create an instance of the router
 const router = express.Router();
-const reviewsRoutes = require('./src/routes/reviews');
 
 // Define routes
 router.use('/api/reviews', reviewsRouter); // Use reviews router for /api/reviews endpoint

@@ -1,3 +1,5 @@
+// src/routes/api.js
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -73,7 +75,7 @@ router.post('/login', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+            expiresIn: '1h', // Token expiration time (1 hour)
         });
 
         res.status(200).json({ token });

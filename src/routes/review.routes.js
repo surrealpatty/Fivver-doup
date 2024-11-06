@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { body, validationResult } from 'express-validator';
+import Review from '../models/review'; // Adjust the import if necessary
+import authMiddleware from '../middlewares/authMiddleware'; // Correct import path for authMiddleware
+
 const router = express.Router();
-const Review = require('../models/review'); // Adjust if path is different
-const { body, validationResult } = require('express-validator'); // For input validation
-const authMiddleware = require('../middlewares/authMiddleware'); // Ensure this is the correct path
 
 // 1. Create a new review
 router.post(
@@ -29,7 +30,7 @@ router.post(
                 rating,
                 comment,
             });
-            res.status(201).json(review);
+            res.status(201).json(review); // Return the newly created review
         } catch (error) {
             console.error('Error creating review:', error.message);
             res.status(500).json({ message: 'Error creating review', error: error.message });
@@ -43,10 +44,10 @@ router.get('/service/:serviceId', async (req, res) => {
 
     try {
         const reviews = await Review.findAll({ where: { serviceId } });
-        if (!reviews.length) {
+        if (reviews.length === 0) {
             return res.status(404).json({ message: 'No reviews found for this service' });
         }
-        res.json(reviews);
+        res.json(reviews); // Return the reviews
     } catch (error) {
         console.error('Error fetching reviews:', error.message);
         res.status(500).json({ message: 'Error fetching reviews', error: error.message });
@@ -73,11 +74,14 @@ router.put(
             if (!review) {
                 return res.status(404).json({ message: 'Review not found' });
             }
+
+            // Ensure the user is updating their own review
             if (review.userId !== req.user.id) {
                 return res.status(403).json({ message: 'Unauthorized to update this review' });
             }
-            await review.update(req.body);
-            res.json(review);
+
+            await review.update(req.body); // Update the review with the new data
+            res.json(review); // Return the updated review
         } catch (error) {
             console.error('Error updating review:', error.message);
             res.status(500).json({ message: 'Error updating review', error: error.message });
@@ -94,15 +98,18 @@ router.delete('/:id', authMiddleware, async (req, res) => {
         if (!review) {
             return res.status(404).json({ message: 'Review not found' });
         }
+
+        // Ensure the user is deleting their own review
         if (review.userId !== req.user.id) {
             return res.status(403).json({ message: 'Unauthorized to delete this review' });
         }
-        await review.destroy();
-        res.json({ message: 'Review deleted successfully' });
+
+        await review.destroy(); // Delete the review
+        res.json({ message: 'Review deleted successfully' }); // Confirmation of deletion
     } catch (error) {
         console.error('Error deleting review:', error.message);
         res.status(500).json({ message: 'Error deleting review', error: error.message });
     }
 });
 
-module.exports = router;
+export default router; // Use ES module export
