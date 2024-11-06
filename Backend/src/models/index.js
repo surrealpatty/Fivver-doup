@@ -20,13 +20,14 @@ const models = {};
 
 // Dynamically import all models in the directory
 fs.readdirSync(__dirname)
-    .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
+    .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js') // Filter out non-JS files
     .forEach((file) => {
-        const model = import(path.join(__dirname, file)); // Use `import` to load models asynchronously
-        model.then((module) => {
-            const initializedModel = module.default(sequelize, Sequelize.DataTypes);
-            models[initializedModel.name] = initializedModel; // Add model to models object
-        });
+        import(path.join(__dirname, file))
+            .then((module) => {
+                const initializedModel = module.default(sequelize, Sequelize.DataTypes); // Use default export if available
+                models[initializedModel.name] = initializedModel; // Add model to models object
+            })
+            .catch((err) => console.error(`Failed to import model: ${file}`, err)); // Handle import errors
     });
 
 // Set up associations (Ensure models have associate method)
