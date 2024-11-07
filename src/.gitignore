@@ -51,6 +51,3 @@ docs/*.msi                    # Exclude .msi files in the docs directory
 # npm & Yarn Lock Files
 package-lock.json             # Exclude npm package lock file (if applicable)
 yarn.lock                     # Exclude Yarn lock file (if applicable)
-
-# Local Environment Files
-.env.local                    # Exclude local environment variable overrides (repeated)
