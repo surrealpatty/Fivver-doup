@@ -2,7 +2,7 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "src/index.js",
-  "type": "module",
+  "type": "module", 
   "directories": {
     "doc": "docs"
   },
@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "babel-jest": "^29.7.0",
     "jest": "^29.5.0",
