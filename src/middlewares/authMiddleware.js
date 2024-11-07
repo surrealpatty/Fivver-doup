@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // Middleware to authenticate the token
-const authMiddleware = (req, res, next) => {
+export const authMiddleware = (req, res, next) => {
     const authHeader = req.header('Authorization');
     if (!authHeader) {
         return res.status(401).json({ message: 'Access denied. No authorization header provided.' });
@@ -24,7 +24,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 // Middleware to authorize based on user role
-const authorizeRoles = (...allowedRoles) => (req, res, next) => {
+export const authorizeRoles = (...allowedRoles) => (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
         return res.status(403).json({ message: 'Access denied: insufficient permissions' });
     }
@@ -32,11 +32,9 @@ const authorizeRoles = (...allowedRoles) => (req, res, next) => {
 };
 
 // Middleware to check for subscription level (e.g., "Paid" subscription)
-const authorizeSubscription = (requiredSubscription) => (req, res, next) => {
+export const authorizeSubscription = (requiredSubscription) => (req, res, next) => {
     if (!req.user || req.user.subscription !== requiredSubscription) {
         return res.status(403).json({ message: `Access denied: ${requiredSubscription} subscription required.` });
     }
     next();
 };
-
-module.exports = { authMiddleware, authorizeRoles, authorizeSubscription };

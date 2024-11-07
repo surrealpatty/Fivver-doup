@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { authMiddleware, authorizeRoles, authorizeSubscription } from '../middlewares/authMiddleware.js'; // Correct import statement
 
 // Middleware to authenticate the token
 export const authMiddleware = (req, res, next) => {
