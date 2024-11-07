@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
-import config from './config.js'; // Adjust path if needed
+import * as config from './config.js';
+
 
 // Determine the current environment (default to 'development' if not set)
 const env = process.env.NODE_ENV || 'development';
