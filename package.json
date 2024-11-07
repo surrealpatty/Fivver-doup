@@ -2,12 +2,12 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "src/index.js",
-  "type": "module", 
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-     "start": "node index.js",
+    "start": "node index.js",
     "dev": "nodemon src/index.js",
     "test": "jest --verbose",
     "test:watch": "jest --watch"
@@ -32,6 +32,7 @@
     "braces": "^3.0.3",
     "chokidar": "^3.6.0",
     "concat-map": "^0.0.1",
+    "cors": "^2.8.5",
     "debug": "^4.3.7",
     "express": "^4.21.1",
     "fill-range": "^7.1.1",

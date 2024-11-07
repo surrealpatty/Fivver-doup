@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import sequelize from './config/database.js';
 import User from './models/user.js';
 import Service from './models/Service.js';  // Import Service model directly
-import serviceRoutes from './src/routes/serviceRoute.js';  // Correct path if index.js is in the root
 
 dotenv.config(); // Load environment variables from .env file
 
