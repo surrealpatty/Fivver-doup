@@ -4,7 +4,7 @@ import {
     loginUser,
     getUserProfile,
     updateUserProfile,
-    upgradeToPaid,       // Import the new subscription upgrade function
+    upgradeToPaid,        // Import the subscription upgrade function
     checkSubscriptionStatus // Import the subscription status check function
 } from '../controllers/userController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
