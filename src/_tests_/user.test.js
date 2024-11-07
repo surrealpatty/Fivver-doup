@@ -1,7 +1,8 @@
-const { registerUser, loginUser } = require('../src/controllers/userController');
+// Correct the path to userController based on the dist folder structure
+const { registerUser, loginUser } = require('../controllers/userController'); // Adjusted for dist folder
 
 // Mock implementation of registerUser and loginUser
-jest.mock('../src/controllers/userController', () => ({
+jest.mock('../controllers/userController', () => ({
   registerUser: jest.fn(),
   loginUser: jest.fn(),
 }));
