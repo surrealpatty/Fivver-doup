@@ -1,13 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables from .env file
+const fs = require('fs');
+const path = require('path');
+const { Sequelize } = require('sequelize');
+require('dotenv').config(); // Load environment variables from .env file
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-import dbConfig from '../../config/config.js'; // Import the config.js based on your setup
+const dbConfig = require('../../config/config.js'); // Import the config.js based on your setup
 
 // Initialize Sequelize instance with the config details
 const sequelize = new Sequelize(dbConfig[env].database, dbConfig[env].username, dbConfig[env].password, {
@@ -25,8 +23,8 @@ const importModels = async () => {
         .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'); // Filter out non-JS files
 
     for (const file of files) {
-        const model = await import(path.join(__dirname, file));
-        const initializedModel = model.default(sequelize, Sequelize.DataTypes); // Assuming default export is used for model
+        const model = require(path.join(__dirname, file)); // Use `require` instead of `import`
+        const initializedModel = model(sequelize, Sequelize.DataTypes); // Assuming model is exported as a function
         models[initializedModel.name] = initializedModel; // Add model to models object
     }
 
@@ -41,4 +39,4 @@ const importModels = async () => {
 // Call the function to import models
 importModels().catch((err) => console.error('Failed to import models:', err));
 
-export { sequelize, models }; // Export sequelize instance and models object
+module.exports = { sequelize, models }; // Export sequelize instance and models object
