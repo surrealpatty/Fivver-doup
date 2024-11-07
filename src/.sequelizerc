@@ -2,14 +2,14 @@ const path = require('path');
 
 module.exports = {
     // Path to the database configuration file
-    'config': path.resolve(__dirname, 'config', 'config.js'),
+    config: path.resolve(__dirname, 'src', 'config', 'config.js'),  // Correcting the path to include 'src'
 
     // Path to the models directory
-    'models-path': path.resolve(__dirname, 'models'),
+    'models-path': path.resolve(__dirname, 'src', 'models'), // Correcting the path to include 'src'
 
     // Path to the seeders directory
-    'seeders-path': path.resolve(__dirname, 'seeders'),
+    'seeders-path': path.resolve(__dirname, 'src', 'seeders'), // Correcting the path to include 'src'
 
     // Path to the migrations directory
-    'migrations-path': path.resolve(__dirname, 'migrations'),
+    'migrations-path': path.resolve(__dirname, 'src', 'migrations'), // Correcting the path to include 'src'
 };

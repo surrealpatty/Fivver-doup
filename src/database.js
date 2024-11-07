@@ -12,7 +12,7 @@ const dbConfig = config[environment]?.db;
 
 // Check if the database config is defined
 if (!dbConfig) {
-    console.error(`No configuration found for environment: ${environment}`);
+    console.error(`No database configuration found for environment: ${environment}`);
     process.exit(1); // Exit if no config found
 }
 
@@ -20,6 +20,7 @@ if (!dbConfig) {
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
+    logging: false, // Disable logging for production, enable in development if needed
 });
 
 // Function to test the database connection

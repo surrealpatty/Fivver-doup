@@ -1,15 +1,18 @@
 // math.js
+
+// Multiply two numbers
 export function multiply(a, b) {
     return a * b;
 }
 
-// You can add more functions as needed
+// Add two numbers
 export function add(a, b) {
     return a + b;
 }
 
+// Subtract b from a
 export function subtract(a, b) {
     return a - b;
 }
 
-// You can also add other math functions here
+// Additional math functions can be added below
