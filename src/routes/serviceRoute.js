@@ -1,29 +1,41 @@
-import express from 'express';
-import {
-    createService,
-    getServices,
-    updateService,
-    deleteService
-} from '../controllers/serviceController.js'; // Ensure the import path is correct
-import authMiddleware from '../middlewares/authMiddleware.js'; // Ensure this path is correct
+import jwt from 'jsonwebtoken';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
-const router = express.Router();
+// Middleware to authenticate the token
+export const authMiddleware = (req, res, next) => {
+    const authHeader = req.header('Authorization');
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Access denied. No authorization header provided.' });
+    }
 
-// Route to create a new service (requires authentication)
-router.post('/', authMiddleware, createService);
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : authHeader.trim();
 
-// Route to get all services
-router.get('/', getServices);
+    if (!token) {
+        return res.status(401).json({ message: 'Access denied. No token provided.' });
+    }
 
-// Route to update a service by ID (requires authentication)
-router.put('/:serviceId', authMiddleware, updateService);
+    try {
+        const verifiedUser = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = verifiedUser; // Attach verified user data to req for later use
+        next();
+    } catch (error) {
+        console.error('Token verification error:', error.message);
+        res.status(401).json({ message: 'Invalid or expired token.' });
+    }
+};
 
-// Route to delete a service by ID (requires authentication)
-router.delete('/:serviceId', authMiddleware, deleteService);
+// Middleware to authorize based on user role
+export const authorizeRoles = (...allowedRoles) => (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+        return res.status(403).json({ message: 'Access denied: insufficient permissions' });
+    }
+    next();
+};
 
-// Optional: Health check route
-router.get('/health', (req, res) => {
-    res.json({ message: 'Services route is working!' });
-});
-
-export default router;
+// Middleware to check for subscription level (e.g., "Paid" subscription)
+export const authorizeSubscription = (requiredSubscription) => (req, res, next) => {
+    if (!req.user || req.user.subscription !== requiredSubscription) {
+        return res.status(403).json({ message: `Access denied: ${requiredSubscription} subscription required.` });
+    }
+    next();
+};
