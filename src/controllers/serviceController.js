@@ -1,3 +1,4 @@
+// serviceController.js
 const { Service } = require('../models'); // Ensure correct model path
 
 // 1. Create a Service
