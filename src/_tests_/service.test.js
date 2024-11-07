@@ -1,5 +1,5 @@
 // Import necessary functions
-const { createService, getServices } = require('../src/controllers/serviceController'); // Adjust the path as needed
+const { createService, getServices } = require('../controllers/serviceController'); // Adjusted to the correct path
 
 // Mock data
 const mockService = {
