@@ -1,7 +1,7 @@
 import express from 'express';  // Importing Express
 import sequelize from './config/database.js';  // Importing Sequelize instance for database connection
 import userRoutes from './src/routes/user.js';  // Import your user routes
-import serviceRoutes from './src/routes/service.js';  // Import your service routes (if applicable)
+import serviceRoutes from './src/routes/serviceRoute.js';  // Correct import
 import cors from 'cors';  // Import CORS middleware (optional, but useful for cross-origin requests)
 import morgan from 'morgan';  // Importing morgan for logging HTTP requests
 
