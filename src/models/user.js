@@ -63,6 +63,11 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        role: {
+            type: DataTypes.ENUM('Free', 'Paid'),  // Define "Free" and "Paid" roles
+            allowNull: false,
+            defaultValue: 'Free',  // Default to "Free"
+        },
     },
     {
         sequelize,             // Ensure sequelize instance is passed here
@@ -73,7 +78,7 @@ User.init(
     }
 );
 
-// Hook to hash password before creating a user
+// Hook to hash password before creating or updating a user
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
