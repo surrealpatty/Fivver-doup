@@ -31,4 +31,12 @@ const authorizeRoles = (...allowedRoles) => (req, res, next) => {
     next();
 };
 
-module.exports = { authMiddleware, authorizeRoles };
+// Middleware to check for subscription level (e.g., "Paid" subscription)
+const authorizeSubscription = (requiredSubscription) => (req, res, next) => {
+    if (!req.user || req.user.subscription !== requiredSubscription) {
+        return res.status(403).json({ message: `Access denied: ${requiredSubscription} subscription required.` });
+    }
+    next();
+};
+
+module.exports = { authMiddleware, authorizeRoles, authorizeSubscription };

@@ -68,6 +68,19 @@ User.init(
             allowNull: false,
             defaultValue: 'Free',  // Default to "Free"
         },
+        subscriptionStatus: {
+            type: DataTypes.ENUM('Inactive', 'Active'), // Subscription status (Inactive or Active)
+            allowNull: false,
+            defaultValue: 'Inactive', // Default to "Inactive"
+        },
+        subscriptionStartDate: {
+            type: DataTypes.DATE,  // When the subscription started
+            allowNull: true,  // Can be null initially
+        },
+        subscriptionEndDate: {
+            type: DataTypes.DATE,  // When the subscription will expire
+            allowNull: true,  // Can be null initially
+        },
     },
     {
         sequelize,             // Ensure sequelize instance is passed here

@@ -3,7 +3,9 @@ import {
     registerUser,
     loginUser,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    upgradeToPaid,       // Import the new subscription upgrade function
+    checkSubscriptionStatus // Import the subscription status check function
 } from '../controllers/userController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
@@ -20,6 +22,12 @@ router.get('/profile', authMiddleware, getUserProfile);
 
 // Route to update the user profile (requires authentication)
 router.put('/profile', authMiddleware, updateUserProfile);
+
+// Route to upgrade to a "Paid" subscription (requires authentication)
+router.post('/subscription/upgrade', authMiddleware, upgradeToPaid);
+
+// Route to check the subscription status (requires authentication)
+router.get('/subscription/status', authMiddleware, checkSubscriptionStatus);
 
 // Optional: Health check route to confirm if the route is active
 router.get('/health', (req, res) => {
