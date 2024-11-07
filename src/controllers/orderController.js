@@ -1,4 +1,4 @@
-const Order = require('../models/order'); // Adjust path as necessary
+const Order = require('../models/order'); // Ensure the correct path
 const User = require('../models/user');
 const Service = require('../models/service');
 
