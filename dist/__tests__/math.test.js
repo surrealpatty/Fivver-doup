@@ -1,5 +1,5 @@
 // dist/__tests__/math.test.js
-const math = require('./math.js'); // Ensure that math.js is in the correct location (dist/__tests__)
+const math = require('../src/math.js');
 const Service = require('../src/models/services');
 
 describe('Math Functions', () => {
