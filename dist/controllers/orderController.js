@@ -1,7 +1,8 @@
 "use strict";
-const Order = require('../models/order'); // Adjust path as necessary
-const Service = require('../models/services'); // Adjust path as necessary
-const User = require('../models/user'); // Adjust path as necessary
+const Order = require('../models/order');
+const Service = require('../models/services');
+const User = require('../models/user');
+
 // 1. Create an Order
 exports.createOrder = async (req, res) => {
     const { serviceId } = req.body;
