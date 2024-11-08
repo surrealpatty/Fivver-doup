@@ -3,6 +3,14 @@ module.exports = {
     moduleNameMapper: {
       '^src/(.*)$': '<rootDir>/dist/src/$1',
     },
-    // Additional Jest configuration options can go here
+    // Additional Jest configuration options
+    testEnvironment: 'node',
+    transform: {
+      '^.+\\.js$': 'babel-jest',
+    },
+    coverageDirectory: './coverage',
+    collectCoverageFrom: [
+      'src/**/*.js',
+    ],
   };
   
