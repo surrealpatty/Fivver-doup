@@ -1,34 +1,88 @@
-"use strict";
-const request = require('supertest');
-const app = require('../app'); // Your Express app
-const Service = require('../models/services'); // Service model
-jest.mock('../models/services'); // Mock the Service model
-describe('Service Controller', () => {
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-    test('should create a new service', async () => {
-        Service.create.mockResolvedValue({ id: 1, name: 'Test Service', description: 'Service description' });
-        const response = await request(app).post('/api/services').send({
-            name: 'Test Service',
-            description: 'Service description'
-        });
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('name', 'Test Service');
-    });
-    test('should get all services', async () => {
-        const mockServices = [{ id: 1, name: 'Service 1' }, { id: 2, name: 'Service 2' }];
-        Service.findAll.mockResolvedValue(mockServices);
-        const response = await request(app).get('/api/services');
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(mockServices);
-    });
-    test('should get a specific service', async () => {
-        const mockService = { id: 1, name: 'Service 1', description: 'Service description' };
-        Service.findByPk.mockResolvedValue(mockService);
-        const response = await request(app).get('/api/services/1');
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('name', 'Service 1');
-    });
-    // Add additional tests for update and delete service as needed
+import { createService, getServices } from 'controllers/serviceController';
+import { Service } from 'models/services'; // Assuming you're using Service model
+import { sequelize } from 'config/database'; // If you need to interact with the database in tests
+
+describe('Service Functions', () => {
+  beforeAll(async () => {
+    // Sync the Sequelize models (if you're interacting with DB in tests)
+    await sequelize.sync();
+  });
+
+  test('should create a new service', async () => {
+    const req = {
+      body: {
+        title: 'Test Service',
+        description: 'This is a test service',
+        price: 100,
+        category: 'Test Category',
+      },
+      user: {
+        id: 1, // Mock the user ID
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    // Call the createService controller
+    await createService(req, res);
+
+    // Check that the response's status and JSON method were called
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      title: 'Test Service',
+      description: 'This is a test service',
+      price: 100,
+      category: 'Test Category',
+    }));
+  });
+
+  test('should retrieve all services', async () => {
+    const req = {
+      query: {
+        userId: 1, // Mock the userId query parameter
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    // Mock the Service.findAll method to return a list of services
+    Service.findAll = jest.fn().mockResolvedValue([
+      {
+        title: 'Service 1',
+        description: 'Description 1',
+        price: 50,
+        category: 'Category 1',
+      },
+      {
+        title: 'Service 2',
+        description: 'Description 2',
+        price: 75,
+        category: 'Category 2',
+      },
+    ]);
+
+    // Call the getServices controller
+    await getServices(req, res);
+
+    // Check that the response's status and JSON method were called
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(expect.arrayContaining([
+      expect.objectContaining({
+        title: 'Service 1',
+        description: 'Description 1',
+        price: 50,
+        category: 'Category 1',
+      }),
+      expect.objectContaining({
+        title: 'Service 2',
+        description: 'Description 2',
+        price: 75,
+        category: 'Category 2',
+      }),
+    ]));
+  });
 });
