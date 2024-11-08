@@ -1,5 +1,6 @@
 // dist/__tests__/math.test.js
 const math = require('./math.js'); // Ensure that math.js is in the correct location (dist/__tests__)
+const Service = require('../src/models/services');
 
 describe('Math Functions', () => {
     test('multiplies 2 by 3 to equal 6', () => {
