@@ -1,15 +1,15 @@
-// Importing necessary functions and mock data
-const { placeOrder } = require('../controllers/orderController'); // Adjust the path as necessary
-const { mockUsers, mockServices } = require('./mockData'); // Adjust the path to your mock data
+// Import necessary functions and mock data
+import { placeOrder } from '../controllers/orderController';  // Adjust path if necessary
+import { mockUsers, mockServices } from './mockData';  // Adjust path if necessary
 
-// Mocking the orderController methods
+// Mocking the orderController methods using Jest
 jest.mock('../controllers/orderController', () => ({
     placeOrder: jest.fn(),
 }));
 
 describe('Order Functions', () => {
     beforeEach(() => {
-        // Reset mock function before each test to ensure a clean slate
+        // Reset the mock function before each test to ensure a clean slate
         placeOrder.mockReset();
     });
 

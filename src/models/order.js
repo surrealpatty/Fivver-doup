@@ -1,9 +1,9 @@
 // src/models/order.js
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+import { DataTypes } from 'sequelize';  // Use ES module import syntax
+import sequelize from '../config/database.js';  // Correct path to the sequelize instance
 
+// Define the Order model
 const Order = sequelize.define('Order', {
-  // Define the attributes of the order model
   order_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,4 +24,5 @@ const Order = sequelize.define('Order', {
   // Add more fields as needed
 });
 
-module.exports = Order;
+// Export the Order model
+export default Order;

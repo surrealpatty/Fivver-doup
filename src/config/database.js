@@ -28,6 +28,7 @@ const sequelize = new Sequelize(
     {
         host: process.env.DB_HOST,       // Database host from .env
         dialect: process.env.DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
+        logging: false, // Disable Sequelize query logging, set to true if you want to see SQL queries
     }
 );
 
@@ -41,6 +42,9 @@ const testConnection = async () => {
         process.exit(1);  // Exit if the connection fails
     }
 };
+
+// Call the testConnection to ensure the connection works when this file is imported
+testConnection();
 
 // Export the Sequelize instance and connection test function
 export { sequelize, testConnection };
