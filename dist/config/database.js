@@ -57,7 +57,7 @@ const dbConfig = config[environment];
 // Initialize Sequelize with the selected environment configuration
 const sequelize = require('../config/database');
     dialect: dbConfig.dialect,
-    logging: dbConfig.logging,
+    logging: dbConfig.logging; // Add semicolon here if missing
 
 
 // Test the database connection

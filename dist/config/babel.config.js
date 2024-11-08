@@ -1,5 +1,4 @@
 {
   "presets": ["@babel/preset-env"],
-  "ignore": ["node_modules"],
-  "include": ["src", "config"]
+  "plugins": ["@babel/plugin-transform-modules-commonjs"]
 }
