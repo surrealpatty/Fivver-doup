@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../src/server'); // Ensure this path points to your Express server
+const app = require('../server');
 
 describe('Basic Test Suite', () => {
   // Test for ensuring the test file runs correctly
