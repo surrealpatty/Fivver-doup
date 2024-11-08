@@ -2,7 +2,7 @@
 exports.upgradeToPaid = async (req, res) => {
     const userId = req.user.id;  // Ensure user ID comes from a verified JWT token
     const durationInMonths = req.body.duration || 1; // Default to 1 month
-
+    const { registerUser, loginUser } = require('controllers/userController')
     try {
         const user = await User.findByPk(userId);
         if (!user) {
