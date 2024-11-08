@@ -13,59 +13,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_js_1 = __importDefault(require("../config/database.js")); // Ensure the correct path for database configuration
-const bcrypt_1 = __importDefault(require("bcrypt")); // Import bcrypt for password hashing
+const database_1 = require("../config/database"); // Ensure this is correctly pointing to your Sequelize instance
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class User extends sequelize_1.Model {
-    // Define associations if any
     static associate(models) {
-        // Example: association with the Review model (if you have a relation)
-        // Ensure that the Review model is imported and exists in your models folder
         User.hasMany(models.Review, {
             foreignKey: 'userId',
             as: 'reviews',
             onDelete: 'CASCADE',
         });
     }
-    // Password hash before saving user
     static hashPassword(user) {
         return __awaiter(this, void 0, void 0, function* () {
             if (user.password) {
-                user.password = yield bcrypt_1.default.hash(user.password, 10); // Hash password before saving
+                user.password = yield bcryptjs_1.default.hash(user.password, 10);
             }
         });
     }
 }
-// Initialize the User model with the schema and Sequelize settings
 User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     username: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensure the username is unique
+        unique: true,
         validate: {
-            len: {
-                args: [3, 50],
-                msg: 'Username must be between 3 and 50 characters long',
-            },
+            len: [3, 50],
         },
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensure the email is unique
+        unique: true,
         validate: {
-            isEmail: {
-                msg: 'Please provide a valid email address',
-            },
+            isEmail: true,
         },
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: {
-                args: [6, 100], // Enforce a minimum password length
-                msg: 'Password must be between 6 and 100 characters long',
-            },
+            len: [6, 100],
         },
     },
     firstName: {
@@ -77,32 +69,31 @@ User.init({
         allowNull: true,
     },
     role: {
-        type: sequelize_1.DataTypes.ENUM('Free', 'Paid'), // Define "Free" and "Paid" roles
+        type: sequelize_1.DataTypes.ENUM('Free', 'Paid'),
         allowNull: false,
-        defaultValue: 'Free', // Default to "Free"
+        defaultValue: 'Free',
     },
     subscriptionStatus: {
-        type: sequelize_1.DataTypes.ENUM('Inactive', 'Active'), // Subscription status (Inactive or Active)
+        type: sequelize_1.DataTypes.ENUM('Inactive', 'Active'),
         allowNull: false,
-        defaultValue: 'Inactive', // Default to "Inactive"
+        defaultValue: 'Inactive',
     },
     subscriptionStartDate: {
-        type: sequelize_1.DataTypes.DATE, // When the subscription started
-        allowNull: true, // Can be null initially
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
     },
     subscriptionEndDate: {
-        type: sequelize_1.DataTypes.DATE, // When the subscription will expire
-        allowNull: true, // Can be null initially
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
     },
 }, {
-    sequelize: database_js_1.default, // Pass Sequelize instance for database connection
-    modelName: 'User', // Model name is 'User'
-    tableName: 'users', // Table name in the database
-    timestamps: true, // Automatically create 'createdAt' and 'updatedAt'
-    underscored: true, // Use snake_case in the table column names
+    sequelize: database_1.sequelize, // Make sure sequelize is correctly passed here
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true,
+    underscored: true,
 });
-// Hook to hash password before creating or updating a user
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
-exports.default = User; // Export the model for use in other parts of the application
+exports.default = User;
 //# sourceMappingURL=user.js.map

@@ -1,7 +1,34 @@
-export default User;
-declare class User extends Model<any, any> {
-    static associate(models: any): void;
-    static hashPassword(user: any): Promise<void>;
-    constructor(values?: import("sequelize").Optional<any, string> | undefined, options?: import("sequelize").BuildOptions);
+import { Model, Optional } from 'sequelize';
+interface UserAttributes {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+    role: 'Free' | 'Paid';
+    subscriptionStatus: 'Inactive' | 'Active';
+    subscriptionStartDate?: Date;
+    subscriptionEndDate?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
-import { Model } from 'sequelize';
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {
+}
+declare class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+    role: 'Free' | 'Paid';
+    subscriptionStatus: 'Inactive' | 'Active';
+    subscriptionStartDate?: Date;
+    subscriptionEndDate?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+    static associate(models: any): void;
+    static hashPassword(user: User): Promise<void>;
+}
+export default User;

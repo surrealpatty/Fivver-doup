@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const database_1 = require("./config/database"); // Adjusted to named import
-const user_js_1 = __importDefault(require("./routes/user.js")); // Import user routes
+const database_1 = require("./config/database"); // Adjusted to named import for sequelize
+const user_1 = __importDefault(require("./routes/user")); // Adjusted to omit '.js' in TypeScript
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app
@@ -25,7 +25,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Parse JSON request bodies
 app.use((0, cors_1.default)()); // Enable Cross-Origin Resource Sharing (CORS)
 // Routes
-app.use('/api/users', user_js_1.default); // Use user routes for '/api/users'
+app.use('/api/users', user_1.default); // Use user routes for '/api/users'
 // Function to test database connection
 const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -42,9 +42,10 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Test DB connection
         yield testConnection();
-        // Sync models with the database
-        // Use `alter: true` in development or `force: true` in testing
-        yield database_1.sequelize.sync({ alter: true });
+        // Sync models with the database based on environment
+        const isDevelopment = process.env.NODE_ENV === 'development';
+        const syncOptions = isDevelopment ? { alter: true } : { force: false }; // Alter models in development
+        yield database_1.sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
         // Start the Express server
         const PORT = process.env.PORT || 5000; // Use PORT from environment or default to 5000
@@ -54,7 +55,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error('Error starting the server:', error);
-        process.exit(1); // Exit if server setup fails
+        // Don't call process.exit(1) unless it's critical
     }
 });
 // Initialize the server

@@ -1,71 +1,16 @@
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-import { Sequelize, Dialect } from 'sequelize';
 
-// Load environment variables from .env file
 dotenv.config();
 
-// List of required environment variables
-const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
-
-// Function to check if all required environment variables are present
-const checkEnvVariables = (): void => {
-    for (const key of requiredKeys) {
-        if (!process.env[key]) {
-            console.error(`Missing required environment variable: ${key}`);
-            process.exit(1);  // Exit the process if any required variable is missing
-        }
-    }
-};
-
-// Check if all required environment variables are present
-checkEnvVariables();
-
-// Access environment variables and ensure they are defined
-const DB_NAME: string = process.env.DB_NAME!;
-const DB_USER: string = process.env.DB_USER!;
-const DB_PASSWORD: string = process.env.DB_PASSWORD!;
-const DB_HOST: string = process.env.DB_HOST!;
-const DB_DIALECT = process.env.DB_DIALECT as Dialect;  // Type assertion to 'Dialect'
-
-// Ensure that DB_DIALECT is one of the allowed dialects
-const validDialects: Dialect[] = ['mysql', 'postgres', 'sqlite', 'mariadb', 'mssql'];
-if (!validDialects.includes(DB_DIALECT)) {
-    console.error(`Invalid DB_DIALECT value: ${DB_DIALECT}. Please set a valid dialect.`);
-    process.exit(1);
-}
-
-// Create a new Sequelize instance with the loaded environment variables
 const sequelize = new Sequelize(
-    DB_NAME,      // Database name from .env
-    DB_USER,      // Database user from .env
-    DB_PASSWORD,  // Database password from .env
+    process.env.DB_NAME!,
+    process.env.DB_USER!,
+    process.env.DB_PASSWORD!,
     {
-        host: DB_HOST,       // Database host from .env
-        dialect: DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
-        logging: false,      // Disable Sequelize query logging
-        dialectOptions: DB_DIALECT === 'mysql' ? { charset: 'utf8mb4' } : {}, // Charset for MySQL
-        pool: {
-            max: 5,           // Max number of connections in the pool
-            min: 0,           // Min number of connections in the pool
-            acquire: 30000,   // Max time, in milliseconds, to wait for a connection
-            idle: 10000       // Max time, in milliseconds, before a connection is considered idle
-        }
+        host: process.env.DB_HOST!,
+        dialect: process.env.DB_DIALECT as any, // Or use Dialect if imported
     }
 );
 
-// Test the connection to the database
-const testConnection = async (): Promise<void> => {
-    try {
-        await sequelize.authenticate(); // Test the database connection
-        console.log('Database connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-        process.exit(1);  // Exit if the connection fails
-    }
-};
-
-// Call the testConnection to ensure the connection works when this file is imported
-testConnection();
-
-// Export the Sequelize instance and connection test function
-export { sequelize, testConnection };
+export { sequelize };

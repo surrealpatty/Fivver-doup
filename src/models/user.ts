@@ -1,10 +1,9 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Correct import for the Sequelize instance
-import bcrypt from 'bcryptjs';  // bcryptjs for password hashing
+import { sequelize } from '../config/database';  // Ensure this is correctly pointing to your Sequelize instance
+import bcrypt from 'bcryptjs';
 
-// Define the shape of the User model, with Optional properties for creation
 interface UserAttributes {
-  id: number;  // Primary key for the model
+  id: number;
   username: string;
   email: string;
   password: string;
@@ -18,11 +17,10 @@ interface UserAttributes {
   updatedAt?: Date;
 }
 
-// Define the type of the creation payload (for optional fields during creation)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  id!: number;  // Sequelize will auto-generate this
+  id!: number;
   username!: string;
   email!: string;
   password!: string;
@@ -35,10 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   createdAt?: Date;
   updatedAt?: Date;
 
-  // Define associations if any
   static associate(models: any) {
-    // Example: association with the Review model (if you have a relation)
-    // Ensure that the Review model is imported and exists in your models folder
     User.hasMany(models.Review, {
       foreignKey: 'userId',
       as: 'reviews',
@@ -46,51 +41,41 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     });
   }
 
-  // Password hash before saving user
   static async hashPassword(user: User) {
     if (user.password) {
-      user.password = await bcrypt.hash(user.password, 10); // Hash password before saving
+      user.password = await bcrypt.hash(user.password, 10);
     }
   }
 }
 
-// Initialize the User model with the schema and Sequelize settings
 User.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,  // Auto-generate ID
+      autoIncrement: true,
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // Ensure the username is unique
+      unique: true,
       validate: {
-        len: {
-          args: [3, 50],
-          msg: 'Username must be between 3 and 50 characters long',
-        },
+        len: [3, 50],
       },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // Ensure the email is unique
+      unique: true,
       validate: {
-        isEmail: {
-          msg: 'Please provide a valid email address',
-        },
+        isEmail: true,
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: {
-          args: [6, 100],  // Enforce a minimum password length
-          msg: 'Password must be between 6 and 100 characters long',
-        },
+        len: [6, 100],
       },
     },
     firstName: {
@@ -102,36 +87,34 @@ User.init(
       allowNull: true,
     },
     role: {
-      type: DataTypes.ENUM('Free', 'Paid'),  // Define "Free" and "Paid" roles
+      type: DataTypes.ENUM('Free', 'Paid'),
       allowNull: false,
-      defaultValue: 'Free',  // Default to "Free"
+      defaultValue: 'Free',
     },
     subscriptionStatus: {
-      type: DataTypes.ENUM('Inactive', 'Active'), // Subscription status (Inactive or Active)
+      type: DataTypes.ENUM('Inactive', 'Active'),
       allowNull: false,
-      defaultValue: 'Inactive', // Default to "Inactive"
+      defaultValue: 'Inactive',
     },
     subscriptionStartDate: {
-      type: DataTypes.DATE,  // When the subscription started
-      allowNull: true,  // Can be null initially
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     subscriptionEndDate: {
-      type: DataTypes.DATE,  // When the subscription will expire
-      allowNull: true,  // Can be null initially
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
-    sequelize,             // Pass Sequelize instance for database connection
-    modelName: 'User',     // Model name is 'User'
-    tableName: 'users',    // Table name in the database
-    timestamps: true,      // Automatically create 'createdAt' and 'updatedAt'
-    underscored: true,     // Use snake_case in the table column names
+    sequelize, // Make sure sequelize is correctly passed here
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true,
+    underscored: true,
   }
 );
 
-// Hook to hash password before creating or updating a user
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
-// Export the model for use in other parts of the application
 export default User;
