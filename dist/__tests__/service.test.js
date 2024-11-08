@@ -1,10 +1,17 @@
 const { createService, getServices } = require('../controllers/serviceController'); // Import the functions from serviceController
-const { Service } = require('../models/services'); // Import the Service model
+const { Service } = require('../models/services'); // Ensure you're importing the Service model correctly
 const sequelize = require('../config/database').sequelize; // Import the sequelize instance for testing
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('../models/services'); // Mock the entire Service model
+jest.mock('../models/services', () => {
+  return {
+    Service: {
+      create: jest.fn(),
+      findAll: jest.fn(),
+    },
+  };
+});
 
 describe('Service Functions', () => {
 
