@@ -1,7 +1,7 @@
 module.exports = {
   moduleNameMapper: {
-    '^../models/(.*)$': '<rootDir>/dist/models/$1',   // Maps imports from models directory
-    '^src/(.*)$': '<rootDir>/dist/src/$1',            // Maps absolute imports from src directory
+    '^../models/(.*)$': '<rootDir>/dist/models/$1',  // Ensure mapping for models
+    '^src/(.*)$': '<rootDir>/dist/src/$1',           // Mapping for src folder
   },
   testEnvironment: 'node',
   transform: {
