@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Correct the import for the Sequelize instance
-import bcrypt from 'bcryptjs';  // Use bcryptjs instead of bcrypt
+import { sequelize } from '../config/database';  // Correct import for the Sequelize instance
+import bcrypt from 'bcryptjs';  // bcryptjs for password hashing
 
 // Define the shape of the User model, with Optional properties for creation
 interface UserAttributes {

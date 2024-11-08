@@ -43,6 +43,13 @@ const sequelize = new Sequelize(
         host: DB_HOST,       // Database host from .env
         dialect: DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
         logging: false,      // Disable Sequelize query logging
+        dialectOptions: DB_DIALECT === 'mysql' ? { charset: 'utf8mb4' } : {}, // Charset for MySQL
+        pool: {
+            max: 5,           // Max number of connections in the pool
+            min: 0,           // Min number of connections in the pool
+            acquire: 30000,   // Max time, in milliseconds, to wait for a connection
+            idle: 10000       // Max time, in milliseconds, before a connection is considered idle
+        }
     }
 );
 

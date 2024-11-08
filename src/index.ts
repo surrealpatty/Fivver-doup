@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize } from './config/database';  // Adjusted to named import
-import userRoutes from './routes/user.js'; // Import user routes
+import { sequelize } from './config/database';  // Adjusted to named import for sequelize
+import userRoutes from './routes/user'; // Adjusted to omit '.js' in TypeScript
 
 // Load environment variables from .env file
 dotenv.config();
@@ -18,7 +18,7 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 app.use('/api/users', userRoutes); // Use user routes for '/api/users'
 
 // Function to test database connection
-const testConnection = async () => {
+const testConnection = async (): Promise<void> => {
     try {
         await sequelize.authenticate(); // Test the database connection
         console.log('Database connection has been established successfully.');
@@ -29,14 +29,16 @@ const testConnection = async () => {
 };
 
 // Function to start the server and sync the database
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
     try {
         // Test DB connection
         await testConnection();
 
-        // Sync models with the database
-        // Use `alter: true` in development or `force: true` in testing
-        await sequelize.sync({ alter: true });
+        // Sync models with the database based on environment
+        const isDevelopment = process.env.NODE_ENV === 'development';
+        const syncOptions = isDevelopment ? { alter: true } : { force: false }; // Alter models in development
+
+        await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
         // Start the Express server
@@ -46,7 +48,7 @@ const startServer = async () => {
         });
     } catch (error) {
         console.error('Error starting the server:', error);
-        process.exit(1); // Exit if server setup fails
+        // Don't call process.exit(1) unless it's critical
     }
 };
 
