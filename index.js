@@ -1,9 +1,13 @@
 import express from 'express';  // Importing Express
 import sequelize from './config/database.js';  // Importing Sequelize instance for database connection
-import userRoutes from './src/routes/user.js';  // Import your user routes
-import serviceRoutes from './src/routes/serviceRoute.js';  // Correct path if index.js is in the root
+import userRoutes from './src/routes/user.js';  // Import user routes
+import serviceRoutes from './src/routes/serviceRoute.js';  // Import service routes
 import cors from 'cors';  // Import CORS middleware (optional, but useful for cross-origin requests)
 import morgan from 'morgan';  // Importing morgan for logging HTTP requests
+import dotenv from 'dotenv';  // Import dotenv for loading environment variables
+
+// Load environment variables
+dotenv.config();
 
 const app = express();  // Initialize the Express app
 const PORT = process.env.PORT || 3000;  // Use environment variable or default to 3000
@@ -16,7 +20,7 @@ app.use(morgan('dev'));  // Log HTTP requests in development mode
 
 // API Routes
 app.use('/api/user', userRoutes);  // Route for user API
-app.use('/api/service', serviceRoutes);  // Route for service API (if you have it)
+app.use('/api/service', serviceRoutes);  // Route for service API
 
 // Home route or a fallback route
 app.get('/', (req, res) => {
@@ -27,8 +31,10 @@ app.get('/', (req, res) => {
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}...`);
   try {
-    // Sync database models with the database
-    await sequelize.sync();
+    // Sync database models with the database (ensure it is connected and synced)
+    await sequelize.authenticate();  // Ensure database connection is successful
+    console.log('Database connection established successfully.');
+    await sequelize.sync();  // Sync all models
     console.log('Database synced successfully.');
   } catch (error) {
     console.error('Error syncing database:', error);

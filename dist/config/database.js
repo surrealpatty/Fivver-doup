@@ -32,6 +32,7 @@ const config = {
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT || 'mysql',  // Default to MySQL if not set
         logging: true,  // Enable logging in development
+        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
     },
     production: {
         username: process.env.PROD_DB_USER || process.env.DB_USER,
@@ -40,6 +41,7 @@ const config = {
         host: process.env.PROD_DB_HOST || process.env.DB_HOST,
         dialect: process.env.DB_DIALECT || 'mysql',
         logging: false,  // Disable logging in production
+        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
     },
     test: {
         username: process.env.DB_USER,
@@ -48,6 +50,7 @@ const config = {
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT || 'mysql',
         logging: false,  // Disable logging in test environment
+        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
     },
 };
 
@@ -58,7 +61,8 @@ const dbConfig = config[environment];
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
   host: dbConfig.host,
   dialect: dbConfig.dialect,
-  logging: dbConfig.logging,  // Corrected this line
+  logging: dbConfig.logging,  // Enable or disable logging
+  charset: dbConfig.charset,  // Ensures UTF-8 compatibility for all environments
 });
 
 // Test the database connection

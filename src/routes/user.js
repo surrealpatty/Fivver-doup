@@ -1,26 +1,75 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';  // Ensure the path is correct
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+// Initialize the express router
 const router = express.Router();
-const User = require('../models/user'); // Ensure this path is correct
+
+// JWT Secret from environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined in environment variables.');
 }
 
+// Registration Route
+router.post('/register', async (req, res) => {
+    const { username, email, password, firstName, lastName } = req.body;
+
+    try {
+        // Check if the user already exists
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username already taken' });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user
+        const user = await User.create({
+            username,
+            email,
+            password: hashedPassword,  // Store the hashed password
+            firstName,
+            lastName,
+            role: 'Free',  // Default to "Free" role
+            subscriptionStatus: 'Inactive',  // Default to "Inactive"
+        });
+
+        // Respond with user details excluding password
+        res.status(201).json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            subscriptionStatus: user.subscriptionStatus,
+        });
+    } catch (error) {
+        console.error('Error during registration:', error.message);
+        res.status(500).json({ message: 'Server error during registration' });
+    }
+});
+
 // Login Route
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Check if the user exists
+        // Find the user by username
         const user = await User.findOne({ where: { username } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Verify the password
+        // Check if the password is valid
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid password' });
@@ -29,18 +78,18 @@ router.post('/login', async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
-        // Send token response
+        // Send token as response
         res.json({ token });
     } catch (error) {
-        console.error('Error during login:', error.message); // Improved error logging
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error during login:', error.message);
+        res.status(500).json({ message: 'Server error during login' });
     }
 });
 
-// Example route for testing
+// Example route for testing if routes are working
 router.get('/', (req, res) => {
     res.send('User route is active');
 });
 
-// Export the router
-module.exports = router;
+// Export the router for use in the main app
+export default router;

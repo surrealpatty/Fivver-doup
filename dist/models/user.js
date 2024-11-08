@@ -20,6 +20,11 @@ class User extends Model {
             user.password = await bcrypt.hash(user.password, 10);  // Hash password before saving
         }
     }
+
+    // Instance method to compare passwords
+    async comparePassword(password) {
+        return bcrypt.compare(password, this.password);  // Compare given password with hashed password
+    }
 }
 
 // Initialize the User model
