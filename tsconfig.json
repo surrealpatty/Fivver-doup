@@ -13,13 +13,15 @@
     "moduleResolution": "node",                       /* Module resolution strategy, 'node' works well for Node.js */
     "allowJs": true,                                  /* Allow JavaScript files to be part of the TypeScript project */
     "skipDefaultLibCheck": true,                      /* Skip checking of default TypeScript libraries */
-    "lib": ["es2016", "dom"]                          /* Include additional library files */
+    "lib": ["es2016", "dom"],                         /* Include additional library files */
+    "declaration": true,                              /* Generate type declaration files (.d.ts) */
+    "sourceMap": true                                 /* Generate source maps for easier debugging */
   },
   "include": [
-    "src/**/*.ts"                                    /* Include all TypeScript files in the src directory */
+    "src/**/*.ts"                                     /* Include all TypeScript files in the src directory */
   ],
   "exclude": [
-    "node_modules",                                  /* Exclude the node_modules directory */
-    "dist"                                           /* Exclude the dist directory */
+    "node_modules",                                   /* Exclude the node_modules directory */
+    "dist"                                            /* Exclude the dist directory */
   ]
 }
