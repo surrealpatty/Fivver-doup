@@ -1,7 +1,6 @@
 import request from 'supertest';
-import app from '../src/server'; // Adjust path if needed
-import { User } from '../src/models/user'; // Ensure the path is correct
-import { initUser } from '../src/models/user'; // Import the initUser function to reset DB
+import app from '../src/server'; // Ensure this path is correct for your app
+import { User, initUser } from '../src/models/user'; // Ensure the path is correct for your models
 
 // Ensure the User table is reset before each test
 beforeAll(async () => {
@@ -111,4 +110,3 @@ describe('User Registration and Login', () => {
         expect(response.body).toHaveProperty('email', newUser.email);
     });
 });
-

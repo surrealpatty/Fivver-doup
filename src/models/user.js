@@ -1,11 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';  // Import sequelize instance
+import sequelize from '../config/database.js';  // Ensure this path is correct
 import bcrypt from 'bcrypt';  // Import bcrypt for password hashing
 
 class User extends Model {
     // Define associations if any
     static associate(models) {
         // Example association with Review (if you have a relation)
+        // Ensure the Review model is imported and exists
         User.hasMany(models.Review, {
             foreignKey: 'userId',
             as: 'reviews',

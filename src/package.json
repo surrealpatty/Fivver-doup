@@ -79,4 +79,11 @@
     "application"
   ],
   "license": "MIT"
+
+  {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  }
+  
 }
