@@ -1,5 +1,5 @@
 "use strict";
-const { placeOrder } = require('../dist/controllers/orderController');
+const { placeOrder } = require('../controllers/orderController');
 const { mockUsers, mockServices } = require('./mockData'); // Adjust the path to your mock data as necessary
 describe('Order Functions', () => {
     test('should place a new order', async () => {
