@@ -31,6 +31,7 @@ const config = {
         database: process.env.DB_NAME,
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT || 'mysql',  // Default to MySQL if not set
+        logging: true,  // Enable logging in development
     },
     production: {
         username: process.env.PROD_DB_USER || process.env.DB_USER,
@@ -38,6 +39,15 @@ const config = {
         database: process.env.PROD_DB_NAME || process.env.DB_NAME,
         host: process.env.PROD_DB_HOST || process.env.DB_HOST,
         dialect: process.env.DB_DIALECT || 'mysql',
+        logging: false,  // Disable logging in production
+    },
+    test: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.TEST_DB_NAME || 'test_db', // Optional test DB
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT || 'mysql',
+        logging: false,  // Disable logging in test environment
     },
 };
 
@@ -48,8 +58,16 @@ const dbConfig = config[environment];
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
-    logging: environment === 'development', // Enable logging in development only
+    logging: dbConfig.logging,
 });
 
-// Use `sequelize` as the default export
-export default sequelize;  // <-- Default export here
+// Test the database connection
+sequelize.authenticate()
+    .then(() => console.log('Database connection established successfully.'))
+    .catch((error) => {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1);  // Exit if connection fails
+    });
+
+// Export the sequelize instance for use in models
+export default sequelize;
