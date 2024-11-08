@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js'; // Ensure this path is correct
+// src/models/services.js
+import sequelize from '../config/database.js';  // Correct default import
 
 class Service extends Model {
     // Associations can be added here, typically in models/index.js if needed

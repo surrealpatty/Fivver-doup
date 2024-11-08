@@ -52,4 +52,4 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 });
 
 // Use `sequelize` as the default export
-export { sequelize };
+export default sequelize;  // <-- Default export here
