@@ -2,10 +2,11 @@
 // src/__tests__/user.test.js
 const { registerUser, loginUser } = require('../src/controllers/userController');
 // Mock implementation of registerUser and loginUser
-jest.mock('../src/controllers/userController', () => ({
-    registerUser: jest.fn(),
+const User = require('../models/user');
+jest.mock('../models/user');
+
     loginUser: jest.fn(),
-}));
+
 describe('User Functions', () => {
     beforeEach(() => {
         // Clear all instances and calls to the mock function before each test
