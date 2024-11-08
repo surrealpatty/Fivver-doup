@@ -1,10 +1,9 @@
 "use strict";
-
 const request = require('supertest'); // Make sure to install supertest
-const app = require('../index'); // Assuming index.js is the entry point
-const { User } = require('../models/user'); // Destructure to import User model
+const app = require('../../src/index'); // Adjusted to point to your actual index.js
+const User = require('../../src/models/user'); // Adjusted path to User model
 const bcrypt = require('bcrypt');
-jest.mock('../models/user'); // Mock the User model
+jest.mock('../../src/models/user'); // Adjusted to point to the correct path
 
 describe('User Controller', () => {
     afterEach(() => {
@@ -14,14 +13,7 @@ describe('User Controller', () => {
     test('should register a new user', async () => {
         // Mock the User.findOne method to return null (user does not exist)
         User.findOne.mockResolvedValue(null);
-
-        // Mock the User.create method to return a mock user object
-        User.create.mockResolvedValue({
-            id: 1,
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'hashedpassword'
-        });
+        User.create.mockResolvedValue({ id: 1, username: 'testuser', email: 'test@example.com', password: 'hashedpassword' });
 
         const response = await request(app).post('/api/users/register').send({
             username: 'testuser',
@@ -36,13 +28,7 @@ describe('User Controller', () => {
 
     test('should login a user', async () => {
         const hashedPassword = await bcrypt.hash('testpassword', 10);
-
-        // Mock the User.findOne method to return a user with the hashed password
-        User.findOne.mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-            password: hashedPassword
-        });
+        User.findOne.mockResolvedValue({ id: 1, email: 'test@example.com', password: hashedPassword });
 
         const response = await request(app).post('/api/users/login').send({
             email: 'test@example.com',
@@ -54,14 +40,7 @@ describe('User Controller', () => {
     });
 
     test('should return user profile', async () => {
-        const mockUser = {
-            id: 1,
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'hashedpassword'
-        };
-
-        // Mock the User.findByPk method to return the mock user
+        const mockUser = { id: 1, username: 'testuser', email: 'test@example.com', password: 'hashedpassword' };
         User.findByPk.mockResolvedValue(mockUser);
 
         const response = await request(app)
@@ -73,5 +52,5 @@ describe('User Controller', () => {
         expect(response.body).toHaveProperty('email', 'test@example.com');
     });
 
-    // Additional tests can be added for updateUserProfile, deleteUser, etc.
+    // Add additional tests for updateUserProfile and deleteUser as needed
 });
