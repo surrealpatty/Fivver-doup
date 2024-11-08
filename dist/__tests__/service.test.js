@@ -1,7 +1,5 @@
-// dist/__tests__/service.test.js
-
 const { createService, getServices } = require('../controllers/serviceController'); // Import the functions from serviceController
-const Service = require('../models/services'); // Import the Service model
+const { Service } = require('../models/services'); // Import the Service model
 const sequelize = require('../config/database').sequelize; // Import the sequelize instance for testing
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
 
@@ -9,7 +7,7 @@ const { Op } = require('sequelize'); // Import Sequelize operators if needed for
 jest.mock('../models/services'); // Mock the entire Service model
 
 describe('Service Functions', () => {
-  
+
   beforeAll(() => {
     // Setup any necessary test initialization, like database connection, if needed
   });
@@ -31,27 +29,43 @@ describe('Service Functions', () => {
     Service.create.mockResolvedValue(mockCreatedService);
 
     // Call the createService function with the mock data
-    const response = await createService(mockServiceData);
+    const req = { body: mockServiceData };  // Mock request object
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    }; // Mock response object
 
-    // Check that the function returned the expected result
-    expect(response).toEqual(mockCreatedService);
+    // Call createService with the mock request and response
+    await createService(req, res);
+
+    // Check that the response was correct
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(mockCreatedService);
     expect(Service.create).toHaveBeenCalledWith(mockServiceData); // Ensure the Service.create method was called with correct data
   });
 
   test('should retrieve all services', async () => {
-    const mockServices = [
+    const mockServicesData = [
       { id: 1, title: 'Test Service 1', description: 'Service 1 description', price: 10.0, category: 'Test' },
       { id: 2, title: 'Test Service 2', description: 'Service 2 description', price: 20.0, category: 'Test' },
     ];
 
     // Mock the Service.findAll method to simulate fetching all services
-    Service.findAll.mockResolvedValue(mockServices);
+    Service.findAll.mockResolvedValue(mockServicesData);
 
-    // Call the getServices function
-    const response = await getServices();
+    // Mock the request and response for getServices
+    const req = { query: {} }; // Mock an empty query object
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    }; // Mock the response object
 
-    // Check that the function returned the expected result
-    expect(response).toEqual(mockServices);
+    // Call getServices with the mock request and response
+    await getServices(req, res);
+
+    // Check that the response was correct
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(mockServicesData);
     expect(Service.findAll).toHaveBeenCalledWith({ where: { price: { [Op.gt]: 0 } } }); // Check if the query includes price condition
   });
 });
