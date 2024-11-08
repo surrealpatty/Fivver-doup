@@ -1,77 +1,57 @@
-import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';
-
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.testConnection = exports.sequelize = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+const sequelize_1 = require("sequelize");
 // Load environment variables from .env file
-dotenv.config();
-
+dotenv_1.default.config();
 // List of required environment variables
 const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
-
-// Function to validate the presence of required environment variables
-const validateEnvVars = () => {
+// Function to check if all required environment variables are present
+const checkEnvVariables = () => {
     for (const key of requiredKeys) {
         if (!process.env[key]) {
-            console.error(`Missing environment variable: ${key}`);
-            process.exit(1);  // Exit if a required environment variable is missing
+            console.error(`Missing required environment variable: ${key}`);
+            process.exit(1); // Exit the process if any required variable is missing
         }
     }
 };
-
-// Validate environment variables
-validateEnvVars();
-
-// Get the environment setting (development by default)
-const environment = process.env.NODE_ENV || 'development';
-
-// Define configuration object based on the environment
-const config = {
-    development: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT || 'mysql',  // Default to MySQL if not set
-        logging: true,  // Enable logging in development
-        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
-    },
-    production: {
-        username: process.env.PROD_DB_USER || process.env.DB_USER,
-        password: process.env.PROD_DB_PASSWORD || process.env.DB_PASSWORD,
-        database: process.env.PROD_DB_NAME || process.env.DB_NAME,
-        host: process.env.PROD_DB_HOST || process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT || 'mysql',
-        logging: false,  // Disable logging in production
-        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
-    },
-    test: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.TEST_DB_NAME || 'test_db', // Optional test DB
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT || 'mysql',
-        logging: false,  // Disable logging in test environment
-        charset: 'utf8mb4',  // Ensure UTF-8 compatibility
-    },
-};
-
-// Select the appropriate configuration based on the environment
-const dbConfig = config[environment];
-
-// Initialize Sequelize with the selected environment configuration
-const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-  logging: dbConfig.logging,  // Enable or disable logging
-  charset: dbConfig.charset,  // Ensures UTF-8 compatibility for all environments
+// Check if all required environment variables are present
+checkEnvVariables();
+// Create a new Sequelize instance with the loaded environment variables
+const sequelize = new sequelize_1.Sequelize(process.env.DB_NAME, // Database name from .env
+process.env.DB_USER, // Database user from .env
+process.env.DB_PASSWORD, // Database password from .env
+{
+    host: process.env.DB_HOST, // Database host from .env
+    dialect: process.env.DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
+    logging: false, // Disable Sequelize query logging, set to true if you want to see SQL queries
 });
-
-// Test the database connection
-sequelize.authenticate()
-    .then(() => console.log('Database connection established successfully.'))
-    .catch((error) => {
+exports.sequelize = sequelize;
+// Test the connection to the database
+const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield sequelize.authenticate(); // Test the database connection
+        console.log('Database connection has been established successfully.');
+    }
+    catch (error) {
         console.error('Unable to connect to the database:', error);
-        process.exit(1);  // Exit if connection fails
-    });
-
-// Export the sequelize instance for use in models
-export default sequelize;
+        process.exit(1); // Exit if the connection fails
+    }
+});
+exports.testConnection = testConnection;
+// Call the testConnection to ensure the connection works when this file is imported
+testConnection();
+//# sourceMappingURL=database.js.map
