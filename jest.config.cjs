@@ -1,9 +1,9 @@
 module.exports = {
-  // This will map any import from 'src/' to 'dist/src/' when running tests
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/dist/src/$1',
+    '^@src/(.*)$': '<rootDir>/dist/src/$1', // Alternative mapping for '@src/' imports
+    '^../(.*)$': '<rootDir>/dist/$1', // Maps relative imports starting with '../' to the dist directory
   },
-  // Additional Jest configuration options
   testEnvironment: 'node',
   transform: {
     '^.+\\.js$': 'babel-jest',
