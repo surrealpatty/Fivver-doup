@@ -1,23 +1,16 @@
 const { createService, getServices } = require('../controllers/serviceController'); // Import the functions from serviceController
 const { Service } = require('../models/services'); // Ensure you're importing the Service model correctly
-const sequelize = require('../config/database').sequelize; // Import the sequelize instance for testing
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('../models/services', () => {
-  return {
-    Service: {
-      create: jest.fn(),
-      findAll: jest.fn(),
-    },
-  };
-});
+jest.mock('../models/services', () => ({
+  Service: {
+    create: jest.fn(),
+    findAll: jest.fn(),
+  },
+}));
 
 describe('Service Functions', () => {
-
-  beforeAll(() => {
-    // Setup any necessary test initialization, like database connection, if needed
-  });
 
   afterEach(() => {
     jest.clearAllMocks(); // Clear mocks after each test to prevent leakage between tests
@@ -38,22 +31,22 @@ describe('Service Functions', () => {
     // Mock the request object to include a user with an id
     const req = { 
       body: mockServiceData,
-      user: { id: 1 } // Simulate that the user is authenticated and has an id
+      user: { id: 1 }, // Simulate that the user is authenticated and has an id
     };
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    }; // Mock response object
+      status: jest.fn().mockReturnThis(), // Mock status method to return the response object
+      json: jest.fn(), // Mock json method to check the response
+    };
 
     // Call createService with the mock request and response
     await createService(req, res);
 
     // Check that the response was correct
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(mockCreatedService);
+    expect(res.status).toHaveBeenCalledWith(201); // Should return 201 (Created)
+    expect(res.json).toHaveBeenCalledWith(mockCreatedService); // Should return the created service
     expect(Service.create).toHaveBeenCalledWith({
       ...mockServiceData,
-      userId: req.user.id, // Make sure the userId is passed correctly
+      userId: req.user.id, // Ensure the userId is passed correctly to the model
     });
   });
 
@@ -69,16 +62,19 @@ describe('Service Functions', () => {
     // Mock the request and response for getServices
     const req = { query: {} }; // Mock an empty query object
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    }; // Mock the response object
+      status: jest.fn().mockReturnThis(), // Mock status method to return the response object
+      json: jest.fn(), // Mock json method to check the response
+    };
 
     // Call getServices with the mock request and response
     await getServices(req, res);
 
     // Check that the response was correct
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(mockServicesData);
-    expect(Service.findAll).toHaveBeenCalledWith({ where: { price: { [Op.gt]: 0 } } }); // Check if the query includes price condition
+    expect(res.status).toHaveBeenCalledWith(200); // Should return 200 (OK)
+    expect(res.json).toHaveBeenCalledWith(mockServicesData); // Should return the services data
+    expect(Service.findAll).toHaveBeenCalledWith({
+      where: { price: { [Op.gt]: 0 } }, // Ensure the query condition is correct
+    });
   });
+
 });
