@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Dialect } from 'sequelize';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -20,14 +20,28 @@ const checkEnvVariables = () => {
 // Check if all required environment variables are present
 checkEnvVariables();
 
+// Access environment variables and ensure they are defined
+const DB_NAME = process.env.DB_NAME!;
+const DB_USER = process.env.DB_USER!;
+const DB_PASSWORD = process.env.DB_PASSWORD!;
+const DB_HOST = process.env.DB_HOST!;
+const DB_DIALECT = process.env.DB_DIALECT as Dialect;  // Type assertion to 'Dialect'
+
+// Ensure that DB_DIALECT is one of the allowed dialects
+const validDialects: Dialect[] = ['mysql', 'postgres', 'sqlite', 'mariadb', 'mssql'];
+if (!validDialects.includes(DB_DIALECT)) {
+    console.error(`Invalid DB_DIALECT value: ${DB_DIALECT}. Please set a valid dialect.`);
+    process.exit(1);
+}
+
 // Create a new Sequelize instance with the loaded environment variables
 const sequelize = new Sequelize(
-    process.env.DB_NAME,      // Database name from .env
-    process.env.DB_USER,      // Database user from .env
-    process.env.DB_PASSWORD,  // Database password from .env
+    DB_NAME,      // Database name from .env
+    DB_USER,      // Database user from .env
+    DB_PASSWORD,  // Database password from .env
     {
-        host: process.env.DB_HOST,       // Database host from .env
-        dialect: process.env.DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
+        host: DB_HOST,       // Database host from .env
+        dialect: DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
         logging: false, // Disable Sequelize query logging, set to true if you want to see SQL queries
     }
 );
