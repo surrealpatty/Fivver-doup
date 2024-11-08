@@ -8,7 +8,7 @@ dotenv.config();
 const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
 
 // Function to check if all required environment variables are present
-const checkEnvVariables = () => {
+const checkEnvVariables = (): void => {
     for (const key of requiredKeys) {
         if (!process.env[key]) {
             console.error(`Missing required environment variable: ${key}`);
@@ -21,10 +21,10 @@ const checkEnvVariables = () => {
 checkEnvVariables();
 
 // Access environment variables and ensure they are defined
-const DB_NAME = process.env.DB_NAME!;
-const DB_USER = process.env.DB_USER!;
-const DB_PASSWORD = process.env.DB_PASSWORD!;
-const DB_HOST = process.env.DB_HOST!;
+const DB_NAME: string = process.env.DB_NAME!;
+const DB_USER: string = process.env.DB_USER!;
+const DB_PASSWORD: string = process.env.DB_PASSWORD!;
+const DB_HOST: string = process.env.DB_HOST!;
 const DB_DIALECT = process.env.DB_DIALECT as Dialect;  // Type assertion to 'Dialect'
 
 // Ensure that DB_DIALECT is one of the allowed dialects
@@ -47,7 +47,7 @@ const sequelize = new Sequelize(
 );
 
 // Test the connection to the database
-const testConnection = async () => {
+const testConnection = async (): Promise<void> => {
     try {
         await sequelize.authenticate(); // Test the database connection
         console.log('Database connection has been established successfully.');

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2016",                              /* Set the JavaScript language version for emitted JavaScript */
-    "module": "commonjs",                             /* Specify module code generation */
+    "module": "commonjs",                             /* Specify module code generation, 'commonjs' for Node.js */
     "esModuleInterop": true,                         /* Enables interoperability between CommonJS and ES Modules */
     "forceConsistentCasingInFileNames": true,         /* Enforce consistent casing in file imports */
     "strict": true,                                   /* Enable strict type-checking options */
@@ -13,7 +13,7 @@
     "moduleResolution": "node",                       /* Module resolution strategy, 'node' works well for Node.js */
     "allowJs": true,                                  /* Allow JavaScript files to be part of the TypeScript project */
     "skipDefaultLibCheck": true,                      /* Skip checking of default TypeScript libraries */
-    "lib": ["es2016", "dom"],                         /* Include additional library files */
+    "lib": ["es2020"],                                /* Use ES2020 for modern JavaScript features */
     "declaration": true,                              /* Generate type declaration files (.d.ts) */
     "sourceMap": true                                 /* Generate source maps for easier debugging */
   },

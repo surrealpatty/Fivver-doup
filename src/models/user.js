@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';  // Ensure the correct path for database configuration
+import { sequelize } from '../config/database.js';  // Ensure the correct import of Sequelize instance
 import bcrypt from 'bcrypt';  // Import bcrypt for password hashing
 
 class User extends Model {
@@ -96,4 +96,5 @@ User.init(
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
-export default User;  // Export the model for use in other parts of the application
+// Export the model for use in other parts of the application
+export default User;
