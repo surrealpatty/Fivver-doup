@@ -35,8 +35,11 @@ describe('Service Functions', () => {
     // Mock the Service.create method to simulate successful service creation
     Service.create.mockResolvedValue(mockCreatedService);
 
-    // Call the createService function with the mock data
-    const req = { body: mockServiceData };  // Mock request object
+    // Mock the request object to include a user with an id
+    const req = { 
+      body: mockServiceData,
+      user: { id: 1 } // Simulate that the user is authenticated and has an id
+    };
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -48,7 +51,10 @@ describe('Service Functions', () => {
     // Check that the response was correct
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(mockCreatedService);
-    expect(Service.create).toHaveBeenCalledWith(mockServiceData); // Ensure the Service.create method was called with correct data
+    expect(Service.create).toHaveBeenCalledWith({
+      ...mockServiceData,
+      userId: req.user.id, // Make sure the userId is passed correctly
+    });
   });
 
   test('should retrieve all services', async () => {
