@@ -1,7 +1,7 @@
 module.exports = {
   moduleNameMapper: {
-    '^../models/(.*)$': '<rootDir>/dist/models/$1',  // Ensure mapping for models
-    '^src/(.*)$': '<rootDir>/dist/src/$1',           // Mapping for src folder
+    '^src/(.*)$': '<rootDir>/dist/src/$1',         // Maps src folder
+    '^models/(.*)$': '<rootDir>/dist/models/$1',   // Maps models folder
   },
   testEnvironment: 'node',
   transform: {
