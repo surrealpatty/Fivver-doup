@@ -1,6 +1,6 @@
 // src/models/order.js
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Ensure this is correct after transpiling
+const sequelize = require('../config/database');
 
 const Order = sequelize.define('Order', {
   // Define the attributes of the order model
