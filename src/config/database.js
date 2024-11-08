@@ -15,3 +15,5 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 
 // Export the Sequelize instance as the default export
 export default sequelize;
+export const development = { /* your dev config */ };
+export const production = { /* your prod config */ };
