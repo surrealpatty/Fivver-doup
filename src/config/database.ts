@@ -42,7 +42,7 @@ const sequelize = new Sequelize(
     {
         host: DB_HOST,       // Database host from .env
         dialect: DB_DIALECT, // Database dialect (mysql, postgres, etc.) from .env
-        logging: false, // Disable Sequelize query logging, set to true if you want to see SQL queries
+        logging: false,      // Disable Sequelize query logging
     }
 );
 
