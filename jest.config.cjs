@@ -1,7 +1,7 @@
 module.exports = {
   moduleNameMapper: {
-    '^../(.*)$': '<rootDir>/dist/$1',       // Maps any import starting with '../' to the dist directory
-    '^src/(.*)$': '<rootDir>/dist/src/$1',  // Maps absolute imports from 'src/' to 'dist/src/'
+    '^../src/(.*)$': '<rootDir>/dist/src/$1',  // Adjust relative imports to point to dist/src
+    '^src/(.*)$': '<rootDir>/dist/src/$1',     // Absolute imports from src/
   },
   testEnvironment: 'node',
   transform: {
