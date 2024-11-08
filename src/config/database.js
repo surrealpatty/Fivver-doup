@@ -51,4 +51,5 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
     logging: environment === 'development', // Enable logging in development only
 });
 
-export default sequelize;  // Export the Sequelize instance as default
+// Use `sequelize` as the default export
+export { sequelize };
