@@ -1,6 +1,6 @@
 "use strict";
 const request = require('supertest'); // Make sure to install supertest
-const app = require('../app'); // Your Express app
+const app = require('../index'); // Assuming index.js is the entry point
 const User = require('../models/user'); // User model
 const bcrypt = require('bcrypt');
 jest.mock('../models/user'); // Mock the User model

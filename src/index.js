@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize } from './config/database.js'; // Use named import for sequelize
+import sequelize from './config/database.js'; // Adjusted to default import for sequelize
 import userRoutes from './routes/user.js'; // Import user routes
 
 // Load environment variables from .env file
@@ -52,3 +52,6 @@ const startServer = async () => {
 
 // Initialize the server
 startServer();
+
+// Export the app for testing purposes
+export default app;  // Ensure the app is exported for test usage

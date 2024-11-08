@@ -1,12 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';  // Ensure this path is correct
+import sequelize from '../config/database.js';  // Ensure the correct path for database configuration
 import bcrypt from 'bcrypt';  // Import bcrypt for password hashing
 
 class User extends Model {
     // Define associations if any
     static associate(models) {
-        // Example association with Review (if you have a relation)
-        // Ensure the Review model is imported and exists
+        // Example: association with the Review model (if you have a relation)
+        // Ensure that the Review model is imported and exists in your models folder
         User.hasMany(models.Review, {
             foreignKey: 'userId',
             as: 'reviews',
@@ -22,7 +22,7 @@ class User extends Model {
     }
 }
 
-// Initialize the User model
+// Initialize the User model with the schema and Sequelize settings
 User.init(
     {
         username: {
@@ -84,7 +84,7 @@ User.init(
         },
     },
     {
-        sequelize,             // Ensure sequelize instance is passed here
+        sequelize,             // Pass Sequelize instance for database connection
         modelName: 'User',     // Model name is 'User'
         tableName: 'users',    // Table name in the database
         timestamps: true,      // Automatically create 'createdAt' and 'updatedAt'
@@ -96,4 +96,4 @@ User.init(
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
-export default User;  // Export the model directly
+export default User;  // Export the model for use in other parts of the application

@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';  // bcryptjs is the correct library you are using, so it's good to stick with it
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';  // Ensure the path is correct
 import dotenv from 'dotenv';
@@ -22,16 +22,21 @@ router.post('/register', async (req, res) => {
     const { username, email, password, firstName, lastName } = req.body;
 
     try {
-        // Check if the user already exists
+        // Check if the user already exists (checking by both username and email)
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
 
-        // Hash the password
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ message: 'Email is already taken' });
+        }
+
+        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user
+        // Create a new user with default 'Free' role and 'Inactive' subscription status
         const user = await User.create({
             username,
             email,
