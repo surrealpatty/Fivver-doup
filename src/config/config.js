@@ -1,4 +1,6 @@
-require('dotenv').config(); // Load environment variables
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
 
 const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
 
@@ -32,4 +34,4 @@ const config = {
     },
 };
 
-module.exports = config;
+export default config; // Default export of the config object
