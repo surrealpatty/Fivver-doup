@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node dist/index.js",  
     "dev": "nodemon src/index.js",  
-    "test": "jest --verbose",  
+    "test": "jest --verbose --maxWorkers=4",
     "test:watch": "jest --watch"  
   },
   "keywords": [],
