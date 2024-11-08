@@ -1,8 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';  // Use default import if sequelize is exported as default
+// dist/models/services.js
+
+const { Model, DataTypes } = require('sequelize'); // CommonJS import
+const sequelize = require('../config/database.js').sequelize; // Use sequelize instance from the config
 
 class Service extends Model {
-  // You can add associations here if needed
+  // Add associations if needed
   static associate(models) {
     // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
   }
@@ -62,4 +64,4 @@ Service.init(
   }
 );
 
-export default Service;
+module.exports = Service;  // Use module.exports to export the Service model
