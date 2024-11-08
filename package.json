@@ -62,19 +62,5 @@
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.1",
     "undefsafe": "^2.0.5"
-  },
-  "description": "",
-  
-  module.exports = {
-    moduleNameMapper: {
-      '^src/(.*)$': '<rootDir>/dist/src/$1',
-    },
-    testEnvironment: 'node',
-    transform: {
-      '^.+\\.js$': 'babel-jest',
-    },
-    coverageDirectory: './coverage',
-    collectCoverageFrom: ['src/**/*.js'],
   }
-  
 }
