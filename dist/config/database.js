@@ -55,10 +55,11 @@ const config = {
 const dbConfig = config[environment];
 
 // Initialize Sequelize with the selected environment configuration
-const sequelize = require('../config/database');
-    dialect: dbConfig.dialect,
-    logging; dbConfig.logging;
-
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+  host: dbConfig.host,
+  dialect: dbConfig.dialect,
+  logging: dbConfig.logging,  // Corrected this line
+});
 
 // Test the database connection
 sequelize.authenticate()
