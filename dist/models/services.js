@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.js';  // Ensure correct import for sequelize instance
+import sequelize from '../config/database.js';  // Use default import if sequelize is exported as default
 
 class Service extends Model {
   // You can add associations here if needed
