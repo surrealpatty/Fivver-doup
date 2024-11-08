@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const database_js_1 = __importDefault(require("./config/database.js")); // Adjusted to default import for sequelize
+const database_1 = require("./config/database"); // Adjusted to named import
 const user_js_1 = __importDefault(require("./routes/user.js")); // Import user routes
 // Load environment variables from .env file
 dotenv_1.default.config();
@@ -29,7 +29,7 @@ app.use('/api/users', user_js_1.default); // Use user routes for '/api/users'
 // Function to test database connection
 const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield database_js_1.default.authenticate(); // Test the database connection
+        yield database_1.sequelize.authenticate(); // Test the database connection
         console.log('Database connection has been established successfully.');
     }
     catch (error) {
@@ -44,7 +44,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         yield testConnection();
         // Sync models with the database
         // Use `alter: true` in development or `force: true` in testing
-        yield database_js_1.default.sync({ alter: true });
+        yield database_1.sequelize.sync({ alter: true });
         console.log('Database synced successfully.');
         // Start the Express server
         const PORT = process.env.PORT || 5000; // Use PORT from environment or default to 5000

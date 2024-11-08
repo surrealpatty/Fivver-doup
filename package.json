@@ -2,12 +2,12 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "type": "module",
+  "type": "commonjs",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/index.cjs",
     "dev": "nodemon src/index.js",
     "test": "jest --verbose --maxWorkers=4",
     "test:watch": "jest --watch",
