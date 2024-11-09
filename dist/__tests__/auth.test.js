@@ -1,5 +1,5 @@
 // Adjusting the import path to refer to dist/src (transpiled code)
-const { authenticateToken } = require('dist/src/middleware/authMiddleware');  // Use dist/src path for the middleware
+const { authenticateToken } = require('dist/src/middleware/authMiddleware'); // Use dist/src path for the middleware
 
 // Mocking the request and response objects
 const mockRequest = (headers = {}) => ({
@@ -9,8 +9,8 @@ const mockRequest = (headers = {}) => ({
 
 const mockResponse = () => {
   const res = {};
-  res.status = jest.fn().mockReturnThis();
-  res.json = jest.fn().mockReturnThis();
+  res.status = jest.fn().mockReturnThis(); // Mock the status method
+  res.json = jest.fn().mockReturnThis(); // Mock the json method
   return res;
 };
 
@@ -20,12 +20,15 @@ describe('Authentication Middleware', () => {
     const token = 'valid_token';
     const req = mockRequest({ Authorization: `Bearer ${token}` });
     const res = mockResponse();
-    
-    // Mocking the actual behavior of authenticateToken
-    // Normally, the middleware will add the user data to the request after decoding the token
-    const next = jest.fn();  // Mock next function
+    const next = jest.fn(); // Mock next function
 
-    // If necessary, mock any underlying dependencies (like JWT verification) here
+    // If your middleware is using JWT or other external dependencies, mock them as well
+    // For example, mocking JWT verification
+    jest.mock('jsonwebtoken', () => ({
+      verify: jest.fn().mockImplementation((token, secret, callback) => {
+        callback(null, { userId: 1 }); // Mock successful JWT verification
+      }),
+    }));
 
     // Call authenticateToken with the mock request and response
     await authenticateToken(req, res, next);
@@ -40,7 +43,14 @@ describe('Authentication Middleware', () => {
     const res = mockResponse();
     const next = jest.fn();
 
-    // Mock the behavior where authenticateToken fails and sends a 401 response
+    // Mock the behavior where JWT verification fails
+    jest.mock('jsonwebtoken', () => ({
+      verify: jest.fn().mockImplementation((token, secret, callback) => {
+        callback('invalid token', null); // Simulate JWT verification failure
+      }),
+    }));
+
+    // Call authenticateToken with the mock request and response
     await authenticateToken(req, res, next);
 
     // Assert that next() was not called and that the status was set to 401
@@ -49,5 +59,20 @@ describe('Authentication Middleware', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized' });
   });
 
-  // Additional tests can be added for other cases like missing token, etc.
+  test('should return 401 if no token is provided', async () => {
+    // Mock a missing token scenario
+    const req = mockRequest({});
+    const res = mockResponse();
+    const next = jest.fn();
+
+    // Call authenticateToken with the mock request and response
+    await authenticateToken(req, res, next);
+
+    // Assert that next() was not called and that the status was set to 401
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Token is required' });
+  });
+
+  // Additional tests can be added for other cases like expired tokens, etc.
 });

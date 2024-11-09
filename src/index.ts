@@ -1,8 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { sequelize } from './config/database';  // Adjusted to named import for sequelize
-import userRoutes from './routes/user'; // Adjusted to omit '.js' in TypeScript
+// Using require instead of import to match CommonJS syntax
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const { sequelize } = require('./config/database');  // Adjusted to named import for sequelize
+const userRoutes = require('./routes/user');  // Adjusted to omit '.js' in TypeScript
 
 // Load environment variables from .env file
 dotenv.config();
@@ -56,4 +57,4 @@ const startServer = async (): Promise<void> => {
 startServer();
 
 // Export the app for testing purposes
-export default app;  // Ensure the app is exported for test usage
+module.exports = app;  // Ensure the app is exported for test usage

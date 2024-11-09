@@ -48,7 +48,8 @@ describe('Order Controller Tests', () => {
       json: jest.fn().mockReturnThis(),  // Mock response's json function
     };
 
-    await createOrder(req, res);  // Call the controller method
+    // Call the createOrder controller method
+    await createOrder(req, res);
 
     // Assert that the response status is 201 (Created)
     expect(res.status).toHaveBeenCalledWith(201);
