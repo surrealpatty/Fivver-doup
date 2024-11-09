@@ -1,8 +1,8 @@
 const request = require('supertest');
-const app = require('../app'); // Ensure this is the path to your Express app
-const Service = require('../models/services'); // Ensure this is the path to your Service model
+const app = require('../dist/app'); // Update to reflect transpiled app in dist/
+const Service = require('../dist/models/services'); // Update to reflect transpiled services model
 
-jest.mock('../models/services'); // Mock the Service model
+jest.mock('../dist/models/services'); // Mock the Service model (correct path for transpiled file)
 
 describe('Service Controller', () => {
     afterEach(() => {
