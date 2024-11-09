@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcryptjs_1 = __importDefault(require("bcryptjs")); // bcryptjs is the correct library you are using, so it's good to stick with it
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_js_1 = __importDefault(require("../models/user.js")); // Ensure the path is correct
+const user_js_1 = __importDefault(require("../models/user.js")); // Ensure the path is correct to your User model
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables
 dotenv_1.default.config();

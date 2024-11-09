@@ -1,10 +1,12 @@
 import request from 'supertest';
 import app from '../../dist/index';  // Adjusted path to the transpiled app
 import { initUser } from '../../dist/models/user';  // Adjusted path to transpiled user model
+import { sequelize } from '../../dist/config/database';  // Assuming you have sequelize set up
 
 // Reset the User table before each test
 beforeAll(async () => {
     await initUser(); // Ensure User table is initialized before the tests
+    await sequelize.sync({ force: true }); // Reset DB to ensure clean slate before each test
 });
 
 // Clear mocks between tests
