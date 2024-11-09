@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'node',  // Use Node.js environment for testing
+  testEnvironment: 'node',  // Ensure the correct environment is set
   testMatch: [
     "**/tests/**/*.test.js",  // Match test files with the .test.js extension
     "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
