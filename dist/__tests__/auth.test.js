@@ -1,12 +1,10 @@
-"use strict";
-
-// Use relative path to the authMiddleware module
-const { authenticateToken } = require('../src/middleware/authMiddleware'); 
+// Adjusting the import path to refer to dist/src (transpiled code)
+const { authenticateToken } = require('dist/src/middleware/authMiddleware');  // Use dist/src path for the middleware
 
 // Mocking the request and response objects
 const mockRequest = (headers = {}) => ({
   headers,
-  body: {}
+  body: {},
 });
 
 const mockResponse = () => {
@@ -26,6 +24,8 @@ describe('Authentication Middleware', () => {
     // Mocking the actual behavior of authenticateToken
     // Normally, the middleware will add the user data to the request after decoding the token
     const next = jest.fn();  // Mock next function
+
+    // If necessary, mock any underlying dependencies (like JWT verification) here
 
     // Call authenticateToken with the mock request and response
     await authenticateToken(req, res, next);
