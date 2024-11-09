@@ -14,6 +14,8 @@ module.exports = {
     '@babel/plugin-transform-modules-commonjs', // Ensure compatibility with CommonJS modules
     '@babel/plugin-transform-runtime', // Optimize the runtime for async functions, generators, etc.
     '@babel/plugin-proposal-class-properties', // Handle class properties if you're using them
+    // Optional: Uncomment if using private methods or fields
+    // '@babel/plugin-proposal-private-methods', 
   ],
   sourceMaps: true, // Enable source maps to help with debugging
   comments: false, // Optionally remove comments in the output files
