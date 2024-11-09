@@ -31,7 +31,9 @@ module.exports = {
   transform: {
     '^.+\\.js$': 'babel-jest', // Transpiling JavaScript with Babel
   },
-  transformIgnorePatterns: ['/node_modules/'], // Ignore transforming files in node_modules
+  transformIgnorePatterns: [
+    '/node_modules/(?!your-module-to-transform/)', // Include specific modules if necessary
+  ],
   coverageDirectory: './coverage',
   collectCoverageFrom: [
     'src/**/*.js',          // Collect coverage from the src directory
