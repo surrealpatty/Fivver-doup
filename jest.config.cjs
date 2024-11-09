@@ -11,15 +11,14 @@ module.exports = {
 
     // Adjusting dist models to resolve to src
     '^dist/models/user$': '<rootDir>/src/models/user.js',  // Correctly map dist/models/user to src/models/user.js
-
-    // Same for other models, services, etc.
     '^dist/models/service$': '<rootDir>/src/models/service.js', // Map dist models to src
+    '^dist/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
+
+    // Specific mappings for service, authMiddleware, order, and user models
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
     '^dist/middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js', // Map dist middleware to src
     '^src/models/order$': '<rootDir>/src/models/order.js',
-    '^dist/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
     '^src/models/user$': '<rootDir>/src/models/user.js',
-    '^dist/models/user$': '<rootDir>/src/models/user.js', // Map dist models to src
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest

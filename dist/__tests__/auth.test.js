@@ -1,5 +1,5 @@
 // Adjusting the import path to refer to dist/src (transpiled code)
-const { authenticateToken } = require('src/middleware/authMiddleware'); // Use dist/src path for the middleware
+const { authenticateToken } = require('dist/src/middleware/authMiddleware');  // Use dist/src path for the middleware
 
 // Mocking the request and response objects
 const mockRequest = (headers = {}) => ({
@@ -22,8 +22,7 @@ describe('Authentication Middleware', () => {
     const res = mockResponse();
     const next = jest.fn(); // Mock next function
 
-    // If your middleware is using JWT or other external dependencies, mock them as well
-    // For example, mocking JWT verification
+    // Mocking JWT verification to simulate successful authentication
     jest.mock('jsonwebtoken', () => ({
       verify: jest.fn().mockImplementation((token, secret, callback) => {
         callback(null, { userId: 1 }); // Mock successful JWT verification
@@ -43,7 +42,7 @@ describe('Authentication Middleware', () => {
     const res = mockResponse();
     const next = jest.fn();
 
-    // Mock the behavior where JWT verification fails
+    // Mocking JWT verification to simulate failure
     jest.mock('jsonwebtoken', () => ({
       verify: jest.fn().mockImplementation((token, secret, callback) => {
         callback('invalid token', null); // Simulate JWT verification failure
