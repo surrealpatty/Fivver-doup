@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';  // bcryptjs is the correct library you are using, so it's good to stick with it
 import jwt from 'jsonwebtoken';
-import User from '../models/user.js';  // Ensure the path is correct
+import User from '../models/user.js';  // Ensure the path is correct to your User model
 import dotenv from 'dotenv';
 
 // Load environment variables
