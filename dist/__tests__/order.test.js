@@ -1,7 +1,7 @@
-import { createOrder } from '../controllers/orderController';  // Adjusted to correct path
-import Order from '../models/order';  // Import the Order model
-import User from '../models/user';  // Import the User model
-import Service from '../models/service';  // Import the Service model
+import { createOrder } from '../../src/controllers/orderController';  // Correct path to the controller
+import Order from '../../src/models/order';  // Correct path to the Order model
+import User from '../../src/models/user';  // Correct path to the User model
+import Service from '../../src/models/service';  // Correct path to the Service model
 
 // Mocking data
 const mockUsers = [
@@ -13,7 +13,7 @@ const mockServices = [
 ];
 
 // Mock the Order model methods
-jest.mock('../models/order', () => ({
+jest.mock('../../src/models/order', () => ({
   create: jest.fn().mockResolvedValue({
     id: 1, // Mock ID for the created order
     userId: mockUsers[0].id, // Mocked user ID
@@ -24,11 +24,11 @@ jest.mock('../models/order', () => ({
 }));
 
 // Mock the User and Service models
-jest.mock('../models/user', () => ({
+jest.mock('../../src/models/user', () => ({
   findByPk: jest.fn().mockResolvedValue(mockUsers[0]), // Mocked user fetch
 }));
 
-jest.mock('../models/service', () => ({
+jest.mock('../../src/models/service', () => ({
   findByPk: jest.fn().mockResolvedValue(mockServices[0]), // Mocked service fetch
 }));
 
