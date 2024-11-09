@@ -1,7 +1,7 @@
-import { createOrder } from '../controllers/orderController';  // Adjust the path to point to controllers correctly
-import Order from '../models/order'; // Import the Order model (if needed for mocking)
-import User from '../models/user';  // Import the User model (if needed for mocking)
-import Service from '../models/service'; // Import the Service model (if needed for mocking)
+import { createOrder } from '../controllers/orderController';  // Adjusted to correct path
+import Order from '../models/order';  // Import the Order model
+import User from '../models/user';  // Import the User model
+import Service from '../models/service';  // Import the Service model
 
 // Mocking data
 const mockUsers = [
@@ -12,18 +12,18 @@ const mockServices = [
   { id: 1, name: 'testservice' } // Mocked service with an ID and name
 ];
 
-// Mock the Order model methods if needed
+// Mock the Order model methods
 jest.mock('../models/order', () => ({
   create: jest.fn().mockResolvedValue({
     id: 1, // Mock ID for the created order
-    userId: mockUsers[0].id, // Ensure mockUsers has valid data
-    serviceId: mockServices[0].id, // Ensure mockServices has valid data
-    orderDetails: 'Test order details', // Add mock details
-    status: 'Pending', // Default status
+    userId: mockUsers[0].id, // Mocked user ID
+    serviceId: mockServices[0].id, // Mocked service ID
+    orderDetails: 'Test order details', // Mocked order details
+    status: 'Pending', // Default order status
   }),
 }));
 
-// Mock the User and Service models if needed
+// Mock the User and Service models
 jest.mock('../models/user', () => ({
   findByPk: jest.fn().mockResolvedValue(mockUsers[0]), // Mocked user fetch
 }));
@@ -43,13 +43,16 @@ describe('Order Controller Tests', () => {
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),  // Mock response's status function
+      json: jest.fn().mockReturnThis(),  // Mock response's json function
     };
 
-    await createOrder(req, res);
+    await createOrder(req, res);  // Call the controller method
 
-    expect(res.status).toHaveBeenCalledWith(201);  // Ensure status 201 for created order
+    // Assert that the response status is 201 (Created)
+    expect(res.status).toHaveBeenCalledWith(201);
+    
+    // Assert that the response JSON matches the expected structure
     expect(res.json).toHaveBeenCalledWith({
       message: 'Order created successfully',
       order: expect.objectContaining({
@@ -62,5 +65,5 @@ describe('Order Controller Tests', () => {
     });
   });
 
-  // You can add more tests for other order-related actions (getOrders, getOrderById, etc.)
+  // Additional tests can be added for other actions like getOrders, getOrderById, etc.
 });
