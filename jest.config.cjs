@@ -1,18 +1,18 @@
 module.exports = {
   moduleNameMapper: {
     // Source paths
-    '^src/(.*)$': '<rootDir>/src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',  // Maps to src/
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
     // Dist paths (post-transpilation)
-    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
-    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1', // Fixed to reference dist/src
-    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1', // Fixed to reference dist/src
-    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1', // Fixed to reference dist/src
-    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1', // Fixed to reference dist/src
+    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',  // Fixed to match dist/src/
+    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1', // Fixed to match dist/src/
+    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1', // Fixed to match dist/src/
+    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1', // Fixed to match dist/src/
+    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1', // Fixed to match dist/src/
 
     // Specific mappings for fixed paths (including userController, services, and authMiddleware)
     '^dist/src/controllers/userController$': '<rootDir>/dist/src/controllers/userController',
@@ -39,8 +39,8 @@ module.exports = {
   ],
   testTimeout: 30000, // Increase the test timeout if necessary
   testMatch: [
-    '**/src/**/__tests__/**/*.js', // Tests in src folder
-    '**/dist/**/__tests__/**/*.js', // Tests in dist folder
+    '**/src/**/__tests__/**/*.js', // Match test files in the src folder
+    '**/dist/**/__tests__/**/*.js', // Match test files in the dist folder
   ],
   moduleFileExtensions: ['js', 'json', 'node'], // File extensions to recognize
 };
