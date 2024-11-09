@@ -1,4 +1,4 @@
-// Using require instead of import to match CommonJS syntax
+// Use require instead of import to match CommonJS syntax
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
