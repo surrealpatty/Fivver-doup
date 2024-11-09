@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../dist/src/server'; // Adjusted to point to the transpiled app
-import { initUser } from '../dist/src/models/user'; // Adjusted path to transpiled user model
+import app from '../dist/index'; // Adjusted to point to the transpiled app
+import { initUser } from '../dist/models/user'; // Adjusted path to transpiled user model
 
 // Reset the User table before each test
 beforeAll(async () => {
