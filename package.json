@@ -2,7 +2,7 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "type": "commonjs",
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
@@ -19,6 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.26.0",
+    "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "@types/bcrypt": "^5.0.2",

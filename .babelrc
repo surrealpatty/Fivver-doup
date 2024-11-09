@@ -1,8 +1,9 @@
 {
   "presets": [
-    "@babel/preset-env"
+    "@babel/preset-env",
+    "@babel/preset-react"
   ],
   "plugins": [
-    // Add any necessary plugins here if you need specific transformations (e.g., for async/await or class properties)
+    "@babel/plugin-transform-runtime"
   ]
 }

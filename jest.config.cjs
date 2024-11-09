@@ -1,7 +1,7 @@
 module.exports = {
   moduleNameMapper: {
     // Source paths
-    '^src/(.*)$': '<rootDir>/src/$1',  // Maps to src/
+    '^src/(.*)$': '<rootDir>/src/$1',
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
@@ -34,10 +34,10 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/'], // Ignore transforming files in node_modules
   coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js',          // Collect coverage from the src directory
-    'dist/**/*.js',         // Collect coverage from the dist directory as well
-    '!src/**/*.test.js',    // Exclude test files from coverage
-    '!dist/**/*.test.js',   // Exclude test files from coverage in dist
+    'src/**/*.js',           // Collect coverage from the src directory
+    'dist/**/*.js',          // Collect coverage from the dist directory as well
+    '!src/**/*.test.js',     // Exclude test files from coverage
+    '!dist/**/*.test.js',    // Exclude test files from coverage in dist
   ],
   testTimeout: 30000, // Increase the test timeout if necessary
   testMatch: [
