@@ -1,29 +1,38 @@
 module.exports = {
   moduleNameMapper: {
-    // Map source paths for Jest to recognize imports
+    // Source paths
     '^src/(.*)$': '<rootDir>/src/$1',
-    '^dist/(.*)$': '<rootDir>/dist/$1',
+    '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
+    '^models/(.*)$': '<rootDir>/src/models/$1',
+    '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
+    '^config/(.*)$': '<rootDir>/src/config/$1',
 
-    // Add mappings to handle database.js for both src and dist
-    '^src/config/database.js$': '<rootDir>/__mocks__/database.js', // Mock for source code
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // Mock for transpiled code
+    // Dist paths (post-transpilation)
+    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
+    '^dist/controllers/(.*)$': '<rootDir>/dist/controllers/$1',
+    '^dist/models/(.*)$': '<rootDir>/dist/models/$1',
+    '^dist/middleware/(.*)$': '<rootDir>/dist/middleware/$1',
+    '^dist/config/(.*)$': '<rootDir>/__mocks__/database.js', // Mock for database.js in dist
+
+    // Explicit mocks
+    '^src/config/database.js$': '<rootDir>/__mocks__/database.js', // Mock for database.js in src
   },
   testEnvironment: 'node',
   transform: {
-    '^.+\\.js$': 'babel-jest', // Transform JavaScript files using Babel
+    '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
     '/node_modules/', // Ignore transforming files in node_modules
   ],
-  coverageDirectory: './coverage', // Directory for coverage reports
+  coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js', // Collect coverage from source files
-    '!src/**/*.test.js', // Exclude test files from coverage
+    'src/**/*.js',
+    '!src/**/*.test.js',
   ],
-  testTimeout: 30000, // Set test timeout to 30 seconds
+  testTimeout: 30000,
   testMatch: [
-    '**/src/**/__tests__/**/*.js', // Match test files in src directory
-    '**/dist/**/__tests__/**/*.js', // Match test files in dist directory for compiled tests
+    '**/src/**/__tests__/**/*.js',
+    '**/dist/**/__tests__/**/*.js',
   ],
-  moduleFileExtensions: ['js', 'json', 'node'], // Specify extensions Jest should recognize
+  moduleFileExtensions: ['js', 'json', 'node'],
 };
