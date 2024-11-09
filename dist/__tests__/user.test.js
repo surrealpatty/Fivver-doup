@@ -2,15 +2,15 @@
 // dist/__tests__/user.test.js
 
 // Adjust the import paths relative to the transpiled `dist` folder
-const { registerUser, loginUser } = require('../dist/src/controllers/userController');  // Adjusted for dist folder
+const { registerUser, loginUser } = require('../controllers/userController');  // Adjusted for dist/controllers folder
 // Mock implementation of registerUser and loginUser
-jest.mock('../dist/src/controllers/userController', () => ({
+jest.mock('../controllers/userController', () => ({
     registerUser: jest.fn(),
     loginUser: jest.fn(),
 }));
 
-// Mock the User model, if needed, but it seems you're using the controller functions
-jest.mock('../dist/src/models/user', () => ({
+// Mock the User model, if needed
+jest.mock('../models/user', () => ({
     create: jest.fn(),
     findOne: jest.fn(),
 }));

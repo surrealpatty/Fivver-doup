@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.js';  // Ensure correct import for sequelize instance
+import { sequelize } from '../config/database.js'; // Ensure the correct import for sequelize instance
 
 class Service extends Model {
   // You can add associations here if needed
@@ -16,7 +16,7 @@ Service.init(
       allowNull: false,
       validate: {
         len: {
-          args: [3, 100],  // Enforce length between 3 and 100 characters
+          args: [3, 100], // Enforce length between 3 and 100 characters
           msg: 'Title must be between 3 and 100 characters long',
         },
       },
@@ -26,7 +26,7 @@ Service.init(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Description cannot be empty',  // Ensure description is provided
+          msg: 'Description cannot be empty', // Ensure description is provided
         },
       },
     },
@@ -35,11 +35,11 @@ Service.init(
       allowNull: false,
       validate: {
         isFloat: {
-          msg: 'Price must be a valid number',  // Validate price as a float
+          msg: 'Price must be a valid number', // Validate price as a float
         },
         min: {
           args: [0],
-          msg: 'Price must be greater than or equal to zero',  // Ensure price is non-negative
+          msg: 'Price must be greater than or equal to zero', // Ensure price is non-negative
         },
       },
     },
@@ -48,7 +48,7 @@ Service.init(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Category cannot be empty',  // Ensure category is provided
+          msg: 'Category cannot be empty', // Ensure category is provided
         },
       },
     },
