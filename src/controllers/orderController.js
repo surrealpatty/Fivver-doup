@@ -1,9 +1,9 @@
-const Order = require('../models/order'); // Ensure the correct path
-const User = require('../models/user');
-const Service = require('../models/service');
+import Order from '../models/order';  // Ensure the correct path to order model
+import User from '../models/user';
+import Service from '../models/service';
 
 // 1. Create an Order
-exports.createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
     const { userId, serviceId, orderDetails } = req.body;
 
     // Input validation (ensuring necessary fields are provided)
@@ -40,7 +40,7 @@ exports.createOrder = async (req, res) => {
 };
 
 // 2. Get all Orders
-exports.getOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
     try {
         const orders = await Order.findAll({
             include: [User, Service], // Optionally include user and service details
@@ -53,7 +53,7 @@ exports.getOrders = async (req, res) => {
 };
 
 // 3. Get Order by ID
-exports.getOrderById = async (req, res) => {
+export const getOrderById = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -73,7 +73,7 @@ exports.getOrderById = async (req, res) => {
 };
 
 // 4. Update an Order
-exports.updateOrder = async (req, res) => {
+export const updateOrder = async (req, res) => {
     const { id } = req.params;
     const { orderDetails, status } = req.body;
 
@@ -106,7 +106,7 @@ exports.updateOrder = async (req, res) => {
 };
 
 // 5. Delete an Order
-exports.deleteOrder = async (req, res) => {
+export const deleteOrder = async (req, res) => {
     const { id } = req.params;
 
     try {
