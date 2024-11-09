@@ -1,43 +1,25 @@
 module.exports = {
-  preset: 'ts-jest', // Use ts-jest preset for TypeScript handling
-  testEnvironment: 'node',
-  moduleNameMapper: {
-    // Resolving paths in src/ directory
-    '^src/(.*)$': '<rootDir>/src/$1',
-    '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
-    '^models/(.*)$': '<rootDir>/src/models/$1',
-    '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
-    '^config/(.*)$': '<rootDir>/src/config/$1',
-
-    // Adjusting dist models to resolve to src
-    '^dist/models/user$': '<rootDir>/src/models/user.js',  // Correctly map dist/models/user to src/models/user.js
-    '^dist/models/service$': '<rootDir>/src/models/service.js', // Map dist models to src
-    '^dist/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
-
-    // Specific mappings for service, authMiddleware, order, and user models
-    '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
-    '^dist/middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js', // Map dist middleware to src
-    '^src/models/order$': '<rootDir>/src/models/order.js',
-    '^src/models/user$': '<rootDir>/src/models/user.js',
-  },
+  testEnvironment: 'node',  // Use Node.js environment for testing
+  testMatch: [
+    "**/tests/**/*.test.js",  // Match test files with the .test.js extension
+    "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
+  ],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
-    '^.+\\.js$': 'babel-jest', // Transform JavaScript files using babel-jest
+    '^.+\\.js$': 'babel-jest',  // Use babel-jest to transform .js files with Babel
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!your-module-to-transform/)',  // Allows transforming specific node modules
+    "/node_modules/(?!sequelize)/",  // Allow transforming sequelize (and any other necessary modules)
   ],
-  coverageDirectory: './coverage',
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    'dist/**/*.js',
-    '!src/**/*.test.ts',  // Exclude test files from coverage
-    '!dist/**/*.test.js',
+  extensionsToTreatAsEsm: ['.js'],  // Treat .js files as ESM
+  moduleNameMapper: {
+    // Resolve imports from src directory correctly
+    '^src/(.*)$': '<rootDir>/src/$1',  // Maps src imports to the src directory
+    '^dist/(.*)$': '<rootDir>/src/$1',  // Maps dist imports back to src during tests
+
+    // Optional: If other files like images or CSS are causing issues, you can mock them here
+  },
+  moduleDirectories: [
+    "node_modules",  // Ensure node_modules are included in path resolution
+    "<rootDir>/src",  // Add src for relative imports
   ],
-  testTimeout: 30000,  // Adjust the timeout for tests if needed
-  testMatch: [
-    '**/src/**/__tests__/**/*.ts', // Tests in src directory
-    '**/dist/**/__tests__/**/*.js', // Tests in dist directory
-  ],
-  moduleFileExtensions: ['js', 'ts', 'json', 'node'],  // Ensure ts is included
 };
