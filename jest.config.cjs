@@ -19,6 +19,8 @@ module.exports = {
     '^dist/models/service$': '<rootDir>/dist/src/models/service.js',
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
     '^dist/middleware/authMiddleware$': '<rootDir>/dist/src/middleware/authMiddleware.js',
+    '^src/models/order$': '<rootDir>/src/models/order.js',
+    '^dist/src/models/order$': '<rootDir>/dist/src/models/order.js',  // Added this line for `order` model
   },
   testEnvironment: 'node',
   transform: {
