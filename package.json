@@ -11,7 +11,8 @@
     "dev": "nodemon src/index.js",
     "test": "jest --verbose --maxWorkers=4",
     "test:watch": "jest --watch",
-    "build": "tsc"
+    "build": "tsc",  // Ensures that TypeScript files are compiled to JavaScript
+    "pretest": "npm run build" // Add this to ensure build happens before testing
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,8 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.7",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "@types/node": "^22.9.0",
@@ -68,7 +70,6 @@
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.1",
-    "typescript": "^5.6.3",
     "undefsafe": "^2.0.5"
   }
 }
