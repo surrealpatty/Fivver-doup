@@ -3,7 +3,8 @@ const Service = require('../../dist/models/services'); // Direct import of Servi
 const { Op } = require('sequelize'); // Import Sequelize operators
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('../../dist/models/services', () => ({
+jest.mock('../config/database.js', () => ({
+  sequelize: jest.fn(),
   create: jest.fn(),
   findAll: jest.fn(),
 }));
