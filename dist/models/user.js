@@ -16,6 +16,7 @@ const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Ensure this is correctly pointing to your Sequelize instance
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class User extends sequelize_1.Model {
+    // Association method
     static associate(models) {
         User.hasMany(models.Review, {
             foreignKey: 'userId',
@@ -23,6 +24,7 @@ class User extends sequelize_1.Model {
             onDelete: 'CASCADE',
         });
     }
+    // Hash the user's password before saving to the database
     static hashPassword(user) {
         return __awaiter(this, void 0, void 0, function* () {
             if (user.password) {
@@ -31,6 +33,7 @@ class User extends sequelize_1.Model {
         });
     }
 }
+// Initialize the User model
 User.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -42,7 +45,7 @@ User.init({
         allowNull: false,
         unique: true,
         validate: {
-            len: [3, 50],
+            len: [3, 50], // Username length constraint
         },
     },
     email: {
@@ -50,14 +53,14 @@ User.init({
         allowNull: false,
         unique: true,
         validate: {
-            isEmail: true,
+            isEmail: true, // Validate that the email is valid
         },
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: [6, 100],
+            len: [6, 100], // Password length constraint
         },
     },
     firstName: {
@@ -93,6 +96,7 @@ User.init({
     timestamps: true,
     underscored: true,
 });
+// Hook to hash password before creating and updating
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 exports.default = User;
