@@ -9,10 +9,10 @@ module.exports = {
 
     // Dist paths (post-transpilation)
     '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
-    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1', // Fixed to reference `dist/src`
-    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1', // Fixed to reference `dist/src`
-    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1', // Fixed to reference `dist/src`
-    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1', // Fixed to reference `dist/src`
+    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1', // Fixed to reference dist/src
+    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1', // Fixed to reference dist/src
+    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1', // Fixed to reference dist/src
+    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1', // Fixed to reference dist/src
 
     // Specific mappings for fixed paths (including userController, services, and authMiddleware)
     '^dist/src/controllers/userController$': '<rootDir>/dist/src/controllers/userController',
