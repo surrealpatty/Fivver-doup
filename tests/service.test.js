@@ -32,7 +32,7 @@ describe('Service Controller', () => {
         });
 
         // Check if the response is as expected
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(201);  // Created status code
         expect(response.body).toHaveProperty('name', 'Test Service');
         expect(response.body).toHaveProperty('description', 'Service description');
     });
@@ -48,8 +48,8 @@ describe('Service Controller', () => {
         const response = await request(app).get('/api/services');
 
         // Check if the response matches the mocked services
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(mockServices);
+        expect(response.status).toBe(200);  // OK status code
+        expect(response.body).toEqual(mockServices);  // Should match mocked services
     });
 
     test('should get a specific service by ID', async () => {
@@ -64,14 +64,14 @@ describe('Service Controller', () => {
         const response = await request(app).get('/api/services/1');
 
         // Check if the response matches the mocked service
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(200);  // OK status code
         expect(response.body).toHaveProperty('name', 'Service 1');
         expect(response.body).toHaveProperty('description', 'Service description');
     });
 
     test('should update a specific service by ID', async () => {
         // Mock the response for Service.update
-        Service.update.mockResolvedValue([1]); // Simulate that one row was updated
+        Service.update.mockResolvedValue([1]);  // Simulate that one row was updated
 
         const response = await request(app).put('/api/services/1').send({
             name: 'Updated Service Name',
@@ -79,18 +79,18 @@ describe('Service Controller', () => {
         });
 
         // Check if the service was updated successfully
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(200);  // OK status code
         expect(response.body).toHaveProperty('message', 'Service updated successfully');
     });
 
     test('should delete a specific service by ID', async () => {
         // Mock the response for Service.destroy
-        Service.destroy.mockResolvedValue(1); // Simulate that one row was deleted
+        Service.destroy.mockResolvedValue(1);  // Simulate that one row was deleted
 
         const response = await request(app).delete('/api/services/1');
 
         // Check if the service was deleted successfully
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(200);  // OK status code
         expect(response.body).toHaveProperty('message', 'Service deleted successfully');
     });
 });

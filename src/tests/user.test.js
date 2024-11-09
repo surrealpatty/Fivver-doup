@@ -1,12 +1,10 @@
 import request from 'supertest';
-
-// Ensure the app path points to the transpiled server file in dist
 import app from '../dist/src/server'; // Adjusted to point to the transpiled app
 import { initUser } from '../dist/src/models/user'; // Adjusted path to transpiled user model
 
 // Reset the User table before each test
 beforeAll(async () => {
-    await initUser(); // Resets the User table before tests
+    await initUser(); // Ensure User table is initialized before the tests
 });
 
 // Clear mocks between tests
@@ -27,13 +25,13 @@ describe('User Registration and Login', () => {
         const response = await request(app).post('/api/users/register').send(newUser);
 
         // Ensure successful registration
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(201); // 201 Created
         expect(response.body).toHaveProperty('username', newUser.username);
         expect(response.body).toHaveProperty('email', newUser.email);
     });
 
     it('should not allow duplicate email during registration', async () => {
-        // First register the user
+        // First, register the user
         await request(app).post('/api/users/register').send({
             username: 'testuser',
             email: 'testuser@example.com',
@@ -48,8 +46,8 @@ describe('User Registration and Login', () => {
         });
 
         // Ensure duplicate email is rejected
-        expect(response.status).toBe(400); // Assuming you handle it with a 400 error
-        expect(response.body).toHaveProperty('error');
+        expect(response.status).toBe(400); // 400 Bad Request for duplicate email
+        expect(response.body).toHaveProperty('error', 'Email already in use'); // Adjust the error message as needed
     });
 
     it('should login a user', async () => {
@@ -68,9 +66,9 @@ describe('User Registration and Login', () => {
         // Now login
         const response = await request(app).post('/api/users/login').send(userData);
 
-        // Ensure the login is successful
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('token'); // Assuming a JWT is returned
+        // Ensure the login is successful and returns a token
+        expect(response.status).toBe(200); // 200 OK for successful login
+        expect(response.body).toHaveProperty('token'); // Ensure the token is returned
     });
 
     it('should not login with incorrect credentials', async () => {
@@ -81,9 +79,9 @@ describe('User Registration and Login', () => {
 
         const response = await request(app).post('/api/users/login').send(userData);
 
-        // Ensure the login fails with incorrect credentials
-        expect(response.status).toBe(401); // Assuming 401 Unauthorized for incorrect credentials
-        expect(response.body).toHaveProperty('error');
+        // Ensure login fails with incorrect credentials
+        expect(response.status).toBe(401); // 401 Unauthorized for incorrect credentials
+        expect(response.body).toHaveProperty('error', 'Invalid email or password'); // Adjust the error message as needed
     });
 
     it('should return the user profile for a logged-in user', async () => {
@@ -101,13 +99,13 @@ describe('User Registration and Login', () => {
 
         const token = loginResponse.body.token;
 
-        // Fetch the user profile
+        // Fetch the user profile using the token
         const response = await request(app)
             .get('/api/users/profile')
             .set('Authorization', `Bearer ${token}`);
 
         // Ensure the user profile is returned correctly
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(200); // 200 OK for fetching the profile
         expect(response.body).toHaveProperty('username', newUser.username);
         expect(response.body).toHaveProperty('email', newUser.email);
     });
