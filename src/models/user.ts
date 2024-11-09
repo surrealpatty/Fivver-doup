@@ -33,6 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   createdAt?: Date;
   updatedAt?: Date;
 
+  // Association method
   static associate(models: any) {
     User.hasMany(models.Review, {
       foreignKey: 'userId',
@@ -41,6 +42,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     });
   }
 
+  // Hash the user's password before saving to the database
   static async hashPassword(user: User) {
     if (user.password) {
       user.password = await bcrypt.hash(user.password, 10);
@@ -48,6 +50,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   }
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
@@ -60,7 +63,7 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        len: [3, 50],
+        len: [3, 50],  // Username length constraint
       },
     },
     email: {
@@ -68,14 +71,14 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: true,  // Validate that the email is valid
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6, 100],
+        len: [6, 100],  // Password length constraint
       },
     },
     firstName: {
@@ -114,6 +117,7 @@ User.init(
   }
 );
 
+// Hook to hash password before creating and updating
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
