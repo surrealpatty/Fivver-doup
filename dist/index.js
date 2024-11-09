@@ -8,28 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const database_1 = require("./config/database"); // Adjusted to named import for sequelize
-const user_1 = __importDefault(require("./routes/user")); // Adjusted to omit '.js' in TypeScript
+// Using require instead of import to match CommonJS syntax
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const { sequelize } = require('./config/database'); // Adjusted to named import for sequelize
+const userRoutes = require('./routes/user'); // Adjusted to omit '.js' in TypeScript
 // Load environment variables from .env file
-dotenv_1.default.config();
+dotenv.config();
 // Create Express app
-const app = (0, express_1.default)();
+const app = express();
 // Middleware
-app.use(express_1.default.json()); // Parse JSON request bodies
-app.use((0, cors_1.default)()); // Enable Cross-Origin Resource Sharing (CORS)
+app.use(express.json()); // Parse JSON request bodies
+app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 // Routes
-app.use('/api/users', user_1.default); // Use user routes for '/api/users'
+app.use('/api/users', userRoutes); // Use user routes for '/api/users'
 // Function to test database connection
 const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield database_1.sequelize.authenticate(); // Test the database connection
+        yield sequelize.authenticate(); // Test the database connection
         console.log('Database connection has been established successfully.');
     }
     catch (error) {
@@ -45,7 +42,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         // Sync models with the database based on environment
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : { force: false }; // Alter models in development
-        yield database_1.sequelize.sync(syncOptions);
+        yield sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
         // Start the Express server
         const PORT = process.env.PORT || 5000; // Use PORT from environment or default to 5000
@@ -61,5 +58,5 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
 // Initialize the server
 startServer();
 // Export the app for testing purposes
-exports.default = app; // Ensure the app is exported for test usage
+module.exports = app; // Ensure the app is exported for test usage
 //# sourceMappingURL=index.js.map

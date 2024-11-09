@@ -1,2 +1,8 @@
-declare const app: import("express-serve-static-core").Express;
-export default app;
+declare const express: any;
+declare const cors: any;
+declare const dotenv: any;
+declare const sequelize: any;
+declare const userRoutes: any;
+declare const app: any;
+declare const testConnection: () => Promise<void>;
+declare const startServer: () => Promise<void>;
