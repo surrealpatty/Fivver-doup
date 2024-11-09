@@ -7,19 +7,23 @@ module.exports = {
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
-    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
-    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1',
-    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1',
-    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
-    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1',
+    
+    // Fixes for dist/src paths
+    '^dist/src/(.*)$': '<rootDir>/src/$1', // Map dist/src to src
+    '^dist/controllers/(.*)$': '<rootDir>/src/controllers/$1',
+    '^dist/models/(.*)$': '<rootDir>/src/models/$1',
+    '^dist/middleware/(.*)$': '<rootDir>/src/middleware/$1',
+    '^dist/config/(.*)$': '<rootDir>/src/config/$1',
+    
+    // Specific mappings for service, authMiddleware, order, and user
     '^src/models/service$': '<rootDir>/src/models/service.js',
-    '^dist/models/service$': '<rootDir>/dist/src/models/service.js',
+    '^dist/models/service$': '<rootDir>/src/models/service.js',
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
-    '^dist/middleware/authMiddleware$': '<rootDir>/dist/src/middleware/authMiddleware.js',
+    '^dist/middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
     '^src/models/order$': '<rootDir>/src/models/order.js',
-    '^dist/src/models/order$': '<rootDir>/dist/src/models/order.js',
+    '^dist/src/models/order$': '<rootDir>/src/models/order.js',
     '^src/models/user$': '<rootDir>/src/models/user.js',
-    '^dist/src/models/user$': '<rootDir>/dist/src/models/user.js',
+    '^dist/src/models/user$': '<rootDir>/src/models/user.js',
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
