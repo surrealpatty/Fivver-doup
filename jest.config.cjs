@@ -2,28 +2,25 @@ module.exports = {
   preset: 'ts-jest', // Use ts-jest preset for TypeScript handling
   testEnvironment: 'node',
   moduleNameMapper: {
+    // Resolving paths in src/ directory
     '^src/(.*)$': '<rootDir>/src/$1',
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
-    
-    // Adjust the dist/src mapping
-    '^dist/src/(.*)$': '<rootDir>/src/$1', // Resolving to src instead of dist/src
-    '^dist/controllers/(.*)$': '<rootDir>/src/controllers/$1',
-    '^dist/models/(.*)$': '<rootDir>/src/models/$1',
-    '^dist/middleware/(.*)$': '<rootDir>/src/middleware/$1',
-    '^dist/config/(.*)$': '<rootDir>/src/config/$1',
-    
-    // Specific mappings for service, authMiddleware, order, and user
+
+    // Adjust the dist to resolve to src instead of dist/src
+    '^dist/(.*)$': '<rootDir>/src/$1', // Map dist to src directly
+
+    // Specific mappings for service, authMiddleware, order, and user models
     '^src/models/service$': '<rootDir>/src/models/service.js',
     '^dist/models/service$': '<rootDir>/src/models/service.js', // Map dist models to src
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
     '^dist/middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js', // Map dist middleware to src
     '^src/models/order$': '<rootDir>/src/models/order.js',
-    '^dist/src/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
+    '^dist/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
     '^src/models/user$': '<rootDir>/src/models/user.js',
-    '^dist/src/models/user$': '<rootDir>/src/models/user.js', // Map dist models to src
+    '^dist/models/user$': '<rootDir>/src/models/user.js', // Map dist models to src
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
