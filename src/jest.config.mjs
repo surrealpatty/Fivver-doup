@@ -12,12 +12,12 @@ module.exports = {
   ],
   extensionsToTreatAsEsm: ['.js'],  // Treat .js files as ESM
   moduleNameMapper: {
-    // Map dist imports back to the correct src paths
-    '^dist/(.*)$': '<rootDir>/src/$1',  // Maps dist imports to src during tests
-
-    // Ensure src paths work properly
+    // Map src imports to the actual src directory
     '^src/(.*)$': '<rootDir>/src/$1',  // Maps src imports to the src directory during tests
+    
+    // Handle dist imports by mapping them back to src
+    '^dist/(.*)$': '<rootDir>/src/$1',  // Map dist imports back to src during tests
 
-    // Optional: Add other custom paths if needed
+    // This makes sure that any custom path resolution issues are handled properly
   },
 };
