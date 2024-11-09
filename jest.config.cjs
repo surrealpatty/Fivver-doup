@@ -16,9 +16,9 @@ module.exports = {
 
     // Mapping database.js correctly for both src and dist paths
     '^src/config/database.js$': '<rootDir>/__mocks__/database.js',
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js',
+    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // For dist paths
 
-    // Explicit mocks
+    // Explicit mocks (to avoid redundancy)
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
