@@ -22,7 +22,7 @@ describe('User Controller', () => {
             id: 1,
             username: 'testuser',
             email: 'test@example.com',
-            password: 'hashedpassword',
+            password: 'hashedpassword', // Simulating the hashed password
         });
 
         const response = await request(app).post('/api/users/register').send({
@@ -79,6 +79,7 @@ describe('User Controller', () => {
 
     test('should update user profile', async () => {
         const mockToken = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
+        // Mock User.update to simulate a successful profile update
         User.update.mockResolvedValue([1]); // Simulate one row updated
 
         const response = await request(app)
@@ -92,6 +93,7 @@ describe('User Controller', () => {
 
     test('should delete user account', async () => {
         const mockToken = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
+        // Mock User.destroy to simulate a successful account deletion
         User.destroy.mockResolvedValue(1); // Simulate user deletion
 
         const response = await request(app)

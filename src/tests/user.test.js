@@ -1,8 +1,8 @@
 import request from 'supertest';
-import app from '../src/server'; // Ensure this path is correct for your app
-import { User, initUser } from '../src/models/user'; // Ensure the path is correct for your models
+import app from '../dist/server'; // Adjust this path if needed for transpiled code
+import { User, initUser } from '../dist/models/user'; // Adjust this path to match transpiled code
 
-// Ensure the User table is reset before each test
+// Reset the User table before each test
 beforeAll(async () => {
     await initUser(); // Resets the User table before tests
 });
@@ -12,7 +12,7 @@ afterEach(() => {
     jest.clearAllMocks(); // Clear all mocks after each test
 });
 
-// User registration test
+// User registration and login test suite
 describe('User Registration and Login', () => {
 
     it('should register a new user', async () => {
