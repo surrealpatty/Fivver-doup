@@ -14,7 +14,7 @@ const mockServices = [
 ];
 
 // Mock the Order model methods
-jest.mock('dist/src/models/order', () => ({
+jest.mock('dist/models/order', () => ({
   create: jest.fn().mockResolvedValue({
     id: 1, // Mock ID for the created order
     userId: mockUsers[0].id, // Mocked user ID

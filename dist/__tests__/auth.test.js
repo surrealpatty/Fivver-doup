@@ -1,5 +1,5 @@
 // Adjusting the import path to refer to dist/src (transpiled code)
-const { authenticateToken } = require('dist/src/middleware/authMiddleware'); // Use dist/src path for the middleware
+const { authenticateToken } = require('dist/middleware/authMiddleware'); // Use dist/src path for the middleware
 
 // Mocking the request and response objects
 const mockRequest = (headers = {}) => ({
