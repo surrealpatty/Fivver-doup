@@ -12,10 +12,11 @@ module.exports = {
     '^dist/controllers/(.*)$': '<rootDir>/dist/controllers/$1',
     '^dist/models/(.*)$': '<rootDir>/dist/models/$1',
     '^dist/middleware/(.*)$': '<rootDir>/dist/middleware/$1',
-    
-    // Mapping database.js correctly
+    '^dist/config/(.*)$': '<rootDir>/dist/config/$1', // Added dist config mapping
+
+    // Mapping database.js correctly for both src and dist paths
     '^src/config/database.js$': '<rootDir>/__mocks__/database.js',
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // For dist paths
+    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js',
 
     // Explicit mocks
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
@@ -30,7 +31,7 @@ module.exports = {
   coverageDirectory: './coverage',
   collectCoverageFrom: [
     'src/**/*.js',
-    '!src/**/*.test.js',
+    '!src/**/*.test.js', // Exclude test files from coverage
   ],
   testTimeout: 30000,
   testMatch: [
