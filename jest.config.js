@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'node',  // Ensure the correct environment is set
+  testEnvironment: 'jsdom',  // Use jsdom to enable DOM-related assertions with jest-dom
   testMatch: [
     "**/tests/**/*.test.js",  // Match test files with the .test.js extension
     "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
@@ -15,5 +15,5 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1',  // Maps src imports to the src directory during tests
     '^dist/(.*)$': '<rootDir>/dist/$1',  // Maps dist imports to the dist directory during tests
   },
-  setupFiles: ["<rootDir>/jest.setup.js"],  // Optionally include a setup file if needed
+  setupFiles: ["<rootDir>/jest.setup.js"],  // Include setup file for any global setup (e.g., jest-dom)
 };
