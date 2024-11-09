@@ -1,10 +1,9 @@
-// Correct relative path imports based on your project structure
-const { createService, getServices } = require('../../controllers/serviceController'); // Adjusted to relative path
-const { Service } = require('../../models/services'); // Adjusted to relative path
+const { createService, getServices } = require('controllers/serviceController'); // Use the updated path
+const { Service } = require('dist/models/services'); // Adjust to direct path under dist
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('../../models/services', () => ({
+jest.mock('dist/models/services', () => ({
   Service: {
     create: jest.fn(),
     findAll: jest.fn(),
