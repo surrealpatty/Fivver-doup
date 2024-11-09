@@ -1,3 +1,3 @@
 // jest.setup.js
-// Import any necessary setup libraries or global configuration
-require('@testing-library/jest-dom/extend-expect');  // For DOM-related assertions
+// Import necessary libraries or global configuration
+require('@testing-library/jest-dom');  // For DOM-related assertions
