@@ -5,7 +5,7 @@ module.exports = {
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
-    '^config/(.*)$': '<rootDir>/src/config/$1',  // Mapping to the src/config
+    '^config/(.*)$': '<rootDir>/src/config/$1',
 
     // Dist paths (post-transpilation)
     '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
@@ -13,9 +13,14 @@ module.exports = {
     '^dist/models/(.*)$': '<rootDir>/dist/models/$1',
     '^dist/middleware/(.*)$': '<rootDir>/dist/middleware/$1',
     
-    // Make sure both src and dist paths for database.js point to the mock
+    // Mapping database.js correctly
     '^src/config/database.js$': '<rootDir>/__mocks__/database.js',
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js',  // Added dist mock mapping
+    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // For dist paths
+
+    // Explicit mocks
+    '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
+    '^models/(.*)$': '<rootDir>/src/models/$1',
+    '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
   },
   testEnvironment: 'node',
   transform: {
