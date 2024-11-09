@@ -1,13 +1,12 @@
 const { createService, getServices } = require('../../src/controllers/serviceController');
-const Service = require('../../dist/models/services'); // Direct import of Service to align with Jest mocks
+const Service = require('../../src/models/services'); // Ensure this path points to the correct location in src
 const { Op } = require('sequelize'); // Import Sequelize operators
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('../config/database.js', () => ({
-  sequelize: jest.fn(),
+jest.mock('../../src/models/services', () => ({
   create: jest.fn(),
   findAll: jest.fn(),
-}));
+}));  // Mocking the entire Service model
 
 describe('Service Functions', () => {
 

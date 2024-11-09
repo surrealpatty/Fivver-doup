@@ -1,5 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../../config/database.js';  // Adjust path relative to dist
+
+// Adjusted path for the transpiled dist folder
+import { sequelize } from '../config/database.js';  // Make sure this is the correct relative path in the src folder
 
 class Service extends Model {
   // You can add associations here if needed
