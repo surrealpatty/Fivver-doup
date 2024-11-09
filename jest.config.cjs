@@ -3,10 +3,10 @@ module.exports = {
     // Map source paths for Jest to recognize imports
     '^src/(.*)$': '<rootDir>/src/$1',
     '^dist/(.*)$': '<rootDir>/dist/$1',
-    
-    // Add mappings to handle database.js
-    '^src/config/database.js$': '<rootDir>/__mocks__/database.js', // Map to mock
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // Map to mock in dist
+
+    // Add mappings to handle database.js for both src and dist
+    '^src/config/database.js$': '<rootDir>/__mocks__/database.js', // Mock for source code
+    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // Mock for transpiled code
   },
   testEnvironment: 'node',
   transform: {
