@@ -1,23 +1,25 @@
 module.exports = {
-  testEnvironment: 'node',
+  testEnvironment: 'node',  // Use Node.js environment for testing
   testMatch: [
-    "**/tests/**/*.test.js", // Ensure you match test files with .test.js
-    "**/tests/**/*.spec.js", // Ensure you match test files with .spec.js
+    "**/tests/**/*.test.js",  // Match test files with the .test.js extension
+    "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
   ],
   transform: {
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript transformations
+    '^.+\\.js$': 'babel-jest',  // Use babel-jest to transform .js files with Babel
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!sequelize)/",  // Allow transforming sequelize
+    "/node_modules/(?!sequelize)/",  // Allow transforming sequelize (and any other necessary modules)
   ],
-  extensionsToTreatAsEsm: ['.js'],  // Treat .js files as ES module
+  extensionsToTreatAsEsm: ['.js'],  // Treat .js files as ESM
   moduleNameMapper: {
-    // Map src imports to src directory
-    '^src/(.*)$': '<rootDir>/src/$1',
-    
-    // Map dist imports back to src (e.g., dist/src/middleware/authMiddleware to src/middleware/authMiddleware)
-    '^dist/(.*)$': '<rootDir>/src/$1',
+    // Fix for resolving src and dist imports
+    '^src/(.*)$': '<rootDir>/src/$1',  // Maps src imports to the src directory
+    '^dist/(.*)$': '<rootDir>/src/$1',  // Maps dist imports back to src during tests
 
-    // Add other necessary mappings as required
+    // Other potential path fixes if needed (static assets or additional modules)
   },
+  moduleDirectories: [
+    "node_modules",  // Ensure node_modules are included in path resolution
+    "<rootDir>/src",  // Include src for relative imports
+  ],
 };
