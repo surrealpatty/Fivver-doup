@@ -1,4 +1,4 @@
-// Full path: /project-root/dist/__tests__/service.test.js
+// Correct relative path imports based on your project structure
 const { createService, getServices } = require('../../controllers/serviceController'); // Adjusted to relative path
 const { Service } = require('../../models/services'); // Adjusted to relative path
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
