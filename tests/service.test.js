@@ -1,8 +1,17 @@
 const request = require('supertest');
-const app = require('../dist/app'); // Ensure this points to the transpiled app
-const Service = require('../dist/models/services'); // Ensure this points to the transpiled service model
 
-jest.mock('../dist/models/services'); // Mock the Service model (correct path for transpiled file)
+// Ensure the app path points to the transpiled file in dist/src
+const app = require('../dist/src/index'); // Adjusted to point to the transpiled app (entry point in dist/src)
+const Service = require('../dist/src/models/services'); // Adjusted path to transpiled services model
+
+// Mock the Service model (correct path for transpiled file)
+jest.mock('../dist/src/models/services', () => ({
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findByPk: jest.fn(),
+    update: jest.fn(),
+    destroy: jest.fn(),
+}));
 
 describe('Service Controller', () => {
     afterEach(() => {

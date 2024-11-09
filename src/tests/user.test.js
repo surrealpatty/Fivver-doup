@@ -1,6 +1,8 @@
 import request from 'supertest';
-import app from '../dist/server'; // Adjust the path if needed for transpiled code
-import { initUser } from '../dist/models/user'; // Adjust this path to match transpiled code
+
+// Ensure the app path points to the transpiled server file in dist
+import app from '../dist/src/server'; // Adjusted to point to the transpiled app
+import { initUser } from '../dist/src/models/user'; // Adjusted path to transpiled user model
 
 // Reset the User table before each test
 beforeAll(async () => {
@@ -9,7 +11,7 @@ beforeAll(async () => {
 
 // Clear mocks between tests
 afterEach(() => {
-    jest.clearAllMocks(); // Clear all mocks after each test
+    jest.clearAllMocks(); // Clears mock calls between tests
 });
 
 // User registration and login test suite

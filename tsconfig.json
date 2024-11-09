@@ -15,7 +15,12 @@
     "skipDefaultLibCheck": true,                      /* Skip checking of default TypeScript libraries */
     "lib": ["es2020"],                                /* Use ES2020 for modern JavaScript features */
     "declaration": true,                              /* Generate type declaration files (.d.ts) */
-    "sourceMap": true                                 /* Generate source maps for easier debugging */
+    "sourceMap": true,                                /* Generate source maps for easier debugging */
+    "baseUrl": ".",                                   /* Set the base directory for relative module imports */
+    "paths": {
+      "src/*": ["src/*"],                             /* Resolve `src/*` to the `src/` directory */
+      "dist/*": ["dist/*"]                            /* Resolve `dist/*` to the `dist/` directory */
+    }
   },
   "include": [
     "src/**/*.ts"                                     /* Include all TypeScript files in the src directory */

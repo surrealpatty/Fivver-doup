@@ -5,6 +5,7 @@ module.exports = {
     "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
   ],
   transform: {
+    '^.+\\.tsx?$': 'ts-jest',  // Use ts-jest to transform .ts and .tsx files with TypeScript
     '^.+\\.js$': 'babel-jest',  // Use babel-jest to transform .js files with Babel
   },
   transformIgnorePatterns: [
@@ -12,6 +13,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',  // Maps src imports to the src directory during tests
-    '^dist/(.*)$': '<rootDir>/src/$1',  // Map dist imports back to src during tests
+    '^dist/(.*)$': '<rootDir>/dist/$1',  // Maps dist imports to the dist directory during tests
   },
+  setupFiles: ["<rootDir>/jest.setup.js"],  // Optionally include a setup file if needed
 };
