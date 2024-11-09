@@ -31,8 +31,8 @@ describe('Service Controller', () => {
     test('should get all services', async () => {
         // Mock the response for Service.findAll
         const mockServices = [
-            { id: 1, name: 'Service 1' },
-            { id: 2, name: 'Service 2' },
+            { id: 1, name: 'Service 1', description: 'Description 1' },
+            { id: 2, name: 'Service 2', description: 'Description 2' },
         ];
         Service.findAll.mockResolvedValue(mockServices);
 

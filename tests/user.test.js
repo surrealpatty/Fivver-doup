@@ -1,10 +1,10 @@
 const request = require('supertest'); // Ensure supertest is installed
-const app = require('../app'); // Import your Express app
-const User = require('../models/user'); // Import the User model
+const app = require('../dist/app'); // Import your Express app from transpiled code (adjust if needed)
+const User = require('../src/models/user'); // Import the User model from the correct path
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-jest.mock('../models/user'); // Mock the User model
+jest.mock('../src/models/user'); // Mock the User model (adjust path if needed)
 
 // Mock environment variable for JWT secret
 process.env.JWT_SECRET = 'testsecret';
