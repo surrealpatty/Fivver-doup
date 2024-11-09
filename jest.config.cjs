@@ -7,14 +7,14 @@ module.exports = {
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
-    // Map for dist paths (direct path without `$1` for specific module imports)
+    // Map for dist paths (transpiled files in dist/src)
     '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
     '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1',
     '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1',
     '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
     '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1',
 
-    // Specific mappings for models and middleware
+    // Specific mappings for individual modules
     '^src/models/service$': '<rootDir>/src/models/service.js',
     '^dist/models/service$': '<rootDir>/dist/src/models/service.js',
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
