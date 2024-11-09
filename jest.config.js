@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'jsdom',  // Use jsdom to enable DOM-related assertions with jest-dom
+  testEnvironment: 'jest-environment-jsdom',  // Ensure this points to the installed package
   testMatch: [
     "**/tests/**/*.test.js",  // Match test files with the .test.js extension
     "**/tests/**/*.spec.js",  // Match test files with the .spec.js extension
