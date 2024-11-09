@@ -1,18 +1,21 @@
 module.exports = {
   moduleNameMapper: {
-    // Map source paths for Jest to recognize imports
+    // Map source paths for Jest to recognize imports in 'src' folder
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^src/(.*)$': '<rootDir>/src/$1',
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
 
-    // Additional mappings to handle compiled paths in dist
+    // Additional mappings to handle compiled paths in 'dist' folder
     '^dist/middleware/(.*)$': '<rootDir>/dist/middleware/$1',
     '^dist/models/(.*)$': '<rootDir>/dist/models/$1',
     '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
     '^dist/controllers/(.*)$': '<rootDir>/dist/controllers/$1',
+
+    // Mappings for handling the config folder
+    '^config/(.*)$': '<rootDir>/src/config/$1', // Ensure Jest can resolve 'config' files
   },
-  testEnvironment: 'node',
+  testEnvironment: 'node', // Set test environment for Node.js
   transform: {
     '^.+\\.js$': 'babel-jest', // Transform JavaScript files using Babel
   },
