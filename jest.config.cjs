@@ -1,14 +1,14 @@
 module.exports = {
   moduleNameMapper: {
     // Source paths
-    '^src/(.*)$': '<rootDir>/src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1', // Maps to src/
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
     // Dist paths (post-transpilation)
-    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',  // Maps to dist/src/
+    '^dist/src/(.*)$': '<rootDir>/dist/src/$1', // Maps to dist/src/
     '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1',
     '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1',
     '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
@@ -34,10 +34,10 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/'], // Ignore transforming files in node_modules
   coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js',           // Collect coverage from the src directory
-    'dist/**/*.js',          // Collect coverage from the dist directory as well
-    '!src/**/*.test.js',     // Exclude test files from coverage
-    '!dist/**/*.test.js',    // Exclude test files from coverage in dist
+    'src/**/*.js',          // Collect coverage from the src directory
+    'dist/**/*.js',         // Collect coverage from the dist directory as well
+    '!src/**/*.test.js',    // Exclude test files from coverage
+    '!dist/**/*.test.js',   // Exclude test files from coverage in dist
   ],
   testTimeout: 30000, // Increase the test timeout if necessary
   testMatch: [
