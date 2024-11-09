@@ -22,6 +22,10 @@ module.exports = {
     // Ensure database.js paths are mapped for both src and dist
     '^src/config/database.js$': '<rootDir>/src/config/database.js',
     '^dist/src/config/database.js$': '<rootDir>/dist/src/config/database.js',
+
+    // Ensure `models/user.js` is correctly mapped
+    '^src/models/user$': '<rootDir>/src/models/user',
+    '^dist/src/models/user$': '<rootDir>/dist/src/models/user', // Ensure `user` model path resolves correctly for both src and dist
   },
   testEnvironment: 'node',
   transform: {
