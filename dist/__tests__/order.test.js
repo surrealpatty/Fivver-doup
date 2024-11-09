@@ -1,10 +1,12 @@
+// src/__tests__/order.test.js
+
 "use strict";
-const { placeOrder } = require('../controllers/orderController');
-const { mockUsers, mockServices } = require('./mockData'); // Adjust the path to your mock data as necessary
-const { Order } = require('../models/order'); // Ensure you're importing the correct model
+const { placeOrder } = require('../../src/controllers/orderController');
+const { mockUsers, mockServices } = require('../../src/__tests__/mockData'); // Adjust path for dist
+const { Order } = require('../../src/models/order'); // Ensure correct import relative to dist
 
 // Mocking the Order model
-jest.mock('../models/order', () => ({
+jest.mock('../../src/models/order', () => ({
   Order: {
     create: jest.fn().mockResolvedValue({
       id: 1, // Mock ID for the created order
@@ -16,19 +18,19 @@ jest.mock('../models/order', () => ({
 }));
 
 describe('Order Tests', () => {
+  // Initialize mock data before each test
   let mockUsers;
   let mockServices;
 
-  // Initialize mock data before each test
   beforeEach(() => {
     mockUsers = [
-      { username: 'testUser' }, // Ensure this data is populated
+      { username: 'testUser' }, // Mock user data
     ];
     mockServices = [
-      { name: 'service1' }, // Add mock services if needed
+      { name: 'service1' }, // Mock service data
     ];
 
-    // Check if mock data is correctly initialized
+    // Validate mock data is correctly initialized
     if (mockUsers.length === 0) {
       throw new Error('mockUsers is empty');
     }
@@ -50,7 +52,7 @@ describe('Order Tests', () => {
     expect(order.serviceId).toBe(mockServices[0].name);
     expect(order.quantity).toBe(1);
 
-    // Verify the Order.create method was called
+    // Verify that the Order.create method was called correctly
     expect(Order.create).toHaveBeenCalledWith({
       userId: mockUsers[0].username,
       serviceId: mockServices[0].name,
@@ -58,5 +60,5 @@ describe('Order Tests', () => {
     });
   });
 
-  // Add other tests here...
+  // You can add more tests here...
 });
