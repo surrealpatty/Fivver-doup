@@ -1,24 +1,26 @@
 module.exports = {
   moduleNameMapper: {
-    // Map the modules to the dist folder, assuming the source is under 'src'
-    '^middleware/(.*)$': '<rootDir>/src/middleware/$1', // Adjust for the original src location
-    '^models/(.*)$': '<rootDir>/src/models/$1', // Adjust for the original src location
-    '^src/(.*)$': '<rootDir>/src/$1', // Map src directly
-    '^controllers/(.*)$': '<rootDir>/src/controllers/$1', // Adjust for the original src location
+    // Adjust the mappings to point to the correct src paths
+    '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
+    '^models/(.*)$': '<rootDir>/src/models/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',
+    '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
   },
-  testEnvironment: 'node', // Keep the test environment set to node for backend testing
+  testEnvironment: 'node',
   transform: {
-    '^.+\\.js$': 'babel-jest', // Ensure babel is transforming the JavaScript files correctly
+    '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/', // Ignore node_modules during transformation
+    '/node_modules/',
   ],
-  coverageDirectory: './coverage', // Keep coverage reports here
+  coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js', // Collect coverage from source files (not dist)
-    '!src/**/*.test.js', // Exclude test files from coverage
+    'src/**/*.js',
+    '!src/**/*.test.js',
   ],
-  testTimeout: 30000, // Optional: Increase the timeout if tests are taking longer than expected
-  // Optionally specify the test path pattern if you want to target specific files
-  testMatch: ['**/src/**/__tests__/**/*.js'],
+  testTimeout: 30000,
+  testMatch: [
+    '**/src/**/__tests__/**/*.js', // Match tests under the src directory
+    '**/dist/__tests__/**/*.js',   // Match tests under the dist directory (where your compiled tests are)
+  ],
 };
