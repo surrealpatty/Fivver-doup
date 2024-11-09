@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// Using require instead of import to match CommonJS syntax
+// Use require instead of import to match CommonJS syntax
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
