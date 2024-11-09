@@ -9,8 +9,10 @@ module.exports = {
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
-    // Specific mappings for service, authMiddleware, order, and user models
-    '^src/models/service$': '<rootDir>/src/models/service.js',
+    // Adjusting dist models to resolve to src
+    '^dist/models/user$': '<rootDir>/src/models/user.js',  // Correctly map dist/models/user to src/models/user.js
+
+    // Same for other models, services, etc.
     '^dist/models/service$': '<rootDir>/src/models/service.js', // Map dist models to src
     '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
     '^dist/middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js', // Map dist middleware to src
@@ -18,10 +20,6 @@ module.exports = {
     '^dist/models/order$': '<rootDir>/src/models/order.js', // Map dist models to src
     '^src/models/user$': '<rootDir>/src/models/user.js',
     '^dist/models/user$': '<rootDir>/src/models/user.js', // Map dist models to src
-
-    // This ensures that 'dist/' does not directly map to 'src/'
-    // This is necessary to avoid issues with trying to resolve dist-based imports before they're transpiled
-    '^dist/(.*)$': '<rootDir>/src/$1', // Map dist to src directly (needed for transpiled test runs)
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
