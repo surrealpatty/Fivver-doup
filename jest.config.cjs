@@ -16,12 +16,15 @@ module.exports = {
 
     // Mapping database.js correctly for both src and dist paths
     '^src/config/database.js$': '<rootDir>/__mocks__/database.js',
-    '^dist/config/database.js$': '<rootDir>/__mocks__/database.js', // For dist paths
+    '^dist/src/config/database.js$': '<rootDir>/__mocks__/database.js', // For dist paths
 
     // Explicit mocks (to avoid redundancy)
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^models/(.*)$': '<rootDir>/src/models/$1',
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
+    '^dist/src/controllers/userController$': '<rootDir>/dist/src/controllers/userController', // Fixed mapping for userController
+    '^dist/src/models/services$': '<rootDir>/dist/src/models/services', // Fixed mapping for services
+    '^dist/src/middleware/authMiddleware$': '<rootDir>/dist/src/middleware/authMiddleware', // Fixed mapping for authMiddleware
   },
   testEnvironment: 'node',
   transform: {
