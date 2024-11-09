@@ -1,9 +1,9 @@
-const { createService, getServices } = require('controllers/serviceController'); // Use the updated path
-const { Service } = require('dist/models/services'); // Adjust to direct path under dist
+const { createService, getServices } = require('../../src/controllers/serviceController'); // Adjusted to relative path for src
+const { Service } = require('../../dist/models/services'); // Adjusted to direct path under dist
 const { Op } = require('sequelize'); // Import Sequelize operators if needed for queries
 
 // Mock the Service model methods to avoid actual database interactions
-jest.mock('dist/models/services', () => ({
+jest.mock('../../dist/models/services', () => ({
   Service: {
     create: jest.fn(),
     findAll: jest.fn(),
@@ -38,21 +38,16 @@ describe('Service Functions', () => {
       json: jest.fn(), // Mock json method to check the response
     };
 
-    // Try-catch block for better error capture in the test
-    try {
-      // Call createService with the mock request and response
-      await createService(req, res);
+    // Call createService with the mock request and response
+    await createService(req, res);
 
-      // Check that the response was correct
-      expect(res.status).toHaveBeenCalledWith(201); // Should return 201 (Created)
-      expect(res.json).toHaveBeenCalledWith(mockCreatedService); // Should return the created service
-      expect(Service.create).toHaveBeenCalledWith({
-        ...mockServiceData,
-        userId: req.user.id, // Ensure the userId is passed correctly to the model
-      });
-    } catch (err) {
-      console.error('Error in createService test:', err);
-    }
+    // Check that the response was correct
+    expect(res.status).toHaveBeenCalledWith(201); // Should return 201 (Created)
+    expect(res.json).toHaveBeenCalledWith(mockCreatedService); // Should return the created service
+    expect(Service.create).toHaveBeenCalledWith({
+      ...mockServiceData,
+      userId: req.user.id, // Ensure the userId is passed correctly to the model
+    });
   });
 
   test('should retrieve all services', async () => {
@@ -71,20 +66,14 @@ describe('Service Functions', () => {
       json: jest.fn(), // Mock json method to check the response
     };
 
-    // Try-catch block for better error capture in the test
-    try {
-      // Call getServices with the mock request and response
-      await getServices(req, res);
+    // Call getServices with the mock request and response
+    await getServices(req, res);
 
-      // Check that the response was correct
-      expect(res.status).toHaveBeenCalledWith(200); // Should return 200 (OK)
-      expect(res.json).toHaveBeenCalledWith(mockServicesData); // Should return the services data
-      expect(Service.findAll).toHaveBeenCalledWith({
-        where: { price: { [Op.gt]: 0 } }, // Ensure the query condition is correct
-      });
-    } catch (err) {
-      console.error('Error in getServices test:', err);
-    }
+    // Check that the response was correct
+    expect(res.status).toHaveBeenCalledWith(200); // Should return 200 (OK)
+    expect(res.json).toHaveBeenCalledWith(mockServicesData); // Should return the services data
+    expect(Service.findAll).toHaveBeenCalledWith({
+      where: { price: { [Op.gt]: 0 } }, // Ensure the query condition is correct
+    });
   });
-
 });
