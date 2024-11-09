@@ -14,13 +14,18 @@ module.exports = {
     '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
     '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1',
 
+    // Specific mappings for fixed paths (including userController, services, and authMiddleware)
+    '^dist/src/controllers/userController$': '<rootDir>/dist/src/controllers/userController',
+    '^dist/src/models/services$': '<rootDir>/dist/src/models/services',
+    '^dist/src/middleware/authMiddleware$': '<rootDir>/dist/src/middleware/authMiddleware',
+
     // Ensure database.js paths are mapped for both src and dist
     '^src/config/database.js$': '<rootDir>/src/config/database.js',
     '^dist/src/config/database.js$': '<rootDir>/dist/src/config/database.js',
 
-    // Explicit mappings for src/models/user
+    // Ensure `models/user.js` is correctly mapped
     '^src/models/user$': '<rootDir>/src/models/user.js',
-    '^dist/src/models/user$': '<rootDir>/dist/src/models/user.js',
+    '^dist/src/models/user$': '<rootDir>/dist/src/models/user.js', // Ensure `user` model path resolves correctly for both src and dist
   },
   testEnvironment: 'node',
   transform: {
