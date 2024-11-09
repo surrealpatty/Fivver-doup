@@ -8,11 +8,11 @@ module.exports = {
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
     // Dist paths (post-transpilation)
-    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',  // Fixed to match dist/src/
-    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1', // Fixed to match dist/src/
-    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1', // Fixed to match dist/src/
-    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1', // Fixed to match dist/src/
-    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1', // Fixed to match dist/src/
+    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',  // Maps to dist/src/
+    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1',
+    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1',
+    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
+    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1',
 
     // Specific mappings for fixed paths (including userController, services, and authMiddleware)
     '^dist/src/controllers/userController$': '<rootDir>/dist/src/controllers/userController',
@@ -25,7 +25,7 @@ module.exports = {
 
     // Ensure `models/user.js` is correctly mapped
     '^src/models/user$': '<rootDir>/src/models/user',
-    '^dist/src/models/user$': '<rootDir>/dist/src/models/user', // Ensure `user` model path resolves correctly for both src and dist
+    '^dist/src/models/user$': '<rootDir>/dist/src/models/user',
   },
   testEnvironment: 'node',
   transform: {
@@ -34,12 +34,14 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/'], // Ignore transforming files in node_modules
   coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/**/*.test.js', // Exclude test files from coverage
+    'src/**/*.js',          // Collect coverage from the src directory
+    'dist/**/*.js',         // Collect coverage from the dist directory as well
+    '!src/**/*.test.js',    // Exclude test files from coverage
+    '!dist/**/*.test.js',   // Exclude test files from coverage in dist
   ],
   testTimeout: 30000, // Increase the test timeout if necessary
   testMatch: [
-    '**/src/**/__tests__/**/*.js', // Match test files in the src folder
+    '**/src/**/__tests__/**/*.js',  // Match test files in the src folder
     '**/dist/**/__tests__/**/*.js', // Match test files in the dist folder
   ],
   moduleFileExtensions: ['js', 'json', 'node'], // File extensions to recognize
