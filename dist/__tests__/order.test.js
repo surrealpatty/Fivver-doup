@@ -25,7 +25,7 @@ jest.mock('dist/models/order', () => ({
 }));
 
 // Mock the User model
-jest.mock('dist/src/models/user', () => ({
+jest.mock('dist/models/user', () => ({
   findByPk: jest.fn().mockResolvedValue(mockUsers[0]), // Mocked user fetch
 }));
 
