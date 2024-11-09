@@ -1,7 +1,7 @@
 module.exports = {
   presets: [
-    '@babel/preset-env', // Preset for compiling ES6+ down to ES5
-    '@babel/preset-typescript' // Preset for compiling TypeScript
+    '@babel/preset-env',
+    '@babel/preset-typescript'
   ],
   plugins: [
     // Add any necessary plugins here
