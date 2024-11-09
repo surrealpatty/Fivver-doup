@@ -7,37 +7,37 @@ module.exports = {
     '^middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^config/(.*)$': '<rootDir>/src/config/$1',
 
-    // Map for dist paths
-    '^dist/src/(.*)$': '<rootDir>/dist/$1',
-    '^dist/controllers/(.*)$': '<rootDir>/dist/controllers/$1',
-    '^dist/models/(.*)$': '<rootDir>/dist/models/$1',
-    '^dist/middleware/(.*)$': '<rootDir>/dist/middleware/$1',
-    '^dist/config/(.*)$': '<rootDir>/dist/config/$1',
+    // Map for dist paths (direct path without `$1` for specific module imports)
+    '^dist/src/(.*)$': '<rootDir>/dist/src/$1',
+    '^dist/controllers/(.*)$': '<rootDir>/dist/src/controllers/$1',
+    '^dist/models/(.*)$': '<rootDir>/dist/src/models/$1',
+    '^dist/middleware/(.*)$': '<rootDir>/dist/src/middleware/$1',
+    '^dist/config/(.*)$': '<rootDir>/dist/src/config/$1',
 
-    // Specific path mappings for `userController`, `services`, `authMiddleware`, and `database`
-    '^src/config/database.js$': '<rootDir>/src/config/database.js',
-    '^dist/config/database.js$': '<rootDir>/dist/config/database.js',
-    '^src/models/user$': '<rootDir>/src/models/user',
-    '^dist/models/user$': '<rootDir>/dist/models/user',
+    // Specific mappings for models and middleware
+    '^src/models/service$': '<rootDir>/src/models/service.js',
+    '^dist/models/service$': '<rootDir>/dist/src/models/service.js',
+    '^middleware/authMiddleware$': '<rootDir>/src/middleware/authMiddleware.js',
+    '^dist/middleware/authMiddleware$': '<rootDir>/dist/src/middleware/authMiddleware.js',
   },
   testEnvironment: 'node',
   transform: {
-    '^.+\\.js$': 'babel-jest', // Transpiles JavaScript with Babel for testing
+    '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!your-module-to-transform/)', // Customize if there are specific modules to transform
+    '/node_modules/(?!your-module-to-transform/)',
   ],
   coverageDirectory: './coverage',
   collectCoverageFrom: [
-    'src/**/*.js',          // Include coverage for src files
-    'dist/**/*.js',         // Include coverage for dist files
-    '!src/**/*.test.js',    // Exclude test files from src coverage
-    '!dist/**/*.test.js',   // Exclude test files from dist coverage
+    'src/**/*.js',
+    'dist/**/*.js',
+    '!src/**/*.test.js',
+    '!dist/**/*.test.js',
   ],
   testTimeout: 30000,
   testMatch: [
-    '**/src/**/__tests__/**/*.js',  // Match test files in src
-    '**/dist/**/__tests__/**/*.js', // Match test files in dist
+    '**/src/**/__tests__/**/*.js',
+    '**/dist/**/__tests__/**/*.js',
   ],
-  moduleFileExtensions: ['js', 'json', 'node'], // Recognized extensions
+  moduleFileExtensions: ['js', 'json', 'node'],
 };
