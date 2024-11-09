@@ -11,8 +11,8 @@
     "dev": "nodemon src/index.js",
     "test": "jest --verbose --maxWorkers=4",
     "test:watch": "jest --watch",
-    "build": "tsc",  // Ensures that TypeScript files are compiled to JavaScript
-    "pretest": "npm run build" // Add this to ensure build happens before testing
+    "build": "tsc",
+    "pretest": "npm run build"
   },
   "keywords": [],
   "author": "",
