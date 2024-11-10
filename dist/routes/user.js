@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Import User model and its attributes type
+const user_1 = __importDefault(require("../models/user")); // Import User model
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
 // User registration route
@@ -38,7 +38,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // Create the user with required fields
+        // Create the user without the explicit omission of fields
         const user = yield user_1.default.create({
             username,
             email,
@@ -47,7 +47,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        });
+        }); // Explicitly mark these fields as optional
         // Respond with the created user data
         res.status(201).json({
             id: user.id,
