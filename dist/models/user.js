@@ -1,13 +1,20 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Make sure to import sequelize from the correct path
+class User extends sequelize_1.Model {
+}
+exports.User = User;
 User.init({
     id: {
-        type: DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
     },
     username: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
@@ -15,7 +22,7 @@ User.init({
         },
     },
     email: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
@@ -24,44 +31,45 @@ User.init({
         },
     },
     password: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true,
         },
     },
     firstName: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true, // optional
     },
     lastName: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true, // optional
     },
     role: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         defaultValue: 'Free',
     },
     subscriptionStatus: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         defaultValue: 'Inactive',
     },
     createdAt: {
-        type: DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW, // Automatically set to the current timestamp
+        defaultValue: sequelize_1.DataTypes.NOW, // Automatically set to the current timestamp
     },
     updatedAt: {
-        type: DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW, // Automatically set to the current timestamp
+        defaultValue: sequelize_1.DataTypes.NOW, // Automatically set to the current timestamp
     },
 }, {
-    sequelize,
+    sequelize: database_1.sequelize,
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
 });
+exports.default = User;
 //# sourceMappingURL=user.js.map

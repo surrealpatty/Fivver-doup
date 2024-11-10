@@ -1,7 +1,2 @@
-interface RegisterBody {
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-}
+declare const router: import("express-serve-static-core").Router;
+export default router;

@@ -17,7 +17,8 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_1 = require("./config/database"); // Correctly import sequelize instance
 const user_1 = __importDefault(require("./routes/user")); // Correct TypeScript import (omit .js)
-dotenv_1.default.config(); // Load environment variables from .env file
+// Load environment variables from .env file
+dotenv_1.default.config();
 // Create Express app
 const app = (0, express_1.default)();
 // Middleware
