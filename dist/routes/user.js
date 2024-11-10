@@ -15,8 +15,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = require("../models/user"); // Ensure UserAttributes is imported correctly
-const express_validator_1 = require("express-validator"); // For validation
+const user_1 = require("../models/user"); // Make sure this import is correct
+const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
 // User registration route
 router.post('/register', (0, express_validator_1.body)('username').isString().notEmpty().withMessage('Username is required'), (0, express_validator_1.body)('email').isEmail().withMessage('Invalid email format'), (0, express_validator_1.body)('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'), (0, express_validator_1.body)('firstName').isString().notEmpty().withMessage('First name is required'), (0, express_validator_1.body)('lastName').isString().notEmpty().withMessage('Last name is required'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,7 +38,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // Create the user, using Partial to make fields optional
+        // Create the user with necessary fields
         const user = yield user_1.User.create({
             username,
             email,
@@ -47,7 +47,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Use Partial to allow optional fields
+        }); // Marking fields as optional for auto-generated fields
         // Respond with the created user data
         res.status(201).json({
             id: user.id,

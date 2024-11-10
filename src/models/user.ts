@@ -1,6 +1,5 @@
-// src/models/user.ts
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure correct path
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Ensure the correct path to your database config
 
 // Define the UserAttributes interface
 export interface UserAttributes {
@@ -16,8 +15,11 @@ export interface UserAttributes {
     updatedAt: Date;
 }
 
+// Define the UserCreationAttributes type for optional fields
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+
 // User model definition
-export class User extends Model<UserAttributes> implements UserAttributes {
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: number;
     public username!: string;
     public email!: string;
