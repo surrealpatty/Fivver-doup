@@ -22,8 +22,8 @@ const testConnection = async (): Promise<void> => {
     try {
         await sequelize.authenticate();  // Test the database connection
         console.log('Database connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
+    } catch (error: any) {
+        console.error('Unable to connect to the database:', error.message || error);
         process.exit(1);  // Exit the process if connection fails
     }
 };
@@ -47,8 +47,8 @@ const startServer = async (): Promise<void> => {
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    } catch (error) {
-        console.error('Error starting the server:', error);
+    } catch (error: any) {
+        console.error('Error starting the server:', error.message || error);
         // Optionally add more granular error handling based on your needs
     }
 };
