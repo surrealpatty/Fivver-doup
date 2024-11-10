@@ -1,11 +1,10 @@
 "use strict";
-// src/components/MyComponent.spec.js
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const test_utils_1 = require("@vue/test-utils");
-const MyComponent_vue_1 = __importDefault(require("./MyComponent.vue")); // Ensure this path is correct
+const MyComponent_vue_1 = __importDefault(require("./components/MyComponent.vue")); // Adjusted path if it's inside the components folder
 describe('MyComponent.vue', () => {
     it('renders props.title when passed', () => {
         const title = 'Hello World';
@@ -22,3 +21,4 @@ describe('MyComponent.vue', () => {
     });
     // Additional tests can be added here
 });
+//# sourceMappingURL=MyComponent.spec.js.map

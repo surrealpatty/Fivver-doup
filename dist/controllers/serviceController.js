@@ -1,72 +1,93 @@
 "use strict";
-const Service = require('../models/services');
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteService = exports.updateService = exports.getServices = exports.createService = void 0;
+const services_js_1 = __importDefault(require("../models/services.js")); // Ensure correct model path
 // 1. Create a Service
-exports.createService = async (req, res) => {
+const createService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { title, description, price, category } = req.body;
-    const userId = req.user.id; // Assume `authMiddleware` attaches user ID to req
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Ensure req.user exists
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
     try {
-        // Create a new service in the database
-        const newService = await Service.create({
+        const newService = yield services_js_1.default.create({
             title,
             description,
             price,
             category,
             userId,
         });
-        return res.status(201).json(newService); // Respond with the created service
+        return res.status(201).json(newService);
     }
     catch (error) {
-        console.error('Error creating service:', error); // Log error for debugging
+        console.error('Error creating service:', error);
         return res.status(500).json({ message: 'Error creating service', error: error.message });
     }
-};
+});
+exports.createService = createService;
 // 2. Read Services (fetch all or by user)
-exports.getServices = async (req, res) => {
-    const userId = req.query.userId; // Get userId from query parameters
+const getServices = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.query;
     try {
         const services = userId
-            ? await Service.findAll({ where: { userId } }) // Fetch services for a specific user
-            : await Service.findAll(); // Fetch all services
-        return res.status(200).json(services); // Respond with the fetched services
+            ? yield services_js_1.default.findAll({ where: { userId } })
+            : yield services_js_1.default.findAll();
+        return res.status(200).json(services);
     }
     catch (error) {
-        console.error('Error fetching services:', error); // Log error for debugging
+        console.error('Error fetching services:', error);
         return res.status(500).json({ message: 'Error fetching services', error: error.message });
     }
-};
+});
+exports.getServices = getServices;
 // 3. Update a Service
-exports.updateService = async (req, res) => {
-    const { id } = req.params; // Get service ID from request parameters
+const updateService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
     const { title, description, price, category } = req.body;
     try {
-        // Find the service that belongs to the user
-        const service = await Service.findOne({ where: { id, userId: req.user.id } });
+        const service = yield services_js_1.default.findOne({ where: { id, userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
         if (!service) {
-            return res.status(404).json({ message: 'Service not found' }); // Handle not found
+            return res.status(404).json({ message: 'Service not found' });
         }
-        // Update the service with the new data
-        await service.update({ title, description, price, category });
-        return res.status(200).json(service); // Respond with the updated service
+        yield service.update({ title, description, price, category });
+        return res.status(200).json(service);
     }
     catch (error) {
-        console.error('Error updating service:', error); // Log error for debugging
+        console.error('Error updating service:', error);
         return res.status(500).json({ message: 'Error updating service', error: error.message });
     }
-};
+});
+exports.updateService = updateService;
 // 4. Delete a Service
-exports.deleteService = async (req, res) => {
-    const { id } = req.params; // Get service ID from request parameters
+const deleteService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
     try {
-        // Find the service that belongs to the user
-        const service = await Service.findOne({ where: { id, userId: req.user.id } });
+        const service = yield services_js_1.default.findOne({ where: { id, userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
         if (!service) {
-            return res.status(404).json({ message: 'Service not found' }); // Handle not found
+            return res.status(404).json({ message: 'Service not found' });
         }
-        await service.destroy(); // Delete the service
-        return res.status(200).json({ message: 'Service deleted successfully' }); // Respond with success message
+        yield service.destroy();
+        return res.status(200).json({ message: 'Service deleted successfully' });
     }
     catch (error) {
-        console.error('Error deleting service:', error); // Log error for debugging
+        console.error('Error deleting service:', error);
         return res.status(500).json({ message: 'Error deleting service', error: error.message });
     }
-};
+});
+exports.deleteService = deleteService;
+//# sourceMappingURL=serviceController.js.map

@@ -1,10 +1,12 @@
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables from .env file
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config(); // Load environment variables from .env file
 // List of required environment variables for validation
 const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
-
 // Function to validate the presence of required environment variables
 const validateEnvVars = () => {
     for (const key of requiredKeys) {
@@ -14,10 +16,8 @@ const validateEnvVars = () => {
         }
     }
 };
-
 // Validate environment variables
 validateEnvVars();
-
 // Define the configuration object with settings for both 'development' and 'production' environments
 const config = {
     development: {
@@ -35,5 +35,5 @@ const config = {
         dialect: process.env.DB_DIALECT || 'mysql', // Default to 'mysql' if DB_DIALECT is not set
     },
 };
-
-export default config; // Export the configuration object as the default export
+exports.default = config; // Export the configuration object as the default export
+//# sourceMappingURL=config.js.map

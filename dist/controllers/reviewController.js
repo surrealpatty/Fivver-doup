@@ -1,110 +1,120 @@
 "use strict";
-const { Review, User, Service } = require('../models'); // Import models
-// Create a new review
-exports.createReview = async (req, res) => {
-    const { rating, comment, serviceId } = req.body;
-    const userId = req.user.id; // Assuming user ID is retrieved from JWT in the request
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+const { Review, User, Service } = require('../models'); // Adjust path as necessary
+// 1. Create a Review
+exports.createReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { serviceId, rating, comment } = req.body;
+    const { userId } = req.user; // Assuming userId is stored in the JWT payload
+    // Validate input
+    if (!serviceId || !rating || !comment) {
+        return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
+    }
     try {
         // Check if the service exists
-        const serviceExists = await Service.findByPk(serviceId);
-        if (!serviceExists) {
-            return res.status(404).json({ error: 'Service not found' });
+        const service = yield Service.findByPk(serviceId);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
         }
-        // Validate required fields
-        if (rating === undefined || comment === undefined) {
-            return res.status(400).json({ error: 'Rating and comment are required' });
-        }
-        // Validate rating is within acceptable range (1-5)
-        if (rating < 1 || rating > 5) {
-            return res.status(400).json({ error: 'Rating must be between 1 and 5' });
-        }
-        // Create the review
-        const review = await Review.create({
+        // Create a new review
+        const review = yield Review.create({
+            serviceId,
+            userId,
             rating,
             comment,
-            userId,
-            serviceId,
         });
-        return res.status(201).json(review);
+        return res.status(201).json({ message: 'Review created successfully', review });
     }
     catch (error) {
         console.error('Error creating review:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ message: 'Error creating review', error: error.message });
     }
-};
-// Get reviews for a specific service
-exports.getReviewsForService = async (req, res) => {
-    const { serviceId } = req.params;
+});
+// 2. Get Reviews for a Service
+exports.getServiceReviews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { serviceId } = req.params; // Get service ID from request params
     try {
-        // Check if the service exists
-        const serviceExists = await Service.findByPk(serviceId);
-        if (!serviceExists) {
-            return res.status(404).json({ error: 'Service not found' });
-        }
-        // Fetch reviews for the service with user details
-        const reviews = await Review.findAll({
+        // Fetch all reviews for the given service
+        const reviews = yield Review.findAll({
             where: { serviceId },
-            include: [{ model: User, as: 'user', attributes: ['id', 'name'] }],
+            include: [
+                {
+                    model: User,
+                    attributes: ['username', 'email'], // Include relevant user details (exclude password)
+                },
+            ],
         });
+        if (!reviews || reviews.length === 0) {
+            return res.status(404).json({ message: 'No reviews found for this service' });
+        }
         return res.status(200).json(reviews);
     }
     catch (error) {
         console.error('Error fetching reviews:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ message: 'Error fetching reviews', error: error.message });
     }
-};
-// Update a review
-exports.updateReview = async (req, res) => {
-    const { reviewId } = req.params;
+});
+// 3. Update a Review
+exports.updateReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const userId = req.user.id; // User ID from JWT
+    const { userId } = req.user; // Assuming userId is stored in the JWT payload
+    // Validate input
+    if (!rating && !comment) {
+        return res.status(400).json({ message: 'Rating or comment is required to update' });
+    }
     try {
-        // Find the review
-        const review = await Review.findByPk(reviewId);
+        // Find the review by ID
+        const review = yield Review.findByPk(reviewId);
         if (!review) {
-            return res.status(404).json({ error: 'Review not found' });
+            return res.status(404).json({ message: 'Review not found' });
         }
-        // Authorization check
+        // Ensure that the logged-in user is the one who wrote the review
         if (review.userId !== userId) {
-            return res.status(403).json({ error: 'You do not have permission to update this review' });
+            return res.status(403).json({ message: 'You can only update your own reviews' });
         }
-        // Update fields if provided
-        if (rating !== undefined) {
-            // Validate rating is within acceptable range (1-5)
-            if (rating < 1 || rating > 5) {
-                return res.status(400).json({ error: 'Rating must be between 1 and 5' });
-            }
+        // Update the review fields (only update provided fields)
+        if (rating)
             review.rating = rating;
-        }
-        if (comment !== undefined)
+        if (comment)
             review.comment = comment;
-        await review.save();
-        return res.status(200).json(review);
+        // Save the updated review
+        yield review.save();
+        return res.status(200).json({ message: 'Review updated successfully', review });
     }
     catch (error) {
         console.error('Error updating review:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ message: 'Error updating review', error: error.message });
     }
-};
-// Delete a review
-exports.deleteReview = async (req, res) => {
-    const { reviewId } = req.params;
-    const userId = req.user.id; // User ID from JWT
+});
+// 4. Delete a Review
+exports.deleteReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { reviewId } = req.params; // Get review ID from request params
+    const { userId } = req.user; // Assuming userId is stored in the JWT payload
     try {
-        // Find the review
-        const review = await Review.findByPk(reviewId);
+        // Find the review by ID
+        const review = yield Review.findByPk(reviewId);
         if (!review) {
-            return res.status(404).json({ error: 'Review not found' });
+            return res.status(404).json({ message: 'Review not found' });
         }
-        // Authorization check
+        // Ensure that the logged-in user is the one who wrote the review
         if (review.userId !== userId) {
-            return res.status(403).json({ error: 'You do not have permission to delete this review' });
+            return res.status(403).json({ message: 'You can only delete your own reviews' });
         }
-        await review.destroy();
-        return res.status(204).send(); // No content response
+        // Delete the review
+        yield review.destroy();
+        return res.status(200).json({ message: 'Review deleted successfully' });
     }
     catch (error) {
         console.error('Error deleting review:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ message: 'Error deleting review', error: error.message });
     }
-};
+});
+//# sourceMappingURL=reviewController.js.map

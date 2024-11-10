@@ -1,14 +1,15 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.js'; // Ensure you're using the correct path for the sequelize instance
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const database_js_1 = require("../config/database.js"); // Ensure you're using the correct path for the sequelize instance
 // Define the UserProfile model
-const UserProfile = sequelize.define('UserProfile', {
+const UserProfile = database_js_1.sequelize.define('UserProfile', {
     bio: {
-        type: DataTypes.TEXT,
+        type: sequelize_1.DataTypes.TEXT,
         allowNull: true,
     },
     profilePicture: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true,
     },
     // Add other fields as necessary
@@ -17,7 +18,6 @@ const UserProfile = sequelize.define('UserProfile', {
     timestamps: true, // Add createdAt and updatedAt fields
     underscored: true, // Use snake_case for column names in the database
 });
-
 // Define associations (to be called in the User model's associate method)
 UserProfile.associate = (models) => {
     // Ensure the User model is available before defining associations
@@ -29,5 +29,5 @@ UserProfile.associate = (models) => {
         });
     }
 };
-
-export default UserProfile;
+exports.default = UserProfile;
+//# sourceMappingURL=userProfile.js.map

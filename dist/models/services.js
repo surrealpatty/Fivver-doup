@@ -1,44 +1,63 @@
-// src/models/services.js
 "use strict";
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Adjust the path to your database config
-
-class Service extends Model {}
-
-Service.init(
-  {
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+// Adjusted path for the transpiled dist folder
+const database_js_1 = require("../config/database.js"); // Make sure this is the correct relative path in the src folder
+class Service extends sequelize_1.Model {
+    // You can add associations here if needed
+    static associate(models) {
+        // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
+    }
+}
+// Initialize the Service model
+Service.init({
     title: {
-      type: DataTypes.STRING,
-      allowNull: false,
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            len: {
+                args: [3, 100], // Enforce length between 3 and 100 characters
+                msg: 'Title must be between 3 and 100 characters long',
+            },
+        },
     },
     description: {
-      type: DataTypes.STRING,
-      allowNull: false,
+        type: sequelize_1.DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Description cannot be empty', // Ensure description is provided
+            },
+        },
     },
     price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+        type: sequelize_1.DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+            isFloat: {
+                msg: 'Price must be a valid number', // Validate price as a float
+            },
+            min: {
+                args: [0],
+                msg: 'Price must be greater than or equal to zero', // Ensure price is non-negative
+            },
+        },
     },
     category: {
-      type: DataTypes.STRING,
-      allowNull: false,
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Category cannot be empty', // Ensure category is provided
+            },
+        },
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users', // Assuming you have a User model with which services are associated
-        key: 'id',
-      },
-    },
-  },
-  {
-    sequelize, // Sequelize instance
-    modelName: 'Service',
-    tableName: 'services', // Ensure your table is named 'services'
-    timestamps: true, // You can adjust this based on your table schema
-  }
-);
-
-// Export the Service model
-module.exports = { Service };
+}, {
+    sequelize: database_js_1.sequelize, // Pass sequelize instance here
+    modelName: 'Service', // Use the name 'Service'
+    tableName: 'services', // Table name in the database
+    timestamps: true, // Automatically add createdAt and updatedAt columns
+    underscored: true, // Use snake_case for database column names
+});
+exports.default = Service;
+//# sourceMappingURL=services.js.map

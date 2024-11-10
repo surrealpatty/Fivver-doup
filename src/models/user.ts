@@ -1,7 +1,8 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure this is correctly pointing to your Sequelize instance
+import { sequelize } from '../config/database'; // Ensure this is correctly pointing to your Sequelize instance
 import bcrypt from 'bcryptjs';
 
+// Define the attributes of the User model
 interface UserAttributes {
   id: number;
   username: string;
@@ -17,8 +18,10 @@ interface UserAttributes {
   updatedAt?: Date;
 }
 
+// Define the attributes required when creating a User
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
+// Define the User model class
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   id!: number;
   username!: string;
@@ -33,8 +36,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   createdAt?: Date;
   updatedAt?: Date;
 
-  // Association method
+  // Define the associations
   static associate(models: any) {
+    // Define the relationship between User and Review (assuming a Review model exists)
     User.hasMany(models.Review, {
       foreignKey: 'userId',
       as: 'reviews',
@@ -42,7 +46,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     });
   }
 
-  // Hash the user's password before saving to the database
+  // Hash the password before saving it to the database
   static async hashPassword(user: User) {
     if (user.password) {
       user.password = await bcrypt.hash(user.password, 10);
@@ -50,7 +54,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   }
 }
 
-// Initialize the User model
+// Initialize the User model with Sequelize
 User.init(
   {
     id: {
@@ -71,7 +75,7 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,  // Validate that the email is valid
+        isEmail: true,  // Validate email format
       },
     },
     password: {
@@ -109,15 +113,15 @@ User.init(
     },
   },
   {
-    sequelize, // Make sure sequelize is correctly passed here
+    sequelize, // Ensure sequelize instance is passed here
     modelName: 'User',
     tableName: 'users',
-    timestamps: true,
-    underscored: true,
+    timestamps: true, // Automatically adds createdAt and updatedAt
+    underscored: true, // Use snake_case for column names
   }
 );
 
-// Hook to hash password before creating and updating
+// Hook to hash the password before creating or updating a user
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 

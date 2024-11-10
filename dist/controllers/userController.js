@@ -1,111 +1,46 @@
 "use strict";
-const User = require('../../models/user'); // Adjusted path relative to the dist directory
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-// 1. Register a new user
-exports.registerUser = async (req, res) => {
-    const { username, email, password } = req.body;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+// 3. Upgrade to Paid Subscription
+exports.upgradeToPaid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user.id; // Ensure user ID comes from a verified JWT token
+    const durationInMonths = req.body.duration || 1; // Default to 1 month
+    const { registerUser, loginUser } = require('controllers/userController');
     try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+        const user = yield User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-        // Create a new user
-        const newUser = await User.create({
-            username,
-            email,
-            password: hashedPassword,
+        const currentDate = new Date();
+        // Check if user is already on a "Paid" subscription and extend it
+        if (user.role === 'Paid' && user.subscriptionEndDate > currentDate) {
+            user.subscriptionEndDate.setMonth(user.subscriptionEndDate.getMonth() + durationInMonths);
+        }
+        else {
+            // Otherwise, set new subscription period
+            user.role = 'Paid';
+            user.subscriptionStatus = 'Active';
+            user.subscriptionStartDate = currentDate;
+            user.subscriptionEndDate = new Date(currentDate);
+            user.subscriptionEndDate.setMonth(currentDate.getMonth() + durationInMonths);
+        }
+        yield user.save();
+        return res.status(200).json({
+            message: 'Subscription upgraded to Paid',
+            subscriptionEndDate: user.subscriptionEndDate,
+            subscriptionStatus: user.subscriptionStatus
         });
-        // Respond with the created user, excluding the password
-        const { password: _, ...userWithoutPassword } = newUser.toJSON();
-        return res.status(201).json(userWithoutPassword);
     }
     catch (error) {
-        console.error('Error registering user:', error);
-        return res.status(500).json({ message: 'Error registering user', error: error.message });
+        console.error('Error upgrading subscription:', error);
+        return res.status(500).json({ message: 'Error upgrading subscription', error: error.message });
     }
-};
-
-// 2. User Login
-exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        // Find the user by email
-        const user = await User.findOne({ where: { email } });
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        // Compare passwords
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        // Generate a JWT token
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        return res.status(200).json({ token });
-    }
-    catch (error) {
-        console.error('Error logging in user:', error);
-        return res.status(500).json({ message: 'Error logging in user', error: error.message });
-    }
-};
-
-// 3. Get User Profile
-exports.getUserProfile = async (req, res) => {
-    const userId = req.user.id;
-    try {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        const { password: _, ...userWithoutPassword } = user.toJSON();
-        return res.status(200).json(userWithoutPassword);
-    }
-    catch (error) {
-        console.error('Error fetching user profile:', error);
-        return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
-    }
-};
-
-// 4. Update User Profile
-exports.updateUserProfile = async (req, res) => {
-    const userId = req.user.id;
-    const { username, email, password } = req.body;
-    try {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        const updates = { username, email };
-        if (password) {
-            updates.password = await bcrypt.hash(password, 10);
-        }
-        await user.update(updates);
-        return res.status(200).json({ message: 'User profile updated successfully' });
-    }
-    catch (error) {
-        console.error('Error updating user profile:', error);
-        return res.status(500).json({ message: 'Error updating user profile', error: error.message });
-    }
-};
-
-// 5. Delete User
-exports.deleteUser = async (req, res) => {
-    const userId = req.user.id;
-    try {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        await user.destroy();
-        return res.status(200).json({ message: 'User deleted successfully' });
-    }
-    catch (error) {
-        console.error('Error deleting user:', error);
-        return res.status(500).json({ message: 'Error deleting user', error: error.message });
-    }
-};
+});
+//# sourceMappingURL=userController.js.map
