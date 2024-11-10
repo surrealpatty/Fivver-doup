@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Default import for User model
+const user_1 = require("../models/user"); // Default import for User model
 const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
 // User registration route
@@ -27,19 +27,19 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
     const { username, email, password, firstName, lastName } = req.body;
     try {
         // Check if username already exists
-        const existingUser = yield user_1.default.findOne({ where: { username } });
+        const existingUser = yield user_1.User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
         // Check if email already exists
-        const existingEmail = yield user_1.default.findOne({ where: { email } });
+        const existingEmail = yield user_1.User.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already taken' });
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         // Create the user with necessary fields
-        const user = yield user_1.default.create({
+        const user = yield user_1.User.create({
             username,
             email,
             password: hashedPassword,
