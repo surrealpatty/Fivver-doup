@@ -1,40 +1,11 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure this is correctly pointing to your Sequelize instance
-import bcrypt from 'bcryptjs';
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');  // Ensure this is correctly pointing to your Sequelize instance
+const bcrypt = require('bcryptjs');
 
-interface UserAttributes {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  role: 'Free' | 'Paid';
-  subscriptionStatus: 'Inactive' | 'Active';
-  subscriptionStartDate?: Date;
-  subscriptionEndDate?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  id!: number;
-  username!: string;
-  email!: string;
-  password!: string;
-  firstName?: string;
-  lastName?: string;
-  role!: 'Free' | 'Paid';
-  subscriptionStatus!: 'Inactive' | 'Active';
-  subscriptionStartDate?: Date;
-  subscriptionEndDate?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
-
-  // Association method
-  static associate(models: any) {
+// User model definition
+class User extends Model {
+  static associate(models) {
+    // Define associations here if needed, e.g., Review association
     User.hasMany(models.Review, {
       foreignKey: 'userId',
       as: 'reviews',
@@ -43,7 +14,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   }
 
   // Hash the user's password before saving to the database
-  static async hashPassword(user: User) {
+  static async hashPassword(user) {
     if (user.password) {
       user.password = await bcrypt.hash(user.password, 10);
     }
@@ -109,7 +80,7 @@ User.init(
     },
   },
   {
-    sequelize, // Make sure sequelize is correctly passed here
+    sequelize, // Pass sequelize instance here
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
@@ -121,4 +92,4 @@ User.init(
 User.beforeCreate(User.hashPassword);
 User.beforeUpdate(User.hashPassword);
 
-export default User;
+module.exports = User;
