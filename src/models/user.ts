@@ -1,5 +1,9 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Ensure the correct path to your database config
+import { Optional } from 'sequelize';  // Add this import for Optional
+import { UserAttributes } from '../models/user';  // Correct the path to UserAttributes
+
+// Your code below, where you need to use Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>
 
 // Define the UserAttributes interface
 export interface UserAttributes {

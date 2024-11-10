@@ -1,4 +1,4 @@
-import { Model } from 'sequelize';
+import { Model, Optional } from 'sequelize';
 export interface UserAttributes {
     id: number;
     username: string;
@@ -11,7 +11,9 @@ export interface UserAttributes {
     createdAt: Date;
     updatedAt: Date;
 }
-export declare class User extends Model<UserAttributes> implements UserAttributes {
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {
+}
+export declare class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     id: number;
     username: string;
     email: string;
