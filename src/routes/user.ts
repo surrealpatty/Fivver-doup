@@ -1,36 +1,22 @@
-import express, { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/user';  // Corrected the import for TypeScript
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
-
-// Initialize the express router
-const router = express.Router();
-
-// JWT Secret from environment variables
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined in environment variables.');
-}
-
 // Interface for the registration body
 interface RegisterBody {
     username: string;
     email: string;
     password: string;
-    firstName?: string;
-    lastName?: string;
+    firstName: string;  // Made required
+    lastName: string;   // Made required
 }
 
-// Registration Route
+// In the route
 router.post('/register', async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     const { username, email, password, firstName, lastName } = req.body;
 
     try {
+        // Ensure firstName and lastName are non-null strings
+        if (!firstName || !lastName) {
+            return res.status(400).json({ message: 'First and last name are required' });
+        }
+
         // Check if the user already exists (checking by both username and email)
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
@@ -71,45 +57,3 @@ router.post('/register', async (req: Request<{}, {}, RegisterBody>, res: Respons
         res.status(500).json({ message: 'Server error during registration' });
     }
 });
-
-// Interface for the login body
-interface LoginBody {
-    username: string;
-    password: string;
-}
-
-// Login Route
-router.post('/login', async (req: Request<{}, {}, LoginBody>, res: Response) => {
-    const { username, password } = req.body;
-
-    try {
-        // Find the user by username
-        const user = await User.findOne({ where: { username } });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Check if the password is valid
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid password' });
-        }
-
-        // Generate JWT token
-        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-
-        // Send token as response
-        res.json({ token });
-    } catch (error) {
-        console.error('Error during login:', error.message);
-        res.status(500).json({ message: 'Server error during login' });
-    }
-});
-
-// Example route for testing if routes are working
-router.get('/', (req: Request, res: Response) => {
-    res.send('User route is active');
-});
-
-// Export the router for use in the main app
-export default router;
