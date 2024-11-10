@@ -57,7 +57,7 @@ router.post(
                 lastName,
                 role: 'Free',  // Default role
                 subscriptionStatus: 'Inactive',  // Default subscription status
-            });
+            } as Partial<UserAttributes>);  // Use Partial to indicate optional fields
 
             // Respond with the created user details, excluding password
             res.status(201).json({
