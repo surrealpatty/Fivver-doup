@@ -7,6 +7,10 @@ interface UserAttributes {
     username: string;
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+    subscriptionStatus: string;
     createdAt: Date;  // createdAt from Sequelize
     updatedAt: Date;  // updatedAt from Sequelize
 }
@@ -19,6 +23,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public username!: string;
     public email!: string;
     public password!: string;
+    public firstName!: string;
+    public lastName!: string;
+    public role!: string;
+    public subscriptionStatus!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
@@ -57,86 +65,30 @@ User.init(
                 notEmpty: true,
             },
         },
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false, // Optional but can be set as required if needed
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: false, // Optional but can be set as required if needed
+        },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'Free', // Default to 'Free' if no role is provided
+        },
+        subscriptionStatus: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'Inactive', // Default to 'Inactive' if no subscription status is provided
+        },
     },
     {
         sequelize,
         modelName: 'User',
         tableName: 'users',
         timestamps: true, // Automatically adds `createdAt` and `updatedAt`
-    }
-);
-// In src/models/user.ts, make sure the model has these fields
-
-// Add these to UserAttributes if necessary:
-interface UserAttributes {
-    id: number;
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-    subscriptionStatus: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-User.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-            validate: {
-                notEmpty: true,
-            },
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-            validate: {
-                isEmail: true,
-                notEmpty: true,
-            },
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-            },
-        },
-        firstName: {
-            type: DataTypes.STRING,
-            allowNull: true, // optional
-        },
-        lastName: {
-            type: DataTypes.STRING,
-            allowNull: true, // optional
-        },
-        role: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            defaultValue: 'Free',
-        },
-        subscriptionStatus: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            defaultValue: 'Inactive',
-        },
-    },
-    {
-        sequelize,
-        modelName: 'User',
-        tableName: 'users',
-        timestamps: true,
     }
 );
 

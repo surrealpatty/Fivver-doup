@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';  // Corrected the import for TypeScript
@@ -17,8 +17,17 @@ if (!JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined in environment variables.');
 }
 
+// Interface for the registration body
+interface RegisterBody {
+    username: string;
+    email: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+}
+
 // Registration Route
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     const { username, email, password, firstName, lastName } = req.body;
 
     try {
@@ -63,8 +72,14 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Interface for the login body
+interface LoginBody {
+    username: string;
+    password: string;
+}
+
 // Login Route
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request<{}, {}, LoginBody>, res: Response) => {
     const { username, password } = req.body;
 
     try {
@@ -92,7 +107,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Example route for testing if routes are working
-router.get('/', (req, res) => {
+router.get('/', (req: Request, res: Response) => {
     res.send('User route is active');
 });
 
