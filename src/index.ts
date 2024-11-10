@@ -37,6 +37,7 @@ const startServer = async (): Promise<void> => {
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : { force: false };  // Alter models in development
 
+        // Syncing the models to the database, handling migrations properly
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
@@ -47,7 +48,7 @@ const startServer = async (): Promise<void> => {
         });
     } catch (error) {
         console.error('Error starting the server:', error);
-        // Don't call process.exit(1) unless it's critical
+        // Optionally add more granular error handling based on your needs
     }
 };
 

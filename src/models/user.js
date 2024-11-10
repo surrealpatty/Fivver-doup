@@ -7,6 +7,8 @@ interface UserAttributes {
     username: string;
     email: string;
     password: string;
+    createdAt: Date;  // Add createdAt to the attributes interface
+    updatedAt: Date;  // Add updatedAt to the attributes interface
 }
 
 // The creation attributes will be a subset of UserAttributes, excluding `id` since it's auto-generated
@@ -17,8 +19,6 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public username!: string;
     public email!: string;
     public password!: string;
-
-    // Timestamps
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
@@ -68,7 +68,7 @@ User.init(
 
 // Function to initialize the User model (useful for syncing the DB)
 export const initUser = async () => {
-    await sequelize.sync();
+    await sequelize.sync(); // Sync the DB
 };
 
 export default User;

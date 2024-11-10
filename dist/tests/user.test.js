@@ -13,18 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("../../dist/index")); // Adjusted path to the transpiled app
-const user_1 = require("../../dist/models/user"); // Adjusted path to transpiled user model
-const database_1 = require("../../dist/config/database"); // Assuming you have sequelize set up
+const index_1 = __importDefault(require("../../dist/index")); // Path to transpiled app
+const user_1 = require("../../dist/models/user"); // Path to transpiled user model
+const database_1 = require("../../dist/config/database"); // Sequelize instance
 // Reset the User table before each test
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Initializing user table...');
     yield (0, user_1.initUser)(); // Ensure User table is initialized before the tests
-    yield database_1.sequelize.sync({ force: true }); // Reset DB to ensure clean slate before each test
+    yield database_1.sequelize.sync({ force: false }); // Sync without dropping tables
 }));
 // Clear mocks between tests
 afterEach(() => {
     jest.clearAllMocks(); // Clears mock calls between tests
 });
+// Close database connection after all tests
+afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield database_1.sequelize.close(); // Close the connection to avoid open handles
+    console.log('Sequelize connection closed');
+}));
 // User registration and login test suite
 describe('User Registration and Login', () => {
     it('should register a new user', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -54,7 +60,7 @@ describe('User Registration and Login', () => {
         });
         // Ensure duplicate email is rejected
         expect(response.status).toBe(400); // 400 Bad Request for duplicate email
-        expect(response.body).toHaveProperty('error', 'Email already in use'); // Adjust the error message as needed
+        expect(response.body).toHaveProperty('error', 'Email already in use');
     }));
     it('should login a user', () => __awaiter(void 0, void 0, void 0, function* () {
         const userData = {
@@ -81,7 +87,7 @@ describe('User Registration and Login', () => {
         const response = yield (0, supertest_1.default)(index_1.default).post('/api/users/login').send(userData);
         // Ensure login fails with incorrect credentials
         expect(response.status).toBe(401); // 401 Unauthorized for incorrect credentials
-        expect(response.body).toHaveProperty('error', 'Invalid email or password'); // Adjust the error message as needed
+        expect(response.body).toHaveProperty('error', 'Invalid email or password');
     }));
     it('should return the user profile for a logged-in user', () => __awaiter(void 0, void 0, void 0, function* () {
         // Register and login the user
