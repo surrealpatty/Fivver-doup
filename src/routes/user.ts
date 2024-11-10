@@ -65,7 +65,7 @@ router.post(
                 lastName,
                 role: 'Free',
                 subscriptionStatus: 'Inactive',
-            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
+            });
 
             res.status(201).json({
                 id: user.id,
