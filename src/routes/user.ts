@@ -1,3 +1,4 @@
+// src/routes/user.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User, { UserAttributes } from '../models/user';  // Import User model

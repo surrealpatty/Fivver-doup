@@ -1,7 +1,9 @@
+// src/models/user.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Make sure to import sequelize from the correct path
+import { sequelize } from '../config/database';  // Ensure correct path
 
-interface UserAttributes {
+// Define the UserAttributes interface
+export interface UserAttributes {
     id: number;
     username: string;
     email: string;
@@ -14,6 +16,7 @@ interface UserAttributes {
     updatedAt: Date;
 }
 
+// User model definition
 export class User extends Model<UserAttributes> implements UserAttributes {
     public id!: number;
     public username!: string;
@@ -27,6 +30,7 @@ export class User extends Model<UserAttributes> implements UserAttributes {
     public updatedAt!: Date;
 }
 
+// Initialize User model
 User.init(
     {
         id: {

@@ -1,5 +1,5 @@
 import { Model } from 'sequelize';
-interface UserAttributes {
+export interface UserAttributes {
     id: number;
     username: string;
     email: string;
