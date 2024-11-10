@@ -4,26 +4,27 @@ import dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 
-// Check if required environment variables are defined
-const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT } = process.env;
+// Destructure and type-check environment variables
+const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_SSL, NODE_ENV } = process.env;
 
 if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
   throw new Error('Missing required database environment variables');
 }
 
-// Type checking for DB_DIALECT to ensure correct usage
+// Ensure correct usage of the DB_DIALECT
 const dialect = DB_DIALECT as Dialect;
+
+// Optional: check if DB_SSL is a valid string for boolean conversion
+const useSSL = DB_SSL === 'true';
 
 // Create a new Sequelize instance
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  dialect,  // Directly using the variable since it's already typed
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Enable logging only in development
+  dialect,  // The dialect is passed directly from environment variable
+  logging: NODE_ENV === 'development' ? console.log : false,  // Enable logging only in development
   dialectOptions: {
-    // Optional: For better performance and compatibility with certain DB engines
-    // Ensure that SSL is not enabled unless needed (based on your DB config)
-    ssl: process.env.DB_SSL === 'true',  // Use SSL if DB_SSL is 'true' in your .env
-    rejectUnauthorized: false,  // Disable verification if connecting to self-signed certs
+    ssl: useSSL,  // Use SSL if DB_SSL is 'true'
+    rejectUnauthorized: false,  // Disable verification if using self-signed certs
   },
 });
 
@@ -34,7 +35,7 @@ sequelize.authenticate()
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
-    process.exit(1); // Exit the process if the connection fails
+    process.exit(1);  // Exit the process if the connection fails
   });
 
 export { sequelize };

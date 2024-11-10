@@ -79,4 +79,4 @@ User.init(
   }
 );
 
-export { User, UserAttributes }; // Export User model and UserAttributes for type checking
+export { User, UserAttributes, UserCreationAttributes }; // Export User model, UserAttributes, and UserCreationAttributes for type checking
