@@ -39,16 +39,16 @@ router.post(
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Create the user with required fields and correct typing
+            // Create the user with required fields
             const user = await User.create({
                 username,
                 email,
-                password: hashedPassword, // Corrected to use comma
+                password: hashedPassword,
                 firstName,
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Explicitly omit 'id', 'createdAt', and 'updatedAt'
+            });
 
             // Respond with the created user data
             res.status(201).json({
