@@ -4,31 +4,16 @@ interface UserAttributes {
     username: string;
     email: string;
     password: string;
-    firstName?: string;
-    lastName?: string;
-    role: 'Free' | 'Paid';
-    subscriptionStatus: 'Inactive' | 'Active';
-    subscriptionStartDate?: Date;
-    subscriptionEndDate?: Date;
-    createdAt?: Date;
-    updatedAt?: Date;
 }
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 }
 declare class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     id: number;
     username: string;
     email: string;
     password: string;
-    firstName?: string;
-    lastName?: string;
-    role: 'Free' | 'Paid';
-    subscriptionStatus: 'Inactive' | 'Active';
-    subscriptionStartDate?: Date;
-    subscriptionEndDate?: Date;
-    createdAt?: Date;
-    updatedAt?: Date;
-    static associate(models: any): void;
-    static hashPassword(user: User): Promise<void>;
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
 }
+export declare const initUser: () => Promise<void>;
 export default User;

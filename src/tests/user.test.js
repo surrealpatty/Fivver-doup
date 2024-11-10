@@ -1,17 +1,24 @@
 import request from 'supertest';
-import app from '../../dist/index';  // Adjusted path to the transpiled app
-import { initUser } from '../../dist/models/user';  // Adjusted path to transpiled user model
-import { sequelize } from '../../dist/config/database';  // Assuming you have sequelize set up
+import app from '../../dist/index';  // Path to transpiled app
+import { initUser } from '../../dist/models/user';  // Path to transpiled user model
+import { sequelize } from '../../dist/config/database';  // Sequelize instance
 
 // Reset the User table before each test
 beforeAll(async () => {
-    await initUser(); // Ensure User table is initialized before the tests
-    await sequelize.sync({ force: true }); // Reset DB to ensure clean slate before each test
+    console.log('Initializing user table...');
+    await initUser();  // Ensure User table is initialized before the tests
+    await sequelize.sync({ force: false });  // Sync without dropping tables
 });
 
 // Clear mocks between tests
 afterEach(() => {
-    jest.clearAllMocks(); // Clears mock calls between tests
+    jest.clearAllMocks();  // Clears mock calls between tests
+});
+
+// Close database connection after all tests
+afterAll(async () => {
+    await sequelize.close();  // Close the connection to avoid open handles
+    console.log('Sequelize connection closed');
 });
 
 // User registration and login test suite
@@ -49,7 +56,7 @@ describe('User Registration and Login', () => {
 
         // Ensure duplicate email is rejected
         expect(response.status).toBe(400); // 400 Bad Request for duplicate email
-        expect(response.body).toHaveProperty('error', 'Email already in use'); // Adjust the error message as needed
+        expect(response.body).toHaveProperty('error', 'Email already in use');
     });
 
     it('should login a user', async () => {
@@ -83,7 +90,7 @@ describe('User Registration and Login', () => {
 
         // Ensure login fails with incorrect credentials
         expect(response.status).toBe(401); // 401 Unauthorized for incorrect credentials
-        expect(response.body).toHaveProperty('error', 'Invalid email or password'); // Adjust the error message as needed
+        expect(response.body).toHaveProperty('error', 'Invalid email or password');
     });
 
     it('should return the user profile for a logged-in user', async () => {
