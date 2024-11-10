@@ -15,9 +15,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Import User model
+const user_1 = __importDefault(require("../models/user")); // Import User model and its attributes type
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
+// User registration route
 router.post('/register', (0, express_validator_1.body)('username').isString().notEmpty().withMessage('Username is required'), (0, express_validator_1.body)('email').isEmail().withMessage('Invalid email format'), (0, express_validator_1.body)('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'), (0, express_validator_1.body)('firstName').isString().notEmpty().withMessage('First name is required'), (0, express_validator_1.body)('lastName').isString().notEmpty().withMessage('Last name is required'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -25,24 +26,29 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
     }
     const { username, email, password, firstName, lastName } = req.body;
     try {
+        // Check if username already exists
         const existingUser = yield user_1.default.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
+        // Check if email already exists
         const existingEmail = yield user_1.default.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already taken' });
         }
+        // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        // Create the user with required fields
         const user = yield user_1.default.create({
             username,
             email,
-            password: hashedPassword,
+            password: hashedPassword, // Corrected to use comma
             firstName,
             lastName,
-            role: 'Free',
-            subscriptionStatus: 'Inactive',
-        }); // Use UserAttributes type directly
+            role: 'Free', // Default role
+            subscriptionStatus: 'Inactive', // Default subscription status
+        }); // Allow all properties to be optional
+        // Respond with the created user data
         res.status(201).json({
             id: user.id,
             username: user.username,

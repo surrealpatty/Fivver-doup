@@ -48,7 +48,7 @@ router.post(
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            } as Optional<UserAttributes>); // Allow all properties to be optional
+            } as Partial<UserAttributes>); // Use Partial to make all properties optional
 
             // Respond with the created user data
             res.status(201).json({
