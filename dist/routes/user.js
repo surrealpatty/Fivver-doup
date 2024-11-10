@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Import User model
+const user_1 = require("../models/user"); // Ensure UserAttributes is imported correctly
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
 // User registration route
@@ -27,19 +27,19 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
     const { username, email, password, firstName, lastName } = req.body;
     try {
         // Check if username already exists
-        const existingUser = yield user_1.default.findOne({ where: { username } });
+        const existingUser = yield user_1.User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
         // Check if email already exists
-        const existingEmail = yield user_1.default.findOne({ where: { email } });
+        const existingEmail = yield user_1.User.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already taken' });
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // Create the user without the explicit omission of fields
-        const user = yield user_1.default.create({
+        // Create the user, using Partial to make fields optional
+        const user = yield user_1.User.create({
             username,
             email,
             password: hashedPassword,
@@ -47,7 +47,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Explicitly mark these fields as optional
+        }); // Use Partial to allow optional fields
         // Respond with the created user data
         res.status(201).json({
             id: user.id,
