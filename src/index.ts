@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize } from './config/database';  // Correctly import sequelize instance
 import userRoutes from './routes/user';  // Correct TypeScript import (omit .js)
 
-dotenv.config();  // Load environment variables from .env file
+// Load environment variables from .env file
+dotenv.config();  
 
 // Create Express app
 const app = express();
