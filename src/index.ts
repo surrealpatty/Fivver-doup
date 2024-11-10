@@ -5,7 +5,7 @@ import { sequelize } from './config/database';  // Correctly import sequelize in
 import userRoutes from './routes/user';  // Correct TypeScript import (omit .js)
 
 // Load environment variables from .env file
-dotenv.config();  
+dotenv.config();
 
 // Create Express app
 const app = express();

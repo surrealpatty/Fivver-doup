@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User from '../models/user';  // Import the User model
+import User, { UserAttributes } from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
 
 // Interface for the registration body
@@ -56,7 +56,7 @@ router.post(
                 lastName,
                 role: 'Free',  // Default role
                 subscriptionStatus: 'Inactive',  // Default subscription status
-            });
+            } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
 
             // Respond with the created user details, excluding password
             res.status(201).json({
@@ -69,7 +69,8 @@ router.post(
                 subscriptionStatus: user.subscriptionStatus,
             });
         } catch (error) {
-            console.error('Error during registration:', error.message);
+            // Cast error as Error to access message property
+            console.error('Error during registration:', (error as Error).message);
             res.status(500).json({ message: 'Server error during registration' });
         }
     }
