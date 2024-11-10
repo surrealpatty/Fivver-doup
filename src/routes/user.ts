@@ -6,24 +6,16 @@ import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
 
 interface UserAttributes {
-    id?: number;
+    id: number;
     username: string;
     email: string;
     password: string;
     firstName: string;
     lastName: string;
-    role?: string;
-    subscriptionStatus?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-interface RegisterBody {
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
+    role: string;
+    subscriptionStatus: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const router = Router();
@@ -35,7 +27,7 @@ router.post(
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
     body('firstName').isString().notEmpty().withMessage('First name is required'),
     body('lastName').isString().notEmpty().withMessage('Last name is required'),
-    async (req: Request<{}, {}, RegisterBody>, res: Response) => {
+    async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -56,15 +48,16 @@ router.post(
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
+            // Create user with exact required properties
             const user = await User.create({
                 username,
                 email,
                 password: hashedPassword,
                 firstName,
                 lastName,
-                role: 'Free',
-                subscriptionStatus: 'Inactive',
-            } as UserAttributes); // Use UserAttributes type directly
+                role: 'Free', // Default role
+                subscriptionStatus: 'Inactive', // Default subscription status
+            });
 
             res.status(201).json({
                 id: user.id,
