@@ -4,6 +4,21 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
+import { Optional } from 'sequelize';  // Import Optional from Sequelize
+
+// Define UserAttributes if not already defined in your project
+interface UserAttributes {
+    id?: number;
+    username: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    role?: string;
+    subscriptionStatus?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
 
 interface RegisterBody {
     username: string;
@@ -15,10 +30,8 @@ interface RegisterBody {
 
 const router = Router();
 
-// Route for user registration
 router.post(
     '/register',
-    // Validate and sanitize inputs using express-validator
     body('username').isString().notEmpty().withMessage('Username is required'),
     body('email').isEmail().withMessage('Invalid email format'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
@@ -45,15 +58,14 @@ router.post(
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Updated User.create call with type assertion
             const user = await User.create({
                 username,
                 email,
                 password: hashedPassword,
                 firstName,
                 lastName,
-                role: 'Free',  
-                subscriptionStatus: 'Inactive',  
+                role: 'Free',
+                subscriptionStatus: 'Inactive',
             } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
 
             res.status(201).json({
