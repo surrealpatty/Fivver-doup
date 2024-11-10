@@ -51,6 +51,61 @@ User.init({
     tableName: 'users',
     timestamps: true, // Automatically adds `createdAt` and `updatedAt`
 });
+User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+    },
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            notEmpty: true,
+        },
+    },
+    email: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true,
+            notEmpty: true,
+        },
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
+    firstName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true, // optional
+    },
+    lastName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true, // optional
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Free',
+    },
+    subscriptionStatus: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Inactive',
+    },
+}, {
+    sequelize: database_1.sequelize,
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true,
+});
 // Function to initialize the User model (useful for syncing the DB)
 const initUser = () => __awaiter(void 0, void 0, void 0, function* () {
     yield database_1.sequelize.sync(); // Sync the DB

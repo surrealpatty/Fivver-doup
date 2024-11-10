@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const bcryptjs_1 = __importDefault(require("bcryptjs")); // bcryptjs is the correct library you are using, so it's good to stick with it
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_js_1 = __importDefault(require("../models/user.js")); // Ensure the path is correct to your User model
+const user_1 = __importDefault(require("../models/user")); // Corrected the import for TypeScript
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables
 dotenv_1.default.config();
@@ -31,18 +31,18 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
     const { username, email, password, firstName, lastName } = req.body;
     try {
         // Check if the user already exists (checking by both username and email)
-        const existingUser = yield user_js_1.default.findOne({ where: { username } });
+        const existingUser = yield user_1.default.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
-        const existingEmail = yield user_js_1.default.findOne({ where: { email } });
+        const existingEmail = yield user_1.default.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already taken' });
         }
         // Hash the password before saving
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         // Create a new user with default 'Free' role and 'Inactive' subscription status
-        const user = yield user_js_1.default.create({
+        const user = yield user_1.default.create({
             username,
             email,
             password: hashedPassword, // Store the hashed password
@@ -72,7 +72,7 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { username, password } = req.body;
     try {
         // Find the user by username
-        const user = yield user_js_1.default.findOne({ where: { username } });
+        const user = yield user_1.default.findOne({ where: { username } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

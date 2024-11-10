@@ -17,5 +17,17 @@ declare class User extends Model<UserAttributes, UserCreationAttributes> impleme
     readonly createdAt: Date;
     readonly updatedAt: Date;
 }
+interface UserAttributes {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+    subscriptionStatus: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
 export declare const initUser: () => Promise<void>;
 export default User;
