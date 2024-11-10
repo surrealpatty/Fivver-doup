@@ -2,7 +2,7 @@
 
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User from '../models/user';  // Default import for User model
+import {User} from '../models/user';  // Default import for User model
 import { body, validationResult } from 'express-validator';
 import { UserAttributes } from '../models/user';  // Import UserAttributes from the model file
 

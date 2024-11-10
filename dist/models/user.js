@@ -1,16 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// Sequelize instance configuration
-const sequelize = new Sequelize({
-    username: 'your_username',
-    password: 'your_password',
-    database: 'your_database_name',
-    host: 'localhost',
-    dialect: 'mysql',
-    dialectOptions: {
-        charset: 'utf8mb4', // Ensuring charset compatibility
+exports.User = void 0;
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Correctly import the sequelize instance
+// Define the User model
+class User extends sequelize_1.Model {
+}
+exports.User = User;
+// Initialize the User model
+User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    logging: false, // Optional: Disable logging for better performance
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    email: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    firstName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    lastName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    subscriptionStatus: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    sequelize: database_1.sequelize, // Using the imported sequelize instance
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true, // Enable timestamps for createdAt and updatedAt
 });
-exports.default = sequelize;
 //# sourceMappingURL=user.js.map
