@@ -1,25 +1,5 @@
-import { Model } from 'sequelize';
-export interface UserAttributes {
-    id: number;
-    username: string;
-    email: string;
-    password: string;
-    firstName?: string;
-    lastName?: string;
-    role: string;
-    subscriptionStatus: string;
-    createdAt: Date;
-    updatedAt: Date;
+export = User;
+declare class User extends Model<any, any> {
+    constructor(values?: import("sequelize").Optional<any, string> | undefined, options?: import("sequelize").BuildOptions);
 }
-export declare class User extends Model<UserAttributes> implements UserAttributes {
-    id: number;
-    username: string;
-    email: string;
-    password: string;
-    firstName?: string;
-    lastName?: string;
-    role: string;
-    subscriptionStatus: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { Model } from "sequelize/types/model";
