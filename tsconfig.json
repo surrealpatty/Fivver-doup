@@ -21,7 +21,7 @@
   },
   "include": [
     "src/**/*.ts"                                    /* Include all TypeScript files in the src directory */
-  ],
+, "src/models/user.js", "src/index.js", "src/declarations.d.js"  ],
   "exclude": [
     "node_modules",                                  /* Exclude the node_modules directory */
     "dist"                                           /* Exclude the dist directory */
