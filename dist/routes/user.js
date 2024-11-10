@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = require("../models/user"); // Make sure this import is correct
+const user_1 = require("../models/user"); // Correct import for User model
 const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
 // User registration route
@@ -47,7 +47,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Marking fields as optional for auto-generated fields
+        }); // Casting the object to UserAttributes type
         // Respond with the created user data
         res.status(201).json({
             id: user.id,
