@@ -44,6 +44,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         // Sync models with the database based on environment
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : { force: false }; // Alter models in development
+        // Syncing the models to the database, handling migrations properly
         yield database_1.sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
         // Start the Express server
@@ -54,7 +55,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error('Error starting the server:', error);
-        // Don't call process.exit(1) unless it's critical
+        // Optionally add more granular error handling based on your needs
     }
 });
 // Initialize the server

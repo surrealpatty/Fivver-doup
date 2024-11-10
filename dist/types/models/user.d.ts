@@ -4,6 +4,8 @@ interface UserAttributes {
     username: string;
     email: string;
     password: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 }

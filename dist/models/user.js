@@ -53,7 +53,7 @@ User.init({
 });
 // Function to initialize the User model (useful for syncing the DB)
 const initUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield database_1.sequelize.sync();
+    yield database_1.sequelize.sync(); // Sync the DB
 });
 exports.initUser = initUser;
 exports.default = User;
