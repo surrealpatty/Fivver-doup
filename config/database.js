@@ -1,9 +1,8 @@
-// Manually define a string union type for valid dialects
+// Define the type for valid dialects
 type ValidDialect = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle';
 
-// Type guard function to check if a string is a valid dialect
+// Type guard to check if a string is a valid dialect
 function isValidDialect(dialect: string | undefined): dialect is ValidDialect {
-  // Only return true if the dialect is not undefined and matches one of the valid dialects
   return dialect !== undefined && ['mysql', 'postgres', 'sqlite', 'mariadb', 'mssql', 'db2', 'snowflake', 'oracle'].includes(dialect);
 }
 
@@ -21,7 +20,7 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
   throw new Error('Missing required database environment variables');
 }
 
-// Ensure DB_DIALECT is a valid dialect using the type guard
+// Validate DB_DIALECT using the type guard
 if (!isValidDialect(DB_DIALECT)) {
   throw new Error(`Invalid DB_DIALECT value: ${DB_DIALECT}`);
 }
