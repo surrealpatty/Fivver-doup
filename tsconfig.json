@@ -17,12 +17,14 @@
     "baseUrl": ".",                                   /* Set the base directory for relative module imports */
     "declarationDir": "./dist/types",                 /* Specify a separate folder for .d.ts files */
     "allowJs": true,                                  /* Allow JavaScript files to be included in the compilation */
-    "checkJs": false                                  /* Disables type checking for JavaScript files */
+    "checkJs": false,                                 /* Disables type checking for JavaScript files */
+    "skipDefaultLibCheck": true                       /* Skip checking of default library files for faster compilation */
   },
   "include": [
     "src/**/*.ts",                                    /* Include all TypeScript files in the src directory */
-    "src/models/user.ts",                             /* Include user.js for compilation (since it’s part of the code) */
-    "src/config/database.js"                          /* Include database.js for compilation */
+    "src/models/user.ts",                             /* Include user.ts for compilation (since it's part of the code) */
+    "src/config/database.ts",                         /* Include database.ts for compilation */
+    "src/**/*.js"                                     /* Include all JavaScript files in the src directory */
   ],
   "exclude": [
     "node_modules",                                   /* Exclude the node_modules directory */
