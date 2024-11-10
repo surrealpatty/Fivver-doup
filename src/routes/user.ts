@@ -48,7 +48,7 @@ router.post(
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            } as Partial<UserAttributes>); // Use Partial to make all properties optional
+            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Exclude auto-generated fields
 
             // Respond with the created user data
             res.status(201).json({

@@ -47,7 +47,7 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Allow all properties to be optional
+        }); // Use Partial to make all properties optional
         // Respond with the created user data
         res.status(201).json({
             id: user.id,
