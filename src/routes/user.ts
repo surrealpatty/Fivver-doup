@@ -2,7 +2,7 @@
 
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User, { UserAttributes } from '../models/user';  // Import User model and its attributes type
+import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
 
 const router = Router();
@@ -39,7 +39,7 @@ router.post(
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Create the user with required fields
+            // Create the user without the explicit omission of fields
             const user = await User.create({
                 username,
                 email,
@@ -48,7 +48,7 @@ router.post(
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            });
+            } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Explicitly mark these fields as optional
 
             // Respond with the created user data
             res.status(201).json({

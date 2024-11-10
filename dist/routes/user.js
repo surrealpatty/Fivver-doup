@@ -38,16 +38,16 @@ router.post('/register', (0, express_validator_1.body)('username').isString().no
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // Create the user with required fields and correct typing
+        // Create the user with required fields
         const user = yield user_1.default.create({
             username,
             email,
-            password: hashedPassword, // Corrected to use comma
+            password: hashedPassword,
             firstName,
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Explicitly omit 'id', 'createdAt', and 'updatedAt'
+        });
         // Respond with the created user data
         res.status(201).json({
             id: user.id,
