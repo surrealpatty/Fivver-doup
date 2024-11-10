@@ -1,7 +1,7 @@
 // src/routes/user.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User from '../models/user';  // Import User model
+import User, { UserAttributes } from '../models/user';  // Import User model and UserAttributes type
 import { body, validationResult } from 'express-validator';  // For validation
 
 // Interface for the registration body
@@ -57,7 +57,7 @@ router.post(
                 lastName,
                 role: 'Free',  // Default role
                 subscriptionStatus: 'Inactive',  // Default subscription status
-            });
+            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Omit the fields Sequelize auto-handles
 
             // Respond with the created user details, excluding password
             res.status(201).json({

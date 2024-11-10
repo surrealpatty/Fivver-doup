@@ -62,7 +62,7 @@ router.post('/register',
         });
     }
     catch (error) {
-        // Cast error as Error to access message property
+        // Handle error with proper type
         console.error('Error during registration:', error.message);
         res.status(500).json({ message: 'Server error during registration' });
     }
