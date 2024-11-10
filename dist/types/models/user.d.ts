@@ -1,4 +1,5 @@
 import { Model, Optional } from 'sequelize';
+import { UserAttributes } from '../models/user';
 export interface UserAttributes {
     id: number;
     username: string;

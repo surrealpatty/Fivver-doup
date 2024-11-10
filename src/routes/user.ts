@@ -2,8 +2,9 @@
 
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { User } from '../models/user'; // Make sure this import is correct
+import { User } from '../models/user'; // Correct import for User model
 import { body, validationResult } from 'express-validator';
+import { UserAttributes } from '../models/user'; // Import UserAttributes for type safety
 
 const router = Router();
 
@@ -48,7 +49,7 @@ router.post(
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            } as unknown as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Marking fields as optional for auto-generated fields
+            } as UserAttributes); // Casting the object to UserAttributes type
 
             // Respond with the created user data
             res.status(201).json({
