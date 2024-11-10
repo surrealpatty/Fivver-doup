@@ -20,10 +20,12 @@
     "paths": {}                                      /* You can remove paths if they aren't required */
   },
   "include": [
-    "src/**/*.ts"                                    /* Include all TypeScript files in the src directory */
-, "src/models/user.js", "src/index.ts", "src/declarations.d.ts"  ],
+    "src/**/*.ts",                                   /* Include all TypeScript files in the src directory */
+    "src/**/*.js"                                    /* Include JavaScript files for type-checking */
+  ],
   "exclude": [
     "node_modules",                                  /* Exclude the node_modules directory */
-    "dist"                                           /* Exclude the dist directory */
+    "dist",                                           /* Exclude the dist directory */
+    "**/*.d.ts"                                      /* Exclude declaration files from being compiled (optional) */
   ]
 }

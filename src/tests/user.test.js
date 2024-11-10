@@ -5,8 +5,8 @@ import { sequelize } from '../../dist/config/database';  // Assuming you have se
 
 // Reset the User table before each test
 beforeAll(async () => {
-    await sequelize.sync({ force: true }); // Reset DB to ensure clean slate before each test
     await initUser(); // Ensure User table is initialized before the tests
+    await sequelize.sync({ force: true }); // Reset DB to ensure clean slate before each test
 });
 
 // Clear mocks between tests
