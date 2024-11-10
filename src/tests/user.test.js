@@ -1,23 +1,22 @@
 import request from 'supertest';
-import app from '../../dist/index';  // Path to transpiled app
-import { initUser } from '../../dist/models/user';  // Path to transpiled user model
-import { sequelize } from '../../dist/config/database';  // Sequelize instance
+import app from '../../dist/index';  // Adjust to the path of your compiled app
+import { initUser } from '../../dist/models/user';  // Adjust path for transpiled model
+import sequelize from '../../dist/config/database';  // Import Sequelize instance
 
-// Reset the User table before each test
+// Sync database before running tests
 beforeAll(async () => {
-    console.log('Initializing user table...');
-    await initUser();  // Ensure User table is initialized before the tests
-    await sequelize.sync({ force: false });  // Sync without dropping tables
+    console.log('Initializing database...');
+    await sequelize.sync({ force: true });  // Clear and sync the database for testing
 });
 
-// Clear mocks between tests
+// Clear mocks and data between tests
 afterEach(() => {
-    jest.clearAllMocks();  // Clears mock calls between tests
+    jest.clearAllMocks();  // Clears mock calls
 });
 
-// Close database connection after all tests
+// Close the database connection after all tests
 afterAll(async () => {
-    await sequelize.close();  // Close the connection to avoid open handles
+    await sequelize.close();  // Avoid open handles warning
     console.log('Sequelize connection closed');
 });
 
@@ -33,14 +32,14 @@ describe('User Registration and Login', () => {
 
         const response = await request(app).post('/api/users/register').send(newUser);
 
-        // Ensure successful registration
+        // Expect successful registration
         expect(response.status).toBe(201); // 201 Created
         expect(response.body).toHaveProperty('username', newUser.username);
         expect(response.body).toHaveProperty('email', newUser.email);
     });
 
     it('should not allow duplicate email during registration', async () => {
-        // First, register the user
+        // Register user once
         await request(app).post('/api/users/register').send({
             username: 'testuser',
             email: 'testuser@example.com',
@@ -54,8 +53,8 @@ describe('User Registration and Login', () => {
             password: 'newpassword123',
         });
 
-        // Ensure duplicate email is rejected
-        expect(response.status).toBe(400); // 400 Bad Request for duplicate email
+        // Expect 400 error for duplicate email
+        expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('error', 'Email already in use');
     });
 
@@ -72,12 +71,12 @@ describe('User Registration and Login', () => {
             password: userData.password,
         });
 
-        // Now login
+        // Now attempt login
         const response = await request(app).post('/api/users/login').send(userData);
 
-        // Ensure the login is successful and returns a token
-        expect(response.status).toBe(200); // 200 OK for successful login
-        expect(response.body).toHaveProperty('token'); // Ensure the token is returned
+        // Expect successful login
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('token');
     });
 
     it('should not login with incorrect credentials', async () => {
@@ -88,8 +87,8 @@ describe('User Registration and Login', () => {
 
         const response = await request(app).post('/api/users/login').send(userData);
 
-        // Ensure login fails with incorrect credentials
-        expect(response.status).toBe(401); // 401 Unauthorized for incorrect credentials
+        // Expect 401 Unauthorized
+        expect(response.status).toBe(401);
         expect(response.body).toHaveProperty('error', 'Invalid email or password');
     });
 
@@ -113,8 +112,8 @@ describe('User Registration and Login', () => {
             .get('/api/users/profile')
             .set('Authorization', `Bearer ${token}`);
 
-        // Ensure the user profile is returned correctly
-        expect(response.status).toBe(200); // 200 OK for fetching the profile
+        // Expect profile details to be returned
+        expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('username', newUser.username);
         expect(response.body).toHaveProperty('email', newUser.email);
     });
