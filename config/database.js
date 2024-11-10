@@ -3,8 +3,8 @@ type ValidDialect = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2
 
 // Type guard function to check if a string is a valid dialect
 function isValidDialect(dialect: string | undefined): dialect is ValidDialect {
-  return dialect !== undefined && 
-         ['mysql', 'postgres', 'sqlite', 'mariadb', 'mssql', 'db2', 'snowflake', 'oracle'].includes(dialect);
+  // Only return true if the dialect is not undefined and matches one of the valid dialects
+  return dialect !== undefined && ['mysql', 'postgres', 'sqlite', 'mariadb', 'mssql', 'db2', 'snowflake', 'oracle'].includes(dialect);
 }
 
 import { Sequelize } from 'sequelize';
