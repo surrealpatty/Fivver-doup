@@ -2,24 +2,12 @@
 
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User from '../models/user';  // Import User model
+import User, { UserAttributes } from '../models/user';  // Import User model and its attributes type
 import { body, validationResult } from 'express-validator';  // For validation
-
-interface UserAttributes {
-    id: number;
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-    subscriptionStatus: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
 
 const router = Router();
 
+// User registration route
 router.post(
     '/register',
     body('username').isString().notEmpty().withMessage('Username is required'),
@@ -36,29 +24,33 @@ router.post(
         const { username, email, password, firstName, lastName } = req.body;
 
         try {
+            // Check if username already exists
             const existingUser = await User.findOne({ where: { username } });
             if (existingUser) {
                 return res.status(400).json({ message: 'Username already taken' });
             }
 
+            // Check if email already exists
             const existingEmail = await User.findOne({ where: { email } });
             if (existingEmail) {
                 return res.status(400).json({ message: 'Email is already taken' });
             }
 
+            // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Create user with exact required properties
+            // Create the user with required fields
             const user = await User.create({
                 username,
                 email,
-                password: hashedPassword,
+                password: hashedPassword, // Corrected to use comma
                 firstName,
                 lastName,
                 role: 'Free', // Default role
                 subscriptionStatus: 'Inactive', // Default subscription status
-            });
+            } as Optional<UserAttributes>); // Allow all properties to be optional
 
+            // Respond with the created user data
             res.status(201).json({
                 id: user.id,
                 username: user.username,
