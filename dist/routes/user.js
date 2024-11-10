@@ -18,10 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = __importDefault(require("../models/user")); // Import User model
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
-// Route for user registration
-router.post('/register', 
-// Validate and sanitize inputs using express-validator
-(0, express_validator_1.body)('username').isString().notEmpty().withMessage('Username is required'), (0, express_validator_1.body)('email').isEmail().withMessage('Invalid email format'), (0, express_validator_1.body)('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'), (0, express_validator_1.body)('firstName').isString().notEmpty().withMessage('First name is required'), (0, express_validator_1.body)('lastName').isString().notEmpty().withMessage('Last name is required'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/register', (0, express_validator_1.body)('username').isString().notEmpty().withMessage('Username is required'), (0, express_validator_1.body)('email').isEmail().withMessage('Invalid email format'), (0, express_validator_1.body)('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'), (0, express_validator_1.body)('firstName').isString().notEmpty().withMessage('First name is required'), (0, express_validator_1.body)('lastName').isString().notEmpty().withMessage('Last name is required'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -37,7 +34,6 @@ router.post('/register',
             return res.status(400).json({ message: 'Email is already taken' });
         }
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // Updated User.create call with type assertion
         const user = yield user_1.default.create({
             username,
             email,

@@ -4,7 +4,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
-import { Optional } from 'sequelize';  // Import Optional from Sequelize
+import { Omit } from 'sequelize';  // Use Omit for removing fields
 
 // Define UserAttributes if not already defined in your project
 interface UserAttributes {
@@ -66,7 +66,7 @@ router.post(
                 lastName,
                 role: 'Free',
                 subscriptionStatus: 'Inactive',
-            } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
+            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
 
             res.status(201).json({
                 id: user.id,
