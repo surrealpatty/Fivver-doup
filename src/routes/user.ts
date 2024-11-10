@@ -4,7 +4,6 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
-import { Omit } from 'sequelize';  // Use Omit for removing fields
 
 // Define UserAttributes if not already defined in your project
 interface UserAttributes {
