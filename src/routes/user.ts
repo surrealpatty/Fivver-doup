@@ -3,7 +3,6 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User, { UserAttributes } from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
-import { Optional } from 'sequelize';  // Import Optional for creating user attributes
 
 // Interface for the registration body
 interface RegisterBody {
@@ -58,7 +57,7 @@ router.post(
                 lastName,
                 role: 'Free',  // Default role
                 subscriptionStatus: 'Inactive',  // Default subscription status
-            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Exclude `id`, `createdAt`, and `updatedAt` from `UserAttributes`
+            });
 
             // Respond with the created user details, excluding password
             res.status(201).json({

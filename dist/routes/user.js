@@ -49,7 +49,7 @@ router.post('/register',
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        }); // Exclude `id`, `createdAt`, and `updatedAt` from `UserAttributes`
+        });
         // Respond with the created user details, excluding password
         res.status(201).json({
             id: user.id,
