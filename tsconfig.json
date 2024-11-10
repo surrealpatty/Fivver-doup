@@ -15,10 +15,14 @@
     "declaration": true,                              /* Generate type declaration files (.d.ts) */
     "sourceMap": true,                                /* Generate source maps for easier debugging */
     "baseUrl": ".",                                   /* Set the base directory for relative module imports */
-    "declarationDir": "./dist/types"                  /* Specify a separate folder for .d.ts files */
+    "declarationDir": "./dist/types",                 /* Specify a separate folder for .d.ts files */
+    "allowJs": true,                                  /* Allow JavaScript files to be included in the compilation */
+    "checkJs": false                                  /* Disables type checking for JavaScript files */
   },
   "include": [
-    "src/**/*.ts"                                     /* Include all TypeScript files in the src directory */
+    "src/**/*.ts",                                    /* Include all TypeScript files in the src directory */
+    "src/models/user.js",                             /* Include user.js for compilation (since it’s part of the code) */
+    "src/config/database.js"                          /* Include database.js for compilation */
   ],
   "exclude": [
     "node_modules",                                   /* Exclude the node_modules directory */
