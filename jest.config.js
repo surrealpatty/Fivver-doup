@@ -4,8 +4,8 @@ module.exports = {
 
   // Specify the test files to be matched by Jest
   testMatch: [
-    "**/src/tests/**/*.test.js",  // Match test files with the .test.js extension under the src/tests folder
-    "**/src/tests/**/*.spec.js",  // Match test files with the .spec.js extension under the src/tests folder
+    "**/src/tests/**/*.test.{js,ts}",  // Match both .test.js and .test.ts files under the src/tests folder
+    "**/src/tests/**/*.spec.{js,ts}",  // Match both .spec.js and .spec.ts files under the src/tests folder
   ],
 
   // Specify how files are transformed before running tests
