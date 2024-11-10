@@ -58,7 +58,7 @@ router.post(
                 lastName,
                 role: 'Free',  // Default role
                 subscriptionStatus: 'Inactive',  // Default subscription status
-            } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
+            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Exclude `id`, `createdAt`, and `updatedAt` from `UserAttributes`
 
             // Respond with the created user details, excluding password
             res.status(201).json({
