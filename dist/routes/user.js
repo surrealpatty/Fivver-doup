@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Import the User model
+const user_1 = __importDefault(require("../models/user")); // Import User model
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
 // Route for user registration
@@ -61,6 +61,7 @@ router.post('/register',
         });
     }
     catch (error) {
+        // Cast error as Error to access message property
         console.error('Error during registration:', error.message);
         res.status(500).json({ message: 'Server error during registration' });
     }
