@@ -33,7 +33,7 @@ const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log('Database connection has been established successfully.');
     }
     catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('Unable to connect to the database:', error.message || error);
         process.exit(1); // Exit the process if connection fails
     }
 });
@@ -55,7 +55,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
-        console.error('Error starting the server:', error);
+        console.error('Error starting the server:', error.message || error);
         // Optionally add more granular error handling based on your needs
     }
 });

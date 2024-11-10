@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = require("../models/user"); // Correct import for User model
+const user_1 = require("../models/user"); // Correct import for both User and UserAttributes
 const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
 // User registration route

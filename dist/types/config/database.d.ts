@@ -1,4 +1,6 @@
-export namespace development {
+export const sequelize: Sequelize;
+import { Sequelize } from "sequelize/types/sequelize";
+export declare namespace development {
     let username: string;
     let password: string;
     let database: string;
@@ -9,7 +11,7 @@ export namespace development {
     }
     let logging: boolean;
 }
-export namespace production {
+export declare namespace production {
     let username_1: string;
     export { username_1 as username };
     let password_1: string;
