@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/user.ts
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = __importDefault(require("../models/user")); // Import User model
+const user_1 = __importDefault(require("../models/user")); // Import User model and UserAttributes type
 const express_validator_1 = require("express-validator"); // For validation
 const router = (0, express_1.Router)();
 // Route for user registration
@@ -49,7 +49,7 @@ router.post('/register',
             lastName,
             role: 'Free', // Default role
             subscriptionStatus: 'Inactive', // Default subscription status
-        });
+        }); // Omit the fields Sequelize auto-handles
         // Respond with the created user details, excluding password
         res.status(201).json({
             id: user.id,

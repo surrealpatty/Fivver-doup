@@ -1,10 +1,10 @@
 // src/routes/user.ts
+
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import User, { UserAttributes } from '../models/user';  // Import User model and UserAttributes type
+import User from '../models/user';  // Import User model
 import { body, validationResult } from 'express-validator';  // For validation
 
-// Interface for the registration body
 interface RegisterBody {
     username: string;
     email: string;
@@ -25,7 +25,6 @@ router.post(
     body('firstName').isString().notEmpty().withMessage('First name is required'),
     body('lastName').isString().notEmpty().withMessage('Last name is required'),
     async (req: Request<{}, {}, RegisterBody>, res: Response) => {
-        // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -34,7 +33,6 @@ router.post(
         const { username, email, password, firstName, lastName } = req.body;
 
         try {
-            // Check if the user already exists by username or email
             const existingUser = await User.findOne({ where: { username } });
             if (existingUser) {
                 return res.status(400).json({ message: 'Username already taken' });
@@ -45,21 +43,19 @@ router.post(
                 return res.status(400).json({ message: 'Email is already taken' });
             }
 
-            // Hash the password before saving it to the database
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Create the new user with default role and subscription status
+            // Updated User.create call with type assertion
             const user = await User.create({
                 username,
                 email,
-                password: hashedPassword,  // Store hashed password
+                password: hashedPassword,
                 firstName,
                 lastName,
-                role: 'Free',  // Default role
-                subscriptionStatus: 'Inactive',  // Default subscription status
-            } as Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>); // Omit the fields Sequelize auto-handles
+                role: 'Free',  
+                subscriptionStatus: 'Inactive',  
+            } as Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>);
 
-            // Respond with the created user details, excluding password
             res.status(201).json({
                 id: user.id,
                 username: user.username,
@@ -70,7 +66,6 @@ router.post(
                 subscriptionStatus: user.subscriptionStatus,
             });
         } catch (error) {
-            // Handle error with proper type
             console.error('Error during registration:', (error as Error).message);
             res.status(500).json({ message: 'Server error during registration' });
         }
