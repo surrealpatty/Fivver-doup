@@ -12,8 +12,11 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
   throw new Error('Missing required database environment variables');
 }
 
-// Non-null assertion to ensure DB_DIALECT is not undefined and is a valid Dialect string
-const dialect = DB_DIALECT! as Dialect;  // Using non-null assertion
+// Validate that DB_DIALECT is a valid value from the Dialect union type
+const validDialects: Dialect[] = ["mysql", "postgres", "sqlite", "mariadb", "mssql", "db2", "snowflake", "oracle"];
+if (!validDialects.includes(DB_DIALECT as Dialect)) {
+  throw new Error(`Invalid DB_DIALECT value: ${DB_DIALECT}`);
+}
 
 // Optional: check if DB_SSL is a valid string for boolean conversion
 const useSSL = DB_SSL === 'true';
@@ -21,7 +24,7 @@ const useSSL = DB_SSL === 'true';
 // Create a new Sequelize instance
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  dialect,  // Using the asserted dialect variable
+  dialect: DB_DIALECT as Dialect,  // Safely use the validated dialect value
   logging: NODE_ENV === 'development' ? console.log : false,  // Enable logging only in development
   dialectOptions: {
     ssl: useSSL,  // Use SSL if DB_SSL is 'true'

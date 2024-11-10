@@ -23,12 +23,12 @@
   "include": [
     "src/**/*.ts",                                    /* Include all TypeScript files in the src directory */
     "src/models/user.ts",                             /* Include user.ts for compilation (since it's part of the code) */
-    "src/config/database.ts",                         /* Include database.ts for compilation */
-    "src/**/*.js"                                     /* Include all JavaScript files in the src directory */
+    "src/config/database.ts"                          /* Include database.ts for compilation */
   ],
   "exclude": [
     "node_modules",                                   /* Exclude the node_modules directory */
     "dist",                                            /* Exclude the dist directory from being compiled */
-    "**/*.d.ts"                                       /* Exclude already generated declaration files from being recompiled */
+    "**/*.d.ts",                                       /* Exclude already generated declaration files from being recompiled */
+    "src/**/*.js"                                      /* Exclude all JavaScript files in the src directory */
   ]
 }
