@@ -1,7 +1,8 @@
-import { app } from '../src/app'; // Adjusted the path relative to `src/test`
 import request from 'supertest';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { app } from '../index';  // Adjust path to match your main app export
+import { User } from '../models/user';  // Import User model
 
 // Mock environment variable for JWT secret
 process.env.JWT_SECRET = 'testsecret';
@@ -12,8 +13,8 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
 }));
 
-// Mock User model
-jest.mock('../src/models/user', () => ({
+// Mock User model with Jest
+jest.mock('../models/user', () => ({
   User: {
     findOne: jest.fn(),
     create: jest.fn(),
@@ -24,12 +25,14 @@ jest.mock('../src/models/user', () => ({
 }));
 
 describe('User Controller', () => {
+  // Clear mocks after each test
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   test('should register a new user', async () => {
-    (User.findOne as jest.Mock).mockResolvedValue(null); // Simulate user not found
+    // Mock behavior for findOne and create methods
+    (User.findOne as jest.Mock).mockResolvedValue(null);  // Simulate user not found
     (User.create as jest.Mock).mockResolvedValue({
       id: 1,
       username: 'testuser',
@@ -94,6 +97,7 @@ describe('User Controller', () => {
 
   test('should update user profile', async () => {
     const mockToken = 'mock.jwt.token';
+    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
     (User.update as jest.Mock).mockResolvedValue([1]);
 
     const response = await request(app)
@@ -107,6 +111,7 @@ describe('User Controller', () => {
 
   test('should delete user account', async () => {
     const mockToken = 'mock.jwt.token';
+    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
     (User.destroy as jest.Mock).mockResolvedValue(1);
 
     const response = await request(app)

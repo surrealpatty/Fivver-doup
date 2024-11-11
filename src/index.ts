@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize } from './config/database';  // Correctly import sequelize instance
-import userRoutes from './routes/user';  // Correct TypeScript import (omit .js)
+import { sequelize } from './config/database';  // Import Sequelize instance correctly
+import userRoutes from './routes/user';  // Import user routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -11,11 +11,11 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(express.json());  // Parse JSON request bodies
-app.use(cors());  // Enable Cross-Origin Resource Sharing (CORS)
+app.use(express.json());  // Middleware to parse JSON request bodies
+app.use(cors());  // Middleware to enable CORS
 
 // Routes
-app.use('/api/users', userRoutes);  // Use user routes for '/api/users'
+app.use('/api/users', userRoutes);  // Route handling for '/api/users'
 
 // Function to test the database connection
 const testConnection = async (): Promise<void> => {
@@ -24,7 +24,7 @@ const testConnection = async (): Promise<void> => {
         console.log('Database connection has been established successfully.');
     } catch (error: any) {
         console.error('Unable to connect to the database:', error.message || error);
-        process.exit(1);  // Exit the process if connection fails
+        process.exit(1);  // Exit the process if the connection fails
     }
 };
 
@@ -34,27 +34,25 @@ const startServer = async (): Promise<void> => {
         // Test DB connection
         await testConnection();
 
-        // Sync models with the database based on environment
+        // Sync models with the database
         const isDevelopment = process.env.NODE_ENV === 'development';
-        const syncOptions = isDevelopment ? { alter: true } : { force: false };  // Alter models in development
+        const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
 
-        // Syncing the models to the database, handling migrations properly
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
         // Start the Express server
-        const PORT = process.env.PORT || 5000;  // Use PORT from environment or default to 5000
+        const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not specified in .env
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
     } catch (error: any) {
         console.error('Error starting the server:', error.message || error);
-        // Optionally add more granular error handling based on your needs
     }
 };
 
-// Initialize the server
+// Start the server
 startServer();
 
 // Export the app for testing purposes
-export default app;  // Export using TypeScript's ES6 export
+export { app };  // Use named export for app to be compatible with ES6 imports in test files
