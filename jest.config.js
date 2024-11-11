@@ -2,8 +2,8 @@ module.exports = {
   testEnvironment: 'jest-environment-jsdom',  // Use jsdom for browser-like environment in tests
   
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', { isolatedModules: true }],  // Inline ts-jest config to avoid globals usage
-    '^.+\\.js$': 'babel-jest',       // Use babel-jest to handle JavaScript files (.js)
+    '^.+\\.tsx?$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest for TypeScript files
+    '^.+\\.js$': 'babel-jest',       // Use babel-jest to handle JavaScript files
   },
 
   testMatch: [
@@ -14,7 +14,7 @@ module.exports = {
   ],
 
   transformIgnorePatterns: [
-    "/node_modules/(?!sequelize)",     // Transform Sequelize in node_modules
+    "/node_modules/(?!sequelize|uuid)",     // Transform Sequelize and uuid in node_modules
   ],
 
   moduleNameMapper: {
@@ -33,4 +33,11 @@ module.exports = {
   clearMocks: true,    // Automatically clear mocks between tests
   
   watchman: true,      // Enable Watchman for faster file change detection
+
+  // Optional: Add a custom `globals` config if using ts-jest with isolatedModules
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 };
