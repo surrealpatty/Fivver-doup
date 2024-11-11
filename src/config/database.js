@@ -79,4 +79,5 @@ const sequelize = new Sequelize(
   }
 );
 
+// Export the Sequelize instance and config
 export { sequelize, config };
