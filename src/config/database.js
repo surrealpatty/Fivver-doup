@@ -11,16 +11,22 @@ const requiredKeys = ['DB_USERNAME', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST'];
 const validateEnvVars = () => {
   for (const key of requiredKeys) {
     if (!process.env[key]) {
-      console.error(`Missing environment variable: ${key}`);
-      process.exit(1); // Exit the process if any required environment variable is missing
+      if (process.env.NODE_ENV !== 'test') {  // Avoid process exit during testing
+        console.error(`Missing environment variable: ${key}`);
+        process.exit(1);
+      } else {
+        console.warn(`Warning: Missing environment variable: ${key}`);
+      }
     }
   }
 };
 
-// Validate environment variables
-validateEnvVars();
+// Validate environment variables unless in testing mode
+if (process.env.NODE_ENV !== 'test') {
+  validateEnvVars();
+}
 
-// Define the configuration object with settings for 'development' and 'production' environments
+// Define the configuration object with settings for 'development', 'production', and 'test' environments
 const config = {
   development: {
     username: process.env.DB_USERNAME || 'root',
@@ -38,6 +44,17 @@ const config = {
     password: process.env.DB_PASSWORD || 'prod_password',
     database: process.env.DB_NAME || 'prod_database',
     host: process.env.DB_HOST || 'prod_host',
+    dialect: 'mysql',
+    dialectOptions: {
+      charset: 'utf8mb4',
+    },
+    logging: false,
+  },
+  test: {
+    username: process.env.DB_USERNAME || 'test_user',
+    password: process.env.DB_PASSWORD || 'test_password',
+    database: process.env.DB_NAME || 'test_database',
+    host: process.env.DB_HOST || 'localhost',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
