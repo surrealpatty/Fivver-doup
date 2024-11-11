@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure correct import of sequelize instance
+import { sequelize } from '../config/database';
 
 // Define the attributes for the User model
 interface UserAttributes {
@@ -13,10 +13,10 @@ interface UserAttributes {
   subscriptionStatus: string;
 }
 
-// Define the creation attributes for the User model (excluding id)
+// Define creation attributes, excluding `id` as it is auto-incremented
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User model
+// Define the User model extending Sequelize's Model class
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
@@ -32,7 +32,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public readonly updatedAt!: Date;
 }
 
-// Initialize the User model
+// Initialize the User model with its attributes and options
 User.init(
   {
     id: {
@@ -56,11 +56,11 @@ User.init(
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: true, // Optional, not required
+      allowNull: true,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: true, // Optional, not required
+      allowNull: true,
     },
     role: {
       type: DataTypes.STRING,
@@ -72,11 +72,11 @@ User.init(
     },
   },
   {
-    sequelize, // Using the imported sequelize instance
+    sequelize,
     modelName: 'User',
-    tableName: 'users', // Ensure the table name matches your database schema
-    timestamps: true, // Enable timestamps for createdAt and updatedAt
+    tableName: 'users',
+    timestamps: true, // Enable automatic timestamps for createdAt and updatedAt
   }
 );
 
-export { User, UserAttributes, UserCreationAttributes }; // Export User model, UserAttributes, and UserCreationAttributes for type checking
+export { User, UserAttributes, UserCreationAttributes };
