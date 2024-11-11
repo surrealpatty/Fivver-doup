@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = require("../../src/app"); // Adjust if necessary
+const app_1 = require("../src/app"); // Adjusted the path relative to `src/test`
 const supertest_1 = __importDefault(require("supertest"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -24,7 +24,7 @@ jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
 // Mock User model
-jest.mock('../../src/models/user', () => ({
+jest.mock('../src/models/user', () => ({
     User: {
         findOne: jest.fn(),
         create: jest.fn(),
@@ -38,9 +38,7 @@ describe('User Controller', () => {
         jest.clearAllMocks();
     });
     test('should register a new user', () => __awaiter(void 0, void 0, void 0, function* () {
-        // Mocking User.findOne to return null to simulate user not found
-        User.findOne.mockResolvedValue(null);
-        // Mocking User.create to simulate successful user creation
+        User.findOne.mockResolvedValue(null); // Simulate user not found
         User.create.mockResolvedValue({
             id: 1,
             username: 'testuser',
@@ -60,14 +58,12 @@ describe('User Controller', () => {
     }));
     test('should login a user and return a token', () => __awaiter(void 0, void 0, void 0, function* () {
         const hashedPassword = yield bcrypt_1.default.hash('testpassword', 10);
-        // Mocking User.findOne to simulate finding the user
         User.findOne.mockResolvedValue({
             id: 1,
             email: 'test@example.com',
             password: hashedPassword,
         });
         const mockToken = 'mock.jwt.token';
-        // Mocking jwt.sign to return a mock token
         jsonwebtoken_1.default.sign.mockReturnValue(mockToken);
         const response = yield (0, supertest_1.default)(app_1.app)
             .post('/api/users/login')
@@ -80,14 +76,12 @@ describe('User Controller', () => {
     }));
     test('should return user profile', () => __awaiter(void 0, void 0, void 0, function* () {
         const mockToken = 'mock.jwt.token';
-        // Mocking jwt.verify to return mock user data
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         const mockUser = {
             id: 1,
             username: 'testuser',
             email: 'test@example.com',
         };
-        // Mocking User.findByPk to return mock user data
         User.findByPk.mockResolvedValue(mockUser);
         const response = yield (0, supertest_1.default)(app_1.app)
             .get('/api/users/profile')
@@ -98,7 +92,6 @@ describe('User Controller', () => {
     }));
     test('should update user profile', () => __awaiter(void 0, void 0, void 0, function* () {
         const mockToken = 'mock.jwt.token';
-        // Mocking User.update to simulate profile update
         User.update.mockResolvedValue([1]);
         const response = yield (0, supertest_1.default)(app_1.app)
             .put('/api/users/profile')
@@ -109,7 +102,6 @@ describe('User Controller', () => {
     }));
     test('should delete user account', () => __awaiter(void 0, void 0, void 0, function* () {
         const mockToken = 'mock.jwt.token';
-        // Mocking User.destroy to simulate account deletion
         User.destroy.mockResolvedValue(1);
         const response = yield (0, supertest_1.default)(app_1.app)
             .delete('/api/users/profile')

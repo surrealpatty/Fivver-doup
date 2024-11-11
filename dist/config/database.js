@@ -1,7 +1,13 @@
 "use strict";
-const { Sequelize } = require('sequelize');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.config = exports.sequelize = void 0;
+const sequelize_1 = require("sequelize");
+const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from a .env file
-require('dotenv').config();
+dotenv_1.default.config();
 // List of required environment variables for validation
 const requiredKeys = ['DB_USERNAME', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST'];
 // Function to validate the presence of required environment variables
@@ -40,14 +46,15 @@ const config = {
         logging: false,
     },
 };
+exports.config = config;
 // Get the environment (default to 'development' if not set)
 const env = process.env.NODE_ENV || 'development';
 // Set up Sequelize instance with the environment-specific configuration
-const sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, {
+const sequelize = new sequelize_1.Sequelize(config[env].database, config[env].username, config[env].password, {
     host: config[env].host,
     dialect: config[env].dialect,
     dialectOptions: config[env].dialectOptions,
     logging: config[env].logging,
 });
-module.exports = { sequelize, config };
+exports.sequelize = sequelize;
 //# sourceMappingURL=database.js.map

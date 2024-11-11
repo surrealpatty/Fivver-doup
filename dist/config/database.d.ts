@@ -31,4 +31,4 @@ export namespace config {
         export { logging_1 as logging };
     }
 }
-import { Sequelize } from "sequelize/types/sequelize";
+import { Sequelize } from 'sequelize';
