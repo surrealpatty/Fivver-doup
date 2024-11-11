@@ -1,3 +1,4 @@
+export const sequelize: Sequelize;
 export namespace config {
     namespace development {
         let username: string;
@@ -30,5 +31,4 @@ export namespace config {
         export { logging_1 as logging };
     }
 }
-export const sequelize: Sequelize;
-import { Sequelize } from 'sequelize';
+import { Sequelize } from "sequelize/types/sequelize";

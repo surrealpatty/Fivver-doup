@@ -1,39 +1,40 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.config = exports.sequelize = void 0;
-const sequelize_1 = require("sequelize");
-// Set up Sequelize instance with the correct connection string
-const sequelize = new sequelize_1.Sequelize('mysql://your_username:your_password@localhost:3306/your_database_name', {
-    dialect: 'mysql',
-    dialectOptions: {
-        charset: 'utf8mb4', // Ensure compatibility with utf8mb4
-    },
-    logging: false, // Optionally disable logging for better performance
-});
-exports.sequelize = sequelize;
-// Configuration for different environments
-exports.config = {
+const { Sequelize } = require('sequelize');
+// Load environment variables from a `.env` file for sensitive data
+require('dotenv').config();
+// Select the appropriate configuration based on the NODE_ENV environment variable
+const config = {
     development: {
-        username: 'your_username',
-        password: 'your_password',
-        database: 'your_database_name',
-        host: 'localhost',
+        username: process.env.DB_USERNAME || 'your_dev_username',
+        password: process.env.DB_PASSWORD || 'your_dev_password',
+        database: process.env.DB_NAME || 'your_dev_database_name',
+        host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
         dialectOptions: {
-            charset: 'utf8mb4', // Ensure compatibility with utf8mb4
+            charset: 'utf8mb4',
         },
-        logging: false, // Optionally disable logging for better performance
+        logging: false,
     },
     production: {
-        username: 'your_username',
-        password: 'your_password',
-        database: 'your_database_name',
-        host: 'your_production_host',
+        username: process.env.DB_USERNAME || 'your_prod_username',
+        password: process.env.DB_PASSWORD || 'your_prod_password',
+        database: process.env.DB_NAME || 'your_prod_database_name',
+        host: process.env.DB_HOST || 'your_production_host',
         dialect: 'mysql',
         dialectOptions: {
-            charset: 'utf8mb4', // Ensure this is also set for production
+            charset: 'utf8mb4',
         },
         logging: false,
     },
 };
+// Determine the current environment
+const env = process.env.NODE_ENV || 'development';
+// Set up Sequelize instance with the environment-specific configuration
+const sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, {
+    host: config[env].host,
+    dialect: config[env].dialect,
+    dialectOptions: config[env].dialectOptions,
+    logging: config[env].logging,
+});
+module.exports = { sequelize, config };
 //# sourceMappingURL=database.js.map
