@@ -1,7 +1,8 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 // Load environment variables from a .env file
-require('dotenv').config();
+dotenv.config();
 
 // List of required environment variables for validation
 const requiredKeys = ['DB_USERNAME', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST'];
@@ -61,4 +62,4 @@ const sequelize = new Sequelize(
   }
 );
 
-module.exports = { sequelize, config };
+export { sequelize, config };
