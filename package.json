@@ -13,7 +13,11 @@
     "test:watch": "jest --watch",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "pretest": "npm run build"
+    "pretest": "npm run build",
+    "postinstall": "npm run build",  // Runs build after npm install
+    "prestart": "npm run build",  // Ensures build is always up to date before starting
+    "lint": "eslint . --ext .ts,.js",  // Optional: If you use ESLint for code linting
+    "clean": "rimraf dist"  // Optional: If you want to clear the dist folder
   },
   "keywords": [],
   "author": "",
@@ -42,7 +46,9 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "eslint": "^8.37.0",  // Optional: If you want to use ESLint for linting
+    "rimraf": "^3.0.2"  // Optional: For cleaning the dist directory
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -55,5 +61,8 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"  // Optional: Specify minimum required Node.js version
   }
 }

@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correctly import the sequelize instance
+import { sequelize } from '../config/database'; // Ensure correct import of sequelize instance
 
 // Define the attributes for the User model
 interface UserAttributes {
@@ -56,11 +56,11 @@ User.init(
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true, // Optional, not required
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true, // Optional, not required
     },
     role: {
       type: DataTypes.STRING,
@@ -74,7 +74,7 @@ User.init(
   {
     sequelize, // Using the imported sequelize instance
     modelName: 'User',
-    tableName: 'users',
+    tableName: 'users', // Ensure the table name matches your database schema
     timestamps: true, // Enable timestamps for createdAt and updatedAt
   }
 );
