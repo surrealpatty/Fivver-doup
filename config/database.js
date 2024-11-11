@@ -6,8 +6,16 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
-// Destructure environment variables
-const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_SSL, NODE_ENV } = process.env;
+// Destructure environment variables from the .env file
+const {
+  DB_NAME, 
+  DB_USER, 
+  DB_PASSWORD, 
+  DB_HOST, 
+  DB_DIALECT, 
+  DB_SSL, 
+  NODE_ENV
+} = process.env;
 
 // Ensure required environment variables are present
 if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
@@ -22,6 +30,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   dialect: DB_DIALECT,
   logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
+  
   dialectOptions: {
     ssl: useSSL, // Use SSL if DB_SSL is 'true'
     rejectUnauthorized: false, // Disable verification if using self-signed certs
