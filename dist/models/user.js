@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Ensure correct import of sequelize instance
-// Define the User model
+const database_1 = require("../config/database");
+// Define the User model extending Sequelize's Model class
 class User extends sequelize_1.Model {
 }
 exports.User = User;
-// Initialize the User model
+// Initialize the User model with its attributes and options
 User.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -30,11 +30,11 @@ User.init({
     },
     firstName: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Optional, not required
+        allowNull: true,
     },
     lastName: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Optional, not required
+        allowNull: true,
     },
     role: {
         type: sequelize_1.DataTypes.STRING,
@@ -45,9 +45,9 @@ User.init({
         allowNull: false,
     },
 }, {
-    sequelize: database_1.sequelize, // Using the imported sequelize instance
+    sequelize: database_1.sequelize,
     modelName: 'User',
-    tableName: 'users', // Ensure the table name matches your database schema
-    timestamps: true, // Enable timestamps for createdAt and updatedAt
+    tableName: 'users',
+    timestamps: true, // Enable automatic timestamps for createdAt and updatedAt
 });
 //# sourceMappingURL=user.js.map
