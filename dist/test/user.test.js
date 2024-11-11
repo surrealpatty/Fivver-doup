@@ -1,56 +1,57 @@
 "use strict";
-const request = require('supertest'); // Make sure to install supertest
-const app = require('../../src/index'); // Adjusted to point to your actual index.js
-const User = require('../../src/models/user'); // Adjusted path to User model
-const bcrypt = require('bcrypt');
-jest.mock('../../src/models/user'); // Adjusted to point to the correct path
-
-describe('User Controller', () => {
-    afterEach(() => {
-        jest.clearAllMocks(); // Clear mocks after each test
-    });
-
-    test('should register a new user', async () => {
-        // Mock the User.findOne method to return null (user does not exist)
-        User.findOne.mockResolvedValue(null);
-        User.create.mockResolvedValue({ id: 1, username: 'testuser', email: 'test@example.com', password: 'hashedpassword' });
-
-        const response = await request(app).post('/api/users/register').send({
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'testpassword'
-        });
-
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('username', 'testuser');
-        expect(response.body).toHaveProperty('email', 'test@example.com');
-    });
-
-    test('should login a user', async () => {
-        const hashedPassword = await bcrypt.hash('testpassword', 10);
-        User.findOne.mockResolvedValue({ id: 1, email: 'test@example.com', password: hashedPassword });
-
-        const response = await request(app).post('/api/users/login').send({
-            email: 'test@example.com',
-            password: 'testpassword'
-        });
-
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('token'); // Ensure token is returned
-    });
-
-    test('should return user profile', async () => {
-        const mockUser = { id: 1, username: 'testuser', email: 'test@example.com', password: 'hashedpassword' };
-        User.findByPk.mockResolvedValue(mockUser);
-
-        const response = await request(app)
-            .get('/api/users/profile')
-            .set('Authorization', 'Bearer mocktoken'); // Mock token here
-
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('username', 'testuser');
-        expect(response.body).toHaveProperty('email', 'test@example.com');
-    });
-
-    // Add additional tests for updateUserProfile and deleteUser as needed
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Correctly import the sequelize instance
+// Define the User model
+class User extends sequelize_1.Model {
+}
+exports.User = User;
+// Initialize the User model
+User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    email: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    firstName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    lastName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    subscriptionStatus: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    sequelize: database_1.sequelize, // Using the imported sequelize instance
+    modelName: 'User',
+    tableName: 'users', // Custom table name
+    timestamps: true, // Enable timestamps for createdAt and updatedAt
 });
+// Optionally sync the model with the database (e.g., on app startup)
+database_1.sequelize.sync()
+    .then(() => console.log('User model synchronized with the database'))
+    .catch((err) => console.error('Error syncing the User model:', err));
+//# sourceMappingURL=user.test.js.map
