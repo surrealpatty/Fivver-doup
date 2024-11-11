@@ -30,5 +30,24 @@ export namespace config {
         let logging_1: boolean;
         export { logging_1 as logging };
     }
+    namespace test {
+        let username_2: string;
+        export { username_2 as username };
+        let password_2: string;
+        export { password_2 as password };
+        let database_2: string;
+        export { database_2 as database };
+        let host_2: string;
+        export { host_2 as host };
+        let dialect_2: string;
+        export { dialect_2 as dialect };
+        export namespace dialectOptions_2 {
+            let charset_2: string;
+            export { charset_2 as charset };
+        }
+        export { dialectOptions_2 as dialectOptions };
+        let logging_2: boolean;
+        export { logging_2 as logging };
+    }
 }
 import { Sequelize } from 'sequelize';
