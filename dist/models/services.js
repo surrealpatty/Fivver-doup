@@ -2,13 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 // Adjusted path for the transpiled dist folder
-const database_js_1 = require("../config/database.js"); // Make sure this is the correct relative path in the src folder
+const database_js_1 = require("../config/database"); // Remove the .js extension if using TypeScript path resolution
+
 class Service extends sequelize_1.Model {
     // You can add associations here if needed
     static associate(models) {
         // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
     }
 }
+
 // Initialize the Service model
 Service.init({
     title: {
@@ -59,5 +61,5 @@ Service.init({
     timestamps: true, // Automatically add createdAt and updatedAt columns
     underscored: true, // Use snake_case for database column names
 });
+
 exports.default = Service;
-//# sourceMappingURL=services.js.map

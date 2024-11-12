@@ -12,7 +12,8 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "test": "jest --verbose --maxWorkers=4 --detectOpenHandles",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint": "eslint 'src/**/*.ts' --fix"
   },
   "keywords": [],
   "author": "",
@@ -42,7 +43,12 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-typescript": "^4.1.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -57,13 +63,18 @@
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5"
   },
-
-    
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json",
-      "node"
-    ]
+  "moduleFileExtensions": [
+    "ts",
+    "js",
+    "json",
+    "node"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "airbnb-typescript/base"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
   }
-
+}

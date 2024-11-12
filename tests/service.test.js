@@ -1,8 +1,6 @@
-const request = require('supertest');
-
-// Ensure the app path points to the transpiled file in dist/src
-const app = require('../dist/src/index'); // Adjusted to point to the transpiled app (entry point in dist/src)
-const Service = require('../dist/src/models/services'); // Adjusted path to transpiled services model
+import request from 'supertest';
+import app from '../dist/src/index';  // Adjusted to point to the transpiled app (entry point in dist/src)
+import Service from '../dist/src/models/services';  // Adjusted path to transpiled services model
 
 // Mock the Service model (correct path for transpiled file)
 jest.mock('../dist/src/models/services', () => ({
@@ -15,33 +13,35 @@ jest.mock('../dist/src/models/services', () => ({
 
 describe('Service Controller', () => {
     afterEach(() => {
-        jest.clearAllMocks(); // Clears mock calls between tests
+        jest.clearAllMocks();  // Clears mock calls between tests
     });
 
     test('should create a new service', async () => {
         // Mock the response for Service.create
         Service.create.mockResolvedValue({
             id: 1,
-            name: 'Test Service',
+            title: 'Test Service',  // Changed to match model's field name
             description: 'Service description',
         });
 
-        const response = await request(app).post('/api/services').send({
-            name: 'Test Service',
-            description: 'Service description',
-        });
+        const response = await request(app)
+            .post('/api/services')
+            .send({
+                title: 'Test Service',  // Changed to match model's field name
+                description: 'Service description',
+            });
 
         // Check if the response is as expected
         expect(response.status).toBe(201);  // Created status code
-        expect(response.body).toHaveProperty('name', 'Test Service');
+        expect(response.body).toHaveProperty('title', 'Test Service');
         expect(response.body).toHaveProperty('description', 'Service description');
     });
 
     test('should get all services', async () => {
         // Mock the response for Service.findAll
         const mockServices = [
-            { id: 1, name: 'Service 1', description: 'Description 1' },
-            { id: 2, name: 'Service 2', description: 'Description 2' },
+            { id: 1, title: 'Service 1', description: 'Description 1' },
+            { id: 2, title: 'Service 2', description: 'Description 2' },
         ];
         Service.findAll.mockResolvedValue(mockServices);
 
@@ -56,7 +56,7 @@ describe('Service Controller', () => {
         // Mock the response for Service.findByPk
         const mockService = {
             id: 1,
-            name: 'Service 1',
+            title: 'Service 1',
             description: 'Service description',
         };
         Service.findByPk.mockResolvedValue(mockService);
@@ -65,7 +65,7 @@ describe('Service Controller', () => {
 
         // Check if the response matches the mocked service
         expect(response.status).toBe(200);  // OK status code
-        expect(response.body).toHaveProperty('name', 'Service 1');
+        expect(response.body).toHaveProperty('title', 'Service 1');
         expect(response.body).toHaveProperty('description', 'Service description');
     });
 
@@ -74,7 +74,7 @@ describe('Service Controller', () => {
         Service.update.mockResolvedValue([1]);  // Simulate that one row was updated
 
         const response = await request(app).put('/api/services/1').send({
-            name: 'Updated Service Name',
+            title: 'Updated Service Name',
             description: 'Updated description',
         });
 

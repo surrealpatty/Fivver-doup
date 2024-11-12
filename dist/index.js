@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 });
 // Routes
 app.use('/api/users', user_1.default); // Set up user-related routes
-// Function to start the server
+// Function to initialize the database and start the server
 const startServer = async () => {
     try {
         // Test DB connection
