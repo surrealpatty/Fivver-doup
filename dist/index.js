@@ -17,6 +17,10 @@ exports.app = app;
 // Middleware
 app.use(express_1.default.json()); // Parse JSON requests
 app.use((0, cors_1.default)()); // Enable CORS for cross-origin requests
+// Root route - ensures the correct message is returned for testing
+app.get('/', (req, res) => {
+    res.send('Fiverr backend is running');
+});
 // Routes
 app.use('/api/users', user_1.default); // Set up user-related routes
 // Function to start the server
@@ -41,6 +45,8 @@ const startServer = async () => {
         console.error('Error starting the server:', error instanceof Error ? error.message : error);
     }
 };
-// Start the server
-startServer();
+// Start the server if this file is executed directly (avoid starting it during tests)
+if (require.main === module) {
+    startServer();
+}
 //# sourceMappingURL=index.js.map
