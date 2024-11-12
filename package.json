@@ -56,25 +56,5 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest",
-      "^.+\\.ts$": "ts-jest"
-    },
-    "moduleFileExtensions": ["js", "ts"],
-    "testEnvironment": "jest-environment-jsdom",
-    "testMatch": [
-      "**/src/test/**/*.test.{js,ts}",
-      "**/src/tests/**/*.test.{js,ts}",
-      "**/src/test/**/*.spec.{js,ts}",
-      "**/src/tests/**/*.spec.{js,ts}"
-    ],
-    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts}",
-      "!src/test/**",
-      "!src/tests/**"
-    ]
   }
 }
