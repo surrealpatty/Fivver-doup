@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const bcryptjs_1 = __importDefault(require("bcryptjs")); // Ensure bcryptjs is used since it's installed
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const index_1 = require("../index"); // Adjust path to match your main app export (ensure you have app exported from index.ts)
-const user_1 = require("../models/user"); // Import User model (ensure path is correct)
+const user_1 = require("../models/user"); // Adjust path to your User model
 process.env.JWT_SECRET = 'testsecret'; // Mock environment variable for JWT secret
 // Mock JWT methods
 jest.mock('jsonwebtoken', () => ({
@@ -92,7 +92,7 @@ describe('User Controller', () => {
         // Mock jwt verify to decode the token and return the user id
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         // Mock User.update to simulate a successful profile update
-        user_1.User.update.mockResolvedValue([1]);
+        user_1.User.update.mockResolvedValue([1]); // Mock sequelize update return value
         const response = await (0, supertest_1.default)(index_1.app)
             .put('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`)
@@ -105,7 +105,7 @@ describe('User Controller', () => {
         // Mock jwt verify to decode the token and return the user id
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         // Mock User.destroy to simulate successful user deletion
-        user_1.User.destroy.mockResolvedValue(1);
+        user_1.User.destroy.mockResolvedValue(1); // Mock sequelize destroy return value
         const response = await (0, supertest_1.default)(index_1.app)
             .delete('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);

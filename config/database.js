@@ -1,55 +1,38 @@
-// src/config/database.js
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
-
-// Load environment variables
+// Load environment variables from .env file
 dotenv.config();
 
-// Destructure environment variables from the .env file
-const {
-  DB_NAME, 
-  DB_USER, 
-  DB_PASSWORD, 
-  DB_HOST, 
-  DB_DIALECT, 
-  DB_SSL, 
-  NODE_ENV
-} = process.env;
-
-// Ensure required environment variables are present
-if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
-  throw new Error('Missing required database environment variables');
-}
-
-// Convert DB_SSL to a boolean value if it's set to 'true'
-const useSSL = DB_SSL === 'true';
-
-// Create a new Sequelize instance with sha256_password authentication plugin
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect: DB_DIALECT,
-  logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
-  
-  dialectOptions: {
-    ssl: useSSL, // Use SSL if DB_SSL is 'true'
-    rejectUnauthorized: false, // Disable verification if using self-signed certs
-    authPlugins: {
-      sha256_password: {
-        password: DB_PASSWORD, // Specify the password for the sha256_password plugin
-      },
-    },
-  },
+// Initialize Sequelize with MySQL configuration
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: process.env.DB_HOST || 'localhost',  // Use environment variable for host, default to localhost
+  database: process.env.DB_NAME || 'fivver_doup',  // Use environment variable for DB name
+  username: process.env.DB_USER || 'test_user',  // Use environment variable for username
+  password: process.env.DB_PASSWORD || 'your_test_password',  // Use environment variable for password
+  logging: false,  // Turn off logging for cleaner output, set to true for debugging
+  charset: 'utf8mb4',  // Ensure utf8mb4 encoding is used
+  collate: 'utf8mb4_general_ci',  // Use utf8mb4 collation for full Unicode support
 });
 
-// Ensure the database connection works
-sequelize.authenticate()
-  .then(() => {
-    console.log('Database connection established successfully');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err.message || err);
-    process.exit(1); // Exit the process if the connection fails
-  });
+// Test the database connection
+const testConnection = async (): Promise<void> => {
+  try {
+    // Test the database connection
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Unable to connect to the database:', error.message);
+    } else {
+      console.error('Unable to connect to the database:', error);
+    }
+    process.exit(1);  // Exit the process if the connection fails
+  }
+};
 
-module.exports = sequelize;
+// Test the connection on script run
+testConnection();
+
+export { sequelize, testConnection };
