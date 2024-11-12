@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcryptjs'; // bcryptjs is recommended for compatibility
+import bcrypt from 'bcryptjs'; // bcryptjs for compatibility
 import { User } from '../models/user'; // Corrected import for User model
 import { body, validationResult } from 'express-validator';
 
@@ -38,7 +38,7 @@ router.post(
       // Hash the password before saving it
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create the user with necessary fields
+      // Create the user without passing 'createdAt' and 'updatedAt'
       const user = await User.create({
         username,
         email,

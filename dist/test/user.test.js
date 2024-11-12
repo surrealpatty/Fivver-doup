@@ -16,13 +16,11 @@ jest.mock('jsonwebtoken', () => ({
 }));
 // Mock User model
 jest.mock('../models/user', () => ({
-    User: {
-        findOne: jest.fn(),
-        create: jest.fn(),
-        findByPk: jest.fn(),
-        update: jest.fn(),
-        destroy: jest.fn(),
-    },
+    findOne: jest.fn(),
+    create: jest.fn(),
+    findByPk: jest.fn(),
+    update: jest.fn(),
+    destroy: jest.fn(),
 }));
 describe('User Controller', () => {
     // Clear mocks after each test
@@ -39,7 +37,7 @@ describe('User Controller', () => {
             password: 'hashedpassword', // Hash simulated for test
         });
         const response = await (0, supertest_1.default)(index_1.app)
-            .post('/api/users/register')
+            .post('/api/users/register') // Adjust path if necessary
             .send({
             username: 'testuser',
             email: 'test@example.com',
@@ -61,7 +59,7 @@ describe('User Controller', () => {
         // Mock jwt sign to return the mock token
         jsonwebtoken_1.default.sign.mockReturnValue(mockToken);
         const response = await (0, supertest_1.default)(index_1.app)
-            .post('/api/users/login')
+            .post('/api/users/login') // Adjust path if necessary
             .send({
             email: 'test@example.com',
             password: 'testpassword',
@@ -81,7 +79,7 @@ describe('User Controller', () => {
         // Mock User.findByPk to return a mock user
         user_1.User.findByPk.mockResolvedValue(mockUser);
         const response = await (0, supertest_1.default)(index_1.app)
-            .get('/api/users/profile')
+            .get('/api/users/profile') // Adjust path if necessary
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('username', 'testuser');
@@ -94,7 +92,7 @@ describe('User Controller', () => {
         // Mock User.update to simulate a successful profile update
         user_1.User.update.mockResolvedValue([1]); // Mock sequelize update return value
         const response = await (0, supertest_1.default)(index_1.app)
-            .put('/api/users/profile')
+            .put('/api/users/profile') // Adjust path if necessary
             .set('Authorization', `Bearer ${mockToken}`)
             .send({ username: 'updatedUser' });
         expect(response.status).toBe(200);
@@ -107,7 +105,7 @@ describe('User Controller', () => {
         // Mock User.destroy to simulate successful user deletion
         user_1.User.destroy.mockResolvedValue(1); // Mock sequelize destroy return value
         const response = await (0, supertest_1.default)(index_1.app)
-            .delete('/api/users/profile')
+            .delete('/api/users/profile') // Adjust path if necessary
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'User deleted successfully');
