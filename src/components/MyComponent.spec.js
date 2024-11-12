@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils';
-import MyComponent from '@/components/MyComponent.vue'; // Adjusted path if using alias @ for components
+import { mount } from '@vue/test-utils'; // Make sure you're using Vue Test Utils for mounting the component
+import MyComponent from '@/components/MyComponent.vue'; // The import path should resolve correctly now
 
 describe('MyComponent.vue', () => {
   it('renders props.title when passed', () => {
@@ -17,5 +17,5 @@ describe('MyComponent.vue', () => {
     expect(wrapper.text()).toContain('Default Title'); // Ensure this matches your component's default behavior
   });
 
-  // Additional tests can be added here
+  // Additional tests can be added here if needed
 });

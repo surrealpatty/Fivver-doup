@@ -6,7 +6,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],  // No need for 'vue' if not using Vue.js
   transformIgnorePatterns: ['/node_modules/'],  // Exclude node_modules from transformation
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/dist/$1',  // Maps source to dist if needed, adjust if necessary
+    '^@/(.*)$': '<rootDir>/src/$1',  // Adjust this mapping to point to 'src' instead of 'dist'
   },
   roots: ['<rootDir>/src'],  // Test files root location
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],  // Optional: Add setup file for global configurations
