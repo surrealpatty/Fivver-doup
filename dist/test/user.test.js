@@ -37,7 +37,7 @@ describe('User Controller', () => {
             id: 1,
             username: 'testuser',
             email: 'test@example.com',
-            password: 'hashedpassword',
+            password: 'hashedpassword', // Hash is simulated
         });
         const response = await (0, supertest_1.default)(index_1.app)
             .post('/api/users/register')
