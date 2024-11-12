@@ -1,15 +1,30 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testConnection = exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
-// Initialize Sequelize with MySQL configuration
-const sequelize = new sequelize_1.Sequelize({
-    dialect: 'mysql',
-    host: 'localhost',
-    database: 'fivver_doup',
-    username: 'test_user', // Make sure to use the correct test user for the MySQL instance
-    password: 'your_test_password', // Ensure this is the correct password for your MySQL instance
-    logging: false, // Turn off logging for cleaner output, set to true for debugging
+const dotenv_1 = __importDefault(require("dotenv"));
+// Load environment variables
+dotenv_1.default.config();
+// Destructure environment variables from the .env file
+const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_SSL, NODE_ENV } = process.env;
+// Ensure required environment variables are present
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
+    throw new Error('Missing required database environment variables');
+}
+// Convert DB_SSL to a boolean value if it's set to 'true'
+const useSSL = DB_SSL === 'true';
+// Create a new Sequelize instance with the given environment variables
+const sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: DB_DIALECT, // Ensure correct dialect type
+    logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
+    dialectOptions: {
+        ssl: useSSL, // Use SSL if DB_SSL is 'true'
+        rejectUnauthorized: false, // Disable verification if using self-signed certs
+    },
 });
 exports.sequelize = sequelize;
 // Test the database connection
