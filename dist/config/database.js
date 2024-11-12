@@ -29,6 +29,15 @@ const sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
         charset: 'utf8mb4', // Ensure correct charset to avoid encoding issues
         collate: 'utf8mb4_unicode_ci', // Set collation to match charset
     },
+    pool: {
+        acquire: 30000, // Increase timeout to avoid connection errors
+        idle: 10000,
+    },
+    // Adding additional option to avoid connection encoding errors
+    query: {
+        raw: true, // Ensures that results are returned as plain objects
+        nest: true, // Ensures nested results are properly handled
+    },
 });
 exports.sequelize = sequelize;
 // Test the database connection and sync models
