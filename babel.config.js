@@ -20,7 +20,7 @@ module.exports = {
   comments: false, // Optionally remove comments in the output files
   overrides: [
     {
-      test: ['./node_modules/uuid'], // Add specific overrides for the uuid module
+      test: /node_modules[\\/]uuid/, // Specific override for the uuid module
       presets: [
         [
           '@babel/preset-env',
