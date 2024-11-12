@@ -1,52 +1,48 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize, testConnection } from './config/database';  // Correct import for sequelize and testConnection
+import { sequelize, testConnection } from './config/database';  // Database configuration
 import userRoutes from './routes/user';  // Import user routes
 
-// Load environment variables from .env file
-dotenv.config();  // Load environment variables as early as possible
+// Load environment variables
+dotenv.config();  // Ensure environment variables are loaded at the start
 
-// Create Express app
+// Initialize Express app
 const app = express();
 
 // Middleware
-app.use(express.json());  // Middleware to parse JSON request bodies
-app.use(cors());  // Middleware to enable CORS
+app.use(express.json());  // Parse JSON requests
+app.use(cors());  // Enable CORS for cross-origin requests
 
 // Routes
-app.use('/api/users', userRoutes);  // Route handling for '/api/users'
+app.use('/api/users', userRoutes);  // Set up user-related routes
 
-// Function to start the server and sync the database
+// Function to start the server
 const startServer = async (): Promise<void> => {
     try {
         // Test DB connection
         await testConnection();
+        console.log('Database connection successful.');
 
-        // Sync models with the database
+        // Sync database
         const isDevelopment = process.env.NODE_ENV === 'development';
-        const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
-
-        // Avoid manually creating the database, sync ensures the database exists
+        const syncOptions = isDevelopment ? { alter: true } : {};  // Use 'alter' in development for automatic model updates
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
-        // Start the Express server
-        const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not specified in .env
+        // Start server
+        const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error('Error starting the server:', error.message);  // Handle error message properly
-        } else {
-            console.error('Error starting the server:', error);  // Log raw error if it's not an instance of Error
-        }
+        // Enhanced error handling
+        console.error('Error starting the server:', error instanceof Error ? error.message : error);
     }
 };
 
 // Start the server
 startServer();
 
-// Export the app for testing purposes
-export { app };  // Use named export for app to be compatible with ES6 imports in test files
+// Export the app for testing
+export { app };
