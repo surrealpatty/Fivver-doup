@@ -1,1 +1,2 @@
-declare const startServer: () => Promise<void>;
+declare const app: import("express-serve-static-core").Express;
+export { app };
