@@ -1,82 +1,36 @@
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database'; // Adjust path if necessary
 
-// Define the attributes for the User model
-interface UserAttributes {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  role: string;
-  subscriptionStatus: string;
-}
-
-// Define creation attributes, excluding `id` as it is auto-incremented
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-// Define the User model extending Sequelize's Model class
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
-  public username!: string;
-  public email!: string;
-  public password!: string;
-  public firstName?: string;
-  public lastName?: string;
-  public role!: string;
-  public subscriptionStatus!: string;
-
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
-
-// Initialize the User model with its attributes and options
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    subscriptionStatus: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+// Define the User model
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true, // Enable automatic timestamps for createdAt and updatedAt
-  }
-);
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  created_at: {
+    type: DataTypes.TIMESTAMP,
+    defaultValue: DataTypes.NOW,
+  },
+});
 
-export { User, UserAttributes, UserCreationAttributes };
+// Sync the model with the database, creating the table if it doesn't exist
+User.sync({ alter: true }).then(() => {
+  console.log('User table is synced');
+}).catch((error) => {
+  console.error('Error syncing User model:', error);
+});
+
+export default User;

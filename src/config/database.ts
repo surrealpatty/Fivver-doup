@@ -12,7 +12,7 @@ const {
   DB_HOST,
   DB_DIALECT,
   DB_SSL,
-  NODE_ENV
+  NODE_ENV,
 } = process.env;
 
 // Ensure required environment variables are present
@@ -33,14 +33,21 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     ssl: useSSL,         // Use SSL if DB_SSL is 'true'
     // Removed rejectUnauthorized for now as it may cause issues with some SSL configurations
   },
+  define: {
+    freezeTableName: true, // To prevent Sequelize from pluralizing table names
+  },
 });
 
-// Test the database connection
+// Test the database connection and sync models
 const testConnection = async (): Promise<void> => {
   try {
     // Test the database connection
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
+
+    // Sync models with the database
+    await sequelize.sync({ alter: true });  // Syncs models with the database, altering tables if needed
+    console.log('Database tables synced.');
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Unable to connect to the database:', error.message);
@@ -51,7 +58,7 @@ const testConnection = async (): Promise<void> => {
   }
 };
 
-// Test the connection on script run
+// Test the connection and sync models on script run
 testConnection();
 
 export { sequelize, testConnection };
