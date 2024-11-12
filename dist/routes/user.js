@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const bcryptjs_1 = __importDefault(require("bcryptjs")); // bcryptjs is recommended for compatibility
+const bcryptjs_1 = __importDefault(require("bcryptjs")); // bcryptjs for compatibility
 const user_1 = require("../models/user"); // Corrected import for User model
 const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
@@ -30,7 +30,7 @@ router.post('/register',
         }
         // Hash the password before saving it
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-        // Create the user with necessary fields
+        // Create the user without passing 'createdAt' and 'updatedAt'
         const user = await user_1.User.create({
             username,
             email,

@@ -11,10 +11,10 @@ interface UserAttributes {
   lastName: string;
   role: string;
   subscriptionStatus: string;
-  createdAt: Date;
+  createdAt: Date; // We will now rely on default behavior
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt'> {} // createdAt is optional during creation
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
@@ -25,7 +25,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public lastName!: string;
   public role!: string;
   public subscriptionStatus!: string;
-  public createdAt!: Date;
+  public createdAt!: Date; // Will be handled by Sequelize
 }
 
 User.init(
@@ -67,14 +67,14 @@ User.init(
     },
     createdAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: DataTypes.NOW, // Automatically handle createdAt
     },
   },
   {
     sequelize,
     modelName: 'User',
     tableName: 'users', // The table name
-    timestamps: false, // Disable Sequelize's default createdAt/updatedAt columns
+    timestamps: false, // Disabling Sequelize's default createdAt/updatedAt columns
   }
 );
 
