@@ -1,11 +1,10 @@
 const request = require('supertest');
-const app = require('../server');
+const app = require('../index');  // Import app from index
 
 describe('Basic Test Suite', () => {
   // Test for ensuring the test file runs correctly
   it('should run the test file successfully', () => {
     console.log('Test file is running successfully!');
-    // Simple assertion to verify the test is running
     expect(true).toBe(true);
   });
 
@@ -16,4 +15,3 @@ describe('Basic Test Suite', () => {
     expect(response.text).toBe('Fiverr backend is running'); // Expect correct response message
   });
 });
-
