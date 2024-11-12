@@ -14,6 +14,11 @@ const app = express();
 app.use(express.json());  // Parse JSON requests
 app.use(cors());  // Enable CORS for cross-origin requests
 
+// Root route - ensures the correct message is returned for testing
+app.get('/', (req: Request, res: Response) => {
+    res.send('Fiverr backend is running');
+});
+
 // Routes
 app.use('/api/users', userRoutes);  // Set up user-related routes
 
@@ -41,8 +46,10 @@ const startServer = async (): Promise<void> => {
     }
 };
 
-// Start the server
-startServer();
+// Start the server if this file is executed directly (avoid starting it during tests)
+if (require.main === module) {
+    startServer();
+}
 
 // Export the app for testing
 export { app };
