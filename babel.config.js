@@ -1,32 +1,37 @@
 module.exports = {
   presets: [
     [
-      '@babel/preset-env', // For compiling modern JavaScript to a compatible version
+      '@babel/preset-env',
       {
-        targets: 'node 14', // Adjust for the version of Node.js you are using
-        useBuiltIns: 'entry', // Ensures polyfills are added based on usage
-        corejs: 3, // Version of corejs for polyfills
-        modules: 'commonjs', // Use CommonJS for module format
+        targets: { node: '14' }, // Ensure compatibility with Node 14
+        useBuiltIns: 'entry',
+        corejs: 3,
       },
     ],
-    '@babel/preset-typescript', // To handle TypeScript syntax
+    '@babel/preset-typescript', // Handle TypeScript syntax
   ],
   plugins: [
-    '@babel/plugin-transform-modules-commonjs', // Ensure compatibility with CommonJS modules
-    '@babel/plugin-transform-runtime', // Optimize the runtime for async functions, generators, etc.
-    '@babel/plugin-proposal-class-properties', // Handle class properties if you're using them
-    '@babel/plugin-proposal-private-methods', // Handle private methods in classes
+    '@babel/plugin-transform-runtime', // Optimizes runtime for async functions, generators, etc.
+    '@babel/plugin-proposal-class-properties', // Supports class properties
+    '@babel/plugin-proposal-private-methods', // Supports private methods in classes
   ],
-  sourceMaps: true, // Enable source maps to help with debugging
-  comments: false, // Optionally remove comments in the output files
+  sourceMaps: 'inline', // Easier debugging with inline source maps
+  comments: false,
+  env: {
+    test: {
+      plugins: [
+        '@babel/plugin-transform-modules-commonjs', // Ensure Jest compatibility with CommonJS modules
+      ],
+    },
+  },
   overrides: [
     {
-      test: /node_modules[\\/]uuid/, // Specific override for the uuid module
+      test: /node_modules[\\/]uuid/, // Specific handling for the uuid module
       presets: [
         [
           '@babel/preset-env',
           {
-            modules: 'commonjs', // Ensure compatibility with Node.js modules for uuid
+            modules: 'commonjs',
           },
         ],
       ],
