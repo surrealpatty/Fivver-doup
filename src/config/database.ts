@@ -29,8 +29,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql', // Ensure correct dialect type
   logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
   dialectOptions: {
-    ssl: useSSL, // Use SSL if DB_SSL is 'true'
-    rejectUnauthorized: false, // Disable verification if using self-signed certs
+    charset: 'utf8mb4',  // Ensure correct charset to avoid encoding issues
+    ssl: useSSL,         // Use SSL if DB_SSL is 'true'
+    // Removed rejectUnauthorized for now as it may cause issues with some SSL configurations
   },
 });
 
