@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize } from './config/database';  // Import Sequelize instance correctly
+import { sequelize } from './config/database';  // Import Sequelize instance
 import userRoutes from './routes/user';  // Import user routes
 
 // Load environment variables from .env file

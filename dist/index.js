@@ -16,7 +16,7 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const database_1 = require("./config/database"); // Import Sequelize instance correctly
+const database_1 = require("./config/database"); // Import Sequelize instance
 const user_1 = __importDefault(require("./routes/user")); // Import user routes
 // Load environment variables from .env file
 dotenv_1.default.config();
