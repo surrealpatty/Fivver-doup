@@ -1,16 +1,87 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Ensure these environment variables are set in your .env file
+// Load environment variables from a .env file
+dotenv.config();
+
+// List of required environment variables for validation
+const requiredKeys = ['DB_USERNAME', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST'];
+
+// Function to validate the presence of required environment variables
+const validateEnvVars = () => {
+  for (const key of requiredKeys) {
+    if (!process.env[key]) {
+      if (process.env.NODE_ENV !== 'test') {  // Avoid process exit during testing
+        console.error(`Missing environment variable: ${key}`);
+        process.exit(1);
+      } else {
+        console.warn(`Warning: Missing environment variable: ${key}`);
+      }
+    }
+  }
+};
+
+// Validate environment variables unless in testing mode
+if (process.env.NODE_ENV !== 'test') {
+  validateEnvVars();
+}
+
+// Define the configuration object with settings for 'development', 'production', and 'test' environments
+const config = {
+  development: {
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'password',
+    database: process.env.DB_NAME || 'fivver_doup_db',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    port: 3306,  // Explicitly define the port for development
+    dialectOptions: {
+      charset: 'utf8mb4',
+    },
+    logging: false,
+  },
+  production: {
+    username: process.env.DB_USERNAME || 'prod_user',
+    password: process.env.DB_PASSWORD || 'prod_password',
+    database: process.env.DB_NAME || 'prod_database',
+    host: process.env.DB_HOST || 'prod_host',
+    dialect: 'mysql',
+    port: 3306,  // Explicitly define the port for production
+    dialectOptions: {
+      charset: 'utf8mb4',
+    },
+    logging: false,
+  },
+  test: {
+    username: process.env.DB_USERNAME || 'test_user',
+    password: process.env.DB_PASSWORD || 'test_password',
+    database: process.env.DB_NAME || 'test_database',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    port: 3306,  // Explicitly define the port for testing
+    dialectOptions: {
+      charset: 'utf8mb4',
+    },
+    logging: false,
+  },
+};
+
+// Get the environment (default to 'development' if not set)
+const env = process.env.NODE_ENV || 'development';
+
+// Set up Sequelize instance with the environment-specific configuration
 const sequelize = new Sequelize(
-  process.env.DB_NAME!, // The database name
-  process.env.DB_USER!, // The username
-  process.env.DB_PASSWORD!, // The password
+  config[env].database,
+  config[env].username,
+  config[env].password,
   {
-    host: process.env.DB_HOST || 'localhost', // The database host (default to 'localhost')
-    dialect: 'mysql', // Database dialect (MySQL)
-    port: 3306, // Explicitly set the port to 3306 (default MySQL port)
-    logging: console.log, // Optional: log SQL queries to console for debugging
+    host: config[env].host,
+    dialect: config[env].dialect,
+    dialectOptions: config[env].dialectOptions,
+    logging: config[env].logging,
+    port: config[env].port,  // Ensure the port is included in the connection
   }
 );
 
-export { sequelize };
+// Export the Sequelize instance and config
+export { sequelize, config };
