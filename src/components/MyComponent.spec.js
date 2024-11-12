@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'; // Make sure you're using Vue Test Utils for mounting the component
-import MyComponent from '@/components/MyComponent.vue'; // The import path should resolve correctly now
+import { mount } from '@vue/test-utils';
+import MyComponent from '@/components/MyComponent.vue'; // Ensure this points to the correct file path
 
 describe('MyComponent.vue', () => {
   it('renders props.title when passed', () => {
@@ -7,15 +7,11 @@ describe('MyComponent.vue', () => {
     const wrapper = mount(MyComponent, {
       props: { title },
     });
-    // Assert that the rendered text includes the title prop
     expect(wrapper.text()).toContain(title);
   });
 
   it('renders default content when no title is passed', () => {
     const wrapper = mount(MyComponent);
-    // Replace 'Default Title' with the actual default content of your component
-    expect(wrapper.text()).toContain('Default Title'); // Ensure this matches your component's default behavior
+    expect(wrapper.text()).toContain('Default Title');
   });
-
-  // Additional tests can be added here if needed
 });
