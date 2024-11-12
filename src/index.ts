@@ -22,7 +22,7 @@ app.get('/', (req: Request, res: Response) => {
 // Routes
 app.use('/api/users', userRoutes);  // Set up user-related routes
 
-// Function to start the server
+// Function to initialize the database and start the server
 const startServer = async (): Promise<void> => {
     try {
         // Test DB connection
