@@ -5,9 +5,9 @@ module.exports = {
   },
   testEnvironment: 'node', // Node environment for backend tests
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue'],  // Include 'vue' for handling Vue components
-  transformIgnorePatterns: ['/node_modules/(?!(your-vue-module|other-module-to-transform)/)'],  // Ensure any necessary modules are transformed
+  transformIgnorePatterns: ['/node_modules/'],  // Exclude node_modules from transformation (unless needed)
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/dist/$1',  // Maps source to dist if needed
+    '^@/(.*)$': '<rootDir>/dist/$1',  // Maps source to dist if needed, adjust if necessary
   },
   roots: ['<rootDir>/src'],  // Test files root location
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],  // Optional: Add setup file for global configurations
