@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import MyComponent from './components/MyComponent.vue'; // Adjusted path if it's inside the components folder
+import MyComponent from '@/components/MyComponent.vue'; // Adjusted path if using alias @ for components
 
 describe('MyComponent.vue', () => {
   it('renders props.title when passed', () => {
