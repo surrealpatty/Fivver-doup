@@ -1,17 +1,17 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
 
-// Load environment variables
+// Load environment variables from the .env file
 dotenv.config();
 
-// Destructure environment variables from the .env file with types
+// Destructure the environment variables
 const {
-  DB_NAME, 
-  DB_USER, 
-  DB_PASSWORD, 
-  DB_HOST, 
-  DB_DIALECT, 
-  DB_SSL, 
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_DIALECT,
+  DB_SSL,
   NODE_ENV
 } = process.env;
 
@@ -23,31 +23,26 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
 // Convert DB_SSL to a boolean value if it's set to 'true'
 const useSSL = DB_SSL === 'true';
 
-// Create a new Sequelize instance with sha256_password authentication plugin
+// Create a new Sequelize instance
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql', // Ensure correct dialect type
+  dialect: DB_DIALECT, // Ensure correct dialect type (mysql, postgres, etc.)
   logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
-  
+
   dialectOptions: {
     ssl: useSSL, // Use SSL if DB_SSL is 'true'
-    rejectUnauthorized: false, // Disable verification if using self-signed certs
-    authPlugins: {
-      sha256_password: {
-        password: DB_PASSWORD, // Specify the password for the sha256_password plugin
-      },
-    },
+    rejectUnauthorized: false, // Disable verification if using self-signed certificates
   },
 });
 
-// Ensure the database connection works
+// Test the database connection
 sequelize.authenticate()
   .then(() => {
     console.log('Database connection established successfully');
   })
-  .catch((err: Error) => {
+  .catch((err) => {
     console.error('Unable to connect to the database:', err.message || err);
     process.exit(1); // Exit the process if the connection fails
   });
 
-export default sequelize;
+module.exports = sequelize;

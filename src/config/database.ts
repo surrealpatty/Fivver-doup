@@ -1,13 +1,37 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Initialize Sequelize with MySQL configuration
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost',
-  database: 'fivver_doup',
-  username: 'test_user',  // Make sure to use the correct test user for the MySQL instance
-  password: 'your_test_password',  // Ensure this is the correct password for your MySQL instance
-  logging: false,  // Turn off logging for cleaner output, set to true for debugging
+// Load environment variables
+dotenv.config();
+
+// Destructure environment variables from the .env file
+const {
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_DIALECT,
+  DB_SSL,
+  NODE_ENV
+} = process.env;
+
+// Ensure required environment variables are present
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
+  throw new Error('Missing required database environment variables');
+}
+
+// Convert DB_SSL to a boolean value if it's set to 'true'
+const useSSL = DB_SSL === 'true';
+
+// Create a new Sequelize instance with the given environment variables
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
+  dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql', // Ensure correct dialect type
+  logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
+  dialectOptions: {
+    ssl: useSSL, // Use SSL if DB_SSL is 'true'
+    rejectUnauthorized: false, // Disable verification if using self-signed certs
+  },
 });
 
 // Test the database connection
