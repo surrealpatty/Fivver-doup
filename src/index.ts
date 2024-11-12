@@ -1,42 +1,11 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { sequelize } from './config/database';  // Import Sequelize instance
-import userRoutes from './routes/user';  // Import user routes
-
-// Load environment variables from .env file
-dotenv.config();
-
-// Create Express app
-const app = express();
-
-// Middleware
-app.use(express.json());  // Middleware to parse JSON request bodies
-app.use(cors());  // Middleware to enable CORS
-
-// Routes
-app.use('/api/users', userRoutes);  // Route handling for '/api/users'
-
-// Function to test the database connection
-const testConnection = async (): Promise<void> => {
-    try {
-        await sequelize.authenticate();  // Test the database connection
-        console.log('Database connection has been established successfully.');
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error('Unable to connect to the database:', error.message);  // Only access message if error is an instance of Error
-        } else {
-            console.error('Unable to connect to the database:', error);  // Log raw error if it's not an instance of Error
-        }
-        process.exit(1);  // Exit the process if the connection fails
-    }
-};
-
 // Function to start the server and sync the database
 const startServer = async (): Promise<void> => {
     try {
         // Test DB connection
         await testConnection();
+
+        // Ensure the database exists (create it if necessary)
+        await sequelize.query('CREATE DATABASE IF NOT EXISTS fivver_doup;');
 
         // Sync models with the database
         const isDevelopment = process.env.NODE_ENV === 'development';
@@ -58,9 +27,3 @@ const startServer = async (): Promise<void> => {
         }
     }
 };
-
-// Start the server
-startServer();
-
-// Export the app for testing purposes
-export { app };  // Use named export for app to be compatible with ES6 imports in test files

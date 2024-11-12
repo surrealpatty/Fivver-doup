@@ -26,7 +26,12 @@ const testConnection = async () => {
         console.log('Database connection has been established successfully.');
     }
     catch (error) {
-        console.error('Unable to connect to the database:', error.message || error);
+        if (error instanceof Error) {
+            console.error('Unable to connect to the database:', error.message); // Only access message if error is an instance of Error
+        }
+        else {
+            console.error('Unable to connect to the database:', error); // Log raw error if it's not an instance of Error
+        }
         process.exit(1); // Exit the process if the connection fails
     }
 };
@@ -47,7 +52,12 @@ const startServer = async () => {
         });
     }
     catch (error) {
-        console.error('Error starting the server:', error.message || error);
+        if (error instanceof Error) {
+            console.error('Error starting the server:', error.message); // Handle error message properly
+        }
+        else {
+            console.error('Error starting the server:', error); // Log raw error if it's not an instance of Error
+        }
     }
 };
 // Start the server
