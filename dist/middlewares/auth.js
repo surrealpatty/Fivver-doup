@@ -11,8 +11,7 @@ exports.generateToken = (userId) => {
 };
 // Middleware to verify the JWT token
 exports.verifyToken = (req, res, next) => {
-    var _a;
-    const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1]; // Extract token from the Authorization header
+    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from the Authorization header
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
     }

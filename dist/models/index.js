@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -55,11 +46,11 @@ const sequelize = new sequelize_1.Sequelize(dbConfig[env].database, dbConfig[env
 exports.sequelize = sequelize;
 const models = {};
 exports.models = models;
-const importModels = () => __awaiter(void 0, void 0, void 0, function* () {
+const importModels = async () => {
     const files = fs_1.default.readdirSync(__dirname)
         .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js');
     for (const file of files) {
-        const model = yield Promise.resolve(`${path_1.default.join(__dirname, file)}`).then(s => __importStar(require(s)));
+        const model = await Promise.resolve(`${path_1.default.join(__dirname, file)}`).then(s => __importStar(require(s)));
         const initializedModel = model.default(sequelize, sequelize_1.Sequelize.DataTypes);
         models[initializedModel.name] = initializedModel;
     }
@@ -68,6 +59,6 @@ const importModels = () => __awaiter(void 0, void 0, void 0, function* () {
             models[modelName].associate(models);
         }
     });
-});
+};
 importModels().catch((err) => console.error('Failed to import models:', err));
 //# sourceMappingURL=index.js.map
