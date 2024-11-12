@@ -1,14 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
-// Define the User model extending Sequelize's Model class
-class User extends sequelize_1.Model {
-}
-exports.User = User;
-// Initialize the User model with its attributes and options
-User.init({
+const database_1 = require("../config/database"); // Adjust path if necessary
+// Define the User model
+const User = database_1.sequelize.define('User', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
@@ -17,37 +12,25 @@ User.init({
     username: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    firstName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
+    created_at: {
+        type: sequelize_1.DataTypes.TIMESTAMP,
+        defaultValue: sequelize_1.DataTypes.NOW,
     },
-    lastName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-    },
-    role: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    subscriptionStatus: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    sequelize: database_1.sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true, // Enable automatic timestamps for createdAt and updatedAt
 });
+// Sync the model with the database, creating the table if it doesn't exist
+User.sync({ alter: true }).then(() => {
+    console.log('User table is synced');
+}).catch((error) => {
+    console.error('Error syncing User model:', error);
+});
+exports.default = User;
 //# sourceMappingURL=user.js.map

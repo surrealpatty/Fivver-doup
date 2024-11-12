@@ -14,13 +14,11 @@ jest.mock('jsonwebtoken', () => ({
 
 // Mock User model
 jest.mock('../models/user', () => ({
-  User: {
-    findOne: jest.fn(),
-    create: jest.fn(),
-    findByPk: jest.fn(),
-    update: jest.fn(),
-    destroy: jest.fn(),
-  },
+  findOne: jest.fn(),
+  create: jest.fn(),
+  findByPk: jest.fn(),
+  update: jest.fn(),
+  destroy: jest.fn(),
 }));
 
 describe('User Controller', () => {
@@ -40,7 +38,7 @@ describe('User Controller', () => {
     });
 
     const response = await request(app)
-      .post('/api/users/register')
+      .post('/api/users/register')  // Adjust path if necessary
       .send({
         username: 'testuser',
         email: 'test@example.com',
@@ -67,7 +65,7 @@ describe('User Controller', () => {
     (jwt.sign as jest.Mock).mockReturnValue(mockToken);
 
     const response = await request(app)
-      .post('/api/users/login')
+      .post('/api/users/login')  // Adjust path if necessary
       .send({
         email: 'test@example.com',
         password: 'testpassword',
@@ -92,7 +90,7 @@ describe('User Controller', () => {
     (User.findByPk as jest.Mock).mockResolvedValue(mockUser);
 
     const response = await request(app)
-      .get('/api/users/profile')
+      .get('/api/users/profile')  // Adjust path if necessary
       .set('Authorization', `Bearer ${mockToken}`);
 
     expect(response.status).toBe(200);
@@ -108,7 +106,7 @@ describe('User Controller', () => {
     (User.update as jest.Mock).mockResolvedValue([1]);  // Mock sequelize update return value
 
     const response = await request(app)
-      .put('/api/users/profile')
+      .put('/api/users/profile')  // Adjust path if necessary
       .set('Authorization', `Bearer ${mockToken}`)
       .send({ username: 'updatedUser' });
 
@@ -124,7 +122,7 @@ describe('User Controller', () => {
     (User.destroy as jest.Mock).mockResolvedValue(1);  // Mock sequelize destroy return value
 
     const response = await request(app)
-      .delete('/api/users/profile')
+      .delete('/api/users/profile')  // Adjust path if necessary
       .set('Authorization', `Bearer ${mockToken}`);
 
     expect(response.status).toBe(200);
