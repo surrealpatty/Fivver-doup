@@ -1,81 +1,30 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.config = exports.sequelize = void 0;
-const sequelize_1 = require("sequelize");
-const dotenv_1 = __importDefault(require("dotenv"));
-// Load environment variables from a .env file
-dotenv_1.default.config();
-// List of required environment variables for validation
-const requiredKeys = ['DB_USERNAME', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST'];
-// Function to validate the presence of required environment variables
-const validateEnvVars = () => {
-    for (const key of requiredKeys) {
-        if (!process.env[key]) {
-            if (process.env.NODE_ENV !== 'test') { // Avoid process exit during testing
-                console.error(`Missing environment variable: ${key}`);
-                process.exit(1);
-            }
-            else {
-                console.warn(`Warning: Missing environment variable: ${key}`);
-            }
+// src/config/database.js
+const { Sequelize } = require('sequelize');
+// Create a new instance of Sequelize
+const sequelize = new Sequelize('fivver_doup', 'test_user', 'your_test_password', {
+    host: 'localhost',
+    dialect: 'mysql',
+});
+// Test database connection
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate(); // Test the database connection
+        console.log('Database connection has been established successfully.');
+    }
+    catch (error) {
+        // Type guard to handle unknown error type in TypeScript
+        if (error instanceof Error) {
+            console.error('Unable to connect to the database:', error.message);
         }
+        else {
+            console.error('Unable to connect to the database:', error);
+        }
+        process.exit(1); // Exit the process if the connection fails
     }
 };
-// Validate environment variables unless in testing mode
-if (process.env.NODE_ENV !== 'test') {
-    validateEnvVars();
-}
-const config = {
-    development: {
-        username: process.env.DB_USERNAME || 'root',
-        password: process.env.DB_PASSWORD || 'password',
-        database: process.env.DB_NAME || 'fivver_doup_db',
-        host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql', // Explicit cast to Dialect
-        port: 3306, // Explicitly define the port for development
-        dialectOptions: {
-            charset: 'utf8mb4',
-        },
-        logging: false,
-    },
-    production: {
-        username: process.env.DB_USERNAME || 'prod_user',
-        password: process.env.DB_PASSWORD || 'prod_password',
-        database: process.env.DB_NAME || 'prod_database',
-        host: process.env.DB_HOST || 'prod_host',
-        dialect: 'mysql', // Explicit cast to Dialect
-        port: 3306, // Explicitly define the port for production
-        dialectOptions: {
-            charset: 'utf8mb4',
-        },
-        logging: false,
-    },
-    test: {
-        username: process.env.DB_USERNAME || 'test_user',
-        password: process.env.DB_PASSWORD || 'test_password',
-        database: process.env.DB_NAME || 'test_database',
-        host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql', // Explicit cast to Dialect
-        port: 3306, // Explicitly define the port for testing
-        dialectOptions: {
-            charset: 'utf8mb4',
-        },
-        logging: false,
-    },
+module.exports = {
+    sequelize,
+    testConnection
 };
-exports.config = config;
-// Get the environment (default to 'development' if not set)
-const env = process.env.NODE_ENV || 'development';
-// Set up Sequelize instance with the environment-specific configuration
-const sequelize = new sequelize_1.Sequelize(config[env].database, config[env].username, config[env].password, {
-    host: config[env].host,
-    dialect: config[env].dialect, // Now correctly typed as Dialect
-    dialectOptions: config[env].dialectOptions,
-    logging: config[env].logging,
-    port: config[env].port, // Ensure the port is included in the connection
-});
-exports.sequelize = sequelize;
 //# sourceMappingURL=database.js.map
