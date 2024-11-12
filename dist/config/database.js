@@ -28,14 +28,13 @@ const validateEnvVars = () => {
 if (process.env.NODE_ENV !== 'test') {
     validateEnvVars();
 }
-// Define the configuration object with settings for 'development', 'production', and 'test' environments
 const config = {
     development: {
         username: process.env.DB_USERNAME || 'root',
         password: process.env.DB_PASSWORD || 'password',
         database: process.env.DB_NAME || 'fivver_doup_db',
         host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql',
+        dialect: 'mysql', // Explicit cast to Dialect
         port: 3306, // Explicitly define the port for development
         dialectOptions: {
             charset: 'utf8mb4',
@@ -47,7 +46,7 @@ const config = {
         password: process.env.DB_PASSWORD || 'prod_password',
         database: process.env.DB_NAME || 'prod_database',
         host: process.env.DB_HOST || 'prod_host',
-        dialect: 'mysql',
+        dialect: 'mysql', // Explicit cast to Dialect
         port: 3306, // Explicitly define the port for production
         dialectOptions: {
             charset: 'utf8mb4',
@@ -59,7 +58,7 @@ const config = {
         password: process.env.DB_PASSWORD || 'test_password',
         database: process.env.DB_NAME || 'test_database',
         host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql',
+        dialect: 'mysql', // Explicit cast to Dialect
         port: 3306, // Explicitly define the port for testing
         dialectOptions: {
             charset: 'utf8mb4',
@@ -73,7 +72,7 @@ const env = process.env.NODE_ENV || 'development';
 // Set up Sequelize instance with the environment-specific configuration
 const sequelize = new sequelize_1.Sequelize(config[env].database, config[env].username, config[env].password, {
     host: config[env].host,
-    dialect: config[env].dialect,
+    dialect: config[env].dialect, // Now correctly typed as Dialect
     dialectOptions: config[env].dialectOptions,
     logging: config[env].logging,
     port: config[env].port, // Ensure the port is included in the connection

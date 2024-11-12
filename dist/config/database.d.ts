@@ -1,41 +1,18 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, Dialect } from 'sequelize';
+interface DBConfig {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    dialect: Dialect;
+    port: number;
+    dialectOptions: {
+        charset: string;
+    };
+    logging: boolean;
+}
 declare const config: {
-    development: {
-        username: string;
-        password: string;
-        database: string;
-        host: string;
-        dialect: string;
-        port: number;
-        dialectOptions: {
-            charset: string;
-        };
-        logging: boolean;
-    };
-    production: {
-        username: string;
-        password: string;
-        database: string;
-        host: string;
-        dialect: string;
-        port: number;
-        dialectOptions: {
-            charset: string;
-        };
-        logging: boolean;
-    };
-    test: {
-        username: string;
-        password: string;
-        database: string;
-        host: string;
-        dialect: string;
-        port: number;
-        dialectOptions: {
-            charset: string;
-        };
-        logging: boolean;
-    };
+    [key: string]: DBConfig;
 };
 declare const sequelize: Sequelize;
 export { sequelize, config };
