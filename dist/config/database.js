@@ -22,12 +22,12 @@ const sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     dialect: DB_DIALECT, // Ensure correct dialect type
     logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
     dialectOptions: {
-        charset: 'utf8mb4', // Ensure correct charset to avoid encoding issues
         ssl: useSSL, // Use SSL if DB_SSL is 'true'
         // Removed rejectUnauthorized for now as it may cause issues with some SSL configurations
     },
     define: {
         freezeTableName: true, // To prevent Sequelize from pluralizing table names
+        charset: 'utf8mb4', // Ensure correct charset to avoid encoding issues
     },
 });
 exports.sequelize = sequelize;

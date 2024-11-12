@@ -30,11 +30,11 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
   dialectOptions: {
     ssl: useSSL,         // Use SSL if DB_SSL is 'true'
-    // Removed rejectUnauthorized for now as it may cause issues with some SSL configurations
   },
   define: {
     freezeTableName: true, // To prevent Sequelize from pluralizing table names
-    charset: 'utf8mb4',  // Ensure correct charset to avoid encoding issues
+    charset: 'utf8mb4',     // Ensure correct charset to avoid encoding issues
+    collate: 'utf8mb4_unicode_ci',  // Set collation to match charset
   },
 });
 
