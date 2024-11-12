@@ -1,21 +1,25 @@
+const { User } = require('../models');  // Ensure User model is correctly imported
+
 // 3. Upgrade to Paid Subscription
 exports.upgradeToPaid = async (req, res) => {
     const userId = req.user.id;  // Ensure user ID comes from a verified JWT token
     const durationInMonths = req.body.duration || 1; // Default to 1 month
-    const { registerUser, loginUser } = require('controllers/userController')
+    
     try {
+        // Fetch the user by ID
         const user = await User.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         const currentDate = new Date();
-        
+
         // Check if user is already on a "Paid" subscription and extend it
         if (user.role === 'Paid' && user.subscriptionEndDate > currentDate) {
+            // Extend subscription period
             user.subscriptionEndDate.setMonth(user.subscriptionEndDate.getMonth() + durationInMonths);
         } else {
-            // Otherwise, set new subscription period
+            // Otherwise, initiate a new "Paid" subscription
             user.role = 'Paid';
             user.subscriptionStatus = 'Active';
             user.subscriptionStartDate = currentDate;
@@ -23,8 +27,10 @@ exports.upgradeToPaid = async (req, res) => {
             user.subscriptionEndDate.setMonth(currentDate.getMonth() + durationInMonths);
         }
 
+        // Save updated user details to the database
         await user.save();
 
+        // Respond with updated subscription information
         return res.status(200).json({
             message: 'Subscription upgraded to Paid',
             subscriptionEndDate: user.subscriptionEndDate,

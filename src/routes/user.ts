@@ -1,16 +1,15 @@
-// src/routes/user.ts
-
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import {User} from '../models/user';  // Default import for User model
+import { User } from '../models/user'; // Importing User model
 import { body, validationResult } from 'express-validator';
-import { UserAttributes } from '../models/user';  // Import UserAttributes from the model file
+import { UserAttributes } from '../models/user'; // Import UserAttributes for type safety
 
 const router = Router();
 
 // User registration route
 router.post(
     '/register',
+    // Validation middleware
     body('username').isString().notEmpty().withMessage('Username is required'),
     body('email').isEmail().withMessage('Invalid email format'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
@@ -37,7 +36,7 @@ router.post(
                 return res.status(400).json({ message: 'Email is already taken' });
             }
 
-            // Hash the password
+            // Hash the password before saving it
             const hashedPassword = await bcrypt.hash(password, 10);
 
             // Create the user with necessary fields
@@ -47,11 +46,11 @@ router.post(
                 password: hashedPassword,
                 firstName,
                 lastName,
-                role: 'Free', // Default role
+                role: 'Free', // Default role for a new user
                 subscriptionStatus: 'Inactive', // Default subscription status
-            } as UserAttributes); // Casting the object to UserAttributes type
+            } as UserAttributes); // Ensure this matches the User model's attributes
 
-            // Respond with the created user data
+            // Respond with the created user data (excluding password)
             res.status(201).json({
                 id: user.id,
                 username: user.username,

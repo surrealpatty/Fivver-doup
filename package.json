@@ -2,18 +2,18 @@
   "name": "fivver_doup",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "type": "commonjs",
+  "type": "module",  // Switch to ES modules (if using modern import/export syntax)
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "pretest": "npm run build",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "test": "jest --verbose --maxWorkers=4",
-    "test:watch": "jest --watch"
+    "pretest": "npm run build",         // Ensure build runs before tests
+    "start": "node dist/index.js",      // Start app in production mode
+    "dev": "nodemon src/index.ts",      // Use nodemon for development with TypeScript
+    "build": "tsc",                     // Compile TypeScript files
+    "build:watch": "tsc --watch",       // Watch TypeScript files for changes
+    "test": "jest --verbose --maxWorkers=4",  // Run Jest tests with verbose output
+    "test:watch": "jest --watch"        // Run Jest tests in watch mode
   },
   "keywords": [],
   "author": "",
@@ -42,7 +42,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3",
-    "sequelize-typescript": "^2.1.0"  
+    "sequelize-typescript": "^2.1.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

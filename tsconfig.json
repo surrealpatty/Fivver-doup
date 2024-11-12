@@ -19,7 +19,7 @@
   },
   "include": [
     "src/**/*.ts"                                     /* Include all TypeScript files in src */
-  ],
+, "src/routes/user.js"  ],
   "exclude": [
     "node_modules",                                   /* Exclude node_modules */
     "dist"                                            /* Exclude dist folder */

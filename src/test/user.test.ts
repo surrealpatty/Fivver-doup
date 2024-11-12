@@ -1,5 +1,5 @@
 import request from 'supertest';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';  // Ensure bcryptjs is used since it's installed
 import jwt from 'jsonwebtoken';
 import { app } from '../index';  // Adjust path to match your main app export
 import { User } from '../models/user';  // Import User model
@@ -98,7 +98,7 @@ describe('User Controller', () => {
   test('should update user profile', async () => {
     const mockToken = 'mock.jwt.token';
     (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
-    (User.update as jest.Mock).mockResolvedValue([1]);
+    (User.update as jest.Mock).mockResolvedValue([1]); // [1] is returned by Sequelize for success
 
     const response = await request(app)
       .put('/api/users/profile')
@@ -112,7 +112,7 @@ describe('User Controller', () => {
   test('should delete user account', async () => {
     const mockToken = 'mock.jwt.token';
     (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
-    (User.destroy as jest.Mock).mockResolvedValue(1);
+    (User.destroy as jest.Mock).mockResolvedValue(1); // Sequelize returns 1 on successful destroy
 
     const response = await request(app)
       .delete('/api/users/profile')
