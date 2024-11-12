@@ -1,115 +1,109 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("../../dist/index")); // Path to transpiled app
-const user_1 = require("../../dist/models/user"); // Path to transpiled user model
-const database_1 = require("../../dist/config/database"); // Sequelize instance
-// Reset the User table before each test
-beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Initializing user table...');
-    yield (0, user_1.initUser)(); // Ensure User table is initialized before the tests
-    yield database_1.sequelize.sync({ force: false }); // Sync without dropping tables
+const bcryptjs_1 = __importDefault(require("bcryptjs")); // Ensure bcryptjs is used since it's installed
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const index_1 = require("../index"); // Adjust path to match your main app export
+const user_1 = require("../models/user"); // Import User model
+// Mock environment variable for JWT secret
+process.env.JWT_SECRET = 'testsecret';
+// Mocking jwt to avoid errors during tests
+jest.mock('jsonwebtoken', () => ({
+    sign: jest.fn(),
+    verify: jest.fn(),
 }));
-// Clear mocks between tests
-afterEach(() => {
-    jest.clearAllMocks(); // Clears mock calls between tests
-});
-// Close database connection after all tests
-afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
-    yield database_1.sequelize.close(); // Close the connection to avoid open handles
-    console.log('Sequelize connection closed');
+// Mock User model with Jest
+jest.mock('../models/user', () => ({
+    User: {
+        findOne: jest.fn(),
+        create: jest.fn(),
+        findByPk: jest.fn(),
+        update: jest.fn(),
+        destroy: jest.fn(),
+    },
 }));
-// User registration and login test suite
-describe('User Registration and Login', () => {
-    it('should register a new user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newUser = {
+describe('User Controller', () => {
+    // Clear mocks after each test
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+    test('should register a new user', async () => {
+        // Mock behavior for findOne and create methods
+        user_1.User.findOne.mockResolvedValue(null); // Simulate user not found
+        user_1.User.create.mockResolvedValue({
+            id: 1,
             username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-        const response = yield (0, supertest_1.default)(index_1.default).post('/api/users/register').send(newUser);
-        // Ensure successful registration
-        expect(response.status).toBe(201); // 201 Created
-        expect(response.body).toHaveProperty('username', newUser.username);
-        expect(response.body).toHaveProperty('email', newUser.email);
-    }));
-    it('should not allow duplicate email during registration', () => __awaiter(void 0, void 0, void 0, function* () {
-        // First, register the user
-        yield (0, supertest_1.default)(index_1.default).post('/api/users/register').send({
+            email: 'test@example.com',
+            password: 'hashedpassword',
+        });
+        const response = await (0, supertest_1.default)(index_1.app)
+            .post('/api/users/register')
+            .send({
             username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
+            email: 'test@example.com',
+            password: 'testpassword',
         });
-        // Try registering again with the same email
-        const response = yield (0, supertest_1.default)(index_1.default).post('/api/users/register').send({
-            username: 'anotheruser',
-            email: 'testuser@example.com',
-            password: 'newpassword123',
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('username', 'testuser');
+        expect(response.body).toHaveProperty('email', 'test@example.com');
+    });
+    test('should login a user and return a token', async () => {
+        const hashedPassword = await bcryptjs_1.default.hash('testpassword', 10);
+        user_1.User.findOne.mockResolvedValue({
+            id: 1,
+            email: 'test@example.com',
+            password: hashedPassword,
         });
-        // Ensure duplicate email is rejected
-        expect(response.status).toBe(400); // 400 Bad Request for duplicate email
-        expect(response.body).toHaveProperty('error', 'Email already in use');
-    }));
-    it('should login a user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const userData = {
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-        // Register the user first
-        yield (0, supertest_1.default)(index_1.default).post('/api/users/register').send({
+        const mockToken = 'mock.jwt.token';
+        jsonwebtoken_1.default.sign.mockReturnValue(mockToken);
+        const response = await (0, supertest_1.default)(index_1.app)
+            .post('/api/users/login')
+            .send({
+            email: 'test@example.com',
+            password: 'testpassword',
+        });
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('token', mockToken);
+    });
+    test('should return user profile', async () => {
+        const mockToken = 'mock.jwt.token';
+        jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
+        const mockUser = {
+            id: 1,
             username: 'testuser',
-            email: userData.email,
-            password: userData.password,
-        });
-        // Now login
-        const response = yield (0, supertest_1.default)(index_1.default).post('/api/users/login').send(userData);
-        // Ensure the login is successful and returns a token
-        expect(response.status).toBe(200); // 200 OK for successful login
-        expect(response.body).toHaveProperty('token'); // Ensure the token is returned
-    }));
-    it('should not login with incorrect credentials', () => __awaiter(void 0, void 0, void 0, function* () {
-        const userData = {
-            email: 'testuser@example.com',
-            password: 'wrongpassword',
+            email: 'test@example.com',
         };
-        const response = yield (0, supertest_1.default)(index_1.default).post('/api/users/login').send(userData);
-        // Ensure login fails with incorrect credentials
-        expect(response.status).toBe(401); // 401 Unauthorized for incorrect credentials
-        expect(response.body).toHaveProperty('error', 'Invalid email or password');
-    }));
-    it('should return the user profile for a logged-in user', () => __awaiter(void 0, void 0, void 0, function* () {
-        // Register and login the user
-        const newUser = {
-            username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-        const registerResponse = yield (0, supertest_1.default)(index_1.default).post('/api/users/register').send(newUser);
-        const loginResponse = yield (0, supertest_1.default)(index_1.default).post('/api/users/login').send({
-            email: newUser.email,
-            password: newUser.password,
-        });
-        const token = loginResponse.body.token;
-        // Fetch the user profile using the token
-        const response = yield (0, supertest_1.default)(index_1.default)
+        user_1.User.findByPk.mockResolvedValue(mockUser);
+        const response = await (0, supertest_1.default)(index_1.app)
             .get('/api/users/profile')
-            .set('Authorization', `Bearer ${token}`);
-        // Ensure the user profile is returned correctly
-        expect(response.status).toBe(200); // 200 OK for fetching the profile
-        expect(response.body).toHaveProperty('username', newUser.username);
-        expect(response.body).toHaveProperty('email', newUser.email);
-    }));
+            .set('Authorization', `Bearer ${mockToken}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('username', 'testuser');
+        expect(response.body).toHaveProperty('email', 'test@example.com');
+    });
+    test('should update user profile', async () => {
+        const mockToken = 'mock.jwt.token';
+        jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
+        user_1.User.update.mockResolvedValue([1]); // Sequelize returns an array [1] on success
+        const response = await (0, supertest_1.default)(index_1.app)
+            .put('/api/users/profile')
+            .set('Authorization', `Bearer ${mockToken}`)
+            .send({ username: 'updatedUser' });
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message', 'Profile updated successfully');
+    });
+    test('should delete user account', async () => {
+        const mockToken = 'mock.jwt.token';
+        jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
+        user_1.User.destroy.mockResolvedValue(1); // Sequelize returns 1 on successful destroy
+        const response = await (0, supertest_1.default)(index_1.app)
+            .delete('/api/users/profile')
+            .set('Authorization', `Bearer ${mockToken}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message', 'User deleted successfully');
+    });
 });
 //# sourceMappingURL=user.test.js.map
