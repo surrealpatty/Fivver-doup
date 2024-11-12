@@ -1,17 +1,20 @@
-// src/config/database.ts
-
 import { Sequelize } from 'sequelize';
 
 // Initialize Sequelize with MySQL configuration
-const sequelize = new Sequelize('fivver_doup', 'test_user', 'your_test_password', {
-  host: 'localhost',
+const sequelize = new Sequelize({
   dialect: 'mysql',
+  host: 'localhost',
+  database: 'fivver_doup',
+  username: 'test_user',
+  password: 'your_test_password',
+  logging: false,  // Turn off logging for cleaner output, set to true for debugging
 });
 
 // Test the database connection
 const testConnection = async () => {
   try {
-    await sequelize.authenticate();  // Test the database connection
+    // Test the database connection
+    await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -22,5 +25,8 @@ const testConnection = async () => {
     process.exit(1);  // Exit the process if the connection fails
   }
 };
+
+// Test the connection on script run
+testConnection();
 
 export { sequelize, testConnection };
