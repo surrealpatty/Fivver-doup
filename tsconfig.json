@@ -18,11 +18,12 @@
     "checkJs": false                                  
   },
   "include": [
-    "src/**/*.ts",                                   
-    "src/**/*.js"                                   
-, "src/components/MyComponent.vue"  ],
+    "src/**/*.ts", 
+    "src/**/*.js"
+  ],
   "exclude": [
     "node_modules",                                  
-    "dist"                                          
+    "dist",
+    "**/*.vue" // Exclude .vue files from TypeScript processing
   ]
 }
