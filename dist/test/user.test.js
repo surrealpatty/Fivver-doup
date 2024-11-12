@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -39,7 +30,7 @@ describe('User Controller', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
-    test('should register a new user', () => __awaiter(void 0, void 0, void 0, function* () {
+    test('should register a new user', async () => {
         // Mock behavior for findOne and create methods
         user_1.User.findOne.mockResolvedValue(null); // Simulate user not found
         user_1.User.create.mockResolvedValue({
@@ -48,7 +39,7 @@ describe('User Controller', () => {
             email: 'test@example.com',
             password: 'hashedpassword',
         });
-        const response = yield (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.app)
             .post('/api/users/register')
             .send({
             username: 'testuser',
@@ -58,9 +49,9 @@ describe('User Controller', () => {
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('username', 'testuser');
         expect(response.body).toHaveProperty('email', 'test@example.com');
-    }));
-    test('should login a user and return a token', () => __awaiter(void 0, void 0, void 0, function* () {
-        const hashedPassword = yield bcrypt_1.default.hash('testpassword', 10);
+    });
+    test('should login a user and return a token', async () => {
+        const hashedPassword = await bcrypt_1.default.hash('testpassword', 10);
         user_1.User.findOne.mockResolvedValue({
             id: 1,
             email: 'test@example.com',
@@ -68,7 +59,7 @@ describe('User Controller', () => {
         });
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.sign.mockReturnValue(mockToken);
-        const response = yield (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.app)
             .post('/api/users/login')
             .send({
             email: 'test@example.com',
@@ -76,8 +67,8 @@ describe('User Controller', () => {
         });
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('token', mockToken);
-    }));
-    test('should return user profile', () => __awaiter(void 0, void 0, void 0, function* () {
+    });
+    test('should return user profile', async () => {
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         const mockUser = {
@@ -86,33 +77,33 @@ describe('User Controller', () => {
             email: 'test@example.com',
         };
         user_1.User.findByPk.mockResolvedValue(mockUser);
-        const response = yield (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.app)
             .get('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('username', 'testuser');
         expect(response.body).toHaveProperty('email', 'test@example.com');
-    }));
-    test('should update user profile', () => __awaiter(void 0, void 0, void 0, function* () {
+    });
+    test('should update user profile', async () => {
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         user_1.User.update.mockResolvedValue([1]);
-        const response = yield (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.app)
             .put('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`)
             .send({ username: 'updatedUser' });
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'Profile updated successfully');
-    }));
-    test('should delete user account', () => __awaiter(void 0, void 0, void 0, function* () {
+    });
+    test('should delete user account', async () => {
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         user_1.User.destroy.mockResolvedValue(1);
-        const response = yield (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.app)
             .delete('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'User deleted successfully');
-    }));
+    });
 });
 //# sourceMappingURL=user.test.js.map
