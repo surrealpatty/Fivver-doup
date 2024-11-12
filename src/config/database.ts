@@ -1,20 +1,19 @@
-// src/config/database.js
+// src/config/database.ts
 
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-// Create a new instance of Sequelize
+// Initialize Sequelize with MySQL configuration
 const sequelize = new Sequelize('fivver_doup', 'test_user', 'your_test_password', {
   host: 'localhost',
   dialect: 'mysql',
 });
 
-// Test database connection
+// Test the database connection
 const testConnection = async () => {
   try {
     await sequelize.authenticate();  // Test the database connection
     console.log('Database connection has been established successfully.');
-  } catch (error) {
-    // Type guard to handle unknown error type in TypeScript
+  } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Unable to connect to the database:', error.message);
     } else {
@@ -24,7 +23,4 @@ const testConnection = async () => {
   }
 };
 
-module.exports = {
-  sequelize,
-  testConnection
-};
+export { sequelize, testConnection };
