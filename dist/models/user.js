@@ -44,12 +44,12 @@ User.init({
     },
     createdAt: {
         type: sequelize_1.DataTypes.DATE,
-        defaultValue: sequelize_1.DataTypes.NOW,
+        defaultValue: sequelize_1.DataTypes.NOW, // Automatically handle createdAt
     },
 }, {
     sequelize: database_1.sequelize,
     modelName: 'User',
     tableName: 'users', // The table name
-    timestamps: false, // Disable Sequelize's default createdAt/updatedAt columns
+    timestamps: false, // Disabling Sequelize's default createdAt/updatedAt columns
 });
 //# sourceMappingURL=user.js.map

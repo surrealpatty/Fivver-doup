@@ -10,7 +10,7 @@ interface UserAttributes {
     subscriptionStatus: string;
     createdAt: Date;
 }
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt'> {
 }
 declare class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     id: number;
