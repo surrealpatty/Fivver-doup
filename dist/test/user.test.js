@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs")); // Ensure bcryptjs is used since it's installed
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const index_1 = require("../index"); // Adjust path to match your main app export
 const user_1 = require("../models/user"); // Import User model
@@ -51,7 +51,7 @@ describe('User Controller', () => {
         expect(response.body).toHaveProperty('email', 'test@example.com');
     });
     test('should login a user and return a token', async () => {
-        const hashedPassword = await bcrypt_1.default.hash('testpassword', 10);
+        const hashedPassword = await bcryptjs_1.default.hash('testpassword', 10);
         user_1.User.findOne.mockResolvedValue({
             id: 1,
             email: 'test@example.com',
@@ -87,7 +87,7 @@ describe('User Controller', () => {
     test('should update user profile', async () => {
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
-        user_1.User.update.mockResolvedValue([1]);
+        user_1.User.update.mockResolvedValue([1]); // Sequelize returns an array [1] on success
         const response = await (0, supertest_1.default)(index_1.app)
             .put('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`)
@@ -98,7 +98,7 @@ describe('User Controller', () => {
     test('should delete user account', async () => {
         const mockToken = 'mock.jwt.token';
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
-        user_1.User.destroy.mockResolvedValue(1);
+        user_1.User.destroy.mockResolvedValue(1); // Sequelize returns 1 on successful destroy
         const response = await (0, supertest_1.default)(index_1.app)
             .delete('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);
