@@ -6,7 +6,7 @@ module.exports = {
         targets: 'node 14', // Adjust for the version of Node.js you are using
         useBuiltIns: 'entry', // Ensures polyfills are added based on usage
         corejs: 3, // Version of corejs for polyfills
-        modules: 'commonjs', // Ensures the output uses CommonJS
+        modules: 'commonjs', // Use CommonJS for module format
       },
     ],
     '@babel/preset-typescript', // To handle TypeScript syntax
