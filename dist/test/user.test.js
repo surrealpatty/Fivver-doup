@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const index_1 = require("../index"); // Adjust path to match your main app export (ensure you have app exported from index.ts)
+const index_1 = require("../index"); // Adjust path to match the main app export
 const user_1 = require("../models/user"); // Adjust path to your User model
-process.env.JWT_SECRET = 'testsecret'; // Mock environment variable for JWT secret
-// Mock JWT methods
+// Set up a mock JWT secret for testing
+process.env.JWT_SECRET = 'testsecret';
+// Mock jwt and User model methods
 jest.mock('jsonwebtoken', () => ({
     sign: jest.fn(),
     verify: jest.fn(),
 }));
-// Mock User model
 jest.mock('../models/user', () => ({
     findOne: jest.fn(),
     create: jest.fn(),
@@ -23,21 +23,21 @@ jest.mock('../models/user', () => ({
     destroy: jest.fn(),
 }));
 describe('User Controller', () => {
-    // Clear mocks after each test
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.clearAllMocks(); // Reset all mocks after each test
     });
     test('should register a new user', async () => {
-        // Mock behavior for findOne (user not found) and create (successful user creation)
-        user_1.User.findOne.mockResolvedValue(null); // Simulate user not found
+        // Mock findOne to simulate that the user does not already exist
+        user_1.User.findOne.mockResolvedValue(null);
+        // Mock create to simulate successful user creation
         user_1.User.create.mockResolvedValue({
             id: 1,
             username: 'testuser',
             email: 'test@example.com',
-            password: 'hashedpassword', // Hash simulated for test
+            password: 'hashedpassword',
         });
         const response = await (0, supertest_1.default)(index_1.app)
-            .post('/api/users/register') // Adjust path if necessary
+            .post('/api/users/register')
             .send({
             username: 'testuser',
             email: 'test@example.com',
@@ -49,17 +49,17 @@ describe('User Controller', () => {
     });
     test('should login a user and return a token', async () => {
         const hashedPassword = await bcryptjs_1.default.hash('testpassword', 10);
-        // Mock behavior for finding the user and returning hashed password
+        // Mock findOne to simulate a user with the hashed password
         user_1.User.findOne.mockResolvedValue({
             id: 1,
             email: 'test@example.com',
             password: hashedPassword,
         });
         const mockToken = 'mock.jwt.token';
-        // Mock jwt sign to return the mock token
+        // Mock jwt.sign to return a test token
         jsonwebtoken_1.default.sign.mockReturnValue(mockToken);
         const response = await (0, supertest_1.default)(index_1.app)
-            .post('/api/users/login') // Adjust path if necessary
+            .post('/api/users/login')
             .send({
             email: 'test@example.com',
             password: 'testpassword',
@@ -69,17 +69,17 @@ describe('User Controller', () => {
     });
     test('should return user profile', async () => {
         const mockToken = 'mock.jwt.token';
-        // Mock jwt verify to decode the token and return the user id
+        // Mock jwt.verify to decode the token and return a mock user id
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
         const mockUser = {
             id: 1,
             username: 'testuser',
             email: 'test@example.com',
         };
-        // Mock User.findByPk to return a mock user
+        // Mock findByPk to return a user profile
         user_1.User.findByPk.mockResolvedValue(mockUser);
         const response = await (0, supertest_1.default)(index_1.app)
-            .get('/api/users/profile') // Adjust path if necessary
+            .get('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('username', 'testuser');
@@ -87,12 +87,12 @@ describe('User Controller', () => {
     });
     test('should update user profile', async () => {
         const mockToken = 'mock.jwt.token';
-        // Mock jwt verify to decode the token and return the user id
+        // Mock jwt.verify to decode the token and return a mock user id
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
-        // Mock User.update to simulate a successful profile update
-        user_1.User.update.mockResolvedValue([1]); // Mock sequelize update return value
+        // Mock update to simulate a successful update
+        user_1.User.update.mockResolvedValue([1]); // Sequelize returns [1] on successful update
         const response = await (0, supertest_1.default)(index_1.app)
-            .put('/api/users/profile') // Adjust path if necessary
+            .put('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`)
             .send({ username: 'updatedUser' });
         expect(response.status).toBe(200);
@@ -100,12 +100,12 @@ describe('User Controller', () => {
     });
     test('should delete user account', async () => {
         const mockToken = 'mock.jwt.token';
-        // Mock jwt verify to decode the token and return the user id
+        // Mock jwt.verify to decode the token and return a mock user id
         jsonwebtoken_1.default.verify.mockReturnValue({ userId: 1 });
-        // Mock User.destroy to simulate successful user deletion
-        user_1.User.destroy.mockResolvedValue(1); // Mock sequelize destroy return value
+        // Mock destroy to simulate user deletion
+        user_1.User.destroy.mockResolvedValue(1); // Sequelize returns 1 on successful deletion
         const response = await (0, supertest_1.default)(index_1.app)
-            .delete('/api/users/profile') // Adjust path if necessary
+            .delete('/api/users/profile')
             .set('Authorization', `Bearer ${mockToken}`);
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'User deleted successfully');

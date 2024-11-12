@@ -7,42 +7,38 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const database_1 = require("./config/database"); // Correct import for sequelize and testConnection
+const database_1 = require("./config/database"); // Database configuration
 const user_1 = __importDefault(require("./routes/user")); // Import user routes
-// Load environment variables from .env file
-dotenv_1.default.config(); // Load environment variables as early as possible
-// Create Express app
+// Load environment variables
+dotenv_1.default.config(); // Ensure environment variables are loaded at the start
+// Initialize Express app
 const app = (0, express_1.default)();
 exports.app = app;
 // Middleware
-app.use(express_1.default.json()); // Middleware to parse JSON request bodies
-app.use((0, cors_1.default)()); // Middleware to enable CORS
+app.use(express_1.default.json()); // Parse JSON requests
+app.use((0, cors_1.default)()); // Enable CORS for cross-origin requests
 // Routes
-app.use('/api/users', user_1.default); // Route handling for '/api/users'
-// Function to start the server and sync the database
+app.use('/api/users', user_1.default); // Set up user-related routes
+// Function to start the server
 const startServer = async () => {
     try {
         // Test DB connection
         await (0, database_1.testConnection)();
-        // Sync models with the database
+        console.log('Database connection successful.');
+        // Sync database
         const isDevelopment = process.env.NODE_ENV === 'development';
-        const syncOptions = isDevelopment ? { alter: true } : {}; // Alter models in development, use default in production
-        // Avoid manually creating the database, sync ensures the database exists
+        const syncOptions = isDevelopment ? { alter: true } : {}; // Use 'alter' in development for automatic model updates
         await database_1.sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
-        // Start the Express server
-        const PORT = process.env.PORT || 5000; // Default to 5000 if PORT is not specified in .env
+        // Start server
+        const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
     }
     catch (error) {
-        if (error instanceof Error) {
-            console.error('Error starting the server:', error.message); // Handle error message properly
-        }
-        else {
-            console.error('Error starting the server:', error); // Log raw error if it's not an instance of Error
-        }
+        // Enhanced error handling
+        console.error('Error starting the server:', error instanceof Error ? error.message : error);
     }
 };
 // Start the server
