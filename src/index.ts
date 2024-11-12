@@ -1,3 +1,22 @@
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { sequelize, testConnection } from './config/database';  // Correct import for sequelize and testConnection
+import userRoutes from './routes/user';  // Import user routes
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Create Express app
+const app = express();
+
+// Middleware
+app.use(express.json());  // Middleware to parse JSON request bodies
+app.use(cors());  // Middleware to enable CORS
+
+// Routes
+app.use('/api/users', userRoutes);  // Route handling for '/api/users'
+
 // Function to start the server and sync the database
 const startServer = async (): Promise<void> => {
     try {
@@ -27,3 +46,9 @@ const startServer = async (): Promise<void> => {
         }
     }
 };
+
+// Start the server
+startServer();
+
+// Export the app for testing purposes
+export { app };  // Use named export for app to be compatible with ES6 imports in test files
