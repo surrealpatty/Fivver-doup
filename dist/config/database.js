@@ -1,18 +1,22 @@
 "use strict";
-// src/config/database.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testConnection = exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 // Initialize Sequelize with MySQL configuration
-const sequelize = new sequelize_1.Sequelize('fivver_doup', 'test_user', 'your_test_password', {
-    host: 'localhost',
+const sequelize = new sequelize_1.Sequelize({
     dialect: 'mysql',
+    host: 'localhost',
+    database: 'fivver_doup',
+    username: 'test_user',
+    password: 'your_test_password',
+    logging: false, // Turn off logging for cleaner output, set to true for debugging
 });
 exports.sequelize = sequelize;
 // Test the database connection
 const testConnection = async () => {
     try {
-        await sequelize.authenticate(); // Test the database connection
+        // Test the database connection
+        await sequelize.authenticate();
         console.log('Database connection has been established successfully.');
     }
     catch (error) {
@@ -26,4 +30,6 @@ const testConnection = async () => {
     }
 };
 exports.testConnection = testConnection;
+// Test the connection on script run
+testConnection();
 //# sourceMappingURL=database.js.map

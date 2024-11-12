@@ -5,13 +5,13 @@ const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
   database: 'fivver_doup',
-  username: 'test_user',
-  password: 'your_test_password',
+  username: 'test_user',  // Make sure to use the correct test user for the MySQL instance
+  password: 'your_test_password',  // Ensure this is the correct password for your MySQL instance
   logging: false,  // Turn off logging for cleaner output, set to true for debugging
 });
 
 // Test the database connection
-const testConnection = async () => {
+const testConnection = async (): Promise<void> => {
   try {
     // Test the database connection
     await sequelize.authenticate();
