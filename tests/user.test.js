@@ -1,109 +1,133 @@
-const request = require('supertest'); // Ensure supertest is installed
-const app = require('../dist/app'); // Import your Express app from transpiled code (adjust if needed)
-const User = require('../src/models/user'); // Import the User model from the correct path
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // Ensure jwt is imported
-jest.mock('../src/models/user'); // Mock the User model (adjust path if needed)
+import request from 'supertest';
+import bcrypt from 'bcryptjs';  // Ensure bcryptjs is used since it's installed
+import jwt from 'jsonwebtoken';
+import { app } from '../index';  // Adjust path to match your main app export (ensure you have app exported from index.ts)
+import { User } from '../models/user';  // Import User model (ensure path is correct)
 
-// Mock environment variable for JWT secret
-process.env.JWT_SECRET = 'testsecret';
+process.env.JWT_SECRET = 'testsecret';  // Mock environment variable for JWT secret
 
-// Mocking jwt to avoid errors during tests
-jest.mock('jsonwebtoken');
+// Mock JWT methods
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn(),
+  verify: jest.fn(),
+}));
+
+// Mock User model
+jest.mock('../models/user', () => ({
+  User: {
+    findOne: jest.fn(),
+    create: jest.fn(),
+    findByPk: jest.fn(),
+    update: jest.fn(),
+    destroy: jest.fn(),
+  },
+}));
 
 describe('User Controller', () => {
-    afterEach(() => {
-        jest.clearAllMocks(); // Clear mocks after each test
+  // Clear mocks after each test
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should register a new user', async () => {
+    // Mock behavior for findOne (user not found) and create (successful user creation)
+    (User.findOne as jest.Mock).mockResolvedValue(null);  // Simulate user not found
+    (User.create as jest.Mock).mockResolvedValue({
+      id: 1,
+      username: 'testuser',
+      email: 'test@example.com',
+      password: 'hashedpassword',  // Hash simulated for test
     });
 
-    test('should register a new user', async () => {
-        // Mock User.findOne to simulate that the user does not exist
-        User.findOne.mockResolvedValue(null);
-        // Mock User.create to simulate successful user creation
-        User.create.mockResolvedValue({
-            id: 1,
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'hashedpassword', // Simulating the hashed password
-        });
+    const response = await request(app)
+      .post('/api/users/register')
+      .send({
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'testpassword',
+      });
 
-        const response = await request(app).post('/api/users/register').send({
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'testpassword',
-        });
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('username', 'testuser');
+    expect(response.body).toHaveProperty('email', 'test@example.com');
+  });
 
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('username', 'testuser');
-        expect(response.body).toHaveProperty('email', 'test@example.com');
+  test('should login a user and return a token', async () => {
+    const hashedPassword = await bcrypt.hash('testpassword', 10);
+
+    // Mock behavior for finding the user and returning hashed password
+    (User.findOne as jest.Mock).mockResolvedValue({
+      id: 1,
+      email: 'test@example.com',
+      password: hashedPassword,
     });
 
-    test('should login a user and return a token', async () => {
-        const hashedPassword = await bcrypt.hash('testpassword', 10);
-        // Mock User.findOne to simulate user found with a hashed password
-        User.findOne.mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-            password: hashedPassword,
-        });
+    const mockToken = 'mock.jwt.token';
+    // Mock jwt sign to return the mock token
+    (jwt.sign as jest.Mock).mockReturnValue(mockToken);
 
-        // Mocking JWT to avoid actual verification process
-        const mockToken = 'mock.jwt.token';
-        jwt.sign.mockReturnValue(mockToken); // Mock JWT signing
+    const response = await request(app)
+      .post('/api/users/login')
+      .send({
+        email: 'test@example.com',
+        password: 'testpassword',
+      });
 
-        const response = await request(app).post('/api/users/login').send({
-            email: 'test@example.com',
-            password: 'testpassword',
-        });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('token', mockToken);
+  });
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('token', mockToken); // Ensure token is returned
-    });
+  test('should return user profile', async () => {
+    const mockToken = 'mock.jwt.token';
+    // Mock jwt verify to decode the token and return the user id
+    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
 
-    test('should return user profile', async () => {
-        // Mock the JWT verification process
-        const mockToken = 'mock.jwt.token';
-        jwt.verify.mockReturnValue({ userId: 1 }); // Mock JWT token verification
-        const mockUser = {
-            id: 1,
-            username: 'testuser',
-            email: 'test@example.com',
-        };
-        User.findByPk.mockResolvedValue(mockUser);
+    const mockUser = {
+      id: 1,
+      username: 'testuser',
+      email: 'test@example.com',
+    };
 
-        const response = await request(app)
-            .get('/api/users/profile')
-            .set('Authorization', `Bearer ${mockToken}`);
+    // Mock User.findByPk to return a mock user
+    (User.findByPk as jest.Mock).mockResolvedValue(mockUser);
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('username', 'testuser');
-        expect(response.body).toHaveProperty('email', 'test@example.com');
-    });
+    const response = await request(app)
+      .get('/api/users/profile')
+      .set('Authorization', `Bearer ${mockToken}`);
 
-    test('should update user profile', async () => {
-        const mockToken = 'mock.jwt.token';
-        // Mock User.update to simulate a successful profile update
-        User.update.mockResolvedValue([1]); // Simulate one row updated
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('username', 'testuser');
+    expect(response.body).toHaveProperty('email', 'test@example.com');
+  });
 
-        const response = await request(app)
-            .put('/api/users/profile')
-            .set('Authorization', `Bearer ${mockToken}`)
-            .send({ username: 'updatedUser' });
+  test('should update user profile', async () => {
+    const mockToken = 'mock.jwt.token';
+    // Mock jwt verify to decode the token and return the user id
+    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
+    // Mock User.update to simulate a successful profile update
+    (User.update as jest.Mock).mockResolvedValue([1]);
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'Profile updated successfully');
-    });
+    const response = await request(app)
+      .put('/api/users/profile')
+      .set('Authorization', `Bearer ${mockToken}`)
+      .send({ username: 'updatedUser' });
 
-    test('should delete user account', async () => {
-        const mockToken = 'mock.jwt.token';
-        // Mock User.destroy to simulate a successful account deletion
-        User.destroy.mockResolvedValue(1); // Simulate user deletion
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Profile updated successfully');
+  });
 
-        const response = await request(app)
-            .delete('/api/users/profile')
-            .set('Authorization', `Bearer ${mockToken}`);
+  test('should delete user account', async () => {
+    const mockToken = 'mock.jwt.token';
+    // Mock jwt verify to decode the token and return the user id
+    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
+    // Mock User.destroy to simulate successful user deletion
+    (User.destroy as jest.Mock).mockResolvedValue(1);
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'User deleted successfully');
-    });
+    const response = await request(app)
+      .delete('/api/users/profile')
+      .set('Authorization', `Bearer ${mockToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'User deleted successfully');
+  });
 });

@@ -1,49 +1,53 @@
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Load environment variables from the .env file
+// Load environment variables
 dotenv.config();
 
-// List of required environment variables for validation
-const requiredKeys = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_DIALECT'];
+// Destructure environment variables from the .env file with types
+const {
+  DB_NAME, 
+  DB_USER, 
+  DB_PASSWORD, 
+  DB_HOST, 
+  DB_DIALECT, 
+  DB_SSL, 
+  NODE_ENV
+} = process.env;
 
-// Function to validate the presence of required environment variables
-const validateEnvVars = () => {
-    for (const key of requiredKeys) {
-        if (!process.env[key]) {
-            console.error(`Missing environment variable: ${key}`);
-            process.exit(1); // Exit the process if any required environment variable is missing
-        }
-    }
-};
+// Ensure required environment variables are present
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
+  throw new Error('Missing required database environment variables');
+}
 
-// Validate environment variables
-validateEnvVars();
+// Convert DB_SSL to a boolean value if it's set to 'true'
+const useSSL = DB_SSL === 'true';
 
-// Define the configuration object with settings for both 'development' and 'production' environments
-const config = {
-    development: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT || 'mysql', // Default to 'mysql' if DB_DIALECT is not set
-        dialectOptions: {
-            charset: 'utf8mb4', // Ensure compatibility with utf8mb4
-        },
-        logging: process.env.NODE_ENV !== 'test', // Disable logging during tests
+// Create a new Sequelize instance with sha256_password authentication plugin
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
+  dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql', // Ensure correct dialect type
+  logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
+  
+  dialectOptions: {
+    ssl: useSSL, // Use SSL if DB_SSL is 'true'
+    rejectUnauthorized: false, // Disable verification if using self-signed certs
+    authPlugins: {
+      sha256_password: {
+        password: DB_PASSWORD, // Specify the password for the sha256_password plugin
+      },
     },
-    production: {
-        username: process.env.PROD_DB_USER || process.env.DB_USER, // Fallback to dev username if PROD_DB_USER is not set
-        password: process.env.PROD_DB_PASSWORD || process.env.DB_PASSWORD, // Fallback to dev password if PROD_DB_PASSWORD is not set
-        database: process.env.PROD_DB_NAME || process.env.DB_NAME, // Fallback to dev database if PROD_DB_NAME is not set
-        host: process.env.PROD_DB_HOST || process.env.DB_HOST, // Fallback to dev host if PROD_DB_HOST is not set
-        dialect: process.env.DB_DIALECT || 'mysql', // Default to 'mysql' if DB_DIALECT is not set
-        dialectOptions: {
-            charset: 'utf8mb4', // Ensure compatibility with utf8mb4
-        },
-        logging: process.env.NODE_ENV !== 'test', // Disable logging during tests
-    },
-};
+  },
+});
 
-// Export the configuration object as the default export
-export default config;
+// Ensure the database connection works
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection established successfully');
+  })
+  .catch((err: Error) => {
+    console.error('Unable to connect to the database:', err.message || err);
+    process.exit(1); // Exit the process if the connection fails
+  });
+
+export default sequelize;

@@ -1,8 +1,8 @@
 import request from 'supertest';
-import bcrypt from 'bcryptjs';  // Ensure bcryptjs is used since it's installed
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { app } from '../index';  // Adjust path to match your main app export (ensure you have app exported from index.ts)
-import { User } from '../models/user';  // Import User model (ensure path is correct)
+import { User } from '../models/user';  // Adjust path to your User model
 
 process.env.JWT_SECRET = 'testsecret';  // Mock environment variable for JWT secret
 
@@ -105,7 +105,7 @@ describe('User Controller', () => {
     // Mock jwt verify to decode the token and return the user id
     (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
     // Mock User.update to simulate a successful profile update
-    (User.update as jest.Mock).mockResolvedValue([1]);
+    (User.update as jest.Mock).mockResolvedValue([1]);  // Mock sequelize update return value
 
     const response = await request(app)
       .put('/api/users/profile')
@@ -121,7 +121,7 @@ describe('User Controller', () => {
     // Mock jwt verify to decode the token and return the user id
     (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
     // Mock User.destroy to simulate successful user deletion
-    (User.destroy as jest.Mock).mockResolvedValue(1);
+    (User.destroy as jest.Mock).mockResolvedValue(1);  // Mock sequelize destroy return value
 
     const response = await request(app)
       .delete('/api/users/profile')

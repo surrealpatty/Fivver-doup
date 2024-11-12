@@ -1,42 +1,53 @@
-import express from 'express';  // Importing Express
-import sequelize from './config/database.js';  // Importing Sequelize instance for database connection
-import userRoutes from './src/routes/user.js';  // Import user routes
-import serviceRoutes from './src/routes/serviceRoute.js';  // Import service routes
-import cors from 'cors';  // Import CORS middleware (optional, but useful for cross-origin requests)
-import morgan from 'morgan';  // Importing morgan for logging HTTP requests
-import dotenv from 'dotenv';  // Import dotenv for loading environment variables
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { sequelize, testConnection } from './config/database';  // Correct import for sequelize and testConnection
+import userRoutes from './routes/user';  // Import user routes
 
-// Load environment variables
+// Load environment variables from .env file as early as possible
 dotenv.config();
 
-const app = express();  // Initialize the Express app
-const PORT = process.env.PORT || 3000;  // Use environment variable or default to 3000
+// Create Express app
+const app = express();
 
 // Middleware
-app.use(express.json());  // For parsing application/json
-app.use(express.urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
-app.use(cors());  // Enable CORS for all routes (use with caution in production)
-app.use(morgan('dev'));  // Log HTTP requests in development mode
+app.use(express.json());  // Middleware to parse JSON request bodies
+app.use(cors());  // Middleware to enable CORS
 
-// API Routes
-app.use('/api/user', userRoutes);  // Route for user API
-app.use('/api/service', serviceRoutes);  // Route for service API
+// Routes
+app.use('/api/users', userRoutes);  // Route handling for '/api/users'
 
-// Home route or a fallback route
-app.get('/', (req, res) => {
-  res.send('Welcome to the Fiverr clone API!');
-});
+// Function to start the server and sync the database
+const startServer = async (): Promise<void> => {
+    try {
+        // Test DB connection
+        await testConnection();
+
+        // Sync models with the database
+        const isDevelopment = process.env.NODE_ENV === 'development';
+        const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
+
+        // Avoid manually creating the database, sync ensures the database exists
+        await sequelize.sync(syncOptions);
+        console.log('Database synced successfully.');
+
+        // Start the Express server
+        const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not specified in .env
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error: unknown) {
+        // Improved error handling
+        if (error instanceof Error) {
+            console.error('Error starting the server:', error.message);  // Handle error message properly
+        } else {
+            console.error('Error starting the server:', error);  // Log raw error if it's not an instance of Error
+        }
+    }
+};
 
 // Start the server
-app.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}...`);
-  try {
-    // Sync database models with the database (ensure it is connected and synced)
-    await sequelize.authenticate();  // Ensure database connection is successful
-    console.log('Database connection established successfully.');
-    await sequelize.sync();  // Sync all models
-    console.log('Database synced successfully.');
-  } catch (error) {
-    console.error('Error syncing database:', error);
-  }
-});
+startServer();
+
+// Export the app for testing purposes
+export { app };  // Use named export for app to be compatible with ES6 imports in test files
