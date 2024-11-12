@@ -98,7 +98,7 @@ describe('User Controller', () => {
   test('should update user profile', async () => {
     const mockToken = 'mock.jwt.token';
     (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
-    (User.update as jest.Mock).mockResolvedValue([1]); // [1] is returned by Sequelize for success
+    (User.update as jest.Mock).mockResolvedValue([1]); // Sequelize returns an array [1] on success
 
     const response = await request(app)
       .put('/api/users/profile')

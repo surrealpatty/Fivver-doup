@@ -5,7 +5,7 @@ import { sequelize, testConnection } from './config/database';  // Correct impor
 import userRoutes from './routes/user';  // Import user routes
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config();  // Load environment variables as early as possible
 
 // Create Express app
 const app = express();
@@ -23,13 +23,11 @@ const startServer = async (): Promise<void> => {
         // Test DB connection
         await testConnection();
 
-        // Ensure the database exists (create it if necessary)
-        await sequelize.query('CREATE DATABASE IF NOT EXISTS fivver_doup;');
-
         // Sync models with the database
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
 
+        // Avoid manually creating the database, sync ensures the database exists
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
