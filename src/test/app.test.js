@@ -1,6 +1,8 @@
 const request = require('supertest');
 const path = require('path');
-const { app } = require(path.resolve(__dirname, '../dist/index')); // Resolves absolute path
+
+// Adjust path to point to the correct location of the compiled index.js in dist
+const { app } = require(path.resolve(__dirname, '../dist/index')); // Ensure the path is correct
 
 describe('Basic Test Suite', () => {
     it('should respond with a message from the root endpoint', async () => {

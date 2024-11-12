@@ -41,7 +41,6 @@ const startServer = async () => {
         });
     }
     catch (error) {
-        // Enhanced error handling
         console.error('Error starting the server:', error instanceof Error ? error.message : error);
     }
 };
