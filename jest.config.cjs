@@ -3,7 +3,7 @@ module.exports = {
 
   transform: {
     '^.+\\.tsx?$': ['ts-jest', { isolatedModules: true }],  // Handle TypeScript files using ts-jest
-    '^.+\\.js$': 'babel-jest',  // Use babel-jest for JavaScript files (commonjs, es modules)
+    '^.+\\.js$': 'babel-jest',  // Use babel-jest for JavaScript files (CommonJS, ES modules)
   },
 
   testMatch: [
@@ -24,7 +24,7 @@ module.exports = {
   },
 
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],  // Set up global configurations or mocks in jest.setup.js
-  
+
   collectCoverageFrom: [
     "src/**/*.{js,ts}",  // Collect coverage from all .js and .ts files in the src folder
     "!src/test/**",  // Exclude test files from coverage
