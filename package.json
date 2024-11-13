@@ -64,7 +64,9 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.4",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "vue": "3.0",
+    "vuex": "4.0"
   },
   "moduleFileExtensions": [
     "ts",
