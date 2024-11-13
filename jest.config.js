@@ -1,14 +1,15 @@
 module.exports = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   testEnvironment: "jsdom",
-  moduleFileExtensions: ["js", "ts", "json", "vue"],
+  moduleFileExtensions: ["js", "ts", "json", "vue", "node"],
   transform: {
-    "^.+\\.vue$": "@vue/vue3-jest",  // For Vue single-file components
-    "^.+\\.ts$": "ts-jest",          // For TypeScript files
-    "^.+\\.jsx?$": "babel-jest"      // For JavaScript/JSX files
+    "^.+\\.vue$": "@vue/vue3-jest",
+    "^.+\\.ts$": "ts-jest",
+    "^.+\\.jsx?$": "babel-jest",
   },
+  verbose: true,
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1"   // Alias for importing files
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   globals: {
     "ts-jest": {
@@ -16,11 +17,11 @@ module.exports = {
     },
     "vue-jest": {
       tsConfig: "<rootDir>/tsconfig.json",
-      experimentalCSSCompile: true,  // Optional for CSS in Vue files
     },
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@vue|vue3|@vue/test-utils)/)"
+    "/node_modules/(?!(@vue|vue3|@vue/test-utils)/)",
   ],
-  verbose: true,
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.{js,ts,vue}", "!src/main.ts", "!src/router/**", "!src/store/**"],
 };
