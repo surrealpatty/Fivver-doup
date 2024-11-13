@@ -13,7 +13,8 @@
     "build:watch": "tsc --watch",
     "test": "npm run build && jest",
     "test:watch": "jest --watch",
-    "lint": "eslint 'src/**/*.ts' --fix"
+    "lint": "eslint 'src/**/*.ts' --fix",
+    "test:ci": "jest --ci --maxWorkers=4"
   },
   "keywords": [],
   "author": "",
