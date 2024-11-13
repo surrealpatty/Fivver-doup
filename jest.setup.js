@@ -1,12 +1,12 @@
 import { config } from '@vue/test-utils';
 import { createApp } from 'vue';
 
-// Ensure Vue is initialized globally before the tests run
+// Check if Vue is already defined globally
 if (typeof globalThis.Vue === 'undefined') {
   globalThis.Vue = createApp({});
 }
 
-// Optional: If you need a global mock for `sessionStorage`
+// Optionally, mock sessionStorage if needed
 beforeEach(() => {
   Object.defineProperty(global, 'sessionStorage', {
     value: {
@@ -18,12 +18,12 @@ beforeEach(() => {
     writable: true,
   });
 
-  // Mock Vue related methods if needed
+  // Add any other necessary global mocks or settings
   config.global.mocks = {
-    $t: (msg) => msg, // Example of a mock for translation function
+    $t: (msg) => msg, // Example mock for translation function
   };
 });
 
 afterEach(() => {
-  jest.clearAllMocks(); // Clear mocks after each test
+  jest.clearAllMocks(); // Clear all mocks after each test
 });
