@@ -91,7 +91,7 @@ describe('User Controller', () => {
 
     const response = await request(app)
       .get('/api/users/profile')
-      .set('Authorization', `Bearer ${mockToken}`);
+      .set('Authorization', `Bearer ${mockToken}`);  // Corrected string interpolation
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('username', 'testuser');
@@ -107,7 +107,7 @@ describe('User Controller', () => {
 
     const response = await request(app)
       .put('/api/users/profile')
-      .set('Authorization', `Bearer ${mockToken}`)
+      .set('Authorization', `Bearer ${mockToken}`)  // Corrected string interpolation
       .send({ username: 'updatedUser' });
 
     expect(response.status).toBe(200);
@@ -123,7 +123,7 @@ describe('User Controller', () => {
 
     const response = await request(app)
       .delete('/api/users/profile')
-      .set('Authorization', `Bearer ${mockToken}`);
+      .set('Authorization', `Bearer ${mockToken}`);  // Corrected string interpolation
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('message', 'User deleted successfully');
