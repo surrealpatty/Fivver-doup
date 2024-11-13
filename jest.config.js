@@ -1,13 +1,20 @@
 module.exports = {
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',      // Transforms JavaScript and TypeScript files
-    '^.+\\.vue$': 'vue-jest'                     // Transforms Vue files using vue-jest
+    '^.+\\.tsx?$': 'babel-jest',       // Transforms TypeScript files with Babel
+    '^.+\\.jsx?$': 'babel-jest',       // Transforms JavaScript files with Babel
+    '^.+\\.vue$': 'vue-jest'           // Processes Vue files with vue-jest
   },
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue'],  // Include 'vue' for Vue component support
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',             // Map '@' to the src directory for cleaner imports
+    '^@/(.*)$': '<rootDir>/src/$1',   // Maps @ to src directory
   },
-  roots: ['<rootDir>/src'],                     // Define 'src' as the root directory for tests
-  testEnvironment: 'jsdom',                     // Use 'jsdom' for a browser-like environment in Jest
-  transformIgnorePatterns: ['/node_modules/'],  // Ignore transformations for node_modules
+  roots: ['<rootDir>/src'],           // Specifies Jest root folder
+  testEnvironment: 'jsdom',           // jsdom environment for Vue component testing
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],  // Optional setup file
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx,vue}',   // Collect coverage from source files
+  ],
+  transformIgnorePatterns: [
+    '/node_modules/',                 // Ignores node_modules
+  ],
 };
