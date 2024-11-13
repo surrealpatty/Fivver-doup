@@ -11,7 +11,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "npm run build && jest",
+    "test": "npm run build && jest", 
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix",
     "test:ci": "jest --ci --maxWorkers=4"
@@ -71,13 +71,6 @@
     "sequelize": "^6.37.5",
     "vuex": "^4.0.0"
   },
-  "moduleFileExtensions": [
-    "ts",
-    "js",
-    "json",
-    "vue",
-    "node"
-  ],
   "eslintConfig": {
     "extends": [
       "airbnb-typescript/base"
