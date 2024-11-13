@@ -1,11 +1,11 @@
 module.exports = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testEnvironment: "jsdom",  // Specify the DOM-like environment
-  moduleFileExtensions: ["js", "ts", "json", "vue", "node"],  // Ensure .vue is included
+  testEnvironment: "jsdom",
+  moduleFileExtensions: ["js", "ts", "json", "vue", "node"],
   transform: {
-    "^.+\\.vue$": "vue-jest",  // Use vue-jest for Vue files
-    "^.+\\.ts$": "ts-jest",    // Transform TypeScript files with ts-jest
-    "^.+\\.jsx?$": "babel-jest",  // Use babel-jest for JavaScript files
+    "^.+\\.vue$": "vue-jest", // Use vue-jest for Vue files
+    "^.+\\.ts$": "ts-jest",   // Use ts-jest for TypeScript files
+    "^.+\\.jsx?$": "babel-jest", // Use babel-jest for JS files
   },
   verbose: true,
   moduleNameMapper: {
@@ -24,6 +24,6 @@ module.exports = {
     "src/**/*.{js,ts,vue}",
     "!src/main.ts",  // Exclude main entry files if necessary
     "!src/router/**",  // Exclude router files
-    "!src/store/**",  // Exclude Vuex store files if you are using them
+    "!src/store/**",  // Exclude Vuex store files
   ],
 };
