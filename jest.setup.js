@@ -10,11 +10,10 @@ global.fetch = jest.fn(() =>
   })
 );
 
-// Mock sessionStorage using Object.defineProperty
-Object.defineProperty(global, 'sessionStorage', {
-  value: require('mock-local-storage'),
-  writable: true,  // Allow modification if necessary in tests
-});
+// Mock sessionStorage by using the `mock-local-storage` package
+// This avoids redefining the sessionStorage property directly
+const mockStorage = require('mock-local-storage');
+global.sessionStorage = mockStorage;
 
 // Mocking Sequelize (if you're testing without an actual database connection)
 jest.mock('sequelize', () => {
