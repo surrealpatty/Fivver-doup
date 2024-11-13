@@ -13,18 +13,18 @@
     "moduleResolution": "node",                      
     "lib": ["es2020"],                              
     "declaration": false,                            
-    "inlineSourceMap": true,                         
+    "sourceMap": true,                               
     "baseUrl": ".",                                  
-    "allowJs": false,                                
-    "checkJs": false,                               
+    "allowJs": true,                                 
     "paths": {
       "@/*": ["src/*"]
     }
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
-, "src/models/index.js"  ],
+    "src/**/*.tsx",
+    "src/models/index.js"
+  ],
   "exclude": [
     "node_modules",                                  
     "dist",  
