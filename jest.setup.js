@@ -1,10 +1,14 @@
 import { config } from '@vue/test-utils';
-import { createApp } from 'vue';
 
-// This will create a dummy Vue app before the tests
+// Only import Vue if it is not already defined
+if (typeof Vue === 'undefined') {
+  global.Vue = require('vue'); // Explicitly import Vue and assign it to the global object
+}
+
 beforeAll(() => {
-  const app = createApp({});
-  app.mount(document.createElement('div')); // Mount to avoid errors related to Vue not being mounted
+  // Create a dummy Vue app to make Vue globally available
+  const app = Vue.createApp({});
+  app.mount(document.createElement('div'));
 });
 
 // Mock sessionStorage to simulate browser's sessionStorage in tests
@@ -19,7 +23,7 @@ beforeEach(() => {
     writable: true,
   });
 
-  // Mock translation function if you're using internationalization
+  // Optional: Mock translation function if you're using internationalization
   config.global.mocks = {
     $t: (msg) => msg, // Mock translation function
   };
