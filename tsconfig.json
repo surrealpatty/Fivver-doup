@@ -19,7 +19,7 @@
     "paths": {
       "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
     },
-    "skipDefaultLibCheck": true                    // Skip checking of default lib files for faster builds
+    "skipDefaultLibCheck": true                   // Skip checking of default lib files for faster builds
   },
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
@@ -30,10 +30,5 @@
     "node_modules",                               // Exclude node_modules from compilation
     "dist",                                       // Exclude dist folder from compilation
     "**/*.vue"                                    // Exclude .vue files from TypeScript compilation (handled by Jest/Vue)
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"              // Optional: You can add references for project-level configuration
-    }
   ]
 }
