@@ -11,6 +11,7 @@ module.exports = {
   // Handle module name mapping (e.g., resolve `@` to `src`)
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1', // Maps @ to src for Jest
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mock CSS/SCSS imports if needed
   },
 
   // Set the root directory for test files (if they are in the `src` folder)
@@ -36,11 +37,6 @@ module.exports = {
     'babel-jest': {
       isolatedModules: true, // Optimize performance for Babel
     },
-  },
-
-  // Optionally, if you need to support static file imports (like images, styles)
-  moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mock CSS/SCSS imports if needed
   },
 
   // Optionally, specify coverage thresholds (e.g., 80% coverage required)
