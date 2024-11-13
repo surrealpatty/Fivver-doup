@@ -63,24 +63,5 @@
     "parserOptions": {
       "project": "./tsconfig.json"
     }
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "json",
-      "vue",
-      "node"
-    ],
-    "transform": {
-      "^.+\\.vue$": "@vue/vue3-jest",
-      "^.+\\.ts$": "ts-jest",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "testEnvironment": "jest-environment-jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "verbose": true
   }
 }
