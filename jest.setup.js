@@ -10,10 +10,13 @@ global.fetch = jest.fn(() =>
   })
 );
 
-// Mock sessionStorage by using the `mock-local-storage` package
+// Mock sessionStorage using jest.spyOn to intercept the calls
 // This avoids redefining the sessionStorage property directly
 const mockStorage = require('mock-local-storage');
-global.sessionStorage = mockStorage;
+jest.spyOn(global, 'sessionStorage', 'get').mockImplementation(mockStorage.get);
+jest.spyOn(global, 'sessionStorage', 'set').mockImplementation(mockStorage.set);
+jest.spyOn(global, 'sessionStorage', 'removeItem').mockImplementation(mockStorage.removeItem);
+jest.spyOn(global, 'sessionStorage', 'clear').mockImplementation(mockStorage.clear);
 
 // Mocking Sequelize (if you're testing without an actual database connection)
 jest.mock('sequelize', () => {
