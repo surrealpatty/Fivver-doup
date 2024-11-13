@@ -11,7 +11,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "jest --verbose --maxWorkers=4 --detectOpenHandles",
+    "test": "npm run build && jest",
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix"
   },

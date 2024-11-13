@@ -1,8 +1,16 @@
 "use strict";
 const request = require('supertest');
 const path = require('path');
-// Adjust path to point to the correct location of the compiled index.js in dist
-const { app } = require(path.resolve(__dirname, '../dist/index')); // Ensure the path is correct
+// Ensure the path is correct, pointing to the compiled index.js in dist
+let app;
+try {
+    // Dynamically require the compiled app from dist/index.js
+    app = require(path.resolve(__dirname, '../dist/index')).app;
+}
+catch (error) {
+    console.error("Error loading app from dist:", error);
+    process.exit(1); // Exit the process if app cannot be loaded
+}
 describe('Basic Test Suite', () => {
     it('should respond with a message from the root endpoint', async () => {
         const response = await request(app).get('/');
