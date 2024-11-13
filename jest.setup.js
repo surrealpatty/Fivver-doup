@@ -1,15 +1,20 @@
+// jest.setup.js
+
 // Import jest-dom for DOM-related assertions
 require('@testing-library/jest-dom');
 
-// Mocking global objects if needed
+// Mocking global objects if needed (for example, fetch)
 global.fetch = jest.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ data: 'mocked data' }),
   })
 );
 
-// Optional: Mocking sessionStorage or localStorage if you're using them in your app
-global.sessionStorage = require('mock-local-storage');
+// Mock sessionStorage using Object.defineProperty
+Object.defineProperty(global, 'sessionStorage', {
+  value: require('mock-local-storage'),
+  writable: true,  // Allow modification if necessary in tests
+});
 
 // Mocking Sequelize (if you're testing without an actual database connection)
 jest.mock('sequelize', () => {
@@ -18,10 +23,10 @@ jest.mock('sequelize', () => {
     authenticate: jest.fn().mockResolvedValue(true),
     close: jest.fn().mockResolvedValue(true),
     define: jest.fn().mockReturnThis(),
-    // Mocking common model methods
+    // Mock common model methods (findOne, create, etc.)
     model: {
       findOne: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),  // Mocked data
-      create: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),  // Mocked data
+      create: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),   // Mocked data
     },
   }));
 
@@ -30,13 +35,13 @@ jest.mock('sequelize', () => {
   };
 });
 
-// Optionally, set a global setup for database or other initializations
+// Optionally, set up global tests (e.g., database setup/teardown)
 global.beforeAll(async () => {
   console.log('Running global setup before all tests');
-  // Setup test database or other resources if necessary
+  // Setup test database or mock DB if necessary
 });
 
-// Clean up mocks and any global state after all tests
+// Clean up after all tests
 global.afterAll(() => {
   console.log('Cleaning up after all tests');
   jest.clearAllMocks();  // Clear mocks after all tests
@@ -47,7 +52,7 @@ beforeEach(() => {
   jest.clearAllMocks();  // Clears any mock data before each test
 });
 
-// Custom matcher to check if array is empty
+// Custom matcher to check if an array is empty
 expect.extend({
   toBeEmpty: (received) => {
     const pass = received && received.length === 0;
