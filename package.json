@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "pretest": "npm run build",
+    "pretest": "npm run build",                    
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
@@ -53,7 +53,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3",
-    "vue": "^3.5.12",
+    "vue": "^3.2.0",                               
     "vue-tsc": "^2.1.10"
   },
   "eslintConfig": {
