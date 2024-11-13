@@ -17,10 +17,9 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/',                  // Ignores transforming node_modules
   ],
-  // Optional: Configure Babel for transpiling TypeScript if it's not already in your Babel config
   globals: {
-    'ts-jest': {
-      isolatedModules: true,            // Speed up compilation for isolated modules
+    'babel-jest': {
+      isolatedModules: true,            // Speed up compilation for isolated modules in Babel
     },
   },
 };

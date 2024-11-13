@@ -15,8 +15,8 @@ module.exports = {
     '@babel/plugin-proposal-class-properties', // Supports public class properties
     '@babel/plugin-proposal-private-methods', // Supports private class methods
   ],
-  sourceMaps: 'inline',
-  comments: false,
+  sourceMaps: 'inline', // Useful for debugging
+  comments: false, // Disable comments in the transpiled code for production
   env: {
     test: {
       presets: [
@@ -43,7 +43,7 @@ module.exports = {
         [
           '@babel/preset-env',
           {
-            targets: { node: '14' }, // Matches Node version for module-specific needs
+            targets: { node: '14' }, // Matches Node version for uuid module-specific needs
           },
         ],
       ],
