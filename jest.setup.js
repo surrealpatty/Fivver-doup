@@ -1,10 +1,10 @@
 import { config } from '@vue/test-utils';
 import { createApp } from 'vue';
 
+// This will create a dummy Vue app before the tests
 beforeAll(() => {
-  // Create and mount a dummy Vue instance to ensure Vue is globally available
   const app = createApp({});
-  app.mount(document.createElement('div')); // Mount to an invisible div for the test lifecycle
+  app.mount(document.createElement('div')); // Mount to avoid errors related to Vue not being mounted
 });
 
 // Mock sessionStorage to simulate browser's sessionStorage in tests
@@ -19,12 +19,12 @@ beforeEach(() => {
     writable: true,
   });
 
-  // Optionally, mock other global properties you need for your tests
+  // Mock translation function if you're using internationalization
   config.global.mocks = {
-    $t: (msg) => msg, // Mock translation function if you're using vue-i18n
+    $t: (msg) => msg, // Mock translation function
   };
 });
 
 afterEach(() => {
-  jest.clearAllMocks(); // Clear mocks after each test to prevent leakage
+  jest.clearAllMocks(); // Clear mocks after each test
 });
