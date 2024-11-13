@@ -54,6 +54,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3",
     "vue": "^3.2.0",
+    "vue-jest": "^5.0.0-alpha.10",
     "vue-tsc": "^2.1.10"
   },
   "eslintConfig": {
@@ -63,8 +64,5 @@
     "parserOptions": {
       "project": "./tsconfig.json"
     }
-  },
-  "dependencies": {
-    "vue-jest": "^5.0.0-alpha.10"
   }
 }
