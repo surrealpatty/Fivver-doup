@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,69 +35,82 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
 var database_1 = require("../config/database"); // Adjust the path to your database configuration
+
 // Mock Sequelize's authenticate method to avoid real database calls during tests
 jest.mock('sequelize', function () {
-    var originalSequelize = jest.requireActual('sequelize');
-    return __assign(__assign({}, originalSequelize), { Sequelize: jest.fn().mockImplementation(function () { return ({
-            authenticate: jest.fn(),
-        }); }) });
+    var originalSequelize = jest.requireActual('sequelize'); // Get the actual Sequelize instance
+    return Object.assign({}, originalSequelize, {
+        Sequelize: jest.fn().mockImplementation(function () {
+            return {
+                authenticate: jest.fn(),
+            };
+        }),
+    });
 });
+
 describe('Database Connection', function () {
     // Mock the actual authenticate method
-    var mockAuthenticate = jest.fn();
+    var mockAuthenticate;
     beforeAll(function () {
-        // Set up mock implementation for testing
+        // Initialize the mockAuthenticate function
+        mockAuthenticate = jest.fn();
         database_1.sequelize.authenticate = mockAuthenticate;
     });
+
     afterAll(function () {
         jest.clearAllMocks(); // Clear mocks after tests run
     });
-    test('should successfully connect to the database', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var consoleLogSpy;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    mockAuthenticate.mockResolvedValueOnce(undefined); // Simulate a successful connection
-                    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-                    // Call the testConnection function
-                    return [4 /*yield*/, (0, database_1.testConnection)()];
-                case 1:
-                    // Call the testConnection function
-                    _a.sent();
-                    // Ensure authenticate was called
-                    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-                    expect(mockAuthenticate).toHaveBeenCalledWith();
-                    // Check if success message was logged
-                    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
-                    // Clean up spy
-                    consoleLogSpy.mockRestore();
-                    return [2 /*return*/];
-            }
+
+    test('should successfully connect to the database', function () {
+        return __awaiter(void 0, void 0, void 0, function () {
+            var consoleLogSpy;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        mockAuthenticate.mockResolvedValueOnce(undefined); // Simulate a successful connection
+                        consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(); // Spy on console.log
+                        // Call the testConnection function
+                        return [4 /*yield*/, (0, database_1.testConnection)()];
+                    case 1:
+                        _a.sent(); // Call the actual database connection test function
+                        // Ensure authenticate was called
+                        expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+                        expect(mockAuthenticate).toHaveBeenCalledWith();
+                        // Check if success message was logged
+                        expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
+                        // Clean up spy
+                        consoleLogSpy.mockRestore();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); });
-    test('should fail to connect to the database', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var consoleErrorSpy;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed')); // Simulate a failed connection
-                    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-                    // Call the testConnection function
-                    return [4 /*yield*/, (0, database_1.testConnection)()];
-                case 1:
-                    // Call the testConnection function
-                    _a.sent();
-                    // Ensure authenticate was called
-                    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-                    expect(mockAuthenticate).toHaveBeenCalledWith();
-                    // Check if error message was logged
-                    expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed');
-                    // Clean up spy
-                    consoleErrorSpy.mockRestore();
-                    return [2 /*return*/];
-            }
+    });
+
+    test('should fail to connect to the database', function () {
+        return __awaiter(void 0, void 0, void 0, function () {
+            var consoleErrorSpy;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed')); // Simulate a failed connection
+                        consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(); // Spy on console.error
+                        // Call the testConnection function
+                        return [4 /*yield*/, (0, database_1.testConnection)()];
+                    case 1:
+                        _a.sent(); // Call the actual database connection test function
+                        // Ensure authenticate was called
+                        expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+                        expect(mockAuthenticate).toHaveBeenCalledWith();
+                        // Check if error message was logged
+                        expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed');
+                        // Clean up spy
+                        consoleErrorSpy.mockRestore();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); });
+    });
 });
