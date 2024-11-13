@@ -10,3 +10,8 @@ beforeAll(() => {
     writable: true,  // Allows overwriting global sessionStorage
   });
 });
+
+afterEach(() => {
+  // Clear the mocks after each test to avoid state leakage
+  jest.clearAllMocks();
+});
