@@ -3,9 +3,9 @@ module.exports = {
   testEnvironment: "jsdom",
   moduleFileExtensions: ["js", "ts", "json", "vue", "node"],
   transform: {
-    "^.+\\.vue$": "vue-jest", // Use vue-jest for Vue files
-    "^.+\\.ts$": "ts-jest",   // Use ts-jest for TypeScript files
-    "^.+\\.jsx?$": "babel-jest", // Use babel-jest for JS files
+    "^.+\\.vue$": "vue-jest",      // Use vue-jest for Vue files
+    "^.+\\.ts$": "ts-jest",        // Use ts-jest for TypeScript files
+    "^.+\\.jsx?$": "babel-jest",   // Use babel-jest for JS files
   },
   verbose: true,
   moduleNameMapper: {
@@ -22,8 +22,11 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     "src/**/*.{js,ts,vue}",
-    "!src/main.ts",  // Exclude main entry files if necessary
-    "!src/router/**",  // Exclude router files
-    "!src/store/**",  // Exclude Vuex store files
+    "!src/main.ts",               // Exclude main entry files if necessary
+    "!src/router/**",             // Exclude router files
+    "!src/store/**",              // Exclude Vuex store files
+    "!src/**/*.d.ts",             // Exclude TypeScript declaration files
   ],
+  coverageDirectory: "<rootDir>/coverage",  // Specify coverage directory
+  coverageReporters: ["text", "lcov", "json"],  // Add different coverage reporters
 };
