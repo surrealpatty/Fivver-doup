@@ -23,13 +23,17 @@ describe('Database Connection', () => {
     });
     test('should successfully connect to the database', async () => {
         mockAuthenticate.mockResolvedValueOnce(undefined); // Simulate a successful connection
+        // Mock console.log
+        const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
         // Call the testConnection function
         await (0, database_1.testConnection)();
         // Ensure authenticate was called
         expect(mockAuthenticate).toHaveBeenCalledTimes(1);
         expect(mockAuthenticate).toHaveBeenCalledWith();
         // Check if success message was logged
-        expect(console.log).toHaveBeenCalledWith('Database connection has been established successfully.');
+        expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
+        // Clean up spy
+        consoleLogSpy.mockRestore();
     });
     test('should fail to connect to the database', async () => {
         mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed')); // Simulate a failed connection

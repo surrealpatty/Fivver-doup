@@ -41,7 +41,8 @@ const startServer = async (): Promise<void> => {
             console.log(`Server running on port ${PORT}`);
         });
     } catch (error: unknown) {
-        console.error('Error starting the server:', error instanceof Error ? error.message : error);
+        console.error('Error starting the server:', error instanceof Error ? error.message : 'Unknown error');
+        process.exit(1);  // Exit the process with a failure code
     }
 };
 
