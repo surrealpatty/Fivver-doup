@@ -2,34 +2,36 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transforms TypeScript files
     '^.+\\.jsx?$': 'babel-jest', // Transforms JavaScript files with Babel
-    '.*\\.(vue)$': '@vue/vue3-jest' // Transforms Vue files for Jest
+    '.*\\.(vue)$': '@vue/vue3-jest', // Transforms Vue files for Jest
   },
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue', 'node'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue', 'node'], // Supported file extensions
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy' // Mock CSS imports
+    '^@/(.*)$': '<rootDir>/src/$1', // Maps imports starting with '@/' to the src directory
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
   },
-  roots: ['<rootDir>/src'],
-  testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'],
-  transformIgnorePatterns: ['/node_modules/'],
+  roots: ['<rootDir>/src'], // The root directory for Jest to look for test files
+  testEnvironment: 'node', // Uses Node.js as the test environment
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Setup file to run before tests
+  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'], // Collects coverage from all relevant files
+  transformIgnorePatterns: ['/node_modules/'], // Exclude node_modules from transformation
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json'
+      tsconfig: '<rootDir>/tsconfig.json', // Path to tsconfig for ts-jest
     },
     'babel-jest': {
-      isolatedModules: true
-    }
+      isolatedModules: true, // Enable isolated modules for Babel
+    },
   },
-  testTimeout: 30000, // Adjust timeout if needed
-  maxWorkers: 2, // Manage parallel tests to conserve resources
+  testTimeout: 30000, // Default timeout for tests (in milliseconds)
+  maxWorkers: 2, // Limits the number of workers Jest uses (helps with resource management)
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
-    }
-  }
+      branches: 80, // Require 80% branch coverage
+      functions: 80, // Require 80% function coverage
+      lines: 80, // Require 80% line coverage
+      statements: 80, // Require 80% statement coverage
+    },
+  },
+  // Optional: To ensure Jest works with TypeScript and Vue together without issues
+  preset: 'ts-jest/presets/default', // Default ts-jest preset for TypeScript
 };

@@ -16,7 +16,7 @@ describe('Database Connection', () => {
     const mockAuthenticate = jest.fn();
     beforeAll(() => {
         // Set up mock implementation for testing
-        database_1.sequelize.authenticate = mockAuthenticate;
+        database_1.sequelize.authenticate = mockAuthenticate; // Mock the instance's authenticate method directly
     });
     afterAll(() => {
         jest.clearAllMocks(); // Clear mocks after tests run

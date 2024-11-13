@@ -1,33 +1,33 @@
 {
   "compilerOptions": {
-    "target": "es2020",                             
-    "module": "commonjs",                            
-    "esModuleInterop": true,                         
-    "allowSyntheticDefaultImports": true,             
-    "strict": true,                                  
-    "skipLibCheck": true,                            
-    "noEmit": false,                                 
-    "outDir": "./dist",                              
-    "rootDir": "./src",                              
-    "resolveJsonModule": true,                       
-    "moduleResolution": "node",                      
-    "lib": ["es2020"],                              
-    "declaration": false,                            
-    "sourceMap": true,                               
-    "baseUrl": ".",                                  
-    "allowJs": true,                                 
+    "target": "es2020",                          // Sets ECMAScript target to ES2020
+    "module": "commonjs",                         // CommonJS module system for Node.js
+    "esModuleInterop": true,                      // Enables default imports from modules with no default export
+    "allowSyntheticDefaultImports": true,         // Allows default imports from modules without a default export
+    "strict": true,                               // Enables strict type-checking options
+    "skipLibCheck": true,                         // Skip type checking of declaration files
+    "noEmit": false,                              // Allow emitting of output (dist folder)
+    "outDir": "./dist",                           // Specifies the output directory for compiled files
+    "rootDir": "./src",                           // Root directory of your source files
+    "resolveJsonModule": true,                    // Allows importing JSON files as modules
+    "moduleResolution": "node",                   // Use Node.js module resolution
+    "lib": ["es2020"],                            // Includes the ES2020 library for type checking
+    "declaration": false,                         // No type declaration files will be generated
+    "sourceMap": true,                            // Generates source maps for debugging
+    "baseUrl": ".",                               // Base directory to resolve non-relative modules
+    "allowJs": true,                              // Allows JavaScript files to be included in the project
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/models/index.js"
+    "src/**/*.ts",                                // Include all TypeScript files in src
+    "src/**/*.tsx",                               // Include all TypeScript JSX files in src
+    "src/models/index.js"                         // Include any JavaScript files that need to be transpiled
   ],
   "exclude": [
-    "node_modules",                                  
-    "dist",  
-    "**/*.vue"
+    "node_modules",                               // Exclude node_modules from the compilation
+    "dist",                                       // Exclude dist folder from compilation
+    "**/*.vue"                                    // Exclude .vue files from TypeScript compilation (handled by Jest)
   ]
 }
