@@ -10,7 +10,7 @@ module.exports = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
   },
   roots: ['<rootDir>/src'], // The root directory for Jest to look for test files
-  testEnvironment: 'jsdom', // Use jsdom for Vue component testing (browser-like environment)
+  testEnvironment: 'jsdom', // Uses jsdom to simulate the browser environment
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Setup file to run before tests
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'], // Collects coverage from all relevant files
   transformIgnorePatterns: ['/node_modules/'], // Exclude node_modules from transformation
