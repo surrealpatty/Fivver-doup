@@ -34,16 +34,18 @@ module.exports = {
   },
   overrides: [
     {
-      test: /\.(ts|tsx|js|jsx)$/,
+      test: /\.(ts|tsx|js|jsx)$/, // Apply this preset to TypeScript and JavaScript files
       presets: ['@babel/preset-typescript'],
     },
     {
-      test: /node_modules[\\/]uuid/, // Custom handling for uuid module if needed
+      test: /node_modules[\\/]uuid/, // Custom handling for uuid module
       presets: [
         [
           '@babel/preset-env',
           {
             targets: { node: '14' }, // Matches Node version for uuid module-specific needs
+            useBuiltIns: 'entry',
+            corejs: 3, // Ensure that core-js is properly included for ESM libraries
           },
         ],
       ],
