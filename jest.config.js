@@ -2,12 +2,12 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transforms TypeScript files
     '^.+\\.jsx?$': 'babel-jest', // Transforms JavaScript files with Babel
-    '.*\\.(vue)$': '@vue/vue3-jest', // Transforms Vue files for Jest (make sure @vue/test-utils is installed)
+    '.*\\.(vue)$': '@vue/vue3-jest', // Transforms Vue files for Jest
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue', 'node'], // Supported file extensions
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1', // Maps imports starting with '@/' to the src directory
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports (including SCSS/SASS)
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
   },
   roots: ['<rootDir>/src'], // The root directory for Jest to look for test files
   testEnvironment: 'jsdom', // Uses jsdom to simulate the browser environment
@@ -19,7 +19,7 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.json', // Path to tsconfig for ts-jest
     },
     'babel-jest': {
-      isolatedModules: true, // Enable isolated modules for Babel (improves performance)
+      isolatedModules: true, // Enable isolated modules for Babel
     },
   },
   testTimeout: 30000, // Default timeout for tests (in milliseconds)
