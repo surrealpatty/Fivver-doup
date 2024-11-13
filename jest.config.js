@@ -6,7 +6,7 @@ module.exports = {
   },
 
   // Specify the file types Jest should process
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'], // Allow JSON imports if needed
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'], // Allow JSON and other potential extensions
 
   // Handle module name mapping (e.g., resolve `@` to `src`)
   moduleNameMapper: {
@@ -27,7 +27,7 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'], // Collect coverage for source files
 
   // Ignore transforming files in node_modules unless explicitly configured
-  transformIgnorePatterns: ['/node_modules/'],
+  transformIgnorePatterns: ['/node_modules/(?!your-package-name)'], // Transform specific node_modules files if needed
 
   // Jest globals configuration for TypeScript and Babel
   globals: {
@@ -39,13 +39,19 @@ module.exports = {
     },
   },
 
+  // Optional: Increase Jest worker timeout if you're hitting worker process issues
+  testTimeout: 30000, // 30 seconds timeout (you can adjust as needed)
+
   // Optionally, specify coverage thresholds (e.g., 80% coverage required)
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 80,
-  //     functions: 80,
-  //     lines: 80,
-  //     statements: 80,
-  //   },
-  // },
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+
+  // Optionally specify the maximum number of workers Jest can use in parallel
+  maxWorkers: 2, // Reduce parallelism if you're running into resource constraints
 };
