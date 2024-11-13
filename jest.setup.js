@@ -1,5 +1,5 @@
 beforeAll(() => {
-  // Mock sessionStorage
+  // Mock sessionStorage to simulate browser's sessionStorage in tests
   Object.defineProperty(global, 'sessionStorage', {
     value: {
       getItem: jest.fn().mockReturnValue('mockedItem'),  // Mocks the return value of getItem
@@ -12,6 +12,7 @@ beforeAll(() => {
 });
 
 afterEach(() => {
-  // Clear the mocks after each test to avoid state leakage
+  // Clear the mocks to ensure no leakage between tests
   jest.clearAllMocks();
 });
+
