@@ -1,8 +1,5 @@
-// Import Vue config for test-utils
+// Import Vue Test Utils configuration
 import { config } from '@vue/test-utils';
-
-// Ensure Vue is available globally in the testing environment
-import Vue from 'vue';
 
 // Mock sessionStorage to simulate browser's sessionStorage in tests
 beforeAll(() => {
@@ -17,10 +14,9 @@ beforeAll(() => {
     writable: true, // Allows overwriting sessionStorage
   });
 
-  // Optional: Set up any global configurations for Vue if needed.
-  // For example, you can configure Vue test utils globally:
+  // Optional: Set up any global configurations for Vue Test Utils
   config.global.mocks = {
-    $t: (msg) => msg, // Mocking a translation function, if needed
+    $t: (msg) => msg, // Mock translation function or other global properties if needed
   };
 });
 
