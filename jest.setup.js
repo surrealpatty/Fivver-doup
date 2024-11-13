@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 beforeAll(() => {
   // Create and mount a dummy Vue instance to ensure Vue is globally available
   const app = createApp({});
-  app.mount(document.createElement('div')); // Mount to an element to avoid errors
+  app.mount(document.createElement('div')); // Mount to an invisible div for the test lifecycle
 });
 
 // Mock sessionStorage to simulate browser's sessionStorage in tests
@@ -19,9 +19,9 @@ beforeEach(() => {
     writable: true,
   });
 
-  // Optional: Mock any other global properties you need for your tests
+  // Optionally, mock other global properties you need for your tests
   config.global.mocks = {
-    $t: (msg) => msg, // Mock translation function if you're using internationalization
+    $t: (msg) => msg, // Mock translation function if you're using vue-i18n
   };
 });
 
