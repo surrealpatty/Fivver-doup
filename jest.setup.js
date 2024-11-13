@@ -1,15 +1,18 @@
-// jest.setup.js
-import 'mock-local-storage';  // Import mock-local-storage to mock localStorage and sessionStorage
-
 beforeAll(() => {
-  // Mock sessionStorage methods using jest.spyOn and mock-local-storage
-  jest.spyOn(global, 'sessionStorage', 'get').mockImplementation(global.localStorage.getItem);
-  jest.spyOn(global, 'sessionStorage', 'set').mockImplementation(global.localStorage.setItem);
-  jest.spyOn(global, 'sessionStorage', 'removeItem').mockImplementation(global.localStorage.removeItem);
-  jest.spyOn(global, 'sessionStorage', 'clear').mockImplementation(global.localStorage.clear);
-});
+  // Make sessionStorage configurable
+  Object.defineProperty(global, 'sessionStorage', {
+    value: {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+      clear: jest.fn(),
+    },
+    writable: true,
+  });
 
-afterAll(() => {
-  // Clean up the mocks after all tests are run
-  jest.restoreAllMocks();
+  // Optionally, you can provide mock implementations for these methods
+  global.sessionStorage.getItem.mockImplementation(() => 'mockedItem');
+  global.sessionStorage.setItem.mockImplementation(() => {});
+  global.sessionStorage.removeItem.mockImplementation(() => {});
+  global.sessionStorage.clear.mockImplementation(() => {});
 });
