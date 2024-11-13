@@ -8,7 +8,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1', // Maps @ to src for Jest
   },
   roots: ['<rootDir>/src'],  // Ensure that Jest is looking for tests inside the src folder
-  testEnvironment: 'node',  // Use Node environment for testing
+  testEnvironment: 'node',  // Use Node environment for testing, change to 'jsdom' if needed
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],  // Setup files for Jest environment
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],  // Collect coverage for source files
   transformIgnorePatterns: ['/node_modules/'],  // Ignore transformation for node_modules

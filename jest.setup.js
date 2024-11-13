@@ -1,8 +1,7 @@
-// For DOM-related assertions, extend jest matchers for DOM elements (e.g., toBeInTheDocument, toHaveTextContent, etc.)
+// Import jest-dom for DOM-related assertions
 require('@testing-library/jest-dom');
 
 // Mocking global objects if needed
-// Example: Mocking fetch if you're using it in your tests
 global.fetch = jest.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ data: 'mocked data' }),
@@ -10,7 +9,7 @@ global.fetch = jest.fn(() =>
 );
 
 // Optional: Mocking sessionStorage or localStorage if you're using them in your app
-// global.sessionStorage = require('mock-local-storage');
+global.sessionStorage = require('mock-local-storage');
 
 // Mocking Sequelize (if you're testing without an actual database connection)
 jest.mock('sequelize', () => {
@@ -18,8 +17,12 @@ jest.mock('sequelize', () => {
     sync: jest.fn().mockResolvedValue(true),
     authenticate: jest.fn().mockResolvedValue(true),
     close: jest.fn().mockResolvedValue(true),
-    // Mock methods for models, if necessary (e.g., findOne, create)
     define: jest.fn().mockReturnThis(),
+    // Mocking common model methods
+    model: {
+      findOne: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),  // Mocked data
+      create: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),  // Mocked data
+    },
   }));
 
   return {
@@ -27,37 +30,30 @@ jest.mock('sequelize', () => {
   };
 });
 
-// Optional: Custom setup for initializing test database before tests run
+// Optionally, set a global setup for database or other initializations
 global.beforeAll(async () => {
   console.log('Running global setup before all tests');
-  // If using a real database or a mock DB, this is where you'd set that up
-  // Example: await setupTestDatabase();
+  // Setup test database or other resources if necessary
 });
 
-// Clean up after all tests (e.g., closing database connections or clearing mocks)
-global.afterAll(async () => {
+// Clean up mocks and any global state after all tests
+global.afterAll(() => {
   console.log('Cleaning up after all tests');
-  // Example: If using a real database, close connections or run teardown logic
-  // await teardownTestDatabase();
+  jest.clearAllMocks();  // Clear mocks after all tests
 });
 
-// Reset mocks before each test to ensure no data is carried over
+// Reset mocks before each test
 beforeEach(() => {
-  jest.clearAllMocks(); // Clears any mock data before each test
+  jest.clearAllMocks();  // Clears any mock data before each test
 });
 
-// Optionally, you can add custom jest matchers if needed
+// Custom matcher to check if array is empty
 expect.extend({
   toBeEmpty: (received) => {
-    if (received && received.length === 0) {
-      return {
-        message: () => `expected ${received} to be empty`,
-        pass: true,
-      };
-    }
+    const pass = received && received.length === 0;
     return {
       message: () => `expected ${received} to be empty`,
-      pass: false,
+      pass,
     };
   },
 });
