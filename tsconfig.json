@@ -5,20 +5,21 @@
     "esModuleInterop": true,                      // Enable default imports from modules with no default export
     "allowSyntheticDefaultImports": true,         // Allows default imports from modules without a default export
     "strict": true,                               // Enables strict type-checking options
-    "skipLibCheck": true,                         // Skip type checking of declaration files
+    "skipLibCheck": true,                         // Skip type checking of declaration files for faster builds
     "noEmit": false,                              // Allow emitting of output (dist folder)
     "outDir": "./dist",                           // Output directory for compiled files
     "rootDir": "./src",                           // Root directory of source files
     "resolveJsonModule": true,                    // Allows importing JSON files as modules
     "moduleResolution": "node",                   // Use Node.js module resolution
-    "lib": ["es2020", "dom"],                     // Includes es2020 and dom for browser environments
+    "lib": ["es2020", "dom"],                     // Includes ES2020 and DOM for browser environments
     "declaration": false,                         // No type declaration files will be generated
     "sourceMap": true,                            // Generates source maps for debugging
     "baseUrl": ".",                               // Base directory for resolving non-relative modules
     "allowJs": true,                              // Allows JavaScript files to be included
     "paths": {
       "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
-    }
+    },
+    "skipDefaultLibCheck": true                    // Skip checking of default lib files for faster builds
   },
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
@@ -29,5 +30,10 @@
     "node_modules",                               // Exclude node_modules from compilation
     "dist",                                       // Exclude dist folder from compilation
     "**/*.vue"                                    // Exclude .vue files from TypeScript compilation (handled by Jest/Vue)
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"              // Optional: You can add references for project-level configuration
+    }
   ]
 }

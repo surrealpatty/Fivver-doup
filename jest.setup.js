@@ -6,7 +6,7 @@ if (typeof globalThis.Vue === 'undefined') {
   globalThis.Vue = createApp({});
 }
 
-// Mock sessionStorage globally (if needed for your tests)
+// Mock sessionStorage globally
 beforeEach(() => {
   Object.defineProperty(global, 'sessionStorage', {
     value: {
@@ -18,9 +18,9 @@ beforeEach(() => {
     writable: true,
   });
 
-  // Mock global translation function
+  // Mock global translation function ($t)
   config.global.mocks = {
-    $t: (msg) => msg,  // Example mock for translation
+    $t: (msg) => msg,  // Mock translation function: returns the message itself for now
   };
 });
 
