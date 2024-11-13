@@ -52,12 +52,8 @@ const testConnection = async (): Promise<void> => {
       await sequelize.sync({ alter: true });
       console.log('Database tables synced.');
     }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Unable to connect to the database:', error.message);
-    } else {
-      console.error('Unable to connect to the database:', error);
-    }
+  } catch (error) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
     // Avoid process.exit in tests to prevent teardown issues
     if (NODE_ENV !== 'test') {
       process.exit(1);
