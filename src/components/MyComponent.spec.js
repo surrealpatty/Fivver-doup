@@ -1,6 +1,13 @@
 import { mount } from '@vue/test-utils';
 import MyComponent from '@/components/MyComponent.vue'; // Ensure the path is correct
 
+// Ensuring the Vue 3 environment is correctly set up
+import { config } from '@vue/test-utils';
+import { createApp } from 'vue';
+
+// Configure global Vue settings for test-utils
+config.global.app = createApp({});
+
 describe('MyComponent.vue', () => {
   it('renders props.title when passed', () => {
     const title = 'Hello World';

@@ -1,5 +1,7 @@
 // Import Vue Test Utils configuration
 import { config } from '@vue/test-utils';
+// Import Vue to make sure it's available globally
+import { createApp } from 'vue';
 
 // Mock sessionStorage to simulate browser's sessionStorage in tests
 beforeAll(() => {
@@ -13,6 +15,10 @@ beforeAll(() => {
     },
     writable: true, // Allows overwriting sessionStorage
   });
+
+  // Ensure Vue is properly set up for the tests
+  // Create a global Vue instance for the test environment
+  config.global.app = createApp({});
 
   // Optional: Set up any global configurations for Vue Test Utils
   config.global.mocks = {
