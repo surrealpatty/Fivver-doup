@@ -10,7 +10,7 @@ module.exports = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
   },
   roots: ['<rootDir>/src'], // The root directory for Jest to look for test files
-  testEnvironment: 'node', // Uses Node.js as the test environment
+  testEnvironment: 'jsdom', // Use jsdom for Vue component testing (browser-like environment)
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Setup file to run before tests
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'], // Collects coverage from all relevant files
   transformIgnorePatterns: ['/node_modules/'], // Exclude node_modules from transformation
@@ -32,6 +32,5 @@ module.exports = {
       statements: 80, // Require 80% statement coverage
     },
   },
-  // Optional: To ensure Jest works with TypeScript and Vue together without issues
   preset: 'ts-jest/presets/default', // Default ts-jest preset for TypeScript
 };
