@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import { sequelize, testConnection } from './config/database';  // Database configuration
 import userRoutes from './routes/user';  // Import user routes
 
-// Load environment variables
-dotenv.config();  // Ensure environment variables are loaded at the start
+// Load environment variables from .env file
+dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -35,21 +35,22 @@ const startServer = async (): Promise<void> => {
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
-        // Start server
+        // Start the server
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    } catch (error: unknown) {
+    } catch (error) {
         console.error('Error starting the server:', error instanceof Error ? error.message : 'Unknown error');
         process.exit(1);  // Exit the process with a failure code
     }
 };
 
-// Start the server if this file is executed directly (avoid starting it during tests)
+// Start the server only if this file is executed directly (i.e., not during testing)
+// Prevents starting the server when running tests
 if (require.main === module) {
     startServer();
 }
 
-// Export the app for testing
+// Export the app for testing purposes
 export { app };

@@ -24,7 +24,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
-  ],
+, "src/models/index.js"  ],
   "exclude": [
     "node_modules",                                  
     "dist",  
