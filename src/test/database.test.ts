@@ -18,7 +18,7 @@ describe('Database Connection', () => {
 
   beforeAll(() => {
     // Set up mock implementation for testing
-    (sequelize.authenticate as jest.Mock) = mockAuthenticate;
+    sequelize.authenticate = mockAuthenticate;  // Mock the instance's authenticate method directly
   });
 
   afterAll(() => {

@@ -1,7 +1,7 @@
 import { User } from '../models/user';  // Adjust the path if needed
 import * as jwt from 'jsonwebtoken';
 import request from 'supertest';
-import { app } from '../app';  // Ensure this path is correct
+import { app } from '../index';  // Ensure this path is correct
 
 // Mock the User model
 jest.mock('../models/user');
@@ -27,6 +27,10 @@ describe('User Controller', () => {
     });  // Mock for finding user profile
     (User.update as jest.Mock).mockResolvedValue([1]);  // Mock for updating user profile
     (User.destroy as jest.Mock).mockResolvedValue(1);  // Mock for deleting user profile
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();  // Clear all mocks after tests
   });
 
   test('should register a new user', async () => {
