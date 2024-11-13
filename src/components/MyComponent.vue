@@ -1,24 +1,17 @@
 <template>
   <div>
-    <h1>{{ title || 'Default Title' }}</h1>
+    <h1>{{ title }}</h1>
   </div>
 </template>
 
 <script>
-// Define a simple Vue component
 export default {
+  name: 'MyComponent',
   props: {
     title: {
       type: String,
-      default: ''
-    }
-  }
-}
+      default: 'Default Title', // Ensure there's a default value
+    },
+  },
+};
 </script>
-
-<style scoped>
-/* Optional CSS styles for the component */
-h1 {
-  color: blue;
-}
-</style>
