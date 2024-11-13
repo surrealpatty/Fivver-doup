@@ -1,28 +1,26 @@
 module.exports = {
   transform: {
-    '^.+\\.tsx?$': 'babel-jest',       // Transforms TypeScript files with Babel
-    '^.+\\.jsx?$': 'babel-jest',       // Transforms JavaScript files with Babel
-    '^.+\\.vue$': 'vue-jest',           // Processes Vue files with vue-jest (if needed)
+    '^.+\\.tsx?$': 'ts-jest',  // Use ts-jest for TypeScript files
+    '^.+\\.jsx?$': 'babel-jest',  // Use babel-jest for JS files
+    '^.+\\.vue$': 'vue-jest',  // If you're using Vue, keep this
   },
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue'],  // Supported extensions
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'vue'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',    // Maps @ to src directory (for module resolution)
+    '^@/(.*)$': '<rootDir>/src/$1', // Maps @ to src for Jest
   },
-  roots: ['<rootDir>/dist', '<rootDir>/src'],            // Root directory for Jest to find tests
-  testEnvironment: 'node',             // Change to node environment for backend tests
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Optional setup file for global configurations
-  collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx,vue}',    // Collect coverage from these file types
-  ],
-  transformIgnorePatterns: [
-    '/node_modules/',                  // Ignores transforming node_modules
-  ],
+  roots: ['<rootDir>/dist', '<rootDir>/src'],
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'],
+  transformIgnorePatterns: ['/node_modules/'],
   globals: {
     'babel-jest': {
-      isolatedModules: true,            // Speed up compilation for isolated modules in Babel
+      isolatedModules: true,
     },
   },
-  // Preset to work with TypeScript
-  preset: 'ts-jest/presets/js-with-ts', // Using ts-jest for TypeScript handling, along with Babel for transformation
-  testMatch: ['**/?(*.)+(spec|test).ts?(x)', '**/?(*.)+(spec|test).js'], // Look for test files
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',  // Reference your tsconfig.json here
+    },
+  },
 };
