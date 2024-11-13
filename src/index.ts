@@ -52,5 +52,5 @@ if (require.main === module) {
     startServer();
 }
 
-// Export the app for testing purposes
+// Export the app for testing purposes (this is the key change to make it work for testing)
 export { app };
