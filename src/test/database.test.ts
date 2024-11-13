@@ -1,4 +1,4 @@
-import { sequelize, testConnection } from '../config/database';  // Adjust the path to your database configuration
+import { sequelize, testConnection } from '../config/database'; // Adjust the path to your database configuration
 import { Sequelize } from 'sequelize';
 
 // Mock Sequelize's authenticate method to avoid real database calls during tests
@@ -22,11 +22,14 @@ describe('Database Connection', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();  // Clear mocks after tests run
+    jest.clearAllMocks(); // Clear mocks after tests run
   });
 
   test('should successfully connect to the database', async () => {
-    mockAuthenticate.mockResolvedValueOnce(undefined);  // Simulate a successful connection
+    mockAuthenticate.mockResolvedValueOnce(undefined); // Simulate a successful connection
+
+    // Mock console.log
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
     // Call the testConnection function
     await testConnection();
@@ -36,11 +39,14 @@ describe('Database Connection', () => {
     expect(mockAuthenticate).toHaveBeenCalledWith();
 
     // Check if success message was logged
-    expect(console.log).toHaveBeenCalledWith('Database connection has been established successfully.');
+    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
+
+    // Clean up spy
+    consoleLogSpy.mockRestore();
   });
 
   test('should fail to connect to the database', async () => {
-    mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed'));  // Simulate a failed connection
+    mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed')); // Simulate a failed connection
 
     // Mock error logging
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
