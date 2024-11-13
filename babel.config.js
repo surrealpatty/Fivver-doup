@@ -3,20 +3,20 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        targets: { node: '14' }, // Adjust Node target version (for production)
-        useBuiltIns: 'entry', // Automatically imports necessary polyfills
-        corejs: 3, // Use core-js version 3
+        targets: { node: '14' }, // Ensure compatibility with Node 14 for production
+        useBuiltIns: 'entry',     // Automatically import necessary polyfills
+        corejs: 3,                // Use core-js version 3 for polyfills
       },
     ],
-    '@babel/preset-typescript', // Supports TypeScript syntax
+    '@babel/preset-typescript',   // Supports TypeScript syntax
   ],
   plugins: [
-    '@babel/plugin-transform-runtime', // Optimizes runtime (avoid duplication)
-    '@babel/plugin-proposal-class-properties', // Allows public class properties
-    '@babel/plugin-proposal-private-methods', // Allows private class methods
+    '@babel/plugin-transform-runtime', // Avoids duplication of runtime code
+    '@babel/plugin-proposal-class-properties', // Allows class properties
+    '@babel/plugin-proposal-private-methods', // Allows private methods in classes
   ],
-  sourceMaps: 'inline', // Useful for debugging
-  comments: false, // Disable comments in the transpiled code (for production)
+  sourceMaps: 'inline',    // Useful for debugging
+  comments: false,         // Disable comments in production code
   env: {
     test: {
       presets: [
@@ -24,13 +24,13 @@ module.exports = {
           '@babel/preset-env',
           {
             targets: { node: 'current' }, // Ensures compatibility with the current version of Node.js for Jest
-            useBuiltIns: 'entry', // Automatically imports necessary polyfills for testing
-            corejs: 3,
+            useBuiltIns: 'entry',         // Automatically import polyfills for Jest tests
+            corejs: 3,                    // Ensure polyfills are included for Jest
           },
         ],
       ],
       plugins: [
-        '@babel/plugin-transform-modules-commonjs', // Ensures Jest compatibility for ESM modules
+        '@babel/plugin-transform-modules-commonjs', // Ensures compatibility with Jest (CommonJS modules)
       ],
     },
   },
