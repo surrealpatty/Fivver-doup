@@ -1,20 +1,20 @@
 {
   "name": "fivver_doup",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/index.js",  // Points to transpiled JavaScript output in dist/
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "pretest": "npm run build",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "lint": "eslint 'src/**/*.ts' --fix",
-    "test:ci": "jest --ci --maxWorkers=4"
+    "start": "node dist/index.js",  // Run the transpiled file
+    "dev": "nodemon src/index.ts",  // Development server for TypeScript
+    "build": "tsc",  // Compile TypeScript
+    "build:watch": "tsc --watch",  // Watch for TypeScript changes
+    "test": "jest",  // Run tests
+    "test:watch": "jest --watch",  // Watch for test changes
+    "lint": "eslint 'src/**/*.ts' --fix",  // Lint TypeScript files
+    "test:ci": "jest --ci --maxWorkers=4"  // CI testing
   },
   "keywords": [],
   "author": "",
