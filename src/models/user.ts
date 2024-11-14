@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure correct path to your sequelize instance
-import Service from '../models/service';
+import { sequelize } from '../config/database'; // Correctly import the sequelize instance
+import Service from './service'; // Corrected path to Service model
 
 // Define the User attributes
 interface UserAttributes {

@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
-import Order from './order'; // Import the related model for associations (Order model)
+import { sequelize } from '../config/database'; // Correctly import sequelize instance
+import Order from './order'; // Import Order model for associations
 import User from './user'; // Uncomment to associate with User model
 
 // Define the attributes interface for the Service model
@@ -22,7 +22,7 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
   public price!: number;
   public category!: string;
 
-  // Timestamps are automatically handled by Sequelize
+  // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
