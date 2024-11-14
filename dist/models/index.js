@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = exports.Service = exports.User = void 0;
-// src/models/index.ts
+// Import each model
 const user_1 = __importDefault(require("./user"));
 exports.User = user_1.default;
 const service_1 = __importDefault(require("./service"));

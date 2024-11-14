@@ -1,4 +1,5 @@
-import { User } from '../models/user'; // Importing User model to mock
+import User from '../models/user'; // Use default import
+
 import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database'; // Importing sequelize to mock the database connection
 
