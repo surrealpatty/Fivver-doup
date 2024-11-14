@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const app_1 = __importDefault(require("../app")); // Make sure app.ts exists and the path is correct
+const app_1 = __importDefault(require("../app")); // Ensure this path is correct
 const database_1 = require("../config/database"); // Ensure sequelize is correctly imported
 const models_1 = require("../models"); // Your models
 // Mock models
@@ -13,7 +13,7 @@ jest.mock('../models/service');
 jest.mock('../models/order');
 describe('Order Controller Tests', () => {
     beforeAll(async () => {
-        // Sync the database for testing
+        // Sync the database for testing (You might want to use an in-memory DB for tests)
         await database_1.sequelize.sync();
     });
     afterEach(() => {
