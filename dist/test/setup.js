@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../config/database"); // Mock the Sequelize connection
 // Mock global setup
 jest.mock('../models/user', () => ({
     findOne: jest.fn(), // Mock findOne method
@@ -28,6 +27,7 @@ afterEach(() => {
 // Optionally, you can define global tear-down tasks after all tests have run
 afterAll(() => {
     // Perform any clean-up operations here if necessary (e.g., closing DB connections or removing global mocks)
-    database_1.sequelize.authenticate.mockRestore(); // Restore the original implementation of sequelize.authenticate if necessary
+    // Since `sequelize.authenticate` is already mocked, no need to restore here unless you need to mock it again.
+    // You can remove or comment out the mockRestore as it's not necessary unless you're testing DB interactions in a way that needs resetting.
 });
 //# sourceMappingURL=setup.js.map

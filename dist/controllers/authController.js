@@ -9,9 +9,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const models_1 = require("../models"); // Adjust the import path if necessary
 // User Registration
 const registerUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, firstName, lastName, role, subscriptionStatus } = req.body;
     // Input validation
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !firstName || !lastName || !role || !subscriptionStatus) {
         return res.status(400).json({ error: 'All fields are required.' });
     }
     try {
@@ -22,7 +22,15 @@ const registerUser = async (req, res) => {
         }
         // Hash the password before saving
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
-        const newUser = await models_1.User.create({ username, email, password: hashedPassword });
+        const newUser = await models_1.User.create({
+            username,
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            role: role || 'user', // Set a default role if not provided
+            subscriptionStatus: subscriptionStatus || 'free', // Set default subscriptionStatus
+        });
         // Return success message
         return res.status(201).json({ message: 'User registered successfully', user: newUser });
     }
