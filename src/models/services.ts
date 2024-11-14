@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure sequelize is properly imported
+import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
+import Order from './order'; // Import the related model for associations (Order model)
 
 // Define the attributes interface for the Service model
 interface ServiceAttributes {
@@ -26,10 +27,10 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
 
   // Define associations for Service
   static associate(models: any) {
-    // Example association: A service can have many orders
+    // A service can have many orders
     Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
 
-    // Add more associations as needed, for example:
+    // Example: Uncomment and modify if needed
     // Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   }
 }
@@ -85,11 +86,11 @@ Service.init(
     },
   },
   {
-    sequelize,
+    sequelize,  // Pass the sequelize instance here
     modelName: 'Service',
     tableName: 'services',
-    timestamps: true,
-    underscored: true, // Use snake_case for column names in the database
+    timestamps: true,  // Automatically adds createdAt and updatedAt fields
+    underscored: true, // Use snake_case for column names in the database (optional, but it helps with convention)
   }
 );
 
