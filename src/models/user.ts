@@ -2,6 +2,7 @@ import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import Service from './services';  // Import related models
 
+// Define the attributes for the User model
 interface UserAttributes {
   id: number;
   username: string;
@@ -15,8 +16,10 @@ interface UserAttributes {
   lastName: string | null;
 }
 
+// Optional attributes for user creation
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
+// Define the User model
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
@@ -29,12 +32,13 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public firstName!: string | null;
   public lastName!: string | null;
 
+  // Define associations here
   static associate(models: any) {
-    // Define associations
     User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
   }
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
@@ -79,19 +83,18 @@ User.init(
       allowNull: true,
     },
     lastName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'last_name', // This ensures Sequelize uses the correct column in the database
-      },
-      
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'last_name', // Map lastName to last_name in the database
     },
-  
+  },
   {
     sequelize,
     modelName: 'User',
     tableName: 'users',
-    timestamps: true,
+    timestamps: true,  // Add timestamps to capture createdAt and updatedAt
   }
 );
 
+// Export the User model
 export default User;
