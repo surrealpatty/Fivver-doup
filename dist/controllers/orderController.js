@@ -1,118 +1,106 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getOrders = exports.createOrder = void 0;
-const order_1 = __importDefault(require("../models/order")); // Ensure the correct path to order model
-const user_1 = __importDefault(require("../models/user"));
-const service_1 = __importDefault(require("../models/service"));
-// 1. Create an Order
+exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
+const models_1 = require("../models");
+// Create an Order
 const createOrder = async (req, res) => {
     const { userId, serviceId, orderDetails } = req.body;
-    // Input validation (ensuring necessary fields are provided)
-    if (!userId || !serviceId || !orderDetails) {
-        return res.status(400).json({ error: 'User ID, Service ID, and order details are required.' });
-    }
     try {
-        // Validate if user and service exist
-        const user = await user_1.default.findByPk(userId);
-        const service = await service_1.default.findByPk(serviceId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
+        // Fetch the User and Service from the database
+        const user = await models_1.User.findByPk(userId);
+        const service = await models_1.Service.findByPk(serviceId);
+        if (!user || !service) {
+            return res.status(404).json({ message: 'User or Service not found' });
         }
-        if (!service) {
-            return res.status(404).json({ error: 'Service not found.' });
-        }
-        // Create the new order
-        const newOrder = await order_1.default.create({
+        // Create the order
+        const order = await models_1.Order.create({
             userId,
             serviceId,
             orderDetails,
             status: 'Pending', // Default status
         });
-        return res.status(201).json({ message: 'Order created successfully', order: newOrder });
+        return res.status(201).json({
+            message: 'Order created successfully',
+            order,
+        });
     }
     catch (error) {
-        console.error('Error creating order:', error);
+        console.error(error);
         return res.status(500).json({ message: 'Error creating order', error: error.message });
     }
 };
 exports.createOrder = createOrder;
-// 2. Get all Orders
-const getOrders = async (req, res) => {
+// Get All Orders
+const getAllOrders = async (req, res) => {
     try {
-        const orders = await order_1.default.findAll({
-            include: [user_1.default, service_1.default], // Optionally include user and service details
-        });
+        // Fetch all orders from the database
+        const orders = await models_1.Order.findAll();
         return res.status(200).json(orders);
     }
     catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error(error);
         return res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
 };
-exports.getOrders = getOrders;
-// 3. Get Order by ID
+exports.getAllOrders = getAllOrders;
+// Get Order by ID
 const getOrderById = async (req, res) => {
     const { id } = req.params;
     try {
-        const order = await order_1.default.findByPk(id, {
-            include: [user_1.default, service_1.default], // Optionally include user and service details
-        });
+        // Find the order by ID
+        const order = await models_1.Order.findByPk(id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
         return res.status(200).json(order);
     }
     catch (error) {
-        console.error('Error fetching order:', error);
+        console.error(error);
         return res.status(500).json({ message: 'Error fetching order', error: error.message });
     }
 };
 exports.getOrderById = getOrderById;
-// 4. Update an Order
+// Update Order
 const updateOrder = async (req, res) => {
     const { id } = req.params;
     const { orderDetails, status } = req.body;
-    // Validate required fields
-    if (!orderDetails && !status) {
-        return res.status(400).json({ error: 'Order details or status are required to update.' });
-    }
     try {
-        const order = await order_1.default.findByPk(id);
+        // Find the order by ID
+        const order = await models_1.Order.findByPk(id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
-        // Update the order with the provided details
-        if (orderDetails) {
-            order.orderDetails = orderDetails;
-        }
-        if (status) {
-            order.status = status;
-        }
+        // Update the order with the new details
+        order.orderDetails = orderDetails || order.orderDetails;
+        order.status = status || order.status;
+        // Save the updated order
         await order.save();
-        return res.status(200).json({ message: 'Order updated successfully', order });
+        return res.status(200).json({
+            message: 'Order updated successfully',
+            order,
+        });
     }
     catch (error) {
-        console.error('Error updating order:', error);
+        console.error(error);
         return res.status(500).json({ message: 'Error updating order', error: error.message });
     }
 };
 exports.updateOrder = updateOrder;
-// 5. Delete an Order
+// Delete Order
 const deleteOrder = async (req, res) => {
     const { id } = req.params;
     try {
-        const order = await order_1.default.findByPk(id);
+        // Find the order by ID
+        const order = await models_1.Order.findByPk(id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
+        // Destroy the order
         await order.destroy();
         return res.status(200).json({ message: 'Order deleted successfully' });
     }
     catch (error) {
-        console.error('Error deleting order:', error);
+        console.error(error);
         return res.status(500).json({ message: 'Error deleting order', error: error.message });
     }
 };
