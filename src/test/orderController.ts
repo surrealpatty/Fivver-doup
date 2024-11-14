@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app'; // Make sure app.ts exists and the path is correct
+import app from '../app'; // Ensure this path is correct
 import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
 import { User, Service, Order } from '../models'; // Your models
 
@@ -10,7 +10,7 @@ jest.mock('../models/order');
 
 describe('Order Controller Tests', () => {
   beforeAll(async () => {
-    // Sync the database for testing
+    // Sync the database for testing (You might want to use an in-memory DB for tests)
     await sequelize.sync();
   });
 

@@ -1,52 +1,39 @@
-import User from '../models/user'; // Use default import
-
 import jwt from 'jsonwebtoken';
-import { sequelize } from '../config/database'; // Importing sequelize to mock the database connection
+import { sequelize } from '../config/database'; // Mock the Sequelize connection
+import User from '../models/user'; // Mock User model
 
 // Mock global setup
-jest.mock('../models/user', () => {
-  return {
-    // Mocking the necessary methods on the User model
-    findOne: jest.fn(),
-    create: jest.fn(),
-  };
-});
-
-// Mocking JWT verify and sign methods
-jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
-  sign: jest.fn(), // Mocking `sign` if it's used in your tests
+jest.mock('../models/user', () => ({
+  findOne: jest.fn(), // Mock findOne method
+  create: jest.fn(),  // Mock create method
 }));
 
-// Mocking sequelize database connection
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn(), // Mock verify method
+  sign: jest.fn(),   // Mock sign method (if needed)
+}));
+
 jest.mock('../config/database', () => ({
   sequelize: {
-    authenticate: jest.fn().mockResolvedValue(undefined), // Mock successful DB connection
+    authenticate: jest.fn().mockResolvedValue(undefined), // Mock a successful DB connection
   },
 }));
-
-// Optionally, mock other utilities or modules
-// Example: Mock a utility function if needed
-// jest.mock('../utils/someUtility', () => ({
-//   someFunction: jest.fn().mockReturnValue('mocked value'),
-// }));
 
 // Global setup for environment variables or mock configurations
 beforeAll(() => {
   // Set up mock environment variables (e.g., JWT secret key for signing and verification)
-  process.env.JWT_SECRET = 'mock-secret-key';
+  process.env.JWT_SECRET = 'mock-secret-key'; // Example JWT secret for mocking JWT signing/verification
 
   // Optional: You can add more environment variables or other global setup here if needed
 });
 
 // Reset mocks to ensure no state leaks between tests
 afterEach(() => {
-  jest.resetAllMocks(); // Clears all mock calls, resets mock states, and ensures clean tests
+  jest.clearAllMocks(); // Clears all mock calls and resets mock states for each test
 });
 
 // Optionally, you can define global tear-down tasks after all tests have run
 afterAll(() => {
-  // Perform any clean-up operations here if necessary (e.g., closing DB connections)
-  // Example: Close DB connection or remove global mock implementations if required
-  sequelize.authenticate.mockRestore(); // Restore the original implementation if necessary
+  // Perform any clean-up operations here if necessary (e.g., closing DB connections or removing global mocks)
+  sequelize.authenticate.mockRestore(); // Restore the original implementation of sequelize.authenticate if necessary
 });
