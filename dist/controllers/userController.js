@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.upgradeToPaid = void 0;
-const express_1 = require("express");
 const models_1 = require("../models"); // Ensure User model is correctly imported
 // Upgrade to Paid Subscription
 const upgradeToPaid = async (req, res) => {
