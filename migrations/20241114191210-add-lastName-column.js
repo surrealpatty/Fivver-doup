@@ -52,8 +52,9 @@ module.exports = {
         allowNull: true,
         defaultValue: 0,
       },
+      // Changed JSONB to JSON for MySQL compatibility
       service_offerings: {
-        type: Sequelize.JSONB,
+        type: Sequelize.JSON,  // Use Sequelize.JSON instead of Sequelize.JSONB
         allowNull: true,
       },
     });
