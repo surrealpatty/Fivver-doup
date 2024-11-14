@@ -1,31 +1,25 @@
 {
   "name": "fivver_doup",
   "version": "1.0.0",
-  "main": "dist/index.js",  // Points to transpiled JavaScript output in dist/
+  "main": "dist/index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "pretest": "npm run build",
-    "start": "node dist/index.js",  // Run the transpiled file
-    "dev": "nodemon src/index.ts",  // Development server for TypeScript
-    "build": "tsc",  // Compile TypeScript
-    "build:watch": "tsc --watch",  // Watch for TypeScript changes
-    "test": "jest",  // Run tests
-    "test:watch": "jest --watch",  // Watch for test changes
-    "lint": "eslint 'src/**/*.ts' --fix",  // Lint TypeScript files
-    "test:ci": "jest --ci --maxWorkers=4"  // CI testing
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint 'src/**/*.ts' --fix",
+    "test:ci": "jest --ci --maxWorkers=4"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-private-methods": "^7.18.6",
-    "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-typescript": "^7.26.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
