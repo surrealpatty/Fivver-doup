@@ -20,8 +20,7 @@
       "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
     },
     "skipDefaultLibCheck": true,                  // Skip checking of default lib files for faster builds
-    "jsx": "preserve",                            // Keep JSX for Vue handling (should be "preserve" for non-React setups)
-    "esModuleInterop": true                       // For compatibility with older modules (e.g., CommonJS)
+    "jsx": "preserve"                            // Keep JSX for Vue handling (should be "preserve" for non-React setups)
   },
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
