@@ -5,10 +5,10 @@ import { User } from '../models'; // Adjust the import path if necessary
 
 // User Registration
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-    const { username, email, password } = req.body;
+    const { username, email, password, firstName, lastName, role, subscriptionStatus } = req.body;
 
     // Input validation
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !firstName || !lastName || !role || !subscriptionStatus) {
         return res.status(400).json({ error: 'All fields are required.' });
     }
 
@@ -21,7 +21,15 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 
         // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ username, email, password: hashedPassword });
+        const newUser = await User.create({
+            username,
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            role: role || 'user',  // Set a default role if not provided
+            subscriptionStatus: subscriptionStatus || 'free',  // Set default subscriptionStatus
+        });
         
         // Return success message
         return res.status(201).json({ message: 'User registered successfully', user: newUser });

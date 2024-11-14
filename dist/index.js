@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -13,7 +12,6 @@ const user_1 = __importDefault(require("./routes/user")); // Import user routes
 dotenv_1.default.config();
 // Initialize Express app
 const app = (0, express_1.default)();
-exports.app = app;
 // Middleware
 app.use(express_1.default.json()); // Parse JSON requests
 app.use((0, cors_1.default)()); // Enable CORS for cross-origin requests
@@ -50,4 +48,6 @@ const startServer = async () => {
 if (require.main === module) {
     startServer();
 }
+// Export the app for testing purposes (this is the key change to make it work for testing)
+exports.default = app; // Ensure app is the default export
 //# sourceMappingURL=index.js.map
