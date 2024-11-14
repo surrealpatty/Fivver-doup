@@ -54,3 +54,5 @@ if (require.main === module) {
 
 // Export the app for testing purposes (this is the key change to make it work for testing)
 export { app };
+
+

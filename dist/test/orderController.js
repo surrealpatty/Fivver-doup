@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const app_1 = __importDefault(require("../app")); // Ensure this path is correct
+const index_1 = __importDefault(require("../index")); // Adjust path if needed
 const database_1 = require("../config/database"); // Ensure sequelize is correctly imported
 const models_1 = require("../models"); // Your models
 // Mock models
@@ -37,7 +37,7 @@ describe('Order Controller Tests', () => {
             orderDetails: 'Test order details',
             status: 'Pending',
         });
-        const response = await (0, supertest_1.default)(app_1.default)
+        const response = await (0, supertest_1.default)(index_1.default)
             .post('/orders')
             .send({
             userId: 1,
@@ -69,7 +69,7 @@ describe('Order Controller Tests', () => {
         ];
         // Mock Order.findAll
         models_1.Order.findAll.mockResolvedValue(mockOrders);
-        const response = await (0, supertest_1.default)(app_1.default).get('/orders');
+        const response = await (0, supertest_1.default)(index_1.default).get('/orders');
         expect(response.status).toBe(200);
         expect(response.body.length).toBe(2);
         expect(response.body[0].status).toBe('Pending');
@@ -85,7 +85,7 @@ describe('Order Controller Tests', () => {
         };
         // Mock Order.findByPk
         models_1.Order.findByPk.mockResolvedValue(mockOrder);
-        const response = await (0, supertest_1.default)(app_1.default).get('/orders/1');
+        const response = await (0, supertest_1.default)(index_1.default).get('/orders/1');
         expect(response.status).toBe(200);
         expect(response.body.orderDetails).toBe('Test order details');
         expect(response.body.status).toBe('Pending');
@@ -106,7 +106,7 @@ describe('Order Controller Tests', () => {
             orderDetails: 'Updated details',
             status: 'Completed',
         });
-        const response = await (0, supertest_1.default)(app_1.default)
+        const response = await (0, supertest_1.default)(index_1.default)
             .put('/orders/1')
             .send({
             orderDetails: 'Updated details',
@@ -129,7 +129,7 @@ describe('Order Controller Tests', () => {
         // Mock Order.findByPk and destroy method
         models_1.Order.findByPk.mockResolvedValue(mockOrder);
         models_1.Order.prototype.destroy.mockResolvedValue(undefined);
-        const response = await (0, supertest_1.default)(app_1.default).delete('/orders/1');
+        const response = await (0, supertest_1.default)(index_1.default).delete('/orders/1');
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Order deleted successfully');
     });
