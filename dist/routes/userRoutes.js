@@ -14,7 +14,8 @@ router.get('/users/:id', async (req, res) => {
         res.json(user);
     }
     catch (err) {
-        res.status(500).json({ error: err.message || 'An error occurred while retrieving the user' });
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+        res.status(500).json({ error: errorMessage });
     }
 });
 // Route to create a new user
@@ -25,7 +26,8 @@ router.post('/users', async (req, res) => {
         res.status(201).json(newUser);
     }
     catch (err) {
-        res.status(500).json({ error: err.message || 'An error occurred while creating the user' });
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+        res.status(500).json({ error: errorMessage });
     }
 });
 exports.default = router;

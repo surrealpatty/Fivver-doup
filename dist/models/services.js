@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-// Adjusted path for the transpiled dist folder
-const database_js_1 = require("../config/database.js"); // Make sure this is the correct relative path in the src folder
+const database_1 = require("../config/database"); // Ensure the path to your sequelize instance is correct
+// Define the Service model class with TypeScript types
 class Service extends sequelize_1.Model {
-    // You can add associations here if needed
+    // Define associations for Service (optional if associations are used)
     static associate(models) {
-        // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
+        // Example association: A service can have many orders
+        Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
+        // Add more associations as needed
     }
 }
 // Initialize the Service model
@@ -53,7 +55,7 @@ Service.init({
         },
     },
 }, {
-    sequelize: database_js_1.sequelize, // Pass sequelize instance here
+    sequelize: database_1.sequelize, // Pass sequelize instance here
     modelName: 'Service', // Use the name 'Service'
     tableName: 'services', // Table name in the database
     timestamps: true, // Automatically add createdAt and updatedAt columns
