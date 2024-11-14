@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
-import { User } from '../models';
+import { User } from '../models';  // Correct import for User model
 
-// Upgrade to Paid Subscription
 export const upgradeToPaid = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.user?.id;  // Ensure user ID is verified, assumes user ID is provided from JWT or session middleware
-    const durationInMonths = req.body.duration || 1; // Default to 1 month if not provided
-    
+    const userId = req.user?.id;  // Ensure user ID is available from JWT or session middleware
+    const durationInMonths = req.body.duration || 1;  // Default to 1 month if not provided
+
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
     try {
         // Fetch the user by ID
         const user = await User.findByPk(userId);
@@ -15,8 +18,8 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
 
         const currentDate = new Date();
 
-        // Check if user is already on a "Paid" subscription and extend it
-        if (user.role === 'Paid' && user.subscriptionEndDate && user.subscriptionEndDate > currentDate) {
+        // If the user already has a "Paid" subscription, extend it
+        if (user.role === 'Paid' && user.subscriptionEndDate instanceof Date && user.subscriptionEndDate > currentDate) {
             // Extend subscription period
             user.subscriptionEndDate.setMonth(user.subscriptionEndDate.getMonth() + durationInMonths);
         } else {
@@ -37,8 +40,12 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
             subscriptionEndDate: user.subscriptionEndDate,
             subscriptionStatus: user.subscriptionStatus
         });
-    } catch (error: any) {
+    } catch (error) {
         console.error('Error upgrading subscription:', error);
-        return res.status(500).json({ message: 'Error upgrading subscription', error: error.message || 'Unknown error' });
+        // Improved error logging for clarity
+        return res.status(500).json({
+            message: 'Error upgrading subscription',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
     }
 };

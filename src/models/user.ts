@@ -1,5 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Ensure correct import path for sequelize instance
 import Service from './services';  // Import related models
 
 // Define the attributes for the User model
@@ -16,10 +16,10 @@ interface UserAttributes {
   lastName: string | null;
 }
 
-// Optional attributes for user creation
+// Optional attributes for user creation (excluding 'id')
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User model
+// Define the User model class
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
@@ -32,8 +32,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public firstName!: string | null;
   public lastName!: string | null;
 
-  // Define associations here
+  // Define associations
   static associate(models: any) {
+    // Ensure correct association with the Service model
     User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
   }
 }
@@ -89,12 +90,13 @@ User.init(
     },
   },
   {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true,  // Add timestamps to capture createdAt and updatedAt
+    sequelize,                        // Pass the sequelize instance
+    modelName: 'User',                // Define the model name
+    tableName: 'users',               // Name of the table in the database
+    timestamps: true,                 // Automatically manage createdAt and updatedAt fields
+    underscored: true,                // If you prefer to use snake_case in the database
   }
 );
 
-// Export the User model
+// Export the User model for use in other parts of the application
 export default User;

@@ -18,7 +18,7 @@ app.use(cors());  // Middleware to enable CORS
 app.use('/api/users', userRoutes);  // Route handling for '/api/users'
 
 // Function to start the server and sync the database
-const startServer = async (): Promise<void> => {
+const startServer = async () => {
     try {
         // Test DB connection
         await testConnection();
@@ -36,7 +36,7 @@ const startServer = async (): Promise<void> => {
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    } catch (error: unknown) {
+    } catch (error) {
         // Improved error handling
         if (error instanceof Error) {
             console.error('Error starting the server:', error.message);  // Handle error message properly

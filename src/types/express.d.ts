@@ -1,3 +1,5 @@
+// src/types/express.d.ts
+
 import { User } from '../models'; // Adjust the import path as necessary
 
 declare global {
@@ -7,3 +9,6 @@ declare global {
         }
     }
 }
+
+// Ensure this file is treated as a module
+export {};

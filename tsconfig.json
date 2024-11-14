@@ -20,7 +20,8 @@
       "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
     },
     "skipDefaultLibCheck": true,                  // Skip checking of default lib files for faster builds
-    "jsx": "preserve"                            // Keep JSX for Vue handling (should be "preserve" for non-React setups)
+    "jsx": "preserve",                            // Keep JSX for Vue handling (should be "preserve" for non-React setups)
+    "types": ["node", "jest"]                     // Ensure Jest types are available if running tests with Jest
   },
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
