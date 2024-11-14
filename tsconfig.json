@@ -26,7 +26,7 @@
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
     "src/**/*.tsx",                               // Include TypeScript JSX files in src
-    "src/models/index.js",                        // Include JavaScript files for transpiling (important for Jest)
+    "src/models/index.ts",                        // Include JavaScript files for transpiling (important for Jest)
     "src/**/*.vue"                                // Include .vue files (if using Vue + TypeScript)
   ],
   "exclude": [
