@@ -28,7 +28,9 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
   static associate(models: any) {
     // Example association: A service can have many orders
     Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
-    // Add more associations as needed
+
+    // Add more associations as needed, for example:
+    // Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   }
 }
 
