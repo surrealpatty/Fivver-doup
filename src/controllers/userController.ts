@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { User } from '../models';  // Ensure User model is correctly imported
+import { User } from '../models';
 
 // Upgrade to Paid Subscription
 export const upgradeToPaid = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.user.id;  // Ensure user ID comes from a verified JWT token
-    const durationInMonths = req.body.duration || 1; // Default to 1 month
+    const userId = req.user?.id;  // Ensure user ID is verified, assumes user ID is provided from JWT or session middleware
+    const durationInMonths = req.body.duration || 1; // Default to 1 month if not provided
     
     try {
         // Fetch the user by ID
@@ -16,7 +16,7 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
         const currentDate = new Date();
 
         // Check if user is already on a "Paid" subscription and extend it
-        if (user.role === 'Paid' && user.subscriptionEndDate > currentDate) {
+        if (user.role === 'Paid' && user.subscriptionEndDate && user.subscriptionEndDate > currentDate) {
             // Extend subscription period
             user.subscriptionEndDate.setMonth(user.subscriptionEndDate.getMonth() + durationInMonths);
         } else {
@@ -37,8 +37,8 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
             subscriptionEndDate: user.subscriptionEndDate,
             subscriptionStatus: user.subscriptionStatus
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error upgrading subscription:', error);
-        return res.status(500).json({ message: 'Error upgrading subscription', error: error.message });
+        return res.status(500).json({ message: 'Error upgrading subscription', error: error.message || 'Unknown error' });
     }
 };
