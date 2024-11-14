@@ -1,25 +1,26 @@
+require('dotenv').config();  // Load environment variables from .env file
+
 module.exports = {
-    development: {
-      username: 'your_username',
-      password: 'your_password',
-      database: 'fivver_doup_db',
-      host: 'localhost',
-      dialect: 'mysql',
-      logging: false,  // Disable logging or change this to true for detailed logs
-    },
-    test: {
-      username: 'your_username',
-      password: 'your_password',
-      database: 'fivver_doup_db_test',
-      host: 'localhost',
-      dialect: 'mysql',
-    },
-    production: {
-      username: 'your_username',
-      password: 'your_password',
-      database: 'fivver_doup_db',
-      host: 'localhost',
-      dialect: 'mysql',
-    },
-  };
-  
+  development: {
+    username: process.env.DB_USERNAME, // Use environment variables
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+    logging: false,  // Disable logging or set to true for more detailed logs
+  },
+  test: {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_TEST_NAME,  // Test database name
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+  },
+  production: {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+  },
+};

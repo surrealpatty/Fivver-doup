@@ -79,10 +79,13 @@ User.init(
       allowNull: true,
     },
     lastName: {
-      type: DataTypes.STRING,
-      allowNull: true,
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'last_name', // This ensures Sequelize uses the correct column in the database
+      },
+      
     },
-  },
+  
   {
     sequelize,
     modelName: 'User',
