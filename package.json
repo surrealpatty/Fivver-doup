@@ -55,18 +55,19 @@
     "vue": "^3.2.0",
     "vue-tsc": "^2.1.10"
   },
-  "eslintConfig": {
-    "extends": [
-      "airbnb-typescript/base"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "mysql2": "^3.11.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-typescript/base",
+      "plugin:import/typescript"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
   }
 }
