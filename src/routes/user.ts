@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcryptjs'; // bcryptjs for compatibility
+import bcrypt from 'bcryptjs'; // bcryptjs for password hashing
 import User from '../models/user'; // Default import for User model
 import { body, validationResult } from 'express-validator';
+import { Op } from 'sequelize'; // Import Op for logical operators in queries
 
 const router = Router();
 
@@ -23,16 +24,20 @@ router.post(
     const { username, email, password, firstName, lastName } = req.body;
 
     try {
-      // Check if username already exists
-      const existingUser = await User.findOne({ where: { username } });
-      if (existingUser) {
-        return res.status(400).json({ message: 'Username already taken' });
-      }
+      // Check if username or email already exists (single query for both checks)
+      const existingUser = await User.findOne({
+        where: {
+          [Op.or]: [{ username }, { email }]
+        }
+      });
 
-      // Check if email already exists
-      const existingEmail = await User.findOne({ where: { email } });
-      if (existingEmail) {
-        return res.status(400).json({ message: 'Email is already taken' });
+      if (existingUser) {
+        if (existingUser.username === username) {
+          return res.status(400).json({ message: 'Username already taken' });
+        }
+        if (existingUser.email === email) {
+          return res.status(400).json({ message: 'Email is already taken' });
+        }
       }
 
       // Hash the password before saving it
