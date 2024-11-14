@@ -25,7 +25,7 @@ const createOrder = async (req, res) => {
         });
     }
     catch (error) {
-        console.error(error);
+        console.error('Error creating order:', error);
         return res.status(500).json({ message: 'Error creating order', error: error.message });
     }
 };
@@ -38,7 +38,7 @@ const getAllOrders = async (req, res) => {
         return res.status(200).json(orders);
     }
     catch (error) {
-        console.error(error);
+        console.error('Error fetching orders:', error);
         return res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
 };
@@ -55,7 +55,7 @@ const getOrderById = async (req, res) => {
         return res.status(200).json(order);
     }
     catch (error) {
-        console.error(error);
+        console.error('Error fetching order:', error);
         return res.status(500).json({ message: 'Error fetching order', error: error.message });
     }
 };
@@ -81,7 +81,7 @@ const updateOrder = async (req, res) => {
         });
     }
     catch (error) {
-        console.error(error);
+        console.error('Error updating order:', error);
         return res.status(500).json({ message: 'Error updating order', error: error.message });
     }
 };
@@ -100,7 +100,7 @@ const deleteOrder = async (req, res) => {
         return res.status(200).json({ message: 'Order deleted successfully' });
     }
     catch (error) {
-        console.error(error);
+        console.error('Error deleting order:', error);
         return res.status(500).json({ message: 'Error deleting order', error: error.message });
     }
 };

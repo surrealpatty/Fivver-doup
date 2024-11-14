@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
         // Hash the password before saving
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
         const newUser = await models_1.User.create({ username, email, password: hashedPassword });
-        // Return success message instead of redirecting
+        // Return success message
         return res.status(201).json({ message: 'User registered successfully', user: newUser });
     }
     catch (error) {

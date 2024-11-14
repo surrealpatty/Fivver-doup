@@ -50,6 +50,6 @@ User.init({
     sequelize: database_1.sequelize,
     modelName: 'User',
     tableName: 'users', // The table name
-    timestamps: false, // Disabling Sequelize's default createdAt/updatedAt columns
+    timestamps: true, // Ensure Sequelize handles timestamps (createdAt and updatedAt)
 });
 //# sourceMappingURL=user.js.map

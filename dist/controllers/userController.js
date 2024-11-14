@@ -1,12 +1,15 @@
 "use strict";
-const { User } = require('../models'); // Ensure User model is correctly imported
-// 3. Upgrade to Paid Subscription
-exports.upgradeToPaid = async (req, res) => {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upgradeToPaid = void 0;
+const express_1 = require("express");
+const models_1 = require("../models"); // Ensure User model is correctly imported
+// Upgrade to Paid Subscription
+const upgradeToPaid = async (req, res) => {
     const userId = req.user.id; // Ensure user ID comes from a verified JWT token
     const durationInMonths = req.body.duration || 1; // Default to 1 month
     try {
         // Fetch the user by ID
-        const user = await User.findByPk(userId);
+        const user = await models_1.User.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -38,4 +41,5 @@ exports.upgradeToPaid = async (req, res) => {
         return res.status(500).json({ message: 'Error upgrading subscription', error: error.message });
     }
 };
+exports.upgradeToPaid = upgradeToPaid;
 //# sourceMappingURL=userController.js.map
