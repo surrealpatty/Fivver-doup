@@ -30,5 +30,7 @@ module.exports = {
       // Drop the 'lastName' column if it exists
       await queryInterface.removeColumn('users', 'lastName');
     }
+
+    // Optionally drop other columns or revert any changes as needed
   }
 };
