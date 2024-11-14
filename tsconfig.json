@@ -19,16 +19,21 @@
     "paths": {
       "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
     },
-    "skipDefaultLibCheck": true                   // Skip checking of default lib files for faster builds
+    "skipDefaultLibCheck": true,                  // Skip checking of default lib files for faster builds
+    "jsx": "react",                               // For handling JSX syntax, especially in .tsx files
+    "esModuleInterop": true                       // For compatibility with older modules (e.g., CommonJS)
   },
   "include": [
     "src/**/*.ts",                                // Include TypeScript files in src
     "src/**/*.tsx",                               // Include TypeScript JSX files in src
-    "src/models/index.js"                         // Include JavaScript files for transpiling (important for Jest)
+    "src/models/index.js",                        // Include JavaScript files for transpiling (important for Jest)
+    "src/**/*.vue"                                // Include .vue files (if using Vue + TypeScript)
   ],
   "exclude": [
     "node_modules",                               // Exclude node_modules from compilation
     "dist",                                       // Exclude dist folder from compilation
+    "**/*.test.ts",                               // Exclude test files for the build
+    "**/*.test.tsx",                              // Exclude test files for the build
     "**/*.vue"                                    // Exclude .vue files from TypeScript compilation (handled by Jest/Vue)
   ]
 }

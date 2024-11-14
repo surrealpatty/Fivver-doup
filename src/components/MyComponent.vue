@@ -4,16 +4,18 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
   name: 'MyComponent', // Defines the name of the component
   props: {
     title: {
-      type: String,
+      type: String as PropType<string>, // Type the prop with PropType for type safety
       default: 'Default Title', // Default title if no prop is passed
     },
   },
-};
+});
 </script>
 
 <style scoped>
