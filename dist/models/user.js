@@ -18,26 +18,26 @@ User.init({
     role: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'Free',
+        defaultValue: 'Free', // Default value for role
     },
     subscriptionStatus: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'Inactive',
+        defaultValue: 'Inactive', // Default value for subscriptionStatus
     },
     subscriptionStartDate: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Optional
+        allowNull: true, // Optional field, nullable
     },
     subscriptionEndDate: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Optional
+        allowNull: true, // Optional field, nullable
     },
 }, {
     sequelize: database_1.sequelize,
-    modelName: 'User', // Model name in DB
-    tableName: 'users', // Explicitly defining table name (optional but helpful)
-    timestamps: false, // Disabling automatic timestamps if you don't want `createdAt` and `updatedAt`
+    modelName: 'User',
+    tableName: 'users', // Explicitly defining table name
+    timestamps: false, // Disabling automatic timestamps if not required
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map
