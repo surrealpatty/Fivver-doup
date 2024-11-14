@@ -1,5 +1,5 @@
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Assuming sequelize is properly exported from database.ts
+import { sequelize } from '../config/database'; // Make sure sequelize is properly exported from database.js
 
 // Define an interface for the attributes of the User model
 interface UserAttributes {
@@ -29,9 +29,14 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public subscriptionEndDate!: Date | null;
     public firstName!: string;
     public lastName!: string;
+
+    // Define association method to set up associations with other models
+    static associate(models: any) {
+        User.hasMany(models.Service, { foreignKey: 'userId' });
+    }
 }
 
-// Initialize the model with proper column definitions
+// Initialize the User model with proper column definitions
 User.init(
     {
         id: {
@@ -42,12 +47,12 @@ User.init(
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true, // Ensure that the username is unique
+            unique: true,
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true, // Ensure that the email is unique
+            unique: true,
         },
         password: {
             type: DataTypes.STRING,
@@ -84,7 +89,7 @@ User.init(
         sequelize,
         modelName: 'User',
         tableName: 'users',
-        timestamps: false, // Optional: set to `true` if you want `createdAt` and `updatedAt`
+        timestamps: false, // Set to true if you want `createdAt` and `updatedAt` columns
     }
 );
 
