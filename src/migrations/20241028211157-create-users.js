@@ -3,8 +3,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Check if the column 'first_name' already exists
+    // Check if the column 'subscription_start_date' already exists
     const tableDesc = await queryInterface.describeTable('users');
+    if (!tableDesc.subscription_start_date) {
+      await queryInterface.addColumn('users', 'subscription_start_date', {
+        type: Sequelize.DATE,
+        allowNull: true,
+      });
+    }
+
+    // Check if 'first_name' column exists, if not, add it
     if (!tableDesc.first_name) {
       await queryInterface.addColumn('users', 'first_name', {
         type: Sequelize.STRING,
@@ -40,5 +48,8 @@ module.exports = {
 
     // Remove 'updated_at' column
     await queryInterface.removeColumn('users', 'updated_at');
+
+    // Remove 'subscription_start_date' column
+    await queryInterface.removeColumn('users', 'subscription_start_date');
   }
 };
