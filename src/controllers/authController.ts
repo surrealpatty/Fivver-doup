@@ -23,7 +23,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await User.create({ username, email, password: hashedPassword });
         
-        // Return success message instead of redirecting
+        // Return success message
         return res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error('Registration error:', error);

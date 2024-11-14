@@ -1,12 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
-
-// Adjusted path for the transpiled dist folder
-import { sequelize } from '../config/database.js';  // Make sure this is the correct relative path in the src folder
+// Adjust the import path according to your project structure
+import { sequelize } from '../config/database';  // Adjusted import for sequelize instance
 
 class Service extends Model {
-  // You can add associations here if needed
-  static associate(models) {
-    // Example: Service.hasMany(models.Review, { foreignKey: 'serviceId', as: 'reviews' });
+  // Define associations here, if needed
+  static associate(models: any) {
+    // Example association: A service can have many orders
+    Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
+    // Add more associations as needed (e.g., reviews, users, etc.)
   }
 }
 

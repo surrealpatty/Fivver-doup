@@ -1,7 +1,8 @@
-const { User } = require('../models');  // Ensure User model is correctly imported
+import { Request, Response } from 'express';
+import { User } from '../models';  // Ensure User model is correctly imported
 
-// 3. Upgrade to Paid Subscription
-exports.upgradeToPaid = async (req, res) => {
+// Upgrade to Paid Subscription
+export const upgradeToPaid = async (req: Request, res: Response): Promise<Response> => {
     const userId = req.user.id;  // Ensure user ID comes from a verified JWT token
     const durationInMonths = req.body.duration || 1; // Default to 1 month
     
