@@ -1,55 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+// src/models/user.ts
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Adjust path if necessary
+const database_1 = __importDefault(require("../config/database"));
 class User extends sequelize_1.Model {
 }
-exports.User = User;
 User.init({
-    id: {
-        type: sequelize_1.DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    username: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    password: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    firstName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    lastName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    role: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Free', // Default role
-    },
-    subscriptionStatus: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Inactive', // Default subscription status
-    },
-    createdAt: {
-        type: sequelize_1.DataTypes.DATE,
-        defaultValue: sequelize_1.DataTypes.NOW, // Automatically handle createdAt
-    },
-}, {
-    sequelize: database_1.sequelize,
-    modelName: 'User',
-    tableName: 'users', // The table name
-    timestamps: true, // Ensure Sequelize handles timestamps (createdAt and updatedAt)
-});
+// Model attributes (columns) definition
+}, { sequelize: database_1.default, modelName: 'User' });
+exports.default = User;
 //# sourceMappingURL=user.js.map
