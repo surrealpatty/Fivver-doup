@@ -1,13 +1,23 @@
-import { Model, DataTypes } from 'sequelize';
-// Adjust the import path according to your project structure
-import { sequelize } from '../config/database';  // Adjusted import for sequelize instance
+import { Model, DataTypes, Sequelize } from 'sequelize';
+import { sequelize } from '../config/database'; // Ensure the path to your sequelize instance is correct
 
+// Define the Service model class with TypeScript types
 class Service extends Model {
-  // Define associations here, if needed
+  public id!: number;
+  public title!: string;
+  public description!: string;
+  public price!: number;
+  public category!: string;
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  // Define associations for Service (optional if associations are used)
   static associate(models: any) {
     // Example association: A service can have many orders
     Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
-    // Add more associations as needed (e.g., reviews, users, etc.)
+    // Add more associations as needed
   }
 }
 

@@ -26,9 +26,9 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
       message: 'Order created successfully',
       order,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Error creating order', error: error.message });
+    return res.status(500).json({ message: 'Error creating order', error: (error as Error).message });
   }
 };
 
@@ -39,9 +39,9 @@ export const getAllOrders = async (req: Request, res: Response): Promise<Respons
     const orders = await Order.findAll();
 
     return res.status(200).json(orders);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching orders:', error);
-    return res.status(500).json({ message: 'Error fetching orders', error: error.message });
+    return res.status(500).json({ message: 'Error fetching orders', error: (error as Error).message });
   }
 };
 
@@ -58,9 +58,9 @@ export const getOrderById = async (req: Request, res: Response): Promise<Respons
     }
 
     return res.status(200).json(order);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching order:', error);
-    return res.status(500).json({ message: 'Error fetching order', error: error.message });
+    return res.status(500).json({ message: 'Error fetching order', error: (error as Error).message });
   }
 };
 
@@ -88,9 +88,9 @@ export const updateOrder = async (req: Request, res: Response): Promise<Response
       message: 'Order updated successfully',
       order,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error updating order:', error);
-    return res.status(500).json({ message: 'Error updating order', error: error.message });
+    return res.status(500).json({ message: 'Error updating order', error: (error as Error).message });
   }
 };
 
@@ -110,8 +110,8 @@ export const deleteOrder = async (req: Request, res: Response): Promise<Response
     await order.destroy();
 
     return res.status(200).json({ message: 'Order deleted successfully' });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error deleting order:', error);
-    return res.status(500).json({ message: 'Error deleting order', error: error.message });
+    return res.status(500).json({ message: 'Error deleting order', error: (error as Error).message });
   }
 };
