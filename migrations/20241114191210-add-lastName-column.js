@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     // Create the 'users' table with additional profile fields
@@ -24,41 +23,51 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // Remove manual timestamps if Sequelize handles them
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'), // Set default value to current date
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'), // Set default value to current date
+        defaultValue: Sequelize.fn('NOW'),
       },
       // New columns
       profile_picture: {
         type: Sequelize.STRING,
-        allowNull: true, // Optional field for the user's profile picture URL
+        allowNull: true,
       },
       bio: {
         type: Sequelize.TEXT,
-        allowNull: true, // Optional field for the user's bio
+        allowNull: true,
       },
       ratings: {
         type: Sequelize.FLOAT,
         allowNull: true,
-        defaultValue: 0.0, // Default value for ratings
+        defaultValue: 0.0,
       },
       reviews_count: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, // Default value for reviews count
+        defaultValue: 0,
       },
       service_offerings: {
-        type: Sequelize.JSON, // Use Sequelize.JSON for MySQL
-        allowNull: true, // Optional field for service offerings (as a JSON object)
+        type: Sequelize.JSONB,
+        allowNull: true,
       },
     });
+
+    // Add lastName column only if it does not exist
+    const [columns] = await queryInterface.sequelize.query("SHOW COLUMNS FROM users");
+    const columnExists = columns.some(col => col.Field === 'lastName');
+
+    if (!columnExists) {
+      await queryInterface.addColumn('users', 'lastName', {
+        type: Sequelize.STRING,
+        allowNull: true,
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
