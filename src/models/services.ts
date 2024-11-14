@@ -1,8 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
 import Order from './order'; // Import the related model for associations (Order model)
-// Uncomment if associating with User model
-// import User from './user'; 
+import User from './user'; // Uncomment to associate with User model
 
 // Define the attributes interface for the Service model
 interface ServiceAttributes {
@@ -23,7 +22,7 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
   public price!: number;
   public category!: string;
 
-  // Timestamps
+  // Timestamps are automatically handled by Sequelize
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -32,8 +31,8 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
     // A service can have many orders
     Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
 
-    // If associating with User model, you can uncomment the following line
-    // Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    // A service belongs to one user (optional)
+    Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   }
 }
 

@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure correct path to your sequelize instance
+import Service from '../models/service';
 
 // Define the User attributes
 interface UserAttributes {
@@ -90,16 +91,6 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
       field: 'last_name', // Ensure the correct column name is used in the DB
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
   },
   {
