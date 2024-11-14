@@ -24,12 +24,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {  // Use lowercase for consistency
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'), // Set default value to current date
       },
-      updatedAt: {
+      updated_at: {  // Use lowercase for consistency
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'), // Set default value to current date
@@ -54,7 +54,7 @@ module.exports = {
         defaultValue: 0, // Default value for reviews count
       },
       service_offerings: {
-        type: Sequelize.JSONB,
+        type: Sequelize.JSON,  // Use JSON instead of JSONB for MySQL
         allowNull: true, // Optional field for service offerings (as a JSON object)
       },
     });
