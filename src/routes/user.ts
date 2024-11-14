@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs'; // bcryptjs for compatibility
-import { User } from '../models/user'; // Corrected import for User model
+import User from '../models/user'; // Default import for User model
 import { body, validationResult } from 'express-validator';
 
 const router = Router();
