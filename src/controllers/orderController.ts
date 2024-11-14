@@ -1,125 +1,117 @@
-import Order from '../models/order';  // Ensure the correct path to order model
-import User from '../models/user';
-import Service from '../models/service';
+import { Request, Response } from 'express';
+import { User, Service, Order } from '../models';
 
-// 1. Create an Order
-export const createOrder = async (req, res) => {
-    const { userId, serviceId, orderDetails } = req.body;
+// Create an Order
+export const createOrder = async (req: Request, res: Response): Promise<Response> => {
+  const { userId, serviceId, orderDetails } = req.body;
 
-    // Input validation (ensuring necessary fields are provided)
-    if (!userId || !serviceId || !orderDetails) {
-        return res.status(400).json({ error: 'User ID, Service ID, and order details are required.' });
+  try {
+    // Fetch the User and Service from the database
+    const user = await User.findByPk(userId);
+    const service = await Service.findByPk(serviceId);
+
+    if (!user || !service) {
+      return res.status(404).json({ message: 'User or Service not found' });
     }
 
-    try {
-        // Validate if user and service exist
-        const user = await User.findByPk(userId);
-        const service = await Service.findByPk(serviceId);
+    // Create the order
+    const order = await Order.create({
+      userId,
+      serviceId,
+      orderDetails,
+      status: 'Pending', // Default status
+    });
 
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-
-        if (!service) {
-            return res.status(404).json({ error: 'Service not found.' });
-        }
-
-        // Create the new order
-        const newOrder = await Order.create({
-            userId,
-            serviceId,
-            orderDetails,
-            status: 'Pending', // Default status
-        });
-
-        return res.status(201).json({ message: 'Order created successfully', order: newOrder });
-    } catch (error) {
-        console.error('Error creating order:', error);
-        return res.status(500).json({ message: 'Error creating order', error: error.message });
-    }
+    return res.status(201).json({
+      message: 'Order created successfully',
+      order,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error creating order', error: error.message });
+  }
 };
 
-// 2. Get all Orders
-export const getOrders = async (req, res) => {
-    try {
-        const orders = await Order.findAll({
-            include: [User, Service], // Optionally include user and service details
-        });
-        return res.status(200).json(orders);
-    } catch (error) {
-        console.error('Error fetching orders:', error);
-        return res.status(500).json({ message: 'Error fetching orders', error: error.message });
-    }
+// Get All Orders
+export const getAllOrders = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    // Fetch all orders from the database
+    const orders = await Order.findAll();
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error fetching orders', error: error.message });
+  }
 };
 
-// 3. Get Order by ID
-export const getOrderById = async (req, res) => {
-    const { id } = req.params;
+// Get Order by ID
+export const getOrderById = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
 
-    try {
-        const order = await Order.findByPk(id, {
-            include: [User, Service], // Optionally include user and service details
-        });
+  try {
+    // Find the order by ID
+    const order = await Order.findByPk(id);
 
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        return res.status(200).json(order);
-    } catch (error) {
-        console.error('Error fetching order:', error);
-        return res.status(500).json({ message: 'Error fetching order', error: error.message });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error fetching order', error: error.message });
+  }
 };
 
-// 4. Update an Order
-export const updateOrder = async (req, res) => {
-    const { id } = req.params;
-    const { orderDetails, status } = req.body;
+// Update Order
+export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
+  const { orderDetails, status } = req.body;
 
-    // Validate required fields
-    if (!orderDetails && !status) {
-        return res.status(400).json({ error: 'Order details or status are required to update.' });
+  try {
+    // Find the order by ID
+    const order = await Order.findByPk(id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
     }
 
-    try {
-        const order = await Order.findByPk(id);
+    // Update the order with the new details
+    order.orderDetails = orderDetails || order.orderDetails;
+    order.status = status || order.status;
 
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
+    // Save the updated order
+    await order.save();
 
-        // Update the order with the provided details
-        if (orderDetails) {
-            order.orderDetails = orderDetails;
-        }
-        if (status) {
-            order.status = status;
-        }
-
-        await order.save();
-        return res.status(200).json({ message: 'Order updated successfully', order });
-    } catch (error) {
-        console.error('Error updating order:', error);
-        return res.status(500).json({ message: 'Error updating order', error: error.message });
-    }
+    return res.status(200).json({
+      message: 'Order updated successfully',
+      order,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error updating order', error: error.message });
+  }
 };
 
-// 5. Delete an Order
-export const deleteOrder = async (req, res) => {
-    const { id } = req.params;
+// Delete Order
+export const deleteOrder = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
 
-    try {
-        const order = await Order.findByPk(id);
+  try {
+    // Find the order by ID
+    const order = await Order.findByPk(id);
 
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        await order.destroy();
-        return res.status(200).json({ message: 'Order deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting order:', error);
-        return res.status(500).json({ message: 'Error deleting order', error: error.message });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    // Destroy the order
+    await order.destroy();
+
+    return res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error deleting order', error: error.message });
+  }
 };
