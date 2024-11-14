@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure correct path to your sequelize instance
 
+// Define the User attributes
 interface UserAttributes {
   id: number;
   username: string;
@@ -12,12 +13,14 @@ interface UserAttributes {
   subscriptionEndDate: Date | null;
   firstName: string | null;
   lastName: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date; // Sequelize will auto-generate this field
+  updatedAt?: Date; // Sequelize will auto-generate this field
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+// Attributes used for creating a user (excluding 'id' which is auto-generated)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
+// User model definition
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
@@ -32,12 +35,14 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Association method
+  // Associations
   static associate(models: any) {
+    // A user has many services (1-to-many relationship)
     User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
   }
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
@@ -84,15 +89,25 @@ User.init(
     lastName: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'last_name',
+      field: 'last_name', // Ensure the correct column name is used in the DB
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
     sequelize, // Ensure sequelize instance is passed correctly
     modelName: 'User',
     tableName: 'users',
-    timestamps: true,
-    underscored: true,
+    timestamps: true,  // Sequelize will manage 'createdAt' and 'updatedAt'
+    underscored: true, // Use snake_case for column names in the database
   }
 );
 

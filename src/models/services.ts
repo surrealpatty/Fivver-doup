@@ -11,8 +11,8 @@ interface ServiceAttributes {
   description: string;
   price: number;
   category: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date;  // Optional fields for timestamps, managed by Sequelize
+  updatedAt?: Date;  // Optional fields for timestamps, managed by Sequelize
 }
 
 // Define the Service model class
