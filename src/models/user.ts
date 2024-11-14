@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Correctly import the sequelize instance
-import Service from './service'; // Corrected path to Service model
+import Service from './services'; // Correct path if service.ts is in src/models/services.ts
+
 
 // Define the User attributes
 interface UserAttributes {
