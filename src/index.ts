@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize, testConnection } from './config/database';
-import userRoutes from './routes/user';
-import User from './models/user';
-import Service from './models/services';
+import userRoutes from './routes/user';  // Ensure correct import path
+import User from './models/user';  // Ensure correct import path
+import Service from './models/services';  // Ensure correct import path
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,13 +16,13 @@ const app = express();
 app.use(express.json());  // Parse JSON requests
 app.use(cors());  // Enable CORS for cross-origin requests
 
-// Root route - ensures the correct message is returned for testing
+// Root route for testing
 app.get('/', (req: Request, res: Response) => {
     res.send('Fiverr backend is running');
 });
 
-// Routes
-app.use('/api/users', userRoutes);  // Set up user-related routes
+// User-related routes
+app.use('/api/users', userRoutes);
 
 // Function to initialize the database and start the server
 const startServer = async (): Promise<void> => {
@@ -32,12 +32,14 @@ const startServer = async (): Promise<void> => {
         console.log('Database connection successful.');
 
         // Ensure model associations are recognized by Sequelize
-        User.associate?.({ Service });
-        Service.associate?.({ User });
+        if (User.associate && Service.associate) {
+            User.associate({ Service });
+            Service.associate({ User });
+        }
 
-        // Sync database
+        // Sync database with models
         const isDevelopment = process.env.NODE_ENV === 'development';
-        const syncOptions = isDevelopment ? { alter: true } : {};  // Use 'alter' in development for automatic model updates
+        const syncOptions = isDevelopment ? { alter: true } : {};  // Use 'alter' in development for automatic updates
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 

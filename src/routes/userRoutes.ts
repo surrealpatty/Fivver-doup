@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcryptjs'; // bcryptjs for compatibility
-import User from '../models/user'; // Corrected import for User model (default import)
+import bcrypt from 'bcryptjs'; // bcryptjs is compatible with both Node.js and TypeScript
+import User from '../models/user'; // Import your User model (make sure it’s the correct path)
 import { body, validationResult } from 'express-validator';
 
 const router = Router();
@@ -8,15 +8,18 @@ const router = Router();
 // User registration route
 router.post(
   '/register',
-  // Validation middleware
-  body('username').isString().notEmpty().withMessage('Username is required'),
-  body('email').isEmail().withMessage('Invalid email format'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('firstName').isString().notEmpty().withMessage('First name is required'),
-  body('lastName').isString().notEmpty().withMessage('Last name is required'),
+  [
+    // Validation middleware
+    body('username').isString().notEmpty().withMessage('Username is required'),
+    body('email').isEmail().withMessage('Invalid email format'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('firstName').isString().notEmpty().withMessage('First name is required'),
+    body('lastName').isString().notEmpty().withMessage('Last name is required'),
+  ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      // Return validation errors in a structured format
       return res.status(400).json({ errors: errors.array() });
     }
 
@@ -26,7 +29,7 @@ router.post(
       // Check if username already exists
       const existingUser = await User.findOne({ where: { username } });
       if (existingUser) {
-        return res.status(400).json({ message: 'Username already taken' });
+        return res.status(400).json({ message: 'Username is already taken' });
       }
 
       // Check if email already exists
@@ -35,18 +38,18 @@ router.post(
         return res.status(400).json({ message: 'Email is already taken' });
       }
 
-      // Hash the password before saving it
+      // Hash the password with a salt round of 10
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create the user without passing 'createdAt' and 'updatedAt'
+      // Create the user
       const user = await User.create({
         username,
         email,
         password: hashedPassword,
-        firstName, // Assuming you added firstName and lastName fields to your User model
-        lastName,  // Add these fields to your User model if necessary
-        role: 'Free', // Default role for a new user
-        subscriptionStatus: 'Inactive', // Default subscription status
+        firstName,
+        lastName,
+        role: 'Free',                // Set the default role to "Free"
+        subscriptionStatus: 'Inactive', // Set the default subscription status
       });
 
       // Respond with the created user data (excluding password)
