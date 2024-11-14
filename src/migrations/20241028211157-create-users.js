@@ -3,19 +3,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Check if the column 'subscription_start_date' already exists
+    // Check if 'first_name' column exists, if not, add it
     const tableDesc = await queryInterface.describeTable('users');
-    if (!tableDesc.subscription_start_date) {
-      await queryInterface.addColumn('users', 'subscription_start_date', {
-        type: Sequelize.DATE,
+    if (!tableDesc.first_name) {
+      await queryInterface.addColumn('users', 'first_name', {
+        type: Sequelize.STRING,
         allowNull: true,
       });
     }
 
-    // Check if 'first_name' column exists, if not, add it
-    if (!tableDesc.first_name) {
-      await queryInterface.addColumn('users', 'first_name', {
-        type: Sequelize.STRING,
+    // Check if 'subscription_start_date' column exists, if not, add it
+    if (!tableDesc.subscription_start_date) {
+      await queryInterface.addColumn('users', 'subscription_start_date', {
+        type: Sequelize.DATE,
         allowNull: true,
       });
     }
@@ -37,19 +37,48 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       });
     }
+
+    // Ensure that 'username', 'email', 'password' columns have unique constraints
+    await queryInterface.changeColumn('users', 'username', {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    });
+    await queryInterface.changeColumn('users', 'email', {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    });
+    await queryInterface.changeColumn('users', 'password', {
+      type: Sequelize.STRING,
+      allowNull: false,
+    });
+    await queryInterface.changeColumn('users', 'role', {
+      type: Sequelize.ENUM('Free', 'Paid'),
+      allowNull: false,
+      defaultValue: 'Free',
+    });
+    await queryInterface.changeColumn('users', 'subscription_status', {
+      type: Sequelize.ENUM('Inactive', 'Active'),
+      allowNull: false,
+      defaultValue: 'Inactive',
+    });
+    await queryInterface.changeColumn('users', 'subscription_end_date', {
+      type: Sequelize.DATE,
+    });
   },
 
   async down(queryInterface, Sequelize) {
     // Remove 'first_name' column
     await queryInterface.removeColumn('users', 'first_name');
 
+    // Remove 'subscription_start_date' column
+    await queryInterface.removeColumn('users', 'subscription_start_date');
+
     // Remove 'created_at' column
     await queryInterface.removeColumn('users', 'created_at');
 
     // Remove 'updated_at' column
     await queryInterface.removeColumn('users', 'updated_at');
-
-    // Remove 'subscription_start_date' column
-    await queryInterface.removeColumn('users', 'subscription_start_date');
   }
 };
