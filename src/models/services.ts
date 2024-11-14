@@ -1,6 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
 import Order from './order'; // Import the related model for associations (Order model)
+// Uncomment if associating with User model
+// import User from './user'; 
 
 // Define the attributes interface for the Service model
 interface ServiceAttributes {
@@ -30,7 +32,7 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
     // A service can have many orders
     Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
 
-    // Example: Uncomment and modify if needed
+    // If associating with User model, you can uncomment the following line
     // Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   }
 }

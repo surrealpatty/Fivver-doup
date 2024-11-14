@@ -7,6 +7,12 @@ import userRoutes from './routes/user';  // Import user routes
 // Load environment variables from .env file as early as possible
 dotenv.config();
 
+// Ensure required environment variables are present
+if (!process.env.NODE_ENV || !process.env.PORT) {
+    console.error('Required environment variables are missing. Make sure .env is correctly configured.');
+    process.exit(1);  // Exit if environment variables are missing
+}
+
 // Create Express app
 const app = express();
 

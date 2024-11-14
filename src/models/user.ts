@@ -1,7 +1,6 @@
-// This file correctly uses the default export
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
-import Service from './services';
+import { sequelize } from '../config/database'; // Ensure correct path to your sequelize instance
+import Service from './services'; // Ensure correct import of the Service model
 
 interface UserAttributes {
   id: number;
@@ -30,11 +29,13 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public firstName!: string | null;
   public lastName!: string | null;
 
+  // Association method
   static associate(models: any) {
     User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
   }
 }
 
+// Initialize the User model with attributes and options
 User.init(
   {
     id: {
@@ -85,7 +86,7 @@ User.init(
     },
   },
   {
-    sequelize,
+    sequelize, // Ensure sequelize instance is passed correctly
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
