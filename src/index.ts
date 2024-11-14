@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize, testConnection } from './config/database';  // Database configuration
-import userRoutes from './routes/user';  // Import user routes
+import { sequelize, testConnection } from './config/database';
+import userRoutes from './routes/user';
+import User from './models/user';
+import Service from './models/services';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,6 +31,10 @@ const startServer = async (): Promise<void> => {
         await testConnection();
         console.log('Database connection successful.');
 
+        // Ensure model associations are recognized by Sequelize
+        User.associate?.({ Service });
+        Service.associate?.({ User });
+
         // Sync database
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : {};  // Use 'alter' in development for automatic model updates
@@ -47,13 +53,9 @@ const startServer = async (): Promise<void> => {
 };
 
 // Start the server only if this file is executed directly (i.e., not during testing)
-// Prevents starting the server when running tests
 if (require.main === module) {
     startServer();
 }
 
-// Export the app for testing purposes (this is the key change to make it work for testing)
-export default app; // Ensure app is the default export
-
-
-
+// Export the app for testing purposes
+export default app;
