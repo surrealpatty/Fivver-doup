@@ -36,6 +36,11 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
 
 Order.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,  // Auto increment the id
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -48,6 +53,7 @@ Order.init(
   {
     sequelize,
     modelName: 'Order',
+    timestamps: true,  // Enable automatic timestamps (createdAt, updatedAt)
   }
 );
 
