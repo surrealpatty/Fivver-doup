@@ -14,7 +14,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix",
-    "test:ci": "jest --ci --maxWorkers=4"
+    "test:ci": "jest --ci --maxWorkers=4",
+    "migrate": "sequelize-cli db:migrate"  
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,7 @@
     "jsdom": "^25.0.1",
     "mock-local-storage": "^1.1.24",
     "nodemon": "^3.1.7",
+    "sequelize-cli": "^6.6.2",
     "sequelize-typescript": "^2.1.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
