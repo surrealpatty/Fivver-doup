@@ -6,8 +6,8 @@ import Service from './services';  // Ensure this is correctly imported
 // Define the model attributes interface for TypeScript
 export interface OrderAttributes {
   id: number;
-  userId: number;
-  serviceId: number;
+  userId: number | null;  // Allow null if user is deleted
+  serviceId: number | null;  // Allow null if service is deleted
   orderDetails: string;
   status: 'Pending' | 'Completed' | 'Cancelled'; // Use ENUM for status
   createdAt?: Date | null;
@@ -19,8 +19,8 @@ export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'>
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
-  public userId!: number;
-  public serviceId!: number;
+  public userId!: number | null;  // Allow null if user is deleted
+  public serviceId!: number | null;  // Allow null if service is deleted
   public orderDetails!: string;
   public status!: 'Pending' | 'Completed' | 'Cancelled'; // Type-safe status
   public createdAt!: Date | null;
@@ -52,7 +52,7 @@ Order.init(
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
         model: User,
         key: 'id',
@@ -62,7 +62,7 @@ Order.init(
     },
     serviceId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
         model: Service,
         key: 'id',
