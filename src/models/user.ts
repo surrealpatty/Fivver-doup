@@ -36,7 +36,9 @@ class User
 
   // Define associations (if needed)
   static associate(models: any) {
-    // Add associations here if applicable, e.g., User.hasMany(models.Post);
+    // Example associations, uncomment as needed:
+    // User.hasMany(models.Order); // if User has many Orders
+    // User.belongsTo(models.Role); // if User belongs to Role
   }
 }
 
