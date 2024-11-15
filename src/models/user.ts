@@ -1,43 +1,39 @@
 // src/models/user.ts
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';
 
-interface UserAttributes {
-  id: number;
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/database'; // Import sequelize instance
+
+// Define the UserAttributes interface
+export interface UserAttributes {
+  id?: number; // Optional, since Sequelize generates this
   username: string;
   email: string;
-  password: string; // Assuming you have a password field as well
+  password: string;
+  firstName?: string;
+  lastName?: string;
   role: string;
   subscriptionStatus: string;
-  firstName: string;  // Added firstName
-  lastName: string;   // Added lastName
   createdAt?: Date;
   updatedAt?: Date;
 }
 
+// Define the User model class
 class User extends Model<UserAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
   public email!: string;
   public password!: string;
+  public firstName?: string;
+  public lastName?: string;
   public role!: string;
   public subscriptionStatus!: string;
-  public firstName!: string;   // Added firstName
-  public lastName!: string;    // Added lastName
-
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 }
 
-// Initialize the User model
+// Initialize the model
 User.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -52,29 +48,28 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 'Free',
     },
     subscriptionStatus: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,  // Ensure this field is required
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,  // Ensure this field is required
+      defaultValue: 'Inactive',
     },
   },
   {
     sequelize,
-    modelName: 'User',
     tableName: 'users',
-    timestamps: true,
-    underscored: true,
   }
 );
 

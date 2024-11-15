@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import User from '../models/user';
+import User, { UserAttributes } from '../models/user'; // Import UserAttributes from the correct file
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';
 
@@ -13,15 +13,15 @@ router.post(
   body('username').isString().notEmpty().withMessage('Username is required'),
   body('email').isEmail().withMessage('Invalid email format'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('firstName').isString().notEmpty().withMessage('First name is required'),
-  body('lastName').isString().notEmpty().withMessage('Last name is required'),
+  body('firstName').optional().isString().withMessage('First name must be a string'),
+  body('lastName').optional().isString().withMessage('Last name must be a string'),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, email, password, firstName, lastName } = req.body;
+    const { username, email, password, firstName = '', lastName = '' }: RegisterUserRequest = req.body;
 
     try {
       // Check if username or email already exists
@@ -43,7 +43,7 @@ router.post(
       // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create the user
+      // Create the user with the correct type for Sequelize
       const user = await User.create({
         username,
         email,
@@ -52,7 +52,7 @@ router.post(
         lastName,
         role: 'Free', // Default role for a new user
         subscriptionStatus: 'Inactive', // Default subscription status
-      } as any); // Casting to `any` to bypass TypeScript type inference for now
+      } as UserAttributes); // Typecast to UserAttributes to match the expected type
 
       // Respond with the created user data (excluding password)
       res.status(201).json({
