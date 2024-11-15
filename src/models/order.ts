@@ -1,33 +1,54 @@
-// Example of `order.ts`
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';
 import Service from './services';
 
-class Order extends Model {
-  // Define attributes here if necessary
+// Define model attributes for TypeScript
+interface OrderAttributes {
+  id: number;
+  userId: number;
+  serviceId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+
+class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
+  id!: number;
+  userId!: number;
+  serviceId!: number;
+  createdAt!: Date;
+  updatedAt!: Date;
+
+  // Define associations inside the `associate` method
+  static associate(models: any) {
+    Order.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
+    Order.belongsTo(models.Service, {
+      foreignKey: 'serviceId',
+      as: 'service',
+    });
+  }
 }
 
 Order.init(
   {
-    // Define your model attributes here
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    serviceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     sequelize,
     modelName: 'Order',
   }
 );
-
-// Define associations (Order to User, Service, etc.)
-Order.associate = (models: any) => {
-  Order.belongsTo(models.User, {
-    foreignKey: 'userId', // Make sure the field exists
-    as: 'user',
-  });
-  Order.belongsTo(models.Service, {
-    foreignKey: 'serviceId', // Make sure the field exists
-    as: 'service',
-  });
-};
 
 export default Order;
