@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcryptjs'; // bcryptjs for password hashing
-import User from '../models/user'; // Default import for User model
+import bcrypt from 'bcryptjs';
+import User from '../models/user';
 import { body, validationResult } from 'express-validator';
-import { Op } from 'sequelize'; // Import Op for logical operators in queries
+import { Op } from 'sequelize';
 
 const router = Router();
 
@@ -24,7 +24,7 @@ router.post(
     const { username, email, password, firstName, lastName } = req.body;
 
     try {
-      // Check if username or email already exists (single query for both checks)
+      // Check if username or email already exists
       const existingUser = await User.findOne({
         where: {
           [Op.or]: [{ username }, { email }]
@@ -40,10 +40,10 @@ router.post(
         }
       }
 
-      // Hash the password before saving it
+      // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create the user without passing 'createdAt' and 'updatedAt'
+      // Create the user
       const user = await User.create({
         username,
         email,
