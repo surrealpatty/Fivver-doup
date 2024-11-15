@@ -28,10 +28,10 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   static associate(models: any) {
     // Each service belongs to one user
     Service.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'user',  // You can reference it as `user` in queries
-      onDelete: 'SET NULL', // If the user is deleted, the service's userId will be set to NULL
-      onUpdate: 'CASCADE',  // If the user ID is updated, the service's userId will be updated accordingly
+      foreignKey: 'userId',   // Foreign key in the services table
+      as: 'user',             // Alias to access the associated user model in queries
+      onDelete: 'SET NULL',   // If the associated user is deleted, set the userId to null
+      onUpdate: 'CASCADE',    // If the user's id is updated, update the foreign key as well
     });
   }
 }
@@ -56,19 +56,19 @@ Service.init(
       type: DataTypes.INTEGER,
       allowNull: false,  // Ensure each service has a user associated with it
       references: {
-        model: 'users', // The target table (should be plural if it matches convention)
-        key: 'id', // The key in the target table
+        model: User,   // Directly reference the User model for the foreign key
+        key: 'id',     // The key in the User model to reference
       },
-      onDelete: 'SET NULL', // If the associated user is deleted, set the userId to null
-      onUpdate: 'CASCADE',  // If the user's id is updated, update this foreign key as well
+      onDelete: 'SET NULL',   // If the associated user is deleted, set the userId to null
+      onUpdate: 'CASCADE',    // If the user's id is updated, update this foreign key as well
     },
   },
   {
-    sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true,  // Sequelize will handle createdAt and updatedAt automatically
-    underscored: true,  // Use snake_case for column names (e.g., created_at, updated_at)
+    sequelize,              // Pass the sequelize instance
+    modelName: 'Service',   // Model name as 'Service'
+    tableName: 'services',  // Specify the table name for services
+    timestamps: true,       // Sequelize will handle createdAt and updatedAt automatically
+    underscored: true,      // Use snake_case for column names (e.g., created_at, updated_at)
   }
 );
 

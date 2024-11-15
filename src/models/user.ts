@@ -94,8 +94,8 @@ User.init(
     sequelize, // Pass the sequelize instance
     tableName: 'users', // Specify the table name
     timestamps: true, // Enable Sequelize to handle createdAt and updatedAt
-    createdAt: 'createdAt', // Map Sequelize's createdAt to 'createdAt' column
-    updatedAt: 'updatedAt', // Map Sequelize's updatedAt to 'updatedAt' column
+    createdAt: 'created_at', // Map Sequelize's createdAt to 'created_at' column
+    updatedAt: 'updated_at', // Map Sequelize's updatedAt to 'updated_at' column
     underscored: true, // Use snake_case for column names (e.g., `created_at`)
   }
 );
