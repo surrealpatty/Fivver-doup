@@ -52,7 +52,7 @@ router.post(
         lastName,
         role: 'Free', // Default role for a new user
         subscriptionStatus: 'Inactive', // Default subscription status
-      });
+      } as any); // Casting to `any` to bypass TypeScript type inference for now
 
       // Respond with the created user data (excluding password)
       res.status(201).json({
