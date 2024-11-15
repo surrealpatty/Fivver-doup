@@ -1,17 +1,17 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user';
-import Service from './services';
+import User from './user';  // Ensure this is correctly imported
+import Service from './services';  // Ensure this is correctly imported
 
 // Define the model attributes interface for TypeScript
 export interface OrderAttributes {
   id: number;
   userId: number;
   serviceId: number;
-  orderDetails: string;  // Added orderDetails property
-  status: string;        // Added status property
-  createdAt?: Date | null;  // Allow null for auto-generated timestamp
-  updatedAt?: Date | null;  // Allow null for auto-generated timestamp
+  orderDetails: string;
+  status: 'Pending' | 'Completed' | 'Cancelled'; // Use ENUM for status
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
 }
 
 // Define the creation attributes interface (excluding `id`)
@@ -21,8 +21,8 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   public id!: number;
   public userId!: number;
   public serviceId!: number;
-  public orderDetails!: string;  // Added orderDetails property
-  public status!: string;        // Added status property
+  public orderDetails!: string;
+  public status!: 'Pending' | 'Completed' | 'Cancelled'; // Type-safe status
   public createdAt!: Date | null;
   public updatedAt!: Date | null;
 
@@ -53,18 +53,31 @@ Order.init(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: User,
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: Service,
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     orderDetails: {
       type: DataTypes.STRING,  // Adjust type based on your needs
       allowNull: false,
     },
     status: {
-      type: DataTypes.STRING,  // Adjust type based on your needs
+      type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),  // Use ENUM for status
       allowNull: false,
+      defaultValue: 'Pending', // Default status to 'Pending'
     },
   },
   {

@@ -32,6 +32,14 @@ Order.init({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
+    orderDetails: {
+        type: sequelize_1.DataTypes.STRING, // Adjust type based on your needs
+        allowNull: false,
+    },
+    status: {
+        type: sequelize_1.DataTypes.STRING, // Adjust type based on your needs
+        allowNull: false,
+    },
 }, {
     sequelize: database_1.sequelize, // Reference the sequelize instance
     modelName: 'Order',
