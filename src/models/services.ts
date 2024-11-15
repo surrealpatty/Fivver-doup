@@ -56,8 +56,8 @@ Service.init(
       type: DataTypes.INTEGER,
       allowNull: false,  // Ensure each service has a user associated with it
       references: {
-        model: User,   // Directly reference the User model for the foreign key
-        key: 'id',     // The key in the User model to reference
+        model: 'users',   // The table name as a string
+        key: 'id',        // The key in the User model to reference
       },
       onDelete: 'SET NULL',   // If the associated user is deleted, set the userId to null
       onUpdate: 'CASCADE',    // If the user's id is updated, update this foreign key as well
@@ -71,5 +71,8 @@ Service.init(
     underscored: true,      // Use snake_case for column names (e.g., created_at, updated_at)
   }
 );
+
+// Call the associate method after all models are defined
+Service.associate({ User });
 
 export default Service;
