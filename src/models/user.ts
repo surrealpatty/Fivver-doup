@@ -1,7 +1,5 @@
-// src/models/user.ts
-
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/database'; // Import sequelize instance
+import { sequelize } from '../config/database'; // Use named import
 
 // Define the UserAttributes interface
 export interface UserAttributes {
@@ -68,7 +66,7 @@ User.init(
     },
   },
   {
-    sequelize,
+    sequelize, // Reference the sequelize instance here
     tableName: 'users',
   }
 );

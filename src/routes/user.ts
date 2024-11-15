@@ -4,6 +4,15 @@ import User, { UserAttributes } from '../models/user'; // Import UserAttributes 
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';
 
+// Define the type for the registration request body
+interface RegisterUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 const router = Router();
 
 // User registration route
@@ -21,6 +30,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
+    // Destructure and typecast to RegisterUserRequest
     const { username, email, password, firstName = '', lastName = '' }: RegisterUserRequest = req.body;
 
     try {
