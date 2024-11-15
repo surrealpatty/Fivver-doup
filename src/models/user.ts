@@ -34,7 +34,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   // Define associations (if any)
   static associate(models: any) {
     // Example association: User.hasMany(models.Order);
-    // You can add associations like this when needed
+    // Add associations as needed here
   }
 }
 
@@ -78,6 +78,8 @@ User.init(
     sequelize, // Reference the sequelize instance here
     tableName: 'users', // Define table name
     timestamps: true, // Sequelize automatically handles createdAt and updatedAt
+    createdAt: 'createdAt', // Explicitly set column names for createdAt and updatedAt
+    updatedAt: 'updatedAt',
   }
 );
 

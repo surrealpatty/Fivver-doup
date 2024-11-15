@@ -3,41 +3,40 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Get table description
+    // Get table description to check existing columns
     const tableDesc = await queryInterface.describeTable('users');
 
-    // Add 'first_name' column if it doesn't exist
-    if (!tableDesc.first_name) {
-      await queryInterface.addColumn('users', 'first_name', {
+    // Add 'firstName' column if it doesn't exist
+    if (!tableDesc.firstName) {
+      await queryInterface.addColumn('users', 'firstName', {
         type: Sequelize.STRING,
         allowNull: true,
       });
     }
 
-    // Ensure 'subscription_start_date' column is removed (it doesn't exist in the model or should be removed if present)
+    // Ensure 'subscription_start_date' column is removed (it shouldn't be in the model)
     if (tableDesc.subscription_start_date) {
       await queryInterface.removeColumn('users', 'subscription_start_date');
     }
 
-    // Ensure 'created_at' column exists and set default value
-    if (!tableDesc.created_at) {
-      await queryInterface.addColumn('users', 'created_at', {
+    // Ensure 'createdAt' and 'updatedAt' columns exist with the correct default values
+    if (!tableDesc.createdAt) {
+      await queryInterface.addColumn('users', 'createdAt', {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       });
     }
 
-    // Ensure 'updated_at' column exists with automatic update on modification
-    if (!tableDesc.updated_at) {
-      await queryInterface.addColumn('users', 'updated_at', {
+    if (!tableDesc.updatedAt) {
+      await queryInterface.addColumn('users', 'updatedAt', {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       });
     }
 
-    // Modify columns and ensure constraints (username, email should be unique)
+    // Modify columns and ensure constraints
     await queryInterface.changeColumn('users', 'username', {
       type: Sequelize.STRING,
       allowNull: false,
@@ -67,9 +66,9 @@ module.exports = {
       defaultValue: 'Inactive', // Default value 'Inactive'
     });
 
-    // If 'subscription_end_date' column is missing, we add it
-    if (!tableDesc.subscription_end_date) {
-      await queryInterface.addColumn('users', 'subscription_end_date', {
+    // If 'subscriptionEndDate' column is missing, we add it
+    if (!tableDesc.subscriptionEndDate) {
+      await queryInterface.addColumn('users', 'subscriptionEndDate', {
         type: Sequelize.DATE,
         allowNull: true, // Allow null values
       });
@@ -77,19 +76,13 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // Remove 'first_name' column
-    await queryInterface.removeColumn('users', 'first_name');
-
-    // Ensure 'subscription_start_date' column is removed (if it exists)
+    // Remove columns added in the migration
+    await queryInterface.removeColumn('users', 'firstName');
+    await queryInterface.removeColumn('users', 'createdAt');
+    await queryInterface.removeColumn('users', 'updatedAt');
+    await queryInterface.removeColumn('users', 'subscriptionEndDate');
+    
+    // If 'subscription_start_date' exists, remove it
     await queryInterface.removeColumn('users', 'subscription_start_date');
-
-    // Remove 'created_at' column
-    await queryInterface.removeColumn('users', 'created_at');
-
-    // Remove 'updated_at' column
-    await queryInterface.removeColumn('users', 'updated_at');
-
-    // Remove 'subscription_end_date' column
-    await queryInterface.removeColumn('users', 'subscription_end_date');
   }
 };
