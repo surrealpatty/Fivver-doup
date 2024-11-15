@@ -4,7 +4,17 @@ import { sequelize } from '../config/database';
 import Service from './service';
 import User from './user';
 
-class Order extends Model {
+interface OrderAttributes {
+  id: number;
+  serviceId: number;
+  userId: number;
+  status: string;
+  totalAmount: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+class Order extends Model<OrderAttributes> implements OrderAttributes {
   public id!: number;
   public serviceId!: number;
   public userId!: number;
@@ -14,11 +24,13 @@ class Order extends Model {
   public readonly updatedAt!: Date;
 
   static associate() {
+    // Associations
     Order.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
     Order.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   }
 }
 
+// Initialize Order model
 Order.init(
   {
     id: {

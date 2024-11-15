@@ -20,6 +20,6 @@ const models: Models = {
 // Set up associations (each model associates with others)
 User.associate(models);
 Service.associate(models);
-Order.associate(models);  // This now works since `associate` is defined in Order
+Order.associate();  // Associations defined directly in the model
 
 export { models, sequelize };

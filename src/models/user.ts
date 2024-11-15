@@ -9,6 +9,8 @@ interface UserAttributes {
   password: string; // Assuming you have a password field as well
   role: string;
   subscriptionStatus: string;
+  firstName: string;  // Added firstName
+  lastName: string;   // Added lastName
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -20,6 +22,8 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public password!: string;
   public role!: string;
   public subscriptionStatus!: string;
+  public firstName!: string;   // Added firstName
+  public lastName!: string;    // Added lastName
 
   // Timestamps
   public readonly createdAt!: Date;
@@ -55,6 +59,14 @@ User.init(
     subscriptionStatus: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,  // Ensure this field is required
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,  // Ensure this field is required
     },
   },
   {
