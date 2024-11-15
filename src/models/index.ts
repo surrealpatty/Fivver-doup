@@ -1,8 +1,7 @@
-import { Sequelize } from 'sequelize'; // Ensure you're importing Sequelize if needed
+import { sequelize } from '../config/database';
 import User from './user';
 import Service from './services';
 import Order from './order';
-import { sequelize } from '../config/database';
 
 // Define a type for models
 type Models = {
@@ -18,10 +17,10 @@ const models: Models = {
   Order,
 };
 
-// Set up associations (ensure each model file has an associate method)
-User.associate(models);  // Assuming `associate` is defined in the User model
-Service.associate(models);  // Assuming `associate` is defined in the Service model
-Order.associate(models);  // Assuming `associate` is defined in the Order model
+// Set up associations
+User.associate(models);  // Calls the associate method in the User model
+Service.associate(models);  // Calls the associate method in the Service model
+Order.associate(models);  // Calls the associate method in the Order model
 
-// Export models and sequelize
+// Export models and sequelize instance
 export { models, sequelize };

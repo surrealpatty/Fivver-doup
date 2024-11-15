@@ -3,16 +3,17 @@ import { sequelize } from '../config/database';
 import User from './user';
 import Service from './services';
 
-// Define model attributes for TypeScript
-interface OrderAttributes {
+// Define the model attributes interface for TypeScript
+export interface OrderAttributes {
   id: number;
   userId: number;
   serviceId: number;
-  createdAt: Date | null;  // Allowing null for auto-generated timestamp
-  updatedAt: Date | null;  // Allowing null for auto-generated timestamp
+  createdAt?: Date | null;  // Allow null for auto-generated timestamp
+  updatedAt?: Date | null;  // Allow null for auto-generated timestamp
 }
 
-interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+// Define the creation attributes interface (excluding `id`)
+export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
@@ -23,10 +24,13 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
 
   // Define associations inside the `associate` method
   static associate(models: any) {
+    // Each Order belongs to a User (foreign key `userId`)
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
     });
+
+    // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(models.Service, {
       foreignKey: 'serviceId',
       as: 'service',
@@ -34,7 +38,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   }
 }
 
-// Initialize the model
+// Initialize the Order model
 Order.init(
   {
     id: {
@@ -52,12 +56,11 @@ Order.init(
     },
   },
   {
-    sequelize,  // Reference to Sequelize instance
+    sequelize,  // Reference the sequelize instance
     modelName: 'Order',
     tableName: 'orders',  // Ensure it matches the table name
-    timestamps: true,  // Enable automatic timestamps (createdAt, updatedAt)
-    createdAt: 'createdAt',  // Explicitly define custom timestamps if necessary
-    updatedAt: 'updatedAt',
+    timestamps: true,  // Sequelize will automatically handle `createdAt` and `updatedAt`
+    underscored: true,  // Use snake_case for column names (e.g., `created_at`)
   }
 );
 

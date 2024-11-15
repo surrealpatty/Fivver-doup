@@ -3,7 +3,7 @@ import { sequelize } from '../config/database'; // Use named import
 
 // Define the UserAttributes interface
 export interface UserAttributes {
-  id?: number; // Optional, since Sequelize generates this
+  id?: number; // Optional, as Sequelize will auto-generate the ID
   username: string;
   email: string;
   password: string;
@@ -31,11 +31,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public createdAt!: Date | null;
   public updatedAt!: Date | null;
 
-  // Optional: Define associations here if needed, e.g., User.hasMany(Order)
+  // Define associations (if any)
   static associate(models: any) {
-    // Define associations here
-    // For example, if you have orders, you could do:
-    // User.hasMany(models.Order);
+    // Example association: User.hasMany(models.Order);
+    // You can add associations like this when needed
   }
 }
 
@@ -58,26 +57,27 @@ User.init(
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true, // firstName can be null if not provided
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true, // lastName can be null if not provided
     },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'Free',
+      defaultValue: 'Free', // Default to 'Free' role if not provided
     },
     subscriptionStatus: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'Inactive',
+      defaultValue: 'Inactive', // Default to 'Inactive' status
     },
   },
   {
     sequelize, // Reference the sequelize instance here
-    tableName: 'users',
+    tableName: 'users', // Define table name
+    timestamps: true, // Sequelize automatically handles createdAt and updatedAt
   }
 );
 
