@@ -16,6 +16,11 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
 }
 // Convert DB_SSL to boolean if it's set to 'true'
 const useSSL = DB_SSL === 'true';
+// Ensure that the dialect is valid and is a recognized database type
+const validDialects = ['mysql', 'postgres', 'sqlite', 'mssql'];
+if (!validDialects.includes(DB_DIALECT)) {
+    throw new Error('Invalid DB_DIALECT specified in environment variables');
+}
 // Initialize Sequelize with appropriate config options
 const sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
