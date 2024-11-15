@@ -78,16 +78,6 @@ User.init(
     sequelize, // Reference the sequelize instance here
     tableName: 'users', // Define table name
     timestamps: true, // Sequelize automatically handles createdAt and updatedAt
-    indexes: [
-      {
-        unique: true,
-        fields: ['username'], // Index for username to be unique
-      },
-      {
-        unique: true,
-        fields: ['email'], // Index for email to be unique
-      },
-    ],
   }
 );
 
