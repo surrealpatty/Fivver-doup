@@ -44,12 +44,12 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensure username is unique in the database
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensure email is unique in the database
     },
     password: {
       type: DataTypes.STRING,
@@ -78,6 +78,13 @@ User.init(
     sequelize, // Reference the sequelize instance here
     tableName: 'users', // Define table name
     timestamps: true, // Sequelize automatically handles createdAt and updatedAt
+    indexes: [
+      // Composite unique index on username and email
+      {
+        unique: true,
+        fields: ['username', 'email'],
+      },
+    ],
   }
 );
 
