@@ -5,6 +5,7 @@ import { sequelize, testConnection } from './config/database';
 import userRoutes from './routes/user';  // Ensure correct import path
 import User from './models/user';  // Ensure correct import path
 import Service from './models/services';  // Ensure correct import path
+import './models/associations';  // Ensure this is imported to apply the associations
 
 // Load environment variables from .env file
 dotenv.config();
@@ -32,10 +33,8 @@ const startServer = async (): Promise<void> => {
         console.log('Database connection successful.');
 
         // Ensure model associations are recognized by Sequelize
-        if (User.associate && Service.associate) {
-            User.associate({ Service });
-            Service.associate({ User });
-        }
+        // Association logic should be handled in the models themselves
+        // So, `User.associate` and `Service.associate` should already be called in the models/associations file
 
         // Sync database with models
         const isDevelopment = process.env.NODE_ENV === 'development';

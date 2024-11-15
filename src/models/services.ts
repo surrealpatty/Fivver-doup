@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Correctly import sequelize instance
 import Order from './order'; // Import Order model for associations
-import User from './user'; // Uncomment to associate with User model
+import User from './user'; // Import User model for associations
 
 // Define the attributes interface for the Service model
 interface ServiceAttributes {
@@ -95,4 +95,5 @@ Service.init(
   }
 );
 
+// Export the Service model
 export default Service;

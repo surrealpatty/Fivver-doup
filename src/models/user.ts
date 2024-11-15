@@ -1,46 +1,36 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correctly import the sequelize instance
-import Service from './services'; // Correct path if service.ts is in src/models/services.ts
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database'; // Import sequelize instance
+import Service from './service'; // Import Service model for associations
+import Order from './order'; // Import Order model for associations
 
-
-// Define the User attributes
+// Define the attributes interface for the User model
 interface UserAttributes {
   id: number;
   username: string;
   email: string;
   password: string;
-  role: 'Free' | 'Paid';
-  subscriptionStatus: 'Inactive' | 'Active';
-  subscriptionStartDate: Date | null;
-  subscriptionEndDate: Date | null;
-  firstName: string | null;
-  lastName: string | null;
-  createdAt?: Date; // Sequelize will auto-generate this field
-  updatedAt?: Date; // Sequelize will auto-generate this field
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Attributes used for creating a user (excluding 'id' which is auto-generated)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
-// User model definition
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+// Define the User model class
+class User extends Model<UserAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
   public email!: string;
   public password!: string;
-  public role!: 'Free' | 'Paid';
-  public subscriptionStatus!: 'Inactive' | 'Active';
-  public subscriptionStartDate!: Date | null;
-  public subscriptionEndDate!: Date | null;
-  public firstName!: string | null;
-  public lastName!: string | null;
+
+  // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Associations
+  // Define associations for User
   static associate(models: any) {
-    // A user has many services (1-to-many relationship)
+    // A user can have many services
     User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
+
+    // A user can have many orders
+    User.hasMany(models.Order, { foreignKey: 'userId', as: 'orders' });
   }
 }
 
@@ -56,50 +46,40 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        len: {
+          args: [3, 50],
+          msg: 'Username must be between 3 and 50 characters long',
+        },
+      },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        isEmail: {
+          msg: 'Email must be a valid email address',
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM('Free', 'Paid'),
-      allowNull: false,
-      defaultValue: 'Free',
-    },
-    subscriptionStatus: {
-      type: DataTypes.ENUM('Inactive', 'Active'),
-      allowNull: false,
-      defaultValue: 'Inactive',
-    },
-    subscriptionStartDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    subscriptionEndDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      field: 'last_name', // Ensure the correct column name is used in the DB
+      validate: {
+        len: {
+          args: [6, 100],
+          msg: 'Password must be at least 6 characters long',
+        },
+      },
     },
   },
   {
-    sequelize, // Ensure sequelize instance is passed correctly
+    sequelize,
     modelName: 'User',
     tableName: 'users',
-    timestamps: true,  // Sequelize will manage 'createdAt' and 'updatedAt'
-    underscored: true, // Use snake_case for column names in the database
+    timestamps: true,
+    underscored: true,
   }
 );
 

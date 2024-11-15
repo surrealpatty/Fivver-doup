@@ -1,64 +1,94 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
+import { sequelize } from '../config/database'; // Import sequelize instance
+import Service from './service'; // Import Service model for associations
+import User from './user'; // Import User model for associations
 
 // Define the attributes interface for the Order model
 interface OrderAttributes {
-  orderId: number;
-  userId: number;
+  id: number;
   serviceId: number;
+  userId: number;
   status: string;
+  totalAmount: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 // Define the Order model class
 class Order extends Model<OrderAttributes> implements OrderAttributes {
-  public orderId!: number;
-  public userId!: number;
+  public id!: number;
   public serviceId!: number;
+  public userId!: number;
   public status!: string;
+  public totalAmount!: number;
 
   // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Define the associations (belongsTo associations)
+  // Define associations for Order
   static associate(models: any) {
-    // Order belongs to User (via userId)
-    Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-
-    // Order belongs to Service (via serviceId)
+    // An order belongs to one service
     Order.belongsTo(models.Service, { foreignKey: 'serviceId', as: 'service' });
+
+    // An order belongs to one user (the buyer)
+    Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   }
 }
 
 // Initialize the Order model
 Order.init(
   {
-    orderId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'services',
+        key: 'id',
+      },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: 'pending',
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Status cannot be empty',
+        },
+      },
+    },
+    totalAmount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        isFloat: {
+          msg: 'Total amount must be a valid number',
+        },
+        min: {
+          args: [0],
+          msg: 'Total amount must be greater than or equal to zero',
+        },
+      },
     },
   },
   {
-    sequelize, // Pass the sequelize instance here
+    sequelize,
     modelName: 'Order',
     tableName: 'orders',
-    timestamps: true, // Automatically add createdAt and updatedAt fields
-    underscored: true, // Use snake_case for column names in the database (optional)
+    timestamps: true,
+    underscored: true,
   }
 );
 
