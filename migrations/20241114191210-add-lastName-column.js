@@ -15,7 +15,7 @@ module.exports = {
       });
     }
 
-    // If the 'created_at' column exists, remove it
+    // Check if 'created_at' column exists, and remove it if it does
     const columnCreatedAtExists = columns.some(col => col.Field === 'created_at');
     if (columnCreatedAtExists) {
       await queryInterface.removeColumn('users', 'created_at');
@@ -30,7 +30,16 @@ module.exports = {
       // Drop the 'lastName' column if it exists
       await queryInterface.removeColumn('users', 'lastName');
     }
-
-    // Optionally drop other columns or revert any changes as needed
+    
+    // Revert other changes if needed (e.g., re-add 'created_at' if required)
+    const columnCreatedAtExists = columns.some(col => col.Field === 'created_at');
+    if (!columnCreatedAtExists) {
+      // Add back the 'created_at' column if it was removed earlier
+      await queryInterface.addColumn('users', 'created_at', {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      });
+    }
   }
 };

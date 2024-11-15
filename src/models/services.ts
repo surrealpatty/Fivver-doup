@@ -1,42 +1,30 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
-import User from './user';  // Import the User model for association
+import { sequelize } from '../config/database'; // Correct way to import a named export
 
-// Define the ServiceAttributes interface
-export interface ServiceAttributes {
-  id?: number;  // Optional, as Sequelize will auto-generate the ID
+// Define the attributes for the "services" table.
+interface ServiceAttributes {
+  id: number;
   name: string;
   description: string;
-  userId: number;  // Foreign key referencing User
-  createdAt?: Date | null;  // Allowing null for createdAt as it's auto-generated
-  updatedAt?: Date | null;  // Allowing null for updatedAt as it's auto-generated
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// Define the ServiceCreationAttributes interface (used for creation without the ID)
-export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+// Define the optional fields for the "services" table (these are only for creating instances, not for database records).
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the Service model class
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
-  public userId!: number;  // Foreign key to User
-  public createdAt!: Date | null;
-  public updatedAt!: Date | null;
+  public userId!: number;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 
-  // Define associations here
-  static associate(models: any) {
-    // Each service belongs to one user
-    Service.belongsTo(models.User, {
-      foreignKey: 'userId',   // Foreign key in the services table
-      as: 'user',             // Alias to access the associated user model in queries
-      onDelete: 'SET NULL',   // If the associated user is deleted, set the userId to null
-      onUpdate: 'CASCADE',    // If the user's id is updated, update the foreign key as well
-    });
-  }
+  // Define any virtuals or custom methods here, if needed
 }
 
-// Initialize the model
 Service.init(
   {
     id: {
@@ -54,25 +42,32 @@ Service.init(
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,  // Ensure each service has a user associated with it
+      allowNull: false,
       references: {
-        model: 'users',   // The table name as a string
-        key: 'id',        // The key in the User model to reference
+        model: 'users',  // Ensure the 'users' table name matches the actual table name
+        key: 'id',
       },
-      onDelete: 'SET NULL',   // If the associated user is deleted, set the userId to null
-      onUpdate: 'CASCADE',    // If the user's id is updated, update this foreign key as well
+      onDelete: 'SET NULL',  // If the user is deleted, set userId to NULL in services
+      onUpdate: 'CASCADE',   // If the user's id is updated, update the userId in services
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
   },
   {
-    sequelize,              // Pass the sequelize instance
-    modelName: 'Service',   // Model name as 'Service'
-    tableName: 'services',  // Specify the table name for services
-    timestamps: true,       // Sequelize will handle createdAt and updatedAt automatically
-    underscored: true,      // Use snake_case for column names (e.g., created_at, updated_at)
+    sequelize, // Pass the sequelize instance
+    modelName: 'Service', // The name of the model
+    tableName: 'services', // The actual table name in the DB
+    timestamps: true, // Enable Sequelize's automatic timestamp management
+    underscored: true, // If you want to use snake_case for column names, e.g., created_at, updated_at
   }
 );
-
-// Call the associate method after all models are defined
-Service.associate({ User });
 
 export default Service;
