@@ -44,12 +44,12 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      // Remove the `unique` constraint if it's already in your database schema
+      unique: true,  // Ensure username is unique
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // Remove the `unique` constraint if it's already in your database schema
+      unique: true,  // Ensure email is unique
     },
     password: {
       type: DataTypes.STRING,
@@ -79,10 +79,9 @@ User.init(
     tableName: 'users', // Define table name
     timestamps: true, // Sequelize automatically handles createdAt and updatedAt
     indexes: [
-      // If you want a composite index, it could be here
       {
         unique: true,
-        fields: ['username', 'email'],
+        fields: ['username', 'email'], // Index for username and email to be unique together
       },
     ],
   }
