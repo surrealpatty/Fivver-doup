@@ -6,7 +6,9 @@ const database_1 = require("../config/database"); // Use named import for sequel
 class User extends sequelize_1.Model {
     // Define associations (if needed)
     static associate(models) {
-        // Add associations here if applicable, e.g., User.hasMany(models.Post);
+        // Example associations, uncomment as needed:
+        // User.hasMany(models.Order); // if User has many Orders
+        // User.belongsTo(models.Role); // if User belongs to Role
     }
 }
 // Initialize the User model
