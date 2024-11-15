@@ -8,6 +8,8 @@ export interface OrderAttributes {
   id: number;
   userId: number;
   serviceId: number;
+  orderDetails: string;  // Added orderDetails property
+  status: string;        // Added status property
   createdAt?: Date | null;  // Allow null for auto-generated timestamp
   updatedAt?: Date | null;  // Allow null for auto-generated timestamp
 }
@@ -19,6 +21,8 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   public id!: number;
   public userId!: number;
   public serviceId!: number;
+  public orderDetails!: string;  // Added orderDetails property
+  public status!: string;        // Added status property
   public createdAt!: Date | null;
   public updatedAt!: Date | null;
 
@@ -52,6 +56,14 @@ Order.init(
     },
     serviceId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    orderDetails: {
+      type: DataTypes.STRING,  // Adjust type based on your needs
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,  // Adjust type based on your needs
       allowNull: false,
     },
   },
