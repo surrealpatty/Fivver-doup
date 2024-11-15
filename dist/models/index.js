@@ -17,6 +17,7 @@ const models = {
 };
 exports.models = models;
 // Set up associations
+// Make sure each model has an 'associate' method to set up relationships
 user_1.default.associate(models); // Calls the associate method in the User model
 services_1.default.associate(models); // Calls the associate method in the Service model
 order_1.default.associate(models); // Calls the associate method in the Order model

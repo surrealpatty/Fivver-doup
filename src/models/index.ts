@@ -18,10 +18,9 @@ const models: Models = {
 };
 
 // Set up associations
-// Make sure each model has an 'associate' method to set up relationships
 User.associate(models);  // Calls the associate method in the User model
 Service.associate(models);  // Calls the associate method in the Service model
 Order.associate(models);  // Calls the associate method in the Order model
 
-// Export models and sequelize instance
-export { models, sequelize };
+// Explicitly export models so they are accessible elsewhere
+export { models, User, Service, Order, sequelize };
