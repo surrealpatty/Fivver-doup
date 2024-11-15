@@ -1,39 +1,38 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('services', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
+    // Check if the foreign key already exists
+    const [results] = await queryInterface.sequelize.query(`
+      SELECT CONSTRAINT_NAME
+      FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+      WHERE TABLE_NAME = 'services' AND TABLE_SCHEMA = 'fivver_doup_db' AND CONSTRAINT_NAME = 'fk_services_user_id';
+    `);
+
+    if (results.length === 0) {
+      // Add the foreign key if it doesn't exist
+      await queryInterface.addConstraint('services', {
+        fields: ['user_id'],
+        type: 'foreign key',
+        name: 'fk_services_user_id',
         references: {
-          model: 'users', // Name of the target table
-          key: 'id', // Key in the target table
+          table: 'users',
+          field: 'id',
         },
-        onDelete: 'SET NULL', // When the associated user is deleted, set user_id to NULL
-        onUpdate: 'CASCADE', // If user id is updated, the change is reflected here
-      },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-    });
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      });
+    }
   },
+
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('services');
-  }
+    // Drop the foreign key constraint only if it exists
+    const [results] = await queryInterface.sequelize.query(`
+      SELECT CONSTRAINT_NAME
+      FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+      WHERE TABLE_NAME = 'services' AND TABLE_SCHEMA = 'fivver_doup_db' AND CONSTRAINT_NAME = 'fk_services_user_id';
+    `);
+
+    if (results.length > 0) {
+      await queryInterface.removeConstraint('services', 'fk_services_user_id');
+    }
+  },
 };
