@@ -81,7 +81,11 @@ User.init(
     indexes: [
       {
         unique: true,
-        fields: ['username', 'email'], // Index for username and email to be unique together
+        fields: ['username'], // Index for username to be unique
+      },
+      {
+        unique: true,
+        fields: ['email'], // Index for email to be unique
       },
     ],
   }
