@@ -1,32 +1,48 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/order.js
-const sequelize_1 = require("sequelize"); // Use ES module import syntax
-const database_js_1 = __importDefault(require("../config/database.js")); // Correct path to the sequelize instance
-// Define the Order model
-const Order = database_js_1.default.define('Order', {
-    order_id: {
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database");
+class Order extends sequelize_1.Model {
+    // Define associations inside the `associate` method
+    static associate(models) {
+        Order.belongsTo(models.User, {
+            foreignKey: 'userId',
+            as: 'user',
+        });
+        Order.belongsTo(models.Service, {
+            foreignKey: 'serviceId',
+            as: 'service',
+        });
+    }
+}
+Order.init({
+    id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true, // Auto increment the id
     },
-    user_id: {
+    userId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
-    service_id: {
+    serviceId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
-    status: {
-        type: sequelize_1.DataTypes.STRING,
-        defaultValue: 'pending',
+    createdAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
     },
-    // Add more fields as needed
+    updatedAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
+    },
+}, {
+    sequelize: database_1.sequelize,
+    modelName: 'Order',
+    timestamps: true, // Enable automatic timestamps (createdAt, updatedAt)
 });
-// Export the Order model
 exports.default = Order;
 //# sourceMappingURL=order.js.map

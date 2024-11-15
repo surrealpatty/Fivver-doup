@@ -11,12 +11,15 @@ export interface UserAttributes {
   lastName?: string;
   role: string;
   subscriptionStatus: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | null; // Allowing null for createdAt as it's auto-generated
+  updatedAt?: Date | null; // Allowing null for updatedAt as it's auto-generated
 }
 
+// Define the UserCreationAttributes interface (used for creation without the ID)
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
 // Define the User model class
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
   public email!: string;
@@ -25,8 +28,15 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public lastName?: string;
   public role!: string;
   public subscriptionStatus!: string;
-  public createdAt!: Date;
-  public updatedAt!: Date;
+  public createdAt!: Date | null;
+  public updatedAt!: Date | null;
+
+  // Optional: Define associations here if needed, e.g., User.hasMany(Order)
+  static associate(models: any) {
+    // Define associations here
+    // For example, if you have orders, you could do:
+    // User.hasMany(models.Order);
+  }
 }
 
 // Initialize the model

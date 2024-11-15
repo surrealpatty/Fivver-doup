@@ -1,42 +1,35 @@
 {
   "compilerOptions": {
-    "target": "es2020",                          // Target ES2020 for modern JavaScript features
-    "module": "commonjs",                         // CommonJS module system for Node.js
-    "esModuleInterop": true,                      // Enable default imports from modules with no default export
-    "allowSyntheticDefaultImports": true,         // Allows default imports from modules without a default export
-    "strict": true,                               // Enables strict type-checking options
-    "skipLibCheck": true,                         // Skip type checking of declaration files for faster builds
-    "noEmit": false,                              // Allow emitting of output (dist folder)
-    "outDir": "./dist",                           // Output directory for compiled files
-    "rootDir": "./src",                           // Root directory of source files
-    "resolveJsonModule": true,                    // Allows importing JSON files as modules
-    "moduleResolution": "node",                   // Use Node.js module resolution
-    "lib": ["es2020"],                            // Includes ES2020 (no need for DOM as you're not targeting the browser)
-    "declaration": false,                         // No type declaration files will be generated
-    "sourceMap": true,                            // Generates source maps for debugging
-    "baseUrl": ".",                               // Base directory for resolving non-relative modules
+    "target": "es2020",                          
+    "module": "commonjs",                         
+    "esModuleInterop": true,                     
+    "allowSyntheticDefaultImports": true,        
+    "strict": true,                              
+    "skipLibCheck": true,                         
+    "noEmit": false,                             
+    "outDir": "./dist",                          
+    "rootDir": "./src",                          
+    "resolveJsonModule": true,                   
+    "moduleResolution": "node",                  
+    "lib": ["es2020"],                            
+    "declaration": false,                         
+    "sourceMap": true,                            
+    "baseUrl": ".",                              
     "paths": {
-      "@/*": ["src/*"]                            // Resolves @ to src for cleaner imports
+      "@/*": ["src/*"]                            
     },
-    "skipDefaultLibCheck": true,                  // Skip checking of default lib files for faster builds
-    "jsx": "preserve",                            // Keep JSX for Vue handling (should be "preserve" for non-React setups)
-    "types": ["node", "jest"],                    // Include Node.js and Jest types
-    "plugins": [
-      {
-        "name": "typescript-vue-plugin",
-        "transform": "vue-tsx-plugin"              // This plugin enables .vue file support in TypeScript
-      }
-    ]
+    "jsx": "preserve",                           
+    "types": ["node", "jest"]                    
   },
   "include": [
-    "src/**/*.ts",                                // Include TypeScript files in src
-    "src/**/*.tsx",                               // Include TypeScript JSX files in src (if you're using React, but leave it for now if not)
-    "src/**/*.vue"                                // Include .vue files (Vue components)
+    "src/**/*.ts",
+    "src/**/*.tsx",  
+    "src/**/*.vue"
   ],
   "exclude": [
-    "node_modules",                               // Exclude node_modules from compilation
-    "dist",                                       // Exclude dist folder from compilation
-    "**/*.test.ts",                               // Exclude test files from the build (can be included separately for testing)
-    "**/*.test.tsx"                               // Exclude test files from the build (can be included separately for testing)
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

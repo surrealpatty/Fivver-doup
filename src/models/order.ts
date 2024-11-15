@@ -8,18 +8,18 @@ interface OrderAttributes {
   id: number;
   userId: number;
   serviceId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | null;  // Allowing null for auto-generated timestamp
+  updatedAt: Date | null;  // Allowing null for auto-generated timestamp
 }
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
-  id!: number;
-  userId!: number;
-  serviceId!: number;
-  createdAt!: Date;
-  updatedAt!: Date;
+  public id!: number;
+  public userId!: number;
+  public serviceId!: number;
+  public createdAt!: Date | null;
+  public updatedAt!: Date | null;
 
   // Define associations inside the `associate` method
   static associate(models: any) {
@@ -34,6 +34,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   }
 }
 
+// Initialize the model
 Order.init(
   {
     id: {
@@ -49,21 +50,14 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW, // Set default to current timestamp
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW, // Set default to current timestamp
-    },
   },
   {
-    sequelize,
+    sequelize,  // Reference to Sequelize instance
     modelName: 'Order',
+    tableName: 'orders',  // Ensure it matches the table name
     timestamps: true,  // Enable automatic timestamps (createdAt, updatedAt)
+    createdAt: 'createdAt',  // Explicitly define custom timestamps if necessary
+    updatedAt: 'updatedAt',
   }
 );
 

@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize'; // Ensure you're importing Sequelize if needed
 import User from './user';
 import Service from './services';
 import Order from './order';
@@ -17,9 +18,10 @@ const models: Models = {
   Order,
 };
 
-// Set up associations (each model associates with others)
-User.associate(models);
-Service.associate(models);
-Order.associate(models);  // This should work now
+// Set up associations (ensure each model file has an associate method)
+User.associate(models);  // Assuming `associate` is defined in the User model
+Service.associate(models);  // Assuming `associate` is defined in the Service model
+Order.associate(models);  // Assuming `associate` is defined in the Order model
 
+// Export models and sequelize
 export { models, sequelize };

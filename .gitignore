@@ -1,2 +1,4 @@
 node_modules
 node_modules
+# Ignore dist folder and build artifacts
+dist/
