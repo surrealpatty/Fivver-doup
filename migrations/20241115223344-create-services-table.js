@@ -17,7 +17,7 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: true, // This should be true, allowing NULL values
         references: {
           model: 'users', // Refers to the 'users' table
           key: 'id',
