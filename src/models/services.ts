@@ -56,7 +56,7 @@ Service.init(
       type: DataTypes.INTEGER,
       allowNull: false,  // Ensure each service has a user associated with it
       references: {
-        model: 'users', // The target table
+        model: 'users', // The target table (should be plural if it matches convention)
         key: 'id', // The key in the target table
       },
       onDelete: 'SET NULL', // If the associated user is deleted, set the userId to null
