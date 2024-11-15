@@ -4,7 +4,6 @@ module.exports = {
     await queryInterface.createTable('services', {
       id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
@@ -13,36 +12,31 @@ module.exports = {
         allowNull: false,
       },
       description: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      userId: {
+      user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: 'users', // Reference the 'users' table
+          model: 'users', // Refers to the 'users' table
           key: 'id',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
     });
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('services');
-  }
+  },
 };
