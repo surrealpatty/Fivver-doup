@@ -1,77 +1,27 @@
+// src/models/user.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Import sequelize instance
-import Service from './service'; // Import Service model for associations
-import Order from './order'; // Import Order model for associations
+import { sequelize } from '../config/database';
 
-// Define the attributes interface for the User model
-interface UserAttributes {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-// Define the User model class
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model {
   public id!: number;
-  public username!: string;
-  public email!: string;
-  public password!: string;
-
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  // Define associations for User
-  static associate(models: any) {
-    // A user can have many services
-    User.hasMany(models.Service, { foreignKey: 'userId', as: 'services' });
-
-    // A user can have many orders
-    User.hasMany(models.Order, { foreignKey: 'userId', as: 'orders' });
-  }
+  public firstName!: string;
+  public lastName!: string;
 }
 
-// Initialize the User model
 User.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
-    username: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        len: {
-          args: [3, 50],
-          msg: 'Username must be between 3 and 50 characters long',
-        },
-      },
     },
-    email: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: {
-          msg: 'Email must be a valid email address',
-        },
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          args: [6, 100],
-          msg: 'Password must be at least 6 characters long',
-        },
-      },
     },
   },
   {

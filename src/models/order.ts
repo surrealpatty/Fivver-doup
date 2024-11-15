@@ -1,42 +1,24 @@
+// src/models/order.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Import sequelize instance
-import Service from './service'; // Import Service model for associations
-import User from './user'; // Import User model for associations
+import { sequelize } from '../config/database';
+import Service from './service';
+import User from './user';
 
-// Define the attributes interface for the Order model
-interface OrderAttributes {
-  id: number;
-  serviceId: number;
-  userId: number;
-  status: string;
-  totalAmount: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-// Define the Order model class
-class Order extends Model<OrderAttributes> implements OrderAttributes {
+class Order extends Model {
   public id!: number;
   public serviceId!: number;
   public userId!: number;
   public status!: string;
   public totalAmount!: number;
-
-  // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Define associations for Order
-  static associate(models: any) {
-    // An order belongs to one service
-    Order.belongsTo(models.Service, { foreignKey: 'serviceId', as: 'service' });
-
-    // An order belongs to one user (the buyer)
-    Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  static associate() {
+    Order.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+    Order.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   }
 }
 
-// Initialize the Order model
 Order.init(
   {
     id: {
@@ -48,7 +30,7 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'services',
+        model: 'services', // Assuming the table name for the Service model is 'services'
         key: 'id',
       },
     },
@@ -56,7 +38,7 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users',
+        model: 'users', // Assuming the table name for the User model is 'users'
         key: 'id',
       },
     },

@@ -1,99 +1,36 @@
+// src/models/service.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Correctly import sequelize instance
-import Order from './order'; // Import Order model for associations
-import User from './user'; // Import User model for associations
+import { sequelize } from '../config/database';
 
-// Define the attributes interface for the Service model
-interface ServiceAttributes {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  createdAt?: Date;  // Optional fields for timestamps, managed by Sequelize
-  updatedAt?: Date;  // Optional fields for timestamps, managed by Sequelize
-}
-
-// Define the Service model class
-class Service extends Model<ServiceAttributes> implements ServiceAttributes {
+class Service extends Model {
   public id!: number;
-  public title!: string;
+  public name!: string;
   public description!: string;
-  public price!: number;
-  public category!: string;
-
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  // Define associations for Service
-  static associate(models: any) {
-    // A service can have many orders
-    Service.hasMany(models.Order, { foreignKey: 'serviceId', as: 'orders' });
-
-    // A service belongs to one user (optional)
-    Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-  }
 }
 
-// Initialize the Service model
 Service.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: {
-          args: [3, 100],
-          msg: 'Title must be between 3 and 100 characters long',
-        },
-      },
     },
     description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Description cannot be empty',
-        },
-      },
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        isFloat: {
-          msg: 'Price must be a valid number',
-        },
-        min: {
-          args: [0],
-          msg: 'Price must be greater than or equal to zero',
-        },
-      },
-    },
-    category: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Category cannot be empty',
-        },
-      },
     },
   },
   {
-    sequelize,  // Pass the sequelize instance here
+    sequelize,
     modelName: 'Service',
     tableName: 'services',
-    timestamps: true,  // Automatically adds createdAt and updatedAt fields
-    underscored: true, // Use snake_case for column names in the database (optional, but it helps with convention)
+    timestamps: true,
+    underscored: true,
   }
 );
 
-// Export the Service model
 export default Service;
