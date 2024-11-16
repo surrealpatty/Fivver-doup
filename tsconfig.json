@@ -24,7 +24,8 @@
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
     "src/**/*.tsx",                              // Include all TypeScript JSX files in the src folder
-    "src/**/*.vue"                               // Include all Vue files
+    "src/**/*.vue",
+    "src/**/*"                               // Include all Vue files
   ],
   "exclude": [
     "node_modules",                              // Exclude node_modules folder
