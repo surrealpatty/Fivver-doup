@@ -16,12 +16,12 @@
       "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "lib": ["esnext", "dom", "vue"],  // Added "vue" to lib
+    "lib": ["esnext", "dom"],  // Removed "vue"
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ],
-    "types": ["jest", "node", "vue", "@vue/test-utils"],  // Added vue and vue/test-utils
+    "types": ["jest", "node", "vue", "@vue/test-utils"],  // "vue" and "@vue/test-utils" in types
     "jsx": "preserve",
     "skipDefaultLibCheck": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
