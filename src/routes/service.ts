@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware';
-import Service from '../models/service'; // Assuming you have a Service model
+import Service from '../models/service';
+
 
 const router = Router();
 
