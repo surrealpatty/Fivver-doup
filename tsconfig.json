@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "commonjs",
+    "module": "ESNext",  // Changed from "commonjs" to "ESNext"
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -10,34 +10,33 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "outDir": "./dist",  // Ensures compiled files go to the "dist" folder
+    "baseUrl": "./",  // Enables path mapping
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]  // Maps "@/..." to "src/..."
     },
     "resolveJsonModule": true,
     "lib": ["esnext", "dom"],
     "typeRoots": [
-      "./node_modules/@types",                // Standard type definition path
-      "./src/types"                            // Custom types folder (if you have one)
+      "./node_modules/@types",  // Standard types
+      "./src/types"              // Custom types folder (if you have one)
     ],
-    "types": ["jest"],                         // Only include Node types, no Vue
+    "types": ["jest"],  // Include Jest types if you're using Jest
     "jsx": "preserve",
     "skipDefaultLibCheck": true,
-    "tsBuildInfoFile": "./.tsbuildinfo",
-    "incremental": true,
-    "allowJs": true
+    "tsBuildInfoFile": "./.tsbuildinfo",  // Enable incremental builds
+    "incremental": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.js",
     "src/**/*.d.ts",
-    "jest.setup.ts"
+    "jest.setup.ts"  // Include Jest setup file if you have one
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "jest.config.ts"
+    "dist",  // Exclude compiled "dist" folder
+    "jest.config.ts"  // Exclude Jest config if using TypeScript for config
   ]
 }
