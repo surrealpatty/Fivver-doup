@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],
@@ -28,3 +30,5 @@ module.exports = {
   setupFiles: ['<rootDir>/jest.setup.js'],
   transformIgnorePatterns: ['/node_modules/'],
 };
+
+export default config;
