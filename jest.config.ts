@@ -16,15 +16,28 @@ const config: Config.InitialOptions = {
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',  // Optional: Map aliases like `@/` to `src/` for cleaner imports
+    '^vue$': 'vue/dist/vue.runtime.esm-bundler.js',  // Map Vue to the correct build for Jest
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!vue|@vue|vue-jest)',  // Allow transformation of certain node_modules packages (like Vue)
+    '/node_modules/(?!vue|@vue|vue-jest|@testing-library)',  // Allow transformation of Vue and related packages
   ],
   testPathIgnorePatterns: [
     '/node_modules/',  // Ignore test files in node_modules
   ],
-  // Optional: Set test coverage thresholds, add test match patterns, etc.
-  collectCoverageFrom: ['src/**/*.{ts,tsx,vue}', '!src/**/*.d.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx,vue}',   // Collect coverage from TypeScript and Vue files
+    '!src/**/*.d.ts',          // Exclude declaration files from coverage
+    '!src/**/index.ts',        // Optionally exclude index.ts files from coverage (optional)
+  ],
+  // Optional: Coverage thresholds (set if needed)
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
 };
 
 export default config;
