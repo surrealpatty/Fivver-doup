@@ -1,3 +1,4 @@
+// src/config/database.ts
 import { Sequelize } from 'sequelize';
 import * as dotenv from 'dotenv';
 
@@ -10,6 +11,7 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
 }
 
 const useSSL = DB_SSL === 'true';
+
 const validDialects = ['mysql', 'postgres', 'sqlite', 'mssql'];
 if (!validDialects.includes(DB_DIALECT)) {
     throw new Error('Invalid DB_DIALECT specified in environment variables');
@@ -34,4 +36,22 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     },
 });
 
-export { sequelize };
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection has been established successfully.');
+
+        if (NODE_ENV !== 'test') {
+            await sequelize.sync({ alter: true });
+            console.log('Database tables synced.');
+        }
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        if (NODE_ENV !== 'test') {
+            process.exit(1);
+        }
+    }
+};
+
+// Export sequelize and testConnection
+export { sequelize, testConnection };

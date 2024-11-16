@@ -1,26 +1,33 @@
-import { sequelize } from '../config/database';
-import User from './user';
-import Service from './services';
-import Order from './order';
+import express from 'express';
+import { sequelize } from './config/database'; // Make sure the import path is correct
+import { models } from './models'; // Import all models from the models directory
+import routes from './routes'; // Assuming you have a routes directory
 
-// Define a type for models
-type Models = {
-  User: typeof User;
-  Service: typeof Service;
-  Order: typeof Order;
-};
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Initialize models
-const models: Models = {
-  User,
-  Service,
-  Order,
-};
+app.use(express.json());
+app.use(routes);  // Assuming routes are set up in the 'routes' directory
 
-// Set up associations
-User.associate(models);  // Calls the associate method in the User model
-Service.associate(models);  // Calls the associate method in the Service model
-Order.associate(models);  // Calls the associate method in the Order model
+// Set up associations for models
+const { User, Service, Order } = models;
 
-// Explicitly export models so they are accessible elsewhere
-export { models, User, Service, Order, sequelize };
+// Test the connection and sync the models with the database
+sequelize.authenticate()
+    .then(() => {
+        console.log('Database connected');
+        return sequelize.sync({ alter: true });  // Sync models if needed (altering existing tables)
+    })
+    .then(() => {
+        console.log('Database synced');
+    })
+    .catch((err) => {
+        console.error('Database connection failed:', err);
+    });
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+export default app;
