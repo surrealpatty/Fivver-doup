@@ -1,12 +1,13 @@
 import { Model, DataTypes, Optional, Sequelize, ModelStatic } from 'sequelize';
 import { sequelize } from '../config/database'; // Correct way to import a named export
+import User from './user'; // Ensure you import the User model (adjust path as needed)
 
 // Define the attributes for the "services" table.
 interface ServiceAttributes {
   id: number;
   name: string;
   description: string;
-  userId: number;
+  userId: number | null;  // userId can be nullable if user is deleted
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,11 +19,9 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public id!: number;
   public name!: string;
   public description!: string;
-  public userId!: number;
+  public userId!: number | null;  // Allow userId to be nullable
   public createdAt!: Date;
   public updatedAt!: Date;
-
-  // Define any virtuals or custom methods here, if needed
 
   // Define the associate method to establish relationships
   static associate(models: { User: ModelStatic<Model> }) {
@@ -52,7 +51,7 @@ Service.init(
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,  // userId can now be nullable (if the user is deleted)
       references: {
         model: 'users',  // Ensure the 'users' table name matches the actual table name
         key: 'id',
@@ -79,5 +78,8 @@ Service.init(
     underscored: true, // Use snake_case for column names, e.g., created_at, updated_at
   }
 );
+
+// Ensure associations are set up
+Service.associate({ User });
 
 export default Service;
