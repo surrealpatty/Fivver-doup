@@ -20,12 +20,6 @@ const config: Config.InitialOptions = {
   transformIgnorePatterns: [
     'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)', // Ensure that Vue-related packages are transformed
   ],
-  // Optional: You can add additional Jest options as needed
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}', // Collect coverage from TypeScript files
-    'src/**/*.{vue}', // Collect coverage from Vue files
-  ],
-  coverageReporters: ['text', 'lcov'], // Report coverage in text and lcov format
 };
 
 export default config;

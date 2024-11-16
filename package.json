@@ -11,7 +11,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-"test": "npx jest --config jest.config.ts",
+    "test": "npx jest --config jest.config.ts",
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix",
     "test:ci": "jest --ci --maxWorkers=4",
