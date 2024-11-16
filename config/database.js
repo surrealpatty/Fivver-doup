@@ -22,8 +22,8 @@ const sequelize = new Sequelize({
 });
 
 // Import models (Ensure correct path for models)
-import User from '../models/user.js';
-import Service from '../models/services.js';
+import User from '../models/user.js'; // Ensure file path is correct
+import Service from '../models/services.js'; // Ensure file path is correct
 
 // Initialize models and set up associations
 User.initModel(sequelize);
@@ -47,7 +47,7 @@ const testConnection = async () => {
 // Sync models with the database
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: true }); // Alter will update the schema if needed
     console.log('Database & tables created!');
   } catch (error) {
     console.error('Error syncing database:', error instanceof Error ? error.message : error);
@@ -55,4 +55,5 @@ const syncDatabase = async () => {
   }
 };
 
+// Export sequelize instance and helper functions
 export { sequelize, testConnection, syncDatabase };
