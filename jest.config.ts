@@ -1,16 +1,16 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  preset: 'ts-jest',  // Keep this for TypeScript support
-  testEnvironment: 'jsdom',  // For front-end testing (use 'node' for back-end tests)
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include 'vue' for Vue components
+  preset: 'ts-jest',  // Use ts-jest preset for TypeScript support
+  testEnvironment: 'jsdom',  // Suitable for front-end testing, switch to 'node' if it's for back-end
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include 'vue' to support Vue components
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',  // Transform TypeScript files with ts-jest
-    '^.+\\.vue$': 'vue-jest',  // Transform Vue files with vue-jest (for Vue 3)
+    '^.+\\.(ts|tsx)$': 'ts-jest',  // Transform TypeScript files using ts-jest
+    '^.+\\.vue$': 'vue-jest',  // Transform Vue files using vue-jest
   },
-  collectCoverage: true,  // Enable code coverage collection
-  coverageDirectory: 'coverage',  // Directory to store coverage reports
-  coverageReporters: ['text', 'lcov'],  // Formats for coverage reports
+  collectCoverage: true,  // Enable collection of coverage data
+  coverageDirectory: 'coverage',  // Directory for coverage reports
+  coverageReporters: ['text', 'lcov'],  // Coverage output formats
   testMatch: [
     '**/src/**/*.test.ts',
     '**/src/**/*.spec.ts',
@@ -18,17 +18,21 @@ const config: Config.InitialOptions = {
     '**/src/**/*.spec.js',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],  // Exclude these directories from coverage
-  testTimeout: 30000,  // Set a timeout limit (in milliseconds) for tests, particularly useful for async tests
+  testTimeout: 30000,  // Set a timeout for tests (in milliseconds)
   globals: {
     'ts-jest': {
-      isolatedModules: true,  // Ensures fast compilation for isolated modules
+      isolatedModules: true,  // Improve performance by isolating module compilation
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // Ensure path alias works for TypeScript
+    '^@/(.*)$': '<rootDir>/src/$1',  // Correct path aliasing for TypeScript and Jest
   },
-  setupFiles: ['<rootDir>/jest.setup.ts'],  // Path to environment setup file (e.g., mocks or global setups)
-  transformIgnorePatterns: ['<rootDir>/node_modules/'],  // Skip transformation for node_modules
+  setupFiles: ['<rootDir>/jest.setup.ts'],  // Set up file for mocks and global variables
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],  // Skip transformations for node_modules
+  // Optional: Uncomment if you're working with a Vue 3 setup:
+  // moduleNameMapper: {
+  //   '\\.(css|scss|sass)$': 'identity-obj-proxy',  // Handle stylesheets if needed
+  // },
 };
 
 export default config;
