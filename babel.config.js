@@ -11,9 +11,10 @@ module.exports = {
     '@babel/preset-typescript',   // Supports TypeScript syntax
   ],
   plugins: [
-    '@babel/plugin-transform-runtime', // Avoids duplication of runtime code
+    '@babel/plugin-transform-runtime',  // Avoids duplication of runtime code
     '@babel/plugin-proposal-class-properties', // Allows class properties
     '@babel/plugin-proposal-private-methods', // Allows private methods in classes
+    '@babel/plugin-transform-modules-commonjs', // Ensures compatibility with Jest (CommonJS modules)
   ],
   sourceMaps: 'inline',    // Useful for debugging
   comments: false,         // Disable comments in production code
@@ -29,16 +30,9 @@ module.exports = {
           },
         ],
       ],
-      plugins: [
-        '@babel/plugin-transform-modules-commonjs', // Ensures compatibility with Jest (CommonJS modules)
-      ],
     },
   },
   overrides: [
-    {
-      test: /\.(ts|tsx|js|jsx)$/, // Applies to TypeScript and JavaScript files
-      presets: ['@babel/preset-typescript'], // Use TypeScript preset for these files
-    },
     {
       test: /node_modules[\\/]uuid/, // Special handling for the 'uuid' package
       presets: [
