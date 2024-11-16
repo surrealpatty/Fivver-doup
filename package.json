@@ -57,6 +57,7 @@
     "vue-jest": "^5.0.0-alpha.10"
   },
   "dependencies": {
+    "@vue/test-utils": "^2.4.6",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
