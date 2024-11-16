@@ -33,7 +33,7 @@ const startServer = async () => {
         const isDevelopment = process.env.NODE_ENV === 'development';
         const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
 
-        // Avoid manually creating the database, sync ensures the database exists
+        // Sync database models (with or without alterations based on environment)
         await sequelize.sync(syncOptions);
         console.log('Database synced successfully.');
 
