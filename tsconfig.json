@@ -17,7 +17,9 @@
     },
     "resolveJsonModule": true,                 // Allows importing JSON files as modules
     "lib": ["esnext", "dom"],                  // Add support for modern JavaScript and DOM APIs
-    "typeRoots": ["./node_modules/@types", "./src/types"] // Include custom types from src/types if needed
+    "typeRoots": ["./node_modules/@types", "./src/types"], // Include custom types from src/types if needed
+    "jsx": "react",                            // Enable JSX support for React or Vue (if needed)
+    "skipDefaultLibCheck": true                // Skips type checking for default libraries, useful if you encounter issues
   },
   "include": [
     "src/**/*.ts",                             // Include all TypeScript files in the src folder
