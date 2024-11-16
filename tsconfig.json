@@ -1,40 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "target": "ES6",                          // ES6 for modern JS features
+    "module": "commonjs",                     // CommonJS for Node.js modules
+    "moduleResolution": "node",               // Resolving modules like Node.js
+    "esModuleInterop": true,                  // Allows interoperability between commonjs and ES modules
+    "allowSyntheticDefaultImports": true,     // Allows default imports from modules that don't have them
+    "skipLibCheck": true,                     // Skip checking of type declarations
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in imports
+    "strict": true,                           // Enable strict mode for better type checking
+    "noImplicitAny": true,                    // Disallow implicit 'any' types
+    "strictNullChecks": true,                 // Enable strict null checks
+    "outDir": "./dist",                       // Output directory for compiled files
+    "baseUrl": "./",                          // Base URL for module resolution
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]                        // Path alias for the 'src' directory
     },
-    "resolveJsonModule": true,
-    "lib": ["esnext", "dom"],  // Removed "vue"
+    "resolveJsonModule": true,                // Allow importing JSON modules
+    "lib": ["esnext", "dom"],                 // Use ESNext and DOM libraries for JS and browser APIs
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ],
-    "types": ["jest", "node", "vue", "@vue/test-utils"],  // "vue" and "@vue/test-utils" in types
-    "jsx": "preserve",
-    "skipDefaultLibCheck": true,
-    "tsBuildInfoFile": "./.tsbuildinfo",
-    "incremental": true
+    "types": ["jest", "node", "@vue/test-utils"], // Keep only necessary types (jest, node, vue/test-utils)
+    "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
+    "skipDefaultLibCheck": true,              // Skip default library checks
+    "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
+    "incremental": true                       // Enable incremental compilation for faster rebuilds
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "jest.setup.ts"
+    "src/**/*.ts",                            // Include all TypeScript files in 'src'
+    "src/**/*.d.ts",                          // Include type declaration files
+    "jest.setup.ts"                           // Include Jest setup file
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "jest.config.ts"
+    "node_modules",                           // Exclude 'node_modules' directory
+    "dist",                                   // Exclude compiled output directory
+    "jest.config.ts"                          // Exclude Jest config file
   ]
 }
