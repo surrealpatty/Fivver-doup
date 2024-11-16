@@ -7,7 +7,7 @@ interface ServiceAttributes {
   id: number;
   name: string;
   description: string;
-  userId: number | null;  // userId can be nullable if user is deleted
+  user_id: number | null;  // Use user_id to match the column name in snake_case
   createdAt: Date;
   updatedAt: Date;
 }
@@ -19,7 +19,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public id!: number;
   public name!: string;
   public description!: string;
-  public userId!: number | null;  // Allow userId to be nullable
+  public user_id!: number | null;  // Make sure user_id is used consistently
   public createdAt!: Date;
   public updatedAt!: Date;
 
@@ -27,9 +27,9 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   static associate(models: { User: ModelStatic<Model> }) {
     // Define the association with the User model
     Service.belongsTo(models.User, {
-      foreignKey: 'userId', // Define the foreign key column
-      onDelete: 'SET NULL',  // If the user is deleted, set userId to NULL in services
-      onUpdate: 'CASCADE',   // If the user's id is updated, update the userId in services
+      foreignKey: 'user_id',  // The foreign key should be snake_case to match the column name
+      onDelete: 'SET NULL',    // If the user is deleted, set user_id to NULL in services
+      onUpdate: 'CASCADE',     // If the user's id is updated, update the user_id in services
     });
   }
 }
@@ -49,15 +49,15 @@ Service.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userId: {
+    user_id: {  // Match this with the snake_case column name
       type: DataTypes.INTEGER,
-      allowNull: true,  // userId can now be nullable (if the user is deleted)
+      allowNull: true,  // user_id can now be nullable (if the user is deleted)
       references: {
         model: 'users',  // Ensure the 'users' table name matches the actual table name
         key: 'id',
       },
-      onDelete: 'SET NULL',  // If the user is deleted, set userId to NULL in services
-      onUpdate: 'CASCADE',   // If the user's id is updated, update the userId in services
+      onDelete: 'SET NULL',  // If the user is deleted, set user_id to NULL in services
+      onUpdate: 'CASCADE',   // If the user's id is updated, update the user_id in services
     },
     createdAt: {
       type: DataTypes.DATE,
