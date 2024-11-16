@@ -3,9 +3,9 @@
     "target": "ES6",                          // ES6 for modern JS features
     "module": "commonjs",                     // CommonJS for Node.js modules
     "moduleResolution": "node",               // Resolving modules like Node.js
-    "esModuleInterop": true,                  // Allows interoperability between commonjs and ES modules
+    "esModuleInterop": true,                  // Allows interoperability between CommonJS and ES modules
     "allowSyntheticDefaultImports": true,     // Allows default imports from modules that don't have them
-    "skipLibCheck": true,                     // Skip checking of type declarations
+    "skipLibCheck": true,                     // Skip checking of type declarations (improves build time)
     "forceConsistentCasingInFileNames": true, // Ensure consistent casing in imports
     "strict": true,                           // Enable strict mode for better type checking
     "noImplicitAny": true,                    // Disallow implicit 'any' types
@@ -21,20 +21,20 @@
       "./node_modules/@types",                // Add the standard type definition path
       "./src/types"                            // Add custom types folder if you have one
     ],
-    "types": ["jest", "node"],                // Keep jest and node for testing and runtime types
+    "types": ["jest", "node"],                // Include Jest and Node types for testing and runtime
     "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
-    "skipDefaultLibCheck": true,              // Skip default library checks
+    "skipDefaultLibCheck": true,              // Skip default library checks to speed up builds
     "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
     "incremental": true                       // Enable incremental compilation for faster rebuilds
   },
   "include": [
     "src/**/*.ts",                            // Include all TypeScript files in 'src'
     "src/**/*.d.ts",                          // Include type declaration files
-    "jest.setup.ts"                           // Include Jest setup file
+    "jest.setup.ts"                           // Include Jest setup file for global mocks
   ],
   "exclude": [
     "node_modules",                           // Exclude 'node_modules' directory
     "dist",                                   // Exclude compiled output directory
-    "jest.config.ts"                          // Exclude Jest config file
+    "jest.config.ts"                          // Exclude Jest config file from TypeScript compilation
   ]
 }

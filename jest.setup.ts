@@ -16,10 +16,10 @@ beforeEach(() => {
   // Mock sessionStorage using Object.defineProperty
   Object.defineProperty(global, 'sessionStorage', {
     value: {
-      getItem: jest.fn().mockReturnValue('mockedItem'),
-      setItem: jest.fn(),
-      removeItem: jest.fn(),
-      clear: jest.fn(),
+      getItem: jest.fn().mockReturnValue('mockedItem'), // Return mocked value for getItem
+      setItem: jest.fn(),  // Mock setItem
+      removeItem: jest.fn(),  // Mock removeItem
+      clear: jest.fn(),    // Mock clear
     },
     writable: true,
   });
