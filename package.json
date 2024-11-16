@@ -56,11 +56,12 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
     "vue": "^3.5.13",
-    "vue-jest": "^0.6.1",
+    "vue-jest": "^3.0.7",
     "vue3-jest": "^27.0.0-alpha.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "core-js": "^3.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
