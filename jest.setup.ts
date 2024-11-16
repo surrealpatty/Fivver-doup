@@ -1,15 +1,19 @@
-import { config } from '@vue/test-utils';  // Import from Vue Test Utils
+import { config } from '@vue/test-utils';  // Import Vue Test Utils
 import { createApp } from 'vue';  // Vue app import
 
+// Explicitly define the global Vue type to avoid TypeScript errors
+declare global {
+  var Vue: ReturnType<typeof createApp>;
+}
+
 // Initialize Vue globally (if necessary, this is usually handled by vue-jest)
-// Ensure we don't overwrite Vue if it's already initialized in the environment
 if (typeof globalThis.Vue === 'undefined') {
-  globalThis.Vue = createApp({});  // Initialize a Vue app instance globally
+  globalThis.Vue = createApp({});  // Initialize a Vue app instance globally if Vue isn't already set
 }
 
 // Mock sessionStorage globally for tests
 beforeEach(() => {
-  // Mocking sessionStorage using Object.defineProperty
+  // Mock sessionStorage using Object.defineProperty
   Object.defineProperty(global, 'sessionStorage', {
     value: {
       getItem: jest.fn().mockReturnValue('mockedItem'),
