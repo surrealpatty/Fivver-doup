@@ -11,7 +11,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "jest --config jest.config.ts",
+    "test": "npx jest --config jest.config.ts",  
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix",
     "test:ci": "jest --ci --maxWorkers=4",
@@ -53,7 +53,7 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
     "vue": "^3.5.13",
-    "vue-jest": "^5.0.0-alpha.10"
+    "vue-jest": "^5.0.0-alpha.10"  
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -87,6 +87,18 @@
           ]
         }
       ]
+    }
+  },
+  "jest": {
+    "preset": "ts-jest",  
+    "testEnvironment": "jest-environment-jsdom",  
+    "transform": {
+      "^.+\\.ts$": "ts-jest",  
+      "^.+\\.vue$": "vue-jest"  
+    },
+    "moduleFileExtensions": ["js", "ts", "vue"],  
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"  
     }
   }
 }
