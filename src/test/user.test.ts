@@ -1,9 +1,17 @@
 import request from 'supertest'; // Import supertest correctly
 import { app } from '../index';  // Ensure correct path to app in dist (if needed)
-import User from '../models/user';  // Default import (adjust according to actual export)
+import User from '../models/user';  // Import User model correctly
 
-// Mock the User model
-jest.mock('../models/user');
+// Mock the User model methods manually
+jest.mock('../models/user', () => {
+    return {
+        findOne: jest.fn(),
+        create: jest.fn(),
+        findByPk: jest.fn(),
+        update: jest.fn(),
+        destroy: jest.fn(),
+    };
+});
 
 // Mock jwt module if necessary
 jest.mock('jsonwebtoken', () => ({
@@ -14,18 +22,18 @@ jest.mock('jsonwebtoken', () => ({
 describe('User Controller', () => {
     beforeAll(() => {
         // Mock necessary User model methods
-        User.findOne.mockResolvedValue(null); // Mock for registration (user not found)
-        User.create.mockResolvedValue({
+        (User.findOne as jest.Mock).mockResolvedValue(null); // Mock for registration (user not found)
+        (User.create as jest.Mock).mockResolvedValue({
             id: 1,
             email: 'test@example.com',
             password: 'hashedpassword',
         }); // Mock for user creation
-        User.findByPk.mockResolvedValue({
+        (User.findByPk as jest.Mock).mockResolvedValue({
             id: 1,
             email: 'test@example.com',
         }); // Mock for finding user profile
-        User.update.mockResolvedValue([1]); // Mock for updating user profile
-        User.destroy.mockResolvedValue(1); // Mock for deleting user profile
+        (User.update as jest.Mock).mockResolvedValue([1]); // Mock for updating user profile
+        (User.destroy as jest.Mock).mockResolvedValue(1); // Mock for deleting user profile
     });
 
     afterAll(() => {
