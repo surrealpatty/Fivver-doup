@@ -1,5 +1,6 @@
 // src/resetDatabase.js
-const { sequelize } = require('./config/database'); // Adjust the path based on where your database.js file is located
+const { sequelize } = require('./config/database'); // Correct path based on your structure
+
 
 const resetDatabase = async () => {
   try {
