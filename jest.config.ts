@@ -6,7 +6,9 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.(vue)$': 'vue3-jest',
+    // Remove vue3-jest as it's no longer used
+    // If you need to support Vue, you can install vue-jest and re-enable this line.
+    // '^.+\\.(vue)$': 'vue-jest',
   },
   collectCoverage: true,
   coverageDirectory: 'coverage',
