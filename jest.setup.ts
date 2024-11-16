@@ -3,7 +3,7 @@ import { createApp } from 'vue';            // Vue app import
 
 // Explicitly declare the global Vue type to avoid TypeScript errors
 declare global {
-  var Vue: ReturnType<typeof createApp>;
+  var Vue: ReturnType<typeof createApp>;  // Type the global Vue variable
 }
 
 // Ensure Vue is available globally for all tests
@@ -21,7 +21,7 @@ beforeEach(() => {
       removeItem: jest.fn(),  // Mock removeItem
       clear: jest.fn(),    // Mock clear
     },
-    writable: true,
+    writable: true,  // Allow modifications to sessionStorage in the tests
   });
 
   // Mock global translation function ($t) commonly used in Vue apps with i18n
