@@ -21,7 +21,7 @@
       "./node_modules/@types",
       "./src/types"
     ],
-    "types": ["jest", "node", "@vue/test-utils"],
+    "types": ["jest", "node"],                // Removed "@vue/test-utils"
     "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
     "skipDefaultLibCheck": true,              // Skip default library checks
     "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
