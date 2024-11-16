@@ -1,27 +1,30 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
+    "target": "ES6",  // Target ES6 for better async/await support
+    "module": "commonjs",  // Use commonjs for Node.js compatibility
+    "moduleResolution": "node",  // Use Node module resolution
+    "esModuleInterop": true,  // Allows default imports from CommonJS modules
+    "allowSyntheticDefaultImports": true,  // Allows default imports from modules without a default export
+    "skipLibCheck": true,  // Skips type checking of declaration files for faster compilation
+    "forceConsistentCasingInFileNames": true,  // Ensures consistent file casing
+    "strict": true,  // Enable strict type-checking
+    "noImplicitAny": true,  // Avoid implicit 'any' types
+    "strictNullChecks": true,  // Enforce null checks
+    "outDir": "./dist",  // Output directory for compiled files
+    "baseUrl": "./",  // Base URL for module resolution
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]  // Aliases for easy module resolution
     },
-    "types": ["jest", "node"],
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "resolveJsonModule": true,  // Allows importing JSON files as modules
+    "lib": ["esnext", "dom"]  // Add support for modern JavaScript and DOM APIs
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "exclude": ["node_modules", "dist", "coverage"]
+  "include": [
+    "src/**/*.ts",  // Include all TypeScript files in the src folder
+    "src/**/*.d.ts"  // Include type declaration files
+  ],
+  "exclude": [
+    "node_modules",  // Exclude node_modules from compilation
+    "dist",  // Exclude dist folder from source files
+    "test"  // Exclude test folder (optional)
+  ]
 }
