@@ -10,6 +10,9 @@ class User extends Model {
   public lastName!: string;
   public role!: string;
   public subscriptionStatus!: string;
+  public subscriptionEndDate?: Date;
+public subscriptionStartDate?: Date;
+
 }
 
 User.init(

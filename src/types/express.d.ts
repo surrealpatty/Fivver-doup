@@ -1,11 +1,11 @@
 // src/types/express.d.ts
 
-import { User } from '../models'; // Adjust the import path as necessary
+import { User } from '../models/user'; // Adjust the import path to the correct User model
 
 declare global {
     namespace Express {
         interface Request {
-            user?: User;  // Add the user property to the request object
+            user?: User;  // Extend the Express Request object to include a user property
         }
     }
 }
