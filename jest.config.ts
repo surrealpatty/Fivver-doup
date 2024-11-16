@@ -20,6 +20,8 @@ const config: Config.InitialOptions = {
   transformIgnorePatterns: [
     'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)', // Ensure that Vue-related packages are transformed
   ],
+  // Added option to clear mocks between tests
+  clearMocks: true,
 };
 
 export default config;
