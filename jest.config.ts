@@ -6,7 +6,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'], // Include Vue file extensions
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }], // Use ts-jest for TypeScript files
-    '^.+\\.vue$': 'vue3-jest', // Use vue3-jest for Vue 3 files (ensure it's installed)
+    '^.+\\.vue$': 'vue3-jest', // Use vue3-jest for Vue 3 files
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Specify setup file to configure mocks and globals
   globals: {
@@ -20,8 +20,6 @@ const config: Config.InitialOptions = {
   transformIgnorePatterns: [
     'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)', // Ensure that Vue-related packages are transformed
   ],
-  // Added option to clear mocks between tests
-  clearMocks: true,
 };
 
 export default config;

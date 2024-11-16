@@ -1,4 +1,4 @@
-import { config } from '@vue/test-utils';  // Import Vue Test Utils
+import { config } from '@vue/test-utils'; // Import Vue Test Utils
 import { createApp } from 'vue';           // Vue app import
 
 // Explicitly declare the global Vue type to avoid TypeScript errors
