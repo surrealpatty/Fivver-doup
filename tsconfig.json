@@ -21,7 +21,7 @@
       "./node_modules/@types",
       "./src/types"
     ],
-    "types": ["jest", "node", "vue"],  // Ensure "vue" is here
+    "types": ["jest", "node"],  // Removed "vue" here
     "jsx": "preserve",
     "skipDefaultLibCheck": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
