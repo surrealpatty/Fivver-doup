@@ -1,25 +1,25 @@
 import { Model, DataTypes, Optional, ModelStatic } from 'sequelize';
-import { sequelize } from '../config/database'; // Correct way to import a named export
-import User from './user'; // Ensure you import the User model (adjust path as needed)
+import { sequelize } from '../config/database'; // Correctly import sequelize instance
+import User from './user'; // Import the User model (adjust path as needed)
 
-// Define the attributes for the "services" table.
+// Define the attributes for the "services" table
 interface ServiceAttributes {
   id: number;
   name: string;
   description: string;
-  user_id: number | null;  // Use user_id to match the column name in snake_case
+  user_id: number | null;  // Nullable user_id to match foreign key relation
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Define the optional fields for the "services" table (these are only for creating instances, not for database records).
+// Define the optional fields for the "services" table (only for creating instances)
 interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
-  public user_id!: number | null;  // Make sure user_id is used consistently
+  public user_id!: number | null;  // Make sure user_id is consistently used
   public createdAt!: Date;
   public updatedAt!: Date;
 
@@ -27,9 +27,9 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   static associate(models: { User: ModelStatic<Model> }) {
     // Define the association with the User model
     Service.belongsTo(models.User, {
-      foreignKey: 'user_id',  // The foreign key should be snake_case to match the column name
+      foreignKey: 'user_id',  // Foreign key is user_id (snake_case to match the column name)
       onDelete: 'SET NULL',    // If the user is deleted, set user_id to NULL in services
-      onUpdate: 'CASCADE',     // If the user's id is updated, update the user_id in services
+      onUpdate: 'CASCADE',     // If the user's id is updated, update user_id in services
     });
   }
 }
@@ -49,15 +49,15 @@ Service.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    user_id: {  // Match this with the snake_case column name
+    user_id: {  // Match this with the snake_case column name in the database
       type: DataTypes.INTEGER,
-      allowNull: true,  // user_id can now be nullable (if the user is deleted)
+      allowNull: true,  // user_id can be nullable if user is deleted
       references: {
-        model: 'users',  // Ensure the 'users' table name matches the actual table name
+        model: 'users',  // The table name in the database (should be plural if that's how it's named)
         key: 'id',
       },
-      onDelete: 'SET NULL',  // If the user is deleted, set user_id to NULL in services
-      onUpdate: 'CASCADE',   // If the user's id is updated, update the user_id in services
+      onDelete: 'SET NULL',  // If the user is deleted, set user_id to NULL
+      onUpdate: 'CASCADE',   // If the user's id is updated, update user_id in services
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -73,13 +73,13 @@ Service.init(
   {
     sequelize, // Pass the sequelize instance
     modelName: 'Service', // The name of the model
-    tableName: 'services', // The actual table name in the DB
+    tableName: 'services', // The table name in the DB
     timestamps: true, // Enable Sequelize's automatic timestamp management
     underscored: true, // Use snake_case for column names, e.g., created_at, updated_at
   }
 );
 
-// Ensure associations are set up
+// Ensure associations are set up after model is initialized
 Service.associate({ User });
 
 export default Service;
