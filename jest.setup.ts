@@ -1,5 +1,5 @@
-import { config } from '@vue/test-utils'; // Import Vue Test Utils
-import { createApp } from 'vue';           // Vue app import
+import { config } from '@vue/test-utils';  // Import Vue Test Utils
+import { createApp } from 'vue';            // Vue app import
 
 // Explicitly declare the global Vue type to avoid TypeScript errors
 declare global {
@@ -16,7 +16,7 @@ beforeEach(() => {
   // Mock sessionStorage using Object.defineProperty
   Object.defineProperty(global, 'sessionStorage', {
     value: {
-      getItem: jest.fn().mockReturnValue('mockedItem'), // Return mocked value for getItem
+      getItem: jest.fn().mockReturnValue('mockedItem'),  // Return mocked value for getItem
       setItem: jest.fn(),  // Mock setItem
       removeItem: jest.fn(),  // Mock removeItem
       clear: jest.fn(),    // Mock clear

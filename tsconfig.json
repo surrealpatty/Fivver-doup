@@ -25,10 +25,13 @@
     "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
     "skipDefaultLibCheck": true,              // Skip default library checks to speed up builds
     "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
-    "incremental": true                       // Enable incremental compilation for faster rebuilds
+    "incremental": true,                      // Enable incremental compilation for faster rebuilds
+    "allowJs": true                           // Allow JavaScript files in the project
   },
   "include": [
     "src/**/*.ts",                            // Include all TypeScript files in 'src'
+    "src/**/*.tsx",                           // Include TypeScript JSX files in 'src' (if using React-style JSX)
+    "src/**/*.js",                            // Include JavaScript files in 'src' if needed
     "src/**/*.d.ts",                          // Include type declaration files
     "jest.setup.ts"                           // Include Jest setup file for global mocks
   ],
