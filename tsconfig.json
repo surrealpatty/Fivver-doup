@@ -16,7 +16,8 @@
       "@/*": ["src/*"]  // Aliases for easy module resolution
     },
     "resolveJsonModule": true,  // Allows importing JSON files as modules
-    "lib": ["esnext", "dom"]  // Add support for modern JavaScript and DOM APIs
+    "lib": ["esnext", "dom"],  // Add support for modern JavaScript and DOM APIs
+    "typeRoots": ["./node_modules/@types", "./src/types"]  // Include custom types from src/types if needed
   },
   "include": [
     "src/**/*.ts",  // Include all TypeScript files in the src folder
