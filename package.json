@@ -5,18 +5,18 @@
   "directories": {
     "doc": "docs"
   },
-  "type": "module", 
+  "type": "module",
   "scripts": {
     "pretest": "npm run build",
-    "start": "node dist/index.js", 
-    "dev": "nodemon src/index.ts", 
-    "build": "tsc", 
-    "build:watch": "tsc --watch", 
-    "test": "npx jest --config jest.config.ts", 
-    "test:watch": "jest --watch", 
-    "lint": "eslint 'src/**/*.ts' --fix", 
-    "test:ci": "jest --ci --maxWorkers=4", 
-    "migrate": "npx sequelize-cli db:migrate" 
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "npx jest --config jest.config.ts",
+    "test:watch": "jest --watch",
+    "lint": "eslint 'src/**/*.ts' --fix",
+    "test:ci": "jest --ci --maxWorkers=4",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",
@@ -66,6 +66,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5"
   },
