@@ -18,17 +18,18 @@
     "resolveJsonModule": true,                 // Allows importing JSON files as modules
     "lib": ["esnext", "dom"],                  // Add support for modern JavaScript and DOM APIs
     "typeRoots": [
-      "./node_modules/@types",                  // Default types from node_modules
-      "./src/types"                              // Custom types if you have any
+      "./node_modules/@types",                 // Default types from node_modules
+      "./src/types"                             // Custom types if you have any
     ],
     "jsx": "preserve",                         // Enable JSX support for Vue 3
     "skipDefaultLibCheck": true,               // Skips type checking for default libraries
     "tsBuildInfoFile": "./.tsbuildinfo",       // Output file for incremental build information
-    "incremental": true                        // Enable incremental compilation for faster rebuilds
+    "incremental": true,                       // Enable incremental compilation for faster rebuilds
+    "types": ["jest", "node", "vue"]           // Add Jest, Node, and Vue types
   },
   "include": [
     "src/**/*.ts",                             // Include all TypeScript files in the src folder
-    "src/**/*.d.ts",                            // Include type declaration files
+    "src/**/*.d.ts",                           // Include type declaration files
     "jest.setup.ts"                             // Include jest setup file for type-checking
   ],
   "exclude": [
