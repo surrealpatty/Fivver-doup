@@ -21,7 +21,7 @@
       "./node_modules/@types",                // Add the standard type definition path
       "./src/types"                            // Add custom types folder if you have one
     ],
-    "types": ["jest", "node"],                // Include Jest and Node types for testing and runtime
+    "types": ["vue"],
     "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
     "skipDefaultLibCheck": true,              // Skip default library checks to speed up builds
     "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
