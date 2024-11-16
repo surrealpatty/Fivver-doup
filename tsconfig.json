@@ -21,7 +21,7 @@
       "./node_modules/@types",                // Standard type definition path
       "./src/types"                            // Custom types folder (if you have one)
     ],
-    "types": ["node"],                         // Only include Node types (since you're not using Vue components)
+    "types": ["jest"],                         // Only include Node types, no Vue
     "jsx": "preserve",
     "skipDefaultLibCheck": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
