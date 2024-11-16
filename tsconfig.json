@@ -18,10 +18,10 @@
     "resolveJsonModule": true,                // Allow importing JSON modules
     "lib": ["esnext", "dom"],                 // Use ESNext and DOM libraries for JS and browser APIs
     "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
+      "./node_modules/@types",                // Add the standard type definition path
+      "./src/types"                            // Add custom types folder if you have one
     ],
-    "types": ["jest", "node"],                // Removed "@vue/test-utils"
+    "types": ["jest", "node"],                // Keep jest and node for testing and runtime types
     "jsx": "preserve",                       // Preserve JSX for future processing (React/Vue)
     "skipDefaultLibCheck": true,              // Skip default library checks
     "tsBuildInfoFile": "./.tsbuildinfo",      // TypeScript build info file for incremental compilation
