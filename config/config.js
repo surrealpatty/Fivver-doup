@@ -1,26 +1,58 @@
-require('dotenv').config();  // Load environment variables from .env file
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
 
-module.exports = {
-  development: {
-    username: process.env.DB_USER || 'root',    // Default to 'root' if DB_USER is not set
-    password: process.env.DB_PASSWORD || '',    // Default to empty string if not set
-    database: process.env.DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if not set
-    host: process.env.DB_HOST || 'localhost',   // Default to 'localhost' if not set
-    dialect: 'mysql',
-    logging: false,  // Disable logging or set to true for more detailed logs
+// Load environment variables from a .env file
+dotenv.config();
+
+// Create a Sequelize instance and connect to the database
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: process.env.DB_HOST || 'localhost',
+  username: process.env.DB_USERNAME || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'fivver_doup',
+  dialectOptions: {
+    charset: 'utf8mb4', // Ensure utf8mb4 encoding to avoid 'cesu8' issue
   },
-  test: {
-    username: process.env.DB_USER || 'root',    // Use the same environment variable name for consistency
-    password: process.env.DB_PASSWORD || '',    // Default to empty string if not set
-    database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Use TEST_DB_NAME for test database
-    host: process.env.DB_HOST || 'localhost',   // Default to 'localhost' if not set
-    dialect: 'mysql',
+  logging: false, // Set to true to enable logging for debugging purposes
+  define: {
+    charset: 'utf8mb4', // Ensure tables use utf8mb4 encoding by default
+    collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci collation by default
   },
-  production: {
-    username: process.env.DB_USER || 'root',    // Use the same environment variable name for consistency
-    password: process.env.DB_PASSWORD || '',    // Default to empty string if not set
-    database: process.env.DB_NAME || 'fivver_doup',    // Use DB_NAME for production DB
-    host: process.env.DB_HOST || 'localhost',   // Default to 'localhost' if not set
-    dialect: 'mysql',
-  },
+});
+
+// Import models (Ensure correct path for models)
+const User = require('../models/user');
+const Service = require('../models/services');
+
+// Initialize models and set up associations
+User.initModel(sequelize);
+Service.initModel(sequelize);
+
+// Set up associations between models
+User.associate(sequelize.models);
+Service.associate(sequelize.models);
+
+// Test the database connection
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    process.exit(1); // Exit the process if the connection fails
+  }
 };
+
+// Sync models with the database
+const syncDatabase = async () => {
+  try {
+    await sequelize.sync({ alter: true });
+    console.log('Database & tables created!');
+  } catch (error) {
+    console.error('Error syncing database:', error instanceof Error ? error.message : error);
+    process.exit(1); // Exit the process if sync fails
+  }
+};
+
+module.exports = { sequelize, testConnection, syncDatabase };
