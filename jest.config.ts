@@ -2,26 +2,22 @@ import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Use ts-jest for TypeScript support
-  testEnvironment: 'jsdom',  // Set the test environment to jsdom for browser-like features
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include Vue file extensions
+  testEnvironment: 'node',  // Set the test environment to node (suitable for backend tests)
+  moduleFileExtensions: ['ts', 'js', 'json'],  // Only include TypeScript and JavaScript file extensions
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest for TypeScript files
-    '^.+\\.vue$': 'vue3-jest',  // Use vue3-jest for Vue 3 files
+    '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest to transform TypeScript files
   },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],  // Specify setup file to configure mocks and globals
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],  // Specify a setup file for any test configuration
   globals: {
-    'vue-jest': {
-      tsConfig: 'tsconfig.json',  // Specify the tsconfig to use for vue-jest transformations
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',  // Specify the tsconfig to use for ts-jest transformations
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // Alias to map '@' to the src folder (optional, based on your project structure)
+    '^@/(.*)$': '<rootDir>/src/$1',  // Optional: Use '@' to refer to the 'src' directory
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)',  // Ensure that Vue-related packages are transformed
-  ],
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx,vue}',  // Collect coverage from TypeScript and Vue files
+    'src/**/*.{ts,tsx}',  // Collect coverage from TypeScript files only
     '!src/**/*.d.ts',  // Exclude declaration files from coverage
   ],
   coverageDirectory: 'coverage',  // Specify the directory where coverage reports will be stored

@@ -12,12 +12,16 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'fivver_doup',
   dialectOptions: {
-    charset: 'utf8mb4', // Avoid cesu8 encoding issue with utf8mb4
+    charset: 'utf8mb4', // Ensure utf8mb4 encoding to avoid 'cesu8' issue
   },
   logging: false, // Set to true to enable logging for debugging purposes
+  define: {
+    charset: 'utf8mb4', // Ensure tables use utf8mb4 encoding by default
+    collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci collation by default
+  },
 });
 
-// Import models
+// Import models (Ensure correct path for models)
 import User from '../models/user.js';
 import Service from '../models/services.js';
 
@@ -25,6 +29,7 @@ import Service from '../models/services.js';
 User.initModel(sequelize);
 Service.initModel(sequelize);
 
+// Set up associations between models
 User.associate(sequelize.models);
 Service.associate(sequelize.models);
 
@@ -35,7 +40,7 @@ const testConnection = async () => {
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
-    process.exit(1);
+    process.exit(1); // Exit the process if the connection fails
   }
 };
 
@@ -46,7 +51,7 @@ const syncDatabase = async () => {
     console.log('Database & tables created!');
   } catch (error) {
     console.error('Error syncing database:', error instanceof Error ? error.message : error);
-    process.exit(1);
+    process.exit(1); // Exit the process if sync fails
   }
 };
 
