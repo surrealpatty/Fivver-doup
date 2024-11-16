@@ -24,7 +24,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public updatedAt?: Date;
 
   // Define the associate method to establish relationships
-  static associate(models: { User: ModelStatic<Model> }) {
+  static associate(models: { User: typeof User }) {
     // Define the association with the User model
     Service.belongsTo(models.User, {
       foreignKey: 'user_id',  // Foreign key is user_id
