@@ -1,40 +1,27 @@
-module.exports = {
-  preset: 'ts-jest', // Use ts-jest preset for TypeScript support
-  testEnvironment: 'jsdom', // Set environment suitable for DOM-related tests
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'], // Recognize these file extensions
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest for TypeScript files
-    '^.+\\.vue$': '@vue/vue3-jest', // Transform Vue files using @vue/vue3-jest
-  },
-  collectCoverage: true, // Enable test coverage collection
-  coverageDirectory: 'coverage', // Specify folder for coverage reports
-  coverageReporters: ['text', 'lcov', 'html'], // Generate text, lcov, and HTML reports
-  testMatch: [
-    '**/__tests__/**/*.(spec|test).[jt]s?(x)', // Match test files in __tests__ folder
-    '**/?(*.)+(spec|test).[jt]s?(x)', // Match .spec or .test files
-  ],
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/dist/',
-    '/src/config/', // Ignore config files from coverage reports
-  ],
-  testTimeout: 30000, // Set test timeout to 30 seconds
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json', // Ensure tsconfig is used
-      isolatedModules: true, // Improve performance by compiling modules in isolation
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
     },
+    "types": ["jest", "node"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Map '@/path' to 'src/path'
-  },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Use setup file after environment setup
-  transformIgnorePatterns: [
-    '/node_modules/(?!(@vue|some-other-esm-package)/)', // Include necessary ESM dependencies
-  ],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/dist/',
-    '/coverage/', // Ignore generated coverage reports
-  ],
-};
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules", "dist", "coverage"]
+}
