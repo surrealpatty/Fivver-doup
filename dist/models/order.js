@@ -31,7 +31,7 @@ Order.init({
     },
     userId: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true, // Allow null for ON DELETE SET NULL behavior
         references: {
             model: user_1.default,
             key: 'id',
@@ -41,7 +41,7 @@ Order.init({
     },
     serviceId: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true, // Allow null for ON DELETE SET NULL behavior
         references: {
             model: services_1.default,
             key: 'id',

@@ -25,12 +25,15 @@
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
     "src/**/*.tsx",                              // Include all TypeScript JSX files in the src folder
     "src/**/*.vue",
-    "src/**/*"                               // Include all Vue files
+    "src/**/*"                                   // Include all Vue files
   ],
   "exclude": [
     "node_modules",                              // Exclude node_modules folder
     "dist",                                      // Exclude dist folder (build output)
     "**/*.test.ts",                              // Exclude test files
     "**/*.test.tsx"                              // Exclude test files
-  ]
+  ],
+  "typeAcquisition": {
+    "include": ["node", "jest"]  // Ensure Node.js and Jest types are explicitly included
+  }
 }

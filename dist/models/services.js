@@ -1,21 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
-// Define the Service model class
+const database_1 = require("../config/database"); // Correctly import sequelize instance
 class Service extends sequelize_1.Model {
-    // Define associations here
+    // Define the associate method to establish relationships
     static associate(models) {
-        // Each service belongs to one user
+        // Define the association with the User model
         Service.belongsTo(models.User, {
-            foreignKey: 'userId',
-            as: 'user', // You can reference it as `user` in queries
-            onDelete: 'SET NULL', // If the user is deleted, the service's userId will be set to NULL
-            onUpdate: 'CASCADE', // If the user ID is updated, the service's userId will be updated accordingly
+            foreignKey: 'user_id', // Foreign key is user_id
+            onDelete: 'SET NULL', // Set user_id to NULL if the user is deleted
+            onUpdate: 'CASCADE', // Update user_id if the user's id is updated
         });
     }
 }
-// Initialize the model
 Service.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -30,22 +27,33 @@ Service.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    userId: {
+    user_id: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false, // Ensure each service has a user associated with it
+        allowNull: true, // user_id can be nullable if the user is deleted
         references: {
-            model: 'users', // The target table (should be plural if it matches convention)
-            key: 'id', // The key in the target table
+            model: 'users', // Reference the "users" table
+            key: 'id',
         },
-        onDelete: 'SET NULL', // If the associated user is deleted, set the userId to null
-        onUpdate: 'CASCADE', // If the user's id is updated, update this foreign key as well
+        onDelete: 'SET NULL', // Set user_id to NULL if the referenced user is deleted
+        onUpdate: 'CASCADE', // Update user_id if the referenced user's id is updated
+    },
+    createdAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: database_1.sequelize.literal('CURRENT_TIMESTAMP'),
+    },
+    updatedAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: database_1.sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
     },
 }, {
-    sequelize: database_1.sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true, // Sequelize will handle createdAt and updatedAt automatically
-    underscored: true, // Use snake_case for column names (e.g., created_at, updated_at)
+    sequelize: database_1.sequelize, // Pass the sequelize instance
+    modelName: 'Service', // The name of the model
+    tableName: 'services', // The table name in the database
+    timestamps: true, // Automatically add createdAt and updatedAt fields
+    underscored: true, // Use snake_case for column names
 });
+// Export the model
 exports.default = Service;
 //# sourceMappingURL=services.js.map
