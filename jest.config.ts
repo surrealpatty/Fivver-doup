@@ -3,10 +3,10 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Keep this for TypeScript support
   testEnvironment: 'jsdom',  // For front-end testing (use 'node' for back-end tests)
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include 'vue' if you're testing Vue components
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include 'vue' for Vue components
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',  // Transform TypeScript files with ts-jest
-    '^.+\\.vue$': 'vue-jest',  // Add transformation for .vue files if using Vue components
+    '^.+\\.vue$': 'vue-jest',  // Transform Vue files with vue-jest (for Vue 3)
   },
   collectCoverage: true,  // Enable code coverage collection
   coverageDirectory: 'coverage',  // Directory to store coverage reports
@@ -25,10 +25,10 @@ const config: Config.InitialOptions = {
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // Adjust this based on your alias configuration in tsconfig.json
+    '^@/(.*)$': '<rootDir>/src/$1',  // Ensure path alias works for TypeScript
   },
   setupFiles: ['<rootDir>/jest.setup.ts'],  // Path to environment setup file (e.g., mocks or global setups)
-  transformIgnorePatterns: ['/node_modules/'],  // Skip transformation for node_modules (to avoid unnecessary transformations)
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],  // Skip transformation for node_modules
 };
 
 export default config;
