@@ -1,5 +1,5 @@
 // src/resetDatabase.ts
-import { sequelize, testConnection } from './config/database';
+import { sequelize, testConnection } from './config/database';  // Updated to TypeScript syntax
 
 const resetDatabase = async () => {
   try {
