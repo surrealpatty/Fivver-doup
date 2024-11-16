@@ -22,8 +22,8 @@ const sequelize = new Sequelize({
 });
 
 // Import models (Ensure correct path for models)
-import User from '../models/user.ts'; // Use .ts if you're working with TypeScript models
-import Service from '../models/services.ts'; // Use .ts if you're working with TypeScript models
+import User from '../models/user'; // Ensure .ts extension is not needed here; adjust paths for .js
+import Service from '../models/services'; // Same as above, ensure paths are correct
 
 // Initialize models and set up associations
 User.initModel(sequelize);
