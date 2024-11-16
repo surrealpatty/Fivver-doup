@@ -1,7 +1,7 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  preset: 'ts-jest',
+  preset: 'ts-jest',  // Keep this once
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],
   transform: {
@@ -25,9 +25,9 @@ const config: Config.InitialOptions = {
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',  // Adjust paths as needed
   },
-  setupFiles: ['<rootDir>/jest.setup.js'],
+  setupFiles: ['<rootDir>/jest.setup.ts'],  // Change to .ts if you're using TypeScript for setup
   transformIgnorePatterns: ['/node_modules/'],
 };
 
