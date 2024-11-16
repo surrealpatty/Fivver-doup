@@ -1,40 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES6",                          // Target ES6 for better async/await support
-    "module": "commonjs",                      // Use commonjs for Node.js compatibility
-    "moduleResolution": "node",                // Use Node module resolution
-    "esModuleInterop": true,                   // Allows default imports from CommonJS modules
-    "allowSyntheticDefaultImports": true,      // Allows default imports from modules without a default export
-    "skipLibCheck": true,                      // Skips type checking of declaration files for faster compilation
-    "forceConsistentCasingInFileNames": true,  // Ensures consistent file casing
-    "strict": true,                            // Enable strict type-checking
-    "noImplicitAny": true,                     // Avoid implicit 'any' types
-    "strictNullChecks": true,                  // Enforce null checks
-    "outDir": "./dist",                        // Output directory for compiled files
-    "baseUrl": "./",                           // Base URL for module resolution
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]                         // Aliases for easy module resolution
+      "@/*": ["src/*"]
     },
-    "resolveJsonModule": true,                 // Allows importing JSON files as modules
-    "lib": ["esnext", "dom"],                  // Add support for modern JavaScript and DOM APIs
+    "resolveJsonModule": true,
+    "lib": ["esnext", "dom"],
     "typeRoots": [
-      "./node_modules/@types",                 // Default types from node_modules
-      "./src/types"                             // Custom types if you have any
+      "./node_modules/@types",
+      "./src/types"
     ],
-    "jsx": "preserve",                         // Enable JSX support for Vue 3
-    "skipDefaultLibCheck": true,               // Skips type checking for default libraries
-    "tsBuildInfoFile": "./.tsbuildinfo",       // Output file for incremental build information
-    "incremental": true,                       // Enable incremental compilation for faster rebuilds
-    "types": ["jest", "node", "vue"]           // Add Jest, Node, and Vue types
+    "types": ["jest", "node", "vue"],  // Ensure "vue" is here
+    "jsx": "preserve",
+    "skipDefaultLibCheck": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "incremental": true
   },
   "include": [
-    "src/**/*.ts",                             // Include all TypeScript files in the src folder
-    "src/**/*.d.ts",                           // Include type declaration files
-    "jest.setup.ts"                             // Include jest setup file for type-checking
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "jest.setup.ts"
   ],
   "exclude": [
-    "node_modules",                            // Exclude node_modules from compilation
-    "dist",                                    // Exclude dist folder from source files
-    "jest.config.ts"                           // Exclude Jest config file from being compiled
+    "node_modules",
+    "dist",
+    "jest.config.ts"
   ]
 }
