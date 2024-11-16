@@ -1,6 +1,5 @@
 // src/resetDatabase.js
-const { sequelize } = require('./config/database'); // Correct path based on your structure
-
+const { sequelize, testConnection } = require('./config/database');
 
 const resetDatabase = async () => {
   try {
