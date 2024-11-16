@@ -5,6 +5,11 @@ import { User, Service, Order } from '../models';
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   const { userId, serviceId, orderDetails } = req.body;
 
+  // Input validation
+  if (!userId || !serviceId || !orderDetails) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
   try {
     // Fetch the User and Service from the database
     const user = await User.findByPk(userId);
@@ -68,6 +73,11 @@ export const getOrderById = async (req: Request, res: Response): Promise<Respons
 export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
   const { orderDetails, status } = req.body;
+
+  // Input validation
+  if (!orderDetails && !status) {
+    return res.status(400).json({ message: 'At least one field (orderDetails or status) is required.' });
+  }
 
   try {
     // Find the order by ID

@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { sequelize, testConnection } = require('./config/database');  // Correct import for sequelize and testConnection
-const userRoutes = require('./routes/user');  // Import user routes
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { sequelize, testConnection } from './config/database';  // Correct import for sequelize and testConnection
+import userRoutes from './routes/user';  // Import user routes
 
 // Load environment variables from .env file as early as possible
 dotenv.config();
@@ -61,4 +61,4 @@ const startServer = async () => {
 startServer();
 
 // Export the app for testing purposes
-module.exports = { app };  // Export app for use in test files
+export { app };  // Export app for use in test files

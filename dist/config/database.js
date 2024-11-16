@@ -23,7 +23,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sequelize = void 0;
+exports.testConnection = exports.sequelize = void 0;
+// src/config/database.ts
 const sequelize_1 = require("sequelize");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -55,4 +56,21 @@ const sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     },
 });
 exports.sequelize = sequelize;
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection has been established successfully.');
+        if (NODE_ENV !== 'test') {
+            await sequelize.sync({ alter: true });
+            console.log('Database tables synced.');
+        }
+    }
+    catch (error) {
+        console.error('Unable to connect to the database:', error);
+        if (NODE_ENV !== 'test') {
+            process.exit(1);
+        }
+    }
+};
+exports.testConnection = testConnection;
 //# sourceMappingURL=database.js.map

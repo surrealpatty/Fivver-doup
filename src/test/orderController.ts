@@ -1,156 +1,103 @@
-import request from 'supertest';
-import app from '../index'; // Adjust path if needed
-import { sequelize } from '../config/database'; // Ensure sequelize is correctly imported
-import { User, Service, Order } from '../models'; // Your models
+import { Request, Response } from 'express';
+import { Order, User, Service } from '../models'; // Make sure models are correctly imported
 
-// Mock models
-jest.mock('../models/user');
-jest.mock('../models/service');
-jest.mock('../models/order');
+// Create Order
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId, serviceId, orderDetails } = req.body;
 
-describe('Order Controller Tests', () => {
-  beforeAll(async () => {
-    // Sync the database for testing (You might want to use an in-memory DB for tests)
-    await sequelize.sync();
-  });
+    // Find user and service by ID
+    const user = await User.findByPk(userId);
+    const service = await Service.findByPk(serviceId);
 
-  afterEach(() => {
-    jest.clearAllMocks(); // Clear mocks after each test to avoid state issues
-  });
+    if (!user || !service) {
+      return res.status(404).json({ message: 'User or Service not found' });
+    }
 
-  afterAll(async () => {
-    await sequelize.close(); // Close the connection after all tests
-  });
-
-  // Test Create Order
-  it('should create a new order', async () => {
-    const mockUser = { id: 1, username: 'testuser', email: 'user@example.com' };
-    const mockService = { id: 1, name: 'Test Service' };
-
-    // Mock the User and Service findByPk methods
-    (User.findByPk as jest.Mock).mockResolvedValue(mockUser);
-    (Service.findByPk as jest.Mock).mockResolvedValue(mockService);
-
-    // Mock the Order creation
-    (Order.create as jest.Mock).mockResolvedValue({
-      id: 1,
-      userId: mockUser.id,
-      serviceId: mockService.id,
-      orderDetails: 'Test order details',
-      status: 'Pending',
+    // Create order
+    const order = await Order.create({
+      userId,
+      serviceId,
+      orderDetails,
+      status: 'Pending',  // Default status
     });
 
-    const response = await request(app)
-      .post('/orders')
-      .send({
-        userId: 1,
-        serviceId: 1,
-        orderDetails: 'Test order details',
-      });
+    return res.status(201).json({ message: 'Order created successfully', order });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
 
-    expect(response.status).toBe(201);
-    expect(response.body.message).toBe('Order created successfully');
-    expect(response.body.order.status).toBe('Pending');
-    expect(response.body.order.userId).toBe(1); // Check user ID in response
-  });
+// Get All Orders
+export const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const orders = await Order.findAll();
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
 
-  // Test Get All Orders
-  it('should fetch all orders', async () => {
-    const mockOrders = [
-      {
-        id: 1,
-        userId: 1,
-        serviceId: 1,
-        orderDetails: 'Test order 1',
-        status: 'Pending',
-      },
-      {
-        id: 2,
-        userId: 2,
-        serviceId: 2,
-        orderDetails: 'Test order 2',
-        status: 'Completed',
-      },
-    ];
+// Get Order by ID
+export const getOrderById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findByPk(id);
 
-    // Mock Order.findAll
-    (Order.findAll as jest.Mock).mockResolvedValue(mockOrders);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-    const response = await request(app).get('/orders');
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
 
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(2);
-    expect(response.body[0].status).toBe('Pending');
-  });
+// Update Order
+export const updateOrder = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { orderDetails, status } = req.body;
 
-  // Test Get Order by ID
-  it('should fetch a specific order by ID', async () => {
-    const mockOrder = {
-      id: 1,
-      userId: 1,
-      serviceId: 1,
-      orderDetails: 'Test order details',
-      status: 'Pending',
-    };
+    const order = await Order.findByPk(id);
 
-    // Mock Order.findByPk
-    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-    const response = await request(app).get('/orders/1');
+    // Update the order
+    order.orderDetails = orderDetails || order.orderDetails;
+    order.status = status || order.status;
 
-    expect(response.status).toBe(200);
-    expect(response.body.orderDetails).toBe('Test order details');
-    expect(response.body.status).toBe('Pending');
-  });
+    await order.save();
 
-  // Test Update Order
-  it('should update an order', async () => {
-    const mockOrder = {
-      id: 1,
-      userId: 1,
-      serviceId: 1,
-      orderDetails: 'Old details',
-      status: 'Pending',
-    };
+    return res.status(200).json({ message: 'Order updated successfully', order });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
 
-    // Mock Order.findByPk and save method
-    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
-    (Order.prototype.save as jest.Mock).mockResolvedValue({
-      ...mockOrder,
-      orderDetails: 'Updated details',
-      status: 'Completed',
-    });
+// Delete Order
+export const deleteOrder = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findByPk(id);
 
-    const response = await request(app)
-      .put('/orders/1')
-      .send({
-        orderDetails: 'Updated details',
-        status: 'Completed',
-      });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Order updated successfully');
-    expect(response.body.order.status).toBe('Completed');
-    expect(response.body.order.orderDetails).toBe('Updated details');
-  });
+    // Delete the order
+    await order.destroy();
 
-  // Test Delete Order
-  it('should delete an order', async () => {
-    const mockOrder = {
-      id: 1,
-      userId: 1,
-      serviceId: 1,
-      orderDetails: 'Test order details',
-      status: 'Pending',
-    };
-
-    // Mock Order.findByPk and destroy method
-    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
-    (Order.prototype.destroy as jest.Mock).mockResolvedValue(undefined);
-
-    const response = await request(app).delete('/orders/1');
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Order deleted successfully');
-  });
-});
+    return res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};

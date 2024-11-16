@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../models'; // Adjust the import path if necessary
+import { User } from '../models'; // Ensure correct path and export of User model
 
 // User Registration
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
@@ -30,7 +30,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
             role: role || 'user',  // Set a default role if not provided
             subscriptionStatus: subscriptionStatus || 'free',  // Set default subscriptionStatus
         });
-        
+
         // Return success message
         return res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
@@ -50,11 +50,11 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
     try {
         const user = await User.findOne({ where: { email } });
-        
+
         // Check if user exists and password matches
         if (user && await bcrypt.compare(password, user.password)) {
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-            
+
             // Set the JWT in a cookie
             res.cookie('jwt', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
             return res.status(200).json({ message: 'Login successful', token });
