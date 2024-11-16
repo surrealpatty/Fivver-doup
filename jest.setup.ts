@@ -1,36 +1,30 @@
-import { config } from '@vue/test-utils';  // Import Vue Test Utils
-import { createApp } from 'vue';            // Vue app import
+import type { Config } from '@jest/types';
 
-// Explicitly declare the global Vue type to avoid TypeScript errors
-declare global {
-  var Vue: ReturnType<typeof createApp>;  // Type the global Vue variable
-}
+const config: Config.InitialOptions = {
+  preset: 'ts-jest',  // Use ts-jest for TypeScript support
+  testEnvironment: 'jsdom',  // Set the test environment to jsdom for browser-like features
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],  // Include Vue file extensions
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest for TypeScript files
+    '^.+\\.vue$': 'vue3-jest',  // Use vue3-jest for Vue 3 files
+  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],  // Specify setup file to configure mocks and globals
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',  // Alias to map '@' to the src folder (optional, based on your project structure)
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)',  // Ensure that Vue-related packages are transformed
+  ],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx,vue}',  // Collect coverage from TypeScript and Vue files
+    '!src/**/*.d.ts',  // Exclude declaration files from coverage
+  ],
+  coverageDirectory: 'coverage',  // Specify the directory where coverage reports will be stored
+  coverageProvider: 'v8',  // Use v8 for faster code coverage collection
+  testPathIgnorePatterns: [
+    '/node_modules/',  // Ignore node_modules during tests
+  ],
+  verbose: true,  // Enable verbose output to see detailed test results
+};
 
-// Ensure Vue is available globally for all tests
-if (typeof globalThis.Vue === 'undefined') {
-  globalThis.Vue = createApp({});  // Initialize a Vue app instance globally if Vue isn't already set
-}
-
-// Mock sessionStorage globally for tests
-beforeEach(() => {
-  // Mock sessionStorage using Object.defineProperty
-  Object.defineProperty(global, 'sessionStorage', {
-    value: {
-      getItem: jest.fn().mockReturnValue('mockedItem'),  // Return mocked value for getItem
-      setItem: jest.fn(),  // Mock setItem
-      removeItem: jest.fn(),  // Mock removeItem
-      clear: jest.fn(),    // Mock clear
-    },
-    writable: true,  // Allow modifications to sessionStorage in the tests
-  });
-
-  // Mock global translation function ($t) commonly used in Vue apps with i18n
-  config.global.mocks = {
-    $t: (msg: string) => msg,  // Return the message string itself (for simple translation mocking)
-  };
-});
-
-// After each test, clear all mocks and reset mocks to avoid state leakage between tests
-afterEach(() => {
-  jest.clearAllMocks();  // Clear all mocks between tests to ensure no state leaks
-});
+export default config;

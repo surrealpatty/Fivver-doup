@@ -5,13 +5,14 @@
   "directories": {
     "doc": "docs"
   },
+  "type": "module",  // Add this line to indicate ES module usage
   "scripts": {
     "pretest": "npm run build",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "npx jest --config jest.config.ts",
+    "test": "npx jest --config jest.config.ts",  // Ensure correct path to Jest config
     "test:watch": "jest --watch",
     "lint": "eslint 'src/**/*.ts' --fix",
     "test:ci": "jest --ci --maxWorkers=4",
@@ -57,7 +58,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
-    "vue3-jest": "^27.0.0-alpha.1"
+    "vue3-jest": "^29.0.0"  // Use stable version for vue3-jest
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
