@@ -1,35 +1,35 @@
 import { Model, DataTypes, Optional, ModelStatic } from 'sequelize';
 import { sequelize } from '../config/database'; // Correctly import sequelize instance
-import User from './user'; // Import the User model (adjust path as needed)
+import User from './user'; // Import the User model (adjust the path if necessary)
 
 // Define the attributes for the "services" table
 interface ServiceAttributes {
   id: number;
   name: string;
   description: string;
-  user_id: number | null;  // Nullable user_id to match foreign key relation
-  createdAt: Date;
-  updatedAt: Date;
+  user_id: number | null; // Nullable user_id to match the foreign key relation
+  createdAt?: Date; // Optional for TypeScript as Sequelize will auto-manage these
+  updatedAt?: Date; // Optional for TypeScript as Sequelize will auto-manage these
 }
 
-// Define the optional fields for the "services" table (only for creating instances)
+// Define the optional fields for creating instances
 interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
-  public user_id!: number | null;  // Make sure user_id is consistently used
-  public createdAt!: Date;
-  public updatedAt!: Date;
+  public user_id!: number | null;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 
   // Define the associate method to establish relationships
   static associate(models: { User: ModelStatic<Model> }) {
     // Define the association with the User model
     Service.belongsTo(models.User, {
-      foreignKey: 'user_id',  // Foreign key is user_id (snake_case to match the column name)
-      onDelete: 'SET NULL',    // If the user is deleted, set user_id to NULL in services
-      onUpdate: 'CASCADE',     // If the user's id is updated, update user_id in services
+      foreignKey: 'user_id',  // Foreign key is user_id
+      onDelete: 'SET NULL',   // Set user_id to NULL if the user is deleted
+      onUpdate: 'CASCADE',    // Update user_id if the user's id is updated
     });
   }
 }
@@ -49,15 +49,15 @@ Service.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    user_id: {  // Match this with the snake_case column name in the database
+    user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,  // user_id can be nullable if user is deleted
+      allowNull: true, // user_id can be nullable if the user is deleted
       references: {
-        model: 'users',  // The table name in the database (should be plural if that's how it's named)
+        model: 'users', // Reference the "users" table
         key: 'id',
       },
-      onDelete: 'SET NULL',  // If the user is deleted, set user_id to NULL
-      onUpdate: 'CASCADE',   // If the user's id is updated, update user_id in services
+      onDelete: 'SET NULL', // Set user_id to NULL if the referenced user is deleted
+      onUpdate: 'CASCADE',  // Update user_id if the referenced user's id is updated
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -67,19 +67,17 @@ Service.init(
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
     },
   },
   {
     sequelize, // Pass the sequelize instance
     modelName: 'Service', // The name of the model
-    tableName: 'services', // The table name in the DB
-    timestamps: true, // Enable Sequelize's automatic timestamp management
-    underscored: true, // Use snake_case for column names, e.g., created_at, updated_at
+    tableName: 'services', // The table name in the database
+    timestamps: true, // Automatically add createdAt and updatedAt fields
+    underscored: true, // Use snake_case for column names
   }
 );
 
-// Ensure associations are set up after model is initialized
-Service.associate({ User });
-
+// Export the model
 export default Service;
