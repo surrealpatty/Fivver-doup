@@ -6,7 +6,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'], // Include Vue file extensions
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }], // Use ts-jest for TypeScript files
-    '^.+\\.vue$': 'vue-jest', // Use vue-jest to handle .vue files
+    '^.+\\.vue$': 'vue3-jest', // Use vue3-jest for Vue 3 files (ensure it's installed)
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Specify setup file to configure mocks and globals
   globals: {
