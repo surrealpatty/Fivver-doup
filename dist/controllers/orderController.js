@@ -5,6 +5,10 @@ const models_1 = require("../models");
 // Create an Order
 const createOrder = async (req, res) => {
     const { userId, serviceId, orderDetails } = req.body;
+    // Input validation
+    if (!userId || !serviceId || !orderDetails) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
     try {
         // Fetch the User and Service from the database
         const user = await models_1.User.findByPk(userId);
@@ -64,6 +68,10 @@ exports.getOrderById = getOrderById;
 const updateOrder = async (req, res) => {
     const { id } = req.params;
     const { orderDetails, status } = req.body;
+    // Input validation
+    if (!orderDetails && !status) {
+        return res.status(400).json({ message: 'At least one field (orderDetails or status) is required.' });
+    }
     try {
         // Find the order by ID
         const order = await models_1.Order.findByPk(id);

@@ -5,6 +5,10 @@ const models_1 = require("../models"); // Correct import for User model
 const upgradeToPaid = async (req, res) => {
     const userId = req.user?.id; // Ensure user ID is available from JWT or session middleware
     const durationInMonths = req.body.duration || 1; // Default to 1 month if not provided
+    // Validate duration
+    if (durationInMonths <= 0 || !Number.isInteger(durationInMonths)) {
+        return res.status(400).json({ message: 'Duration must be a positive integer' });
+    }
     if (!userId) {
         return res.status(400).json({ message: 'User ID is required' });
     }

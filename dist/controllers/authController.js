@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const models_1 = require("../models"); // Adjust the import path if necessary
+const models_1 = require("../models"); // Ensure correct path and export of User model
 // User Registration
 const registerUser = async (req, res) => {
     const { username, email, password, firstName, lastName, role, subscriptionStatus } = req.body;
