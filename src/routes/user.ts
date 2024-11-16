@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import User, { UserAttributes } from '../models/user'; // Import UserAttributes from the correct file
+import User from '../models/user'; // Correct import
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';
 
@@ -62,7 +62,7 @@ router.post(
         lastName,
         role: 'Free', // Default role for a new user
         subscriptionStatus: 'Inactive', // Default subscription status
-      } as UserAttributes); // Typecast to UserAttributes to match the expected type
+      });
 
       // Respond with the created user data (excluding password)
       res.status(201).json({

@@ -1,5 +1,5 @@
 // src/config/database.ts
-import { Sequelize } from 'sequelize';
+import { sequelize } from '../config/database'; // Use named import instead of default import
 import * as dotenv from 'dotenv';
 
 dotenv.config();
