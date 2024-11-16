@@ -1,5 +1,5 @@
-// src/resetDatabase.js
-const { sequelize, testConnection } = require('./config/database');
+// src/resetDatabase.ts
+import { sequelize, testConnection } from './config/database';
 
 const resetDatabase = async () => {
   try {
