@@ -17,7 +17,7 @@ export interface UserAttributes {
 }
 
 // Define interface for creation - excludes id (because it’s auto-generated)
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+export type UserCreationAttributes = Optional<UserAttributes, 'id'>
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;

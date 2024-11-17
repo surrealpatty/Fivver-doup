@@ -15,7 +15,7 @@ export interface OrderAttributes {
 }
 
 // Define the creation attributes interface (excluding `id`)
-export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;

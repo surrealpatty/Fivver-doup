@@ -12,7 +12,7 @@ interface ServiceAttributes {
   updatedAt?: Date;
 }
 
-interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>
 
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
