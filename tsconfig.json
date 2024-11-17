@@ -14,7 +14,8 @@
     "rootDir": "./src",                         // Specify the root directory for TypeScript sources
     "paths": {
       "*": ["node_modules/*", "src/*"]          // Resolve modules from src and node_modules
-    }
+    },
+    "resolvePackageJsonExports": true           // Ensure correct handling of package.json "exports" field (optional)
   },
   "include": [
     "src/**/*.ts"                               // Include all .ts files in the src folder
