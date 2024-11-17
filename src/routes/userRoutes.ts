@@ -1,45 +1,34 @@
+// src/routes/userRoutes.ts
+
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
-import User from '../models/user';
-import { authenticateToken } from '../middlewares/authMiddleware';
-import { Op } from 'sequelize';
+import { Op } from 'sequelize';  // Import Op for Sequelize operators
+import User from '../models/user'; // Ensure this import matches your model file
+import { authenticateToken } from '../middlewares/authMiddleware';  // If you use token authentication
 
-// Initialize router
 const router = express.Router();
 
-// Interface for better type safety on the request body
-interface RegisterRequestBody {
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  subscriptionStatus?: string;
-}
-
 // Registration Route
-router.post(
-  '/register',
-  // Input validation
+router.post('/register', 
+  // Validation checks
   body('username').isString().notEmpty().withMessage('Username is required'),
   body('email').isEmail().withMessage('Invalid email format'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
-    const errors = validationResult(req);
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);  // Check validation errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });  // Send error response if validation fails
     }
 
     const { username, email, password, firstName, lastName, subscriptionStatus } = req.body;
 
     try {
-      // Check if the username or email already exists
-      const existingUser = await User.findOne({
-        where: {
-          [Op.or]: [{ username }, { email }],
-        },
+      // Check if the user already exists
+      const existingUser = await User.findOne({ 
+        where: { 
+          [Op.or]: [{ username }, { email }] 
+        }
       });
       if (existingUser) {
         return res.status(400).json({ message: 'Username or email already taken' });
@@ -47,42 +36,42 @@ router.post(
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
-      if (!hashedPassword) {
-        return res.status(500).json({ message: 'Error hashing password' });
-      }
 
-      // Set subscription dates
+      // Set subscriptionStartDate and subscriptionEndDate
       const subscriptionStartDate = new Date();
       const subscriptionEndDate = new Date();
-      subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + 1);  // Default to one month from now
+      subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + 1);  // Default subscription for 1 month
 
-      // Create the new user
+      // Create the user in the database
       const user = await User.create({
         username,
         email,
         password: hashedPassword,
-        firstName,
-        lastName,
-        role: 'Free',  // Default role is 'Free'
-        subscriptionStatus: subscriptionStatus || 'Inactive',  // Default status is 'Inactive'
+        firstName,  // Optional if you add this to your model
+        lastName,   // Optional if you add this to your model
+        role: 'Free', // Default role
+        subscriptionStatus: subscriptionStatus || 'Inactive',  // Default to 'Inactive' if not provided
         subscriptionStartDate,
-        subscriptionEndDate,
+        subscriptionEndDate
       });
 
-      // Respond with the created user data (excluding the password)
+      // Return success response
       return res.status(201).json({
         id: user.id,
         username: user.username,
         email: user.email,
-        role: user.role,
+        role: user.role
       });
-    } catch (error) {
-      console.error('Error during registration:', error);
-      return res.status(500).json({ message: 'Server error during registration', error: error.message });
+    } catch (error: unknown) {
+      // Proper error handling with type assertion
+      if (error instanceof Error) {
+        return res.status(500).json({ message: 'Server error during registration', error: error.message });
+      } else {
+        return res.status(500).json({ message: 'Server error during registration', error: 'Unknown error' });
+      }
     }
   }
 );
 
-// Other routes...
-
+// Export the router
 export default router;
