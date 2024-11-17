@@ -1,3 +1,4 @@
+// src/models/user.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Correctly import sequelize instance
 import Service from './service'; // Import the Service model
@@ -12,6 +13,8 @@ interface UserAttributes {
   subscriptionStatus: string; // 'Active' or 'Inactive'
   subscriptionStartDate: Date;
   subscriptionEndDate: Date;
+  firstName?: string;  // Add firstName as optional
+  lastName?: string;   // Add lastName as optional
   createdAt?: Date; // Optional for TypeScript as Sequelize will auto-manage these
   updatedAt?: Date; // Optional for TypeScript as Sequelize will auto-manage these
 }
@@ -28,6 +31,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public subscriptionStatus!: string; // Default 'Active' or 'Inactive'
   public subscriptionStartDate!: Date;
   public subscriptionEndDate!: Date;
+  public firstName?: string;  // Add firstName property
+  public lastName?: string;   // Add lastName property
   public createdAt?: Date;
   public updatedAt?: Date;
 
@@ -80,6 +85,14 @@ User.init(
     subscriptionEndDate: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,  // firstName can be null if it's not provided
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,  // lastName can be null if it's not provided
     },
     createdAt: {
       type: DataTypes.DATE,

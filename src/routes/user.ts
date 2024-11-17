@@ -1,3 +1,4 @@
+// src/routes/userRoutes.ts
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -19,7 +20,7 @@ router.post('/register',
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, email, password } = req.body;
+    const { username, email, password, firstName, lastName } = req.body;
 
     try {
       const existingUser = await User.findOne({ where: { [Op.or]: [{ username }, { email }] } });
@@ -28,12 +29,24 @@ router.post('/register',
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Set subscriptionStartDate to the current date
+      const subscriptionStartDate = new Date();
+
+      // Set subscriptionEndDate to one month later (or any other time period you prefer)
+      const subscriptionEndDate = new Date();
+      subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + 1); // Default to one month
+
       const user = await User.create({
         username,
         email,
         password: hashedPassword,
         role: 'Free',
-        subscriptionStatus: 'Inactive'
+        subscriptionStatus: 'Inactive',
+        firstName,  // Add firstName
+        lastName,    // Add lastName
+        subscriptionStartDate,  // Add subscriptionStartDate
+        subscriptionEndDate     // Add subscriptionEndDate
       });
 
       res.status(201).json({
@@ -80,7 +93,9 @@ router.get('/profile', authenticateToken, async (req: Request, res: Response) =>
       username: user.username,
       email: user.email,
       role: user.role,
-      subscriptionStatus: user.subscriptionStatus
+      subscriptionStatus: user.subscriptionStatus,
+      firstName: user.firstName, // Return firstName
+      lastName: user.lastName    // Return lastName
     });
   } catch (error) {
     console.error('Error fetching profile:', error);
