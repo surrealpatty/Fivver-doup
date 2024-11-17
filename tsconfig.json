@@ -1,27 +1,28 @@
 {
   "compilerOptions": {
-    "module": "ESNext",                         // Use ESNext for modern module resolution
-    "moduleResolution": "node",                 // Use Node.js module resolution strategy
-    "target": "ESNext",                         // Target the latest version of JavaScript
-    "esModuleInterop": true,                    // Ensure compatibility with CommonJS modules
-    "strict": true,                             // Enable strict type-checking options
-    "skipLibCheck": true,                       // Skip type checking of declaration files
-    "resolveJsonModule": true,                  // Allow importing JSON files as modules
-    "outDir": "./dist",                         // Compiled files will go to dist folder
-    "baseUrl": "./",                            // Base directory for module resolution
-    "allowJs": true,                            // Allow JavaScript files to be compiled
-    "noEmitOnError": true,                      // Don't emit files if there are TypeScript errors
+    "module": "ESNext",                        // Use ESNext for modern module resolution
+    "moduleResolution": "node",                // Use Node.js module resolution strategy
+    "target": "ESNext",                        // Target the latest version of JavaScript
+    "esModuleInterop": true,                   // Ensure compatibility with CommonJS modules
+    "strict": true,                            // Enable strict type-checking options
+    "skipLibCheck": true,                      // Skip type checking of declaration files
+    "resolveJsonModule": true,                 // Allow importing JSON files as modules
+    "outDir": "./dist",                        // Compiled files will go to dist folder
+    "baseUrl": "./",                           // Base directory for module resolution
+    "allowJs": true,                           // Allow JavaScript files to be compiled
+    "noEmitOnError": true,                     // Don't emit files if there are TypeScript errors
     "paths": {
-      "*": ["node_modules/*", "src/*"]          // Resolve modules from src and node_modules
+      "*": ["node_modules/*", "src/*"]         // Resolve modules from src and node_modules
     },
-    "sourceMap": true                           // Generate source maps for debugging (optional)
+    "sourceMap": true,                         // Generate source maps for debugging (optional)
+    "rootDir": "./src"                         // Specify the root directory for TypeScript sources
   },
   "include": [
-    "src/**/*.ts"                               // Include all .ts files in the src folder
+    "src/**/*.ts"                              // Include all .ts files in the src folder
   ],
   "exclude": [
-    "node_modules",                             // Exclude node_modules from the compilation
-    "dist",                                     // Exclude dist folder from the compilation process
-    "**/*.js"                                   // Exclude .js files in the src folder
+    "node_modules",                            // Exclude node_modules from the compilation
+    "dist",                                    // Exclude dist folder from the compilation process
+    "**/*.js"                                  // Exclude .js files in the src folder (if they exist)
   ]
 }
