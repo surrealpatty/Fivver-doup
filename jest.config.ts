@@ -14,8 +14,8 @@ const config: Config.InitialOptions = {
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // Optional: Use '@' to refer to the 'src' directory
-  },
+    '^@models/(.*)$': '<rootDir>/src/models/$1',
+  },  
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',  // Collect coverage from TypeScript files only
     '!src/**/*.d.ts',  // Exclude declaration files from coverage
