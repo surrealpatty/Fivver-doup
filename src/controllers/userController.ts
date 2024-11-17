@@ -3,7 +3,7 @@ import { User } from '../models';  // Correct import for User model
 
 export const upgradeToPaid = async (req: Request, res: Response): Promise<Response> => {
     const userId = req.user?.id;  // Ensure user ID is available from JWT or session middleware
-    const durationInMonths = req.body.duration || 1;  // Default to 1 month if not provided
+    const durationInMonths: number = req.body.duration || 1;  // Default to 1 month if not provided
 
     // Validate duration
     if (durationInMonths <= 0 || !Number.isInteger(durationInMonths)) {
