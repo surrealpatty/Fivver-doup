@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';  // Import Op from Sequelize
 import User from '../models/user'; // Import the User model
-import { authenticateToken } from '../middleware/authMiddleware'; // Ensure token authentication is used
+import { authenticateToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
