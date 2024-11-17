@@ -2,7 +2,10 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
-import { ParserOptions } from "@typescript-eslint/parser"; // Import the TypeScript parser
+
+// Use default import for the TypeScript parser due to CommonJS compatibility
+import pkg from "@typescript-eslint/parser";
+const { parser } = pkg;
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -17,7 +20,7 @@ export default [
   // Apply TypeScript linting rules
   {
     files: ["**/*.{ts,tsx}"],
-    parser: "@typescript-eslint/parser", // Use the TypeScript parser
+    parser, // Use the TypeScript parser
     plugins: {
       "@typescript-eslint": tseslint,
     },
@@ -26,7 +29,7 @@ export default [
   // Vue linting configuration
   {
     files: ["**/*.vue"],
-    parser: "@typescript-eslint/parser", // Use TypeScript parser for Vue files
+    parser, // Use TypeScript parser for Vue files
     plugins: {
       vue: pluginVue,
     },
