@@ -1,8 +1,9 @@
 // src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+    // Extract the token from the Authorization header
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
@@ -10,9 +11,18 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
 
     try {
-        // Type the decoded token to ensure proper structure
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number };
-        req.userId = decoded.userId;  // Attach userId to request object
+        // Ensure JWT_SECRET is defined in your environment
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
+        }
+
+        // Decode the token and type it correctly
+        const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: number };
+
+        // Attach the userId to the request object
+        req.userId = decoded.userId;
+
         next();
     } catch (error) {
         return res.status(403).json({ message: 'Invalid or expired token' });

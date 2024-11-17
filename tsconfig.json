@@ -1,41 +1,41 @@
 {
   "compilerOptions": {
-    "target": "ES6", // Set target to ES6 for Node.js compatibility
-    "module": "commonjs", // Use commonjs for Node.js
-    "moduleResolution": "node", // Resolves modules like Node.js
-    "esModuleInterop": true, // Allow default imports from modules with no default export
-    "allowSyntheticDefaultImports": true, // Allows default imports from non-default export modules
-    "skipLibCheck": true, // Skip library type checking for faster builds
-    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
-    "strict": true, // Enable all strict checks (best practice)
-    "noImplicitAny": true, // Disallow implicit any types
-    "strictNullChecks": true, // Ensure null checks are enabled
-    "outDir": "./dist", // Compiled files go to the "dist" folder
-    "baseUrl": "./src", // The root of the project (for path mapping)
+    "target": "ES6",  // Set target to ES6 for Node.js compatibility
+    "module": "commonjs",  // Use commonjs for Node.js
+    "moduleResolution": "node",  // Resolves modules like Node.js
+    "esModuleInterop": true,  // Allow default imports from modules with no default export
+    "allowSyntheticDefaultImports": true,  // Allows default imports from non-default export modules
+    "skipLibCheck": true,  // Skip library type checking for faster builds
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing
+    "strict": true,  // Enable all strict checks (best practice)
+    "noImplicitAny": true,  // Disallow implicit any types
+    "strictNullChecks": true,  // Ensure null checks are enabled
+    "outDir": "./dist",  // Compiled files go to the "dist" folder
+    "baseUrl": "./src",  // The root of the project (for path mapping)
     "paths": {
-      "@/*": ["*"] // Path alias for "src" directory
+      "@/*": ["*"]  // Path alias for "src" directory
     },
-    "resolveJsonModule": true, // Allow importing JSON files as modules
-    "lib": ["esnext", "dom", "es2015"], // Include ES libraries and DOM for node and frontend compatibility
+    "resolveJsonModule": true,  // Allow importing JSON files as modules
+    "lib": ["esnext", "dom", "es2015"],  // Include ES libraries and DOM for node and frontend compatibility
     "typeRoots": [
-      "./node_modules/@types", // Standard types folder
-      "./src/types" // Custom types folder (if you have one)
+      "./node_modules/@types",  // Standard types folder
+      "./src/types"  // Custom types folder (if you have one)
     ],
-    "types": ["jest", "node"], // Include Jest and Node types for testing and Node.js
-    "tsBuildInfoFile": "./.tsbuildinfo", // For incremental builds
-    "incremental": true // Enable incremental compilation for faster rebuilds
+    "types": ["jest", "node"],  // Include Jest and Node types for testing and Node.js
+    "tsBuildInfoFile": "./.tsbuildinfo",  // For incremental builds
+    "incremental": true  // Enable incremental compilation for faster rebuilds
   },
   "include": [
-  "src/**/*.ts",
-  "src/**/*.tsx",
-  "src/**/*.js",
-  "src/**/*.d.ts",
-  "src/test/**/*.ts",  // Ensure test files are included
-  "src/test/**/*.tsx"
-],
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "src/test/**/*.ts",  // Ensure test files are included
+    "src/test/**/*.tsx"
+  ],
   "exclude": [
-    "node_modules", // Exclude the "node_modules" folder
-    "dist", // Exclude the compiled "dist" folder
-    "jest.config.ts" // Exclude Jest config if using TypeScript for config
+    "node_modules",  // Exclude the "node_modules" folder
+    "dist",  // Exclude the compiled "dist" folder
+    "jest.config.ts"  // Exclude Jest config if using TypeScript for config
   ]
 }

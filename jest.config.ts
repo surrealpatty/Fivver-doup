@@ -10,7 +10,7 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],  // Specify a setup file for any test configuration
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json',  // Specify the tsconfig to use for ts-jest transformations
+      tsconfig: '<rootDir>/tsconfig.json',  // Specify the correct tsconfig to use for ts-jest transformations
     },
   },
   moduleNameMapper: {
