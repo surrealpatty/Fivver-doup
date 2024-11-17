@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user';  // Try using absolute imports
+import userRoutes from './routes/user';  // Use absolute imports
 import authenticateToken from './middlewares/authMiddleware';  // Import authentication middleware
 
 const app = express();
@@ -27,9 +27,9 @@ app.use('/users/profile', authenticateToken, async (req, res) => {
 });
 
 // Start the server
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
-// Export app for testing purposes
-export { app };
+// Export app and server for testing purposes
+export { app, server };

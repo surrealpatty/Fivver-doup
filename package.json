@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "directories": {
     "doc": "docs",
-    "test": "tests"
+    "test": "npx jest --config jest.config.ts"
   },
   "type": "module",
   "scripts": {
@@ -15,8 +15,9 @@
     "build:watch": "tsc --watch",
     "test": "npx jest --config jest.config.ts",
     "test:watch": "jest --watch",
-    "lint": "eslint 'src/**/*.ts' --fix",
+    "test:coverage": "npx jest --coverage --detectOpenHandles",
     "test:ci": "jest --ci --maxWorkers=4",
+    "lint": "eslint 'src/**/*.ts' --fix",
     "migrate": "npx sequelize-cli db:migrate"
   },
   "keywords": [],

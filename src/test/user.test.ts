@@ -1,6 +1,6 @@
 import express from 'express';  // Correct ES module import
 import request from 'supertest'; 
-import { app } from '../index';  // Import app from index.ts
+import { app, server } from '../index';  // Import app and server from index.ts
 import User from '../models/user'; 
 import jwt from 'jsonwebtoken'; 
 import { sequelize } from '../config/database';  
@@ -45,12 +45,13 @@ describe('User Controller', () => {
 
     afterAll(async () => {
         // Ensure cleanup of any database connections after tests
-        await sequelize.close();  
+        await sequelize.close();
+        server.close();  // Close the server after all tests to prevent hanging
     });
 
     test('should login a user and return a token', async () => {
         const response = await request(app)
-            .post('/api/users/login')  // Make sure this route exists in your Express setup
+            .post('/users/login')  // Adjusted to match your actual route in Express
             .send({
                 email: 'test@example.com',
                 password: 'password123',  // Match with your mock data
@@ -64,7 +65,7 @@ describe('User Controller', () => {
 
     test('should update user profile', async () => {
         const response = await request(app)
-            .put('/api/users/profile')  // Correct route to update profile
+            .put('/users/profile')  // Adjusted to match your actual route in Express
             .set('Authorization', 'Bearer mockedToken')  // Mock Authorization header
             .send({
                 email: 'updated@example.com',
@@ -80,7 +81,7 @@ describe('User Controller', () => {
 
     test('should delete user account', async () => {
         const response = await request(app)
-            .delete('/api/users/profile')  // Correct route to delete profile
+            .delete('/users/profile')  // Adjusted to match your actual route in Express
             .set('Authorization', 'Bearer mockedToken');  // Mock Authorization header
 
         console.log(response.status, response.body);  
