@@ -1,28 +1,30 @@
-// src/controllers/userController.ts
-import { Request, Response } from 'express';
-import User from '../models/user'; // Default import for User
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-export const getUserProfile = async (req: Request, res: Response) => {
-    try {
-        const userId = req.userId; // Assuming req.userId is set earlier (e.g., via a middleware)
+// Define an interface for the JWT payload (add any other fields your token includes)
+interface CustomJwtPayload extends JwtPayload {
+    id: string; // Assuming `id` is a string, change if it's a different type (e.g., number)
+}
 
-        if (!userId) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
+const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Assuming Bearer token
 
-        const user = await User.findOne({ where: { id: userId } });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        return res.status(200).json({
-            email: user.email,
-            username: user.username,  // Ensure these fields exist on the User model
-            role: user.role           // Ensure these fields exist on the User model
-        });
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+    if (!token) {
+        return res.status(403).json({ message: 'Token required' });
     }
+
+    jwt.verify(token, 'your-secret-key', (err, user) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        // Type assertion to ensure `user` is the custom JwtPayload
+        const customUser = user as CustomJwtPayload;
+
+        // Now that TypeScript knows `customUser` has an `id`, we can safely access it
+        req.userId = customUser.id;  // Assuming the token has a userId property
+        next();
+    });
 };
+
+export default authenticateToken;

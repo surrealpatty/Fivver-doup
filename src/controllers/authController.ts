@@ -1,34 +1,32 @@
-import { Request, Response } from 'express';
-import User from '../models/user'; // Assuming User model is correctly imported
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+// src/middleware/authMiddleware.ts
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-interface RegisterRequestBody {
-    email: string;
-    password: string;
-    username: string;
-    role: string;
-}
+// Authentication middleware to verify JWT token
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+    // Extract the token from the Authorization header (Bearer token)
+    const token = req.header('Authorization')?.replace('Bearer ', '');
 
-export const registerUser = async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
-    const { email, password, username, role } = req.body;
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) {
+        return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
+    }
 
     try {
-        // Hash password before storing in DB
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Verify and decode the JWT token
+        const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: number };
 
-        // Create a new user in the database
-        const newUser = await User.create({
-            email,
-            password: hashedPassword,
-            username,
-            role,
-        });
+        // Attach the `userId` to the request object
+        req.userId = decoded.userId;
 
-        // Return success response
-        return res.status(201).json({ username: newUser.username, role: newUser.role });
+        // Proceed to the next middleware or route handler
+        next();
     } catch (error) {
-        console.error('Error registering user:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };

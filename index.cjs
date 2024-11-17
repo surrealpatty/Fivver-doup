@@ -1,8 +1,9 @@
-import express from 'express';  // Use ES module import for express
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { sequelize, testConnection } from './config/database';  // Correct import for sequelize
-import userRoutes from './routes/user';  // Correct import for user routes
+// index.cjs
+const express = require('express');  // Use CommonJS require for express
+const cors = require('cors');
+const dotenv = require('dotenv');
+const { sequelize, testConnection } = require('./config/database');  // Correct require for sequelize
+const userRoutes = require('./routes/user');  // Correct require for user routes
 
 dotenv.config();
 
@@ -40,5 +41,5 @@ const startServer = async () => {
 
 startServer();
 
-// Export app for testing purposes
-export { app };
+// Export app for testing purposes (CommonJS)
+module.exports = { app };

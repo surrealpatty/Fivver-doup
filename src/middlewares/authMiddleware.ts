@@ -6,14 +6,12 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 declare global {
     namespace Express {
         interface Request {
-            userId?: number;  // Add `userId` to the request object
+            userId?: number;  // Keep this as a number if you want `userId` to be a number
         }
     }
 }
 
-// Authentication middleware to verify JWT token
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-    // Extract the token from the Authorization header (Bearer token)
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
@@ -28,12 +26,15 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
     try {
         // Verify and decode the JWT token
-        const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: number };
+        const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: string };  // Change to string if the id is a string
 
-        // Attach the `userId` to the request object
-        req.userId = decoded.userId;
+        // Convert userId to number (assuming it's a string in the token)
+        req.userId = Number(decoded.userId);  // Convert string to number if needed
 
-        // Proceed to the next middleware or route handler
+        if (isNaN(req.userId)) {
+            return res.status(400).json({ message: 'Invalid userId in token' });
+        }
+
         next();
     } catch (error) {
         return res.status(403).json({ message: 'Invalid or expired token' });

@@ -13,14 +13,16 @@
     "noEmitOnError": true,                  // Don't emit files if there are TypeScript errors
     "paths": {
       "*": ["node_modules/*", "src/*"]     // Resolve modules from src and node_modules
-    }
+    },
+    "sourceMap": true                       // Generate source maps for debugging (optional)
   },
   "include": [
     "src/**/*.ts",                          // Include all TypeScript files in the src folder
-    "src/config/database.d.ts"              // Include the database declaration file (if it exists)
+    "src/**/*.d.ts"                         // Include TypeScript declaration files in the src folder (if any)
   ],
   "exclude": [
     "node_modules",                         // Exclude node_modules from the compilation
-    "dist"                                  // Exclude dist folder from the compilation process
+    "dist",                                  // Exclude dist folder from the compilation process
+    "**/*.js"                               // Optional: Exclude .js files in the dist folder
   ]
 }
