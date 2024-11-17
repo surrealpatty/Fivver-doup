@@ -1,4 +1,4 @@
-import express = require('express');  // Use `require` for CommonJS-style import
+import express from 'express';  // Use ES module import for express
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize, testConnection } from './config/database';  // Correct import for sequelize
