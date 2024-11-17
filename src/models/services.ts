@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional, ModelStatic } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Correctly import sequelize instance
 import User from './user'; // Import the User model (adjust the path if necessary)
 
