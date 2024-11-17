@@ -12,7 +12,7 @@ const router = Router();
 // Route for creating a service (only authenticated users can create a service)
 router.post('/create', authMiddleware, async (req: Request, res: Response) => {
     try {
-        // Ensure req and res are passed to the controller functions if needed
+        // Call the controller function for creating a service
         await createService(req, res);
     } catch (error) {
         console.error('Error creating service:', error.message);
@@ -23,7 +23,7 @@ router.post('/create', authMiddleware, async (req: Request, res: Response) => {
 // Route for getting all services or a specific user's services
 router.get('/', async (req: Request, res: Response) => {
     try {
-        // Ensure req and res are passed to the controller functions if needed
+        // Call the controller function for retrieving services
         await getServices(req, res);
     } catch (error) {
         console.error('Error retrieving services:', error.message);
@@ -31,10 +31,10 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-// Route for updating a service (only the user who created the service or admin can update it)
+// Route for updating a service (only the user who created the service or an admin can update it)
 router.put('/:id', authMiddleware, authorizeRoles('user', 'admin'), async (req: Request, res: Response) => {
     try {
-        // Ensure req and res are passed to the controller functions if needed
+        // Call the controller function for updating a service
         await updateService(req, res);
     } catch (error) {
         console.error('Error updating service:', error.message);
@@ -42,10 +42,10 @@ router.put('/:id', authMiddleware, authorizeRoles('user', 'admin'), async (req: 
     }
 });
 
-// Route for deleting a service (only the user who created the service or admin can delete it)
+// Route for deleting a service (only the user who created the service or an admin can delete it)
 router.delete('/:id', authMiddleware, authorizeRoles('user', 'admin'), async (req: Request, res: Response) => {
     try {
-        // Ensure req and res are passed to the controller functions if needed
+        // Call the controller function for deleting a service
         await deleteService(req, res);
     } catch (error) {
         console.error('Error deleting service:', error.message);

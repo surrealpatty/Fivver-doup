@@ -1,9 +1,7 @@
-import authMiddleware from '../src/middleware/authMiddleware';  // Adjust the path if necessary
-
-const { authenticateToken } = require('../src/middleware/authMiddleware'); // Adjust the path as needed
-const jwt = require('jsonwebtoken'); // For generating and verifying tokens
-const mockResponse = require('mock-response'); // Mock response object for testing purposes
-const mockRequest = require('mock-request'); // Mock request object for testing purposes
+import { authenticateToken } from '../src/middleware/authMiddleware';  // Ensure correct import
+import jwt from 'jsonwebtoken';  // Correct import for jwt
+import mockResponse from 'mock-response';  // Correct import for mock-response
+import mockRequest from 'mock-request';  // Correct import for mock-request
 
 describe('Authentication Middleware', () => {
     let mockNext;
