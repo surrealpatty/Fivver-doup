@@ -3,13 +3,12 @@ import pluginJs from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
 
-// Use default import for the TypeScript parser due to CommonJS compatibility
+// Import the TypeScript parser from the package
 import pkg from "@typescript-eslint/parser";
 const { parser } = pkg;
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  // Apply configuration to all JS, TS, Vue, and related files
   {
     files: ["**/*.{js,mjs,cjs,ts,vue}"],
     languageOptions: {
@@ -17,22 +16,24 @@ export default [
     },
     ...pluginJs.configs.recommended, // Spread the recommended JS config
   },
-  // Apply TypeScript linting rules
   {
-    files: ["**/*.{ts,tsx}"],
-    parser, // Use the TypeScript parser
-    plugins: {
-      "@typescript-eslint": tseslint,
+    files: ["**/*.{ts,tsx}"], // Target TypeScript files
+    languageOptions: {
+      parser, // Set the TypeScript parser here
     },
-    rules: tseslint.configs.recommended.rules, // Include the recommended TypeScript rules directly
+    plugins: {
+      "@typescript-eslint": tseslint, // Include the TypeScript plugin
+    },
+    rules: tseslint.configs.recommended.rules, // Apply TypeScript recommended rules directly
   },
-  // Vue linting configuration
   {
-    files: ["**/*.vue"],
-    parser, // Use TypeScript parser for Vue files
-    plugins: {
-      vue: pluginVue,
+    files: ["**/*.vue"], // Target Vue files
+    languageOptions: {
+      parser, // Use TypeScript parser for Vue files
     },
-    rules: pluginVue.configs["vue3-recommended"].rules, // Include Vue rules directly
+    plugins: {
+      vue: pluginVue, // Include the Vue plugin
+    },
+    rules: pluginVue.configs["vue3-recommended"].rules, // Apply Vue3 recommended rules directly
   },
 ];
