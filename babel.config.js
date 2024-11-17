@@ -3,7 +3,7 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        targets: { node: '14' }, // Ensure compatibility with Node 14 for production
+        targets: { node: '14' },  // Ensure compatibility with Node 14 for production
         useBuiltIns: 'entry',     // Automatically import necessary polyfills
         corejs: 3,                // Use core-js version 3 for polyfills
       },
@@ -12,8 +12,8 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-transform-runtime',  // Avoids duplication of runtime code
-    '@babel/plugin-proposal-class-properties', // Allows class properties
-    '@babel/plugin-proposal-private-methods', // Allows private methods in classes
+    '@babel/plugin-transform-class-properties',  // Updated plugin
+    '@babel/plugin-transform-private-methods',  // Updated plugin
     '@babel/plugin-transform-modules-commonjs', // Ensures compatibility with Jest (CommonJS modules)
   ],
   sourceMaps: 'inline',    // Useful for debugging
@@ -29,7 +29,6 @@ module.exports = {
             corejs: 3,                    // Ensure polyfills are included for Jest
           },
         ],
-        '@babel/preset-typescript',   // Make sure this is also available in the test environment for TypeScript
       ],
     },
   },
