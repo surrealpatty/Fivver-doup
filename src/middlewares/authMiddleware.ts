@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { authenticateToken } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware';
+
 
 // Define the interface for the User object attached to the request
 interface User {
