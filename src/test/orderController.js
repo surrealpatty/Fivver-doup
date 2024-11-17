@@ -1,179 +1,201 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+const request = require('supertest');  // For making HTTP requests
+const app = require('../app'); // Your Express app
+const { User, Service, Order } = require('../models'); // Import your models
+
+// Mock the models (you can adjust this to fit your testing framework like Jest or Mocha)
+jest.mock('../models');  // Mock Sequelize models
+
+describe('Order Controller Tests', () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();  // Clear previous mock data before each test
     });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
-var models_1 = require("../models"); // Make sure models are correctly imported
-// Create Order
-var createOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, userId, serviceId, orderDetails, user, service, order, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 4, , 5]);
-                _a = req.body, userId = _a.userId, serviceId = _a.serviceId, orderDetails = _a.orderDetails;
-                return [4 /*yield*/, models_1.User.findByPk(userId)];
-            case 1:
-                user = _b.sent();
-                return [4 /*yield*/, models_1.Service.findByPk(serviceId)];
-            case 2:
-                service = _b.sent();
-                if (!user || !service) {
-                    return [2 /*return*/, res.status(404).json({ message: 'User or Service not found' })];
-                }
-                return [4 /*yield*/, models_1.Order.create({
-                        userId: userId,
-                        serviceId: serviceId,
-                        orderDetails: orderDetails,
-                        status: 'Pending', // Default status
-                    })];
-            case 3:
-                order = _b.sent();
-                return [2 /*return*/, res.status(201).json({ message: 'Order created successfully', order: order })];
-            case 4:
-                error_1 = _b.sent();
-                console.error(error_1);
-                return [2 /*return*/, res.status(500).json({ message: 'Server Error' })];
-            case 5: return [2 /*return*/];
-        }
+
+    // Test creating an order
+    describe('POST /orders', () => {
+        it('should create a new order successfully', async () => {
+            // Mock the responses from Sequelize models
+            User.findByPk.mockResolvedValue({ id: 1 });  // Mock a user found
+            Service.findByPk.mockResolvedValue({ id: 1 });  // Mock a service found
+            Order.create.mockResolvedValue({
+                id: 1,
+                userId: 1,
+                serviceId: 1,
+                orderDetails: 'Test Order',
+                status: 'Pending',
+            });  // Mock successful order creation
+
+            const response = await request(app)
+                .post('/orders')
+                .send({
+                    userId: 1,
+                    serviceId: 1,
+                    orderDetails: 'Test Order',
+                });
+
+            expect(response.status).toBe(201);
+            expect(response.body.message).toBe('Order created successfully');
+            expect(response.body.order.status).toBe('Pending');
+        });
+
+        it('should return 404 if User or Service is not found', async () => {
+            User.findByPk.mockResolvedValue(null);  // Mock user not found
+            Service.findByPk.mockResolvedValue(null);  // Mock service not found
+
+            const response = await request(app)
+                .post('/orders')
+                .send({
+                    userId: 1,
+                    serviceId: 1,
+                    orderDetails: 'Test Order',
+                });
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('User or Service not found');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            User.findByPk.mockRejectedValue(new Error('Database error'));  // Mock error
+
+            const response = await request(app)
+                .post('/orders')
+                .send({
+                    userId: 1,
+                    serviceId: 1,
+                    orderDetails: 'Test Order',
+                });
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('Server Error');
+        });
     });
-}); };
-exports.createOrder = createOrder;
-// Get All Orders
-var getAllOrders = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orders, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, models_1.Order.findAll()];
-            case 1:
-                orders = _a.sent();
-                return [2 /*return*/, res.status(200).json(orders)];
-            case 2:
-                error_2 = _a.sent();
-                console.error(error_2);
-                return [2 /*return*/, res.status(500).json({ message: 'Server Error' })];
-            case 3: return [2 /*return*/];
-        }
+
+    // Test getting all orders
+    describe('GET /orders', () => {
+        it('should return all orders successfully', async () => {
+            const mockOrders = [
+                { id: 1, userId: 1, serviceId: 1, orderDetails: 'Test Order 1' },
+                { id: 2, userId: 2, serviceId: 2, orderDetails: 'Test Order 2' },
+            ];
+            Order.findAll.mockResolvedValue(mockOrders);  // Mock finding all orders
+
+            const response = await request(app).get('/orders');
+
+            expect(response.status).toBe(200);
+            expect(response.body.length).toBe(2);  // Expecting two orders in the response
+            expect(response.body[0].orderDetails).toBe('Test Order 1');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            Order.findAll.mockRejectedValue(new Error('Database error'));  // Mock error
+
+            const response = await request(app).get('/orders');
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('Server Error');
+        });
     });
-}); };
-exports.getAllOrders = getAllOrders;
-// Get Order by ID
-var getOrderById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, order, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                id = req.params.id;
-                return [4 /*yield*/, models_1.Order.findByPk(id)];
-            case 1:
-                order = _a.sent();
-                if (!order) {
-                    return [2 /*return*/, res.status(404).json({ message: 'Order not found' })];
-                }
-                return [2 /*return*/, res.status(200).json(order)];
-            case 2:
-                error_3 = _a.sent();
-                console.error(error_3);
-                return [2 /*return*/, res.status(500).json({ message: 'Server Error' })];
-            case 3: return [2 /*return*/];
-        }
+
+    // Test getting an order by ID
+    describe('GET /orders/:id', () => {
+        it('should return an order by ID', async () => {
+            const mockOrder = { id: 1, userId: 1, serviceId: 1, orderDetails: 'Test Order' };
+            Order.findByPk.mockResolvedValue(mockOrder);  // Mock finding an order by ID
+
+            const response = await request(app).get('/orders/1');
+
+            expect(response.status).toBe(200);
+            expect(response.body.id).toBe(1);
+            expect(response.body.orderDetails).toBe('Test Order');
+        });
+
+        it('should return 404 if the order is not found', async () => {
+            Order.findByPk.mockResolvedValue(null);  // Mock order not found
+
+            const response = await request(app).get('/orders/999');
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Order not found');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            Order.findByPk.mockRejectedValue(new Error('Database error'));  // Mock error
+
+            const response = await request(app).get('/orders/1');
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('Server Error');
+        });
     });
-}); };
-exports.getOrderById = getOrderById;
-// Update Order
-var updateOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, _a, orderDetails, status_1, order, error_4;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 3, , 4]);
-                id = req.params.id;
-                _a = req.body, orderDetails = _a.orderDetails, status_1 = _a.status;
-                return [4 /*yield*/, models_1.Order.findByPk(id)];
-            case 1:
-                order = _b.sent();
-                if (!order) {
-                    return [2 /*return*/, res.status(404).json({ message: 'Order not found' })];
-                }
-                // Update the order
-                order.orderDetails = orderDetails || order.orderDetails;
-                order.status = status_1 || order.status;
-                return [4 /*yield*/, order.save()];
-            case 2:
-                _b.sent();
-                return [2 /*return*/, res.status(200).json({ message: 'Order updated successfully', order: order })];
-            case 3:
-                error_4 = _b.sent();
-                console.error(error_4);
-                return [2 /*return*/, res.status(500).json({ message: 'Server Error' })];
-            case 4: return [2 /*return*/];
-        }
+
+    // Test updating an order
+    describe('PUT /orders/:id', () => {
+        it('should update an order successfully', async () => {
+            const mockOrder = { id: 1, orderDetails: 'Updated Order', status: 'Pending' };
+            Order.findByPk.mockResolvedValue(mockOrder);  // Mock finding the order by ID
+            Order.prototype.save.mockResolvedValue(mockOrder);  // Mock save
+
+            const response = await request(app)
+                .put('/orders/1')
+                .send({ orderDetails: 'Updated Order', status: 'Completed' });
+
+            expect(response.status).toBe(200);
+            expect(response.body.message).toBe('Order updated successfully');
+            expect(response.body.order.status).toBe('Completed');
+        });
+
+        it('should return 404 if the order is not found', async () => {
+            Order.findByPk.mockResolvedValue(null);  // Mock order not found
+
+            const response = await request(app)
+                .put('/orders/999')
+                .send({ orderDetails: 'Updated Order' });
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Order not found');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            Order.findByPk.mockRejectedValue(new Error('Database error'));  // Mock error
+
+            const response = await request(app)
+                .put('/orders/1')
+                .send({ orderDetails: 'Updated Order' });
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('Server Error');
+        });
     });
-}); };
-exports.updateOrder = updateOrder;
-// Delete Order
-var deleteOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, order, error_5;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                id = req.params.id;
-                return [4 /*yield*/, models_1.Order.findByPk(id)];
-            case 1:
-                order = _a.sent();
-                if (!order) {
-                    return [2 /*return*/, res.status(404).json({ message: 'Order not found' })];
-                }
-                // Delete the order
-                return [4 /*yield*/, order.destroy()];
-            case 2:
-                // Delete the order
-                _a.sent();
-                return [2 /*return*/, res.status(200).json({ message: 'Order deleted successfully' })];
-            case 3:
-                error_5 = _a.sent();
-                console.error(error_5);
-                return [2 /*return*/, res.status(500).json({ message: 'Server Error' })];
-            case 4: return [2 /*return*/];
-        }
+
+    // Test deleting an order
+    describe('DELETE /orders/:id', () => {
+        it('should delete an order successfully', async () => {
+            const mockOrder = { id: 1, orderDetails: 'Test Order' };
+            Order.findByPk.mockResolvedValue(mockOrder);  // Mock finding the order by ID
+            Order.prototype.destroy.mockResolvedValue(true);  // Mock delete
+
+            const response = await request(app).delete('/orders/1');
+
+            expect(response.status).toBe(200);
+            expect(response.body.message).toBe('Order deleted successfully');
+        });
+
+        it('should return 404 if the order is not found', async () => {
+            Order.findByPk.mockResolvedValue(null);  // Mock order not found
+
+            const response = await request(app).delete('/orders/999');
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Order not found');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            Order.findByPk.mockRejectedValue(new Error('Database error'));  // Mock error
+
+            const response = await request(app).delete('/orders/1');
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('Server Error');
+        });
     });
-}); };
-exports.deleteOrder = deleteOrder;
+});

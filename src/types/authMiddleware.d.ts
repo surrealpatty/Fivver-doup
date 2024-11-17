@@ -1,7 +1,7 @@
 // src/types/authMiddleware.d.ts
 import { Request } from 'express';
 
-// Extend the Request interface to include userId
+// Augmenting the Express Request interface to include userId
 declare global {
   namespace Express {
     interface Request {
@@ -9,3 +9,6 @@ declare global {
     }
   }
 }
+
+// This will ensure the file is treated as a module.
+export {};
