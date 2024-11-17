@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import User from '../models/user'; // Import the User model
-import { authenticateToken } from '../middleware/authMiddleware'; // Ensure token authentication is used
+import { authenticateToken } from '../middlewares/authMiddleware'; // Corrected path
 import { Op } from 'sequelize';
 
 const router = express.Router();
