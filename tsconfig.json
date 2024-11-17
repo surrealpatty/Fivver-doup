@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",  // Set target to ES6 for Node.js compatibility
-    "module": "commonjs",  // Use commonjs for Node.js
+    "module": "ESNext",  // Use ESNext for ES module support
     "moduleResolution": "node",  // Resolves modules like Node.js
     "esModuleInterop": true,  // Allow default imports from modules with no default export
     "allowSyntheticDefaultImports": true,  // Allows default imports from non-default export modules
