@@ -9,7 +9,9 @@ export default [
   {
     files: ["**/*.{js,mjs,cjs,ts,vue}"],
     languageOptions: {
-      globals: globals.browser, // Define browser globals
+      globals: {
+        ...globals.browser, // Define browser globals
+      },
     },
     rules: {
       ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
@@ -49,8 +51,17 @@ export default [
   },
   {
     files: ["**/*.test.ts", "**/*.test.js"], // Target test files specifically
-    env: {
-      jest: true, // Enable Jest global variables for test files
+    languageOptions: {
+      globals: {
+        jest: "readonly", // Declare Jest globals as readonly for test files
+        describe: "readonly", 
+        it: "readonly",
+        expect: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+      },
     },
     rules: {
       "no-undef": "off", // Disable no-undef for Jest globals
