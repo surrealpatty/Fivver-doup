@@ -29,6 +29,7 @@ module.exports = {
             corejs: 3,                    // Ensure polyfills are included for Jest
           },
         ],
+        '@babel/preset-typescript',   // Make sure this is also available in the test environment for TypeScript
       ],
     },
   },

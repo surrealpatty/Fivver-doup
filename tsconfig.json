@@ -19,14 +19,16 @@
       "@services/*": ["services/*"]  // Optional: path alias for services
     },
     "resolveJsonModule": true,  // Allow importing JSON files as modules
-    "lib": ["esnext", "dom", "es2015"],  // Include ES libraries and DOM for node and frontend compatibility
+    "lib": ["es2015", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
     "typeRoots": [
       "./node_modules/@types",  // Standard types folder
       "./src/types"  // Custom types folder (if you have one)
     ],
     "types": ["jest", "node"],  // Include Jest and Node types for testing and Node.js
     "tsBuildInfoFile": "./.tsbuildinfo",  // For incremental builds
-    "incremental": true  // Enable incremental compilation for faster rebuilds
+    "incremental": true,  // Enable incremental compilation for faster rebuilds
+    "resolveJsonModule": true,  // Allow importing of JSON modules
+    "skipDefaultLibCheck": true  // Avoid errors with default libraries
   },
   "include": [
     "src/**/*.ts",  // Include all .ts files in the src folder
