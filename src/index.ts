@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user'; // Use relative path for the import
+import userRoutes from './routes/user';  // Correct relative path to routes
 import authenticateToken from './middlewares/authMiddleware';  // Import authentication middleware
 
 const app = express();
