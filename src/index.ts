@@ -1,70 +1,28 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import { sequelize, testConnection } from './config/database'; // Correct import for sequelize and testConnection
-import userRoutes from './routes/user'; // Import user routes
+import { registerUser } from './controllers/authController'; // Correct path to your controller
+import userRoutes from './routes/userRoutes';
 
-// Load environment variables from .env file as early as possible
-dotenv.config();
-
-// Ensure required environment variables are present
-if (!process.env.NODE_ENV) {
-    console.error('NODE_ENV is not defined. Ensure your .env file is configured correctly.');
-    process.exit(1);  // Exit if environment variable is missing
-}
-
-if (!process.env.PORT) {
-    console.error('PORT is not defined. Ensure your .env file is configured correctly.');
-    process.exit(1);  // Exit if environment variable is missing
-}
-
-// Create Express app
 const app = express();
 
-// Middleware
-app.use(express.json());  // Middleware to parse JSON request bodies
-app.use(cors());  // Middleware to enable CORS
+// Middleware setup
+app.use(cors());
+app.use(express.json()); // This will correctly parse the request body as JSON
 
-// Routes
-app.use('/api/users', userRoutes);  // Route handling for '/api/users'
-
-// Function to start the server and sync the database
-const startServer = async () => {
+// Register route with async handler
+app.post('/register', async (req, res) => {
     try {
-        // Test DB connection
-        await testConnection();
-
-        // Sync models with the database
-        const isDevelopment = process.env.NODE_ENV === 'development';
-        const syncOptions = isDevelopment ? { alter: true } : {};  // Alter models in development, use default in production
-
-        // Sync database models (with or without alterations based on environment)
-        await sequelize.sync(syncOptions);
-        console.log('Database synced successfully.');
-
-        // Start the Express server
-        const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not specified in .env
-        const NODE_ENV = process.env.NODE_ENV || 'development';  // Default to 'development' if NODE_ENV is not set
-
-        // Log the environment and port for clarity
-        console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);
-
-        // Start the server
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
+        await registerUser(req, res); // Directly call async function here
     } catch (error) {
-        // Improved error handling
-        if (error instanceof Error) {
-            console.error('Error starting the server:', error.message);  // Handle error message properly
-        } else {
-            console.error('Error starting the server:', error);  // Log raw error if it's not an instance of Error
-        }
+        console.error('Error handling register route:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-};
+});
 
-// Start the server
-startServer();
+// Use other routes (e.g., for user profile)
+app.use('/users', userRoutes);
 
-// Export the app for testing purposes
-export { app };  // Export app for use in test files
+// Start server
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});

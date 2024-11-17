@@ -1,15 +1,21 @@
-import express from 'express';
-import { loginUser, updateUserProfile, deleteUserAccount } from '../controllers/userController';
+// Example in userRoutes.ts
+import { Router } from 'express';
+import { getUserProfile } from '../controllers/userController';
 
-const router = express.Router();
+const router = Router();
 
-// Route to login user and get token
-router.post('/login', loginUser);
+router.get('/profile', async (req, res) => {
+    const user = await User.findOne({ where: { id: req.userId } });
+    
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
 
-// Route to update user profile
-router.put('/profile/:userId', updateUserProfile);
-
-// Route to delete user account
-router.delete('/profile/:userId', deleteUserAccount);
+    return res.status(200).json({
+        email: user.email,
+        username: user.username, // username exists now
+        role: user.role,         // role exists now
+    });
+});
 
 export default router;

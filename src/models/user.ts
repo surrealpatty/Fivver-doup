@@ -6,6 +6,8 @@ class User extends Model {
     public id!: string;
     public email!: string;
     public password!: string;
+    public username!: string; // Add username field
+    public role!: string; // Add role field
 }
 
 User.init(
@@ -25,6 +27,16 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false, // Ensure username is required
+            unique: true, // Optionally make it unique
+        },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false, // Ensure role is required
+            defaultValue: 'user', // Default role (you can adjust this)
+        },
     },
     {
         sequelize,
@@ -32,4 +44,4 @@ User.init(
     }
 );
 
-export default User; // Default export of the User class
+export default User;
