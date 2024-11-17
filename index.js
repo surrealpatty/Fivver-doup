@@ -8,7 +8,7 @@ import userRoutes from './routes/user';  // Import user routes
 dotenv.config();
 
 // Ensure required environment variables are present
-if (!process.env.NODE_ENV || !process.env.PORT) {
+if (!process.env.NODE_ENV || !process.env.PORT || !process.env.JWT_SECRET) {
     console.error('Required environment variables are missing. Make sure .env is correctly configured.');
     process.exit(1);  // Exit if environment variables are missing
 }
@@ -27,7 +27,7 @@ app.use('/api/users', userRoutes);  // Route handling for '/api/users'
 const startServer = async () => {
     try {
         // Test DB connection
-        await testConnection();
+        await testConnection();  // Ensure database connection is tested before syncing
 
         // Sync models with the database
         const isDevelopment = process.env.NODE_ENV === 'development';
@@ -49,6 +49,7 @@ const startServer = async () => {
         } else {
             console.error('Error starting the server:', error);  // Log raw error if it's not an instance of Error
         }
+        process.exit(1);  // Exit if there's an error starting the server
     }
 };
 
