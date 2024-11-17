@@ -12,7 +12,7 @@ export interface ServiceAttributes {
 }
 
 // Define the creation attributes interface (excluding `id`)
-export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+export type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>
 
 // Define the Service instance, which includes both the attributes and model methods
 export interface ServiceInstance extends Model<ServiceAttributes, ServiceCreationAttributes>, ServiceAttributes {}
