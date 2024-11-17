@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "ESNext",                     // Keep ESNext for modern module resolution
-    "moduleResolution": "Node",             // Standard Node.js module resolution strategy
+    "module": "ESNext",                     // Use ESNext for modern module resolution
+    "moduleResolution": "node",             // Standard Node.js module resolution strategy
     "target": "ESNext",                     // Target the latest version of JavaScript
     "esModuleInterop": true,                // Ensure compatibility with CommonJS modules
     "strict": true,                         // Enable strict type-checking options
@@ -22,7 +22,7 @@
   ],
   "exclude": [
     "node_modules",                         // Exclude node_modules from the compilation
-    "dist",                                  // Exclude dist folder from the compilation process
-    "**/*.js"                               // Optional: Exclude .js files in the dist folder
+    "dist",                                 // Exclude dist folder from the compilation process
+    "**/*.js"                               // Exclude .js files in the src folder
   ]
 }

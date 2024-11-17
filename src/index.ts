@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user';  // Should point to the correct file
+import userRoutes from './routes/user';  // This assumes a file like dist/routes/user.js exists after build
 import authenticateToken from './middlewares/authMiddleware';  // Import authentication middleware
 
 const app = express();
