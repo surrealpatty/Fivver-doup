@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+// Destructure environment variables
 const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_SSL, NODE_ENV } = process.env;
 
 // Ensure required environment variables are set
@@ -16,24 +17,24 @@ if (!validDialects.includes(DB_DIALECT)) {
     throw new Error(`Invalid DB_DIALECT specified: ${DB_DIALECT}. Must be one of ${validDialects.join(', ')}`);
 }
 
-// Use SSL if specified
+// Determine SSL usage based on environment
 const useSSL = DB_SSL === 'true';
 
-// Initialize Sequelize instance
+// Set up Sequelize instance with dialect-specific options
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
-    dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql',
+    dialect: DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mssql', // Ensure the dialect is strictly typed
     logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development mode
-    dialectOptions: useSSL
-        ? {
-            ssl: {
-                rejectUnauthorized: false, // Allows self-signed certificates
-            },
-            charset: 'utf8mb4',
-        }
-        : {
-            charset: 'utf8mb4',
-        },
+    dialectOptions: DB_DIALECT === 'mysql' || DB_DIALECT === 'postgres'
+        ? useSSL
+            ? {
+                ssl: {
+                    rejectUnauthorized: false, // Allow self-signed certificates
+                },
+                charset: 'utf8mb4',
+            }
+            : { charset: 'utf8mb4' }
+        : {}, // No dialectOptions needed for sqlite
     define: {
         freezeTableName: true, // Prevent automatic pluralization of table names
         charset: 'utf8mb4',
@@ -54,7 +55,7 @@ const testConnection = async () => {
         console.log('Database connection has been established successfully.');
 
         if (NODE_ENV !== 'test') {
-            await sequelize.sync({ alter: true }); // Sync models with the database
+            await sequelize.sync({ alter: true }); // Sync models with the database (but only for non-test environments)
             console.log('Database tables synced successfully.');
         }
     } catch (error) {
