@@ -46,6 +46,7 @@ describe('User Controller', () => {
             .send({
                 email: 'test@example.com',
                 password: 'password123',
+                username: 'testuser', // Make sure you send all required fields
             });
         expect(response.status).toBe(201); // Ensure the response status is 201 (Created)
         expect(response.body).toHaveProperty('id', 1); // Ensure the response contains the user ID
