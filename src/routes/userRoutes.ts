@@ -10,11 +10,14 @@ import { authenticateToken } from '../middlewares/authMiddleware';  // If you us
 const router = express.Router();
 
 // Registration Route
-router.post('/register', 
+router.post(
+  '/register', 
   // Validation checks
   body('username').isString().notEmpty().withMessage('Username is required'),
   body('email').isEmail().withMessage('Invalid email format'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('firstName').isString().notEmpty().withMessage('First name is required'),
+  body('lastName').isString().notEmpty().withMessage('Last name is required'),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);  // Check validation errors
     if (!errors.isEmpty()) {
@@ -47,8 +50,8 @@ router.post('/register',
         username,
         email,
         password: hashedPassword,
-        firstName,  // Optional if you add this to your model
-        lastName,   // Optional if you add this to your model
+        firstName,
+        lastName,
         role: 'Free', // Default role
         subscriptionStatus: subscriptionStatus || 'Inactive',  // Default to 'Inactive' if not provided
         subscriptionStartDate,

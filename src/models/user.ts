@@ -1,36 +1,27 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+// src/models/user.ts
+
+import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';  // Correct path to your sequelize instance
 import { v4 as uuidv4 } from 'uuid';
 
-// Define the type for User attributes
-interface UserAttributes {
-    id: string;
-    email: string;
-    password: string;
-    username: string;
-    role: string;
-}
-
-// Define the type for User creation (fields that can be omitted when creating a new user)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User extends Model {
     public id!: string;
     public email!: string;
     public password!: string;
     public username!: string;
     public role!: string;
-
-    // Timestamps (optional) - if you use createdAt and updatedAt fields
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    public firstName!: string;
+    public lastName!: string;
+    public subscriptionStatus!: string; // Add subscriptionStatus field
+    public subscriptionStartDate!: Date;
+    public subscriptionEndDate!: Date;
 }
 
 User.init(
     {
         id: {
             type: DataTypes.UUID,
-            defaultValue: uuidv4(), // Automatically generate UUID
+            defaultValue: uuidv4(),
             primaryKey: true,
             allowNull: false,
         },
@@ -45,13 +36,34 @@ User.init(
         },
         username: {
             type: DataTypes.STRING,
-            allowNull: false, // Ensure username is required
-            unique: true, // Optionally make it unique
+            allowNull: false,
+            unique: true,
         },
         role: {
             type: DataTypes.STRING,
-            allowNull: false, // Ensure role is required
-            defaultValue: 'user', // Default role (you can adjust this)
+            allowNull: false,
+            defaultValue: 'user',
+        },
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        subscriptionStatus: {
+            type: DataTypes.STRING,
+            allowNull: true,  // This can be null if not provided
+            defaultValue: 'Inactive',  // Default value if not specified
+        },
+        subscriptionStartDate: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        subscriptionEndDate: {
+            type: DataTypes.DATE,
+            allowNull: true,
         },
     },
     {

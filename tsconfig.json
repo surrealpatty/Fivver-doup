@@ -37,7 +37,7 @@
     "src/**/*.d.ts",  // Include any declaration files in the src folder
     "src/test/**/*.ts",  // Ensure test files are included
     "src/test/**/*.tsx"  // Include test .tsx files if present
-  ],
+, "src/types"  ],
   "exclude": [
     "node_modules",  // Exclude the "node_modules" folder
     "dist",  // Exclude the compiled "dist" folder
