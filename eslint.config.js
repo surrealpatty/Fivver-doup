@@ -2,7 +2,6 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
-import { ParserOptions } from "@typescript-eslint/parser"; // This import is now correct for the parser
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -11,7 +10,9 @@ export default [
     languageOptions: {
       globals: globals.browser, // Define browser globals
     },
-    ...pluginJs.configs.recommended, // Spread the recommended JS config
+    rules: {
+      ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
+    },
   },
   {
     files: ["**/*.ts"], // Target TypeScript files specifically
@@ -25,7 +26,9 @@ export default [
     plugins: {
       "@typescript-eslint": tseslint, // Include the TypeScript plugin
     },
-    rules: tseslint.configs.recommended.rules, // Apply TypeScript recommended rules directly
+    rules: {
+      ...tseslint.configs.recommended.rules, // Apply TypeScript recommended rules directly
+    },
   },
   {
     files: ["**/*.vue"], // Target Vue files
@@ -39,6 +42,8 @@ export default [
     plugins: {
       vue: pluginVue, // Include the Vue plugin
     },
-    rules: pluginVue.configs["vue3-recommended"].rules, // Apply Vue3 recommended rules directly
+    rules: {
+      ...pluginVue.configs["vue3-recommended"].rules, // Apply Vue3 recommended rules directly
+    },
   },
 ];
