@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import authenticateToken from './middlewares/authMiddleware';  // Check if this path resolves correctly
+import authenticateToken from './middleware/authMiddleware';
 
 // Define an interface for the JWT payload (including the id field)
 interface CustomJwtPayload extends JwtPayload {
