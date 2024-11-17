@@ -45,7 +45,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     const verifiedUser = jwt.verify(token, jwtSecret) as User;
     req.user = verifiedUser; // Attach the verified user data to the request object
 
-    next(); // Proceed to the next middleware or route handler
+    return next(); // Proceed to the next middleware or route handler
   } catch (error) {
     console.error('Token verification error:', error instanceof Error ? error.message : error);
     return res.status(401).json({ message: 'Invalid or expired token.' });
@@ -63,8 +63,8 @@ export const authorizeRoles = (...allowedRoles: string[]) => {
     if (!allowedRoles.includes(req.user.role)) {
       return res.status(403).json({ message: 'Access denied: insufficient permissions' });
     }
-    
-    next(); // Proceed to the next middleware or route handler
+
+    return next(); // Proceed to the next middleware or route handler
   };
 };
 
@@ -79,7 +79,7 @@ export const authorizeSubscription = (requiredSubscription: string) => {
     if (req.user.subscription !== requiredSubscription) {
       return res.status(403).json({ message: `Access denied: ${requiredSubscription} subscription required.` });
     }
-    
-    next(); // Proceed to the next middleware or route handler
+
+    return next(); // Proceed to the next middleware or route handler
   };
 };
