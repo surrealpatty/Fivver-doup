@@ -2,7 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
-import parser from "@typescript-eslint/parser"; // Use default import for the parser
+import parser from "@typescript-eslint/parser"; // Default import for the TypeScript parser
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -18,14 +18,14 @@ export default [
   {
     files: ["**/*.ts"], // Target TypeScript files specifically
     languageOptions: {
-      parser, // Specify the TypeScript parser directly here
+      parser, // Use TypeScript parser here
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: "module",
       },
     },
     plugins: {
-      "@typescript-eslint": tseslint, // Include the TypeScript plugin
+      "@typescript-eslint": tseslint, // Include TypeScript plugin
     },
     rules: {
       ...tseslint.configs.recommended.rules, // Apply TypeScript recommended rules directly
@@ -41,7 +41,7 @@ export default [
       },
     },
     plugins: {
-      vue: pluginVue, // Include the Vue plugin
+      vue: pluginVue, // Include Vue plugin
     },
     rules: {
       ...pluginVue.configs["vue3-recommended"].rules, // Apply Vue3 recommended rules directly
