@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize, testConnection } from './config/database';  // Correct import for sequelize and testConnection
-import userRoutes from './routes/user';  // Import user routes
+import { sequelize, testConnection } from './config/database'; // Correct import for sequelize and testConnection
+import userRoutes from './routes/user'; // Import user routes
 
 // Load environment variables from .env file as early as possible
 dotenv.config();
@@ -44,6 +44,12 @@ const startServer = async () => {
 
         // Start the Express server
         const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not specified in .env
+        const NODE_ENV = process.env.NODE_ENV || 'development';  // Default to 'development' if NODE_ENV is not set
+
+        // Log the environment and port for clarity
+        console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);
+
+        // Start the server
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });

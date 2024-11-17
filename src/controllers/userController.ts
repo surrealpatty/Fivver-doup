@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { User } from '../models';  // Correct import for User model
+import { User } from '../models'; // Assuming your model is correctly imported
+
+interface IUser extends User {
+    subscriptionEndDate: Date;
+    subscriptionStartDate: Date;
+}
 
 export const upgradeToPaid = async (req: Request, res: Response): Promise<Response> => {
     const userId = req.user?.id;  // Ensure user ID is available from JWT or session middleware
@@ -16,7 +21,7 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
 
     try {
         // Fetch the user by ID
-        const user = await User.findByPk(userId);
+        const user = await User.findByPk(userId) as IUser;  // Explicit cast to IUser interface
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -42,12 +47,12 @@ export const upgradeToPaid = async (req: Request, res: Response): Promise<Respon
         // Respond with updated subscription information
         return res.status(200).json({
             message: 'Subscription upgraded to Paid',
-            subscriptionEndDate: user.subscriptionEndDate,
+            subscriptionEndDate: user.subscriptionEndDate.toISOString(), // Format the date in ISO string
             subscriptionStatus: user.subscriptionStatus
         });
     } catch (error) {
         console.error('Error upgrading subscription:', error);
-        // Improved error logging for clarity
+        // Enhanced error logging for better debugging
         return res.status(500).json({
             message: 'Error upgrading subscription',
             error: error instanceof Error ? error.message : 'Unknown error'
