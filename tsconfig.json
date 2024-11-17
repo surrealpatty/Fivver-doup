@@ -26,13 +26,13 @@
     "incremental": true // Enable incremental compilation for faster rebuilds
   },
   "include": [
-    "src/**/*.ts",  // Include all TypeScript files in the "src" folder
-    "src/**/*.tsx", // Include all TypeScript JSX files (if using React)
-    "src/**/*.js",  // Include JavaScript files (if necessary)
-    "src/**/*.d.ts", // Include TypeScript declaration files
-    "src/test/**/*.ts",  // Include all test files in "test" folder
-    "src/test/**/*.tsx"  // Include test files with JSX (if necessary)
-  ],
+  "src/**/*.ts",
+  "src/**/*.tsx",
+  "src/**/*.js",
+  "src/**/*.d.ts",
+  "src/test/**/*.ts",  // Ensure test files are included
+  "src/test/**/*.tsx"
+],
   "exclude": [
     "node_modules", // Exclude the "node_modules" folder
     "dist", // Exclude the compiled "dist" folder

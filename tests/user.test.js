@@ -30,8 +30,8 @@ describe('User Controller', () => {
 
   test('should register a new user', async () => {
     // Mock behavior for findOne (user not found) and create (successful user creation)
-    (User.findOne as jest.Mock).mockResolvedValue(null); // Simulate user not found
-    (User.create as jest.Mock).mockResolvedValue({
+    User.findOne.mockResolvedValue(null); // Simulate user not found
+    User.create.mockResolvedValue({
       id: 1,
       username: 'testuser',
       email: 'test@example.com',
@@ -55,7 +55,7 @@ describe('User Controller', () => {
     const hashedPassword = await bcrypt.hash('testpassword', 10);
 
     // Mock finding the user and returning the hashed password
-    (User.findOne as jest.Mock).mockResolvedValue({
+    User.findOne.mockResolvedValue({
       id: 1,
       email: 'test@example.com',
       password: hashedPassword,
@@ -63,7 +63,7 @@ describe('User Controller', () => {
 
     const mockToken = 'mock.jwt.token';
     // Mock jwt.sign to return a mock token
-    (jwt.sign as jest.Mock).mockReturnValue(mockToken);
+    jwt.sign.mockReturnValue(mockToken);
 
     const response = await request(app)
       .post('/api/users/login')
@@ -79,7 +79,7 @@ describe('User Controller', () => {
   test('should return user profile', async () => {
     const mockToken = 'mock.jwt.token';
     // Mock jwt.verify to decode the token and return the user id
-    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
+    jwt.verify.mockReturnValue({ userId: 1 });
 
     const mockUser = {
       id: 1,
@@ -88,7 +88,7 @@ describe('User Controller', () => {
     };
 
     // Mock User.findByPk to return a mock user
-    (User.findByPk as jest.Mock).mockResolvedValue(mockUser);
+    User.findByPk.mockResolvedValue(mockUser);
 
     const response = await request(app)
       .get('/api/users/profile')
@@ -102,9 +102,9 @@ describe('User Controller', () => {
   test('should update user profile', async () => {
     const mockToken = 'mock.jwt.token';
     // Mock jwt.verify to decode the token and return the user id
-    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
+    jwt.verify.mockReturnValue({ userId: 1 });
     // Mock User.update to simulate a successful profile update
-    (User.update as jest.Mock).mockResolvedValue([1]); // Simulate update success
+    User.update.mockResolvedValue([1]); // Simulate update success
 
     const response = await request(app)
       .put('/api/users/profile')
@@ -118,9 +118,9 @@ describe('User Controller', () => {
   test('should delete user account', async () => {
     const mockToken = 'mock.jwt.token';
     // Mock jwt.verify to decode the token and return the user id
-    (jwt.verify as jest.Mock).mockReturnValue({ userId: 1 });
+    jwt.verify.mockReturnValue({ userId: 1 });
     // Mock User.destroy to simulate successful user deletion
-    (User.destroy as jest.Mock).mockResolvedValue(1); // Simulate deletion success
+    User.destroy.mockResolvedValue(1); // Simulate deletion success
 
     const response = await request(app)
       .delete('/api/users/profile')

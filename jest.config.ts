@@ -3,7 +3,7 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Use ts-jest for TypeScript support
   testEnvironment: 'node',  // Set the test environment to node (suitable for backend tests)
-  moduleFileExtensions: ['ts', 'js', 'json'],  // Only include TypeScript and JavaScript file extensions
+  moduleFileExtensions: ['ts', 'js', 'json', 'node'],  // Include node extension for modules
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest to transform TypeScript files
   },
@@ -14,8 +14,10 @@ const config: Config.InitialOptions = {
     },
   },
   moduleNameMapper: {
-    '^@models/(.*)$': '<rootDir>/src/models/$1',
-  },  
+    '^@models/(.*)$': '<rootDir>/src/models/$1',  // Correctly map models to src/models
+    '^@/(.*)$': '<rootDir>/src/$1',  // Map "@" to "src" folder for other paths
+    '^~/(.*)$': '<rootDir>/src/$1',  // Optional: If you use "~" as an alias for the src directory
+  },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',  // Collect coverage from TypeScript files only
     '!src/**/*.d.ts',  // Exclude declaration files from coverage
@@ -24,6 +26,7 @@ const config: Config.InitialOptions = {
   coverageProvider: 'v8',  // Use v8 for faster code coverage collection
   testPathIgnorePatterns: [
     '/node_modules/',  // Ignore node_modules during tests
+    '/dist/',  // Exclude dist folder to avoid running tests on transpiled files
   ],
   verbose: true,  // Enable verbose output to see detailed test results
 };
