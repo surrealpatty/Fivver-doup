@@ -2,6 +2,15 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
+// Extend the Request type to include `userId`
+declare global {
+    namespace Express {
+        interface Request {
+            userId?: number;  // Add `userId` to the request object
+        }
+    }
+}
+
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     // Extract the token from the Authorization header
     const token = req.header('Authorization')?.replace('Bearer ', '');
