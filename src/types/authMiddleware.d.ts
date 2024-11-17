@@ -1,6 +1,11 @@
-declare module '../middlewares/authMiddleware' {
-    import { Request, Response, NextFunction } from 'express';
-  
-    export function authenticateToken(req: Request, res: Response, next: NextFunction): void;
+// src/types/authMiddleware.d.ts
+import { Request } from 'express';
+
+// Extend the Request interface to include userId
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: number;  // Optional userId on the request object
+    }
   }
-  
+}
