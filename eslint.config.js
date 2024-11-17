@@ -47,4 +47,13 @@ export default [
       ...pluginVue.configs["vue3-recommended"].rules, // Apply Vue3 recommended rules directly
     },
   },
+  {
+    files: ["**/*.test.ts", "**/*.test.js"], // Target test files specifically
+    env: {
+      jest: true, // Enable Jest global variables for test files
+    },
+    rules: {
+      "no-undef": "off", // Disable no-undef for Jest globals
+    },
+  },
 ];
