@@ -11,7 +11,7 @@ export default [
     languageOptions: {
       globals: globals.browser, // Define browser globals
     },
-    ...pluginJs.configs.recommended,
+    ...pluginJs.configs.recommended, // Spread the recommended JS config
   },
   // Apply TypeScript linting rules
   {
@@ -19,10 +19,10 @@ export default [
     plugins: {
       "@typescript-eslint": tseslint,
     },
-    extends: [
-      "plugin:@typescript-eslint/recommended",
-    ],
-    parser: tseslint.parser, // Ensure TypeScript files are parsed with TypeScript parser
+    languageOptions: {
+      parser: tseslint.parser, // Ensure TypeScript files are parsed with TypeScript parser
+    },
+    rules: tseslint.configs.recommended.rules, // Include the recommended TypeScript rules directly
   },
   // Vue linting configuration
   {
@@ -35,9 +35,6 @@ export default [
     plugins: {
       vue: pluginVue,
     },
-    extends: [
-      // Use the recommended Vue ESLint config
-      "plugin:vue/vue3-recommended",
-    ],
+    rules: pluginVue.configs["vue3-recommended"].rules, // Include Vue rules directly
   },
 ];
