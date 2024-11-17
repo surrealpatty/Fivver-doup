@@ -43,6 +43,7 @@
     "@types/node": "^20.17.6",
     "@types/sequelize": "^4.28.20",
     "@types/supertest": "^6.0.2",
+    "@types/vue": "^1.0.31",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "@vue/runtime-core": "^3.5.13",
