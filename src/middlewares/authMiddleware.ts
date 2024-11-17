@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { authenticateToken } from '../middlewares/authMiddleware';
-
 
 // Define the interface for the User object attached to the request
 interface User {
@@ -10,15 +8,6 @@ interface User {
   email: string;
   role: string;
   subscription: string;
-}
-
-// Extend the Request interface globally to include the `user` property
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User; // Attach user to the request object
-    }
-  }
 }
 
 // Middleware to authenticate the token
