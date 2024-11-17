@@ -14,9 +14,10 @@
     "baseUrl": "./src",  // The root of the project (for path mapping)
     "paths": {
       "@/*": ["*"],  // Path alias for "src" directory
-      "@models/*": ["models/*"],  // Path alias for models folder (for testing imports)
+      "@models/*": ["models/*"],  // Path alias for models folder
       "@controllers/*": ["controllers/*"],  // Path alias for controllers
-      "@services/*": ["services/*"]  // Path alias for services
+      "@services/*": ["services/*"],  // Path alias for services
+      "@utils/*": ["utils/*"]  // You can add utility path aliases if needed
     },
     "resolveJsonModule": true,  // Allow importing JSON files as modules
     "lib": ["esnext", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
@@ -28,7 +29,7 @@
     "tsBuildInfoFile": "./.tsbuildinfo",  // For incremental builds
     "incremental": true,  // Enable incremental compilation for faster rebuilds
     "skipDefaultLibCheck": true,  // Avoid errors with default libraries
-    "jsx": "react"  // If using JSX (e.g., for React or Vue JSX), ensure it's enabled
+    "jsx": "react"  // If using JSX (e.g., for React or Vue JSX), ensure it's enabled; remove if not using JSX
   },
   "include": [
     "src/**/*.ts",  // Include all .ts files in the src folder
