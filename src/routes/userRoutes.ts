@@ -5,7 +5,8 @@ import bcrypt from 'bcryptjs';
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';  // Import Op for Sequelize operators
 import User from '../models/user'; // Ensure this import matches your model file
-import { authenticateToken } from '../middlewares/authMiddleware';  // If you use token authentication
+import authenticateToken from '../middlewares/authMiddleware';  // Use default import
+
 
 const router = express.Router();
 
