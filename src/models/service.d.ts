@@ -1,18 +1,23 @@
 // src/models/service.d.ts
 
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 
+// Define the attributes for the Service model
 export interface ServiceAttributes {
   id: number;
   title: string;
   description: string;
   price: number;
-  userId: string;
+  userId: number;  // Assuming userId is a number (foreign key to User model)
 }
 
-export interface ServiceInstance
-  extends Model<ServiceAttributes>,
-    ServiceAttributes {}
+// Define the creation attributes interface (excluding `id`)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-declare const Service: Model<ServiceInstance>;
+// Define the Service instance, which includes both the attributes and model methods
+export interface ServiceInstance extends Model<ServiceAttributes, ServiceCreationAttributes>, ServiceAttributes {}
+
+// Define the Service model, which is a `Model` of the `ServiceInstance`
+declare const Service: Model<ServiceAttributes, ServiceCreationAttributes>;
+
 export default Service;

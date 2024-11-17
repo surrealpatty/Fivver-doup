@@ -10,15 +10,47 @@ import {
 const router = Router();
 
 // Route for creating a service (only authenticated users can create a service)
-router.post('/create', authMiddleware, createService);
+router.post('/create', authMiddleware, async (req: Request, res: Response) => {
+    try {
+        // Ensure req and res are passed to the controller functions if needed
+        await createService(req, res);
+    } catch (error) {
+        console.error('Error creating service:', error.message);
+        res.status(500).json({ message: 'Failed to create service' });
+    }
+});
 
 // Route for getting all services or a specific user's services
-router.get('/', getServices);
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        // Ensure req and res are passed to the controller functions if needed
+        await getServices(req, res);
+    } catch (error) {
+        console.error('Error retrieving services:', error.message);
+        res.status(500).json({ message: 'Failed to retrieve services' });
+    }
+});
 
 // Route for updating a service (only the user who created the service or admin can update it)
-router.put('/:id', authMiddleware, authorizeRoles('user', 'admin'), updateService);
+router.put('/:id', authMiddleware, authorizeRoles('user', 'admin'), async (req: Request, res: Response) => {
+    try {
+        // Ensure req and res are passed to the controller functions if needed
+        await updateService(req, res);
+    } catch (error) {
+        console.error('Error updating service:', error.message);
+        res.status(500).json({ message: 'Failed to update service' });
+    }
+});
 
 // Route for deleting a service (only the user who created the service or admin can delete it)
-router.delete('/:id', authMiddleware, authorizeRoles('user', 'admin'), deleteService);
+router.delete('/:id', authMiddleware, authorizeRoles('user', 'admin'), async (req: Request, res: Response) => {
+    try {
+        // Ensure req and res are passed to the controller functions if needed
+        await deleteService(req, res);
+    } catch (error) {
+        console.error('Error deleting service:', error.message);
+        res.status(500).json({ message: 'Failed to delete service' });
+    }
+});
 
 export default router;

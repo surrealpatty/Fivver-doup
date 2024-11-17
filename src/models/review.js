@@ -1,69 +1,48 @@
+// src/models/review.ts
 import { Model, DataTypes } from 'sequelize';
+import sequelize from '../config/database'; // Ensure the correct import path for sequelize
 
 class Review extends Model {
-    static associate(models) {
-        // Associations with User and Service models
-        Review.belongsTo(models.User, {
-            foreignKey: 'userId',
-            as: 'user',
-            onDelete: 'CASCADE',
-        });
-        Review.belongsTo(models.Service, {
-            foreignKey: 'serviceId',
-            as: 'service',
-            onDelete: 'CASCADE',
-        });
-    }
+    public id!: number;
+    public serviceId!: number;
+    public userId!: number;
+    public rating!: number;
+    public comment!: string | null;
+
+    // Timestamps for Sequelize
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
-// Initialize the Review model
-const initReview = (sequelize) => {
-    Review.init(
-        {
-            rating: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notNull: { msg: 'Rating cannot be null' },
-                    min: { args: [1], msg: 'Rating must be at least 1' },
-                    max: { args: [5], msg: 'Rating must be at most 5' },
-                },
-            },
-            comment: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notNull: { msg: 'Comment cannot be null' },
-                    len: {
-                        args: [1, 500],
-                        msg: 'Comment must be between 1 and 500 characters long',
-                    },
-                },
-            },
-            userId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notNull: { msg: 'User ID cannot be null' },
-                },
-            },
-            serviceId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notNull: { msg: 'Service ID cannot be null' },
-                },
-            },
+Review.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
         },
-        {
-            sequelize,
-            modelName: 'Review',
-            tableName: 'reviews',
-            timestamps: true,
-            underscored: true,
-        }
-    );
-};
+        serviceId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        rating: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        comment: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+    },
+    {
+        sequelize,
+        modelName: 'Review',
+        tableName: 'reviews',
+    }
+);
 
-// Export both the init function and the Review model class
-export { initReview, Review };
+export default Review;

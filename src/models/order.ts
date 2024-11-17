@@ -1,3 +1,4 @@
+// src/models/order.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';  // Ensure this is correctly imported
@@ -15,7 +16,7 @@ export interface OrderAttributes {
 }
 
 // Define the creation attributes interface (excluding `id`)
-export type OrderCreationAttributes = Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
@@ -27,17 +28,17 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   public updatedAt!: Date | null;
 
   // Define associations inside the `associate` method
-  static associate(models: any) {
+  static associate(models: { User: typeof User; Service: typeof Service }) {
     // Each Order belongs to a User (foreign key `userId`)
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
-      as: 'user',  // Alias for the User association
+      as: 'user',
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(models.Service, {
       foreignKey: 'serviceId',
-      as: 'service',  // Alias for the Service association
+      as: 'service',
     });
   }
 }

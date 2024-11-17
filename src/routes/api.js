@@ -1,12 +1,10 @@
-// src/routes/api.js
-
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
-const { User } = require('../models/user'); // Ensure path and import style is correct
-const { Service } = require('../models/service'); // Ensure path and import style is correct
-const authenticateToken = require('../middleware/authenticateToken'); // Authentication middleware
+import express, { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { check, validationResult } from 'express-validator';
+import { User } from '../models/user'; // Correct import style for TypeScript
+import { Service } from '../models/service'; // Correct import style for TypeScript
+import { authenticateToken } from '../middleware/authenticateToken'; // Ensure correct import if it's TypeScript
 
 const router = express.Router();
 
@@ -18,7 +16,7 @@ router.post(
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
     ],
-    async (req, res) => {
+    async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -52,14 +50,14 @@ router.post(
                 },
             });
         } catch (error) {
-            console.error('Error creating user:', error.message); // Improved error logging
+            console.error('Error creating user:', error.message);
             res.status(500).json({ message: 'Server error' });
         }
     }
 );
 
 // User Login Route
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
@@ -74,28 +72,29 @@ router.post('/login', async (req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, {
             expiresIn: '1h', // Token expiration time (1 hour)
         });
 
         res.status(200).json({ token });
     } catch (error) {
-        console.error('Login error:', error.message); // Improved error logging
+        console.error('Login error:', error.message);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
 // Protected Profile Route
-router.get('/profile', authenticateToken, async (req, res) => {
+router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
     try {
-        const user = await User.findByPk(req.user.id); // Use req.user.id from the middleware
+        // Access userId from the typed request object
+        const user = await User.findByPk(req.userId); // Ensure req.userId exists after authenticateToken
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         res.json({ id: user.id, username: user.username, email: user.email });
     } catch (error) {
-        console.error('Profile retrieval error:', error.message); // Improved error logging
+        console.error('Profile retrieval error:', error.message);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -110,7 +109,7 @@ router.post(
         check('price', 'Price must be a valid number').isFloat({ min: 0 }), // Use isFloat for price
         check('category', 'Category is required').notEmpty(),
     ],
-    async (req, res) => {
+    async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -125,14 +124,14 @@ router.post(
                 description,
                 price,
                 category,
-                userId: req.user.id, // The authenticated user's ID
+                userId: req.userId, // The authenticated user's ID
             });
             res.status(201).json(newService);
         } catch (error) {
-            console.error('Error creating service:', error.message); // Improved error logging
+            console.error('Error creating service:', error.message);
             res.status(500).json({ message: 'Failed to create service' });
         }
     }
 );
 
-module.exports = router;
+export default router;

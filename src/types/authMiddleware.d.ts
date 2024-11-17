@@ -1,4 +1,3 @@
-// src/types/authMiddleware.d.ts
 import { Request } from 'express';
 
 // Augmenting the Express Request interface to include userId
@@ -10,5 +9,5 @@ declare global {
   }
 }
 
-// This will ensure the file is treated as a module.
+// This ensures the file is treated as a module.
 export {};
