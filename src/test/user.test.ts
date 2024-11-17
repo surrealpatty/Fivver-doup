@@ -1,6 +1,6 @@
 import express from 'express';  // Correct ES module import
 import request from 'supertest'; 
-import { app } from '../index';  
+import { app } from '../index';  // Import app from index.ts
 import User from '../models/user'; 
 import jwt from 'jsonwebtoken'; 
 import { sequelize } from '../config/database';  
@@ -20,7 +20,6 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 describe('User Controller', () => {
-
     beforeAll(() => {
         // Setup mocked responses for User model functions
         (User.findOne as jest.Mock).mockResolvedValue({

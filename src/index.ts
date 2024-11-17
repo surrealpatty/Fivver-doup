@@ -1,23 +1,30 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser'; // Optional, depending on your setup
-import userRoutes from './routes/userRoutes';
+import express from 'express';  // Import Express
+import { sequelize } from './config/database';  // Import sequelize instance
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Middleware setup
-app.use(cors());
-app.use(express.json()); // This will correctly parse the request body as JSON
+// Middleware and routes setup
+app.use(express.json());
 
-// Routes
-app.use('/users', userRoutes);
+// Example route
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
-// Export the app instance for testing or other purposes
+// Sync sequelize models (syncing the database)
+sequelize.sync()
+  .then(() => {
+    console.log('Database synced');
+  })
+  .catch((error) => {
+    console.error('Error syncing database:', error);
+  });
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// Export the app instance for testing
 export { app };
-
-// Start the server if this file is executed directly (not in test environment)
-if (require.main === module) {
-    app.listen(3000, () => {
-        console.log('Server is running on port 3000');
-    });
-}
