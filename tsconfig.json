@@ -12,12 +12,12 @@
     "allowJs": true,                        // Allow JavaScript files to be compiled
     "noEmitOnError": true,                  // Don't emit files if there are TypeScript errors
     "paths": {
-      "*": ["node_modules/*", "src/*"]     // Allow resolution from both src and node_modules
+      "*": ["node_modules/*", "src/*"]     // Resolve modules from src and node_modules
     }
   },
   "include": [
     "src/**/*.ts",                          // Include all TypeScript files in the src folder
-    "src/config/database.d.ts"              // Include the database declaration file
+    "src/config/database.d.ts"              // Include the database declaration file (if it exists)
   ],
   "exclude": [
     "node_modules",                         // Exclude node_modules from the compilation
