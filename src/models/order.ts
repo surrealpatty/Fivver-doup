@@ -15,7 +15,7 @@ export interface OrderAttributes {
 }
 
 // Define the creation attributes interface (excluding `id`)
-export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>
+export type OrderCreationAttributes = Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'>;
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
@@ -31,13 +31,13 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     // Each Order belongs to a User (foreign key `userId`)
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
-      as: 'user',
+      as: 'user',  // Alias for the User association
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(models.Service, {
       foreignKey: 'serviceId',
-      as: 'service',
+      as: 'service',  // Alias for the Service association
     });
   }
 }
