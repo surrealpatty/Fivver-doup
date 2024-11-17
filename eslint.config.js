@@ -11,6 +11,8 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser, // Define browser globals
+        process: "readonly", // Add Node.js process as readonly
+        require: "readonly", // Add Node.js require as readonly
       },
     },
     rules: {
@@ -50,7 +52,7 @@ export default [
     },
   },
   {
-    files: ["**/*.test.ts", "**/*.test.js"], // Target test files specifically
+    files: ["**/*.test.ts", "**/*.test.js", "**/setupEnvVars.ts"], // Target test files specifically
     languageOptions: {
       globals: {
         jest: "readonly", // Declare Jest globals as readonly for test files
@@ -61,10 +63,12 @@ export default [
         afterAll: "readonly",
         beforeEach: "readonly",
         afterEach: "readonly",
+        process: "readonly", // Add Node.js process for setupEnvVars.ts
+        require: "readonly", // Add Node.js require for test files
       },
     },
     rules: {
-      "no-undef": "off", // Disable no-undef for Jest globals
+      "no-undef": "off", // Disable no-undef for Jest and Node globals
     },
   },
 ];
