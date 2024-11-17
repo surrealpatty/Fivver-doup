@@ -1,13 +1,29 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Correct path to your sequelize instance
 import { v4 as uuidv4 } from 'uuid';
 
-class User extends Model {
+// Define the type for User attributes
+interface UserAttributes {
+    id: string;
+    email: string;
+    password: string;
+    username: string;
+    role: string;
+}
+
+// Define the type for User creation (fields that can be omitted when creating a new user)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: string;
     public email!: string;
     public password!: string;
-    public username!: string; // Add username field
-    public role!: string; // Add role field
+    public username!: string;
+    public role!: string;
+
+    // Timestamps (optional) - if you use createdAt and updatedAt fields
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 User.init(
