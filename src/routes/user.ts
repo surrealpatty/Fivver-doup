@@ -1,84 +1,138 @@
-import { Router, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import User from '../models/user'; // Correct import
+import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
-import { Op } from 'sequelize';
+import { Op } from 'sequelize';  // Import Op from Sequelize
+import User from '../models/user'; // Import the User model
+import { authenticateToken } from '../middleware/authMiddleware'; // Ensure token authentication is used
 
-// Define the type for the registration request body
-interface RegisterUserRequest {
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-}
+const router = express.Router();
 
-const router = Router();
-
-// User registration route
-router.post(
-  '/register',
-  // Validation middleware
+// Registration Route
+router.post('/register', 
   body('username').isString().notEmpty().withMessage('Username is required'),
   body('email').isEmail().withMessage('Invalid email format'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('firstName').optional().isString().withMessage('First name must be a string'),
-  body('lastName').optional().isString().withMessage('Last name must be a string'),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Destructure and typecast to RegisterUserRequest
-    const { username, email, password, firstName = '', lastName = '' }: RegisterUserRequest = req.body;
+    const { username, email, password } = req.body;
 
     try {
-      // Check if username or email already exists
-      const existingUser = await User.findOne({
-        where: {
-          [Op.or]: [{ username }, { email }]
-        }
-      });
-
+      const existingUser = await User.findOne({ where: { [Op.or]: [{ username }, { email }] } });
       if (existingUser) {
-        if (existingUser.username === username) {
-          return res.status(400).json({ message: 'Username already taken' });
-        }
-        if (existingUser.email === email) {
-          return res.status(400).json({ message: 'Email is already taken' });
-        }
+        return res.status(400).json({ message: 'Username or email already taken' });
       }
 
-      // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create the user with the correct type for Sequelize
       const user = await User.create({
         username,
         email,
         password: hashedPassword,
-        firstName,
-        lastName,
-        role: 'Free', // Default role for a new user
-        subscriptionStatus: 'Inactive', // Default subscription status
+        role: 'Free',
+        subscriptionStatus: 'Inactive'
       });
 
-      // Respond with the created user data (excluding password)
       res.status(201).json({
         id: user.id,
         username: user.username,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-        subscriptionStatus: user.subscriptionStatus,
+        role: user.role
       });
     } catch (error) {
-      console.error('Error during registration:', (error as Error).message);
+      console.error('Error during registration:', error);
       res.status(500).json({ message: 'Server error during registration' });
     }
   }
 );
+
+// Login Route
+router.post('/login', async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { username } });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'defaultsecret', { expiresIn: '1h' });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error during login' });
+  }
+});
+
+// Profile Route (requires authentication)
+router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
+  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.status(200).json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      subscriptionStatus: user.subscriptionStatus
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error while fetching profile' });
+  }
+});
+
+// Update Profile Route
+router.put('/profile', authenticateToken, async (req: Request, res: Response) => {
+  const { firstName, lastName, password } = req.body;
+  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (password) user.password = await bcrypt.hash(password, 10);
+
+    await user.save();
+
+    res.status(200).json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName
+    });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Server error while updating profile' });
+  }
+});
+
+// Delete Profile Route
+router.delete('/profile', authenticateToken, async (req: Request, res: Response) => {
+  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    await user.destroy();
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ message: 'Server error while deleting account' });
+  }
+});
 
 export default router;
