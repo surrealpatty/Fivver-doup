@@ -45,7 +45,7 @@
     "@types/supertest": "^6.0.2",
     "@types/vue": "^1.0.31",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
+    "@typescript-eslint/parser": "^5.62.0",
     "@vue/runtime-core": "^3.5.13",
     "@vue/test-utils": "^2.4.6",
     "babel-jest": "^29.7.0",
