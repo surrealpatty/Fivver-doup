@@ -19,7 +19,7 @@
       "@services/*": ["services/*"]  // Path alias for services
     },
     "resolveJsonModule": true,  // Allow importing JSON files as modules
-    "lib": ["es2015", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
+    "lib": ["esnext", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
     "typeRoots": [
       "./node_modules/@types",  // Standard types folder
       "./src/types"  // Custom types folder (if you have one)

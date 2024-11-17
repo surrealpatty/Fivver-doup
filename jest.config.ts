@@ -2,19 +2,18 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
-    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest for TypeScript files
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
+      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.js$': 'babel-jest',
   },
-  transformIgnorePatterns: [
-    '/node_modules/(?!your-esm-package-to-transform)/', // Ignore node_modules unless needed
-  ],
+  moduleNameMapper: {
+    '^@models/(.*)$': '<rootDir>/src/models/$1',
+    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
+      '^@services/(.*)$': '<rootDir>/src/services/$1',
+  },
   globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json', // Reference tsconfig file in the root directory
-    },
+      'ts-jest': {
+          tsconfig: 'tsconfig.json',
+      },
   },
   moduleFileExtensions: ['js', 'ts', 'tsx'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // For path aliases (e.g., @models/* => src/models/*)
-  },
 };
