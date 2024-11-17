@@ -15,8 +15,8 @@
     "paths": {
       "@/*": ["*"],  // Path alias for "src" directory
       "@models/*": ["models/*"],  // Path alias for models folder (for testing imports)
-      "@controllers/*": ["controllers/*"],  // Optional: path alias for controllers
-      "@services/*": ["services/*"]  // Optional: path alias for services
+      "@controllers/*": ["controllers/*"],  // Path alias for controllers
+      "@services/*": ["services/*"]  // Path alias for services
     },
     "resolveJsonModule": true,  // Allow importing JSON files as modules
     "lib": ["es2015", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
@@ -27,7 +27,6 @@
     "types": ["jest", "node"],  // Include Jest and Node types for testing and Node.js
     "tsBuildInfoFile": "./.tsbuildinfo",  // For incremental builds
     "incremental": true,  // Enable incremental compilation for faster rebuilds
-    "resolveJsonModule": true,  // Allow importing of JSON modules
     "skipDefaultLibCheck": true  // Avoid errors with default libraries
   },
   "include": [
@@ -36,8 +35,9 @@
     "src/**/*.js",  // If you have any JS files in the src folder
     "src/**/*.d.ts",  // Include any declaration files in the src folder
     "src/test/**/*.ts",  // Ensure test files are included
-    "src/test/**/*.tsx"  // Include test .tsx files if present
-, "src/types"  ],
+    "src/test/**/*.tsx",  // Include test .tsx files if present
+    "src/types"  // Ensure custom types are included
+  ],
   "exclude": [
     "node_modules",  // Exclude the "node_modules" folder
     "dist",  // Exclude the compiled "dist" folder

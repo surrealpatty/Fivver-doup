@@ -11,27 +11,29 @@ declare global {
     }
 }
 
+// Authentication middleware to verify JWT token
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-    // Extract the token from the Authorization header
+    // Extract the token from the Authorization header (Bearer token)
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
         return res.status(401).json({ message: 'Authentication required' });
     }
 
-    try {
-        // Ensure JWT_SECRET is defined in your environment
-        const jwtSecret = process.env.JWT_SECRET;
-        if (!jwtSecret) {
-            return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
-        }
+    const jwtSecret = process.env.JWT_SECRET;
 
-        // Decode the token and type it correctly
+    if (!jwtSecret) {
+        return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
+    }
+
+    try {
+        // Verify and decode the JWT token
         const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: number };
 
-        // Attach the userId to the request object
+        // Attach the `userId` to the request object
         req.userId = decoded.userId;
 
+        // Proceed to the next middleware or route handler
         next();
     } catch (error) {
         return res.status(403).json({ message: 'Invalid or expired token' });
