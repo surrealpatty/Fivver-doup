@@ -1,30 +1,25 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import User from '../models/user';  // Change to default import
 
-// Define an interface for the JWT payload (add any other fields your token includes)
-interface CustomJwtPayload extends JwtPayload {
-    id: string; // Assuming `id` is a string, change if it's a different type (e.g., number)
-}
+// Example function for getting a user profile
+export const getUserProfile = async (req: Request, res: Response) => {
+    try {
+        // req.userId should be a number now
+        const userId = req.userId;
 
-const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Assuming Bearer token
-
-    if (!token) {
-        return res.status(403).json({ message: 'Token required' });
-    }
-
-    jwt.verify(token, 'your-secret-key', (err, user) => {
-        if (err) {
-            return res.status(403).json({ message: 'Invalid token' });
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID not found in request' });
         }
 
-        // Type assertion to ensure `user` is the custom JwtPayload
-        const customUser = user as CustomJwtPayload;
+        const user = await User.findByPk(userId);  // Fetch user by primary key (userId)
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-        // Now that TypeScript knows `customUser` has an `id`, we can safely access it
-        req.userId = customUser.id;  // Assuming the token has a userId property
-        next();
-    });
+        return res.json(user);
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 };
-
-export default authenticateToken;

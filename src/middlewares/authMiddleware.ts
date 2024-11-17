@@ -1,42 +1,36 @@
-// src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-// Extend the Request type to include `userId`
-declare global {
-    namespace Express {
-        interface Request {
-            userId?: number;  // Keep this as a number if you want `userId` to be a number
-        }
-    }
+// Define an interface for the JWT payload
+interface CustomJwtPayload extends JwtPayload {
+    id: string;  // Assuming `id` is a string, change if needed
 }
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Assuming Bearer token
 
     if (!token) {
-        return res.status(401).json({ message: 'Authentication required' });
+        return res.status(403).json({ message: 'Token required' });
     }
 
-    const jwtSecret = process.env.JWT_SECRET;
+    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';  // Secret key from environment
 
-    if (!jwtSecret) {
-        return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
-    }
+    jwt.verify(token, jwtSecret, (err, user) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
 
-    try {
-        // Verify and decode the JWT token
-        const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: string };  // Change to string if the id is a string
+        const customUser = user as CustomJwtPayload;
 
-        // Convert userId to number (assuming it's a string in the token)
-        req.userId = Number(decoded.userId);  // Convert string to number if needed
+        // Ensure that `userId` is a number (convert from string if necessary)
+        req.userId = Number(customUser.id);
 
         if (isNaN(req.userId)) {
             return res.status(400).json({ message: 'Invalid userId in token' });
         }
 
         next();
-    } catch (error) {
-        return res.status(403).json({ message: 'Invalid or expired token' });
-    }
+    });
 };
+
+export default authenticateToken;
