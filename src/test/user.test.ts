@@ -19,7 +19,7 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 describe('User Controller', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
         // Setup mocked responses for User model functions
         (User.findOne as jest.Mock).mockResolvedValue({
             id: 1,
