@@ -52,7 +52,7 @@ export default [
     },
   },
   {
-    files: ["**/*.test.ts", "**/*.test.js", "**/setupEnvVars.ts"], // Target test files specifically
+    files: ["**/*.test.ts", "**/*.test.js", "**/setupEnvVars.ts", "**/test/**/*.ts", "**/test/**/*.js"], // Target test files specifically
     languageOptions: {
       globals: {
         jest: "readonly", // Declare Jest globals as readonly for test files
