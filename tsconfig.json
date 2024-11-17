@@ -16,7 +16,7 @@
       "@/*": ["*"] // Path alias for "src" directory
     },
     "resolveJsonModule": true, // Allow importing JSON files as modules
-    "lib": ["esnext", "node"], // Include ES and Node libraries
+    "lib": ["esnext", "dom", "es2015"], // Include ES libraries and DOM for node and frontend compatibility
     "typeRoots": [
       "./node_modules/@types", // Standard types folder
       "./src/types" // Custom types folder (if you have one)
