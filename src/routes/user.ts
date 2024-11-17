@@ -2,9 +2,8 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
-import { Op } from 'sequelize';  // Import Op from Sequelize
 import User from '../models/user'; // Import the User model
-import { authenticateToken } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middleware/authMiddleware'; // Ensure token authentication is used
 
 const router = express.Router();
 
@@ -71,10 +70,8 @@ router.post('/login', async (req: Request, res: Response) => {
 
 // Profile Route (requires authentication)
 router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
-  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
-
   try {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(req.user?.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({
@@ -93,7 +90,7 @@ router.get('/profile', authenticateToken, async (req: Request, res: Response) =>
 // Update Profile Route
 router.put('/profile', authenticateToken, async (req: Request, res: Response) => {
   const { firstName, lastName, password } = req.body;
-  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
+  const userId = req.user?.id;
 
   try {
     const user = await User.findByPk(userId);
@@ -120,7 +117,7 @@ router.put('/profile', authenticateToken, async (req: Request, res: Response) =>
 
 // Delete Profile Route
 router.delete('/profile', authenticateToken, async (req: Request, res: Response) => {
-  const userId = req.user?.id; // Assuming 'req.user' contains the authenticated user
+  const userId = req.user?.id;
 
   try {
     const user = await User.findByPk(userId);

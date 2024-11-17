@@ -16,7 +16,7 @@
       "@/*": ["src/*"] // Path alias for "src" directory
     },
     "resolveJsonModule": true, // Allow importing JSON files as modules
-    "lib": ["esnext", "dom"], // Include ES and DOM libraries
+    "lib": ["esnext"], // Only include ES libraries (DOM is usually unnecessary in Node.js)
     "typeRoots": [
       "./node_modules/@types", // Standard types folder
       "./src/types" // Custom types folder (if you have one)
@@ -28,15 +28,14 @@
     "incremental": true // Enable incremental compilation for faster rebuilds
   },
   "include": [
-  "src/**/*.ts",
-  "src/**/*.tsx",
-  "src/**/*.js",  // If you have JS files you want to include
-  "src/**/*.d.ts" // Type declaration files
-],
-
+    "src/**/*.ts",  // Include all TypeScript files in the "src" folder
+    "src/**/*.tsx", // Include all TypeScript JSX files (if using React)
+    "src/**/*.js",  // Include JavaScript files (if necessary)
+    "src/**/*.d.ts" // Include TypeScript declaration files
+  ],
   "exclude": [
-    "node_modules", // Exclude node_modules
-    "dist", // Exclude the compiled dist folder
-    "jest.config.ts" // Exclude Jest config if using TypeScript config
+    "node_modules", // Exclude the "node_modules" folder
+    "dist", // Exclude the compiled "dist" folder
+    "jest.config.ts" // Exclude Jest config if using TypeScript for config
   ]
 }
