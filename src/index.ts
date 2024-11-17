@@ -1,5 +1,5 @@
 import express from 'express';  // Import Express
-import { sequelize } from '../config/database'; // Adjusted path for compiled files
+import { sequelize } from './config/database';  // Correct relative path for compiled files
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,7 +17,7 @@ sequelize.sync()
   .then(() => {
     console.log('Database synced');
   })
-  .catch((error) => {
+  .catch((error: Error) => {  // Typing the error as `Error` for better type safety
     console.error('Error syncing database:', error);
   });
 
