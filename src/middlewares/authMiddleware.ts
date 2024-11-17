@@ -1,3 +1,5 @@
+// src/middlewares/authMiddleware.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -11,7 +13,7 @@ interface User {
 }
 
 // Middleware to authenticate the token
-export const authMiddleware = (req: Request, res: Response, next: NextFunction): Response | void => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
   const authHeader = req.header('Authorization');
 
   if (!authHeader) {
@@ -43,34 +45,4 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
   }
 };
 
-// Middleware to authorize based on user role
-export const authorizeRoles = (...allowedRoles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): Response | void => {
-    if (!req.user) {
-      return res.status(403).json({ message: 'Access denied: user not authenticated' });
-    }
-
-    // Check if the user's role matches the allowed roles
-    if (!allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Access denied: insufficient permissions' });
-    }
-
-    return next(); // Proceed to the next middleware or route handler
-  };
-};
-
-// Middleware to check for subscription level (e.g., "Paid" subscription)
-export const authorizeSubscription = (requiredSubscription: string) => {
-  return (req: Request, res: Response, next: NextFunction): Response | void => {
-    if (!req.user) {
-      return res.status(403).json({ message: 'Access denied: user not authenticated' });
-    }
-
-    // Check if the user has the required subscription level
-    if (req.user.subscription !== requiredSubscription) {
-      return res.status(403).json({ message: `Access denied: ${requiredSubscription} subscription required.` });
-    }
-
-    return next(); // Proceed to the next middleware or route handler
-  };
-};
+// Optionally, you can also export other middlewares like authorizeRoles or authorizeSubscription.
