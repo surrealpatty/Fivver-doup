@@ -11,17 +11,17 @@
     "noImplicitAny": true, // Disallow implicit any types
     "strictNullChecks": true, // Ensure null checks are enabled
     "outDir": "./dist", // Compiled files go to the "dist" folder
-    "baseUrl": "./", // The root of the project (for path mapping)
+    "baseUrl": "./src", // The root of the project (for path mapping)
     "paths": {
-      "@/*": ["src/*"] // Path alias for "src" directory
+      "@/*": ["*"] // Path alias for "src" directory
     },
     "resolveJsonModule": true, // Allow importing JSON files as modules
-    "lib": ["esnext"], // Only include ES libraries (DOM is usually unnecessary in Node.js)
+    "lib": ["esnext", "node"], // Include ES and Node libraries
     "typeRoots": [
       "./node_modules/@types", // Standard types folder
       "./src/types" // Custom types folder (if you have one)
     ],
-    "types": ["jest"], // Include Jest types for testing
+    "types": ["jest", "node"], // Include Jest and Node types
     "jsx": "preserve", // Preserve JSX if you are using React
     "skipDefaultLibCheck": true, // Skip default lib check (if necessary)
     "tsBuildInfoFile": "./.tsbuildinfo", // For incremental builds
