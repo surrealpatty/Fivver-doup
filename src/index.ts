@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user';  // Use absolute imports
+import userRoutes from './routes/user'; // Should be correct for TypeScript
 import authenticateToken from './middlewares/authMiddleware';  // Import authentication middleware
 
 const app = express();
