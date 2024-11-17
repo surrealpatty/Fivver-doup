@@ -10,20 +10,20 @@
     "baseUrl": ".",
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["jest", "vue"],  // Add jest to the types array for Jest integration
+    "types": ["jest", "node", "vue"],  // Added jest and node for Jest and Node.js type support
     "paths": {
       "@/*": ["src/*"]
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "src/test/**/*.ts"  // Include test files here to be recognized by TypeScript
+    "src/**/*.ts",  // TypeScript files in the src folder
+    "src/**/*.d.ts",  // TypeScript declaration files
+    "src/**/*.tsx",  // TypeScript React files (if using JSX/TSX)
+    "src/**/*.vue",  // Vue component files
+    "src/test/**/*.ts"  // Include your test files (add a wildcard for .ts test files)
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules",  // Exclude node_modules folder
+    "dist"  // Exclude dist folder
   ]
 }
