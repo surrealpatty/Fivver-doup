@@ -1,18 +1,17 @@
-import type { Config } from '@jest/types';
-
-const config: Config.InitialOptions = {
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest for TypeScript files
+    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!your-esm-package-to-transform)/", // Ignore node_modules unless needed
+  ],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json',
+      tsconfig: 'tsconfig.json', // Reference your tsconfig
     },
   },
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  coverageDirectory: 'coverage',
+  moduleFileExtensions: ['js', 'ts', 'tsx'],
 };
-
-export default config;
