@@ -1,42 +1,41 @@
 {
   "compilerOptions": {
-    "target": "ES6",  // Set target to ES6, which is a good balance for Node.js compatibility
-    "module": "commonjs",  // Changed to "commonjs" for better Node.js compatibility
-    "moduleResolution": "node",  // Ensures modules are resolved in a Node.js-compatible way
-    "esModuleInterop": true,  // Allows default imports from modules with no default export
-    "allowSyntheticDefaultImports": true,  // Allows default imports from modules without a default export
-    "skipLibCheck": true,  // Skip library checking for faster compilation
-    "forceConsistentCasingInFileNames": true,  // Enforces consistent file name casing
-    "strict": true,  // Enables all strict type-checking options
-    "noImplicitAny": true,  // Disallows "any" type by default
-    "strictNullChecks": true,  // Enables strict null checks
-    "outDir": "./dist",  // Ensures compiled files go to the "dist" folder
-    "baseUrl": "./",  // Enables path mapping
+    "target": "ES6", // Set target to ES6 for Node.js compatibility
+    "module": "commonjs", // Use commonjs for Node.js
+    "moduleResolution": "node", // Resolves modules like Node.js
+    "esModuleInterop": true, // Allow default imports from modules with no default export
+    "allowSyntheticDefaultImports": true, // Allows default imports from non-default export modules
+    "skipLibCheck": true, // Skip library type checking for faster builds
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
+    "strict": true, // Enable all strict checks (best practice)
+    "noImplicitAny": true, // Disallow implicit any types
+    "strictNullChecks": true, // Ensure null checks are enabled
+    "outDir": "./dist", // Compiled files go to the "dist" folder
+    "baseUrl": "./", // The root of the project (for path mapping)
     "paths": {
-      "@/*": ["src/*"]  // Maps "@/..." to "src/..."
+      "@/*": ["src/*"] // Path alias for "src" directory
     },
-    "resolveJsonModule": true,  // Allows importing JSON files as modules
-    "lib": ["esnext", "dom"],  // Includes ES and DOM libraries
+    "resolveJsonModule": true, // Allow importing JSON files as modules
+    "lib": ["esnext", "dom"], // Include ES and DOM libraries
     "typeRoots": [
-      "./node_modules/@types",  // Standard types folder
-      "./src/types"  // Custom types folder, if you have one
+      "./node_modules/@types", // Standard types folder
+      "./src/types" // Custom types folder (if you have one)
     ],
-    "types": ["jest"],  // Include Jest types only if using Jest for tests
-    "jsx": "preserve",  // Keeps JSX intact if working with React
-    "skipDefaultLibCheck": true,  // Skip checking of the default lib
-    "tsBuildInfoFile": "./.tsbuildinfo",  // Enable incremental builds for faster rebuilds
-    "incremental": true  // Enable incremental compilation
+    "types": ["jest"], // Include Jest types for testing
+    "jsx": "preserve", // Preserve JSX if you are using React
+    "skipDefaultLibCheck": true, // Skip default lib check (if necessary)
+    "tsBuildInfoFile": "./.tsbuildinfo", // For incremental builds
+    "incremental": true // Enable incremental compilation for faster rebuilds
   },
   "include": [
-    "src/**/*.ts",  // Include all TypeScript files in the "src" folder
-    "src/**/*.tsx",  // Include all TypeScript JSX files
-    "src/**/*.js",  // Include JavaScript files if necessary
-    "src/**/*.d.ts",  // Include TypeScript declaration files
-    "jest.setup.ts"  // Include Jest setup file if you have one
+    "src/**/*.ts", // Include all TypeScript files
+    "src/**/*.tsx", // Include TypeScript JSX files (if using React)
+    "src/**/*.d.ts", // Include TypeScript declaration files
+    "jest.setup.ts" // Include Jest setup file (if you have one)
   ],
   "exclude": [
-    "node_modules",  // Exclude the "node_modules" folder
-    "dist",  // Exclude the compiled "dist" folder
-    "jest.config.ts"  // Exclude Jest config if using TypeScript for config
+    "node_modules", // Exclude node_modules
+    "dist", // Exclude the compiled dist folder
+    "jest.config.ts" // Exclude Jest config if using TypeScript config
   ]
 }
