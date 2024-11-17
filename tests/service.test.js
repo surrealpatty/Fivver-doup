@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import request from 'supertest';
 
 // Adjusted to point to the transpiled app (entry point in dist/src)
-const app = require('../dist/src/index'); 
+const app = require('../dist/index');  // Adjust this if your output is in a different location
 // Adjusted path to transpiled services model
 const Service = require('../dist/models/services');
 

@@ -1,5 +1,4 @@
-import express from 'express';  // Correct ES module import
-import request from 'supertest'; 
+import request from 'supertest';
 import { app, server } from '../index';  // Import app and server from index.ts
 import User from '../models/user'; 
 import jwt from 'jsonwebtoken'; 
@@ -57,7 +56,7 @@ describe('User Controller', () => {
                 password: 'password123',  // Match with your mock data
             });
 
-        console.log(response.status, response.body); 
+        console.log(response.status, response.body);
 
         expect(response.status).toBe(200); 
         expect(response.body).toHaveProperty('token', 'mockedToken');  // Mocked token value
@@ -84,7 +83,7 @@ describe('User Controller', () => {
             .delete('/users/profile')  // Adjusted to match your actual route in Express
             .set('Authorization', 'Bearer mockedToken');  // Mock Authorization header
 
-        console.log(response.status, response.body);  
+        console.log(response.status, response.body);
 
         expect(response.status).toBe(200);  // Expect status to be 200 (OK)
         expect(response.body).toHaveProperty('message', 'User deleted successfully');  // Expect message in response
