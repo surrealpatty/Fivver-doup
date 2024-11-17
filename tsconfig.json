@@ -28,11 +28,12 @@
     "incremental": true // Enable incremental compilation for faster rebuilds
   },
   "include": [
-    "src/**/*.ts", // Include all TypeScript files
-    "src/**/*.tsx", // Include TypeScript JSX files (if using React)
-    "src/**/*.d.ts", // Include TypeScript declaration files
-    "jest.setup.ts" // Include Jest setup file (if you have one)
-  ],
+  "src/**/*.ts",
+  "src/**/*.tsx",
+  "src/**/*.js",  // If you have JS files you want to include
+  "src/**/*.d.ts" // Type declaration files
+],
+
   "exclude": [
     "node_modules", // Exclude node_modules
     "dist", // Exclude the compiled dist folder
