@@ -1,3 +1,5 @@
+import app from '../dist/index';  // Verify this path is correct
+
 const request = require('supertest');
 const path = require('path');
 

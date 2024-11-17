@@ -3,9 +3,9 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Use ts-jest for TypeScript support
   testEnvironment: 'node',  // Set the test environment to node (suitable for backend tests)
-  moduleFileExtensions: ['ts', 'js', 'json', 'node'],  // Include node extension for modules
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],  // Include node extension for modules
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }],  // Use ts-jest to transform TypeScript files
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],  // Use ts-jest to transform TypeScript files
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],  // Specify a setup file for any test configuration
   globals: {
