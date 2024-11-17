@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",  // Set target to ES6 for Node.js compatibility
-    "module": "ESNext",  // Use ESNext for ES module support
+    "module": "CommonJS",  // Use CommonJS for Node.js compatibility (this may help with compatibility)
     "moduleResolution": "node",  // Resolves modules like Node.js
     "esModuleInterop": true,  // Allow default imports from modules with no default export
     "allowSyntheticDefaultImports": true,  // Allows default imports from non-default export modules
@@ -17,7 +17,7 @@
       "@models/*": ["models/*"],  // Path alias for models folder
       "@controllers/*": ["controllers/*"],  // Path alias for controllers
       "@services/*": ["services/*"],  // Path alias for services
-      "@utils/*": ["utils/*"]  // You can add utility path aliases if needed
+      "@utils/*": ["utils/*"]  // Path alias for utilities
     },
     "resolveJsonModule": true,  // Allow importing JSON files as modules
     "lib": ["esnext", "dom"],  // Include ES libraries and DOM for node and frontend compatibility
@@ -29,7 +29,7 @@
     "tsBuildInfoFile": "./.tsbuildinfo",  // For incremental builds
     "incremental": true,  // Enable incremental compilation for faster rebuilds
     "skipDefaultLibCheck": true,  // Avoid errors with default libraries
-    "jsx": "react"  // If using JSX (e.g., for React or Vue JSX), ensure it's enabled; remove if not using JSX
+    "jsx": "react"  // Only include if using JSX, otherwise remove it
   },
   "include": [
     "src/**/*.ts",  // Include all .ts files in the src folder
