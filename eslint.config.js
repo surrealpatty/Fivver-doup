@@ -3,7 +3,7 @@ import { Linter } from "eslint";  // Import Linter from ESLint
 import pluginJs from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
-import { parse } from "@typescript-eslint/parser"; // Correctly import the TypeScript parser
+import parser from "@typescript-eslint/parser"; // Use TypeScript parser correctly
 
 /** @type {Linter.FlatConfig[]} */
 export default [
@@ -17,6 +17,7 @@ export default [
         process: "readonly", // Add Node.js process as readonly
         require: "readonly", // Add Node.js require as readonly
       },
+      parser: pluginJs.parsers.get("babel-eslint"), // Specify a JS parser (you could use babel-eslint or another appropriate parser for JS)
     },
     rules: {
       ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
@@ -25,7 +26,7 @@ export default [
   {
     files: ["**/*.ts"], // Specific rules for TypeScript files
     languageOptions: {
-      parser: parse, // Use TypeScript parser correctly
+      parser, // Use the correct TypeScript parser
       ecmaVersion: 2020,
       sourceType: "module", // Enable module system for TypeScript
     },
@@ -37,7 +38,7 @@ export default [
   {
     files: ["**/*.vue"], // Specific rules for Vue files
     languageOptions: {
-      parser: parse, // Use TypeScript parser for Vue
+      parser, // Use TypeScript parser for Vue
       ecmaVersion: 2020,
       sourceType: "module",
     },
