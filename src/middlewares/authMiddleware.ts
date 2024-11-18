@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import { config } from '../config/config'; // Assuming you're using named exports for config
+import { config } from '../config/config'; // TypeScript knows the types now
 
 // Extend the Request type to include a 'user' property
 declare global {

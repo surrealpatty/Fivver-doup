@@ -23,10 +23,13 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
 // Convert DB_SSL to a boolean value if it's set to 'true' or 'false'
 const useSSL = DB_SSL === 'true';
 
+// Cast DB_DIALECT to a valid Sequelize dialect
+const dialect = DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mariadb'; // Replace with all valid dialects you support
+
 // Create a new Sequelize instance
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  dialect: DB_DIALECT, // Ensure correct dialect type (mysql, postgres, etc.)
+  dialect, // Use the type-cast dialect here
   logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
 
   dialectOptions: {
