@@ -25,8 +25,10 @@ const config: Config.InitialOptions = {
     '/node_modules/(?!(@babel|some-other-package-to-transform)/)', // Example: transform certain node_modules
   ],
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
-  extensionsToTreatAsEsm: ['.ts', '.tsx'], // Remove .js as it is inferred as ESM
-  resolver: '<rootDir>/node_modules/jest-resolve', // Use Jest resolver to handle ESM
+  extensionsToTreatAsEsm: ['.ts', '.tsx'], // Treat .ts/.tsx as ESM
+  resolver: require.resolve('jest-resolve'), // Use Jest resolver to handle ESM
+  testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
+  testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder
 };
 
 export default config;
