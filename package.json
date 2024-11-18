@@ -84,7 +84,6 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mock-request": "^0.1.2",
-    "mock-response": "^3.2.2",
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5",
     "uglify-js": "^3.19.3",
