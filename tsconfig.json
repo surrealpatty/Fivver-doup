@@ -18,7 +18,7 @@
     "declarationMap": true,                  // Generate declaration maps to improve debugging
     "allowSyntheticDefaultImports": true,    // Allow importing CommonJS modules as default imports
     "skipDefaultLibCheck": true,             // Skip checking the default library files for faster compilation
-    "jsx": "preserve"                        // Ensure JSX files (like in Vue) are handled properly
+    "jsx": "preserve"                        // Handle JSX files correctly, needed for Vue
   },
   "include": [
     "src/**/*.ts",                           // Include all TypeScript files in the src folder
