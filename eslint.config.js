@@ -5,18 +5,18 @@ import tseslint from "@typescript-eslint/eslint-plugin";
 import pluginVue from "eslint-plugin-vue";
 import parser from "@typescript-eslint/parser"; // Default import for the TypeScript parser
 
-/** @type {Linter.Config[]} */
+/** @type {Linter.FlatConfig[]} */
 export default [
   {
     files: ["**/*.{js,mjs,cjs,ts,vue}"],
-    parserOptions: {
+    languageOptions: {
       ecmaVersion: 2020,
       sourceType: "module", // Enable module system for JS, TS, and Vue
-    },
-    globals: {
-      ...globals.browser, // Add browser globals
-      process: "readonly", // Add Node.js process as readonly
-      require: "readonly", // Add Node.js require as readonly
+      globals: {
+        ...globals.browser, // Add browser globals
+        process: "readonly", // Add Node.js process as readonly
+        require: "readonly", // Add Node.js require as readonly
+      },
     },
     rules: {
       ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
@@ -24,8 +24,8 @@ export default [
   },
   {
     files: ["**/*.ts"], // Specific rules for TypeScript files
-    parser: "@typescript-eslint/parser", // Use TypeScript parser
-    parserOptions: {
+    languageOptions: {
+      parser: "@typescript-eslint/parser", // Use TypeScript parser
       ecmaVersion: 2020,
       sourceType: "module", // Enable module system for TypeScript
     },
@@ -36,8 +36,8 @@ export default [
   },
   {
     files: ["**/*.vue"], // Specific rules for Vue files
-    parser: "@typescript-eslint/parser",  // Use TypeScript parser for Vue
-    parserOptions: {
+    languageOptions: {
+      parser: "@typescript-eslint/parser",  // Use TypeScript parser for Vue
       ecmaVersion: 2020,
       sourceType: "module",
     },
@@ -48,17 +48,19 @@ export default [
   },
   {
     files: ["**/*.test.ts", "**/*.test.js", "**/setupEnvVars.ts", "**/test/**/*.ts", "**/test/**/*.js"], // Specific rules for test files
-    globals: {
-      jest: "readonly", // Declare Jest globals as readonly for test files
-      describe: "readonly", 
-      it: "readonly",
-      expect: "readonly",
-      beforeAll: "readonly",
-      afterAll: "readonly",
-      beforeEach: "readonly",
-      afterEach: "readonly",
-      process: "readonly", // Add Node.js process for setupEnvVars.ts
-      require: "readonly", // Add Node.js require for test files
+    languageOptions: {
+      globals: {
+        jest: "readonly", // Declare Jest globals as readonly for test files
+        describe: "readonly", 
+        it: "readonly",
+        expect: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        process: "readonly", // Add Node.js process for setupEnvVars.ts
+        require: "readonly", // Add Node.js require for test files
+      },
     },
     rules: {
       "no-undef": "off", // Disable `no-undef` in test files
