@@ -13,11 +13,12 @@ const {
   DB_DIALECT,
   DB_SSL,
   NODE_ENV,
+  JWT_SECRET, // Assuming you also want JWT_SECRET here
 } = process.env;
 
 // Ensure required environment variables are present
-if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
-  throw new Error('Missing required database environment variables');
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT || !JWT_SECRET) {
+  throw new Error('Missing required environment variables');
 }
 
 // Convert DB_SSL to a boolean value if it's set to 'true' or 'false'
@@ -48,4 +49,15 @@ sequelize.authenticate()
     process.exit(1); // Exit the process if the connection fails
   });
 
-export default sequelize; // Export the sequelize instance
+// Export the config object for other files, and the sequelize instance
+export default {
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_DIALECT,
+  DB_SSL,
+  NODE_ENV,
+  JWT_SECRET,
+  sequelize,
+};

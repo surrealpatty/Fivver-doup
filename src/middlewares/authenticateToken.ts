@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { config } from '../config/config'; // Assuming you're using named exports for config
+import config from 'src/config/config'; // Correct import for default export
 
 // Extend the Request type to include a 'user' property
 declare global {

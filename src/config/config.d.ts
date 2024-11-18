@@ -10,6 +10,5 @@ declare module 'src/config/config' {
     DB_SSL: string | boolean;
     NODE_ENV: string;
   };
-
   export default config;
 }
