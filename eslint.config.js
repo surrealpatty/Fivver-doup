@@ -1,65 +1,67 @@
 import globals from 'globals';
-import { Linter } from 'eslint';  // Import Linter from ESLint
 import pluginJs from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import pluginVue from 'eslint-plugin-vue';
-import parser from '@typescript-eslint/parser'; // Use TypeScript parser correctly
-import vueParser from 'vue-eslint-parser'; // Vue parser
+import parser from '@typescript-eslint/parser';
+import vueParser from 'vue-eslint-parser';
 
-/** @type {Linter.FlatConfig[]} */
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
   {
     files: ['**/*.{js,mjs,cjs,ts,vue}'],
     languageOptions: {
       ecmaVersion: 2020,
-      sourceType: 'module', // Enable module system for JS, TS, and Vue
+      sourceType: 'module',
       globals: {
-        ...globals.browser, // Add browser globals
-        process: 'readonly', // Add Node.js process as readonly
-        require: 'readonly', // Add Node.js require as readonly
+        ...globals.browser,
+        process: 'readonly',
+        require: 'readonly',
       },
-      parser: 'babel-eslint', // Use babel-eslint parser for JS
-    },
-    plugins: {
-      'eslint-plugin-js': pluginJs, // Corrected reference to the JS plugin
     },
     rules: {
-      ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
+      ...pluginJs.configs.recommended.rules,
     },
   },
   {
-    files: ['**/*.ts'], // Specific rules for TypeScript files
+    files: ['**/*.ts'],
     languageOptions: {
-      parser, // Use the correct TypeScript parser
-      ecmaVersion: 2020,
-      sourceType: 'module', // Enable module system for TypeScript
-    },
-    plugins: {
-      '@typescript-eslint': tseslint, // Correct reference to the TypeScript plugin
-    },
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'warn', // Warn for unused variables in TypeScript
-    },
-  },
-  {
-    files: ['**/*.vue'], // Specific rules for Vue files
-    languageOptions: {
-      parser: vueParser, // Use Vue parser to handle Vue files
+      parser, // TypeScript parser
       ecmaVersion: 2020,
       sourceType: 'module',
     },
     plugins: {
-      'vue': pluginVue, // Corrected the plugin reference
+      '@typescript-eslint': tseslint,
     },
     rules: {
-      'vue/no-unused-vars': 'warn',  // Warn for unused variables in Vue files
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.test.js', '**/setupEnvVars.ts', '**/test/**/*.ts', '**/test/**/*.js'], // Specific rules for test files
+    files: ['**/*.vue'],
+    languageOptions: {
+      parser: vueParser, // Vue parser
+      ecmaVersion: 2020,
+      sourceType: 'module',
+    },
+    plugins: {
+      vue: pluginVue,
+    },
+    rules: {
+      ...pluginVue.configs['vue3-recommended'].rules, // Recommended Vue 3 rules
+      'vue/no-unused-vars': 'warn',
+    },
+  },
+  {
+    files: [
+      '**/*.test.ts',
+      '**/*.test.js',
+      '**/setupEnvVars.ts',
+      '**/test/**/*.ts',
+      '**/test/**/*.js',
+    ],
     languageOptions: {
       globals: {
-        jest: 'readonly', // Declare Jest globals as readonly for test files
+        jest: 'readonly',
         describe: 'readonly',
         it: 'readonly',
         expect: 'readonly',
@@ -67,12 +69,12 @@ export default [
         afterAll: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',
-        process: 'readonly', // Add Node.js process for setupEnvVars.ts
-        require: 'readonly', // Add Node.js require for test files
+        process: 'readonly',
+        require: 'readonly',
       },
     },
     rules: {
-      'no-undef': 'off', // Disable `no-undef` in test files
+      'no-undef': 'off',
     },
   },
 ];
