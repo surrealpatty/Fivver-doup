@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken'; // Import JwtPayload for decoding
-import * as config from '../config/config'; // Assuming you export config as a namespace
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken'; // Import VerifyErrors for type safety
+import * as config from '../config/config'; // Assuming you export the config properly
 
 // Extend the Request type to include 'user' (in case it's not declared globally)
 declare global {
@@ -13,21 +13,22 @@ declare global {
 
 // Middleware to authenticate token
 const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
 
-    if (!token) {
-        return res.status(403).json({ message: 'No token provided' });
+  if (!token) {
+    return res.status(403).json({ message: 'No token provided' });
+  }
+
+  // Simplify the verification process
+  jwt.verify(token, config.JWT_SECRET, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
+    if (err) {
+      // Respond with unauthorized if there's an error
+      return res.status(401).json({ message: 'Unauthorized', error: err?.message });
     }
 
-    // jwt.verify with proper type for 'err' and 'decoded'
-    jwt.verify(token, config.JWT_SECRET, (err: any, decoded: JwtPayload | undefined) => {
-        if (err) {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
-
-        req.user = decoded; // Attach user object to request after decoding
-        next();
-    });
+    req.user = decoded; // Attach user object to request after decoding
+    next(); // Call next middleware or route handler
+  });
 };
 
 export default authMiddleware;

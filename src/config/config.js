@@ -1,10 +1,10 @@
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 // Load environment variables from the .env file
 dotenv.config();
 
-// Destructure the environment variables
+// Destructure environment variables
 const {
   DB_NAME,
   DB_USER,
@@ -45,4 +45,4 @@ sequelize.authenticate()
     process.exit(1); // Exit the process if the connection fails
   });
 
-module.exports = sequelize;
+export default sequelize; // Export the sequelize instance
