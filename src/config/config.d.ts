@@ -1,8 +1,15 @@
 // src/config/config.d.ts
-declare module '../config/config' {
-  export const JWT_SECRET: string;
-  // You can add any other configuration variables from your config.js here
-  // Example:
-  // export const DB_HOST: string;
-  // export const DB_USER: string;
+declare module 'src/config/config' {
+  const config: {
+    JWT_SECRET: string;
+    DB_NAME: string;
+    DB_USER: string;
+    DB_PASSWORD: string;
+    DB_HOST: string;
+    DB_DIALECT: string;
+    DB_SSL: string | boolean;
+    NODE_ENV: string;
+  };
+
+  export default config;
 }
