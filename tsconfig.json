@@ -18,9 +18,10 @@
     "declarationMap": true,                  // Generate declaration maps to improve debugging
     "allowSyntheticDefaultImports": true,    // Allow importing CommonJS modules as default imports
     "skipDefaultLibCheck": true,             // Skip checking the default library files for faster compilation
-    "jsx": "preserve",                      // Handle JSX files correctly, needed for Vue (React JSX: "react")
+    "jsx": "preserve",                      // Preserve JSX for Vue (use "react" for React JSX)
     "incremental": true,                     // Enable incremental compilation for faster builds
-    "isolatedModules": true                  // Isolated modules for faster transpilation (useful with Babel)
+    "isolatedModules": true,                 // Isolated modules for faster transpilation (useful with Babel)
+    "useDefineForClassFields": true          // Use the "define" behavior for class fields to avoid issues
   },
   "include": [
     "src/**/*.ts",                           // Include all TypeScript files in the src folder
