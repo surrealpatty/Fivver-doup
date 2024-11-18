@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import Service from '../../models/service'; // Import the Service model
-import User from '../../models/user'; // Import the User model if needed for user-related routes
+import Service from 'src/models/services'; // Import the Service model
+import User from 'src/models/user'; // Import the User model if needed for user-related routes
 
 const router = express.Router();
 
