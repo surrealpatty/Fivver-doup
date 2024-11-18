@@ -1,10 +1,25 @@
-// src/models/user.ts
-
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Correct path to your sequelize instance
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { v4 as uuidv4 } from 'uuid';
 
-class User extends Model {
+// Define the attributes of the User model
+interface UserAttributes {
+    id: string;
+    email: string;
+    password: string;
+    username: string;
+    role: string;
+    firstName: string;
+    lastName: string;
+    subscriptionStatus: string;
+    subscriptionStartDate: Date | null;
+    subscriptionEndDate: Date | null;
+}
+
+// Define the creation attributes (optional fields that can be omitted in creation)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: string;
     public email!: string;
     public password!: string;
@@ -12,16 +27,20 @@ class User extends Model {
     public role!: string;
     public firstName!: string;
     public lastName!: string;
-    public subscriptionStatus!: string; // Add subscriptionStatus field
-    public subscriptionStartDate!: Date;
-    public subscriptionEndDate!: Date;
+    public subscriptionStatus!: string;
+    public subscriptionStartDate!: Date | null;
+    public subscriptionEndDate!: Date | null;
+
+    // Optional: if you want to control timestamps
+    // public readonly createdAt!: Date;
+    // public readonly updatedAt!: Date;
 }
 
 User.init(
     {
         id: {
             type: DataTypes.UUID,
-            defaultValue: uuidv4(),
+            defaultValue: uuidv4, // Make sure uuidv4 is a function (not called directly)
             primaryKey: true,
             allowNull: false,
         },
@@ -54,8 +73,8 @@ User.init(
         },
         subscriptionStatus: {
             type: DataTypes.STRING,
-            allowNull: true,  // This can be null if not provided
-            defaultValue: 'Inactive',  // Default value if not specified
+            allowNull: true, // This can be null if not provided
+            defaultValue: 'Inactive', // Default value if not specified
         },
         subscriptionStartDate: {
             type: DataTypes.DATE,
@@ -69,6 +88,7 @@ User.init(
     {
         sequelize,
         modelName: 'User',
+        timestamps: true, // Optional: if you want Sequelize to manage createdAt and updatedAt
     }
 );
 
