@@ -25,6 +25,10 @@ const config: Config.InitialOptions = {
     '/node_modules/(?!(@babel|some-other-package-to-transform)/)', // Example: transform certain node_modules
   ],
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
+  // Enable ES modules support for Jest, using Babel to transpile JS
+  extensionsToTreatAsEsm: ['.ts', '.tsx', '.js'],
+  // Enable Jest to understand ESM (experimental flag)
+  resolver: '<rootDir>/node_modules/jest-resolve', // Use Jest resolver to handle ESM
 };
 
 export default config;
