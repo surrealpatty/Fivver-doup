@@ -5,7 +5,7 @@ import User from './user'; // Import the User model for association
 // Define the attributes for the Service model
 interface ServiceAttributes {
   id: number;
-  userId: number;
+  userId: string; // Updated to string for UUID reference
   title: string;
   description: string;
   price: number;
@@ -19,7 +19,7 @@ interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 // Define the Service model
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
-  public userId!: number;
+  public userId!: string; // Updated to string for UUID reference
   public title!: string;
   public description!: string;
   public price!: number;
@@ -38,10 +38,10 @@ Service.init(
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, // Use UUID here to match the User model's id type
       allowNull: false,
       references: {
-        model: 'users', // The referenced model name for foreign key relationship
+        model: 'Users', // The referenced model name for foreign key relationship
         key: 'id',
       },
       onDelete: 'CASCADE', // Optional: delete services if the associated user is deleted

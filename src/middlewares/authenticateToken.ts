@@ -13,7 +13,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
   }
 
   // Verify the token using the secret key (JWT_SECRET)
-  jwt.verify(token, config.JWT_SECRET, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
+  jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       // If the token is invalid or expired, return a 401 Unauthorized error
       return res.status(401).json({ message: 'Unauthorized', error: err?.message });

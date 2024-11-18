@@ -22,7 +22,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction): void =
   }
 
   // Verify the token using the secret key from config
-  jwt.verify(token, config.JWT_SECRET, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
+  jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       // If there's an error in verifying the token (invalid/expired), return a 401 Unauthorized response
       return res.status(401).json({ message: 'Unauthorized', error: err?.message });
