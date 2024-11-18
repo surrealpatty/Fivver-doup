@@ -19,10 +19,14 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "test:ci": "jest --ci --maxWorkers=4",
-    "lint": "eslint 'src/**/*.ts' --fix",
+    "lint": "eslint 'src/**/*.{ts,js,vue}' --fix",
     "migrate": "npx sequelize-cli db:migrate"
   },
-  "keywords": ["fiverr-clone", "skills", "platform"],
+  "keywords": [
+    "fiverr-clone",
+    "skills",
+    "platform"
+  ],
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -70,7 +74,12 @@
     "vue": "^3.5.13"
   },
   "eslintConfig": {
-    "extends": ["airbnb-typescript/base", "plugin:import/typescript", "plugin:vue/vue3-recommended"],
+    "extends": [
+      "airbnb-typescript/base",
+      "plugin:import/typescript",
+      "plugin:vue/vue3-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint", "vue"],
     "parserOptions": {
@@ -81,10 +90,14 @@
       "import/no-extraneous-dependencies": [
         "error",
         {
-          "devDependencies": ["**/*.test.ts", "**/jest.config.ts"]
+          "devDependencies": [
+            "**/*.test.ts",
+            "**/jest.config.ts"
+          ]
         }
       ],
-      "vue/multi-word-component-names": "off"
+      "vue/multi-word-component-names": "off",
+      "@typescript-eslint/no-unused-vars": "warn"
     }
   }
 }
