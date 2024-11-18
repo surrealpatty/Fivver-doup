@@ -21,7 +21,7 @@ export default [
       parser: 'babel-eslint', // Use babel-eslint parser for JS
     },
     plugins: {
-      '@eslint/js': pluginJs,
+      'eslint-plugin-js': pluginJs, // Corrected reference to the JS plugin
     },
     rules: {
       ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
@@ -35,12 +35,10 @@ export default [
       sourceType: 'module', // Enable module system for TypeScript
     },
     plugins: {
-      '@typescript-eslint': tseslint,
+      '@typescript-eslint': tseslint, // Correct reference to the TypeScript plugin
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn', // Warn for unused variables in TypeScript
-      '@typescript-eslint/explicit-module-boundary-types': 'off', // Turn off rule for explicit return types
-      '@typescript-eslint/no-explicit-any': 'off', // Optionally allow `any` type (adjust as per your team's preference)
     },
   },
   {
@@ -51,11 +49,10 @@ export default [
       sourceType: 'module',
     },
     plugins: {
-      'eslint-plugin-vue': pluginVue, // Explicitly include the vue plugin
+      'vue': pluginVue, // Corrected the plugin reference
     },
     rules: {
       'vue/no-unused-vars': 'warn',  // Warn for unused variables in Vue files
-      'vue/require-default-prop': 'off', // Optionally disable requiring default props (adjust as needed)
     },
   },
   {
