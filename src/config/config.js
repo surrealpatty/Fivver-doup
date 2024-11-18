@@ -12,7 +12,7 @@ const {
   DB_HOST,
   DB_DIALECT,
   DB_SSL,
-  NODE_ENV
+  NODE_ENV,
 } = process.env;
 
 // Ensure required environment variables are present
@@ -20,7 +20,7 @@ if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
   throw new Error('Missing required database environment variables');
 }
 
-// Convert DB_SSL to a boolean value if it's set to 'true'
+// Convert DB_SSL to a boolean value if it's set to 'true' or 'false'
 const useSSL = DB_SSL === 'true';
 
 // Create a new Sequelize instance

@@ -19,7 +19,9 @@
     "allowSyntheticDefaultImports": true,    // Allow importing CommonJS modules as default imports
     "skipDefaultLibCheck": true,             // Skip checking the default library files for faster compilation
     "jsx": "preserve",                      // Handle JSX files correctly, needed for Vue
-    "incremental": true                      // Enable incremental compilation for faster builds
+    "incremental": true,                     // Enable incremental compilation for faster builds
+    "resolveJsonModule": true,               // Allow importing JSON modules
+    "isolatedModules": true                  // Isolated modules for faster transpilation (useful with Babel)
   },
   "include": [
     "src/**/*.ts",                           // Include all TypeScript files in the src folder

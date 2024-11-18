@@ -19,7 +19,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction): void =
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  // Simplify the verification process
+  // Simplified the verification process
   jwt.verify(token, config.JWT_SECRET, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       // Respond with unauthorized if there's an error
