@@ -1,6 +1,5 @@
 // src/config/config.d.ts
-
-export const config: {
-  JWT_SECRET: string;
-  // Add other properties from config.js here if needed
-};
+declare module '../config/config' {
+  export const JWT_SECRET: string;
+  // Add any other variables from your config.js file here
+}
