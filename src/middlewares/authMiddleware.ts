@@ -1,33 +1,38 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken'; // Import VerifyErrors for type safety
-import { config } from '../config/config'; // Assuming you're using named exports in config.js
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
+import { config } from '../config/config'; // Assuming you're using named exports for config
 
-// Extend the Request type to include 'user' (in case it's not declared globally)
+// Extend the Request type to include a 'user' property
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload; // Type for the user object attached to the request
+      user?: JwtPayload; // Adding 'user' property to request, which will hold decoded JWT payload
     }
   }
 }
 
 // Middleware to authenticate token
 const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+  // Extract the token from the Authorization header (Bearer <token>)
+  const token = req.headers['authorization']?.split(' ')[1]; // Token should be in the format "Bearer <token>"
 
+  // If no token is provided, return a 403 Forbidden response
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  // Simplified the verification process
+  // Verify the token using the secret key from config
   jwt.verify(token, config.JWT_SECRET, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
-      // Respond with unauthorized if there's an error
+      // If there's an error in verifying the token (invalid/expired), return a 401 Unauthorized response
       return res.status(401).json({ message: 'Unauthorized', error: err?.message });
     }
 
-    req.user = decoded; // Attach user object to request after decoding
-    next(); // Call next middleware or route handler
+    // Attach the decoded user information to the request object
+    req.user = decoded; // 'decoded' contains the payload (user data) of the JWT
+
+    // Proceed to the next middleware or route handler
+    next();
   });
 };
 

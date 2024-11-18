@@ -1,79 +1,75 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correctly import sequelize instance
-import User from './user'; // Import the User model
+import { sequelize } from '../config/database'; // Ensure this import path is correct
+import User from './user'; // Import the User model for association
 
-// Define the attributes for the "services" table
+// Define the attributes for the Service model
 interface ServiceAttributes {
   id: number;
-  name: string;
+  userId: number;
+  title: string;
   description: string;
-  user_id: number | null;
+  price: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>
+// These are the attributes that can be passed when creating a new service (excluding 'id' as it's auto-incremented)
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
+// Define the Service model
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
-  public name!: string;
+  public userId!: number;
+  public title!: string;
   public description!: string;
-  public user_id!: number | null;
-  public createdAt?: Date;
-  public updatedAt?: Date;
+  public price!: number;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
-  static associate(models: { User: typeof User }) {
-    Service.belongsTo(models.User, {
-      foreignKey: 'user_id',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-    });
-  }
+  // Optionally, you can define associations here if needed later (e.g., User-Services relationship)
 }
 
+// Initialize the Service model
 Service.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
     },
-    name: {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users', // The referenced model name for foreign key relationship
+        key: 'id',
+      },
+      onDelete: 'CASCADE', // Optional: delete services if the associated user is deleted
+    },
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-    },
-    createdAt: {
-      type: DataTypes.DATE,
+    price: {
+      type: DataTypes.DECIMAL(10, 2), // Precision for price
       allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
     },
   },
   {
     sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true,
-    underscored: true,
+    tableName: 'services', // Ensure this matches your table name in the DB
+    underscored: true, // Optional: If you want snake_case column names
   }
 );
+
+// Define associations here, such as:
+Service.belongsTo(User, {
+  foreignKey: 'userId',  // User ID in Service model
+  as: 'user',            // Alias for association
+});
 
 export default Service;

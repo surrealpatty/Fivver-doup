@@ -32,15 +32,15 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public subscriptionEndDate!: Date | null;
 
     // Optional: if you want to control timestamps
-    // public readonly createdAt!: Date;
-    // public readonly updatedAt!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 User.init(
     {
         id: {
             type: DataTypes.UUID,
-            defaultValue: uuidv4, // Make sure uuidv4 is a function (not called directly)
+            defaultValue: uuidv4, // Ensure uuidv4 is correctly used as a function
             primaryKey: true,
             allowNull: false,
         },
@@ -88,7 +88,7 @@ User.init(
     {
         sequelize,
         modelName: 'User',
-        timestamps: true, // Optional: if you want Sequelize to manage createdAt and updatedAt
+        timestamps: true, // Sequelize will manage createdAt and updatedAt automatically
     }
 );
 
