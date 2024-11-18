@@ -19,6 +19,9 @@ export default [
       },
       parser: 'babel-eslint', // Specify a JS parser (you could use babel-eslint or another appropriate parser for JS)
     },
+    plugins: {
+      '@eslint/js': pluginJs,
+    },
     rules: {
       ...pluginJs.configs.recommended.rules, // Spread the recommended JS rules
     },
@@ -30,7 +33,9 @@ export default [
       ecmaVersion: 2020,
       sourceType: 'module', // Enable module system for TypeScript
     },
-    plugins: ['@typescript-eslint'],  // Use the TypeScript plugin
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn', // Warn for unused variables in TypeScript
       '@typescript-eslint/explicit-module-boundary-types': 'off', // Turn off rule for explicit return types
@@ -44,7 +49,9 @@ export default [
       ecmaVersion: 2020,
       sourceType: 'module',
     },
-    plugins: ['eslint-plugin-vue'],  // Use Vue plugin
+    plugins: {
+      'eslint-plugin-vue': pluginVue, // Explicitly include the vue plugin
+    },
     rules: {
       'vue/no-unused-vars': 'warn',  // Warn for unused variables in Vue files
       'vue/require-default-prop': 'off', // Optionally disable requiring default props (adjust as needed)
