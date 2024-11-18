@@ -1,155 +1,107 @@
 import express, { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { check, validationResult } from 'express-validator';
-import User from '../models/user';  // Corrected import
-import Service from '../models/service';  // Corrected import
-import authenticateToken from 'src/middleware/authenticateToken';  // Corrected import
+import Service from '../../models/service'; // Import the Service model
+import User from '../../models/user'; // Import the User model if needed for user-related routes
 
 const router = express.Router();
 
-// Define interface for Register and Login Request Body
-interface RegisterRequestBody {
-    username: string;
-    email: string;
-    password: string;
-}
-
-interface LoginRequestBody {
-    email: string;
-    password: string;
-}
-
-interface ServiceRequestBody {
-    title: string;
-    description: string;
-    price: number;
-    category: string;
-}
-
-// User Registration Route
-router.post(
-    '/register',
-    [
-        check('username', 'Username is required').notEmpty(),
-        check('email', 'Please include a valid email').isEmail(),
-        check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
-    ],
-    async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const { username, email, password } = req.body;
-
-        try {
-            // Check if user already exists
-            const existingUser = await User.findOne({ where: { email } });
-            if (existingUser) {
-                return res.status(400).json({ message: 'User already exists' });
-            }
-
-            // Hash the password
-            const hashedPassword = await bcrypt.hash(password, 10);
-
-            // Create new user
-            const newUser = await User.create({
-                username,
-                email,
-                password: hashedPassword,
-            });
-
-            res.status(201).json({
-                message: 'User created successfully',
-                user: {
-                    id: newUser.id,
-                    username: newUser.username,
-                    email: newUser.email,
-                },
-            });
-        } catch (error: any) {
-            console.error('Error creating user:', error.message);
-            res.status(500).json({ message: 'Server error' });
-        }
+// CREATE: Add a new service
+router.post('/services', async (req: Request, res: Response) => {
+  const { userId, title, description, price } = req.body;
+  
+  try {
+    // Check if the user exists (this can also be a middleware for validation)
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-);
-
-// User Login Route
-router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.findOne({ where: { email } });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, {
-            expiresIn: '1h', // Token expiration time (1 hour)
-        });
-
-        res.status(200).json({ token });
-    } catch (error: any) {
-        console.error('Login error:', error.message);
-        res.status(500).json({ message: 'Server error' });
-    }
+    
+    // Create a new service
+    const service = await Service.create({ userId, title, description, price });
+    return res.status(201).json(service); // Return the newly created service
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Protected Profile Route
-router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
-    try {
-        const user = await User.findByPk(req.user?.id); // Access userId from the decoded token (req.user)
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        res.json({ id: user.id, username: user.username, email: user.email });
-    } catch (error: any) {
-        console.error('Profile retrieval error:', error.message);
-        res.status(500).json({ message: 'Server error' });
-    }
+// READ: Get all services
+router.get('/services', async (req: Request, res: Response) => {
+  try {
+    const services = await Service.findAll({
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name'], // Assuming 'name' is a field in the User model
+      }],
+    });
+    return res.status(200).json(services); // Return all services
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Route to create a new service (Protected)
-router.post(
-    '/services',
-    authenticateToken,
-    [
-        check('title', 'Title is required').notEmpty(),
-        check('description', 'Description is required').notEmpty(),
-        check('price', 'Price must be a valid number').isFloat({ min: 0 }), // Use isFloat for price
-        check('category', 'Category is required').notEmpty(),
-    ],
-    async (req: Request<{}, {}, ServiceRequestBody>, res: Response) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const { title, description, price, category } = req.body;
-
-        try {
-            // Create new service
-            const newService = await Service.create({
-                title,
-                description,
-                price,
-                category,
-                userId: req.user?.id, // The authenticated user's ID
-            });
-            res.status(201).json(newService);
-        } catch (error: any) {
-            console.error('Error creating service:', error.message);
-            res.status(500).json({ message: 'Failed to create service' });
-        }
+// READ: Get a specific service by ID
+router.get('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  
+  try {
+    const service = await Service.findByPk(id, {
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name'],
+      }],
+    });
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
     }
-);
+    return res.status(200).json(service);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// UPDATE: Update a service
+router.put('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { title, description, price } = req.body;
+  
+  try {
+    const service = await Service.findByPk(id);
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+    
+    service.title = title || service.title;
+    service.description = description || service.description;
+    service.price = price || service.price;
+
+    await service.save(); // Save the updated service
+    return res.status(200).json(service); // Return the updated service
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// DELETE: Delete a service
+router.delete('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  
+  try {
+    const service = await Service.findByPk(id);
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    await service.destroy(); // Delete the service
+    return res.status(204).send(); // Return no content (204) status after deletion
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 export default router;
