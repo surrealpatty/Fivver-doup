@@ -25,7 +25,10 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction): void =
   jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       // If there's an error in verifying the token (invalid/expired), return a 401 Unauthorized response
-      return res.status(401).json({ message: 'Unauthorized', error: err?.message });
+      return res.status(401).json({
+        message: 'Unauthorized',
+        error: err.message || 'Token verification failed',
+      });
     }
 
     // Attach the decoded user information to the request object

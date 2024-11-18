@@ -2,11 +2,30 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
-import { User } from '../models/user'; 
-import { Service } from '../models/service'; // Correct import style for TypeScript
-import { authenticateToken } from '../middleware/authenticateToken'; // Ensure correct import if it's TypeScript
+import { User } from '../models/user';
+import { Service } from '../models/service';
+import { authenticateToken } from '../middleware/authenticateToken';
 
 const router = express.Router();
+
+// Define interface for Register and Login Request Body
+interface RegisterRequestBody {
+    username: string;
+    email: string;
+    password: string;
+}
+
+interface LoginRequestBody {
+    email: string;
+    password: string;
+}
+
+interface ServiceRequestBody {
+    title: string;
+    description: string;
+    price: number;
+    category: string;
+}
 
 // User Registration Route
 router.post(
@@ -16,7 +35,7 @@ router.post(
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
     ],
-    async (req: Request, res: Response) => {
+    async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -38,7 +57,7 @@ router.post(
             const newUser = await User.create({
                 username,
                 email,
-                password: hashedPassword, // Store hashed password
+                password: hashedPassword,
             });
 
             res.status(201).json({
@@ -57,7 +76,7 @@ router.post(
 );
 
 // User Login Route
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
     const { email, password } = req.body;
 
     try {
@@ -86,8 +105,7 @@ router.post('/login', async (req: Request, res: Response) => {
 // Protected Profile Route
 router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
     try {
-        // Access userId from the typed request object
-        const user = await User.findByPk(req.userId); // Ensure req.userId exists after authenticateToken
+        const user = await User.findByPk(req.user?.id); // Access userId from the decoded token (req.user)
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -109,7 +127,7 @@ router.post(
         check('price', 'Price must be a valid number').isFloat({ min: 0 }), // Use isFloat for price
         check('category', 'Category is required').notEmpty(),
     ],
-    async (req: Request, res: Response) => {
+    async (req: Request<{}, {}, ServiceRequestBody>, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -124,7 +142,7 @@ router.post(
                 description,
                 price,
                 category,
-                userId: req.userId, // The authenticated user's ID
+                userId: req.user?.id, // The authenticated user's ID
             });
             res.status(201).json(newService);
         } catch (error) {

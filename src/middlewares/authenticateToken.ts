@@ -25,7 +25,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
   jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       // If there's an error in verifying the token (invalid/expired), return a 401 Unauthorized response
-      return res.status(401).json({ message: 'Unauthorized', error: err?.message });
+      return res.status(401).json({ message: 'Unauthorized', error: err.message });
     }
 
     // Attach the decoded user information to the request object
