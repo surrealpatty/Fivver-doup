@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken'; // Import VerifyErrors for type safety
-import * as config from '../config/config'; // Assuming you export the config properly
+import { config } from '../config/config'; // Assuming you're using named exports in config.js
 
 // Extend the Request type to include 'user' (in case it's not declared globally)
 declare global {
