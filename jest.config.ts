@@ -7,7 +7,6 @@ const config: Config.InitialOptions = {
   detectLeaks: true, // Detect unhandled asynchronous operations
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files (for ES module support)
   },
   moduleNameMapper: {
     '^@models/(.*)$': '<rootDir>/src/models/$1', // Map @models to src/models
@@ -22,11 +21,10 @@ const config: Config.InitialOptions = {
   },
   moduleFileExtensions: ['js', 'ts', 'tsx'], // Recognize JS, TS, and TSX files
   transformIgnorePatterns: [
-    '/node_modules/(?!(@babel|some-other-package-to-transform)/)', // Example: transform certain node_modules
+    '/node_modules/', // Ignore node_modules for transformation
   ],
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
   extensionsToTreatAsEsm: ['.ts', '.tsx'], // Treat .ts/.tsx as ESM
-  resolver: require.resolve('jest-resolve'), // Use Jest resolver to handle ESM
   testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder
 };
