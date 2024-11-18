@@ -1,21 +1,18 @@
 module.exports = {
-    presets: [
-      [
-        "@babel/preset-env",
-        {
-          targets: {
-            node: "current",  // Ensure compatibility with the current Node version
-          },
-          modules: "auto",  // Automatically detect module system (ESM or CommonJS)
-          // Ensure compatibility with ESM and CommonJS if using ES modules in the project
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: 'current',  // Ensures compatibility with the current Node version
         },
-      ],
-      "@babel/preset-typescript", // Add TypeScript support
+        modules: 'auto',  // Automatically detect module system (ESM or CommonJS)
+      },
     ],
-    plugins: [
-      "@babel/plugin-transform-runtime", // Transforms async/await
-    ],
-    // Ensure Babel handles ESM and Node.js compatibility properly
-    sourceType: "module", // Set Babel to treat files as modules
-  };
-  
+    '@babel/preset-typescript',  // Adds TypeScript support
+  ],
+  plugins: [
+    '@babel/plugin-transform-runtime',  // Transforms async/await
+  ],
+  sourceType: 'unambiguous',  // Ensures Babel handles both ESM and CommonJS compatibility properly
+};

@@ -17,6 +17,7 @@ const config: Config.InitialOptions = {
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.json', // Point to the TypeScript config for Jest
+      isolatedModules: true, // Enable faster test compilation
     },
   },
   moduleFileExtensions: ['js', 'ts', 'tsx'], // Recognize JS, TS, and TSX files
