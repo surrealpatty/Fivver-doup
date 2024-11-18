@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
-import { User } from '../models/user';
-import { Service } from '../models/service';
-import { authenticateToken } from '../middleware/authenticateToken';
+import User from '../models/user';  // Corrected import
+import Service from '../models/service';  // Corrected import
+import authenticateToken from 'src/middleware/authenticateToken';  // Corrected import
 
 const router = express.Router();
 
@@ -68,7 +68,7 @@ router.post(
                     email: newUser.email,
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating user:', error.message);
             res.status(500).json({ message: 'Server error' });
         }
@@ -96,7 +96,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
         });
 
         res.status(200).json({ token });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Login error:', error.message);
         res.status(500).json({ message: 'Server error' });
     }
@@ -111,7 +111,7 @@ router.get('/profile', authenticateToken, async (req: Request, res: Response) =>
         }
 
         res.json({ id: user.id, username: user.username, email: user.email });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Profile retrieval error:', error.message);
         res.status(500).json({ message: 'Server error' });
     }
@@ -145,7 +145,7 @@ router.post(
                 userId: req.user?.id, // The authenticated user's ID
             });
             res.status(201).json(newService);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating service:', error.message);
             res.status(500).json({ message: 'Failed to create service' });
         }

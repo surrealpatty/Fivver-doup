@@ -41,7 +41,7 @@ Service.init(
       type: DataTypes.UUID, // Use UUID here to match the User model's id type
       allowNull: false,
       references: {
-        model: 'Users', // The referenced model name for foreign key relationship
+        model: 'users', // The referenced model name for foreign key relationship (ensure this matches the table name in the DB)
         key: 'id',
       },
       onDelete: 'CASCADE', // Optional: delete services if the associated user is deleted
@@ -63,6 +63,7 @@ Service.init(
     sequelize,
     tableName: 'services', // Ensure this matches your table name in the DB
     underscored: true, // Optional: If you want snake_case column names
+    timestamps: true, // Ensure Sequelize handles createdAt and updatedAt
   }
 );
 
