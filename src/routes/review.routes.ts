@@ -36,12 +36,15 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
     
 }
-// Line 39: async function declaration (with braces)
-try {
-  // Logic inside try
-} catch (error) {
-  // Logic inside catch
+// Line 40: Ensure the try block is correctly opened
+async function handleRequest() {
+  try {
+    // Your logic here
+  } catch (error) {
+    // Error handling here
+  }
 }
+
 
 
 // Route for updating user profile (only authenticated users can update their profile)
@@ -68,7 +71,9 @@ router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) =
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
+// This should close the router.put() or other route method properly
 });
+
 
 export default router;
 async function handleRequest() {
