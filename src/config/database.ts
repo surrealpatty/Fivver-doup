@@ -1,10 +1,12 @@
+// src/config/database.ts
 import { Sequelize } from 'sequelize';
 
-// Initialize sequelize instance
-export const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost',
-  username: 'root', // replace with your username
-  password: '', // replace with your password
-  database: 'fiverr_clone', // your database name
-});
+export const sequelize = new Sequelize(
+  'database', // Replace with your database name
+  'username', // Replace with your username
+  'password', // Replace with your password
+  {
+    host: 'localhost',
+    dialect: 'mysql', // Or any other database you are using
+  }
+);

@@ -1,7 +1,9 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correct import for sequelize instance
+// src/models/service.ts
 
-// Define the attributes for the Service model
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Make sure this points to your Sequelize instance
+
+// Define attributes for the Service model
 interface ServiceAttributes {
   id: number;
   name: string;
@@ -11,13 +13,11 @@ interface ServiceAttributes {
   updatedAt?: Date;
 }
 
-// Define creation attributes (all attributes except `id` are optional)
+// Define creation attributes (id is optional for creation)
 type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
 
-class Service
-  extends Model<ServiceAttributes, ServiceCreationAttributes>
-  implements ServiceAttributes
-{
+// Define the Service model class
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
@@ -28,7 +28,7 @@ class Service
   public readonly updatedAt!: Date;
 }
 
-// Initialize the model
+// Initialize the Service model
 Service.init(
   {
     id: {
@@ -50,11 +50,10 @@ Service.init(
     },
   },
   {
-    sequelize, // Make sure sequelize is passed correctly
-    modelName: 'Service',
-    tableName: 'services', // This should match your table name in the database
-    timestamps: true, // Enable timestamps (createdAt, updatedAt)
-    underscored: true, // If you want column names to be snake_case (optional)
+    sequelize, // Pass the sequelize instance here
+    modelName: 'Service',  // Make sure this matches the table name
+    tableName: 'services', // Ensure this is the name of your table
+    timestamps: true, // Sequelize will automatically manage createdAt and updatedAt fields
   }
 );
 

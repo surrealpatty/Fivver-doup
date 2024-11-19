@@ -1,6 +1,8 @@
+// src/controllers/orderController.ts
+
 import { Request, Response } from 'express';
 import User from '../models/user';
-import Service from '../models/service'; // Make sure the import path is correct
+import Service from '../models/service'; // Correct path to Service model
 import Order from '../models/order';
 
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
@@ -23,7 +25,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     }
 
     // Check if the service exists
-    const service = await Service.findByPk(serviceId);  // Now this should work!
+    const service = await Service.findByPk(serviceId);  // Correctly using findByPk
     if (!service) {
       return res.status(404).json({ 
         message: 'Service not found.' 
