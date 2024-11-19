@@ -38,7 +38,7 @@ router.get('/profile', authMiddleware, async (req: Request & { user?: { id: stri
 });
 
 // Route for updating the user profile
-router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+router.put('/profile', authMiddleware, async (req: Request & { user: UserRequest }, res: Response) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });

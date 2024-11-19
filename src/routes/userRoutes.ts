@@ -18,7 +18,7 @@ router.get('/reviews/:userId', async (req: Request, res: Response) => {
 
   try {
     const reviews = await Review.findAll({
-      where: { reviewedUserId: req.user?.id }, // Map properly from the logged-in user's ID
+      where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
       include: [{ model: User, as: 'user', attributes: ['username'] }],  // Assuming you want to include reviewer's username
     });
 
@@ -46,7 +46,7 @@ router.post(
     body('content').isString().isLength({ min: 1 }).withMessage('Review content is required'),
   ],
   authMiddleware,  // Make sure the user is authenticated before posting a review
-  async (req: UserRequest, res: Response) => {
+  where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -63,7 +63,7 @@ router.post(
       // Create a new review
       const newReview = await Review.create({
         userId: userId,  // The user who is writing the review
-        reviewedUserId: reviewedUserId,  // The user who is being reviewed
+        where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
         content: content,
       });
 

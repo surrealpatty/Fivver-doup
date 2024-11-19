@@ -42,7 +42,7 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     const newReview = await Review.create({
       rating,
       comment,
-      reviewedUserId,
+      reviewedUserId: req.body.reviewedUserId,
       userId: req.user.id, // Associate the logged-in user's ID
     });
 

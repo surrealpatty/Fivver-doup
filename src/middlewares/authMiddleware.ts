@@ -9,7 +9,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
+    return next(new Error('No token provided'));
   }
 
   try {
@@ -26,7 +26,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
     // If decoded is null, return 401 Unauthorized response
     if (!decoded) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return next(new Error('Unauthorized'));
     }
 
     // Attach the decoded user information to the request object
@@ -37,9 +37,9 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   } catch (err: unknown) {
     // Handle error, ensure it's an instance of Error
     if (err instanceof Error) {
-      return res.status(401).json({ message: 'Unauthorized', error: err.message });
+      return next(new Error(err.message || 'Unauthorized')); // Pass error to the next middleware
     }
-    return res.status(401).json({ message: 'Unauthorized' });
+    return next(new Error(err.message || 'Unauthorized')); // Pass error to the next middleware
   }
 };
 
