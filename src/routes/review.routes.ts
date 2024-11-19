@@ -5,7 +5,8 @@ import {
     getReviews,
     updateReview,
     deleteReview,
-} from '@/controllers/reviewController'; // Ensure correct path and named exports
+// src/routes/review.routes.ts, Line 8
+import { reviewController } from '../controllers/reviewController'; // Correct the path
 
 const router = Router();
 
@@ -15,10 +16,10 @@ router.post('/create', authMiddleware, createReview);
 // Route for getting all reviews or a specific review by ID
 router.get('/', getReviews);
 
-// Route for updating a review (only the user who created the review or admin can update it)
-router.put('/:id', authMiddleware, authorizeRoles('user', 'admin'), updateReview);
-
-// Route for deleting a review (only the user who created the review or admin can delete it)
-router.delete('/:id', authMiddleware, authorizeRoles('user', 'admin'), deleteReview);
+// src/middlewares/authMiddleware.ts, Line 10 (example)
+export function authorizeRoles(...roles: string[]) {
+    // Function logic here
+  }
+  
 
 export default router;

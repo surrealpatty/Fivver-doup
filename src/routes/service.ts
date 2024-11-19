@@ -1,6 +1,10 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Make sure this points to your sequelize instance
-import { Service } from '../models/service'; // Correct path to Service model
+// src/models/service.ts, Line 1 (example)
+export default Service; // Or if Service is a named export:
+// export { Service };
+
+
 
 // Define the attributes for the Service model
 interface ServiceAttributes {

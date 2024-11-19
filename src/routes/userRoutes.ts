@@ -59,12 +59,14 @@ router.post(
   }
 );
 
-// 3. Get User Profile Route (GET /profile)
+// src/routes/userRoutes.ts, Line 63
 interface UserRequest extends Request {
-  user?: { id: number }; // Ensure the type matches the use case
+  user?: { id: number }; // Ensure 'user' property is compatible
 }
 
-router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+
+// src/routes/userRoutes.ts, Line 67
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => { /* logic */ });
   const userId = req.user?.id;
   try {
     if (!req.user) {
