@@ -11,14 +11,14 @@ export const authenticateToken = (req: UserRequest, res: Response, next: NextFun
     const token = req.headers['authorization'];
 
     if (!token) {
-        return res.sendStatus(403); // Forbidden if no token is provided
+        return res.status(403).json({ message: 'Forbidden: No token provided' }); // Send a response with message
     }
 
     // Token format: Bearer <token>
     const tokenWithoutBearer = token.split(' ')[1]; // Remove the 'Bearer ' part
 
     if (!tokenWithoutBearer) {
-        return res.sendStatus(403); // Forbidden if token is malformed
+        return res.status(403).json({ message: 'Forbidden: No token provided' }); // Send a response with message
     }
 
     try {
@@ -31,6 +31,6 @@ export const authenticateToken = (req: UserRequest, res: Response, next: NextFun
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
         console.error('Invalid token:', error);
-        return res.status(403).json({ message: 'Invalid token.' }); // Forbidden with error message
+        return res.status(403).json({ message: 'Forbidden: No token provided' }); // Send a response with message
     }
 };
