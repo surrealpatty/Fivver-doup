@@ -1,7 +1,8 @@
-const { Review, User, Service } = require('../models'); // Adjust path as necessary
+import { Request, Response } from 'express';
+import { Review, User, Service } from '../models'; // Import your models for better type checking
 
 // 1. Create a Review
-exports.createReview = async (req, res) => {
+export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
     const { userId } = req.user; // Assuming userId is stored in the JWT payload
 
@@ -33,7 +34,7 @@ exports.createReview = async (req, res) => {
 };
 
 // 2. Get Reviews for a Service
-exports.getServiceReviews = async (req, res) => {
+export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId } = req.params; // Get service ID from request params
 
     try {
@@ -60,7 +61,7 @@ exports.getServiceReviews = async (req, res) => {
 };
 
 // 3. Update a Review
-exports.updateReview = async (req, res) => {
+export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
     const { userId } = req.user; // Assuming userId is stored in the JWT payload
@@ -98,7 +99,7 @@ exports.updateReview = async (req, res) => {
 };
 
 // 4. Delete a Review
-exports.deleteReview = async (req, res) => {
+export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { userId } = req.user; // Assuming userId is stored in the JWT payload
 
