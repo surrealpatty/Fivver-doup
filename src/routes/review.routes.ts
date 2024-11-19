@@ -9,7 +9,7 @@ const router = Router();
 router.get('/:userId/reviews', async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId; // Get user ID from request params
-    
+
     // Fetch all reviews related to the user
     const reviews = await Review.findAll({ where: { userId } });
 
@@ -39,7 +39,7 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     }
 
     // Create new review associated with the logged-in user
-    const reviewedUserId = req.params.reviewedUserId; // Assign correctly from route params
+    const newReview = await Review.create({
       rating,
       comment,
       userId: req.user.id, // Use authenticated user's ID
