@@ -1,3 +1,5 @@
+// src/controllers/reviewController.ts
+
 import { Request, Response } from 'express';
 import { models } from '../models'; // Import models from the index.ts file
 
@@ -7,12 +9,17 @@ const { Review, User, Service } = models; // Destructure the models
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
     const { userId } = req.user as { userId: string }; // Adjust to match the actual type
-const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
 
+    // Convert userId from string to number
+    const userIdAsNumber = parseInt(userId, 10);
 
     // Validate input
     if (!serviceId || !rating || !comment) {
         return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
+    }
+
+    if (isNaN(userIdAsNumber)) {
+        return res.status(400).json({ message: 'Invalid userId' });
     }
 
     try {
@@ -25,7 +32,7 @@ const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
         // Create a new review
         const review = await Review.create({
             serviceId,
-            userId,
+            userId: userIdAsNumber, // Use the numeric userId
             rating,
             comment,
         });
@@ -68,11 +75,17 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
+    const { userId } = req.user as { userId: string }; // Assuming userId is stored as a string
+
+    const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
 
     // Validate input
     if (!rating && !comment) {
         return res.status(400).json({ message: 'Rating or comment is required to update' });
+    }
+
+    if (isNaN(userIdAsNumber)) {
+        return res.status(400).json({ message: 'Invalid userId' });
     }
 
     try {
@@ -84,7 +97,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== userId) {
+        if (review.userId !== userIdAsNumber) {
             return res.status(403).json({ message: 'You can only update your own reviews' });
         }
 
@@ -104,7 +117,13 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
+    const { userId } = req.user as { userId: string }; // Assuming userId is stored as a string
+
+    const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
+
+    if (isNaN(userIdAsNumber)) {
+        return res.status(400).json({ message: 'Invalid userId' });
+    }
 
     try {
         // Find the review by ID
@@ -115,7 +134,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== userId) {
+        if (review.userId !== userIdAsNumber) {
             return res.status(403).json({ message: 'You can only delete your own reviews' });
         }
 
