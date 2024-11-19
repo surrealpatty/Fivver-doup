@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {
-  createService,
-  getServices,
-  updateService,
-  deleteService,
+  export const createService = async (req: Request, res: Response) => { /* ... */ };
+export const getServices = async (req: Request, res: Response) => { /* ... */ };
+export const updateService = async (req: Request, res: Response) => { /* ... */ };
+export const deleteService = async (req: Request, res: Response) => { /* ... */ };
 } from '../controllers/serviceController'; // Import service controller methods
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
 
