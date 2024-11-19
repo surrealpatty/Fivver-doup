@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
-import { User } from '../models/user';
+import User from '../models/user';
 
 const router = Router();
 
@@ -12,7 +12,12 @@ router.post(
     body('email').isEmail().withMessage('Enter a valid email'),
     body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 characters'),
   ],
-  async (req, res) => {
+  import { Request, Response } from 'express';
+
+  router.post('/register', async (req: Request, res: Response) => {
+    // Your route logic here
+  });
+  
     // Validate the request body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

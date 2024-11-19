@@ -10,7 +10,20 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
     try {
         if (!token) {
-            return res.status(401).send('Unauthorized'); // Handle missing token
+            import { Request, Response, NextFunction } from 'express';
+
+// Middleware to authenticate token
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  // Token validation logic
+  next();
+};
+
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Ensure token is defined
         

@@ -3,7 +3,7 @@ import { app } from '../index'; // Ensure this path is correct based on your pro
 import { sequelize } from '../config/database';
 import User from '../models/user'; // Ensure you're importing the correct module
 import { Service } from '../models/services'; // Adjust the path based on your file structure
-import { Order } from '../models'; // Or correct path
+import Order from '../models/order'; // Use default import for Order
 
 // Mock models using jest
 jest.mock('../models/user', () => ({

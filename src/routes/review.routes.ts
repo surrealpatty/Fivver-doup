@@ -42,7 +42,27 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     const newReview = await Review.create({
       rating,
       comment,
-      reviewedUserId: req.body.reviewedUserId,
+      import { Model, DataTypes } from 'sequelize';
+      import { sequelize } from '../config/database';
+      
+      export class Review extends Model {
+        public reviewedUserId!: number; // Ensure this is defined
+      }
+      
+      Review.init(
+        {
+          reviewedUserId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+          },
+          // Other fields...
+        },
+        {
+          sequelize,
+          modelName: 'Review',
+        }
+      );
+      
       userId: req.user.id, // Associate the logged-in user's ID
     });
 
