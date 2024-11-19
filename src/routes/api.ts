@@ -1,4 +1,3 @@
-// src/routes/api.ts
 import express, { Request, Response } from 'express';
 import { sequelize } from '../config/database';
 import { Service } from '../models/services';
@@ -28,12 +27,13 @@ router.post('/services', async (req: Request, res: Response) => {
     // Create a new service
     const service = await Service.create({
       userId,
-      name,
+      name, // Ensure 'name' is added to the creation process
       description,
       price,
     });
 
-    return res.status(201).json(service); // Return the newly created service
+    // Return the newly created service
+    return res.status(201).json(service); 
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -130,4 +130,5 @@ router.delete('/services/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Export the router
 export default router;
