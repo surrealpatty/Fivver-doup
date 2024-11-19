@@ -7,8 +7,14 @@ const router = Router();
 
 // Interface for custom request object
 interface UserRequest extends Request {
-  user: User; // Assuming User is the type for authenticated user
+  user: {
+      id: string; // Make sure this type aligns with your actual data
+      email: string;
+      username: string;
+      password?: string;
+  };
 }
+
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {

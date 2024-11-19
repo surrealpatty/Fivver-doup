@@ -10,7 +10,7 @@
     "baseUrl": "./src",                       // Set base directory to src for simplified imports
     "outDir": "dist",                         // Output directory for transpiled files
     "rootDir": "src",                         // Root directory for source files
-    "types": ["jest", "node", "vue"],         // Type definitions for Jest, Node.js, and Vue
+    "types": ["jest", "node", "vue", "express"], // Ensure express types are included
     "paths": {
       "@/*": ["src/*"]                        // Use @/ for imports from src/
     },

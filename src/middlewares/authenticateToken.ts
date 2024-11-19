@@ -6,8 +6,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     const token = req.header('Authorization')?.replace('Bearer ', ''); // Extract token from Authorization header
 
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
-    }
+        res.status(401).json({ message: 'Access denied. No token provided.' }); // Remove the return keyword
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify token with secret from environment variable
