@@ -60,7 +60,15 @@ router.post(
 );
 
 // 3. Get User Profile Route (GET /profile)
-router.get('/profile', authMiddleware, async (req: Request & { user?: { id: number } }, res: Response) => {
+interface UserRequest extends Request {
+  user?: { id: number };
+}
+
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+  const userId = req.user?.id;
+  // Handle logic
+});
+
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });

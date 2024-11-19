@@ -83,7 +83,7 @@ router.put('/services/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    service.name = name || service.name;
+    service.name = name || service.name; // Ensure name is a property of Service model
     service.description = description || service.description;
     service.price = price || service.price;
 

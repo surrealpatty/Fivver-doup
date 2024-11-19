@@ -23,7 +23,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            userId, // Assign userId from the JWT payload
+            userId = Number(req.user.userId); // Ensure conversion to number
             rating,
             comment
         });
@@ -66,7 +66,7 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const { userId } = req.user as { userId: number }; // Assuming userId is stored in the JWT payload and it is a number
+    const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
 
     // Validate input
     if (!rating && !comment) {
@@ -102,7 +102,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { userId } = req.user as { userId: number }; // Assuming userId is stored in the JWT payload and it is a number
+    const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
 
     try {
         // Find the review by ID
