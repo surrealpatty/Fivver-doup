@@ -9,7 +9,7 @@ const router = Router();
 interface UserRequest extends Request {
   user: User; // Assuming User is the type for authenticated user
 }
-   user?: { id: number } | undefined; // Ensure this matches the structure of the 'user' object attached by the auth middleware
+user?: { id: number } | undefined; // This ensures the optional user structure is properly defined
 
 
 
@@ -28,7 +28,11 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
 
     return res.json(user); // Send user data as response
-  } catch (error) {
+    // Correct code:
+} catch (error) {
+  // Your error handling logic here
+}
+
     return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
 });
