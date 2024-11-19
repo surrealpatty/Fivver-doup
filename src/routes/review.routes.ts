@@ -36,6 +36,7 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
     
 }
+async function handleRequest() 
 try {
   // Your code logic
 } catch (error) {
