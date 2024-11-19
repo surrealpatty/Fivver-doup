@@ -1,8 +1,6 @@
-// src/routes/serviceRoute.ts
-
 import { Router, Request, Response } from 'express';
-import Service from '../models/service'; // Ensure the path to the Service model is correct
-import authMiddleware from '../middlewares/authMiddleware'; // Import authMiddleware
+import Service from '../models/service';  // Correct import of Service model
+import authMiddleware from '../middlewares/authMiddleware';  // Correct import of authMiddleware
 
 const router = Router();
 
@@ -10,7 +8,7 @@ const router = Router();
 router.get('/services', async (req: Request, res: Response) => {
   try {
     const services = await Service.findAll(); // Sequelize method for finding all records
-    res.json(services);
+    res.json(services); // Return the list of services
   } catch (error) {
     res.status(500).json({ message: 'Error fetching services', error: (error as Error).message });
   }
@@ -19,8 +17,17 @@ router.get('/services', async (req: Request, res: Response) => {
 // Example of creating a service
 router.post('/services', authMiddleware, async (req: Request, res: Response) => {
   try {
-    // Make sure req.body has the correct shape
-    const newService = await Service.create({ ...req.body, userId: req.user.id }); // Sequelize create method
+    // Ensure req.body has the correct shape based on ServiceAttributes
+    const { title, description, price, name } = req.body;
+    
+    const newService = await Service.create({ 
+      title, 
+      description, 
+      price, 
+      name, 
+      userId: req.user.id  // Ensure userId is correctly attached from authMiddleware
+    });
+
     res.status(201).json({ message: 'Service created successfully', newService });
   } catch (error) {
     res.status(500).json({ message: 'Error creating service', error: (error as Error).message });
@@ -34,7 +41,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
-    res.json(service);
+    res.json(service); // Return the found service
   } catch (error) {
     res.status(500).json({ message: 'Error fetching service', error: (error as Error).message });
   }
