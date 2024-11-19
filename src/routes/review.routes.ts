@@ -36,16 +36,13 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
     
 }
-async function handleRequest() {
-  // Add the logic inside the function
+// Line 39: async function declaration (with braces)
+try {
+  // Logic inside try
+} catch (error) {
+  // Logic inside catch
 }
 
-  try {
-    // logic inside try
-  } catch (error) {
-    // error handling
-  }
-}
 
 // Route for updating user profile (only authenticated users can update their profile)
 router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
