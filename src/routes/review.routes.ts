@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Review } from '../models/review'; // Assuming Review model is imported here
+import Review from '../models/review'; // Assuming Review model is imported here
 import authMiddleware from '../middlewares/authMiddleware'; // Middleware to verify user authentication
 import { UserRequest } from '../types'; // Assuming you have this custom request type for authenticated users
 
