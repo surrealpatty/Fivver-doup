@@ -9,10 +9,7 @@ const router = Router();
 interface UserRequest extends Request {
   user: User; // Assuming User is the type for authenticated user
 }
-user?: { id: number } | undefined; // This ensures the optional user structure is properly defined
-
-
-
+user?: { id: number }; // This ensures the optional user structure is properly defined
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
@@ -32,11 +29,11 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
 } catch (error) {
   // Your error handling logic here
 }
-
-    return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
-  }
-});
-
+try {
+  // Your code logic
+} catch (error) {
+  // Handle error
+}
 // Route for updating user profile (only authenticated users can update their profile)
 router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   try {
