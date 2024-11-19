@@ -2,21 +2,22 @@ import { sequelize } from '../config/database';
 import User from './user';
 import Service from './services';
 import Order from './order';
-import { Review } from './review';
+import Review from './review'; // Default import
 
-// Initialize the models with their attributes and options
+// Initialize models with the correct types
 const models = {
-  User: User,
-  Service: Service,
-  Order: Order,
-  Review: Review,
+  User,
+  Service,
+  Order,
+  Review,
 };
 
-// Set up associations between models
-User.associate(models);
-Service.associate(models);
-Order.associate(models);
-Review.associate(models);
+// Set up associations only if the associate method exists
+Object.values(models).forEach((model: any) => {
+  if (model.associate) {
+    model.associate(models); // Call associate if it exists
+  }
+});
 
-// Export models and Sequelize instance
+// Export models and sequelize instance
 export { sequelize, models };

@@ -1,34 +1,25 @@
-// src/models/service.ts
+// src/models/services.ts
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';
 
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Make sure this points to your Sequelize instance
-
-// Define attributes for the Service model
-interface ServiceAttributes {
+// Define ServiceAttributes
+export interface ServiceAttributes {
   id: number;
   name: string;
   description: string;
   price: number;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
-// Define creation attributes (id is optional for creation)
-type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
+// Define ServiceCreationAttributes (for creating new instances)
+export interface ServiceCreationAttributes
+  extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the Service model class
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
-  public id!: number;
-  public name!: string;
-  public description!: string;
-  public price!: number;
-
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
+  static associate(models: any) {
+    Service.belongsToMany(models.User, { through: 'UserServices' });
+  }
 }
 
-// Initialize the Service model
 Service.init(
   {
     id: {
@@ -50,10 +41,8 @@ Service.init(
     },
   },
   {
-    sequelize, // Pass the sequelize instance here
-    modelName: 'Service',  // Make sure this matches the table name
-    tableName: 'services', // Ensure this is the name of your table
-    timestamps: true, // Sequelize will automatically manage createdAt and updatedAt fields
+    sequelize,
+    modelName: 'Service',
   }
 );
 

@@ -25,9 +25,9 @@ const config: Config.InitialOptions = {
     '/node_modules/', // Ignore node_modules for transformation
   ],
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
-  extensionsToTreatAsEsm: ['.ts', '.tsx'], // Treat .ts/.tsx as ESM
   testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder
+  extensionsToTreatAsEsm: [], // Disable ESM treatment, use CommonJS for Jest
 };
 
 export default config;
