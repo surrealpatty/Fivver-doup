@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Use named import
+import { sequelize } from '../config/database'; // Use named import for sequelize
 import User from './user'; // Import the User model
 
 // Define the attributes for the Service model
@@ -34,6 +34,11 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
       foreignKey: 'userId',
       as: 'user', // Alias for the association
     });
+  }
+
+  // Add a static method explicitly for `findByPk`
+  static findByPk(id: number) {
+    return super.findByPk(id); // Call Sequelize's super method
   }
 }
 

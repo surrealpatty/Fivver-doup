@@ -1,4 +1,3 @@
-// src/controllers/orderController.ts
 import { Request, Response } from 'express';
 import User from '../models/user';
 import Service from '../models/service'; // Correct path to Service model
@@ -9,8 +8,8 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
 
   // Validate input data
   if (!userId || !serviceId || !orderDetails) {
-    return res.status(400).json({ 
-      message: 'User ID, Service ID, and Order Details are required.' 
+    return res.status(400).json({
+      message: 'User ID, Service ID, and Order Details are required.',
     });
   }
 
@@ -18,16 +17,16 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ 
-        message: 'User not found.' 
+      return res.status(404).json({
+        message: 'User not found.',
       });
     }
 
     // Check if the service exists
-    const service = await Service.findByPk(serviceId); // Correct usage of findByPk
+    const service = await Service.findByPk(serviceId); // This should work now
     if (!service) {
-      return res.status(404).json({ 
-        message: 'Service not found.' 
+      return res.status(404).json({
+        message: 'Service not found.',
       });
     }
 
@@ -44,16 +43,16 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
       message: 'Order created successfully.',
       order,
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Error creating order:', error);
 
     // Return detailed error message in development
-    const errorMessage = process.env.NODE_ENV === 'development' 
-      ? (error as Error).message 
+    const errorMessage = process.env.NODE_ENV === 'development'
+      ? (error instanceof Error ? error.message : 'Unknown error')
       : 'An error occurred.';
 
-    return res.status(500).json({ 
-      message: 'An error occurred while creating the order.', 
+    return res.status(500).json({
+      message: 'An error occurred while creating the order.',
       error: errorMessage,
     });
   }
