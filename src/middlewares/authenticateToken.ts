@@ -3,11 +3,11 @@ import jwt from 'jsonwebtoken'; // Corrected import for jsonwebtoken
 
 // Middleware to authenticate token
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.header('Authorization')?.replace('Bearer ', ''); // Extract token from Authorization header
+    const token = req.headers['authorization'];
 
     if (!token) {
-        res.status(401).json({ message: 'Access denied. No token provided.' }); // Remove the return keyword
-
+        return res.sendStatus(403);  // Forbidden
+    }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify token with secret from environment variable
 
@@ -19,4 +19,4 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         console.error('Invalid token:', error);
         return res.status(403).json({ message: 'Invalid token.' });
     }
-};
+
