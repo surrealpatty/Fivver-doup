@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Correct named import for sequelize
-import { Service } from '../models/services';
+import  Service  from '../models/services';
 
 const services = await Service.findAll(); // Sequelize method for finding all records
 const newService = await Service.create({ /* ... */ });
