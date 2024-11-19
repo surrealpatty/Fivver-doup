@@ -2,7 +2,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';
-import { Service } from './services';
+import  Service  from './services';
 
 interface ReviewAttributes {
   id: number;

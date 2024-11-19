@@ -1,6 +1,6 @@
 import { sequelize } from '../config/database';
 import User from './user';       // Default import for User
-import { Service } from './services'; // Named import for Service
+import  Service  from './services'; // Named import for Service
 import Order from './order';     // Default import for Order
 import Review from './review';   // Default import for Review
 

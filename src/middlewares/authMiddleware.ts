@@ -5,8 +5,8 @@ import config from '../config/config'; // Adjusted import to match directory str
 // Extend the Request interface to include a user object
 declare global {
   namespace Express {
-    interface Request {
-      user: { id: string; email: string; username: string };
+      export interface UserRequest extends Request {
+        user?: { id: string; email: string; username: string }; // Optional user property
     }
   }
 }
