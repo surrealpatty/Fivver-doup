@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { sequelize } from '../config/database';
-import Service from '../models/services'; // Correct import for Service model
+import { Service } from './services';
 import User from '../models/user';
 
 const router = express.Router();

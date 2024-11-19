@@ -1,5 +1,5 @@
 import User from './user';
-import Service from './services';
+import { Service } from './services';
 import Order from './order';
 
 User.hasMany(Service, { foreignKey: 'userId' });
