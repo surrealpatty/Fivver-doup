@@ -1,10 +1,13 @@
-// src/types/express/index.d.ts
+// src/types/index.d.ts
 
 declare namespace Express {
-    interface Request {
+  interface Request {
       user: {
-        userId: string; // Define the structure of the user object attached to the request
+          id: string;         // User ID
+          email: string;      // User email
+          username: string;   // User username
+          password?: string;  // Optional password (depending on your use case)
+          // Add any other properties that are part of your user model
       };
-    }
   }
-  
+}
