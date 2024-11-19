@@ -26,7 +26,9 @@ name: {
   type: DataTypes.STRING, // Example property
 
   const Service: any = sequelize.define('Service', {
-    // Define fields here
+    // Field definitions go here
+  });
+  
     name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -35,31 +37,32 @@ name: {
       type: Sequelize.STRING,
       allowNull: true,
     },
-  }); // Ensure proper closure
+  }; // Ensure proper closure
   
     // Add proper structure here
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-    },
+  
     description: {
       type: Sequelize.STRING,
       allowNull: true,
     },
-  }); // Ensure proper closure of the object and parentheses
+  }; // Ensure proper closure of the object and parentheses
   
   // Add valid model attributes here
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false, // Field cannot be null
+
   },
-});
+};
 
     type: DataTypes.STRING,
     allowNull: false, // Adjust based on your requirements
   },
 })
-}
+
 
     return res.status(201).json(service); // Return the newly created service
   // src/routes/api.ts
@@ -72,7 +75,6 @@ try {
 
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
-  }
 // src/routes/review.routes.ts
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   // Some code here
