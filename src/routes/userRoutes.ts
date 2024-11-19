@@ -1,85 +1,54 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
-import authMiddleware from '../middlewares/authMiddleware';
-import Review from '../models/review';
-import User from '../models/user';
+import { User } from '../models/user';
 
-// Create router instance
 const router = Router();
 
-// Extend the Request interface to include user information
-interface UserRequest extends Request {
-  user: User;  // Assuming 'User' is the type for authenticated user
-}
-
-// Get all reviews for a user (GET /reviews/:userId)
-router.get('/reviews/:userId', async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
-  try {
-    const reviews = await Review.findAll({
-      where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
-      include: [{ model: User, as: 'user', attributes: ['username'] }],  // Assuming you want to include reviewer's username
-    });
-
-    if (reviews.length === 0) {
-      return res.status(404).json({ message: 'No reviews found' });
-    }
-
-    res.json({ reviews });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error fetching reviews:', error.message);
-      res.status(500).json({ message: 'Internal server error', error: error.message });
-    } else {
-      console.error('Unknown error occurred:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-});
-
-// Add a review for a user (POST /reviews)
+// POST route for user registration or similar
 router.post(
-  '/reviews',
+  '/register', 
   [
-    body('reviewedUserId').isInt().withMessage('Reviewed user ID must be an integer'),
-    body('content').isString().isLength({ min: 1 }).withMessage('Review content is required'),
+    // Validation rules for the request body
+    body('email').isEmail().withMessage('Enter a valid email'),
+    body('password').isLength({ min: 5 }).withMessage('Password must be at least 5 characters'),
   ],
-  authMiddleware,  // Make sure the user is authenticated before posting a review
-  where: { reviewedUserId: req.user?.id }, // Ensure this line ends properly
-const errors = validationResult(req);
+  async (req, res) => {
+    // Validate the request body
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { reviewedUserId, content } = req.body;
-    const userId = req.user?.id;  // Get the user ID from the request user object
-
-    if (userId === reviewedUserId) {
-      return res.status(400).json({ message: 'You cannot review yourself' });
-    }
-
     try {
-      // Create a new review
-      const newReview = await Review.create({
-        userId: userId,  // The user who is writing the review
-        where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
-        content: content,
+      // Example of inserting a new user into the database
+      const newUser = await User.create({
+        email: req.body.email,
+        password: req.body.password,
       });
 
-      res.status(201).json({
-        message: 'Review created successfully',
-        review: newReview,
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Error creating review:', error.message);
-        res.status(500).json({ message: 'Internal server error', error: error.message });
-      } else {
-        console.error('Unknown error occurred:', error);
-        res.status(500).json({ message: 'Internal server error' });
-      }
+      // Respond with the new user data
+      return res.status(201).json({ message: 'User created successfully', user: newUser });
+    } catch (error) {
+      // Handle any errors that occur
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
+  }
 );
+
+// Example GET route for fetching users based on a reviewed user ID
+router.get('/reviewed-users', async (req, res) => {
+  try {
+    // Sequelize query to fetch users with a specific reviewedUserId
+    const users = await User.findAll({
+      where: { reviewedUserId: req.user?.id }, // Ensure req.user?.id is correct
+    });
+
+    // Respond with the list of users
+    return res.status(200).json({ users });
+  } catch (error) {
+    // Handle any errors that occur
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 export default router;
