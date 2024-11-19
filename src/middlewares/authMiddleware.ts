@@ -1,15 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import config from 'src/config/config'; // Correct import for default export
-
-// Extend the Request type to include a 'user' property
-declare global {
-  namespace Express {
-    interface Request {
-      user?: JwtPayload; // Adding 'user' property to request, which will hold decoded JWT payload
-    }
-  }
-}
+import config from '../config/config'; // Adjusted import to match directory structure
 
 // Middleware to authenticate token
 const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -19,7 +10,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
     res.status(403).json({ message: 'No token provided' });
-    return; // Stop further execution
+    return; // Ensure that we stop here if there's no token
   }
 
   try {
@@ -37,11 +28,11 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
     // If decoded is null, return 401 Unauthorized response
     if (!decoded) {
       res.status(401).json({ message: 'Unauthorized' });
-      return; // Stop further execution
+      return;
     }
 
     // Attach the decoded user information to the request object
-    req.user = decoded;
+    req.user = { userId: decoded.userId }; // Adjust to match expected structure
 
     // Proceed to the next middleware or route handler
     next();
@@ -49,9 +40,9 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
     // Handle error, ensure it's an instance of Error
     if (err instanceof Error) {
       res.status(401).json({ message: 'Unauthorized', error: err.message });
-    } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
+    res.status(401).json({ message: 'Unauthorized' });
   }
 };
 

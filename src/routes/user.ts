@@ -4,9 +4,16 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/user'; // Ensure your User model is being imported correctly
-import { authMiddleware } from '../middleware/authMiddleware'; // Assuming authMiddleware handles JWT validation
+import { authMiddleware } from 'src/middleware/authMiddleware'; // Assuming authMiddleware handles JWT validation
 
 const router = Router();
+
+// Utility function to generate JWT token
+const generateAuthToken = (userId: number) => {
+    const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // Use a secret from your env
+    const expiresIn = '1h'; // Token expiration
+    return jwt.sign({ id: userId }, secret, { expiresIn });
+};
 
 // User Registration Route (POST /register)
 router.post('/register', [
@@ -19,7 +26,7 @@ router.post('/register', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, isPaid } = req.body;
+    const { email, password, isPaid = false } = req.body; // Set default value for isPaid
 
     try {
         // Check if the user already exists
@@ -38,12 +45,16 @@ router.post('/register', [
             isPaid, // Ensure this field exists in your User model
         });
 
+        // Generate JWT token
+        const token = generateAuthToken(newUser.id);
+
         return res.status(201).json({
             message: 'User registered successfully',
             user: {
                 email: newUser.email,
                 isPaid: newUser.isPaid, // Return the isPaid status if required
             },
+            token, // Include the generated token
         });
     } catch (error) {
         console.error('Error registering user:', error);

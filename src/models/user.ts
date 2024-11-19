@@ -76,18 +76,22 @@ User.init(
     },
     isPaid: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false, // Default to false if not provided
     },
     role: {
       type: DataTypes.STRING,
-      defaultValue: 'user',
+      defaultValue: 'user', // Default to 'user' if not provided
     },
   },
   {
     sequelize, // Pass the Sequelize instance
     tableName: 'users', // Adjust if your table name differs
     modelName: 'User',
+    timestamps: true, // Enable timestamps (createdAt, updatedAt)
   }
 );
+
+// Dynamically associate models with the sequelize instance after defining them
+User.associate({ Review, Order, Service });
 
 export default User;
