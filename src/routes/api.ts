@@ -1,9 +1,18 @@
+// src/routes/api.ts
 import express, { Request, Response } from 'express';
 import { sequelize } from '../config/database';
 import { Service } from '../models/services';
 import User from '../models/user';
 
 const router = express.Router();
+
+// Define the ServiceCreationAttributes interface
+interface ServiceCreationAttributes {
+  name: string;
+  description: string;
+  price: number;
+  userId: number; // Added userId since it's part of the creation
+}
 
 // CREATE: Add a new service
 router.post('/services', async (req: Request, res: Response) => {
@@ -19,8 +28,7 @@ router.post('/services', async (req: Request, res: Response) => {
     // Create a new service
     const service = await Service.create({
       userId,
-      interface ServiceCreationAttributes {
-        name: string;     
+      name,
       description,
       price,
     });
