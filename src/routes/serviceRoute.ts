@@ -8,8 +8,9 @@ export interface UserRequest extends Request {
 const router = Router();
 
 // Interface for custom request object
-export interface UserRequest extends Request {
-  user: User;
+export interface UserRequest extends Request 
+  interface UserRequest extends Request {
+    user: User; // Assuming you have a 'User' interface or class
       id: string; // Make sure this type aligns with your actual data
       email: string;
       username: string;
