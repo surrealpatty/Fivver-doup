@@ -1,10 +1,9 @@
-// src/routes/user.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/user'; // Ensure your User model is being imported correctly
-import { authMiddleware } from 'src/middleware/authMiddleware'; // Assuming authMiddleware handles JWT validation
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -12,7 +11,7 @@ const router = Router();
 const generateAuthToken = (userId: number) => {
     const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // Use a secret from your env
     const expiresIn = '1h'; // Token expiration
-    return jwt.sign({ id: userId }, secret, { expiresIn });
+    return jwt.sign({ userId }, secret, { expiresIn }); // Ensure we're using the correct payload
 };
 
 // User Registration Route (POST /register)
@@ -26,7 +25,7 @@ router.post('/register', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, isPaid = false } = req.body; // Set default value for isPaid
+    const { email, password, isPaid = false, username, role = 'user' } = req.body; // Added default values for username and role
 
     try {
         // Check if the user already exists
@@ -42,7 +41,9 @@ router.post('/register', [
         const newUser = await User.create({
             email,
             password: hashedPassword,
-            isPaid, // Ensure this field exists in your User model
+            isPaid,
+            username,  // Added username field
+            role,      // Added role field
         });
 
         // Generate JWT token
@@ -52,7 +53,9 @@ router.post('/register', [
             message: 'User registered successfully',
             user: {
                 email: newUser.email,
-                isPaid: newUser.isPaid, // Return the isPaid status if required
+                username: newUser.username, // Return the username if needed
+                isPaid: newUser.isPaid,     // Return the isPaid status if needed
+                role: newUser.role          // Return the role if needed
             },
             token, // Include the generated token
         });
@@ -65,18 +68,21 @@ router.post('/register', [
 // Get User Profile Route (GET /profile)
 router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     try {
-        const userId = req.userId; // Assuming req.userId is set earlier via authMiddleware
+        // Access userId from the decoded token
+        const userId = req.user?.userId; // Access userId from the decoded JWT payload
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required' });
         }
 
+        // Find the user from the database
         const user = await User.findOne({ where: { id: userId } });
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Return user profile details
         return res.status(200).json({
             email: user.email,
             username: user.username,  // Ensure these fields exist on the User model
