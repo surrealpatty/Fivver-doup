@@ -6,7 +6,7 @@ const { Review, User, Service } = models; // Destructure the models
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const { userId } = req.user as { userId: number }; // Assuming userId is stored in the JWT payload and it is a number
+    const { userId } = req.user as { userId: string };  // assuming userId is a string
 
     // Validate input
     if (!serviceId || !rating || !comment) {
