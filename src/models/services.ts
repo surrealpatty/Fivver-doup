@@ -1,8 +1,8 @@
-// src/models/services.ts
+// src/models/service.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-// Define ServiceAttributes
+// Define ServiceAttributes interface
 export interface ServiceAttributes {
   id: number;
   name: string;
@@ -10,12 +10,13 @@ export interface ServiceAttributes {
   price: number;
 }
 
-// Define ServiceCreationAttributes (for creating new instances)
+// Define ServiceCreationAttributes interface (used for creating new instances)
 export interface ServiceCreationAttributes
   extends Optional<ServiceAttributes, 'id'> {}
 
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   static associate(models: any) {
+    // Define relationships here (if any)
     Service.belongsToMany(models.User, { through: 'UserServices' });
   }
 }
