@@ -20,7 +20,17 @@ router.post('/services', async (req: Request, res: Response) => {
     // src/models/service.ts
 name: {
   type: DataTypes.STRING,
-  allowNull: false, // Adjust based on your requirements
+  // src/routes/api.ts
+{
+  allowNull: false, // Ensure this is part of a valid object definition
+  type: DataTypes.STRING, // Example property
+// src/routes/api.ts
+const Service = sequelize.define('Service', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false, // Adjust based on your requirements
+  },
+})
 }
 
     return res.status(201).json(service); // Return the newly created service
@@ -28,7 +38,12 @@ name: {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
+// src/routes/review.routes.ts
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+  // Some code here
+  res.status(200).send({ message: 'Success' }); // Ensure response is properly closed
 });
+
 
 // READ: Get all services
 router.get('/services', async (req: Request, res: Response) => {
