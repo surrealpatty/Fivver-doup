@@ -19,4 +19,5 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         console.error('Invalid token:', error);
         return res.status(403).json({ message: 'Invalid token.' });
     }
+}; // <-- Closing brace for the function (added)
 
