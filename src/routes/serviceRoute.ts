@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { 
-  export { createService, getServices, updateService, deleteService };
-
+  createService, 
+  getServices, 
+  updateService, 
+  deleteService 
 } from '../controllers/serviceController'; // Correct import from serviceController
 
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
