@@ -36,7 +36,7 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
     
 }
-async function handleRequest() 
+async function handleRequest() { // Add opening curly brace for the function body
 try {
   // Your code logic
 } catch (error) {
