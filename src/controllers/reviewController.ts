@@ -23,7 +23,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            userId,  // Make sure userId is included in the Review model
+            const userId = Number(req.body.userId); // Ensure userId is a number
             rating,
             comment,
         });
@@ -84,7 +84,10 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== userId) {
+        if (Number(review.userId) !== Number(userId)) {
+            // Your logic here
+          }
+          
             return res.status(403).json({ message: 'You can only update your own reviews' });
         }
 

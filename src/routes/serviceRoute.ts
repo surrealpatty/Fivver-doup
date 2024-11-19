@@ -1,11 +1,11 @@
 import { Router, Request, Response } from 'express';
-import authMiddleware, { authorizeRoles } from '../middlewares/authMiddleware'; // Adjusted import for default and named export
+import authMiddleware, { authorizeRoles } from '../middlewares/authMiddleware'; // Ensure correct import of both default and named exports
 import {
-    createService,
-    getServices,
-    updateService,
-    deleteService,
-} from '../controllers/serviceController'; // Ensure correct path and named exports
+  createService,
+  getServices,
+  updateService,
+  deleteService,
+} from '../controllers/serviceController'; // Ensure correct import from the serviceController
 
 const router = Router();
 

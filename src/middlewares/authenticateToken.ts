@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import config from 'src/config/config'; // Correct import for default export
+import config from '../config/config'; // Adjust the path as needed
 
 // Extend the Request type to include a 'user' property
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload; // Adding 'user' property to request, which will hold decoded JWT payload
+      user?: JwtPayload;
     }
   }
 }
@@ -41,7 +41,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
     }
 
     // Attach the decoded user information to the request object
-    req.user = decoded;
+    req.user = { userId: decoded.userId }; // If decoded is your JWT payload
 
     // Proceed to the next middleware or route handler
     next();
