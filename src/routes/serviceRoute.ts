@@ -1,8 +1,9 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
-import { UserRequest } from '../types'; // Or ensure the correct path
-
+export interface UserRequest extends Request {
+  user: { id: string; email: string; username: string; password?: string };
+}
 const router = Router();
 
 // Interface for custom request object

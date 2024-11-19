@@ -9,7 +9,11 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         res.sendStatus(403); // Removed 'return' to match expected type
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify token with secret from environment variable
+        if (!token) {
+            return res.status(401).send('Unauthorized'); // Handle missing token
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Ensure token is defined
+        
 
         // Assuming you have a user ID in the token, you can attach it to the request object
         req.user = decoded; // Attach the decoded user information to the request object

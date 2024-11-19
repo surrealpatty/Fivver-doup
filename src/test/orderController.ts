@@ -1,7 +1,10 @@
 import request from 'supertest';
 import { app } from '../index'; // Adjust the import to match your app's entry point
 import { sequelize } from '../config/database'; // Make sure sequelize instance is correctly imported
-import { Order, User, Service } from '../models';
+export { default as Order } from './order';
+export { default as User } from './user';
+export { Service } from './services';
+
 
 // Mocking models
 jest.mock('../models/user');
