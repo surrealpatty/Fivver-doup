@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Correct import for sequelize instance
 
-// Define attributes for the Service model
+// Define the attributes for the Service model
 interface ServiceAttributes {
   id: number;
   name: string;
@@ -11,7 +11,7 @@ interface ServiceAttributes {
   updatedAt?: Date;
 }
 
-// Define creation attributes (all fields except `id` are optional)
+// Define creation attributes (all attributes except `id` are optional)
 type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
 
 class Service
@@ -28,7 +28,7 @@ class Service
   public readonly updatedAt!: Date;
 }
 
-// Initialize the Service model
+// Initialize the model
 Service.init(
   {
     id: {
@@ -39,32 +39,22 @@ Service.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     description: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      validate: {
-        isFloat: true,
-        min: 0,
-      },
     },
   },
   {
-    sequelize, // Sequelize instance
-    modelName: 'Service', // Model name
-    tableName: 'services', // Table name in the database
-    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
-    underscored: true, // Converts camelCase to snake_case for database columns
+    sequelize, // Make sure sequelize is passed correctly
+    modelName: 'Service',
+    tableName: 'services', // This should match your table name in the database
+    timestamps: true, // Enable timestamps (createdAt, updatedAt)
+    underscored: true, // If you want column names to be snake_case (optional)
   }
 );
 

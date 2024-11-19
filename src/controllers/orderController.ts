@@ -1,41 +1,59 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
-import Service from '../models/service';
+import Service from '../models/service'; // Make sure the import path is correct
 import Order from '../models/order';
 
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   const { userId, serviceId, orderDetails } = req.body;
 
+  // Validate input data
   if (!userId || !serviceId || !orderDetails) {
-    return res.status(400).json({ message: 'User ID, Service ID, and Order Details are required.' });
+    return res.status(400).json({ 
+      message: 'User ID, Service ID, and Order Details are required.' 
+    });
   }
 
   try {
-    // Correctly access static methods
+    // Check if the user exists
     const user = await User.findByPk(userId);
-    const service = await Service.findByPk(serviceId);
-
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ 
+        message: 'User not found.' 
+      });
     }
 
+    // Check if the service exists
+    const service = await Service.findByPk(serviceId);  // Now this should work!
     if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+      return res.status(404).json({ 
+        message: 'Service not found.' 
+      });
     }
 
+    // Create the order
     const order = await Order.create({
       userId,
       serviceId,
       orderDetails,
-      status: 'Pending',
+      status: 'Pending', // Default status
     });
 
+    // Respond with success
     return res.status(201).json({
-      message: 'Order created successfully',
+      message: 'Order created successfully.',
       order,
     });
   } catch (error: unknown) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'An error occurred while creating the order.', error: (error as Error).message });
+
+    // Return detailed error message in development
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? (error as Error).message 
+      : 'An error occurred.';
+
+    return res.status(500).json({ 
+      message: 'An error occurred while creating the order.', 
+      error: errorMessage,
+    });
   }
 };
