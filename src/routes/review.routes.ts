@@ -1,27 +1,56 @@
 import { Router, Request, Response } from 'express';
+import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
-import { reviewController } from '../controllers/reviewController'; // Import controller functions
+import { UserRequest } from '../types/userRequest'; // Adjust according to your file structure
 
 const router = Router();
 
-// Route for creating a review (only authenticated users can create a review)
-router.post('/create', authMiddleware, reviewController.createReview);
+// Interface for custom request object
+interface UserRequest extends Request {
+  user?: { id: number }; // Ensure this matches the structure of the 'user' object attached by the auth middleware
+}
 
-// Route for getting all reviews or a specific review by ID
-router.get('/', reviewController.getReviews);
+// Route for getting the user profile (only authenticated users can view it)
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    // Find user by ID
+    const user = await User.findByPk(req.user.id);
 
-// Route for updating a review (only the user who created the review or an admin can update it)
-router.put(
-  '/:id',
-  authMiddleware,
-  reviewController.updateReview
-);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-// Route for deleting a review (only the user who created the review or an admin can delete it)
-router.delete(
-  '/:id',
-  authMiddleware,
-  reviewController.deleteReview
-);
+    return res.json(user); // Send user data as response
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
+
+// Route for updating user profile (only authenticated users can update their profile)
+router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const user = await User.findByPk(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Perform update logic here, e.g., updating the user fields
+    // Assuming req.body contains updated data
+    const updatedUser = await user.update(req.body);
+
+    return res.json(updatedUser); // Send updated user data as response
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
 
 export default router;
