@@ -25,7 +25,18 @@ name: {
   allowNull: false, // Ensure this is part of a valid object definition
   type: DataTypes.STRING, // Example property
 
-const Service: any = sequelize.define('Service', {
+  const Service: any = sequelize.define('Service', {
+    // Add proper structure here
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+  }); // Ensure proper closure of the object and parentheses
+  
   // Add valid model attributes here
   name: {
     type: DataTypes.STRING,
