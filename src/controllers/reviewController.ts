@@ -103,7 +103,10 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
-
+    if (req.user) {
+        userId = Number(req.user.userId); // Ensure conversion to number
+      }
+      
     try {
         // Find the review by ID
         const review = await Review.findByPk(reviewId);
