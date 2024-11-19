@@ -2,8 +2,9 @@ import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
 export interface UserRequest extends Request {
-  user: User;
+  user: { id: string; email: string; username: string; password?: string };
 }
+
 const router = Router();
 
 // Interface for custom request object
@@ -37,7 +38,6 @@ router.get('/profile', authMiddleware, async (req: Request & { user?: { id: stri
   }
 });
 
-// Route for updating the user profile
 router.put('/profile', authMiddleware, async (req: Request & { user: UserRequest }, res: Response) => {
   try {
     if (!req.user) {

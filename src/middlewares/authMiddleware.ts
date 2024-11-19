@@ -30,7 +30,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
     }
 
     // Attach the decoded user information to the request object
-    req.user = { id: decoded.id }; // Use 'id' as per the JWT payload structure
+    req.user = { id: decoded.id, email: decoded.email, username: decoded.username };
 
     // Proceed to the next middleware or route handler
     next();

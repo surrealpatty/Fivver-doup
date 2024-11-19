@@ -113,9 +113,8 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { Id } = req.user as { Id: string }; // Assuming userId is stored as a string
-
-    const userIdAsNumber = parseInt(Id, 10); // Convert to a number if necessary
+    const { id } = req.user as { id: string };
+    const userIdAsNumber = parseInt(id, 10); // Convert to a number if necessary
 
     if (isNaN(userIdAsNumber)) {
         return res.status(400).json({ message: 'Invalid userId' });
