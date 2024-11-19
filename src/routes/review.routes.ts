@@ -9,17 +9,14 @@ const router = Router();
 interface UserRequest extends Request {
   user: User; // Assuming User is the type for authenticated user
 }
-interface Review {
-  user?: { id: number }; // Optional user field
-}
-
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+  try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    
+
     // Find user by ID
     const user = await User.findByPk(req.user.id);
 
@@ -28,37 +25,20 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
     }
 
     return res.json(user); // Send user data as response
-    // Correct code:
-    try {
-      // Some logic
-    } catch (error) {
-      // Handle the error
-    }
-    
-}
-// Line 40: Ensure the try block is correctly opened
-async function handleRequest() {
-  try {
-    // Your logic here
   } catch (error) {
-    // Error handling here
+    return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
-}
-
-
-
-// Route for updating user profile (only authenticated users can update their profile)
-router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
-  // Add your logic here
 });
 
+// Route for updating the user profile
+router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const user = await User.findByPk(req.user.id);
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -71,11 +51,6 @@ router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) =
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
-// This should close the router.put() or other route method properly
 });
 
-
 export default router;
-async function handleRequest() {
-  // Function logic here
-}  // Closing brace for the function
