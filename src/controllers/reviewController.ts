@@ -91,12 +91,20 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
             return res.status(403).json({ message: 'You can only update your own reviews' });
         }
 
-        // Update the review fields (only update provided fields)
-        if (rating) review.rating = rating;
-        if (comment) review.comment = comment;
+        // try {
+  if (rating) review.rating = rating;
+} catch (error) {
+  // Handle the error
+}
+
 
         // Save the updated review
-        await review.save();
+        try {
+            // your code here
+          } catch (error: unknown) {
+            // handle the error
+          };
+
 
         return res.status(200).json({ message: 'Review updated successfully', review });
     } catch (error: unknown) {
