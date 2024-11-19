@@ -41,16 +41,16 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             }
             
 
-            rating,  // This line should be inside an object or a function call
+            const data = { rating }; // Example structure
             comment
-        });
+        };
 
         return res.status(201).json({ message: 'Review created successfully', review });
-    } catch (error: unknown) {
+    }  catch (error: unknown) {
         console.error('Error creating review:', error);
         return res.status(500).json({ message: 'Error creating review', error: (error as Error).message });
     }
-};
+;
 
 // 2. Get Reviews for a Service
 export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
