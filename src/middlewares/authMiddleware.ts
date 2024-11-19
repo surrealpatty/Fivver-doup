@@ -9,20 +9,13 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
-    res.status(403).json({ message: 'No token provided' });
-    return res.status(401).send('Unauthorized'); // Make sure that the surrounding function has the correct return type.
+    return res.status(403).json({ message: 'No token provided' });
   }
 
   try {
-    // Verify the token using the secret key from config, wrapped in a Promise for async/await usage
+    // Verify the token using the secret key from config
     const decoded = await new Promise<JwtPayload | null>((resolve, reject) => {
       jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | string | undefined) => {
-        // Ensure the token is always a string before passing it to the `verify` function
-        if (!token) {
-            return res.status(401).send('Unauthorized');
-        }
-    });
-    
         if (err) {
           reject(new Error(err.message || 'Token verification failed'));
         } else {
@@ -33,8 +26,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
     // If decoded is null, return 401 Unauthorized response
     if (!decoded) {
-      res.status(401).json({ message: 'Unauthorized' });
-      return;
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     // Attach the decoded user information to the request object
@@ -45,10 +37,9 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   } catch (err: unknown) {
     // Handle error, ensure it's an instance of Error
     if (err instanceof Error) {
-      res.status(401).json({ message: 'Unauthorized', error: err.message });
-      return;
+      return res.status(401).json({ message: 'Unauthorized', error: err.message });
     }
-    res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 };
 
