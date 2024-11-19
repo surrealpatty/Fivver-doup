@@ -10,7 +10,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
     res.status(403).json({ message: 'No token provided' });
-    return; // Ensure that we stop here if there's no token
+    res.status(401).send('Unauthorized'); // Do not return the response object
   }
 
   try {

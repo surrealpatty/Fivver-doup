@@ -42,8 +42,8 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     const newReview = await Review.create({
       rating,
       comment,
-      userId: parseInt(req.user.id, 10), // Convert `id` to a number
-      reviewedUserId,
+      id?: number;
+      reviewedUserId?: number;
     });
 
     return res.status(201).json(newReview); // Return the newly created review

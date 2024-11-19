@@ -29,7 +29,7 @@
     "src/**/*.tsx",                           // Include TypeScript JSX files
     "src/**/*.vue",                           // Include Vue files
     "src/test/**/*.ts"                        // Include test files
-  ],
+, "src/controllers/categoryController.js"  ],
   "exclude": [
     "node_modules",                           // Exclude node_modules
     "dist",                                   // Exclude the output folder

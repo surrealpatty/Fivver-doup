@@ -8,11 +8,9 @@ const { Review, User, Service } = models; // Destructure the models
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsNumber = parseInt(id, 10); 
-
+    const userIdAsNumber = parseInt(req.params.id, 10);
     // Convert userId from string to number
-    const userIdAsNumber = parseInt(Id, 10);
-
+    const userIdAsNumber = parseInt(req.params.id, 10);
     // Validate input
     if (!serviceId || !rating || !comment) {
         return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
@@ -77,7 +75,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
     const { rating, comment } = req.body;
     const { id } = req.user as { id: string };
 
-    const userIdAsNumber = parseInt(Id, 10); // Convert to a number if necessary
+    const userIdAsNumber = parseInt(req.params.id, 10);
 
     // Validate input
     if (!rating && !comment) {

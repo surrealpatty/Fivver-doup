@@ -2,19 +2,19 @@ import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
 export interface UserRequest extends Request {
-  user: { id: string; email: string; username: string; password?: string };
+  user: User;
 }
 const router = Router();
 
 // Interface for custom request object
-interface UserRequest extends Request {
-  user: {
+export interface UserRequest extends Request {
+  user: User;
       id: string; // Make sure this type aligns with your actual data
       email: string;
       username: string;
       password?: string;
   };
-}
+
 
 
 // Route for getting the user profile (only authenticated users can view it)
