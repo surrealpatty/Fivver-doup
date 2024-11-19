@@ -1,55 +1,70 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database';
-import Review from './review';  // Corrected import
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Correct import for sequelize instance
 
-class Service extends Model {
+// Define attributes for the Service model
+interface ServiceAttributes {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// Define creation attributes (all fields except `id` are optional)
+type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
+
+class Service
+  extends Model<ServiceAttributes, ServiceCreationAttributes>
+  implements ServiceAttributes
+{
   public id!: number;
-  public userId!: string;
-  public title!: string;
+  public name!: string;
   public description!: string;
   public price!: number;
 
-  // Define associations in the associate method
-  public static associate(models: any) {
-    Service.hasMany(models.Review, { foreignKey: 'serviceId' });  // One-to-many relation
-  }
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
+// Initialize the Service model
 Service.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-      onDelete: 'CASCADE',
-    },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     description: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        isFloat: true,
+        min: 0,
+      },
     },
   },
   {
-    sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true,
-    underscored: true,
+    sequelize, // Sequelize instance
+    modelName: 'Service', // Model name
+    tableName: 'services', // Table name in the database
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
+    underscored: true, // Converts camelCase to snake_case for database columns
   }
 );
 

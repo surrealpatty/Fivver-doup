@@ -1,30 +1,33 @@
 import { Request, Response } from 'express';
-import { User, Service, Order } from '../models';
+import User from '../models/user';
+import Service from '../models/service';
+import Order from '../models/order';
 
-// Create an Order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   const { userId, serviceId, orderDetails } = req.body;
 
-  // Input validation
   if (!userId || !serviceId || !orderDetails) {
-    return res.status(400).json({ message: 'All fields are required.' });
+    return res.status(400).json({ message: 'User ID, Service ID, and Order Details are required.' });
   }
 
   try {
-    // Fetch the User and Service from the database
+    // Correctly access static methods
     const user = await User.findByPk(userId);
     const service = await Service.findByPk(serviceId);
 
-    if (!user || !service) {
-      return res.status(404).json({ message: 'User or Service not found' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Create the order
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
     const order = await Order.create({
       userId,
       serviceId,
       orderDetails,
-      status: 'Pending', // Default status
+      status: 'Pending',
     });
 
     return res.status(201).json({
@@ -33,95 +36,6 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     });
   } catch (error: unknown) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Error creating order', error: (error as Error).message });
-  }
-};
-
-// Get All Orders
-export const getAllOrders = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    // Fetch all orders from the database
-    const orders = await Order.findAll();
-
-    return res.status(200).json(orders);
-  } catch (error: unknown) {
-    console.error('Error fetching orders:', error);
-    return res.status(500).json({ message: 'Error fetching orders', error: (error as Error).message });
-  }
-};
-
-// Get Order by ID
-export const getOrderById = async (req: Request, res: Response): Promise<Response> => {
-  const { id } = req.params;
-
-  try {
-    // Find the order by ID
-    const order = await Order.findByPk(id);
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    return res.status(200).json(order);
-  } catch (error: unknown) {
-    console.error('Error fetching order:', error);
-    return res.status(500).json({ message: 'Error fetching order', error: (error as Error).message });
-  }
-};
-
-// Update Order
-export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
-  const { id } = req.params;
-  const { orderDetails, status } = req.body;
-
-  // Input validation
-  if (!orderDetails && !status) {
-    return res.status(400).json({ message: 'At least one field (orderDetails or status) is required.' });
-  }
-
-  try {
-    // Find the order by ID
-    const order = await Order.findByPk(id);
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    // Update the order with the new details
-    order.orderDetails = orderDetails || order.orderDetails;
-    order.status = status || order.status;
-
-    // Save the updated order
-    await order.save();
-
-    return res.status(200).json({
-      message: 'Order updated successfully',
-      order,
-    });
-  } catch (error: unknown) {
-    console.error('Error updating order:', error);
-    return res.status(500).json({ message: 'Error updating order', error: (error as Error).message });
-  }
-};
-
-// Delete Order
-export const deleteOrder = async (req: Request, res: Response): Promise<Response> => {
-  const { id } = req.params;
-
-  try {
-    // Find the order by ID
-    const order = await Order.findByPk(id);
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    // Destroy the order
-    await order.destroy();
-
-    return res.status(200).json({ message: 'Order deleted successfully' });
-  } catch (error: unknown) {
-    console.error('Error deleting order:', error);
-    return res.status(500).json({ message: 'Error deleting order', error: (error as Error).message });
+    return res.status(500).json({ message: 'An error occurred while creating the order.', error: (error as Error).message });
   }
 };

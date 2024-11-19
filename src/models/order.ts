@@ -1,43 +1,52 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
-import User from './user';  // Ensure this is correctly imported
-import Service from './services';  // Ensure this is correctly imported
+import sequelize from '../config/database'; // Ensure the import matches your file structure
+import User from './user'; // Import the User model for associations
+import Service from './service'; // Import the Service model for associations
 
-// Define the model attributes interface for TypeScript
-export interface OrderAttributes {
+// Define the attributes for the Order model
+interface OrderAttributes {
   id: number;
-  userId: string | null;  // UUID type for userId
-  serviceId: number | null;  // Allow null if service is deleted (keep INTEGER for Service)
+  userId: string | null; // UUID type for userId
+  serviceId: number | null; // Allow null if the service is deleted
   orderDetails: string;
-  status: 'Pending' | 'Completed' | 'Cancelled'; // Use ENUM for status
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
+  status: 'Pending' | 'Completed' | 'Cancelled'; // ENUM for order status
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Define the creation attributes interface (excluding `id`)
-export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
+// Define the creation attributes (all fields except `id` are optional)
+type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
 
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
+class Order
+  extends Model<OrderAttributes, OrderCreationAttributes>
+  implements OrderAttributes
+{
   public id!: number;
-  public userId!: string | null;  // UUID for userId
-  public serviceId!: number | null;  // INTEGER for serviceId
+  public userId!: string | null;
+  public serviceId!: number | null;
   public orderDetails!: string;
-  public status!: 'Pending' | 'Completed' | 'Cancelled'; // Type-safe status
-  public createdAt!: Date | null;
-  public updatedAt!: Date | null;
+  public status!: 'Pending' | 'Completed' | 'Cancelled';
 
-  // Define associations inside the `associate` method
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  // Define associations
   static associate(models: { User: typeof User; Service: typeof Service }) {
-    // Each Order belongs to a User (foreign key `userId`)
+    // An Order belongs to a User
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
 
-    // Each Order belongs to a Service (foreign key `serviceId`)
+    // An Order belongs to a Service
     Order.belongsTo(models.Service, {
       foreignKey: 'serviceId',
       as: 'service',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
   }
 }
@@ -48,44 +57,47 @@ Order.init(
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,  // Auto increment the id
+      autoIncrement: true,
     },
     userId: {
-      type: DataTypes.UUID,  // Use UUID for userId
-      allowNull: true,  // Allow null for ON DELETE SET NULL behavior
+      type: DataTypes.UUID,
+      allowNull: true, // Allow null if the user is deleted
       references: {
         model: User,
         key: 'id',
       },
-      onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     },
     serviceId: {
-      type: DataTypes.INTEGER,  // INTEGER for serviceId, since Service uses INTEGER ID
-      allowNull: true,  // Allow null for ON DELETE SET NULL behavior
+      type: DataTypes.INTEGER,
+      allowNull: true, // Allow null if the service is deleted
       references: {
         model: Service,
         key: 'id',
       },
-      onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     },
     orderDetails: {
-      type: DataTypes.STRING,  // Adjust type based on your needs
+      type: DataTypes.STRING, // Adjust type if order details need a different format
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     status: {
-      type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),  // Use ENUM for status
+      type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),
       allowNull: false,
-      defaultValue: 'Pending', // Default status to 'Pending'
+      defaultValue: 'Pending',
     },
   },
   {
-    sequelize,  // Reference the sequelize instance
+    sequelize,
     modelName: 'Order',
-    tableName: 'orders',  // Ensure it matches the table name
-    timestamps: true,  // Sequelize will automatically handle `createdAt` and `updatedAt`
-    underscored: true,  // Use snake_case for column names (e.g., `created_at`)
+    tableName: 'orders',
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
+    underscored: true, // Converts camelCase to snake_case for database columns
   }
 );
 

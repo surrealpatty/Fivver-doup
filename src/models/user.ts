@@ -1,42 +1,62 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database';
-import Review from './review';  // Corrected import
+import { Model, DataTypes, Optional } from 'sequelize';
+import sequelize from '../config/database'; // Ensure the path matches your project structure
+import Review from './review'; // Import related model for association
 
+// Define User model attributes
+interface UserAttributes {
+  id: string;
+  name: string;
+  email: string;
+}
 
-class User extends Model {
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+// User model definition
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public name!: string;
   public email!: string;
 
-  // Define associations in the associate method
-  public static associate(models: any) {
-    User.hasMany(models.Review, { foreignKey: 'userId' });  // One-to-many relation
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  // Static method for defining associations
+  public static associate(models: { [key: string]: typeof Model }) {
+    User.hasMany(models.Review, { foreignKey: 'userId', as: 'reviews', onDelete: 'CASCADE' });
   }
 }
 
+// Initialize User model
 User.init(
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      defaultValue: DataTypes.UUIDV4, // Automatically generates UUID
       primaryKey: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true, // Ensures name is not empty
+      },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensures email uniqueness
+      validate: {
+        isEmail: true, // Validates email format
+      },
     },
   },
   {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true,
-    underscored: true,
+    sequelize, // Sequelize instance
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in the database
+    timestamps: true, // Enables createdAt and updatedAt fields
+    underscored: true, // Converts camelCase to snake_case
   }
 );
 
