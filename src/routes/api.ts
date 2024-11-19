@@ -17,7 +17,12 @@ router.post('/services', async (req: Request, res: Response) => {
     }
 
     // Create a new service
-    const service = await Service.create({ userId, name, description, price });
+    // src/models/service.ts
+name: {
+  type: DataTypes.STRING,
+  allowNull: false, // Adjust based on your requirements
+}
+
     return res.status(201).json(service); // Return the newly created service
   } catch (error) {
     console.error(error);

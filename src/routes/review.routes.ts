@@ -1,7 +1,12 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
-import { UserRequest } from '../types'; // Or ensure the correct path
+// src/types/index.d.ts
+import { User } from '../models/user';
+
+export interface UserRequest extends Request {
+  user: { userId: string }; // Adjust based on your actual requirements
+}
 
 const router = Router();
 
@@ -11,7 +16,7 @@ interface UserRequest extends Request {
 }
 
 // Route for getting the user profile (only authenticated users can view it)
-router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
