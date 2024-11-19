@@ -25,12 +25,8 @@ router.post('/services', async (req: Request, res: Response) => {
     }
 
     // Create a new service
-    const service = await Service.create({ ... });
-      userId,
-      name,
-      description,
-      price,
-      title: "default title", // Add the title property
+    const service = await Service.create({
+      title: "default title",  // Ensure all required fields are included and properly formatted
     });
     
 

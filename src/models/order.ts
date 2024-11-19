@@ -42,10 +42,9 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
 
     // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(Service, { foreignKey: 'serviceId' });
+    Order.belongsTo(Service, {
+      as: 'service',  // Correct usage of 'as' in the association definition
       foreignKey: 'serviceId',
-      as: 'service',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
     });
   }
 }
