@@ -23,7 +23,12 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            const userId = Number(req.body.userId); // Ensure userId is a number
+            interface RequestBody {
+                userId: string | number;
+              }
+              
+              const userId = Number((req.body as RequestBody).userId);
+              
             rating,
             comment,
         });
