@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../index'; // Ensure this path is correct based on your project structure
 import { sequelize } from '../config/database';
 import User from '../models/user'; // Ensure you're importing the correct module
-import { Service } from '../models'; // Or correct path
+export { Service } from './services';
 import { Order } from '../models'; // Or correct path
 
 // Mock models using jest

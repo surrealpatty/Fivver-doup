@@ -32,7 +32,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
     }
 
     // Attach the decoded user information to the request object
-    req.user = { userId: decoded.userId }; // Adjust to match expected structure
+    req.user = { id: decoded.id }; // Use 'id' as per the JWT payload structure
 
     // Proceed to the next middleware or route handler
     next();

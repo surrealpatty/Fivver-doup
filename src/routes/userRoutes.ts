@@ -18,7 +18,7 @@ router.get('/reviews/:userId', async (req: Request, res: Response) => {
 
   try {
     const reviews = await Review.findAll({
-      where: { reviewedUserId: userId }, // If 'reviewedUserId' is a valid property, ensure it’s part of the model definition
+      where: { reviewedUserId: req.user?.id }, // Map properly from the logged-in user's ID
       include: [{ model: User, as: 'user', attributes: ['username'] }],  // Assuming you want to include reviewer's username
     });
 

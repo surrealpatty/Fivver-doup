@@ -17,7 +17,7 @@ interface UserRequest extends Request {
 
 
 // Route for getting the user profile (only authenticated users can view it)
-router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
+router.get('/profile', authMiddleware, async (req: Request & { user?: { id: string } }, res: Response) => { 
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });

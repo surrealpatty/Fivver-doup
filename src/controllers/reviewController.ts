@@ -8,7 +8,7 @@ const { Review, User, Service } = models; // Destructure the models
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const { Id } = req.user as { Id: string }; // Adjust to match the actual type
+    const { id } = req.user as { id: string };
 
     // Convert userId from string to number
     const userIdAsNumber = parseInt(Id, 10);

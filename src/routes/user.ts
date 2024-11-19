@@ -69,7 +69,7 @@ router.post('/register', [
 router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     try {
         // Access userId from the decoded token
-        const userId = req.user?.userId; // Access userId from the decoded JWT payload
+        const userId = req.user?.id; // Correctly access 'id'
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required' });

@@ -6,7 +6,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     const token = req.headers['authorization'];
 
     if (!token) {
-        return res.sendStatus(403);  // Forbidden
+        res.sendStatus(403); // Removed 'return' to match expected type
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify token with secret from environment variable
@@ -17,7 +17,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
         console.error('Invalid token:', error);
-        return res.status(403).json({ message: 'Invalid token.' });
+        res.status(403).json({ message: 'Invalid token.' }); // Removed 'return'
     }
 }; // <-- Closing brace for the function (added)
 

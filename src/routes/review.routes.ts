@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import Review from '../models/review'; // Assuming Review model is imported here
 import authMiddleware from '../middlewares/authMiddleware'; // Middleware to verify user authentication
-import { UserRequest } from '../types'; // Assuming you have this custom request type for authenticated users
+export type UserRequest = Request & { user?: { id: string } }; // Define and export in '../types'
 
 const router = Router();
 
@@ -39,7 +39,7 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     }
 
     // Create new review associated with the logged-in user
-    const newReview = await Review.create({
+    const reviewedUserId = req.params.reviewedUserId; // Assign correctly from route params
       rating,
       comment,
       userId: req.user.id, // Use authenticated user's ID
