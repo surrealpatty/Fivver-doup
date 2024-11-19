@@ -4,13 +4,15 @@ import { Request, Response, NextFunction } from 'express';
 
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   if (!req.headers.authorization) {
-    return res.status(403).json({ message: 'Forbidden: No token provided' });
+    res.status(403).json({ message: 'Forbidden: No token provided' });
+return; // Ensure function exits after sending the response
   }
 
   // Example of how you should check the token validity:
   const token = req.headers.authorization.split(' ')[1];
   if (!token) {
-    return res.status(403).json({ message: 'Forbidden: Invalid token data' });
+    res.status(403).json({ message: 'Forbidden: No token provided' });
+return; // Ensure function exits after sending the response
   }
 
   // Verify the token logic here:
@@ -21,7 +23,8 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
 
     next(); // Token is valid, proceed to the next middleware
   } catch (error) {
-    return res.status(403).json({ message: 'Forbidden: Invalid or expired token' });
+    res.status(403).json({ message: 'Forbidden: No token provided' });
+return; // Ensure function exits after sending the response
   }
 };
 
