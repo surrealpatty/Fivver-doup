@@ -9,8 +9,10 @@ const router = Router();
 interface UserRequest extends Request {
   user: User; // Assuming User is the type for authenticated user
 }
-  user?: { id: number }; // Ensure this matches the structure of the 'user' object attached by the auth middleware
-}
+   user?: { id: number } | undefined; // Ensure this matches the structure of the 'user' object attached by the auth middleware
+
+
+
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
