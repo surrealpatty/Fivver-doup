@@ -1,17 +1,23 @@
-// src/routes/userRoutes.ts
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import User from '../models/user'; // Ensure User model is imported correctly
-import bcrypt from 'bcryptjs'; // For password hashing
-import authMiddleware from '../middlewares/authMiddleware'; // For JWT auth middleware
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'; // Ensure this is installed
+import authMiddleware from '../middlewares/authMiddleware';
+import User from '../models/user'; // Update path if necessary
 
 const router = Router();
+
+// Utility function to generate JWT token
+const generateAuthToken = (userId: number) => {
+  const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // Use a secret from your env
+  const expiresIn = '1h'; // Token expiration
+  return jwt.sign({ id: userId }, secret, { expiresIn });
+};
 
 // 1. User Registration Route (POST /register)
 router.post(
   '/register',
   [
-    // Validation checks
     body('email').isEmail().withMessage('Please include a valid email'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
     body('username').isString().withMessage('Username must be a string'),
@@ -22,7 +28,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, username, isPaid } = req.body;
+    const { email, password, username, isPaid = false } = req.body;
 
     try {
       // Check if the user already exists
@@ -34,7 +40,7 @@ router.post(
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create new user
+      // Create a new user
       const newUser = await User.create({
         email,
         password: hashedPassword,
@@ -42,7 +48,6 @@ router.post(
         isPaid,
       });
 
-      // Respond with the created user (excluding password)
       res.status(201).json({
         message: 'User registered successfully',
         user: {
@@ -52,14 +57,14 @@ router.post(
           isPaid: newUser.isPaid,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error registering user:', error.message);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
 );
 
-// 2. User Login Route (POST /login) - to return JWT token
+// 2. User Login Route (POST /login)
 router.post(
   '/login',
   [
@@ -77,23 +82,21 @@ router.post(
     try {
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'Invalid email or password' });
       }
 
-      // Compare the entered password with the hashed password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(401).json({ message: 'Invalid email or password' });
       }
 
-      // Generate a JWT token
-      const token = user.generateAuthToken(); // Assuming you have a method in your model to generate token
+      const token = generateAuthToken(user.id);
 
       res.json({
         message: 'Login successful',
         token,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error logging in user:', error.message);
       res.status(500).json({ message: 'Internal server error' });
     }
@@ -101,24 +104,25 @@ router.post(
 );
 
 // 3. Get User Profile Route (GET /profile)
-router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
+router.get('/profile', authMiddleware, async (req: Request & { user?: { id: number } }, res: Response) => {
   try {
-    const userId = req.user!.id; // Assuming the user ID is decoded from the JWT token
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(req.user.id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Return user profile information (excluding password)
     res.json({
       email: user.email,
       username: user.username,
       isPaid: user.isPaid,
       role: user.role,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching user profile:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -133,27 +137,30 @@ router.put(
     body('email').optional().isEmail().withMessage('Please include a valid email'),
     body('isPaid').optional().isBoolean().withMessage('isPaid must be a boolean'),
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request & { user?: { id: number } }, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const userId = req.user!.id; // Get user ID from the JWT token
-    const { username, email, isPaid } = req.body;
-
     try {
-      const user = await User.findByPk(userId);
+      if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const user = await User.findByPk(req.user.id);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
 
-      // Update the user fields
-      user.username = username || user.username;
-      user.email = email || user.email;
-      user.isPaid = isPaid !== undefined ? isPaid : user.isPaid;
+      const { username, email, isPaid } = req.body;
 
-      await user.save(); // Save the changes
+      // Update only fields provided in the request
+      if (username) user.username = username;
+      if (email) user.email = email;
+      if (isPaid !== undefined) user.isPaid = isPaid;
+
+      await user.save();
 
       res.json({
         message: 'User profile updated successfully',
@@ -164,7 +171,7 @@ router.put(
           isPaid: user.isPaid,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating user profile:', error.message);
       res.status(500).json({ message: 'Internal server error' });
     }
