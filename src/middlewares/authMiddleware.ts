@@ -10,13 +10,19 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
     res.status(403).json({ message: 'No token provided' });
-    res.status(401).send('Unauthorized'); // Do not return the response object
+    return res.status(401).send('Unauthorized'); // Make sure that the surrounding function has the correct return type.
   }
 
   try {
     // Verify the token using the secret key from config, wrapped in a Promise for async/await usage
     const decoded = await new Promise<JwtPayload | null>((resolve, reject) => {
       jwt.verify(token, config.JWT_SECRET as string, (err: VerifyErrors | null, decoded: JwtPayload | string | undefined) => {
+        // Ensure the token is always a string before passing it to the `verify` function
+        if (!token) {
+            return res.status(401).send('Unauthorized');
+        }
+    });
+    
         if (err) {
           reject(new Error(err.message || 'Token verification failed'));
         } else {

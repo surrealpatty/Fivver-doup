@@ -10,8 +10,6 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
     const { serviceId, rating, comment } = req.body;
     const userIdAsNumber = parseInt(req.params.id, 10);
     // Convert userId from string to number
-    const userIdAsNumber = parseInt(req.params.id, 10);
-    // Validate input
     if (!serviceId || !rating || !comment) {
         return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
     }
