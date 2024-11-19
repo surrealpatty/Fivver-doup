@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
 import {
-  // src/controllers/serviceController.ts, Line 1 to 4 (example)
-export const createService = () => { /* logic */ };
+ // src/routes/serviceRoute.ts, Line 4
+export const createService = () => {
+
 export const getServices = () => { /* logic */ };
 export const updateService = () => { /* logic */ };
 export const deleteService = () => { /* logic */ };

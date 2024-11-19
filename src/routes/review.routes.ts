@@ -5,8 +5,8 @@ import {
     getReviews,
     updateReview,
     deleteReview,
-// src/routes/review.routes.ts, Line 8
-import { reviewController } from '../controllers/reviewController'; // Correct the path
+export const reviewController = { /* implementation */ };
+
 
 const router = Router();
 
