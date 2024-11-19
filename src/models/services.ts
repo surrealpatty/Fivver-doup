@@ -12,12 +12,10 @@ export interface ServiceAttributes {
 }
 
 // Define attributes that are required for creation (make 'id' optional)
-export interface ServiceCreationAttributes
-  extends Optional<ServiceAttributes, 'id'> {}
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 // Define the Service model
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
-  implements ServiceAttributes {
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
@@ -27,19 +25,6 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
-  // Define static method for associations
-  static associate() {
-    Service.belongsTo(User, {
-      foreignKey: 'userId',
-      as: 'user', // Alias for the association
-    });
-  }
-
-  // Add a static method explicitly for `findByPk`
-  static findByPk(id: number) {
-    return super.findByPk(id); // Call Sequelize's super method
-  }
 }
 
 // Initialize the model with the correct fields and data types
@@ -74,6 +59,12 @@ Service.init(
     timestamps: true, // Enable timestamps (createdAt, updatedAt)
   }
 );
+
+// Define the association outside the model, usually in an `index.ts` file
+Service.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'user', // Alias for the association
+});
 
 // Export the model
 export default Service;

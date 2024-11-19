@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import { sequelize } from '../config/database'; // Ensure proper import of sequelize
-import Service from '../models/services'; // Correct relative import for Service model
-import User from '../models/user'; // Correct relative import for User model
+import { sequelize } from '../config/database';
+import Service from '../models/services'; // Correct import for Service model
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ router.get('/services', async (req: Request, res: Response) => {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'username'], // Assuming 'username' is a field in the User model
+          attributes: ['id', 'username'],
         },
       ],
     });
@@ -47,9 +47,11 @@ router.get('/services', async (req: Request, res: Response) => {
 // READ: Get a specific service by ID
 router.get('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
 
   try {
-    const service = await Service.findByPk(id, {
+    const service = await Service.findOne({
+      where: { id: serviceId }, // Use the `where` clause with primary key
       include: [
         {
           model: User,
@@ -58,6 +60,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
         },
       ],
     });
+
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
@@ -71,10 +74,11 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 // UPDATE: Update a service
 router.put('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
   const { name, description, price } = req.body;
 
   try {
-    const service = await Service.findByPk(id);
+    const service = await Service.findByPk(serviceId); // Now using the correct type for the id
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
@@ -94,9 +98,10 @@ router.put('/services/:id', async (req: Request, res: Response) => {
 // DELETE: Delete a service
 router.delete('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
 
   try {
-    const service = await Service.findByPk(id);
+    const service = await Service.findByPk(serviceId); // Correct id type passed
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
