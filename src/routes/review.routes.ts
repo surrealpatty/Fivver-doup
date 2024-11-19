@@ -1,18 +1,19 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
-import { UserRequest } from '../types/userRequest'; // Adjust according to your file structure
+import { UserRequest } from '../types'; // Or ensure the correct path
 
 const router = Router();
 
 // Interface for custom request object
 interface UserRequest extends Request {
+  user: User; // Assuming User is the type for authenticated user
+}
   user?: { id: number }; // Ensure this matches the structure of the 'user' object attached by the auth middleware
 }
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
-  try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -26,7 +27,7 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
 
     return res.json(user); // Send user data as response
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error', error: error.message });
+    return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
 });
 
@@ -49,7 +50,7 @@ router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) =
 
     return res.json(updatedUser); // Send updated user data as response
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error', error: error.message });
+    return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
 });
 

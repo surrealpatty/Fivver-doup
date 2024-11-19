@@ -62,6 +62,7 @@ router.post(
 
 // Extend the Request interface to include user information
 interface UserRequest extends Request {
+  user: User; // Assuming User is the type for authenticated user
   user?: { id: number }; // Attach user information to request object
 }
 
