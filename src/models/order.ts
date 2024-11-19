@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';  // Ensure this is correctly imported
 import  Service  from './services';
-Service.findByPk(id);
+const service = await Service.findByPk(id);
 // Define the model attributes interface for TypeScript
 export interface OrderAttributes {
   id: number;
@@ -41,7 +41,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
-    Order.belongsTo(models.Service, {
+    Order.belongsTo(Service, { foreignKey: 'serviceId' });
       foreignKey: 'serviceId',
       as: 'service',
       onDelete: 'SET NULL',

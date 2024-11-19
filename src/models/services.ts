@@ -8,7 +8,7 @@ const router = Router();
 router.get('/services', async (req: Request, res: Response) => {
   try {
     // Correct usage of static method
-    const services = await Service.findAll(); // Sequelize method for finding all records
+    const services = await Service.findAll();
     res.json(services); // Return the list of services
   } catch (error) {
     res.status(500).json({ message: 'Error fetching services', error: (error as Error).message });
