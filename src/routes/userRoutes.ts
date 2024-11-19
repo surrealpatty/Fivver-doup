@@ -46,8 +46,8 @@ router.post(
     body('content').isString().isLength({ min: 1 }).withMessage('Review content is required'),
   ],
   authMiddleware,  // Make sure the user is authenticated before posting a review
-  where: { reviewedUserId: req.user?.id as number }, // Ensure type matching
-    const errors = validationResult(req);
+  where: { reviewedUserId: req.user?.id }, // Ensure this line ends properly
+const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -80,7 +80,6 @@ router.post(
         res.status(500).json({ message: 'Internal server error' });
       }
     }
-  }
 );
 
 export default router;
