@@ -22,8 +22,8 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
-  public createdAt!: Date;  // Optional if timestamps are enabled
-  public updatedAt!: Date;  // Optional if timestamps are enabled
+  public createdAt?: Date;  // Optional if timestamps are enabled
+  public updatedAt?: Date;  // Optional if timestamps are enabled
 
   // Define associations if needed (e.g., User association)
   static associate(models: any) {
@@ -65,4 +65,5 @@ Service.init(
   }
 );
 
-export { Service }; // Named export instead of default export for consistency
+// Export the Service model
+export { Service }; // Named export instead of default export
