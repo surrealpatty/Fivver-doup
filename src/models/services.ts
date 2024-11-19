@@ -8,6 +8,8 @@ interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
+  createdAt?: Date;  // Optional timestamps (if used)
+  updatedAt?: Date;  // Optional timestamps (if used)
 }
 
 // Define the attributes for creating a Service (without the 'id' field)
@@ -20,6 +22,8 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
+  public createdAt!: Date;  // Optional if timestamps are enabled
+  public updatedAt!: Date;  // Optional if timestamps are enabled
 
   // Define associations if needed (e.g., User association)
   static associate(models: any) {

@@ -9,6 +9,8 @@ export interface OrderAttributes {
   userId: string | null;  // UUID type for userId
   serviceId: number | null;  // Allow null if service is deleted (keep INTEGER for Service)
   orderDetails: string;
+  quantity: number;  // Add quantity to attributes
+  totalAmount: number; // Add totalAmount to attributes
   status: 'Pending' | 'Completed' | 'Cancelled'; // Use ENUM for status
   createdAt?: Date | null;
   updatedAt?: Date | null;
@@ -22,9 +24,11 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   public userId!: string | null;  // UUID for userId
   public serviceId!: number | null;  // INTEGER for serviceId
   public orderDetails!: string;
+  public quantity!: number;  // Add quantity field
+  public totalAmount!: number; // Add totalAmount field
   public status!: 'Pending' | 'Completed' | 'Cancelled'; // Type-safe status
-  public createdAt!: Date | null;
-  public updatedAt!: Date | null;
+  public readonly createdAt!: Date | null;  // Make it readonly, Sequelize will handle it
+  public readonly updatedAt!: Date | null;  // Make it readonly, Sequelize will handle it
 
   // Define associations inside the `associate` method
   static associate(models: { User: typeof User; Service: typeof Service }) {
@@ -32,12 +36,16 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(models.Service, {
       foreignKey: 'serviceId',
       as: 'service',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
   }
 }
@@ -73,6 +81,14 @@ Order.init(
     orderDetails: {
       type: DataTypes.STRING,  // Adjust type based on your needs
       allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,  // INTEGER for quantity
+      allowNull: false,  // Ensure quantity is required
+    },
+    totalAmount: {
+      type: DataTypes.DECIMAL,  // DECIMAL for totalAmount (use suitable precision/scale)
+      allowNull: false,  // Ensure totalAmount is required
     },
     status: {
       type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),  // Use ENUM for status
