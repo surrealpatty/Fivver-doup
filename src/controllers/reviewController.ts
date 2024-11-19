@@ -6,7 +6,7 @@ const { Review, User, Service } = models; // Destructure the models
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const { userId } = req.user as { userId: string };  // assuming userId is a string
+    const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
 
     // Validate input
     if (!serviceId || !rating || !comment) {
@@ -23,39 +23,17 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            // Assuming this is inside a function that handles a request
-            import { Request, Response } from 'express';
-
-            // Fix: Add type annotations for req and res
-            export const someFunction = (req: Request, res: Response): void => {
-                    // Ensure conversion to number
-                    const userId: number = Number(req.user.userId); 
-            
-                    // Other code logic...
-            
-                    res.status(200).send({ userId }); // Example response
-                    
-                } catch (error: unknown) {
-                    console.error(error);
-                }
-                
-                    res.status(500).send('Error occurred');
-                }
-            }
-            
-
-            const rating = someValue; // Define rating
-const data = { rating }; // Include in an object
-
-            comment
-        };
+            userId,
+            rating,
+            comment,
+        });
 
         return res.status(201).json({ message: 'Review created successfully', review });
-    }  catch (error: unknown) {
+    } catch (error: unknown) {
         console.error('Error creating review:', error);
         return res.status(500).json({ message: 'Error creating review', error: (error as Error).message });
     }
-;
+};
 
 // 2. Get Reviews for a Service
 export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
@@ -104,7 +82,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== userId) { // Ensuring userId is a number
+        if (review.userId !== userId) {
             return res.status(403).json({ message: 'You can only update your own reviews' });
         }
 
@@ -125,10 +103,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { userId } = req.user as { userId: number }; // Assuming userId is stored as a number
-    if (req.user) {
-        userId = Number(req.user.userId); // Ensure conversion to number
-      }
-      
+
     try {
         // Find the review by ID
         const review = await Review.findByPk(reviewId);
