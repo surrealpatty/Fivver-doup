@@ -24,11 +24,10 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         const review = await Review.create({
             serviceId,
             // Assuming this is inside a function that handles a request
-            import { Request, Response } from 'express'; // Add this import if not already present
+            import { Request, Response } from 'express';
 
             // Fix: Add type annotations for req and res
             export const someFunction = (req: Request, res: Response): void => {
-                try {
                     // Ensure conversion to number
                     const userId: number = Number(req.user.userId); 
             
@@ -42,7 +41,8 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             }
             
 
-            rating,
+            rating,  // This line should be inside an object or a function call
+
             comment
         });
 
