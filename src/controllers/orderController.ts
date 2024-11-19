@@ -24,7 +24,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     }
 
     // Check if the service exists
-    const service = await Service.findByPk(serviceId);  // Correctly using findByPk
+    const service = await Service.findByPk(serviceId); // Correct usage of findByPk
     if (!service) {
       return res.status(404).json({ 
         message: 'Service not found.' 
