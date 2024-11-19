@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'; // Use the updated Request
+import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -39,9 +39,13 @@ router.post(
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await User.create({ email, password: hashedPassword, username, isPaid });
 
+      // Generate JWT token after successful registration
+      const token = generateAuthToken(newUser.id);
+
       res.status(201).json({
         message: 'User registered successfully',
         user: { id: newUser.id, email: newUser.email, username: newUser.username, isPaid: newUser.isPaid },
+        token, // Include token in the response
       });
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -82,3 +86,5 @@ router.get('/profile', authMiddleware, async (req: Request & { user?: { id: numb
     }
   }
 });
+
+export default router;
