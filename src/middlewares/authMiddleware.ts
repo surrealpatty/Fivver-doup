@@ -6,7 +6,7 @@ import config from '../config/config'; // Adjusted import to match directory str
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; email: string; username: string };
+      user: { id: string; email: string; username: string };
     }
   }
 }
