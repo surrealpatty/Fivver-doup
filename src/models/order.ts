@@ -7,7 +7,7 @@ import Service from './services';  // Ensure this is correctly imported
 export interface OrderAttributes {
   id: number;
   userId: string | null;  // UUID type for userId
-  serviceId: number | null;  // Allow null if service is deleted (keep INTEGER for Service)
+  serviceId: number | null;  // INTEGER for serviceId
   orderDetails: string;
   quantity: number;  // Add quantity to attributes
   totalAmount: number; // Add totalAmount to attributes
@@ -87,7 +87,7 @@ Order.init(
       allowNull: false,  // Ensure quantity is required
     },
     totalAmount: {
-      type: DataTypes.DECIMAL,  // DECIMAL for totalAmount (use suitable precision/scale)
+      type: DataTypes.DECIMAL(10, 2),  // DECIMAL for totalAmount (with precision and scale)
       allowNull: false,  // Ensure totalAmount is required
     },
     status: {
