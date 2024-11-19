@@ -33,7 +33,8 @@ interface UserRequest extends Request {
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
   }
-});
+
+
 
 // Route for updating the user profile
 router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {

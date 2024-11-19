@@ -26,6 +26,17 @@ name: {
   type: DataTypes.STRING, // Example property
 
   const Service: any = sequelize.define('Service', {
+    // Define fields here
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+  }); // Ensure proper closure
+  
     // Add proper structure here
     name: {
       type: Sequelize.STRING,
