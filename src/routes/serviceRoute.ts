@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import Service from '../models/service';  // Correct import of Service model
+import  Service  from '../models/service';  // Corrected import to use named import for Service model
 import authMiddleware from '../middlewares/authMiddleware';  // Correct import of authMiddleware
 
 const router = Router();
