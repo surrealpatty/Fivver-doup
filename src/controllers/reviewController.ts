@@ -23,7 +23,21 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            const userId = Number(req.user.userId); // Ensure conversion to number
+            // Assuming this is inside a function that handles a request
+export const someFunction = (req, res) => {
+    try {
+        // Other code logic...
+
+        // Corrected line 26
+        const userId: number = Number(req.user.userId); // Ensure conversion to number
+
+        // Other code logic...
+        
+    } catch (error) {
+        res.status(500).send('Error occurred');
+    }
+};
+
             rating,
             comment
         });
