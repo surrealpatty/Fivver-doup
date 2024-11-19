@@ -35,14 +35,13 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             
                     res.status(200).send({ userId }); // Example response
                     
-                } catch (error) {
+                } catch (error: unknown) {
                     res.status(500).send('Error occurred');
                 }
             }
             
 
             rating,  // This line should be inside an object or a function call
-
             comment
         });
 
