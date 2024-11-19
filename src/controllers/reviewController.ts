@@ -8,10 +8,10 @@ const { Review, User, Service } = models; // Destructure the models
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const { userId } = req.user as { userId: string }; // Adjust to match the actual type
+    const { Id } = req.user as { Id: string }; // Adjust to match the actual type
 
     // Convert userId from string to number
-    const userIdAsNumber = parseInt(userId, 10);
+    const userIdAsNumber = parseInt(Id, 10);
 
     // Validate input
     if (!serviceId || !rating || !comment) {
@@ -75,9 +75,9 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const { userId } = req.user as { userId: string }; // Assuming userId is stored as a string
+    const { Id } = req.user as { Id: string }; // Assuming userId is stored as a string
 
-    const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
+    const userIdAsNumber = parseInt(Id, 10); // Convert to a number if necessary
 
     // Validate input
     if (!rating && !comment) {
@@ -117,9 +117,9 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { userId } = req.user as { userId: string }; // Assuming userId is stored as a string
+    const { Id } = req.user as { Id: string }; // Assuming userId is stored as a string
 
-    const userIdAsNumber = parseInt(userId, 10); // Convert to a number if necessary
+    const userIdAsNumber = parseInt(Id, 10); // Convert to a number if necessary
 
     if (isNaN(userIdAsNumber)) {
         return res.status(400).json({ message: 'Invalid userId' });

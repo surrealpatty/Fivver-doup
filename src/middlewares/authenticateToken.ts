@@ -1,107 +1,23 @@
-import { Request, Response } from 'express';
-import { models } from '../models'; // Import models from the index.ts file
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken'; // Corrected import for jsonwebtoken
 
-const { Review, User, Service } = models; // Destructure the models
+// Middleware to authenticate token
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+    const token = req.header('Authorization')?.replace('Bearer ', ''); // Extract token from Authorization header
 
-// 1. Create a Review
-export const createReview = async (req: Request, res: Response): Promise<Response> => {
-    const { serviceId, rating, comment } = req.body;
-    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
-
-    const numericUserId = Number(userId); // Convert userId to a number
-
-    // Validate input
-    if (!serviceId || !rating || !comment) {
-        return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
+    if (!token) {
+        return res.status(401).json({ message: 'Access denied. No token provided.' });
     }
 
     try {
-        // Check if the service exists
-        const service = await Service.findByPk(serviceId);
-        if (!service) {
-            return res.status(404).json({ message: 'Service not found' });
-        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify token with secret from environment variable
 
-        // Create a new review
-        const review = await Review.create({
-            serviceId,
-            userId: numericUserId, // Use the numeric userId
-            rating,
-            comment
-        });
+        // Assuming you have a user ID in the token, you can attach it to the request object
+        req.user = decoded; // Attach the decoded user information to the request object
 
-        return res.status(201).json({ message: 'Review created successfully', review });
-    } catch (error: unknown) {
-        console.error('Error creating review:', error);
-        return res.status(500).json({ message: 'Error creating review', error: (error as Error).message });
-    }
-};
-
-// 2. Update a Review
-export const updateReview = async (req: Request, res: Response): Promise<Response> => {
-    const { reviewId } = req.params; // Get review ID from request params
-    const { rating, comment } = req.body;
-    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
-
-    const numericUserId = Number(userId); // Convert userId to a number
-
-    // Validate input
-    if (!rating && !comment) {
-        return res.status(400).json({ message: 'Rating or comment is required to update' });
-    }
-
-    try {
-        // Find the review by ID
-        const review = await Review.findByPk(reviewId);
-
-        if (!review) {
-            return res.status(404).json({ message: 'Review not found' });
-        }
-
-        // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== numericUserId) { // Compare numericUserId with review.userId
-            return res.status(403).json({ message: 'You can only update your own reviews' });
-        }
-
-        // Update review details
-        if (rating) review.rating = rating;
-        if (comment) review.comment = comment;
-
-        await review.save(); // Save the updated review
-
-        return res.status(200).json({ message: 'Review updated successfully', review });
-    } catch (error: unknown) {
-        console.error('Error updating review:', error);
-        return res.status(500).json({ message: 'Error updating review', error: (error as Error).message });
-    }
-};
-
-// 3. Delete a Review
-export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
-    const { reviewId } = req.params; // Get review ID from request params
-    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
-
-    const numericUserId = Number(userId); // Convert userId to a number
-
-    try {
-        // Find the review by ID
-        const review = await Review.findByPk(reviewId);
-
-        if (!review) {
-            return res.status(404).json({ message: 'Review not found' });
-        }
-
-        // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== numericUserId) { // Compare numericUserId with review.userId
-            return res.status(403).json({ message: 'You can only delete your own reviews' });
-        }
-
-        // Delete the review
-        await review.destroy();
-
-        return res.status(200).json({ message: 'Review deleted successfully' });
-    } catch (error: unknown) {
-        console.error('Error deleting review:', error);
-        return res.status(500).json({ message: 'Error deleting review', error: (error as Error).message });
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        console.error('Invalid token:', error);
+        return res.status(403).json({ message: 'Invalid token.' });
     }
 };
