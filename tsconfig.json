@@ -28,8 +28,9 @@
     "src/**/*.d.ts",                          // Include declaration files
     "src/**/*.tsx",                           // Include TypeScript JSX files
     "src/**/*.vue",                           // Include Vue files
-    "src/test/**/*.ts"                        // Include test files
-, "src/controllers/categoryController.js"  ],
+    "src/test/**/*.ts",                       // Include test files
+    "src/controllers/categoryController.js"   // Include specific JavaScript file
+  ],
   "exclude": [
     "node_modules",                           // Exclude node_modules
     "dist",                                   // Exclude the output folder
