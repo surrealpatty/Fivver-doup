@@ -24,9 +24,15 @@ name: {
 {
   allowNull: false, // Ensure this is part of a valid object definition
   type: DataTypes.STRING, // Example property
-// src/routes/api.ts
-const Service = sequelize.define('Service', {
+
+const Service: any = sequelize.define('Service', {
+  // Add valid model attributes here
   name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
     type: DataTypes.STRING,
     allowNull: false, // Adjust based on your requirements
   },
@@ -34,7 +40,14 @@ const Service = sequelize.define('Service', {
 }
 
     return res.status(201).json(service); // Return the newly created service
-  } catch (error) {
+  // src/routes/api.ts
+try {
+  const result = await Service.create(req.body);
+  res.status(201).send(result);
+} catch (error) {
+  res.status(500).send({ error: error.message });
+}
+
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
