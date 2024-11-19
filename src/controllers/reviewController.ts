@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
-import { models } from '../models'; // Import models from the index.ts file
-
-const { Review, User, Service } = models; // Destructure the models
-
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const { userId } = req.user; // Assuming userId is stored in the JWT payload
+    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
+
+    const numericUserId = Number(userId); // Convert userId to a number
 
     // Validate input
     if (!serviceId || !rating || !comment) {
@@ -23,56 +20,25 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            interface RequestBody {
-                userId: string | number;
-              }
-              
-              // Then, use it like this
-              const userId = Number((req.body as RequestBody).userId);
-              
+            userId: numericUserId, // Use the numeric userId
             rating,
-            try: {
-                // Your code here
-                if (rating) review.rating = rating;
-              } catch (error: unknown) {
-                // Handle error
-              }
-              
-}
-
-// 2. Get Reviews for a Service
-export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
-    const { serviceId } = req.params; // Get service ID from request params
-
-    try {
-        // Fetch all reviews for the given service
-        const reviews = await Review.findAll({
-            where: { serviceId },
-            include: [
-                {
-                    model: User,
-                    attributes: ['id', 'username', 'email'], // Include relevant user details (exclude password)
-                },
-            ],
+            comment
         });
 
-        if (!reviews || reviews.length === 0) {
-            return res.status(404).json({ message: 'No reviews found for this service' });
-        }
-
-        return res.status(200).json(reviews);
+        return res.status(201).json({ message: 'Review created successfully', review });
     } catch (error: unknown) {
-        console.error('Error fetching reviews:', error);
-        const errMessage = (error as Error).message;
-        return res.status(500).json({ message: 'Error fetching reviews', error: errMessage });
+        console.error('Error creating review:', error);
+        return res.status(500).json({ message: 'Error creating review', error: (error as Error).message });
     }
 };
 
-// 3. Update a Review
+// 2. Update a Review
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const { userId } = req.user; // Assuming userId is stored in the JWT payload
+    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
+
+    const numericUserId = Number(userId); // Convert userId to a number
 
     // Validate input
     if (!rating && !comment) {
@@ -88,31 +54,29 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (Number(review.userId) !== Number(userId)) {
-            // Your logic here
-          }
-          
+        if (review.userId !== numericUserId) { // Compare numericUserId with review.userId
             return res.status(403).json({ message: 'You can only update your own reviews' });
         }
 
-        // try {
-  if (rating) review.rating = rating;
-}interface RequestBody {
-    userId: string | number;
-  }
-  
-  try {
-    const userId = Number((req.body as RequestBody).userId); // Ensure userId is a number
-    if (rating) review.rating = rating; // Inside try block
-  } catch (error: unknown) {
-    // Handle error here
-    console.error(error);
-  }
-  
-// 4. Delete a Review
+        // Update review details
+        if (rating) review.rating = rating;
+        if (comment) review.comment = comment;
+
+        await review.save(); // Save the updated review
+
+        return res.status(200).json({ message: 'Review updated successfully', review });
+    } catch (error: unknown) {
+        console.error('Error updating review:', error);
+        return res.status(500).json({ message: 'Error updating review', error: (error as Error).message });
+    }
+};
+
+// 3. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { userId } = req.user; // Assuming userId is stored in the JWT payload
+    const { userId } = req.user as { userId: string }; // Assuming userId is a string in the JWT payload
+
+    const numericUserId = Number(userId); // Convert userId to a number
 
     try {
         // Find the review by ID
@@ -123,7 +87,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Ensure that the logged-in user is the one who wrote the review
-        if (review.userId !== userId) {
+        if (review.userId !== numericUserId) { // Compare numericUserId with review.userId
             return res.status(403).json({ message: 'You can only delete your own reviews' });
         }
 
@@ -133,7 +97,6 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         return res.status(200).json({ message: 'Review deleted successfully' });
     } catch (error: unknown) {
         console.error('Error deleting review:', error);
-        const errMessage = (error as Error).message;
-        return res.status(500).json({ message: 'Error deleting review', error: errMessage });
+        return res.status(500).json({ message: 'Error deleting review', error: (error as Error).message });
     }
 };

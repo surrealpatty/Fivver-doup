@@ -1,8 +1,10 @@
-// custom.d.ts
+// src/types/custom.d.ts
+import { User } from '../models'; // Adjust the path as necessary
+
 declare global {
-    namespace Express {
-        interface Request {
-            userId?: string;  // Change this to string if your JWT token's id is a string
-        }
+  namespace Express {
+    interface Request {
+      user?: User; // Add the `user` property
     }
+  }
 }
