@@ -5,16 +5,17 @@ import jwt from 'jsonwebtoken';
 import authMiddleware from '../middlewares/authMiddleware';
 import User from '../models/user';
 
+// Create router instance
 const router = Router();
 
 // Utility function to generate JWT token
-const generateAuthToken = (userId: number) => {
+const generateAuthToken = (userId: number): string => {
   const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // Use a secret from your env
   const expiresIn = '1h'; // Token expiration
   return jwt.sign({ id: userId }, secret, { expiresIn });
 };
 
-// 1. User Registration Route (POST /register)
+// User Registration Route (POST /register)
 router.post(
   '/register',
   [
@@ -59,21 +60,22 @@ router.post(
   }
 );
 
-// src/routes/userRoutes.ts, Line 63
+// Extend the Request interface to include user information
 interface UserRequest extends Request {
-  user?: { id: number }; // Ensure 'user' property is compatible
+  user?: { id: number }; // Attach user information to request object
 }
 
-
-// src/routes/userRoutes.ts, Line 67
-router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => { /* logic */ });
+// Get User Profile Route (GET /profile)
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   const userId = req.user?.id;
+
   try {
-    if (!req.user) {
+    if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(userId);
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -82,7 +84,7 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
       email: user.email,
       username: user.username,
       isPaid: user.isPaid,
-      role: user.role,
+      role: user.role, // Assuming role exists on your user model
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -92,6 +94,6 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-
+});
 
 export default router;
