@@ -1,20 +1,17 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/database';
+import Review from './review';  // Corrected import
 
-interface UserAttributes {
-  id: string; // UUID for User ID
-  name: string;
-  email: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model {
   public id!: string;
   public name!: string;
   public email!: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+
+  // Define associations in the associate method
+  public static associate(models: any) {
+    User.hasMany(models.Review, { foreignKey: 'userId' });  // One-to-many relation
+  }
 }
 
 User.init(
@@ -36,9 +33,10 @@ User.init(
   },
   {
     sequelize,
+    modelName: 'User',
     tableName: 'users',
-    underscored: true,
     timestamps: true,
+    underscored: true,
   }
 );
 

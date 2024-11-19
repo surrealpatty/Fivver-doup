@@ -1,4 +1,3 @@
-// src/models/order.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';  // Ensure this is correctly imported
@@ -7,8 +6,8 @@ import Service from './services';  // Ensure this is correctly imported
 // Define the model attributes interface for TypeScript
 export interface OrderAttributes {
   id: number;
-  userId: number | null;  // Allow null if user is deleted
-  serviceId: number | null;  // Allow null if service is deleted
+  userId: string | null;  // UUID type for userId
+  serviceId: number | null;  // Allow null if service is deleted (keep INTEGER for Service)
   orderDetails: string;
   status: 'Pending' | 'Completed' | 'Cancelled'; // Use ENUM for status
   createdAt?: Date | null;
@@ -20,8 +19,8 @@ export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
-  public userId!: number | null;  // Allow null if user is deleted
-  public serviceId!: number | null;  // Allow null if service is deleted
+  public userId!: string | null;  // UUID for userId
+  public serviceId!: number | null;  // INTEGER for serviceId
   public orderDetails!: string;
   public status!: 'Pending' | 'Completed' | 'Cancelled'; // Type-safe status
   public createdAt!: Date | null;
@@ -52,7 +51,7 @@ Order.init(
       autoIncrement: true,  // Auto increment the id
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,  // Use UUID for userId
       allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
         model: User,
@@ -62,7 +61,7 @@ Order.init(
       onDelete: 'SET NULL',
     },
     serviceId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER,  // INTEGER for serviceId, since Service uses INTEGER ID
       allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
         model: Service,

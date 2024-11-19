@@ -1,39 +1,22 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database'; // or wherever your sequelize instance is
+import { sequelize } from '../config/database';
+import User from './user';
+import Service from './services';
+import Order from './order';
+import { Review } from './review';
 
-class Review extends Model {
-  public id!: number;
-  public serviceId!: number;
-  public userId!: number;
-  public rating!: number;
-  public comment!: string;
-}
+// Initialize the models with their attributes and options
+const models = {
+  User: User,
+  Service: Service,
+  Order: Order,
+  Review: Review,
+};
 
-Review.init({
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  serviceId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  rating: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  comment: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-}, {
-  sequelize,
-  tableName: 'reviews',
-});
+// Set up associations between models
+User.associate(models);
+Service.associate(models);
+Order.associate(models);
+Review.associate(models);
 
-export { Review };
+// Export models and Sequelize instance
+export { sequelize, models };

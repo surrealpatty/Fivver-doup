@@ -1,27 +1,18 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure this path is correct
-import User from './user'; // Import the User model for association
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/database';
+import Review from './review';  // Corrected import
 
-interface ServiceAttributes {
-  id: number;
-  userId: string;
-  title: string;
-  description: string;
-  price: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
-
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+class Service extends Model {
   public id!: number;
   public userId!: string;
   public title!: string;
   public description!: string;
   public price!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+
+  // Define associations in the associate method
+  public static associate(models: any) {
+    Service.hasMany(models.Review, { foreignKey: 'serviceId' });  // One-to-many relation
+  }
 }
 
 Service.init(
@@ -55,15 +46,11 @@ Service.init(
   },
   {
     sequelize,
+    modelName: 'Service',
     tableName: 'services',
-    underscored: true,
     timestamps: true,
+    underscored: true,
   }
 );
-
-Service.belongsTo(User, {
-  foreignKey: 'userId',
-  as: 'user',
-});
 
 export default Service;
