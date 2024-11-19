@@ -8,6 +8,7 @@ interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
+  name: string; // Add 'name' to the attributes
   createdAt?: Date;  // Optional timestamps (if used)
   updatedAt?: Date;  // Optional timestamps (if used)
 }
@@ -22,6 +23,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
+  public name!: string; // Add 'name' to the model class
   public createdAt?: Date;  // Optional if timestamps are enabled
   public updatedAt?: Date;  // Optional if timestamps are enabled
 
@@ -45,6 +47,10 @@ Service.init(
       allowNull: false,
     },
     title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    name: { // Define 'name' field here
       type: DataTypes.STRING,
       allowNull: false,
     },
