@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
-import { Review, User, Service } from '../models'; // Import your models for better type checking
+import { models } from '../models'; // Import models from the index.ts file
+
+const { Review, User, Service } = models; // Destructure the models
 
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
@@ -21,15 +23,16 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create a new review
         const review = await Review.create({
             serviceId,
-            userId,
+            userId,  // Make sure userId is included in the Review model
             rating,
             comment,
         });
 
         return res.status(201).json({ message: 'Review created successfully', review });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error creating review:', error);
-        return res.status(500).json({ message: 'Error creating review', error: error.message });
+        const errMessage = (error as Error).message; // Cast error to Error type
+        return res.status(500).json({ message: 'Error creating review', error: errMessage });
     }
 };
 
@@ -44,7 +47,7 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
             include: [
                 {
                     model: User,
-                    attributes: ['username', 'email'], // Include relevant user details (exclude password)
+                    attributes: ['id', 'username', 'email'], // Include relevant user details (exclude password)
                 },
             ],
         });
@@ -54,9 +57,10 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
         }
 
         return res.status(200).json(reviews);
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error fetching reviews:', error);
-        return res.status(500).json({ message: 'Error fetching reviews', error: error.message });
+        const errMessage = (error as Error).message;
+        return res.status(500).json({ message: 'Error fetching reviews', error: errMessage });
     }
 };
 
@@ -92,9 +96,10 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         await review.save();
 
         return res.status(200).json({ message: 'Review updated successfully', review });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error updating review:', error);
-        return res.status(500).json({ message: 'Error updating review', error: error.message });
+        const errMessage = (error as Error).message;
+        return res.status(500).json({ message: 'Error updating review', error: errMessage });
     }
 };
 
@@ -120,8 +125,9 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         await review.destroy();
 
         return res.status(200).json({ message: 'Review deleted successfully' });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error deleting review:', error);
-        return res.status(500).json({ message: 'Error deleting review', error: error.message });
+        const errMessage = (error as Error).message;
+        return res.status(500).json({ message: 'Error deleting review', error: errMessage });
     }
 };

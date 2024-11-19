@@ -1,8 +1,8 @@
 import { sequelize } from '../config/database';
-import User from './user';
-import Service from './services';
-import Order from './order';
-import Review from './review'; // Default import
+import User from './user';       // Named import
+import Service from './services';  // Named import
+import Order from './order';     // Named import
+import Review from './review';   // Named import
 
 // Initialize models with the correct types
 const models = {
