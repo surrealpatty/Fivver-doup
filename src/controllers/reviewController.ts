@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { models } from '../models'; // Import models from the index.ts file
-import  Service  from '../models/services'; // Ensure the correct model import
+import { Service } from '../models/services'; // Ensure the correct import
 
 const { Review, User, Service } = models; // Destructure the models
 
