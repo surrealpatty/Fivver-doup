@@ -3,7 +3,7 @@ import { app } from '../index'; // Adjust the import to match your app's entry p
 import { sequelize } from '../config/database'; // Make sure sequelize instance is correctly imported
 import Order from '../models/order'; // Use default import for Order
 import  User  from '../models/user';
-import { Service } from '../models/services'; // Ensure these paths are correct
+import  Service  from '../models/services'; // Ensure these paths are correct
 
 
 // Mocking models
