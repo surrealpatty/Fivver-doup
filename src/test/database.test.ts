@@ -1,14 +1,15 @@
 import { sequelize, testConnection } from '../config/database'; // Adjust the path if necessary
 import { Sequelize } from 'sequelize';
 
-// Mock Sequelize's authenticate method to avoid real database calls during tests
-jest.mock('sequelize', () => {
-  const originalSequelize = jest.requireActual('sequelize');
+// Mock sequelize instance's authenticate method to avoid real database calls during tests
+jest.mock('../config/database', () => {
+  const originalDatabase = jest.requireActual('../config/database');
   return {
-    ...originalSequelize,
-    Sequelize: jest.fn().mockImplementation(() => ({
-      authenticate: jest.fn(),
-    })),
+    ...originalDatabase,
+    sequelize: {
+      ...originalDatabase.sequelize,
+      authenticate: jest.fn(), // Mock the authenticate method on the sequelize instance
+    },
   };
 });
 
@@ -17,8 +18,7 @@ describe('Database Connection', () => {
 
   beforeAll(() => {
     // Set up the mock for authenticate method before tests run
-    mockAuthenticate = jest.fn();
-    sequelize.authenticate = mockAuthenticate;  // Mock the instance's authenticate method directly
+    mockAuthenticate = sequelize.authenticate as jest.Mock; // Cast to mock function
   });
 
   afterAll(() => {
@@ -37,7 +37,7 @@ describe('Database Connection', () => {
 
     // Ensure authenticate was called once
     expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-    expect(mockAuthenticate).toHaveBeenCalledWith();  // Ensure it was called without arguments
+    expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
 
     // Check if success message was logged
     expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
@@ -58,7 +58,7 @@ describe('Database Connection', () => {
 
     // Ensure authenticate was called once
     expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-    expect(mockAuthenticate).toHaveBeenCalledWith();  // Ensure it was called without arguments
+    expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
 
     // Check if error message was logged
     expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed');
