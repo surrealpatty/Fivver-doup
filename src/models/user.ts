@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure the correct path
 import Review from './review'; // Import related models
 import Order from './order'; // Import related models
-import Service from './services'; // Import related models
+import { Service } from './services';
 
 // Define the attributes for the User model
 interface UserAttributes {
