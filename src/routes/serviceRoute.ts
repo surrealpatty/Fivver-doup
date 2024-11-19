@@ -1,14 +1,13 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import {
-  export const createService = async (req: Request, res: Response) => { /* ... */ };
-export const getServices = async (req: Request, res: Response) => { /* ... */ };
-export const updateService = async (req: Request, res: Response) => { /* ... */ };
-export const deleteService = async (req: Request, res: Response) => { /* ... */ };
-} from '../controllers/serviceController'; // Import service controller methods
-import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
+  createService,
+  getServices,
+  updateService,
+  deleteService
+} from '../controllers/serviceController'; // Correct import from serviceController
 
-// Ensure authorizeRoles is properly exported from authMiddleware
-import { authorizeRoles } from '../middlewares/authMiddleware';
+import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
+import { authorizeRoles } from '../middlewares/authMiddleware'; // Correct import of authorizeRoles
 
 const router = Router();
 
