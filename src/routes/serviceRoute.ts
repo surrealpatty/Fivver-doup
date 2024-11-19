@@ -1,7 +1,8 @@
 // src/routes/serviceRoute.ts
 
 import { Router, Request, Response } from 'express';
-import Service from '../models/service'; // Adjust import path if necessary
+import Service from '../models/service'; // Ensure the path to the Service model is correct
+import authMiddleware from '../middlewares/authMiddleware'; // Import authMiddleware
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.get('/services', async (req: Request, res: Response) => {
 // Example of creating a service
 router.post('/services', authMiddleware, async (req: Request, res: Response) => {
   try {
+    // Make sure req.body has the correct shape
     const newService = await Service.create({ ...req.body, userId: req.user.id }); // Sequelize create method
     res.status(201).json({ message: 'Service created successfully', newService });
   } catch (error) {
