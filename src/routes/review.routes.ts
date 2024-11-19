@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { Review } from '../models/review'; // Adjust the import path for your Review model
-import authMiddleware from '../middlewares/authMiddleware'; // Assuming this is used to verify user authentication
+import { Review } from '../models/review'; // Assuming Review model is imported here
+import authMiddleware from '../middlewares/authMiddleware'; // Middleware to verify user authentication
 import { UserRequest } from '../types'; // Assuming you have this custom request type for authenticated users
 
 const router = Router();
@@ -113,4 +113,4 @@ router.delete('/reviews/:reviewId', authMiddleware, async (req: UserRequest, res
   }
 });
 
-export default router;
+export default router; // Proper export of the router
