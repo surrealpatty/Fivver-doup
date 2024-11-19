@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { sequelize } from '../config/database';
-import { Service } from '../models/services'; // or appropriate path
+import { Service } from '../models/services';
 import User from '../models/user';
 
 const router = express.Router();
@@ -17,70 +17,19 @@ router.post('/services', async (req: Request, res: Response) => {
     }
 
     // Create a new service
-    // src/models/service.ts
-name: {
-  type: DataTypes.STRING,
-  // src/routes/api.ts
-{
-  allowNull: false, // Ensure this is part of a valid object definition
-  type: DataTypes.STRING, // Example property
-
-  const Service: any = sequelize.define('Service', {
-    // Field definitions go here
-  });
-  
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-  }; // Ensure proper closure
-  
-    // Add proper structure here
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-  
-    description: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-  }; // Ensure proper closure of the object and parentheses
-  
-  // Add valid model attributes here
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false, // Field cannot be null
-
-  },
-};
-
-    type: DataTypes.STRING,
-    allowNull: false, // Adjust based on your requirements
-  },
-})
-
+    const service = await Service.create({
+      userId,
+      name,
+      description,
+      price,
+    });
 
     return res.status(201).json(service); // Return the newly created service
-  // src/routes/api.ts
-try {
-  const result = await Service.create(req.body);
-  res.status(201).send(result);
-} catch (error) {
-  res.status(500).send({ error: error.message });
-}
-
+  } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
-// src/routes/review.routes.ts
-router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
-  // Some code here
-  res.status(200).send({ message: 'Success' }); // Ensure response is properly closed
+  }
 });
-
 
 // READ: Get all services
 router.get('/services', async (req: Request, res: Response) => {
@@ -108,7 +57,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 
   try {
     const service = await Service.findOne({
-      where: { id: serviceId }, // Use the `where` clause with primary key
+      where: { id: serviceId },
       include: [
         {
           model: User,
@@ -135,12 +84,13 @@ router.put('/services/:id', async (req: Request, res: Response) => {
   const { name, description, price } = req.body;
 
   try {
-    const service = await Service.findByPk(serviceId); // Now using the correct type for the id
+    const service = await Service.findByPk(serviceId);
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    service.name = name || service.name; // Ensure name is a property of Service model
+    // Update the service fields
+    service.name = name || service.name;
     service.description = description || service.description;
     service.price = price || service.price;
 
@@ -158,7 +108,7 @@ router.delete('/services/:id', async (req: Request, res: Response) => {
   const serviceId = parseInt(id, 10); // Convert id to number
 
   try {
-    const service = await Service.findByPk(serviceId); // Correct id type passed
+    const service = await Service.findByPk(serviceId);
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
