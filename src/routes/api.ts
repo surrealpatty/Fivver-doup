@@ -1,22 +1,23 @@
 import express, { Request, Response } from 'express';
-import Service from 'src/models/services'; // Import the Service model
-import User from 'src/models/user'; // Import the User model if needed for user-related routes
+import { sequelize } from '../config/database'; // Ensure proper import of sequelize
+import Service from '../models/services'; // Correct relative import for Service model
+import User from '../models/user'; // Correct relative import for User model
 
 const router = express.Router();
 
 // CREATE: Add a new service
 router.post('/services', async (req: Request, res: Response) => {
-  const { userId, title, description, price } = req.body;
-  
+  const { userId, name, description, price } = req.body;
+
   try {
-    // Check if the user exists (this can also be a middleware for validation)
+    // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     // Create a new service
-    const service = await Service.create({ userId, title, description, price });
+    const service = await Service.create({ userId, name, description, price });
     return res.status(201).json(service); // Return the newly created service
   } catch (error) {
     console.error(error);
@@ -28,11 +29,13 @@ router.post('/services', async (req: Request, res: Response) => {
 router.get('/services', async (req: Request, res: Response) => {
   try {
     const services = await Service.findAll({
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['id', 'name'], // Assuming 'name' is a field in the User model
-      }],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username'], // Assuming 'username' is a field in the User model
+        },
+      ],
     });
     return res.status(200).json(services); // Return all services
   } catch (error) {
@@ -44,14 +47,16 @@ router.get('/services', async (req: Request, res: Response) => {
 // READ: Get a specific service by ID
 router.get('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+
   try {
     const service = await Service.findByPk(id, {
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['id', 'name'],
-      }],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username'],
+        },
+      ],
     });
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
@@ -66,15 +71,15 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 // UPDATE: Update a service
 router.put('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description, price } = req.body;
-  
+  const { name, description, price } = req.body;
+
   try {
     const service = await Service.findByPk(id);
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
-    
-    service.title = title || service.title;
+
+    service.name = name || service.name;
     service.description = description || service.description;
     service.price = price || service.price;
 
@@ -89,7 +94,7 @@ router.put('/services/:id', async (req: Request, res: Response) => {
 // DELETE: Delete a service
 router.delete('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+
   try {
     const service = await Service.findByPk(id);
     if (!service) {
