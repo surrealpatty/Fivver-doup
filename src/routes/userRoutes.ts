@@ -66,9 +66,6 @@ interface UserRequest extends Request {
 
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   const userId = req.user?.id;
-  // Handle logic
-});
-
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -93,6 +90,6 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-;
+});
 
 export default router;
