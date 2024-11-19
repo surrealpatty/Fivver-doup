@@ -1,14 +1,9 @@
-import { Router, Request, Response } from 'express';
-import {
-// src/routes/serviceRoute.ts, Line 4
-export const createService = () => {
-  
-};
-
-export const getServices = () => { /* logic */ };
-export const updateService = () => { /* logic */ };
-export const deleteService = () => { /* logic */ };
-
+import { Router } from 'express';
+import { 
+  createService, 
+  getServices, 
+  updateService, 
+  deleteService 
 } from '../controllers/serviceController'; // Correct import from serviceController
 
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
