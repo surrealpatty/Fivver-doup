@@ -1,26 +1,16 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct import
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import
+
+// Define the UserRequest interface properly once
 export interface UserRequest extends Request {
-  user: { id: string; email: string; username: string; password?: string };
+  user: { id: string; email: string; username: string; password?: string }; // User properties
 }
 
 const router = Router();
 
-// Interface for custom request object
-export interface UserRequest extends Request 
-  interface UserRequest extends Request {
-    user: User; // Assuming you have a 'User' interface or class
-      id: string; // Make sure this type aligns with your actual data
-      email: string;
-      username: string;
-      password?: string;
-  };
-
-
-
 // Route for getting the user profile (only authenticated users can view it)
-router.get('/profile', authMiddleware, async (req: Request & { user?: { id: string } }, res: Response) => { 
+router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => { 
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -39,7 +29,8 @@ router.get('/profile', authMiddleware, async (req: Request & { user?: { id: stri
   }
 });
 
-router.put('/profile', authMiddleware, async (req: Request & { user: UserRequest }, res: Response) => {
+// Route for updating the user profile (only authenticated users can update it)
+router.put('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
