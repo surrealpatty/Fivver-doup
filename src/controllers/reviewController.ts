@@ -24,19 +24,23 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         const review = await Review.create({
             serviceId,
             // Assuming this is inside a function that handles a request
-export const someFunction = (req, res) => {
-    try {
-        // Other code logic...
+            import { Request, Response } from 'express'; // Add this import if not already present
 
-        // Corrected line 26
-        const userId: number = Number(req.user.userId); // Ensure conversion to number
-
-        // Other code logic...
-        
-    } catch (error) {
-        res.status(500).send('Error occurred');
-    }
-};
+            // Fix: Add type annotations for req and res
+            export const someFunction = (req: Request, res: Response): void => {
+                try {
+                    // Ensure conversion to number
+                    const userId: number = Number(req.user.userId); 
+            
+                    // Other code logic...
+            
+                    res.status(200).send({ userId }); // Example response
+                    
+                } catch (error) {
+                    res.status(500).send('Error occurred');
+                }
+            }
+            
 
             rating,
             comment
