@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Use named import for sequelize
+import { sequelize } from '../config/database'; // Correct named import for sequelize
 
 // Define the attributes of the Service model
 interface ServiceAttributes {
@@ -65,4 +65,4 @@ Service.init(
   }
 );
 
-export default Service;
+export { Service }; // Named export instead of default export for consistency
