@@ -1,34 +1,60 @@
-import express, { Request, Response } from 'express';
-import Service from '../models/service'; // Import the updated Service model
-import User from '../models/user'; // Import User model to associate with services
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Make sure this points to your sequelize instance
 
-const router = express.Router();
+// Define the attributes for the Service model
+interface ServiceAttributes {
+  id: number;
+  userId: number;
+  title: string;
+  description: string;
+  price: number;
+}
 
-// CREATE: Add a new service
-router.post('/services', async (req: Request, res: Response) => {
-  const { userId, title, description, price } = req.body;
+// Define creation attributes (this is used for creating new records)
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-  try {
-    // Check if the user exists
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+// Define the Service model
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+  public id!: number;
+  public userId!: number;
+  public title!: string;
+  public description!: string;
+  public price!: number;
 
-    // Create a new service, associating it with the user
-    const service = await Service.create({
-      userId,
-      title,
-      description,
-      price,
-    });
+  // Timestamps (if you have createdAt and updatedAt columns in your model)
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
-    // Send back the created service
-    return res.status(201).json(service);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+// Initialize the Service model with Sequelize
+Service.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize, // Pass the sequelize instance
+    tableName: 'services', // Specify the table name (optional if different from model name)
   }
-});
+);
 
-export default router;
+export default Service;
