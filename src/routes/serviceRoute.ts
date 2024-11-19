@@ -3,8 +3,6 @@ import {
  // Correct code:
  import { createService, getServices, updateService, deleteService } from '../controllers/serviceController';
 
-
-
 import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
 import { authorizeRoles } from '../middlewares/authMiddleware'; // Correct import of authorizeRoles
 
