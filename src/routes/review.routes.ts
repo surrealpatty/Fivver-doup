@@ -9,7 +9,10 @@ const router = Router();
 interface UserRequest extends Request {
   user: User; // Assuming User is the type for authenticated user
 }
-user?: { id: number }; // This ensures the optional user structure is properly defined
+interface Review {
+  user?: { id: number }; // Optional user field
+}
+
 
 // Route for getting the user profile (only authenticated users can view it)
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {
@@ -26,8 +29,12 @@ router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) =
 
     return res.json(user); // Send user data as response
     // Correct code:
-} catch (error) {
-  // Your error handling logic here
+    try {
+      // Some logic
+    } catch (error) {
+      // Handle the error
+    }
+    
 }
 try {
   // Your code logic
