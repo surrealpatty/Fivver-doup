@@ -27,19 +27,18 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
                 userId: string | number;
               }
               
+              // Then, use it like this
               const userId = Number((req.body as RequestBody).userId);
               
             rating,
-            comment,
-        });
-
-        return res.status(201).json({ message: 'Review created successfully', review });
-    } catch (error: unknown) {
-        console.error('Error creating review:', error);
-        const errMessage = (error as Error).message; // Cast error to Error type
-        return res.status(500).json({ message: 'Error creating review', error: errMessage });
-    }
-};
+            try: {
+                // Your code here
+                if (rating) review.rating = rating;
+              } catch (error: unknown) {
+                // Handle error
+              }
+              
+}
 
 // 2. Get Reviews for a Service
 export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
@@ -98,27 +97,18 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 
         // try {
   if (rating) review.rating = rating;
-} catch (error) {
-  // Handle the error
-}
-
-
-        // Save the updated review
-        try {
-            // your code here
-          } catch (error: unknown) {
-            // handle the error
-          };
-
-
-        return res.status(200).json({ message: 'Review updated successfully', review });
-    } catch (error: unknown) {
-        console.error('Error updating review:', error);
-        const errMessage = (error as Error).message;
-        return res.status(500).json({ message: 'Error updating review', error: errMessage });
-    }
-};
-
+}interface RequestBody {
+    userId: string | number;
+  }
+  
+  try {
+    const userId = Number((req.body as RequestBody).userId); // Ensure userId is a number
+    if (rating) review.rating = rating; // Inside try block
+  } catch (error: unknown) {
+    // Handle error here
+    console.error(error);
+  }
+  
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
