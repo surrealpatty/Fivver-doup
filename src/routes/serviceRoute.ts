@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
-import authMiddleware, { authorizeRoles } from '../middlewares/authMiddleware'; // Ensure correct import of both default and named exports
-import {
+export const authorizeRoles = (roles: string[]) => { ... }; // Ensure `authMiddleware` exports this
   createService,
   getServices,
   updateService,

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { authMiddleware, authorizeRoles } from '../middlewares/authMiddleware';
+import authMiddleware from '../middlewares/authMiddleware'; // Adjust if it’s the default export
 import {
     createReview,
     getReviews,

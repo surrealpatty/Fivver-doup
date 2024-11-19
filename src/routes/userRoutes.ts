@@ -61,7 +61,7 @@ router.post(
 
 // 3. Get User Profile Route (GET /profile)
 interface UserRequest extends Request {
-  user?: { id: number };
+  user?: { id: number }; // Ensure the type matches the use case
 }
 
 router.get('/profile', authMiddleware, async (req: UserRequest, res: Response) => {

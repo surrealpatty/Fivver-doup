@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../index'; // Adjust the path to your Express app if necessary
 import { sequelize } from '../config/database';
-import { User, Service, Order } from '../models'; // Import your models
+export { User, Service, Order }; // Ensure these are exported
 
 // Mock models using jest
 jest.mock('../models/user', () => ({
