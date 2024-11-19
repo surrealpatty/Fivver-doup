@@ -42,10 +42,13 @@ router.post('/reviews', authMiddleware, async (req: UserRequest, res: Response) 
     const newReview = await Review.create({
       rating,
       comment,
-      45       const review = {
-        46           id?: number, // Replace the semicolon with a comma
-        47           reviewedUserId?: number, // Ensure commas separate properties in an object
-        48       };
+      const review = {
+        id: undefined as number | undefined, // Optional property simulated with `undefined`
+        reviewedUserId: undefined as number | undefined, // Optional property simulated
+    };
+    
+    }
+    
         
     });
 
