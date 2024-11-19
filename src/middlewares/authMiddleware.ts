@@ -2,6 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import config from '../config/config'; // Adjusted import to match directory structure
 
+// Extend the Request interface to include a user object
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id: string; email: string; username: string };
+    }
+  }
+}
+
 // Middleware to authenticate token
 const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   // Extract the token from the Authorization header (Bearer <token>)
@@ -9,7 +18,8 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
-    return next(new Error('No token provided'));
+    res.status(403).json({ message: 'Forbidden: No token provided' });
+    return;
   }
 
   try {
@@ -26,7 +36,8 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
     // If decoded is null, return 401 Unauthorized response
     if (!decoded) {
-      return next(new Error('Unauthorized'));
+      res.status(401).json({ message: 'Unauthorized: Invalid token' });
+      return;
     }
 
     // Attach the decoded user information to the request object
@@ -37,9 +48,10 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   } catch (err: unknown) {
     // Handle error, ensure it's an instance of Error
     if (err instanceof Error) {
-      return next(new Error(err.message || 'Unauthorized')); // Pass error to the next middleware
+      res.status(401).json({ message: `Unauthorized: ${err.message}` });
+      return;
     }
-    next(err); // If not an instance of Error, pass it to the next middleware
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

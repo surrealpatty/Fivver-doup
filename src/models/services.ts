@@ -71,5 +71,5 @@ Service.init(
   }
 );
 
-// Export the Service model
-export { Service }; // Named export instead of default export
+// Export the Service model as a default export
+export default Service; // Default export for the model

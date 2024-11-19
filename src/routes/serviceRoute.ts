@@ -1,7 +1,7 @@
 // src/routes/serviceRoute.ts
 
 import { Router, Request, Response } from 'express';
-import { Service } from '../models/service'; // Adjust import path if necessary
+import Service from '../models/service'; // Adjust import path if necessary
 
 const router = Router();
 
