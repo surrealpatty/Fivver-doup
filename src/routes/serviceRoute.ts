@@ -1,5 +1,3 @@
-// src/routes/serviceRoute.ts
-
 import { Router } from 'express';
 import {
   createService,
@@ -7,8 +5,10 @@ import {
   updateService,
   deleteService,
 } from '../controllers/serviceController'; // Import service controller methods
-import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is correctly implemented
-import { authorizeRoles } from '../middlewares/authMiddleware'; // Ensure authorizeRoles is exported
+import authMiddleware from '../middlewares/authMiddleware'; // Ensure authMiddleware is implemented
+
+// Ensure authorizeRoles is properly exported from authMiddleware
+import { authorizeRoles } from '../middlewares/authMiddleware';
 
 const router = Router();
 
