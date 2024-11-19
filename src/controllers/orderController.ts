@@ -1,21 +1,33 @@
 import { Request, Response } from 'express';
-import Order from '../models/order';
+import Order from '../models/order';  // Make sure this path is correct
 
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response) => {
-  const { userId, serviceId, quantity, totalAmount, orderDetails, status = 'pending' } = req.body; // Default status to 'pending'
+  // ... your existing code
+};
 
-  // Basic validation to ensure the required fields are present
-  if (!userId || !serviceId || !quantity || !totalAmount || !orderDetails) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
+// GET: Get all orders
+export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    // Create a new order with the status field included
-    const order = await Order.create({ userId, serviceId, quantity, totalAmount, orderDetails, status });
-    return res.status(201).json(order); // Return the newly created order
+    const orders = await Order.findAll(); // Adjust the query as needed
+    return res.status(200).json(orders);  // Return the list of orders
   } catch (error) {
-    console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Error creating order', error });
+    console.error('Error fetching orders:', error);
+    return res.status(500).json({ message: 'Error fetching orders', error });
   }
+};
+
+// GET: Get a single order by ID
+export const getOrderById = async (req: Request, res: Response) => {
+  // ... your existing code
+};
+
+// PUT: Update an order by ID
+export const updateOrder = async (req: Request, res: Response) => {
+  // ... your existing code
+};
+
+// DELETE: Delete an order by ID
+export const deleteOrder = async (req: Request, res: Response) => {
+  // ... your existing code
 };

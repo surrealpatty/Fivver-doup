@@ -7,7 +7,7 @@
     "strict": true,                           // Enable all strict type-checking options
     "skipLibCheck": true,                     // Skip type checking of declaration files
     "resolveJsonModule": true,                // Allow importing JSON modules
-    "baseUrl": "./",                          // Base directory for imports
+    "baseUrl": "./src",                       // Set base directory to src for simplified imports
     "outDir": "dist",                         // Output directory for transpiled files
     "rootDir": "src",                         // Root directory for source files
     "types": ["jest", "node", "vue"],         // Type definitions for Jest, Node.js, and Vue
