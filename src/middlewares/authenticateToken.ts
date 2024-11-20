@@ -1,4 +1,3 @@
-// src/middlewares/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
@@ -19,7 +18,7 @@ interface UserPayload extends JwtPayload {
 }
 
 // Named export for authenticateToken middleware
-export const authenticateToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   // Extract token from 'Authorization' header (Assuming format: 'Bearer <token>')
   const token = req.headers['authorization']?.split(' ')[1];
 
@@ -51,6 +50,4 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
     console.error('Token verification failed:', error);
 
     // Return a generic error message
-    return res.status(403).json({ message: 'Invalid or expired token' });
-  }
-};
+    return res.status(403).json({ message: 'Invalid or
