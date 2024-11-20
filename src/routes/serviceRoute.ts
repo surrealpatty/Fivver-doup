@@ -1,3 +1,5 @@
+// src/routes/serviceRoute.ts
+
 import express, { Request, Response } from 'express';
 import Service from '../models/services'; // Import Service model
 import User from '../models/user'; // Import User model (to check user existence)
@@ -27,7 +29,7 @@ router.post('/services', async (req: Request, res: Response) => {
     // Return the newly created service
     return res.status(201).json(service);
   } catch (error) {
-    console.error(error);
+    console.error('Error creating service:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -47,7 +49,7 @@ router.get('/services', async (req: Request, res: Response) => {
 
     return res.status(200).json(services);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching services:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -75,7 +77,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 
     return res.status(200).json(service);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching service:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -101,7 +103,7 @@ router.put('/services/:id', async (req: Request, res: Response) => {
     await service.save(); // Save the updated service
     return res.status(200).json(service);
   } catch (error) {
-    console.error(error);
+    console.error('Error updating service:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -120,7 +122,7 @@ router.delete('/services/:id', async (req: Request, res: Response) => {
     await service.destroy(); // Delete the service
     return res.status(204).send(); // Return no content (204) status after deletion
   } catch (error) {
-    console.error(error);
+    console.error('Error deleting service:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
