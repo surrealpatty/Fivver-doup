@@ -40,7 +40,6 @@ describe('Database Connection', () => {
   afterAll(() => {
     consoleLogSpy.mockRestore();
     consoleErrorSpy.mockRestore();
-    jest.restoreAllMocks(); // Restore all mocks
   });
 
   // Test for successful database connection
