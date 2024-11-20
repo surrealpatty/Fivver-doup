@@ -33,16 +33,17 @@ describe('Database Connection', () => {
 
   // Clear mocks and spies after each test to avoid state leakage
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks(); // Clear all mocks between tests to ensure isolation
   });
 
   // Restore spies after all tests are completed
   afterAll(() => {
     consoleLogSpy.mockRestore();
     consoleErrorSpy.mockRestore();
-    jest.restoreAllMocks();
+    jest.restoreAllMocks(); // Restore all mocks
   });
 
+  // Test for successful database connection
   test('should successfully connect to the database', async () => {
     // Simulate a successful connection
     mockAuthenticate.mockResolvedValueOnce(undefined);
@@ -58,6 +59,7 @@ describe('Database Connection', () => {
     expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
   });
 
+  // Test for failed database connection
   test('should fail to connect to the database', async () => {
     // Simulate a failed connection
     mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed'));

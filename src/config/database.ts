@@ -23,7 +23,7 @@ export const sequelize = new Sequelize({
   password: DB_PASSWORD || '',  // Default to empty string if not provided
   database: DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if not provided
   port: parseInt(DB_PORT || '3306', 10),  // Default to 3306 if not provided
-  logging: false,  // Disable logging to keep the console clean
+  logging: NODE_ENV === 'development',  // Log SQL queries only in development
   dialectOptions: {
     // Optional: Adjust if necessary for your environment (e.g., SSL, timezone)
     // ssl: { require: true, rejectUnauthorized: false }, // Example for SSL setup
