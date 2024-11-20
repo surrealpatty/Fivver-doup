@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
-// Removed body-parser, as Express has a built-in JSON parser now
 import userRoutes from './routes/user.js'; // Correct .js extension for ESM
 import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
 
