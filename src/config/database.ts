@@ -4,8 +4,14 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-// Destructure environment variables
+// Destructure environment variables from process.env
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
+
+// Validate required environment variables
+if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
+  console.error('Missing required environment variables. Please check your .env file.');
+  process.exit(1); // Exit the process if environment variables are not set
+}
 
 // Sequelize instance for database connection
 export const sequelize = new Sequelize({
@@ -32,10 +38,11 @@ export const testConnection = async () => {
     console.log('Database connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
+    process.exit(1); // Exit the process if the connection fails
   }
 };
 
-// Ensure sequelize connection is properly closed after tests
+// Ensure sequelize connection is properly closed after tests or app shutdown
 export const closeConnection = async () => {
   try {
     await sequelize.close();
