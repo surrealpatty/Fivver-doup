@@ -34,6 +34,7 @@
   "exclude": [
     "node_modules",                                   // Exclude node_modules directory
     "dist",                                           // Exclude dist directory
-    "**/*.spec.ts"                                    // Exclude .spec.ts files (for testing files like *.test.ts)
+    "**/*.spec.ts",                                   // Exclude .spec.ts files (for testing files like *.test.ts)
+    "**/*.test.ts"                                    // Explicitly exclude test files
   ]
 }
