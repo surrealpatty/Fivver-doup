@@ -3,7 +3,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 // Middleware to check if authorization token is provided
-export function checkAuth(req: Request, res: Response, next: NextFunction): void {
+export function checkAuth(req: Request, res: Response, next: NextFunction): void | Response {
   const token = req.headers['authorization'];
   if (!token) {
     // If no token is provided, respond with 403 Forbidden
@@ -14,7 +14,7 @@ export function checkAuth(req: Request, res: Response, next: NextFunction): void
 }
 
 // Middleware to validate token (you can add your actual validation logic here)
-export function validateToken(req: Request, res: Response, next: NextFunction): void {
+export function validateToken(req: Request, res: Response, next: NextFunction): void | Response {
   const token = req.headers['authorization'];
   if (!token) {
     // If no token is provided, respond with 403 Forbidden
@@ -26,10 +26,10 @@ export function validateToken(req: Request, res: Response, next: NextFunction): 
   next();
 }
 
-// Middleware to handle errors like unauthorized access
-export function handleUnauthorizedError(err: any, req: Request, res: Response, next: NextFunction): void {
+// Middleware to handle errors like unauthorized access (token related errors)
+export function handleUnauthorizedError(err: any, req: Request, res: Response, next: NextFunction): void | Response {
   if (err) {
-    // Handle unauthorized error (token related errors)
+    // Handle unauthorized error (token-related errors)
     return res.status(401).json({ message: 'Unauthorized: Invalid token' });
   }
   // If no error, proceed to the next middleware

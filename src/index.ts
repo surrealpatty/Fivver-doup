@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import userRoutes from './routes/user'; // Correct import for TypeScript
-import { authenticateToken } from './middlewares/authMiddleware'; // Named import
+import { authenticateToken } from './middlewares/authMiddleware'; // Correct named import
 
 const app = express();
 

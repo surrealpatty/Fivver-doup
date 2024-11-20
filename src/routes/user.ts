@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/user'; // Ensure your User model is being imported correctly
-import { authenticateToken } from '../middlewares/authMiddleware';  // Named import
+import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import for the middleware
 
 const router = Router();
 
@@ -66,7 +66,7 @@ router.post('/register', [
 });
 
 // Get User Profile Route (GET /profile)
-router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
+router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
     try {
         // Access userId from the decoded token
         const userId = req.user?.id;
