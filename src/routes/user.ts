@@ -10,6 +10,11 @@ router.post('/register', async (req: Request, res: Response) => {
   const { email, password, username, role } = req.body;
 
   try {
+    // Validate the incoming data
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'Please provide email, password, and username' });
+    }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -28,10 +33,16 @@ router.post('/register', async (req: Request, res: Response) => {
       isPaid: false, // Assuming the default user is not paid
     });
 
+    // Ensure JWT_SECRET is present
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return res.status(500).json({ message: 'JWT secret is not configured properly.' });
+    }
+
     // Generate a JWT token
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, username: newUser.username },
-      process.env.JWT_SECRET as string,
+      jwtSecret,
       { expiresIn: '1h' }
     );
 
@@ -56,6 +67,11 @@ router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
+    // Validate the incoming data
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password' });
+    }
+
     // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
@@ -68,10 +84,16 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Ensure JWT_SECRET is present
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return res.status(500).json({ message: 'JWT secret is not configured properly.' });
+    }
+
     // Generate a JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET as string,
+      jwtSecret,
       { expiresIn: '1h' }
     );
 

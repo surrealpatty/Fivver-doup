@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",                                 // Target ES6 for compatibility
     "module": "ESNext",                              // Use ESNext module system
-    "moduleResolution": "node",                      // Node's module resolution strategy
+    "moduleResolution": "bundler",                    // Better for bundling and modern module resolution
     "strict": true,                                  // Enable strict type checking
     "esModuleInterop": true,                         // Enable interoperability with CommonJS modules
     "skipLibCheck": true,                            // Skip library checks (useful for large projects)
@@ -26,7 +26,8 @@
     "noUnusedParameters": true,                      // Disallow unused function parameters
     "strictPropertyInitialization": true,            // Ensure properties are initialized in class constructors
     "types": ["node", "express", "jest"],            // Include types for node, express, and jest
-    "lib": ["ESNext", "DOM"]                         // Include standard library files
+    "lib": ["ESNext", "DOM"],                        // Include standard library files
+    "skipDefaultLibCheck": true                      // Skip default lib check for performance
   },
   "include": [
     "src/**/*",                                      // Include all files under src directory
