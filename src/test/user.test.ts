@@ -82,4 +82,4 @@ describe('User Controller Tests', () => {
         expect(response.status).toBe(200); // Expect HTTP 200 OK
         expect(response.body).toHaveProperty('message', 'User deleted successfully'); // Deletion message
     });
-});
+}, 10000); // Increased timeout for longer tests

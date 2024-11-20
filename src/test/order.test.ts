@@ -80,6 +80,7 @@ describe('Order Controller Tests', () => {
       }),
     };
 
+    // Mock finding the order by ID
     (Order.findByPk as jest.Mock).mockResolvedValue(mockOrderInstance);
 
     const response = await request(app)
@@ -92,6 +93,7 @@ describe('Order Controller Tests', () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Order updated successfully');
     expect(response.body.order.status).toBe('Completed');
+    expect(mockOrderInstance.save).toHaveBeenCalled(); // Verify save method was called
   });
 
   // Test Delete Order
@@ -105,16 +107,19 @@ describe('Order Controller Tests', () => {
       destroy: jest.fn().mockResolvedValue(undefined),
     };
 
+    // Mock finding the order by ID
     (Order.findByPk as jest.Mock).mockResolvedValue(mockOrderInstance);
 
     const response = await request(app).delete('/api/orders/1');
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Order deleted successfully');
+    expect(mockOrderInstance.destroy).toHaveBeenCalled(); // Verify destroy method was called
   });
 
   // Test Get Order by ID (Order Not Found)
   it('should return 404 if the order is not found', async () => {
+    // Mock finding a non-existing order
     (Order.findByPk as jest.Mock).mockResolvedValue(null);
 
     const response = await request(app).get('/api/orders/9999');
