@@ -41,7 +41,9 @@ router.post('/services', async (req: Request, res: Response) => {
 // READ: Get all services
 router.get('/services', async (req: Request, res: Response) => {
   try {
-    const services = await Service.findAll({
+    import Service from '../models/services';
+
+const services = await Service.findAll();
       include: [
         {
           model: User,
