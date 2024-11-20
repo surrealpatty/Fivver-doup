@@ -5,8 +5,8 @@ import User from './user';
 
 // Define the Service attributes (what data the Service model will store)
 interface ServiceAttributes {
-  id: number;
-  title: string;  // Change 'name' to 'title' as per your model
+  id: number;           // id field is required
+  title: string;        // Change 'name' to 'title' as per your model
   description: string;
   price: number;
   userId: number;
@@ -33,6 +33,11 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
 // Initialize the Service model
 Service.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,      // Mark as primary key
+      autoIncrement: true,   // Auto-increment the id field
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,

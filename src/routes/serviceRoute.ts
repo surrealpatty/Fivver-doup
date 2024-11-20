@@ -8,7 +8,7 @@ const router = express.Router();
 
 // CREATE: Add a new service
 router.post('/services', async (req: Request, res: Response) => {
-  const { userId, title, name, description, price } = req.body;
+  const { userId, title, description, price } = req.body; // Removed 'name', keeping 'title'
 
   try {
     // Validate that the user exists
@@ -20,8 +20,7 @@ router.post('/services', async (req: Request, res: Response) => {
     // Create a new service
     const service = await Service.create({
       userId,
-      title,
-      name,
+      title, // 'title' instead of 'name'
       description,
       price,
     });
@@ -86,7 +85,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 router.put('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const serviceId = parseInt(id, 10); // Convert id to number
-  const { title, name, description, price } = req.body;
+  const { title, description, price } = req.body; // Removed 'name', keeping 'title'
 
   try {
     const service = await Service.findByPk(serviceId);
@@ -96,7 +95,6 @@ router.put('/services/:id', async (req: Request, res: Response) => {
 
     // Update the service fields
     service.title = title || service.title;
-    service.name = name || service.name;
     service.description = description || service.description;
     service.price = price || service.price;
 
