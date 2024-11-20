@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
 import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
+import userRoutes from './routes/user.js'; // Ensure userRoutes is correctly imported (you may need to adjust the path)
 
 const app = express();
 

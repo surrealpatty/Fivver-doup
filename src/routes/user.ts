@@ -100,3 +100,12 @@ router.get('/profile', authenticateToken, async (req: Request, res: Response): P
 });
 
 export default router;
+
+// Fixing the `req.userId` typing:
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string; // Adjust `userId` to be a string based on your token payload
+    }
+  }
+}
