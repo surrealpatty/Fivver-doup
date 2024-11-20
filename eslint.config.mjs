@@ -1,15 +1,14 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginVue from "eslint-plugin-vue";
+// eslint.config.mjs
 
-
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  {files: ["**/*.{js,mjs,cjs,ts,vue}"]},
-  {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...pluginVue.configs["flat/essential"],
-  {files: ["**/*.vue"], languageOptions: {parserOptions: {parser: tseslint.parser}}},
-];
+export default {
+  overrides: [
+    {
+      files: ['*.ts', '*.vue'],
+      parser: '@typescript-eslint/parser', // Optional if you're using TypeScript
+      rules: {
+        // Your specific rules for .ts and .vue files
+      },
+    },
+  ],
+  // Additional ESLint configurations can go here
+};
