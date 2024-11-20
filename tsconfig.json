@@ -26,17 +26,15 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "strictPropertyInitialization": true,
-    "typeRoots": [
-      "node_modules/@types"
+    "types": ["node", "express"],  // Add express here to ensure TypeScript knows about the Express types
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "**/*.test.ts",
+      "**/*.spec.ts"
     ]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+  }
 }
