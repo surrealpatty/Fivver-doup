@@ -26,7 +26,6 @@
     "noUnusedParameters": true,                       // Disallow unused function parameters
     "strictPropertyInitialization": true,             // Ensure properties are initialized in class constructors
     "types": ["node", "express"],                     // Include types for node and express
-    "skipDefaultLibCheck": true                       // Optional: skip default lib check (helpful in large projects)
   },
   "include": [
     "src/**/*"                                        // Include all files under src directory
