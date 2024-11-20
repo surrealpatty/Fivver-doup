@@ -3,7 +3,9 @@
 export default [
   {
     files: ['*.ts', '*.vue'],
-    parser: '@typescript-eslint/parser',
+    languageOptions: {
+      parser: '@typescript-eslint/parser', // Specify the parser here
+    },
     rules: {
       // Your specific rules for .ts and .vue files
     },
