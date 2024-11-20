@@ -20,17 +20,19 @@ jest.mock('../models/order', () => ({
 }));
 
 describe('Order Controller Tests', () => {
+  // Sync the database for testing (use an in-memory DB for tests if possible)
   beforeAll(async () => {
-    // Sync the database for testing (use an in-memory DB for tests if possible)
     await sequelize.sync({ force: true }); // Use force to drop and re-sync the DB for clean tests
   });
 
+  // Clear mocks after each test to avoid state leakage
   afterEach(() => {
-    jest.clearAllMocks(); // Clear mocks after each test to avoid state issues
+    jest.clearAllMocks(); // Clear all mocks between tests to ensure isolation
   });
 
+  // Close the database connection after all tests are completed
   afterAll(async () => {
-    await sequelize.close(); // Close the connection after all tests
+    await sequelize.close(); // Close the database connection after all tests
   });
 
   // Test Create Order
@@ -67,7 +69,6 @@ describe('Order Controller Tests', () => {
 
   // Test Update Order
   it('should update an order', async () => {
-    // Mock Order instance with the save method
     const mockOrderInstance = {
       id: 1,
       userId: 1,
@@ -102,7 +103,6 @@ describe('Order Controller Tests', () => {
 
   // Test Delete Order
   it('should delete an order', async () => {
-    // Mock Order instance with the destroy method
     const mockOrderInstance = {
       id: 1,
       userId: 1,

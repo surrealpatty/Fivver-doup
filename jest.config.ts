@@ -3,8 +3,8 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest', // Use ts-jest preset to handle TypeScript
   testEnvironment: 'node', // Test environment for Node.js
-  maxWorkers: 1, // Run tests in a single worker to help identify leaks
-  detectLeaks: true, // Detect unhandled asynchronous operations
+  maxWorkers: process.env.CI ? 2 : undefined, // Use more workers in CI, 1 worker in local
+  detectLeaks: process.env.CI ? true : false, // Detect leaks only in CI (optional)
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files using ts-jest
   },
@@ -21,7 +21,7 @@ const config: Config.InitialOptions = {
     },
   },
   moduleFileExtensions: ['js', 'ts', 'tsx'], // Recognize JS, TS, and TSX files
-  transformIgnorePatterns: ['/node_modules/'], // Ignore node_modules for transformation
+  transformIgnorePatterns: ['/node_modules/(?!some-package-to-transform)'], // If needed, transform certain packages
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
   testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder

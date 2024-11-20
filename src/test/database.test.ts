@@ -15,27 +15,36 @@ jest.mock('../config/database', () => {
 describe('Database Connection', () => {
   let mockAuthenticate: jest.Mock;
 
+  // Before all tests, set up the mock function
   beforeAll(() => {
-    // Set up the mock for authenticate method before tests run
-    mockAuthenticate = sequelize.authenticate as jest.Mock; // Cast to mock function
+    mockAuthenticate = sequelize.authenticate as jest.Mock;
   });
 
+  // Mock console methods globally before each test
+  let consoleLogSpy: jest.SpyInstance;
+  let consoleErrorSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    // Set up the spies to mock console.log and console.error
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+  });
+
+  // Clear mocks and spies after each test to avoid state leakage
   afterEach(() => {
-    // Clear all mocks after each test to ensure no state is carried over
     jest.clearAllMocks();
   });
 
+  // Restore spies after all tests are completed
   afterAll(() => {
-    // Ensure all mocks are restored after tests run
+    consoleLogSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
     jest.restoreAllMocks();
   });
 
   test('should successfully connect to the database', async () => {
     // Simulate a successful connection
     mockAuthenticate.mockResolvedValueOnce(undefined);
-
-    // Mock console.log to check the success message
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
     // Call the testConnection function
     await testConnection();
@@ -46,17 +55,11 @@ describe('Database Connection', () => {
 
     // Check if success message was logged
     expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
-
-    // Clean up spy
-    consoleLogSpy.mockRestore();
   });
 
   test('should fail to connect to the database', async () => {
     // Simulate a failed connection
     mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed'));
-
-    // Mock console.error to check the error message
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
     // Call the testConnection function
     await testConnection();
@@ -67,8 +70,5 @@ describe('Database Connection', () => {
 
     // Check if error message was logged
     expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed');
-
-    // Clean up spy
-    consoleErrorSpy.mockRestore();
   });
 });
