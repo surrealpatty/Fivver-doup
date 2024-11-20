@@ -26,7 +26,7 @@ router.post('/services', async (req: Request, res: Response) => {
 
     // Create a new service
     const service = await Service.create({
-      name, // Using request body data
+      title: name, // Use 'name' as the title (or make sure the model has a title field)
       description,
       price,
       userId,

@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import authMiddleware from '../middlewares/authMiddleware'; // Correct middleware import
-import { UserRequest } from '../middlewares/authMiddleware'; // Ensure UserRequest is imported correctly
 
 const router = Router();
 
@@ -27,10 +26,11 @@ router.post('/users', async (req: Request, res: Response) => {
 });
 
 // Route for updating a user (only authenticated users can update their own profile)
-router.put('/users/:id', authMiddleware, async (req: UserRequest, res: Response) => {
+router.put('/users/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    if (req.user.id !== userId) {
+    // Make sure the authenticated user can only update their own profile
+    if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only update your own profile' });
     }
     // Logic to update user details based on userId (e.g., using Sequelize)
@@ -42,10 +42,11 @@ router.put('/users/:id', authMiddleware, async (req: UserRequest, res: Response)
 });
 
 // Route for deleting a user (only authenticated users can delete their own profile)
-router.delete('/users/:id', authMiddleware, async (req: UserRequest, res: Response) => {
+router.delete('/users/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    if (req.user.id !== userId) {
+    // Make sure the authenticated user can only delete their own profile
+    if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only delete your own profile' });
     }
     // Logic to delete the user (e.g., using Sequelize)

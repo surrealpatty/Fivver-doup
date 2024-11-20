@@ -2,11 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import config from '../config/config'; // Ensure the path matches your project structure
 
-// Extend the Request interface to include a user object
+// Extend the Request interface to include a user object (make it optional if not required in all routes)
 declare global {
   namespace Express {
     export interface Request {
-      user?: { id: string; email: string; username: string }; // Optional user property
+      user?: { id: string; email: string; username: string }; // Make `user` optional here
     }
   }
 }
