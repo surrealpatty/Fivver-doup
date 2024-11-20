@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",                     // Use CommonJS for Node.js compatibility
-    "target": "ES2017",                       // Target modern JavaScript
+    "module": "commonjs",                    // Use CommonJS for Node.js compatibility
+    "target": "ES2017",                       // Target modern JavaScript (you can change this to a higher version like "ES2020" if needed)
     "moduleResolution": "node",               // Use Node.js resolution for modules
     "esModuleInterop": true,                  // Enable interoperability for CommonJS modules
     "strict": true,                           // Enable all strict type-checking options
@@ -26,7 +26,7 @@
   "include": [
     "src/**/*.ts",                            // Include TypeScript files
     "src/**/*.d.ts",                          // Include declaration files
-    "src/**/*.tsx",                           // Include TypeScript JSX files
+    "src/**/*.tsx",                           // Include TypeScript JSX files (if using JSX/TSX)
     "src/**/*.vue",                           // Include Vue files
     "src/test/**/*.ts"                        // Include test files
   ],

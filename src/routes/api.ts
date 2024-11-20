@@ -24,13 +24,12 @@ router.post('/services', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update the create call to match the expected attributes
-const service = await Service.create({
-  name: name, // Use 'name' as the required field
-  description,
-  price,
-  userId,
-});
+    const service = await Service.create({
+      title: name, // Use 'title' instead of 'name'
+      description: description,
+      price: price,
+      userId: userId,
+    });
 
 
     // Return the newly created service
