@@ -1,12 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
-import bodyParser from 'body-parser';
-import userRoutes from './routes/user.js'; // Ensure .js extension for ESM
 import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
 
 const app = express();
 
 // Middleware to parse incoming JSON requests
-app.use(bodyParser.json()); // Parses incoming JSON payloads for API requests
+app.use(express.json()); // Replaced body-parser with Express built-in JSON parsing
 
 // Public routes (no authentication required)
 app.use('/users', userRoutes); // Routes for user-related actions like register, login, etc.

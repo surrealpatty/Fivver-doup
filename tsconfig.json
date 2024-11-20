@@ -6,6 +6,7 @@
     "strict": true,                                // Enable all strict type-checking options
     "esModuleInterop": true,                       // Allow default imports from CJS modules
     "skipLibCheck": true,                          // Skip checking library files for faster builds
+    "skipDefaultLibCheck": true,                   // Optional: Skip default lib check for faster builds
     "forceConsistentCasingInFileNames": true,      // Enforce consistent casing in file names
     "outDir": "./dist",                            // Output directory for compiled files
     "rootDir": "./src",                            // Root directory for source files
