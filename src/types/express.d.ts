@@ -1,10 +1,14 @@
-// src/types/express.d.ts
+// Extend the Express.Request type globally to include the user property
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: number; username: string }; // Make sure the shape includes id
+      user?: { 
+        id: number;         // User ID should match your database model type
+        username: string;   // Add other properties as needed (e.g., email, role, etc.)
+      };
     }
   }
 }
 
-export {};  // Ensures this file is treated as a module
+// Ensure this file is treated as a module by adding an export statement
+export {};

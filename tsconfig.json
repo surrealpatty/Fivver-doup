@@ -8,11 +8,11 @@
     "skipLibCheck": true,                     // Skip type checking of declaration files
     "resolveJsonModule": true,                // Allow importing JSON modules
     "baseUrl": "./src",                       // Set base directory to src for simplified imports
-    "outDir": "dist",                         // Output directory for transpiled files
-    "rootDir": "src",                         // Root directory for source files
+    "outDir": "./dist",                       // Output directory for transpiled files
+    "rootDir": "./src",                       // Root directory for source files
     "types": ["jest", "node", "vue", "express"], // Include types for Jest, Node, Vue, and Express
     "paths": {
-      "@/*": ["src/*"]                       // Use @/ for imports from src/
+      "@/*": ["*"]                            // Simplify import paths from src/
     },
     "declaration": true,                      // Generate declaration files
     "declarationMap": true,                   // Generate maps for .d.ts files
@@ -28,13 +28,12 @@
     "src/**/*.d.ts",                          // Include declaration files
     "src/**/*.tsx",                           // Include TypeScript JSX files
     "src/**/*.vue",                           // Include Vue files
-    "src/test/**/*.ts",                       // Include test files
-    "src/controllers/categoryController.js"   // Include specific JavaScript file if needed
+    "src/test/**/*.ts"                        // Include test files
   ],
   "exclude": [
     "node_modules",                           // Exclude node_modules
     "dist",                                   // Exclude the output folder
-    "coverage",                               // Exclude coverage reports (if any)
+    "coverage",                               // Exclude coverage reports
     "**/*.test.js",                           // Exclude test JavaScript files
     "**/*.spec.js",                           // Exclude spec JavaScript files
     "**/*.js"                                 // Exclude other non-TS JavaScript files
