@@ -1,9 +1,10 @@
 // src/models/review.ts
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
-import User from './user';
-import  Service  from './services';
+import { sequelize } from '../config/database';  // Ensure the sequelize instance is imported
+import User from './user';  // Import User model
+import Service from './services';  // Import Service model
 
+// Define the attributes for the Review model
 interface ReviewAttributes {
   id: number;
   userId: number;
@@ -12,6 +13,7 @@ interface ReviewAttributes {
   comment: string;
 }
 
+// Define the attributes required for creating a Review (exclude id)
 type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
 
 class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
@@ -20,10 +22,12 @@ class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implement
   public serviceId!: number;
   public rating!: number;
   public comment!: string;
-  
+
+  // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
+  // Define associations between models
   static associate(models: any) {
     // A review belongs to a user
     Review.belongsTo(models.User, { foreignKey: 'userId' });
@@ -33,6 +37,7 @@ class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implement
   }
 }
 
+// Initialize the Review model
 Review.init(
   {
     id: {
@@ -64,6 +69,7 @@ Review.init(
   {
     sequelize,
     modelName: 'Review',
+    timestamps: true,  // Sequelize handles timestamps automatically
   }
 );
 
