@@ -3,26 +3,32 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 // Define the expected structure of the decoded JWT payload
 interface UserPayload extends JwtPayload {
-  id: string;
+  id: string;       // Ensure this matches the type you expect from your token
   email: string;
   username: string;
 }
 
 // Named export for authenticateToken
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is in 'Authorization' header
+  // Get token from 'Authorization' header, assuming it is in the format: 'Bearer <token>'
+  const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ message: 'Authentication token is required' });
   }
 
+  // Verify the token using JWT secret
   jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret', (err, decoded) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid token' });
+      return res.status(403).json({ message: 'Invalid or expired token' });
     }
 
-    // Cast the decoded value to UserPayload
-    req.user = decoded as UserPayload; // Ensure req.user matches the expected structure
-    next();
+    // Ensure decoded is cast to UserPayload for further type safety
+    if (decoded) {
+      req.user = decoded as UserPayload; // Cast to the UserPayload interface
+      next();
+    } else {
+      return res.status(401).json({ message: 'Token verification failed' });
+    }
   });
 };

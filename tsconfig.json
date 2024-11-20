@@ -24,7 +24,9 @@
     "incremental": true,                       // Enable incremental builds for faster compilation
     "isolatedModules": true,                   // Isolated modules for faster transpilation
     "useDefineForClassFields": true,           // Enable behavior for class fields in strict mode
-    "forceConsistentCasingInFileNames": true   // Ensure consistent casing in imports
+    "forceConsistentCasingInFileNames": true,  // Ensure consistent casing in imports
+    "noImplicitAny": false,                    // Allow `any` type (optional, depending on your strictness preference)
+    "skipDefaultLibCheck": true                // Skip checking default library files for performance
   },
   "include": [
     "src/**/*.ts",                             // Include all TypeScript files
