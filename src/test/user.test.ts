@@ -1,10 +1,10 @@
 import request from 'supertest';
-import { app, server } from '../index';  // Import app and server from index.ts
-import User from '../models/user'; 
-import jwt from 'jsonwebtoken'; 
-import { sequelize } from '../config/database';  
+import { app, server } from '../index'; // Import app and server from index.ts
+import User from '../models/user'; // User model
+import jwt from 'jsonwebtoken'; // JSON Web Token library
+import { sequelize } from '../config/database'; // Sequelize instance
 
-// Mocking models and JWT for tests
+// Mocking User model and JWT
 jest.mock('../models/user', () => ({
     findOne: jest.fn(),
     create: jest.fn(),
@@ -14,78 +14,72 @@ jest.mock('../models/user', () => ({
 }));
 
 jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(() => 'mockedToken'),  // Return mocked token on sign
-    verify: jest.fn(() => ({ userId: 1 })),  // Mock the decoded token
+    sign: jest.fn(() => 'mockedToken'), // Mocked token for signing
+    verify: jest.fn(() => ({ userId: 1 })), // Mocked decoded token
 }));
 
-describe('User Controller', () => {
+describe('User Controller Tests', () => {
     beforeAll(async () => {
-        // Setup mocked responses for User model functions
-        (User.findOne as jest.Mock).mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-            password: 'hashedpassword',  // This can be any mock value you want
-        });
-
-        (User.create as jest.Mock).mockResolvedValue({
+        // Set up mocked responses
+        (User.findOne as jest.MockedFunction<typeof User.findOne>).mockResolvedValue({
             id: 1,
             email: 'test@example.com',
             password: 'hashedpassword',
-        });
+        } as any);
 
-        (User.findByPk as jest.Mock).mockResolvedValue({
+        (User.create as jest.MockedFunction<typeof User.create>).mockResolvedValue({
             id: 1,
             email: 'test@example.com',
-        });
+            password: 'hashedpassword',
+        } as any);
 
-        (User.update as jest.Mock).mockResolvedValue([1]);  // Sequelize update returns an array, [affectedRows]
-        (User.destroy as jest.Mock).mockResolvedValue(1);  // Returns number of rows affected
+        (User.findByPk as jest.MockedFunction<typeof User.findByPk>).mockResolvedValue({
+            id: 1,
+            email: 'test@example.com',
+        } as any);
+
+        (User.update as jest.MockedFunction<typeof User.update>).mockResolvedValue([1]); // Sequelize update returns [affectedRows]
+        (User.destroy as jest.MockedFunction<typeof User.destroy>).mockResolvedValue(1); // Return affected rows count
     });
 
     afterAll(async () => {
-        // Ensure cleanup of any database connections after tests
+        // Close Sequelize connection and Express server
         await sequelize.close();
-        server.close();  // Close the server after all tests to prevent hanging
+        server.close();
     });
 
-    test('should login a user and return a token', async () => {
+    test('should log in a user and return a token', async () => {
         const response = await request(app)
-            .post('/users/login')  // Adjusted to match your actual route in Express
+            .post('/users/login') // Login route
             .send({
                 email: 'test@example.com',
-                password: 'password123',  // Match with your mock data
+                password: 'password123', // Mocked login credentials
             });
 
-        console.log(response.status, response.body);
-
-        expect(response.status).toBe(200); 
-        expect(response.body).toHaveProperty('token', 'mockedToken');  // Mocked token value
+        expect(response.status).toBe(200); // Expect HTTP 200 OK
+        expect(response.body).toHaveProperty('token', 'mockedToken'); // Mocked token
     });
 
-    test('should update user profile', async () => {
+    test('should update the user profile', async () => {
         const response = await request(app)
-            .put('/users/profile')  // Adjusted to match your actual route in Express
-            .set('Authorization', 'Bearer mockedToken')  // Mock Authorization header
+            .put('/users/profile') // Profile update route
+            .set('Authorization', 'Bearer mockedToken') // Mocked Authorization header
             .send({
                 email: 'updated@example.com',
                 password: 'newpassword123',
             });
 
-        console.log(response.status, response.body);  
-
-        expect(response.status).toBe(200);  // Expect status to be 200 (OK)
-        expect(response.body).toHaveProperty('id', 1);  // Check if response contains 'id'
-        expect(response.body).toHaveProperty('email', 'updated@example.com');  // Check if email was updated
+        expect(response.status).toBe(200); // Expect HTTP 200 OK
+        expect(response.body).toHaveProperty('id', 1); // Updated user ID
+        expect(response.body).toHaveProperty('email', 'updated@example.com'); // Updated email
     });
 
-    test('should delete user account', async () => {
+    test('should delete the user account', async () => {
         const response = await request(app)
-            .delete('/users/profile')  // Adjusted to match your actual route in Express
-            .set('Authorization', 'Bearer mockedToken');  // Mock Authorization header
+            .delete('/users/profile') // Delete user route
+            .set('Authorization', 'Bearer mockedToken'); // Mocked Authorization header
 
-        console.log(response.status, response.body);
-
-        expect(response.status).toBe(200);  // Expect status to be 200 (OK)
-        expect(response.body).toHaveProperty('message', 'User deleted successfully');  // Expect message in response
+        expect(response.status).toBe(200); // Expect HTTP 200 OK
+        expect(response.body).toHaveProperty('message', 'User deleted successfully'); // Deletion message
     });
 });

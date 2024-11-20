@@ -1,13 +1,13 @@
 import { sequelize, testConnection } from '../config/database'; // Adjust path if necessary
 
-// Mock the sequelize instance's authenticate method to avoid real database calls during tests
+// Mock the sequelize instance's `authenticate` method to avoid real database calls during tests
 jest.mock('../config/database', () => {
   const originalDatabase = jest.requireActual('../config/database');
   return {
     ...originalDatabase,
     sequelize: {
       ...originalDatabase.sequelize,
-      authenticate: jest.fn(), // Mock the authenticate method
+      authenticate: jest.fn(), // Mock the `authenticate` method
     },
   };
 });
@@ -15,62 +15,57 @@ jest.mock('../config/database', () => {
 describe('Database Connection', () => {
   let mockAuthenticate: jest.Mock;
 
-  // Before all tests, set up the mock function
+  // Initialize the mock function for `authenticate`
   beforeAll(() => {
-    // Access the mock of authenticate
     mockAuthenticate = sequelize.authenticate as jest.Mock;
   });
 
-  // Mock console methods globally before each test
+  // Mock console methods globally
   let consoleLogSpy: jest.SpyInstance;
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    // Set up the spies to mock console.log and console.error
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    // Mock `console.log` and `console.error` for test isolation
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  // Clear mocks and spies after each test to avoid state leakage
   afterEach(() => {
-    jest.clearAllMocks(); // Clear all mocks between tests to ensure isolation
+    // Clear all mocks to reset state between tests
+    jest.clearAllMocks();
   });
 
-  // Restore spies after all tests are completed
   afterAll(() => {
+    // Restore original implementations of console methods
     consoleLogSpy.mockRestore();
     consoleErrorSpy.mockRestore();
   });
 
-  // Test for successful database connection
-  test('should successfully connect to the database', async () => {
+  // Test for a successful database connection
+  it('should successfully connect to the database', async () => {
     // Simulate a successful connection
     mockAuthenticate.mockResolvedValueOnce(undefined);
 
-    // Call the testConnection function
+    // Execute the `testConnection` function
     await testConnection();
 
-    // Ensure authenticate was called once
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+    // Assertions
+    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-
-    // Check if success message was logged
-    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.');
+    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.'); // Check success log
   });
 
-  // Test for failed database connection
-  test('should fail to connect to the database', async () => {
-    // Simulate a failed connection
+  // Test for a failed database connection
+  it('should log an error when the database connection fails', async () => {
+    // Simulate a connection failure
     mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed'));
 
-    // Call the testConnection function
+    // Execute the `testConnection` function
     await testConnection();
 
-    // Ensure authenticate was called once
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+    // Assertions
+    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-
-    // Check if error message was logged
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed');
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed'); // Check error log
   });
 });
