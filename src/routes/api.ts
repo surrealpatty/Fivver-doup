@@ -1,17 +1,20 @@
-// src/routes/api.ts
-
 import { Router, Request, Response } from 'express'; // Importing Router, Request, and Response from express
-import Service from '../models/services'; // Ensure this is correct based on your model's file
-import User from '../models/user'; // Ensure this is correct based on your model's file
-import { ServiceCreationAttributes } from '../models/services'; // Correct import for Service creation attributes
+import Service from '../models/services'; // Import Service model
+import User from '../models/user'; // Import User model
+import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for Service creation
 
 const router = Router(); // Initialize the router
 
 router.post('/services', async (req: Request, res: Response) => {
-  // Destructuring the body of the request and specifying types for 'title', 'description', and 'price'
+  // Destructure the body of the request and specify types for 'userId', 'title', 'description', and 'price'
   const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
+    // Validate the incoming data
+    if (!userId || !title || !description || price === undefined) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
     // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
@@ -20,10 +23,10 @@ router.post('/services', async (req: Request, res: Response) => {
 
     // Create the new service
     const service = await Service.create({
-      title,       // 'title' from the request body
-      description, // 'description' from the request body
-      price,       // 'price' from the request body
-      userId,      // 'userId' from the request body
+      userId,       // 'userId' from the request body
+      title,        // 'title' from the request body
+      description,  // 'description' from the request body
+      price,        // 'price' from the request body
     });
 
     // Return the newly created service
