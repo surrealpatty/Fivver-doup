@@ -1,7 +1,5 @@
-// src/models/services.ts
-
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
+import { sequelize } from '../config/database'; // Use named import for sequelize
 
 class Service extends Model {
   public id!: number;
