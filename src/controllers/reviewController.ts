@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { models } from '../models'; // Import models from the index.ts file
-import Service from '../models/services';
+import ServiceModel from '../models/services'; // Rename the import to avoid conflicts
 
 const { Review, User, Service } = models; // Destructure the models
 
@@ -21,7 +21,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
 
     try {
         // Check if the service exists
-        const service = await Service.findByPk(serviceId);
+        const service = await ServiceModel.findByPk(serviceId); // Use the correct model reference
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }

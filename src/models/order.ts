@@ -2,8 +2,10 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';  // Ensure this is correctly imported
 import  Service  from './services';
-const service = await Service.findByPk(id);
-// Define the model attributes interface for TypeScript
+c(async () => {
+  const service = await Service.findByPk(id);
+})();
+
 export interface OrderAttributes {
   id: number;
   userId: string | null;  // UUID type for userId

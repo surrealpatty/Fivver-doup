@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",                     // CommonJS for Node.js compatibility
-    "target": "ESNext",                       // Target modern JavaScript
+    "module": "esnext",                     // CommonJS for Node.js compatibility
+    "target": "ES2017",                       // Target modern JavaScript
     "moduleResolution": "node",               // Use Node.js resolution for modules
     "esModuleInterop": true,                  // Enable interoperability for CommonJS modules
     "strict": true,                           // Enable all strict type-checking options
