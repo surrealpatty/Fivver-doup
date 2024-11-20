@@ -7,20 +7,18 @@ dotenv.config();
 // Destructure environment variables from process.env
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, NODE_ENV } = process.env;
 
-// Validate required environment variables
-if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
+// Validate required environment variables (skip validation in test environment)
+if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT)) {
   console.error('Missing required environment variables. Please check your .env file.');
-  
-  // Do not call process.exit(1) in a test environment
   if (NODE_ENV !== 'test') {
-    process.exit(1); // Exit the process only if it's not a test environment
+    process.exit(1); // Exit the process if it's not in a test environment
   }
 }
 
 // Sequelize instance for database connection
 export const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: DB_HOST || 'localhost', // Default to 'localhost' if not provided
+  host: DB_HOST || 'localhost',  // Default to 'localhost' if not provided
   username: DB_USER || 'root',  // Default to 'root' if not provided
   password: DB_PASSWORD || '',  // Default to empty string if not provided
   database: DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if not provided
@@ -69,4 +67,3 @@ export const closeConnection = async (): Promise<void> => {
 if (NODE_ENV !== 'test') {
   testConnection();
 }
-
