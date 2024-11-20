@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+// Define an interface for the user data that will be attached to the request
+interface User {
+  id: string; // Adjust the structure of this as per your JWT payload
+}
+
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   // Check if authorization header is present
   const authHeader = req.headers.authorization;
@@ -8,7 +13,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
     return res.status(403).json({ message: 'Forbidden: No token provided' });
   }
 
-  // Extract token from the authorization header
+  // Extract token from the authorization header (Bearer <token>)
   const token = authHeader.split(' ')[1];
   if (!token) {
     return res.status(403).json({ message: 'Forbidden: No token provided' });
@@ -19,12 +24,15 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
 
   try {
     // Verify the token using jwt.verify and secret key
-    const decoded = jwt.verify(token, secretKey) as { userId: string }; // Decoded token will contain userId
-    req.user = { id: decoded.userId }; // Attach decoded user information to the request object
+    const decoded = jwt.verify(token, secretKey) as { userId: string }; // Assuming your JWT contains a userId
+
+    // Attach decoded user information to the request object
+    req.user = { id: decoded.userId }; // Add userId to req.user (or any other fields you want to access)
+
     next(); // Token is valid, proceed to the next middleware
   } catch (error) {
-    // Handle errors (e.g., invalid or expired token)
-    return res.status(403).json({ message: 'Forbidden: Invalid token' });
+    console.error('Error verifying token:', error);
+    return res.status(403).json({ message: 'Forbidden: Invalid or expired token' });
   }
 };
 

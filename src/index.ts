@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
+// Removed body-parser, as Express has a built-in JSON parser now
+import userRoutes from './routes/user.js'; // Correct .js extension for ESM
 import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
-import userRoutes from './routes/user.js'; // Ensure userRoutes is correctly imported (you may need to adjust the path)
 
 const app = express();
 
-// Middleware to parse incoming JSON requests
-app.use(express.json()); // Replaced body-parser with Express built-in JSON parsing
+// Middleware to parse incoming JSON requests (no need for body-parser)
+app.use(express.json()); // Express built-in JSON parser
 
 // Public routes (no authentication required)
 app.use('/users', userRoutes); // Routes for user-related actions like register, login, etc.
@@ -18,7 +19,7 @@ app.use('/profile', authenticateToken, (req: Request, res: Response) => {
 // Example of a specific protected route for fetching user profile
 app.use('/users/profile', authenticateToken, async (req: Request, res: Response) => {
   try {
-    // Assuming you want to access `req.user` after authentication
+    // Accessing req.user after authentication
     const userId = req.user?.id; // Ensure `req.user` is populated by `authenticateToken`
     
     if (!userId) {
