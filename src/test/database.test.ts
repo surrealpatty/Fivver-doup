@@ -1,5 +1,4 @@
 import { sequelize, testConnection } from '../config/database'; // Adjust the path if necessary
-import { Sequelize } from 'sequelize';
 
 // Mock sequelize instance's authenticate method to avoid real database calls during tests
 jest.mock('../config/database', () => {
