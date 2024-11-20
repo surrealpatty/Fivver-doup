@@ -40,12 +40,17 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 });
 
 // Test the database connection
-const testConnection = async () => {
+const testConnection = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established successfully');
-  } catch (err) {
-    console.error('Unable to connect to the database:', err.message || err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error('Unable to connect to the database:', err.message || err);
+    } else {
+      console.error('An unknown error occurred during database connection');
+    }
+
     // Do not call process.exit(1) in a test environment
     if (NODE_ENV !== 'test') {
       process.exit(1); // Exit the process only if it's not a test environment
