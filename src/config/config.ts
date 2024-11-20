@@ -40,19 +40,25 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 });
 
 // Test the database connection
-sequelize.authenticate()
-  .then(() => {
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
     console.log('Database connection established successfully');
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error('Unable to connect to the database:', err.message || err);
     // Do not call process.exit(1) in a test environment
     if (NODE_ENV !== 'test') {
       process.exit(1); // Exit the process only if it's not a test environment
     }
-  });
+  }
+};
 
-// Export the config object for other files, and the sequelize instance
+// Only call testConnection if it's not in a test environment
+if (NODE_ENV !== 'test') {
+  testConnection();
+}
+
+// Export the config object and sequelize instance
 export default {
   DB_NAME,
   DB_USER,
@@ -63,4 +69,5 @@ export default {
   NODE_ENV,
   JWT_SECRET,
   sequelize,
+  testConnection,
 };
