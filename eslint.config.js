@@ -32,7 +32,7 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ['**/*.test.ts', '**/*.test.js'],
+      files: ['**/*.test.ts', '**/*.test.js', '**/*.vue'],
       env: {
         jest: true,
       },
