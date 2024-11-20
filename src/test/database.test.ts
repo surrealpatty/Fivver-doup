@@ -20,8 +20,14 @@ describe('Database Connection', () => {
     mockAuthenticate = sequelize.authenticate as jest.Mock; // Cast to mock function
   });
 
+  afterEach(() => {
+    // Clear all mocks after each test to ensure no state is carried over
+    jest.clearAllMocks();
+  });
+
   afterAll(() => {
-    jest.clearAllMocks(); // Clear mocks after tests run
+    // Ensure all mocks are restored after tests run
+    jest.restoreAllMocks();
   });
 
   test('should successfully connect to the database', async () => {

@@ -28,6 +28,7 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder
   extensionsToTreatAsEsm: [], // Disable ESM treatment, use CommonJS for Jest
+  restoreMocks: true, // Automatically restore mocks between tests
 };
 
 export default config;

@@ -2,24 +2,25 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure the correct path
 import Review from './review'; // Import related models
 import Order from './order'; // Import related models
-import  Service  from './services';
+import Service from './services'; // Import related models
+import { v4 as uuidv4 } from 'uuid'; // Import UUID generation for `id`
 
 // Define the attributes for the User model
 interface UserAttributes {
-  id: number;
+  id: string; // UUID instead of integer
   email: string;
   username: string;
   password: string;
   isPaid: boolean;
-  role?: string; // Optional field
+  role?: string; // Optional field for user role
 }
 
-// Optional attributes for User creation (id is auto-incremented)
+// Optional attributes for User creation (id is auto-generated)
 type UserCreationAttributes = Optional<UserAttributes, 'id'>;
 
 // Extend Sequelize's Model with your custom attributes
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
+  public id!: string; // UUID as string
   public email!: string;
   public username!: string;
   public password!: string;
@@ -56,8 +57,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: uuidv4, // Generate a UUID by default
       primaryKey: true,
     },
     email: {
