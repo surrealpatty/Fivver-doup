@@ -8,7 +8,7 @@ import { authenticateToken } from '../middlewares/authMiddleware'; // Middleware
 const router = Router();
 
 // Utility function to generate JWT token
-const generateAuthToken = (userId: string): string => {  // Changed userId to string to match UUID type
+const generateAuthToken = (userId: string): string => {  
     const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // JWT secret from env
     const expiresIn = '1h'; // Token expiration time
     return jwt.sign({ userId }, secret, { expiresIn }); // Generate token
@@ -51,7 +51,7 @@ router.post(
             });
 
             // Generate JWT token
-            const token = generateAuthToken(newUser.id.toString());  // Make sure to pass user ID as string
+            const token = generateAuthToken(newUser.id.toString());  
 
             return res.status(201).json({
                 message: 'User registered successfully',
@@ -74,7 +74,7 @@ router.post(
 router.get('/profile', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
     try {
         // Access userId from the decoded token
-        const userId = req.userId; // Ensure `req.userId` is populated by `authenticateToken`
+        const userId = (req as any).userId; // Ensure `req.userId` is populated by `authenticateToken`
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required' });

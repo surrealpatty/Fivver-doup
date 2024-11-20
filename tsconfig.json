@@ -1,27 +1,34 @@
 {
   "compilerOptions": {
-    "target": "ES6",                               // Target modern JavaScript (ES6)
-    "module": "ESNext",                            // Use ESNext modules
-    "moduleResolution": "node",                    // Use Node-style module resolution
-    "strict": true,                                // Enable strict type checking
-    "esModuleInterop": true,                       // Allow default imports from non-ES modules
-    "skipLibCheck": true,                          // Skip checking library files for faster compilation
-    "forceConsistentCasingInFileNames": true,      // Enforce consistent file naming
-    "outDir": "./dist",                            // Output directory for compiled JavaScript
-    "rootDir": "./src",                            // Root directory for source files
-    "baseUrl": ".",                                // Set base URL for module resolution
-    "resolveJsonModule": true,                     // Allow importing JSON files as modules
+    "target": "ES2017",                            // Updated to ES2017 for better async/await support
+    "module": "CommonJS",                          // Use CommonJS for better compatibility with Node.js
+    "moduleResolution": "node",                   // Node-style module resolution
+    "strict": true,                               // Enable strict type checking
+    "esModuleInterop": true,                      // Allow default imports from non-ES modules
+    "skipLibCheck": true,                         // Skip checking library files for faster compilation
+    "forceConsistentCasingInFileNames": true,     // Enforce consistent file naming
+    "outDir": "./dist",                           // Output directory for compiled JavaScript
+    "rootDir": "./src",                           // Root directory for source files
+    "baseUrl": ".",                               // Base URL for module resolution
+    "resolveJsonModule": true,                    // Allow importing JSON files as modules
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]       // Path mapping for custom types (if needed)
+      "*": ["node_modules/*", "src/types/*"]      // Path mapping for custom types
     },
-    "declaration": true,                           // Generate TypeScript declaration files (.d.ts)
-    "sourceMap": true                              // Generate source maps for debugging
+    "declaration": true,                          // Generate TypeScript declaration files (.d.ts)
+    "sourceMap": true,                            // Generate source maps for debugging
+    "allowSyntheticDefaultImports": true,         // Allow default imports for compatibility
+    "noImplicitAny": true,                        // Disallow the use of `any` unless explicitly specified
+    "strictNullChecks": true,                     // Enable strict null checking
+    "experimentalDecorators": true,               // Enable support for experimental decorators
+    "emitDecoratorMetadata": true                 // Emit metadata for decorators (useful for frameworks like TypeORM)
   },
   "include": [
-    "src/**/*"                                     // Include all files in the src folder
+    "src/**/*"                                    // Include all files in the src folder
   ],
   "exclude": [
-    "node_modules",                                // Exclude node_modules
-    "dist"                                         // Exclude dist folder
+    "node_modules",                               // Exclude node_modules
+    "dist",                                       // Exclude dist folder
+    "**/*.test.ts",                               // Exclude test files (optional)
+    "**/*.spec.ts"                                // Exclude spec files (optional)
   ]
 }
