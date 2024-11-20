@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import config from '../config/config'; // Adjusted import to match directory structure
+import config from '../config/config'; // Ensure the path matches your project structure
 
 // Extend the Request interface to include a user object
 declare global {
   namespace Express {
-      export interface UserRequest extends Request {
-        user?: { id: string; email: string; username: string }; // Optional user property
+    export interface Request {
+      user?: { id: string; email: string; username: string }; // Optional user property
     }
   }
 }
@@ -18,8 +18,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
   // If no token is provided, return a 403 Forbidden response
   if (!token) {
-    res.status(403).json({ message: 'Forbidden: No token provided' });
-    return;
+    return res.status(403).json({ message: 'Forbidden: No token provided' });
   }
 
   try {
@@ -36,8 +35,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
 
     // If decoded is null, return 401 Unauthorized response
     if (!decoded) {
-      res.status(401).json({ message: 'Unauthorized: Invalid token' });
-      return;
+      return res.status(401).json({ message: 'Unauthorized: Invalid token' });
     }
 
     // Attach the decoded user information to the request object
@@ -48,8 +46,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
   } catch (err: unknown) {
     // Handle error, ensure it's an instance of Error
     if (err instanceof Error) {
-      res.status(401).json({ message: `Unauthorized: ${err.message}` });
-      return;
+      return res.status(401).json({ message: `Unauthorized: ${err.message}` });
     }
     res.status(500).json({ message: 'Internal Server Error' });
   }

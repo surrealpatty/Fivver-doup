@@ -1,10 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import User from './user';  // Ensure this is correctly imported
-import  Service  from './services';
-(async () => {
-  const service = await Service.findByPk(id);
-})();
+import Service from './services';  // Ensure this is correctly imported
+
+// Define the Order attributes interface
 export interface OrderAttributes {
   id: number;
   userId: string | null;  // UUID type for userId
@@ -42,10 +41,11 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
-    Order.belongsTo(Service, { foreignKey: 'serviceId' });
-    Order.belongsTo(Service, {
+    Order.belongsTo(models.Service, { 
+      foreignKey: 'serviceId', 
       as: 'service',  // Correct usage of 'as' in the association definition
-      foreignKey: 'serviceId',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
   }
 }

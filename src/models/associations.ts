@@ -1,13 +1,14 @@
 // Import the Sequelize models correctly
-import  User from './user';
-import Service from '../models/services';
-import  Order  from './order';
+import User from './user';
+import Service from './services';  // Correct path for importing Service
+import Order from './order';  // Correct path for importing Order
 
-import Service from './services'; // Import Service from the model file
-User.hasMany(Service, { foreignKey: 'userId' });
-import User from './user'; // Ensure User model is imported
-Service.belongsTo(User, { foreignKey: 'userId' });
+// Define the associations
+User.hasMany(Service, { foreignKey: 'userId' }); // A user can have many services
+Service.belongsTo(User, { foreignKey: 'userId' }); // A service belongs to one user
+
 Service.hasMany(Order, { foreignKey: 'serviceId' }); // A service has many orders
 Order.belongsTo(Service, { foreignKey: 'serviceId' }); // An order belongs to a service
-User.hasMany(Order, { foreignKey: 'userId' }); // A user has many orders
+
+User.hasMany(Order, { foreignKey: 'userId' }); // A user can have many orders
 Order.belongsTo(User, { foreignKey: 'userId' }); // An order belongs to a user

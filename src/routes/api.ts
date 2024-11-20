@@ -15,7 +15,7 @@ interface ServiceCreationAttributes {
 
 // CREATE: Add a new service
 router.post('/services', async (req: Request, res: Response) => {
-  const { userId, name, description, price } = req.body;
+  const { userId, name, description, price }: ServiceCreationAttributes = req.body;
 
   try {
     // Check if the user exists
@@ -47,7 +47,7 @@ router.get('/services', async (req: Request, res: Response) => {
       include: [
         {
           model: User,
-          as: 'user',
+          as: 'user', // Ensure this is consistent with your model associations
           attributes: ['id', 'username'],
         },
       ],
@@ -93,7 +93,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 router.put('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const serviceId = parseInt(id, 10); // Convert id to number
-  const { name, description, price } = req.body;
+  const { name, description, price }: ServiceCreationAttributes = req.body;
 
   try {
     const service = await Service.findByPk(serviceId);

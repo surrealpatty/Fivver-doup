@@ -1,80 +1,128 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correct named import for sequelize
-import  Service  from '../models/services';
+import express, { Request, Response } from 'express';
+import Service from '../models/services'; // Import Service model
+import User from '../models/user'; // Import User model (to check user existence)
 
-const services = await Service.findAll(); // Sequelize method for finding all records
-const newService = await Service.create({ /* ... */ });
-const service = await Service.findByPk(req.params.id); // Find by primary key
+const router = express.Router();
 
-// Define the attributes of the Service model
-interface ServiceAttributes {
-  id: number;
-  userId: number;
-  title: string;
-  description: string;
-  price: number;
-  name: string; // Add 'name' to the attributes
-  createdAt?: Date;  // Optional timestamps (if used)
-  updatedAt?: Date;  // Optional timestamps (if used)
-}
+// CREATE: Add a new service
+router.post('/services', async (req: Request, res: Response) => {
+  const { userId, title, name, description, price } = req.body;
 
-// Define the attributes for creating a Service (without the 'id' field)
-interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+  try {
+    // Validate that the user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-// Create the Service class, extending Sequelize's Model class
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
-  public id!: number;
-  public userId!: number;
-  public title!: string;
-  public description!: string;
-  public price!: number;
-  public name!: string; // Add 'name' to the model class
-  public createdAt?: Date;  // Optional if timestamps are enabled
-  public updatedAt?: Date;  // Optional if timestamps are enabled
+    // Create a new service
+    const service = await Service.create({
+      userId,
+      title,
+      name,
+      description,
+      price,
+    });
 
-  // Define associations if needed (e.g., User association)
-  static associate(models: any) {
-    // Example association: A service belongs to a user
-    Service.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    // Return the newly created service
+    return res.status(201).json(service);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
-}
+});
 
-// Initialize the Service model with column definitions
-Service.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    name: { // Define 'name' field here
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize, // Use the named import 'sequelize'
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true, // Optionally, you can enable timestamps if needed (createdAt, updatedAt)
+// READ: Get all services
+router.get('/services', async (req: Request, res: Response) => {
+  try {
+    const services = await Service.findAll({
+      include: [
+        {
+          model: User,
+          as: 'user', // Ensure this matches the alias in your Service model association
+          attributes: ['id', 'username'],
+        },
+      ],
+    });
+
+    return res.status(200).json(services);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
-);
+});
 
-// Export the Service model as a default export
-export default Service; // Default export for the model
+// READ: Get a specific service by ID
+router.get('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
+
+  try {
+    const service = await Service.findOne({
+      where: { id: serviceId },
+      include: [
+        {
+          model: User,
+          as: 'user', // Ensure this matches the alias in your Service model association
+          attributes: ['id', 'username'],
+        },
+      ],
+    });
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    return res.status(200).json(service);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// UPDATE: Update a service
+router.put('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
+  const { title, name, description, price } = req.body;
+
+  try {
+    const service = await Service.findByPk(serviceId);
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    // Update the service fields
+    service.title = title || service.title;
+    service.name = name || service.name;
+    service.description = description || service.description;
+    service.price = price || service.price;
+
+    await service.save(); // Save the updated service
+    return res.status(200).json(service);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// DELETE: Delete a service
+router.delete('/services/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const serviceId = parseInt(id, 10); // Convert id to number
+
+  try {
+    const service = await Service.findByPk(serviceId);
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    await service.destroy(); // Delete the service
+    return res.status(204).send(); // Return no content (204) status after deletion
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+export default router; // Export the router to use in the app

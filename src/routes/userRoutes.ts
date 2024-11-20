@@ -1,7 +1,6 @@
-// src/routes/userRoutes.ts
 import { Router, Request, Response } from 'express';
-import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct middleware import
-import  UserRequest  from '../middlewares/authMiddleware'; // Correct UserRequest import
+import authMiddleware from '../middlewares/authMiddleware'; // Correct middleware import
+import { UserRequest } from '../middlewares/authMiddleware'; // Ensure UserRequest is imported correctly
 
 const router = Router();
 
