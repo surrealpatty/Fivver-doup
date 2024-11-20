@@ -1,12 +1,25 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user'; // Make sure the path to the User model is correct
+import User from '../models/user'; // Ensure correct path to your User model
 import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing
 import jwt from 'jsonwebtoken'; // Assuming JWT is used for authentication
 
 const router = express.Router();
 
+// Define the expected shape of request body for TypeScript
+interface RegisterRequestBody {
+  email: string;
+  password: string;
+  username: string;
+  role?: string;
+}
+
+interface LoginRequestBody {
+  email: string;
+  password: string;
+}
+
 // Register new user
-router.post('/register', async (req: Request, res: Response) => {
+router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
   const { email, password, username, role } = req.body;
 
   try {
@@ -33,7 +46,7 @@ router.post('/register', async (req: Request, res: Response) => {
       isPaid: false, // Assuming the default user is not paid
     });
 
-    // Ensure JWT_SECRET is present
+    // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       return res.status(500).json({ message: 'JWT secret is not configured properly.' });
@@ -63,7 +76,7 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 // Login user
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
   const { email, password } = req.body;
 
   try {
