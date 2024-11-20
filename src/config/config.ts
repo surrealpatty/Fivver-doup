@@ -46,7 +46,10 @@ sequelize.authenticate()
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err.message || err);
-    process.exit(1); // Exit the process if the connection fails
+    // Do not call process.exit(1) in a test environment
+    if (NODE_ENV !== 'test') {
+      process.exit(1); // Exit the process only if it's not a test environment
+    }
   });
 
 // Export the config object for other files, and the sequelize instance
