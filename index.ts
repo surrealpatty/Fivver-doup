@@ -19,8 +19,15 @@ app.use('/profile', authenticateToken, (req: Request, res: Response) => {
 // Example of a specific protected route for fetching user profile
 app.use('/users/profile', authenticateToken, async (req: Request, res: Response) => {
   try {
+    // Assuming you want to access `req.user` after authentication
+    const userId = req.user?.id; // Ensure `req.user` is populated by `authenticateToken`
+    
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is missing or invalid' });
+    }
+    
     // Your logic to fetch and return the user profile data
-    res.json({ message: 'User profile data' });
+    res.json({ message: `User profile data for user with ID: ${userId}` });
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ message: 'Internal server error' });
