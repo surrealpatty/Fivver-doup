@@ -1,6 +1,4 @@
-import { defineConfig } from 'eslint-define-config';
-
-export default defineConfig({
+module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -48,4 +46,4 @@ export default defineConfig({
       },
     },
   ],
-});
+};
