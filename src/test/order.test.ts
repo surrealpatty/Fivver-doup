@@ -82,7 +82,6 @@ describe('Order Controller Tests', () => {
         orderDetails: 'Updated details',
         status: 'Completed',
       }),
-      destroy: jest.fn().mockResolvedValue(undefined),
     };
 
     // Mock the findByPk method to return the mockOrderInstance
@@ -109,14 +108,7 @@ describe('Order Controller Tests', () => {
       serviceId: 1,
       orderDetails: 'Test order details',
       status: 'Pending',
-      save: jest.fn().mockResolvedValue({
-        id: 1,
-        userId: 1,
-        serviceId: 1,
-        orderDetails: 'Updated details',
-        status: 'Completed',
-      }),
-      destroy: jest.fn().mockResolvedValue(undefined),
+      destroy: jest.fn().mockResolvedValue(undefined), // Mock the destroy method
     };
 
     // Mock the findByPk method to return the mockOrderInstance

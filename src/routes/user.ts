@@ -8,7 +8,7 @@ import { authenticateToken } from '../middlewares/authMiddleware';  // Correct i
 const router = Router();
 
 // Utility function to generate JWT token
-const generateAuthToken = (userId: number) => {
+const generateAuthToken = (userId: number): string => {
     const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // Use a secret from your env
     const expiresIn = '1h'; // Token expiration
     return jwt.sign({ userId }, secret, { expiresIn }); // Ensure we're using the correct payload

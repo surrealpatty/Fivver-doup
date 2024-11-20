@@ -27,6 +27,7 @@ export const sequelize = new Sequelize({
   dialectOptions: {
     // Optional: Adjust if necessary for your environment (e.g., SSL, timezone)
     // ssl: { require: true, rejectUnauthorized: false }, // Example for SSL setup
+    timezone: 'Z',  // Optional: Use UTC for MySQL queries (if applicable)
   },
   define: {
     timestamps: false, // Optional: Adjust if you don't want `createdAt` and `updatedAt` fields
