@@ -1,40 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": ".",
-    "resolveJsonModule": true,
+    "target": "ESNext",                                // Use the latest ECMAScript version
+    "module": "ESNext",                                // Set the module system to ESNext
+    "moduleResolution": "node",                        // Use Node's module resolution strategy
+    "strict": true,                                    // Enable strict type checking
+    "esModuleInterop": true,                           // Enable interoperability with CommonJS modules
+    "skipLibCheck": true,                              // Skip library checks (useful for large projects)
+    "skipDefaultLibCheck": true,                       // Skip default library checks
+    "forceConsistentCasingInFileNames": true,          // Ensure consistent file name casing
+    "outDir": "./dist",                                // Output directory for compiled files
+    "rootDir": "./src",                                // Root directory for source files
+    "baseUrl": ".",                                    // Base URL for module resolution
+    "resolveJsonModule": true,                         // Allow importing JSON files
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]
+      "*": ["node_modules/*", "src/types/*"]           // Resolve custom types from src/types
     },
-    "declaration": true,
-    "sourceMap": true,  // Enable external source maps
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "strictPropertyInitialization": true,
-    "types": ["node", "express"],  // Add express here to ensure TypeScript knows about the Express types
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules",
-      "dist",
-      "**/*.test.ts",
-      "**/*.spec.ts"
-    ]
-  }
+    "declaration": true,                               // Generate .d.ts declaration files
+    "sourceMap": true,                                 // Generate source maps for debugging
+    "allowSyntheticDefaultImports": true,              // Allow default imports for CommonJS modules
+    "noImplicitAny": true,                             // Disallow 'any' type implicitly
+    "strictNullChecks": true,                          // Enable strict null checks
+    "experimentalDecorators": true,                    // Enable experimental decorators
+    "emitDecoratorMetadata": true,                     // Emit decorator metadata
+    "noUnusedLocals": true,                            // Disallow unused local variables
+    "noUnusedParameters": true,                        // Disallow unused function parameters
+    "noFallthroughCasesInSwitch": true,                // Disallow fall-through in switch statements
+    "strictPropertyInitialization": true,              // Ensure properties are initialized in class constructors
+    "types": ["node", "express"]                       // Include node and express types
+  },
+  "include": [
+    "src/**/*"                                         // Include all files under the src directory
+  ],
+  "exclude": [
+    "node_modules",                                    // Exclude node_modules directory
+    "dist",                                            // Exclude the dist directory
+    "**/*.test.ts",                                    // Exclude test files
+    "**/*.spec.ts"                                     // Exclude spec files
+  ]
 }
