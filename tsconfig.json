@@ -1,41 +1,44 @@
 {
   "compilerOptions": {
     "module": "commonjs",                    // Use CommonJS for Node.js compatibility
-    "target": "ES2017",                       // Target modern JavaScript (you can change this to a higher version like "ES2020" if needed)
-    "moduleResolution": "node",               // Use Node.js resolution for modules
-    "esModuleInterop": true,                  // Enable interoperability for CommonJS modules
-    "strict": true,                           // Enable all strict type-checking options
-    "skipLibCheck": true,                     // Skip type checking of declaration files for performance
-    "resolveJsonModule": true,                // Allow importing JSON modules
-    "baseUrl": "./src",                       // Set base directory to src for simplified imports
-    "outDir": "./dist",                       // Output directory for transpiled files
-    "rootDir": "./src",                       // Root directory for source files
-    "types": ["jest", "node", "vue", "express"], // Include types for Jest, Node, Vue, and Express
+    "target": "ES2017",                      // Target modern JavaScript (change to ES2020 if needed)
+    "moduleResolution": "node",              // Use Node.js resolution for modules
+    "esModuleInterop": true,                 // Enable interoperability for CommonJS modules
+    "strict": true,                          // Enable all strict type-checking options
+    "skipLibCheck": true,                    // Skip type checking of declaration files for performance
+    "resolveJsonModule": true,               // Allow importing JSON modules
+    "baseUrl": "./src",                      // Set base directory to src for simplified imports
+    "outDir": "./dist",                      // Output directory for transpiled files
+    "rootDir": "./src",                      // Root directory for source files
+    "types": ["jest", "node", "express"],    // Include types for Jest, Node, and Express (remove "vue" if unused)
     "paths": {
-      "@/*": ["*"]                            // Simplify import paths from src/
+      "@models/*": ["src/models/*"],         // Define alias for models directory
+      "@controllers/*": ["src/controllers/*"], // Define alias for controllers directory
+      "@services/*": ["src/services/*"],     // Define alias for services directory
+      "@utils/*": ["src/utils/*"]            // Define alias for utils directory
     },
-    "declaration": true,                      // Generate declaration files
-    "declarationMap": true,                   // Generate maps for .d.ts files
-    "allowSyntheticDefaultImports": true,     // Allow importing CommonJS modules as default imports
-    "jsx": "preserve",                        // Preserve JSX (works with Vue)
-    "incremental": true,                      // Enable incremental builds for faster compilation
-    "isolatedModules": true,                  // Isolated modules for faster transpilation
-    "useDefineForClassFields": true,          // Define behavior for class fields
-    "forceConsistentCasingInFileNames": true  // Ensure consistent casing in imports
+    "declaration": true,                     // Generate declaration files
+    "declarationMap": true,                  // Generate maps for .d.ts files
+    "allowSyntheticDefaultImports": true,    // Allow importing CommonJS modules as default imports
+    "jsx": "preserve",                       // Preserve JSX (works with Vue if needed)
+    "incremental": true,                     // Enable incremental builds for faster compilation
+    "isolatedModules": true,                 // Isolated modules for faster transpilation
+    "useDefineForClassFields": true,         // Define behavior for class fields
+    "forceConsistentCasingInFileNames": true // Ensure consistent casing in imports
   },
   "include": [
-    "src/**/*.ts",                            // Include TypeScript files
-    "src/**/*.d.ts",                          // Include declaration files
-    "src/**/*.tsx",                           // Include TypeScript JSX files (if using JSX/TSX)
-    "src/**/*.vue",                           // Include Vue files
-    "src/test/**/*.ts"                        // Include test files
+    "src/**/*.ts",                           // Include TypeScript files
+    "src/**/*.d.ts",                         // Include declaration files
+    "src/**/*.tsx",                          // Include TypeScript JSX files (if using JSX/TSX)
+    "src/**/*.vue",                          // Include Vue files (if used)
+    "src/test/**/*.ts"                       // Include test files
   ],
   "exclude": [
-    "node_modules",                           // Exclude node_modules
-    "dist",                                   // Exclude the output folder
-    "coverage",                               // Exclude coverage reports
-    "**/*.test.js",                           // Exclude test JavaScript files
-    "**/*.spec.js",                           // Exclude spec JavaScript files
-    "**/*.js"                                 // Exclude other non-TS JavaScript files
+    "node_modules",                          // Exclude node_modules
+    "dist",                                  // Exclude the output folder
+    "coverage",                              // Exclude coverage reports
+    "**/*.test.js",                          // Exclude test JavaScript files
+    "**/*.spec.js",                          // Exclude spec JavaScript files
+    "**/*.js"                                // Exclude other non-TS JavaScript files
   ]
 }

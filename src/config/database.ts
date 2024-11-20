@@ -4,10 +4,18 @@ import { Sequelize } from 'sequelize';
 export const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
-  username: 'root',
-  password: 'password',  // Ensure this password is correct
+  username: 'root', // Ensure this is the correct username
+  password: 'password', // Ensure this is the correct password
   database: 'fivver_doup',
-  logging: false, // Disable logging
+  port: 3306, // Add this line if needed for non-default ports
+  logging: false, // Disable logging to keep console clean
+  dialectOptions: {
+    // Optional: Adjust if necessary for your environment (e.g., SSL, timezone)
+    // ssl: { require: true, rejectUnauthorized: false }, // Example for SSL setup
+  },
+  define: {
+    timestamps: false, // Optional: Adjust if you don't want `createdAt` and `updatedAt` fields
+  },
 });
 
 // Function to test the database connection

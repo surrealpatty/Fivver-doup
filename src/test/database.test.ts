@@ -1,13 +1,13 @@
-import { sequelize, testConnection } from '../config/database'; // Adjust the path if necessary
+import { sequelize, testConnection } from '../config/database'; // Adjust path if necessary
 
-// Mock sequelize instance's authenticate method to avoid real database calls during tests
+// Mock the sequelize instance's authenticate method to avoid real database calls during tests
 jest.mock('../config/database', () => {
   const originalDatabase = jest.requireActual('../config/database');
   return {
     ...originalDatabase,
     sequelize: {
       ...originalDatabase.sequelize,
-      authenticate: jest.fn(), // Mock the authenticate method on the sequelize instance
+      authenticate: jest.fn(), // Mock the authenticate method
     },
   };
 });

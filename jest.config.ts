@@ -21,9 +21,7 @@ const config: Config.InitialOptions = {
     },
   },
   moduleFileExtensions: ['js', 'ts', 'tsx'], // Recognize JS, TS, and TSX files
-  transformIgnorePatterns: [
-    '/node_modules/', // Ignore node_modules for transformation
-  ],
+  transformIgnorePatterns: ['/node_modules/'], // Ignore node_modules for transformation
   setupFiles: ['<rootDir>/jest.setup.ts'], // Optional: setup file for custom mocks or global setups
   testPathIgnorePatterns: ['/node_modules/'], // Ignore tests in node_modules folder
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.test.tsx'], // Match test files inside the src folder
