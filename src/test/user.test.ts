@@ -18,6 +18,9 @@ jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(() => ({ userId: 1 })), // Mocked decoded token
 }));
 
+// Set a global timeout for all tests
+jest.setTimeout(10000); // Set timeout to 10 seconds for all tests
+
 describe('User Controller Tests', () => {
     beforeAll(async () => {
         // Set up mocked responses
@@ -82,4 +85,4 @@ describe('User Controller Tests', () => {
         expect(response.status).toBe(200); // Expect HTTP 200 OK
         expect(response.body).toHaveProperty('message', 'User deleted successfully'); // Deletion message
     });
-}, 10000); // Increased timeout for longer tests
+});
