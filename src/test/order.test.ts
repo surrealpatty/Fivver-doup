@@ -1,15 +1,15 @@
 import request from 'supertest';
 import { app } from '../index'; // Ensure this path is correct based on your project structure
-import { sequelize } from '../config/database';
-import User from '../models/user'; // Ensure you're importing the correct module
-import Service  from '../models/services'; // Adjust the path based on your file structure
-import Order from '../models/order'; // Use default import for Order
+import { sequelize } from '../config/database'; // Correct import for sequelize
+import User from '../models/user'; // Correct import path for User model
+import Service from '../models/services'; // Correct import path for Service model
+import Order from '../models/order'; // Correct import path for Order model
 
 // Mock models using jest
 jest.mock('../models/user', () => ({
   findByPk: jest.fn(),
 }));
-jest.mock('../models/service', () => ({
+jest.mock('../models/services', () => ({
   findByPk: jest.fn(),
 }));
 jest.mock('../models/order', () => ({
