@@ -24,15 +24,15 @@
     "noUnusedLocals": true,                           // Disallow unused local variables
     "noUnusedParameters": true,                       // Disallow unused function parameters
     "strictPropertyInitialization": true,             // Ensure properties are initialized in class constructors
-    "types": ["node", "express"]                      // Include types for node and express
+    "types": ["node", "express", "jest"],             // Include types for node, express, and jest
+    "lib": ["ESNext", "DOM"]                          // Include standard library files
   },
   "include": [
-    "src/**/*"                                        // Include all files under src directory
+    "src/**/*",                                       // Include all files under src directory
+    "**/*.test.ts"                                    // Include .test.ts files for Jest tests
   ],
   "exclude": [
     "node_modules",                                   // Exclude node_modules directory
-    "dist",                                           // Exclude dist directory
-    "**/*.spec.ts",                                   // Exclude .spec.ts files (for testing files like *.test.ts)
-    "**/*.test.ts"                                    // Explicitly exclude test files
+    "dist"                                            // Exclude dist directory
   ]
 }

@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { app } from '../index'; // Adjust the import to match your app's entry point
-import { sequelize } from '../config/database'; // Make sure sequelize instance is correctly imported
-import Order from '../models/order'; // Use default import for Order
-import User from '../models/user'; // Fixed import (make sure it's the correct model path)
-import Service from '../models/services'; // Ensure these paths are correct
+import { app } from '../index'; // Ensure this import points to the correct entry point for your app
+import { sequelize } from '../config/database'; // Ensure sequelize instance is correctly imported
+import Order from '../models/order'; // Default import for Order model
+import User from '../models/user'; // Correct import path for User model
+import Service from '../models/services'; // Correct import path for Service model
 
 // Mocking models
 jest.mock('../models/user');
@@ -17,7 +17,7 @@ describe('Order Controller', () => {
   });
 
   beforeEach(() => {
-    // Reset mocks before each test
+    // Reset mocks before each test to ensure clean slate for tests
     jest.resetAllMocks();
   });
 

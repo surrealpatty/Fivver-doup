@@ -3,24 +3,24 @@
   "version": "1.0.0",
   "description": "A Fiverr-like platform for skill-based posts.",
   "author": "Patty",
-  "main": "dist/index.js",                      
-  "type": "module",                            
+  "main": "dist/index.js",
+  "type": "module",
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
   "scripts": {
-    "start": "node dist/index.js",              
-    "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",   
-    "build": "tsc",                             
-    "build:watch": "tsc --watch",               
-    "pretest": "npm run build",                 
-    "test": "jest --config jest.config.ts",     
-    "test:watch": "jest --watch",               
-    "test:coverage": "jest --coverage --detectOpenHandles", 
-    "test:ci": "jest --ci --maxWorkers=4",      
-    "lint": "eslint 'src/**/*.{ts,js,vue}' --fix",   
-    "migrate": "npx sequelize-cli db:migrate"  
+    "start": "node dist/index.js",
+    "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "pretest": "npm run build",
+    "test": "jest --config jest.config.ts",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --detectOpenHandles",
+    "test:ci": "jest --ci --maxWorkers=4",
+    "lint": "eslint 'src/**/*.{ts,js,vue}' --fix",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "keywords": [
     "fiverr-clone",
@@ -108,5 +108,5 @@
       "@typescript-eslint/no-unused-vars": "warn"
     }
   },
-  "types": "./dist"   
+  "types": "./dist"
 }
