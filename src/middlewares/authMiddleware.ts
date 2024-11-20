@@ -6,7 +6,7 @@ import config from '../config/config'; // Ensure the path matches your project s
 declare global {
   namespace Express {
     export interface Request {
-      user?: { id: string; email: string; username: string }; // Make `user` optional here
+      user?: { id: string; email: string; username: string }; // Make `user` optional
     }
   }
 }
