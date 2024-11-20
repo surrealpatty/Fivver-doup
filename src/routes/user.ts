@@ -1,111 +1,68 @@
-import express, { Request, Response, Router } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { check, validationResult } from 'express-validator';
-import User from '../models/user'; // Ensure User model is correctly imported
-import { authenticateToken } from '../middlewares/authMiddleware'; // Middleware for token authentication
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Ensure you're using the correct sequelize instance
 
-const router: Router = express.Router(); // Explicitly typing `router`
+// Define the User attributes interface
+interface UserAttributes {
+  id: number;
+  email: string;
+  password: string;
+  isPaid: boolean;
+  username: string;
+  role: string;
+}
 
-// Utility function to generate JWT token
-const generateAuthToken = (userId: string): string => {
-    const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // JWT secret from env
-    const expiresIn = '1h'; // Token expiration time
-    return jwt.sign({ userId }, secret, { expiresIn }); // Generate token
-};
+// Define the creation attributes (optional fields during creation)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// User Registration Route (POST /register)
-router.post(
-    '/register',
-    [
-        // Validation checks
-        check('email', 'Please include a valid email').isEmail(),
-        check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
-        check('username', 'Username is required').notEmpty(), // Added username validation
-    ],
-    async (req: Request, res: Response): Promise<Response> => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+// Create the User model by extending Sequelize's Model class
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: number;         // '!' denotes non-nullable field
+  public email!: string;
+  public password!: string;
+  public isPaid!: boolean;
+  public username!: string;
+  public role!: string;
 
-        const { email, password, isPaid = false, username, role = 'user' } = req.body;
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
-        try {
-            // Check if the user already exists
-            const existingUser = await User.findOne({ where: { email } });
-            if (existingUser) {
-                return res.status(409).json({ message: 'User already exists' });
-            }
-
-            // Hash the password securely
-            const hashedPassword = await bcrypt.hash(password, 10);
-
-            // Create a new user in the database
-            const newUser = await User.create({
-                email,
-                password: hashedPassword,
-                isPaid,
-                username,
-                role,
-            });
-
-            // Generate JWT token
-            const token = generateAuthToken(newUser.id.toString());
-
-            return res.status(201).json({
-                message: 'User registered successfully',
-                user: {
-                    email: newUser.email,
-                    username: newUser.username,
-                    isPaid: newUser.isPaid,
-                    role: newUser.role,
-                },
-                token,
-            });
-        } catch (error) {
-            console.error('Error registering user:', error);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-    }
+// Initialize the User model with Sequelize
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    isPaid: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 'user',
+    },
+  },
+  {
+    sequelize, // The Sequelize instance
+    tableName: 'users', // The table name in the database
+    modelName: 'User', // Model name
+  }
 );
 
-// Get User Profile Route (GET /profile)
-router.get('/profile', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
-    try {
-        // Access userId from the decoded token
-        const userId = req.userId; // Ensure `req.userId` is populated by `authenticateToken`
-
-        if (!userId) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
-
-        // Fetch user details from the database
-        const user = await User.findOne({ where: { id: userId } });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        return res.status(200).json({
-            email: user.email,
-            username: user.username,
-            isPaid: user.isPaid,
-            role: user.role,
-        });
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-export default router;
-
-// Fixing the `req.userId` typing:
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: string; // Adjust `userId` to be a string based on your token payload
-    }
-  }
-}
+export default User;

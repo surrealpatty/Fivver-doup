@@ -1,38 +1,39 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                               // Use the latest ECMAScript version
-    "module": "ESNext",                               // Set module system to ESNext for ES module support
-    "moduleResolution": "node",                       // Use Node's module resolution strategy
-    "strict": true,                                   // Enable strict type checking
-    "esModuleInterop": true,                          // Enable interoperability with CommonJS modules
-    "skipLibCheck": true,                             // Skip library checks (useful for large projects)
-    "forceConsistentCasingInFileNames": true,         // Ensure consistent file name casing
-    "outDir": "./dist",                               // Output directory for compiled files
-    "rootDir": "./src",                               // Root directory for source files
-    "baseUrl": ".",                                   // Base URL for module resolution
-    "resolveJsonModule": true,                        // Allow importing JSON files
+    "target": "ES6",                                 // Target ES6 for compatibility
+    "module": "ESNext",                              // Use ESNext module system
+    "moduleResolution": "node",                      // Node's module resolution strategy
+    "strict": true,                                  // Enable strict type checking
+    "esModuleInterop": true,                         // Enable interoperability with CommonJS modules
+    "skipLibCheck": true,                            // Skip library checks (useful for large projects)
+    "forceConsistentCasingInFileNames": true,        // Ensure consistent file name casing
+    "outDir": "./dist",                              // Output directory for compiled files
+    "rootDir": "./src",                              // Root directory for source files
+    "baseUrl": ".",                                  // Base URL for module resolution
+    "resolveJsonModule": true,                       // Allow importing JSON files
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]          // Ensure custom types are resolved from src/types
+      "*": ["node_modules/*", "src/types/*"]         // Ensure custom types are resolved from src/types
     },
-    "declaration": true,                              // Generate .d.ts declaration files
-    "sourceMap": true,                                // Generate source maps for debugging
-    "allowSyntheticDefaultImports": true,             // Allow default imports for CommonJS modules
-    "noImplicitAny": true,                            // Disallow implicit 'any' types
-    "strictNullChecks": true,                         // Enable strict null checks
-    "experimentalDecorators": true,                   // Enable decorators if you're using them
-    "emitDecoratorMetadata": true,                    // Emit decorator metadata for TypeScript decorators
-    "noUnusedLocals": true,                           // Disallow unused local variables
-    "noUnusedParameters": true,                       // Disallow unused function parameters
-    "strictPropertyInitialization": true,             // Ensure properties are initialized in class constructors
-    "types": ["node", "express", "jest"],             // Include types for node, express, and jest
-    "lib": ["ESNext", "DOM"]                          // Include standard library files
+    "declaration": true,                             // Generate .d.ts declaration files
+    "declarationDir": "./dist/types",                // Specify where declaration files should be stored
+    "sourceMap": true,                               // Generate source maps for debugging
+    "allowSyntheticDefaultImports": true,            // Allow default imports for CommonJS modules
+    "noImplicitAny": true,                           // Disallow implicit 'any' types
+    "strictNullChecks": true,                        // Enable strict null checks
+    "experimentalDecorators": true,                  // Enable decorators if you're using them
+    "emitDecoratorMetadata": true,                   // Emit decorator metadata for TypeScript decorators
+    "noUnusedLocals": true,                          // Disallow unused local variables
+    "noUnusedParameters": true,                      // Disallow unused function parameters
+    "strictPropertyInitialization": true,            // Ensure properties are initialized in class constructors
+    "types": ["node", "express", "jest"],            // Include types for node, express, and jest
+    "lib": ["ESNext", "DOM"]                         // Include standard library files
   },
   "include": [
-    "src/**/*",                                       // Include all files under src directory
-    "**/*.test.ts"                                    // Include .test.ts files for Jest tests
+    "src/**/*",                                      // Include all files under src directory
+    "**/*.test.ts"                                   // Include .test.ts files for Jest tests
   ],
   "exclude": [
-    "node_modules",                                   // Exclude node_modules directory
-    "dist"                                            // Exclude dist directory
+    "node_modules",                                  // Exclude node_modules directory
+    "dist"                                           // Exclude dist directory
   ]
 }
