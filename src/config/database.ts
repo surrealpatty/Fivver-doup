@@ -5,12 +5,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Destructure environment variables from process.env
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, NODE_ENV } = process.env;
 
 // Validate required environment variables
 if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
   console.error('Missing required environment variables. Please check your .env file.');
-  process.exit(1); // Exit the process if environment variables are not set
+  
+  // Do not call process.exit(1) in a test environment
+  if (NODE_ENV !== 'test') {
+    process.exit(1); // Exit the process only if it's not a test environment
+  }
 }
 
 // Sequelize instance for database connection
@@ -32,18 +36,27 @@ export const sequelize = new Sequelize({
 });
 
 // Function to test the database connection
-export const testConnection = async () => {
+export const testConnection = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit the process if the connection fails
+  } catch (error: unknown) {
+    // Ensure the error is typed correctly and logged
+    if (error instanceof Error) {
+      console.error('Unable to connect to the database:', error.message);
+    } else {
+      console.error('An unknown error occurred during the database connection');
+    }
+
+    // Do not call process.exit(1) in a test environment
+    if (NODE_ENV !== 'test') {
+      process.exit(1); // Exit the process only if it's not a test environment
+    }
   }
 };
 
 // Ensure sequelize connection is properly closed after tests or app shutdown
-export const closeConnection = async () => {
+export const closeConnection = async (): Promise<void> => {
   try {
     await sequelize.close();
     console.log('Database connection has been closed.');
@@ -51,3 +64,9 @@ export const closeConnection = async () => {
     console.error('Error closing the database connection:', error);
   }
 };
+
+// Only call testConnection if it's not in a test environment
+if (NODE_ENV !== 'test') {
+  testConnection();
+}
+
