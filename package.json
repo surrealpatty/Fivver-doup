@@ -3,24 +3,24 @@
   "version": "1.0.0",
   "description": "A Fiverr-like platform for skill-based posts.",
   "author": "Patty",
-  "main": "dist/index.js",
-  "type": "module",
+  "main": "dist/index.mjs",  // Use .mjs for ES module compatibility
+  "type": "module",          // Ensure ES module compatibility
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "pretest": "npm run build",
-    "test": "jest --config jest.config.ts",
+    "start": "node dist/index.mjs",  // Change to .mjs to align with ES module usage
+    "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",  // Ensure ts-node uses ESM loader
+    "build": "tsc",  // Use TypeScript compiler to transpile code
+    "build:watch": "tsc --watch",  // Watch for file changes and transpile
+    "pretest": "npm run build",  // Ensure build happens before tests
+    "test": "jest --config jest.config.ts",  // Running tests
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "test:ci": "jest --ci --maxWorkers=4",
-    "lint": "eslint 'src/**/*.{ts,js,vue}' --fix",
-    "migrate": "npx sequelize-cli db:migrate"
+    "lint": "eslint 'src/**/*.{ts,js,vue}' --fix",  // Linting TypeScript, JavaScript, and Vue files
+    "migrate": "npx sequelize-cli db:migrate"  // Running database migrations
   },
   "keywords": [
     "fiverr-clone",
