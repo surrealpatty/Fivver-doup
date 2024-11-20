@@ -1,91 +1,52 @@
-import request from 'supertest';
-import { app, server } from '../index';  // Import app and server from index.ts
-import User from '../models/user'; 
-import jwt from 'jsonwebtoken'; 
-import { sequelize } from '../config/database';  
-
-// Mocking models and JWT for tests
-jest.mock('../models/user', () => ({
-    findOne: jest.fn(),
-    create: jest.fn(),
-    findByPk: jest.fn(),
-    update: jest.fn(),
-    destroy: jest.fn(),
-}));
-
-jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(() => 'mockedToken'),  // Return mocked token on sign
-    verify: jest.fn(() => ({ userId: 1 })),  // Mock the decoded token
-}));
-
-describe('User Controller', () => {
-    beforeAll(async () => {
-        // Setup mocked responses for User model functions
-        (User.findOne as jest.Mock).mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-            password: 'hashedpassword',  // This can be any mock value you want
-        });
-
-        (User.create as jest.Mock).mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-            password: 'hashedpassword',
-        });
-
-        (User.findByPk as jest.Mock).mockResolvedValue({
-            id: 1,
-            email: 'test@example.com',
-        });
-
-        (User.update as jest.Mock).mockResolvedValue([1]);  // Sequelize update returns an array, [affectedRows]
-        (User.destroy as jest.Mock).mockResolvedValue(1);  // Returns number of rows affected
-    });
-
-    afterAll(async () => {
-        // Ensure cleanup of any database connections after tests
-        await sequelize.close();
-        server.close();  // Close the server after all tests to prevent hanging
-    });
-
-    test('should login a user and return a token', async () => {
-        const response = await request(app)
-            .post('/users/login')  // Adjusted to match your actual route in Express
-            .send({
-                email: 'test@example.com',
-                password: 'password123',  // Match with your mock data
-            });
-
-        console.log(response.status, response.body);
-
-        expect(response.status).toBe(200); 
-        expect(response.body).toHaveProperty('token', 'mockedToken');  // Mocked token value
-    });
-
-    test('should update user profile', async () => {
-        const response = await request(app)
-            .put('/users/profile')  // Adjusted to match your actual route in Express
-            .set('Authorization', 'Bearer mockedToken')  // Mock Authorization header
-            .send({
-                email: 'updated@example.com',
-                password: 'newpassword123',
-            });
-
-        console.log(response.status, response.body);  
-
-        expect(response.status).toBe(200);  // Expect status to be 200 (OK)
-        expect(response.body).toHaveProperty('id', 1);  // Check if response contains 'id'
-        expect(response.body).toHaveProperty('email', 'updated@example.com');  // Check if email was updated
-    });
-
-    test('should delete user account', async () => {
-        const response = await request(app)
-            .delete('/users/profile')  // Adjusted to match your actual route in Express
-            .set('Authorization', 'Bearer mockedToken');  // Mock Authorization header
-
-        console.log(response.status, response.body);
-
-        expect(response.status).toBe(200);  // Expect status to be 200 (OK)
-        expect(response.body).toHaveProperty('message', 'User deleted successfully');  // Expect message in response
-    });
-});
+module.exports = {
+    // Specify the test environment, which is usually 'node' for backend testing
+    testEnvironment: 'node',
+  
+    // Transform TypeScript files using ts-jest (if you're using TypeScript)
+    transform: {
+      '^.+\\.(ts|tsx)$': 'ts-jest',  // Transforms TypeScript files
+    },
+  
+    // Glob pattern to locate the test files
+    testMatch: [
+      '**/src/**/*.test.ts',  // Test files should be located under the `src` directory
+      '**/src/**/*.spec.ts',  // Optionally match `.spec.ts` files as well
+    ],
+  
+    // Setup global mocks for modules
+    setupFiles: [
+      // This can include any setup files you need, such as to mock global variables or API calls
+      '<rootDir>/jest.setup.js',  // If you have a `jest.setup.js` file for additional global setup
+    ],
+  
+    // Automatically clear mock calls and reset mocks before each test
+    resetMocks: true,
+  
+    // Enable verbose test output for easier debugging
+    verbose: true,
+  
+    // Handle module imports that may not have a proper transformation (e.g., static assets)
+    moduleNameMapper: {
+      // Mocking static assets (like CSS files or images) for Jest tests
+      '\\.(css|less|scss|svg)$': 'identity-obj-proxy',  // Handles imports of CSS/SCSS/etc.
+    },
+  
+    // Enable handling of files with no transformations (like .js, .ts, .json)
+    moduleFileExtensions: ['js', 'ts', 'json', 'node'],
+  
+    // Collect coverage from your source files
+    collectCoverage: true,
+    collectCoverageFrom: [
+      'src/**/*.{ts,js}',  // Collect coverage for TypeScript and JavaScript files in the `src` directory
+      '!src/**/*.d.ts',  // Exclude declaration files from coverage
+    ],
+  
+    // If you're using Babel, you may also need to configure the Babel transformer
+    transformIgnorePatterns: [
+      '/node_modules/(?!your-module-to-transform).+\\.js$',  // If any dependencies need to be transpiled
+    ],
+  
+    // Configure custom test timeout if necessary
+    testTimeout: 10000,  // Adjust based on the complexity of your tests, especially async ones
+  };
+  

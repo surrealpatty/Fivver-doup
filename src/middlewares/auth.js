@@ -7,7 +7,7 @@ const JWT_SECRET = config.JWT_SECRET;
 const JWT_EXPIRATION = config.JWT_EXPIRATION || '1h';  // Default expiration if not defined
 
 // Extend the Request interface to include the `userId` property
-declare global {
+process.env.JWT_SECRET = config.JWT_SECRET; // Use environment variables instead of global
     namespace Express {
         interface Request {
             userId?: number;  // Make sure `userId` is optional, as it may not exist on all requests
