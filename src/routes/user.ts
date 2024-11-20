@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express'; // Correct import statement
+import express, { Request, Response, Router } from 'express'; // Corrected import
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/user'; // Ensure User model is correctly imported
 import { authenticateToken } from '../middlewares/authMiddleware'; // Middleware for token authentication
 
-const router = Router();
+const router: Router = express.Router(); // Explicitly typing `router`
 
 // Utility function to generate JWT token
 const generateAuthToken = (userId: string): string => {  
