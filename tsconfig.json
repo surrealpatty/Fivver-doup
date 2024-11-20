@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",                               // Use the latest ECMAScript version
-    "module": "ESNext",                               // Set the module system to ESNext (for ES Module support)
+    "module": "ESNext",                               // Use ESNext module system (ES module support)
     "moduleResolution": "node",                       // Use Node's module resolution strategy
     "strict": true,                                   // Enable strict type checking
-    "esModuleInterop": true,                          // Enable interoperability with CommonJS modules
+    "esModuleInterop": true,                          // Allow CommonJS modules to be imported as ES Modules
     "skipLibCheck": true,                             // Skip library checks (useful for large projects)
     "skipDefaultLibCheck": true,                      // Skip default library checks for faster compilation
     "forceConsistentCasingInFileNames": true,         // Ensure consistent file name casing
@@ -20,12 +20,12 @@
     "allowSyntheticDefaultImports": true,             // Allow default imports for CommonJS modules
     "noImplicitAny": true,                            // Disallow 'any' type implicitly
     "strictNullChecks": true,                         // Enable strict null checks
-    "experimentalDecorators": true,                   // Enable experimental decorators
+    "experimentalDecorators": true,                   // Enable experimental decorators (if used in your project)
     "emitDecoratorMetadata": true,                    // Emit decorator metadata for TypeScript decorators
     "noUnusedLocals": true,                           // Disallow unused local variables
     "noUnusedParameters": true,                       // Disallow unused function parameters
     "strictPropertyInitialization": true,             // Ensure properties are initialized in class constructors
-    "types": ["node", "express"]                      // Include node and express types (ensure you have @types/express installed)
+    "types": ["node", "express"]                      // Ensure both node and express types are included
   },
   "include": [
     "src/**/*"                                        // Include all files under the src directory
