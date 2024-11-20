@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
 import bodyParser from 'body-parser';
-// Ensure paths have .js extension for ESM (post-compilation)
-import userRoutes from './routes/user.js';  // Correct .js extension for ESM
+import userRoutes from './routes/user.js'; // Ensure .js extension for ESM
 import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
 
 const app = express();
@@ -54,3 +53,12 @@ const server = app.listen(PORT, () => {
 
 // Export the app and server for testing purposes
 export { app, server };
+
+// Fixing the `req.user` typing:
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id: string; username: string }; // Adjust the user object properties as per your logic
+    }
+  }
+}

@@ -1,41 +1,41 @@
 {
   "compilerOptions": {
-    "target": "ES2017",                            // Target ES2017 for async/await support
-    "module": "CommonJS",                          // CommonJS for compatibility with Node.js
-    "moduleResolution": "node",                   // Use Node.js-style module resolution
-    "strict": true,                               // Enable all strict type-checking options
-    "esModuleInterop": true,                      // Allow default imports from CJS modules
-    "skipLibCheck": true,                         // Skip checking library files for faster builds
-    "forceConsistentCasingInFileNames": true,     // Enforce consistent casing in file names
-    "outDir": "./dist",                           // Output directory for compiled files
-    "rootDir": "./src",                           // Root directory for source files
-    "baseUrl": ".",                               // Base directory for resolving non-relative modules
-    "resolveJsonModule": true,                    // Allow importing JSON files
+    "target": "ESNext",                            // Target ESNext for modern async/await and ES features
+    "module": "ESNext",                            // ESM modules for full compatibility with ES imports/exports
+    "moduleResolution": "node",                    // Use Node.js-style module resolution
+    "strict": true,                                // Enable all strict type-checking options
+    "esModuleInterop": true,                       // Allow default imports from CJS modules
+    "skipLibCheck": true,                          // Skip checking library files for faster builds
+    "forceConsistentCasingInFileNames": true,      // Enforce consistent casing in file names
+    "outDir": "./dist",                            // Output directory for compiled files
+    "rootDir": "./src",                            // Root directory for source files
+    "baseUrl": ".",                                // Base directory for resolving non-relative modules
+    "resolveJsonModule": true,                     // Allow importing JSON files
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]      // Path mapping for custom types
+      "*": ["node_modules/*", "src/types/*"]       // Path mapping for custom types
     },
-    "declaration": true,                          // Generate .d.ts files
-    "sourceMap": true,                            // Generate source maps
-    "allowSyntheticDefaultImports": true,         // Allow default imports for compatibility
-    "noImplicitAny": true,                        // Prevent the use of implicit `any` types
-    "strictNullChecks": true,                     // Enable strict null checking
-    "experimentalDecorators": true,               // Enable decorators (useful for frameworks like TypeORM)
-    "emitDecoratorMetadata": true,                // Emit metadata for decorators
-    "noUnusedLocals": true,                       // Report unused local variables
-    "noUnusedParameters": true,                   // Report unused function parameters
-    "noFallthroughCasesInSwitch": true,           // Prevent fallthrough in switch statements
-    "strictPropertyInitialization": true,         // Ensure all class properties are initialized
+    "declaration": true,                           // Generate .d.ts files
+    "sourceMap": true,                             // Generate source maps
+    "allowSyntheticDefaultImports": true,          // Allow default imports for compatibility
+    "noImplicitAny": true,                         // Prevent the use of implicit `any` types
+    "strictNullChecks": true,                      // Enable strict null checking
+    "experimentalDecorators": true,                // Enable decorators (useful for frameworks like TypeORM)
+    "emitDecoratorMetadata": true,                 // Emit metadata for decorators
+    "noUnusedLocals": true,                        // Report unused local variables
+    "noUnusedParameters": true,                    // Report unused function parameters
+    "noFallthroughCasesInSwitch": true,            // Prevent fallthrough in switch statements
+    "strictPropertyInitialization": true,          // Ensure all class properties are initialized
     "typeRoots": [
-      "node_modules/@types"                       // Ensure TypeScript looks for types in node_modules/@types
+      "node_modules/@types"                        // Ensure TypeScript looks for types in node_modules/@types
     ]
   },
   "include": [
-    "src/**/*"                                    // Include all files in the src folder
+    "src/**/*"                                     // Include all files in the src folder
   ],
   "exclude": [
-    "node_modules",                               // Exclude node_modules
-    "dist",                                       // Exclude compiled files
-    "**/*.test.ts",                               // Exclude test files (optional)
-    "**/*.spec.ts"                                // Exclude spec files (optional)
+    "node_modules",                                // Exclude node_modules
+    "dist",                                        // Exclude compiled files
+    "**/*.test.ts",                                // Exclude test files (optional)
+    "**/*.spec.ts"                                 // Exclude spec files (optional)
   ]
 }
