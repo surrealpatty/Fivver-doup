@@ -25,8 +25,14 @@ router.post('/users', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // Create the new user
-    const newUser = await User.create({ username, email, password });
+    // Create the new user with 'isPaid' set to false (for free tier)
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      isPaid: false, // Default to false for new users
+    });
+
     res.status(201).json({ message: 'User created successfully', user: newUser });
   } catch (error) {
     res.status(500).json({ message: 'Error creating user', error: (error as Error).message });

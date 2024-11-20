@@ -1,14 +1,21 @@
 import { Sequelize } from 'sequelize';
 
-// Database configuration (example, adjust as per your setup)
-const sequelize = new Sequelize({
-  dialect: 'mysql', // Adjust based on your database type (mysql, postgres, etc.)
-  host: process.env.DB_HOST || 'localhost', // Database host
-  username: process.env.DB_USERNAME || 'root', // Database username
-  password: process.env.DB_PASSWORD || '', // Database password
-  database: process.env.DB_NAME || 'fivver_doup', // Database name
-  logging: false, // Optional: Disable logging for clean output
+// Sequelize instance for database connection
+export const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'root',
+  password: 'password',
+  database: 'fivver_doup',
+  logging: false, // Disable logging
 });
 
-// Export sequelize as a named export
-export { sequelize };
+// Function to test the database connection
+export const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
