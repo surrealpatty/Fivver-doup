@@ -47,7 +47,7 @@ router.post('/register', [
         });
 
         // Generate JWT token
-        const token = generateAuthToken(newUser.id);
+        const token = generateAuthToken(Number(newUser.id));
 
         return res.status(201).json({
             message: 'User registered successfully',
@@ -69,7 +69,7 @@ router.post('/register', [
 router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     try {
         // Access userId from the decoded token
-        const userId = req.user?.id; // Correctly access 'id'
+        const userId = req.user?.id;
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required' });
