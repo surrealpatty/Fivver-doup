@@ -8,12 +8,11 @@ const JWT_EXPIRATION = config.JWT_EXPIRATION || '1h';  // Default expiration if 
 
 // Extend the Request interface to include the `userId` property
 process.env.JWT_SECRET = config.JWT_SECRET; // Use environment variables instead of global
-    namespace Express {
+import express from 'express';
         interface Request {
             userId?: number;  // Make sure `userId` is optional, as it may not exist on all requests
         }
-    }
-}
+    
 
 // Middleware to generate a JWT token
 export const generateToken = (userId: number): string => {
