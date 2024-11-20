@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Define the ServiceCreationAttributes interface
 interface ServiceCreationAttributes {
-  name: string;
+  title: string; // Use 'title' instead of 'name'
   description: string;
   price: number;
   userId: number; // Include userId since it's part of the creation
@@ -15,7 +15,7 @@ interface ServiceCreationAttributes {
 
 // CREATE: Add a new service
 router.post('/services', async (req: Request, res: Response) => {
-  const { userId, name, description, price }: ServiceCreationAttributes = req.body;
+  const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
     // Check if the user exists
@@ -25,12 +25,11 @@ router.post('/services', async (req: Request, res: Response) => {
     }
 
     const service = await Service.create({
-      title: name, // Use 'title' instead of 'name'
-      description: description,
-      price: price,
-      userId: userId,
+      title, // Use 'title' instead of 'name'
+      description,
+      price,
+      userId,
     });
-
 
     // Return the newly created service
     return res.status(201).json(service);
@@ -93,7 +92,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
 router.put('/services/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const serviceId = parseInt(id, 10); // Convert id to number
-  const { name, description, price }: ServiceCreationAttributes = req.body;
+  const { title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
     const service = await Service.findByPk(serviceId);
@@ -102,7 +101,7 @@ router.put('/services/:id', async (req: Request, res: Response) => {
     }
 
     // Update the service fields
-    service.name = name || service.name;
+    service.title = title || service.title; // Correcting field name to 'title'
     service.description = description || service.description;
     service.price = price || service.price;
 
