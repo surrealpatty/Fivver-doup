@@ -5,11 +5,11 @@ declare global {
         id: string;
         email: string;
         username: string;
-        role?: string;
+        role?: string; // Optional role field
       };
     }
   }
 }
 
-// Ensure this file is treated as a module by adding an export statement
+// Ensure that this file is treated as a module
 export {};
