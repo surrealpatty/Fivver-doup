@@ -17,6 +17,7 @@
     },
     "declaration": true,                            // Generate .d.ts files
     "sourceMap": true,                              // Generate source maps
+    "inlineSourceMap": true,                        // Use inline source maps for easier debugging
     "allowSyntheticDefaultImports": true,           // Allow default imports for compatibility
     "noImplicitAny": true,                          // Prevent the use of implicit `any` types
     "strictNullChecks": true,                       // Enable strict null checking
