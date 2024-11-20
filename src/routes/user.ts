@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/user'; // Ensure your User model is being imported correctly
-import authMiddleware from '../middlewares/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware';  // Named import
 
 const router = Router();
 
