@@ -50,4 +50,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     console.error('Token verification failed:', error);
 
     // Return a generic error message
-    return res.status(403).json({ message: 'Invalid or
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
+};
