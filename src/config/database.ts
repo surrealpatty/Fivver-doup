@@ -1,6 +1,10 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Load environment variables (make sure you have .env file or use environment variables directly)
+// Load environment variables from the .env file
+dotenv.config();
+
+// Destructure environment variables
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
 
 // Sequelize instance for database connection
@@ -8,7 +12,7 @@ export const sequelize = new Sequelize({
   dialect: 'mysql',
   host: DB_HOST || 'localhost', // Default to 'localhost' if not provided
   username: DB_USER || 'root',  // Default to 'root' if not provided
-  password: DB_PASSWORD || 'password',  // Default to 'password' if not provided
+  password: DB_PASSWORD || '',  // Default to empty string if not provided
   database: DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if not provided
   port: parseInt(DB_PORT || '3306', 10),  // Default to 3306 if not provided
   logging: false,  // Disable logging to keep the console clean
