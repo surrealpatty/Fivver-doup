@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">70.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/16</span>
+                <span class='fraction'>17/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">69.56% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/16</span>
+                <span class='fraction'>16/23</span>
             </div>
         
             
@@ -98,10 +98,25 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,6 +138,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,42 +148,71 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user';  // Try using absolute imports
-import authenticateToken from './middlewares/authMiddleware';  // Import authentication middleware
+import userRoutes from './routes/user'; // Correct import for user routes
+import { authenticateToken } from './middlewares/authMiddleware'; // Correct named import for authentication middleware
 &nbsp;
 const app = express();
 &nbsp;
 // Middleware to parse incoming JSON requests
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Parses incoming JSON payloads for API requests
 &nbsp;
 // Public routes (no authentication required)
-app.use('/users', userRoutes);  // This makes /users/register, /users/login, and other public routes available
+app.use('/users', userRoutes); // Routes for user-related actions like register, login, etc.
 &nbsp;
-// Private routes (authentication required) - Add routes that need token authentication
-app.use('/profile', authenticateToken, <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >    res.send('Profile page (authentication required)');</span>
+// Protected routes (require authentication)
+app.use('/profile', authenticateToken, <span class="fstat-no" title="function not covered" >(r</span>eq: Request, res: Response) =&gt; {
+<span class="cstat-no" title="statement not covered" >  res.json({ message: 'Profile page (authentication required)' });</span>
 });
 &nbsp;
-// Example of a specific protected route
-app.use('/users/profile', authenticateToken, <span class="fstat-no" title="function not covered" >async </span>(req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        // Your logic to fetch and return the user profile (e.g., from a database)
-<span class="cstat-no" title="statement not covered" >        res.json({ message: 'User profile data' });</span>
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >        res.status(500).json({ message: 'Internal server error' });</span>
-    }
+// Example of a specific protected route for fetching user profile
+app.use('/users/profile', authenticateToken, <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    // Your logic to fetch and return the user profile data
+<span class="cstat-no" title="statement not covered" >    res.json({ message: 'User profile data' });</span>
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    console.error('Error fetching user profile:', error);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: 'Internal server error' });</span>
+  }
 });
+&nbsp;
+// 404 route for undefined routes
+app.use((req: Request, res: Response) =&gt; {
+  res.status(404).json({ message: 'Route not found' });
+});
+&nbsp;
+// Global error handler for unhandled errors in the application
+app.use(
+<span class="fstat-no" title="function not covered" >  (e</span>rr: Error, req: Request, res: Response, next: NextFunction) =&gt; {
+<span class="cstat-no" title="statement not covered" >    console.error('Global error handler:', err.message);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: 'Internal server error', error: err.message });</span>
+  }
+);
 &nbsp;
 // Start the server
-app.listen(3000, () =&gt; {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () =&gt; {
+  console.log(`Server is running on port ${PORT}`);
 });
 &nbsp;
-// Export app for testing purposes
-export { app };
+// Export the app and server for testing purposes
+export { app, server };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -175,7 +220,7 @@ export { app };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-17T20:35:02.416Z
+                at 2024-11-20T18:56:25.641Z
             </div>
         <script src="../prettify.js"></script>
         <script>
