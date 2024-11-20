@@ -1,30 +1,30 @@
-// src/middlewares/authenticateToken.ts
-
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.headers.authorization) {
-    res.status(403).json({ message: 'Forbidden: No token provided' });
-return; // Ensure function exits after sending the response
+  // Check if authorization header is present
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(403).json({ message: 'Forbidden: No token provided' });
   }
 
-  // Example of how you should check the token validity:
-  const token = req.headers.authorization.split(' ')[1];
+  // Extract token from the authorization header
+  const token = authHeader.split(' ')[1];
   if (!token) {
-    res.status(403).json({ message: 'Forbidden: No token provided' });
-return; // Ensure function exits after sending the response
+    return res.status(403).json({ message: 'Forbidden: No token provided' });
   }
 
-  // Verify the token logic here:
-  try {
-    // You should use a real JWT verification process here
-    // Example of the logic that could go wrong:
-    // jwt.verify(token, secretKey);
+  // Secret key should come from environment variables (for security)
+  const secretKey = process.env.JWT_SECRET || 'your_jwt_secret';
 
+  try {
+    // Verify the token using jwt.verify and secret key
+    const decoded = jwt.verify(token, secretKey) as { userId: string }; // Decoded token will contain userId
+    req.user = { id: decoded.userId }; // Attach decoded user information to the request object
     next(); // Token is valid, proceed to the next middleware
   } catch (error) {
-    res.status(403).json({ message: 'Forbidden: No token provided' });
-return; // Ensure function exits after sending the response
+    // Handle errors (e.g., invalid or expired token)
+    return res.status(403).json({ message: 'Forbidden: Invalid token' });
   }
 };
 
