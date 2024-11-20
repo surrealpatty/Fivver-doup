@@ -1,14 +1,27 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",          // Ensure CommonJS module format
-    "target": "ESNext",            // Use the latest ECMAScript features
-    "outDir": "./dist",            // Output directory for compiled files
-    "esModuleInterop": true,       // Allow interoperability between CommonJS and ES Modules
-    "moduleResolution": "node",    // Use Node.js module resolution
-    "strict": true,                // Enable strict type checking
-    "skipLibCheck": true,          // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true  // Ensure file name casing consistency
+    "target": "ES6",                               // Target modern JavaScript (ES6)
+    "module": "ESNext",                            // Use ESNext modules
+    "moduleResolution": "node",                    // Use Node-style module resolution
+    "strict": true,                                // Enable strict type checking
+    "esModuleInterop": true,                       // Allow default imports from non-ES modules
+    "skipLibCheck": true,                          // Skip checking library files for faster compilation
+    "forceConsistentCasingInFileNames": true,      // Enforce consistent file naming
+    "outDir": "./dist",                            // Output directory for compiled JavaScript
+    "rootDir": "./src",                            // Root directory for source files
+    "baseUrl": ".",                                // Set base URL for module resolution
+    "resolveJsonModule": true,                     // Allow importing JSON files as modules
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]       // Path mapping for custom types (if needed)
+    },
+    "declaration": true,                           // Generate TypeScript declaration files (.d.ts)
+    "sourceMap": true                              // Generate source maps for debugging
   },
-  "include": ["src/**/*"],         // Include all TypeScript files in the src folder
-  "exclude": ["node_modules"]      // Exclude node_modules from being compiled
+  "include": [
+    "src/**/*"                                     // Include all files in the src folder
+  ],
+  "exclude": [
+    "node_modules",                                // Exclude node_modules
+    "dist"                                         // Exclude dist folder
+  ]
 }

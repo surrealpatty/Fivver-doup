@@ -1,9 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure the correct path
-import Review from './review'; // Import related models
-import Order from './order'; // Import related models
-import Service from './services'; // Import related models
+import { sequelize } from '../config/database'; // Ensure correct path to sequelize instance
 import { v4 as uuidv4 } from 'uuid'; // Import UUID generation for `id`
+import Review from './review'; // Import the Review model
+import Order from './order'; // Import the Order model
+import Service from './services'; // Import the Service model
 
 // Define the attributes for the User model
 interface UserAttributes {
@@ -31,7 +31,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Define any instance-level methods here if needed
+  // Define associations after the model is defined
   static associate(models: any) {
     // A user can have many reviews
     User.hasMany(models.Review, {
@@ -45,7 +45,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
       as: 'orders', // Alias for the associated model
     });
 
-    // A user can have many services (if applicable)
+    // A user can have many services
     User.hasMany(models.Service, {
       foreignKey: 'userId',
       as: 'services', // Alias for the associated model

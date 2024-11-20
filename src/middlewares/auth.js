@@ -1,21 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Ensure you're using TypeScript imports for config
+import config from '../config/config'; // Importing config for JWT_SECRET and JWT_EXPIRATION
 
 // Access the secret and expiration from the config
 const JWT_SECRET = config.JWT_SECRET;
 const JWT_EXPIRATION = config.JWT_EXPIRATION || '1h';  // Default expiration if not defined
 
-// Extend the Request interface to include the `userId` property
-process.env.JWT_SECRET = config.JWT_SECRET; // Use environment variables instead of global
-import express from 'express';
-        interface Request {
-            userId?: number;  // Make sure `userId` is optional, as it may not exist on all requests
-        }
-    
-
 // Middleware to generate a JWT token
-export const generateToken = (userId: number): string => {
+export const generateToken = (userId) => {
     // Ensure that the JWT token is signed using the correct secret and expiration time
     return jwt.sign({ id: userId }, JWT_SECRET, {
         expiresIn: JWT_EXPIRATION,
@@ -23,7 +14,7 @@ export const generateToken = (userId: number): string => {
 };
 
 // Middleware to verify the JWT token
-export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
+export const verifyToken = (req, res, next) => {
     // Extract the token from the Authorization header
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -40,7 +31,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
 
         // If the token is valid, set the user ID on the request object
         if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-            req.userId = (decoded as { id: number }).id;  // Type-safe access to decoded userId
+            req.userId = decoded.id;  // Access decoded userId safely
             next();  // Proceed to the next middleware or route handler
         } else {
             return res.status(401).json({ message: 'Invalid token' });

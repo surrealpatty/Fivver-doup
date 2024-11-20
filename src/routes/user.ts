@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from 'express'; // Correct import statement
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
@@ -8,7 +8,7 @@ import { authenticateToken } from '../middlewares/authMiddleware'; // Middleware
 const router = Router();
 
 // Utility function to generate JWT token
-const generateAuthToken = (userId: number): string => {
+const generateAuthToken = (userId: string): string => {  // Changed userId to string to match UUID type
     const secret = process.env.JWT_SECRET || 'your_jwt_secret'; // JWT secret from env
     const expiresIn = '1h'; // Token expiration time
     return jwt.sign({ userId }, secret, { expiresIn }); // Generate token
@@ -21,8 +21,9 @@ router.post(
         // Validation checks
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
+        check('username', 'Username is required').notEmpty(), // Added username validation
     ],
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response): Promise<Response> => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -50,7 +51,7 @@ router.post(
             });
 
             // Generate JWT token
-            const token = generateAuthToken(Number(newUser.id));
+            const token = generateAuthToken(newUser.id.toString());  // Make sure to pass user ID as string
 
             return res.status(201).json({
                 message: 'User registered successfully',
@@ -70,10 +71,10 @@ router.post(
 );
 
 // Get User Profile Route (GET /profile)
-router.get('/profile', authenticateToken, async (req: Request, res: Response) => {
+router.get('/profile', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
     try {
         // Access userId from the decoded token
-        const userId = req.user?.id; // Ensure `req.user` is populated by `authenticateToken`
+        const userId = req.userId; // Ensure `req.userId` is populated by `authenticateToken`
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required' });
