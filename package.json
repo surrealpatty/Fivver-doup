@@ -41,7 +41,7 @@
     "@types/node": "^20.17.6",
     "@types/sequelize": "^4.28.20",
     "@types/supertest": "^6.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^8.15.0",
     "@vue/compiler-sfc": "^3.5.13",
     "@vue/test-utils": "^2.4.6",
