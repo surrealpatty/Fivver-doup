@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { sequelize } from '../config/database';
-import Service  from '../models/services';
+import Service from '../models/services';
 import User from '../models/user';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ interface ServiceCreationAttributes {
   name: string;
   description: string;
   price: number;
-  userId: number; // Added userId since it's part of the creation
+  userId: number; // Include userId since it's part of the creation
 }
 
 // CREATE: Add a new service
@@ -26,12 +26,14 @@ router.post('/services', async (req: Request, res: Response) => {
 
     // Create a new service
     const service = await Service.create({
-      title: "default title",  // Ensure all required fields are included and properly formatted
+      name, // Using request body data
+      description,
+      price,
+      userId,
     });
-    
 
     // Return the newly created service
-    return res.status(201).json(service); 
+    return res.status(201).json(service);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -41,9 +43,7 @@ router.post('/services', async (req: Request, res: Response) => {
 // READ: Get all services
 router.get('/services', async (req: Request, res: Response) => {
   try {
-    import Service from '../models/services';
-
-const services = await Service.findAll();
+    const services = await Service.findAll({
       include: [
         {
           model: User,
@@ -52,7 +52,9 @@ const services = await Service.findAll();
         },
       ],
     });
-    return res.status(200).json(services); // Return all services
+
+    // Return all services
+    return res.status(200).json(services);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -79,6 +81,7 @@ router.get('/services/:id', async (req: Request, res: Response) => {
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
+
     return res.status(200).json(service);
   } catch (error) {
     console.error(error);
@@ -104,7 +107,7 @@ router.put('/services/:id', async (req: Request, res: Response) => {
     service.price = price || service.price;
 
     await service.save(); // Save the updated service
-    return res.status(200).json(service); // Return the updated service
+    return res.status(200).json(service);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
