@@ -1,25 +1,25 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
 import bodyParser from 'body-parser';
-import userRoutes from './routes/user'; // Correct import for TypeScript
-import { authenticateToken } from './middlewares/authMiddleware'; // Correct named import
+import userRoutes from './routes/user'; // Correct import for user routes
+import { authenticateToken } from './middlewares/authMiddleware'; // Correct named import for authentication middleware
 
 const app = express();
 
 // Middleware to parse incoming JSON requests
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Parses incoming JSON payloads for API requests
 
 // Public routes (no authentication required)
-app.use('/users', userRoutes); // Example: /users/register, /users/login, etc.
+app.use('/users', userRoutes); // Routes for user-related actions like register, login, etc.
 
 // Protected routes (require authentication)
 app.use('/profile', authenticateToken, (req: Request, res: Response) => {
   res.json({ message: 'Profile page (authentication required)' });
 });
 
-// Example of a specific protected route
+// Example of a specific protected route for fetching user profile
 app.use('/users/profile', authenticateToken, async (req: Request, res: Response) => {
   try {
-    // Your logic to fetch and return the user profile
+    // Your logic to fetch and return the user profile data
     res.json({ message: 'User profile data' });
   } catch (error) {
     console.error('Error fetching user profile:', error);
@@ -27,12 +27,12 @@ app.use('/users/profile', authenticateToken, async (req: Request, res: Response)
   }
 });
 
-// Handle 404 for undefined routes
+// 404 route for undefined routes
 app.use((req: Request, res: Response) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Global error handler
+// Global error handler for unhandled errors in the application
 app.use(
   (err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error('Global error handler:', err.message);
@@ -46,5 +46,5 @@ const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// Export app and server for testing purposes
+// Export the app and server for testing purposes
 export { app, server };

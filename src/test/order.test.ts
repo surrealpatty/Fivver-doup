@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../index'; // Default export for app
+import { app } from '../index'; // Correct named import for app
 import { sequelize } from '../config/database'; // Correctly imports Sequelize instance
 import User from '../models/user'; // Adjust based on your models directory structure
 import Service from '../models/services';
@@ -29,7 +29,7 @@ describe('Order Controller Tests', () => {
   });
 
   afterAll(async () => {
-    await sequelize.close(); // Close Sequelize connection
+    await sequelize.close(); // Close Sequelize connection after tests are done
   });
 
   // Test Create Order
