@@ -1,68 +1,94 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure you're using the correct sequelize instance
+import express, { Request, Response } from 'express';
+import User from '../models/user'; // Make sure the path to the User model is correct
+import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing
+import jwt from 'jsonwebtoken'; // Assuming JWT is used for authentication
 
-// Define the User attributes interface
-interface UserAttributes {
-  id: number;
-  email: string;
-  password: string;
-  isPaid: boolean;
-  username: string;
-  role: string;
-}
+const router = express.Router();
 
-// Define the creation attributes (optional fields during creation)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+// Register new user
+router.post('/register', async (req: Request, res: Response) => {
+  const { email, password, username, role } = req.body;
 
-// Create the User model by extending Sequelize's Model class
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;         // '!' denotes non-nullable field
-  public email!: string;
-  public password!: string;
-  public isPaid!: boolean;
-  public username!: string;
-  public role!: string;
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
 
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// Initialize the User model with Sequelize
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    isPaid: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-      defaultValue: 'user',
-    },
-  },
-  {
-    sequelize, // The Sequelize instance
-    tableName: 'users', // The table name in the database
-    modelName: 'User', // Model name
+    // Create new user in the database
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      username,
+      role: role || 'user', // Default to 'user' role if not provided
+      isPaid: false, // Assuming the default user is not paid
+    });
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email, username: newUser.username },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1h' }
+    );
+
+    // Send the response with the token
+    res.status(201).json({
+      message: 'User registered successfully',
+      token,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+      },
+    });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ message: 'Server error' });
   }
-);
+});
 
-export default User;
+// Login user
+router.post('/login', async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    // Compare the password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, username: user.username },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1h' }
+    );
+
+    // Send the response with the token
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+export default router;
