@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Import sequelize instance from config
+import  sequelize  from '../config/database';  // Import sequelize instance from config
 
 // Import models without causing circular dependency issues
 import  User  from './user';  // Use the correct import for User model

@@ -1,6 +1,6 @@
 // models/user.ts (example)
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Assuming you have a sequelize instance
+import sequelize from '../config/database';
 
 export interface UserAttributes {
   id: number;

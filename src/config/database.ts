@@ -4,66 +4,64 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-// Destructure environment variables from process.env
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, NODE_ENV } = process.env;
+// Destructure and validate environment variables
+const {
+    DB_HOST = 'localhost',
+    DB_USER = 'root',
+    DB_PASSWORD = '',
+    DB_NAME = 'fivver_doup',
+    DB_PORT = '3306',
+    NODE_ENV,
+} = process.env;
 
-// TypeScript type declaration for process.env (ensure all required variables are present)
-if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
-    if (NODE_ENV !== 'test') {
-        console.error('Missing required environment variables. Please check your .env file.');
-        process.exit(1); // Exit the process if it's not in a test environment
-    }
+// Ensure critical environment variables are defined
+if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
+    console.error('Missing required database environment variables. Check your .env file.');
+    process.exit(1);
 }
 
-// Default values for database connection settings if not provided
+// Initialize Sequelize instance
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    host: DB_HOST || 'localhost', // Default to 'localhost' if not provided
-    username: DB_USER || 'root', // Default to 'root' if not provided
-    password: DB_PASSWORD || '', // Default to empty string if not provided
-    database: DB_NAME || 'fivver_doup', // Default to 'fivver_doup' if not provided
-    port: parseInt(DB_PORT || '3306', 10), // Default to 3306 if not provided
+    host: DB_HOST,
+    username: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: parseInt(DB_PORT, 10),
     logging: NODE_ENV === 'development', // Log SQL queries only in development
     dialectOptions: {
-        timezone: 'Z', // Optional: Use UTC for MySQL queries (if applicable)
+        timezone: 'Z', // Use UTC timezone for MySQL queries
     },
     define: {
-        timestamps: false, // Optional: Adjust if you don't want `createdAt` and `updatedAt` fields
+        timestamps: false, // Disable auto-generated timestamps
     },
 });
 
-// Function to test the database connection
+// Test the database connection
 export const testConnection = async (): Promise<void> => {
     try {
         await sequelize.authenticate();
-        console.log('Database connection has been established successfully.');
+        console.log('Database connection established successfully.');
     } catch (error) {
-        if (error instanceof Error) {
-            console.error('Unable to connect to the database:', error.message);
-        } else {
-            console.error('An unknown error occurred during the database connection');
-        }
-
-        // Exit the process only if it's not in a test environment
-        if (NODE_ENV !== 'test') {
-            process.exit(1); // Exit the process if connection fails
-        }
+        console.error('Error connecting to the database:', error instanceof Error ? error.message : error);
+        if (NODE_ENV !== 'test') process.exit(1); // Exit process if not in test environment
     }
 };
 
-// Ensure sequelize connection is properly closed after tests or app shutdown
+// Close the database connection
 export const closeConnection = async (): Promise<void> => {
     try {
         await sequelize.close();
-        console.log('Database connection has been closed.');
+        console.log('Database connection closed successfully.');
     } catch (error) {
         console.error('Error closing the database connection:', error);
     }
 };
 
-// Only call testConnection if it's not in a test environment
+// Automatically test the connection unless in a test environment
 if (NODE_ENV !== 'test') {
     testConnection();
 }
 
-export { sequelize }; // Export sequelize instance for use elsewhere in the app
+// Export Sequelize instance as the default export
+export default sequelize;
