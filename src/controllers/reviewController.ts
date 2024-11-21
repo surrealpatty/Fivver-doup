@@ -89,4 +89,36 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 
     if (!rating && !comment) {
         return res.status(400).json({ 
-      
+            message: 'At least one of rating or comment is required to update' 
+        });
+    }
+
+    try {
+        const review = await Review.findByPk(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+
+        // Check if the user is the one who posted the review
+        if (review.userId !== userIdAsNumber) {
+            return res.status(403).json({ message: 'You can only update your own reviews' });
+        }
+
+        // Update the review with new values
+        if (rating) review.rating = rating;
+        if (comment) review.comment = comment;
+
+        await review.save(); // Save the updated review
+
+        return res.status(200).json({
+            message: 'Review updated successfully',
+            review,
+        });
+    } catch (error) {
+        console.error('Error updating review:', error);
+        return res.status(500).json({
+            message: 'Internal server error',
+            error: (error as Error).message,
+        });
+    }
+};
