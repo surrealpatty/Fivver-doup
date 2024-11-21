@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",                                 // Target ES6 for compatibility
     "module": "ESNext",                              // Use ESNext module system (for better tree shaking)
-    "moduleResolution": "node",                       // Use Node.js module resolution strategy
+    "moduleResolution": "node",                      // Use Node.js module resolution strategy
     "strict": true,                                  // Enable strict type checking
     "esModuleInterop": true,                         // Enable interoperability with CommonJS modules
     "skipLibCheck": true,                            // Skip library checks (useful for large projects)

@@ -30,10 +30,10 @@ class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implement
   // Define associations between models
   static associate(models: any) {
     // A review belongs to a user
-    Review.belongsTo(models.User, { foreignKey: 'userId' });
+    Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
     // A review belongs to a service
-    Review.belongsTo(models.Service, { foreignKey: 'serviceId' });
+    Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
   }
 }
 
