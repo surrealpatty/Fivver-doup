@@ -1,11 +1,17 @@
 import { sequelize } from '../config/database'; // Import sequelize instance
-import User from './user';  // Default import for User
-import Service from './services'; // Default import for Service
-import Order from './order'; // Default import for Order
-import Review from './review'; // Default import for Review
+import { Model } from 'sequelize';  // Import the Sequelize Model class
+import  User  from './user';  // Named import for User
+import  Service  from './services'; // Named import for Service
+import { Order } from './order'; // Named import for Order
+import { Review } from './review'; // Named import for Review
 
-// Initialize models
-const models = {
+// Define the models interface for association typing
+interface ModelWithAssociations {
+  associate?: (models: { [key: string]: typeof Model }) => void;
+}
+
+// Initialize models with proper typing
+const models: { [key: string]: typeof Model } = {
   User,
   Service,
   Order,
@@ -13,7 +19,7 @@ const models = {
 };
 
 // Set up associations if the associate method exists
-Object.values(models).forEach((model: any) => {
+Object.values(models).forEach((model) => {
   if (model.associate) {
     model.associate(models); // Call associate if it exists
   }
