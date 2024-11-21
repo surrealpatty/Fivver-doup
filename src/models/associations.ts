@@ -1,7 +1,7 @@
 // Import the Sequelize models correctly
 import User from './user'; // Correct path for importing User
 import Service from './services'; // Correct path for importing Service
-import { Order } from './order'; // Correct path for importing Order
+import  Order  from './order'; // Correct path for importing Order
 
 // Define associations between the models
 const defineAssociations = () => {

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import sequelize from '../config/database'; // Named import for sequelize instance
+import { sequelize } from '../config/database';  // Named import
 import User from './user'; // Import User model
 import Service from './services'; // Import Service model
 
@@ -70,8 +70,8 @@ Order.init(
       type: DataTypes.UUID, // UUID for userId
       allowNull: true, // Supports ON DELETE SET NULL
       references: {
-        model: User,
-        key: 'id',
+        model: User, // Reference to the User model
+        key: 'id', // Foreign key points to 'id' in the User model
       },
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
@@ -80,8 +80,8 @@ Order.init(
       type: DataTypes.INTEGER, // Integer for serviceId
       allowNull: true, // Supports ON DELETE SET NULL
       references: {
-        model: Service,
-        key: 'id',
+        model: Service, // Reference to the Service model
+        key: 'id', // Foreign key points to 'id' in the Service model
       },
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',

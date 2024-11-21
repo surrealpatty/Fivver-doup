@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import sequelize from '../config/database';  // Ensure the sequelize instance is imported
+import { sequelize } from '../config/database';  // Named import
 import User from './user';  // Import User model as a named import
 import Service from './services';  // Import Service model as a named import
 

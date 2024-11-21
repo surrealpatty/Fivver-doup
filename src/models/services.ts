@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional, Association } from 'sequelize';
-import sequelize from '../config/database';  // Import sequelize instance
+import { sequelize } from '../config/database';  // Named import
 import User from './user';  // Import the associated User model
 
 // Define the attributes for the Service model
@@ -8,7 +8,7 @@ interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
-  userId: number;
+  userId: string;  // Updated to string to match UUID type
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,7 +21,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
-  public userId!: number;
+  public userId!: string;  // Updated to string to match UUID type
 
   // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
@@ -63,7 +63,7 @@ Service.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.UUID,  // Updated to UUID to match the User model
       allowNull: false,
       references: {
         model: 'users',  // Ensure it matches the User table name

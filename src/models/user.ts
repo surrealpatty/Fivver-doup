@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import sequelize from '../config/database';  // Ensure this path is correct
+import { sequelize } from '../config/database';  // Named import
 import Service from './services';  // Import associated models
 
 // Define the User model interface

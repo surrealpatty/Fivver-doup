@@ -1,5 +1,4 @@
 // src/index.ts
-
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/user'; // Correct import for user routes
 import profileRoutes from './routes/profile'; // Import profile routes
