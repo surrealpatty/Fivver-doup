@@ -32,21 +32,21 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public readonly updatedAt!: Date;
 
   // Define associations after the model is defined
-  static associate(models: any) {
+  static associate() {
     // A user can have many reviews
-    User.hasMany(models.Review, {
+    User.hasMany(sequelize.models.Review, {
       foreignKey: 'userId',
       as: 'reviews', // Alias for the associated model
     });
 
     // A user can have many orders
-    User.hasMany(models.Order, {
+    User.hasMany(sequelize.models.Order, {
       foreignKey: 'userId',
       as: 'orders', // Alias for the associated model
     });
 
     // A user can have many services
-    User.hasMany(models.Service, {
+    User.hasMany(sequelize.models.Service, {
       foreignKey: 'userId',
       as: 'services', // Alias for the associated model
     });
@@ -93,6 +93,6 @@ User.init(
 );
 
 // Dynamically associate models with the sequelize instance after defining them
-User.associate({ Review, Order, Service });
+User.associate();
 
 export default User;
