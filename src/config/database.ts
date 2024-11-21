@@ -14,7 +14,7 @@ const {
     NODE_ENV,
 } = process.env;
 
-// Ensure critical environment variables are defined
+// Ensure critical environment variables are defined, except in test environment
 if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
     console.error('Missing required database environment variables. Check your .env file.');
     process.exit(1);
@@ -44,7 +44,9 @@ export const testConnection = async (): Promise<void> => {
         console.log('Database connection established successfully.');
     } catch (error) {
         console.error('Error connecting to the database:', error instanceof Error ? error.message : error);
-        if (NODE_ENV !== 'test') process.exit(1); // Exit process if not in test environment
+        if (NODE_ENV !== 'test') {
+            process.exit(1); // Exit process if not in test environment
+        }
     }
 };
 
@@ -63,5 +65,5 @@ if (NODE_ENV !== 'test') {
     testConnection();
 }
 
-// Export Sequelize instance as the default export
+// Export Sequelize instance for usage in models
 export default sequelize;

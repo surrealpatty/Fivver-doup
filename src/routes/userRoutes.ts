@@ -15,7 +15,7 @@ interface AuthenticatedRequest extends Request {
 
 const router = Router();
 
-// Route for getting all users
+// Route for getting all users (accessible only for admin or authorized users)
 router.get('/users', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const users = await User.findAll();
@@ -25,13 +25,19 @@ router.get('/users', authenticateToken, async (req: AuthenticatedRequest, res: R
   }
 });
 
-// Route for creating a user
+// Route for creating a user (admin only, or open depending on your logic)
 router.post('/users', async (req: Request, res: Response): Promise<Response> => {
   try {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Check if the email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
     }
 
     const newUser = await User.create({
@@ -47,11 +53,12 @@ router.post('/users', async (req: Request, res: Response): Promise<Response> => 
   }
 });
 
-// Route for updating a user
+// Route for updating a user (ensures users can only update their own profile)
 router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.params.id;
 
+    // Check if the logged-in user is trying to update their own profile
     if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only update your own profile' });
     }
@@ -71,11 +78,12 @@ router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, re
   }
 });
 
-// Route for deleting a user
+// Route for deleting a user (ensures users can only delete their own profile)
 router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.params.id;
 
+    // Check if the logged-in user is trying to delete their own profile
     if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only delete your own profile' });
     }
@@ -86,7 +94,7 @@ router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest,
       return res.status(404).json({ message: 'User not found' });
     }
 
-    return res.status(204).send();
+    return res.status(204).send(); // No content response after deletion
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting user', error: (error as Error).message });
   }

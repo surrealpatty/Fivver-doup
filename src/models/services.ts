@@ -1,5 +1,6 @@
+// src/models/services.ts
 import { Model, DataTypes, Optional, Association } from 'sequelize';
-export { sequelize };
+import sequelize from '../config/database';  // Import sequelize instance
 import User from './user';  // Import the associated User model
 
 // Define the attributes for the Service model
@@ -82,4 +83,4 @@ Service.init(
 );
 
 // Export default for easy imports
-export default Service; 
+export default Service;

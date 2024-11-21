@@ -1,11 +1,13 @@
+// src/controllers/reviewController.ts
 import { Request, Response } from 'express';
-export { Review, User, Service };
+import { Review, User, Service } from '../models'; // Correctly import models
 
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
     const userIdAsNumber = parseInt(req.params.id, 10); // Convert userId from string to number
 
+    // Input validation
     if (!serviceId || typeof rating !== 'number' || !comment) {
         return res.status(400).json({ 
             message: 'Service ID, rating, and comment are required', 
