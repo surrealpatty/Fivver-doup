@@ -4,6 +4,16 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
+// TypeScript type definition for environment variables
+interface ProcessEnv {
+    DB_HOST?: string;
+    DB_USER?: string;
+    DB_PASSWORD?: string;
+    DB_NAME?: string;
+    DB_PORT?: string;
+    NODE_ENV?: string;
+}
+
 // Destructure and validate environment variables
 const {
     DB_HOST = 'localhost',
@@ -12,7 +22,7 @@ const {
     DB_NAME = 'fivver_doup',
     DB_PORT = '3306',
     NODE_ENV,
-} = process.env;
+}: ProcessEnv = process.env;
 
 // Ensure critical environment variables are defined, except in test environment
 if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
@@ -27,13 +37,13 @@ const sequelize = new Sequelize({
     username: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
-    port: parseInt(DB_PORT, 10),
+    port: parseInt(DB_PORT, 10), // Ensure correct conversion of DB_PORT to an integer
     logging: NODE_ENV === 'development', // Log SQL queries only in development
     dialectOptions: {
         timezone: 'Z', // Use UTC timezone for MySQL queries
     },
     define: {
-        timestamps: false, // Disable auto-generated timestamps
+        timestamps: true, // Allow Sequelize to manage timestamps by default
     },
 });
 
