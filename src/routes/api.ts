@@ -5,17 +5,20 @@ import { ServiceCreationAttributes } from '../models/services'; // Import the co
 
 const router = Router(); // Initialize the router
 
-// POST route to create a new service
+// Define the service creation route
 router.post('/services', async (req: Request, res: Response): Promise<Response> => {
-  const { userId, title, description, price }: ServiceCreationAttributes = req.body; // Destructure fields from the request body
+  // Destructure the necessary fields from the request body and type it with ServiceCreationAttributes
+  const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
     // Validate the incoming data
     if (!userId || !title || !description || price === undefined) {
-      return res.status(400).json({ 
-        message: 'Missing required fields', 
-        error: 'userId, title, description, and price are required' 
-      });
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Ensure price is a valid number
+    if (typeof price !== 'number' || isNaN(price)) {
+      return res.status(400).json({ message: 'Price must be a valid number' });
     }
 
     // Check if the user exists
@@ -35,14 +38,11 @@ router.post('/services', async (req: Request, res: Response): Promise<Response> 
     // Return the newly created service
     return res.status(201).json({
       message: 'Service created successfully',
-      service, // The service object created
+      service,
     });
   } catch (error) {
     console.error('Error creating service:', error);
-    return res.status(500).json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
+    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 });
 

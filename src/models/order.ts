@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import  sequelize  from '../config/database'; // Named import for sequelize instance
+import { DataTypes, Model, Optional, Association } from 'sequelize';
+import sequelize from '../config/database'; // Named import for sequelize instance
 import User from './user'; // Import User model
 import Service from './services'; // Import Service model
 
@@ -20,10 +20,7 @@ export interface OrderAttributes {
 export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
 
 // Define the Order model class
-class Order
-  extends Model<OrderAttributes, OrderCreationAttributes>
-  implements OrderAttributes
-{
+class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
   public userId!: string | null;
   public serviceId!: number | null;
@@ -37,6 +34,11 @@ class Order
   public readonly updatedAt!: Date | null;
 
   // Define model associations
+  public static associations: {
+    user: Association<Order, User>;
+    service: Association<Order, Service>;
+  };
+
   static associate(models: { User: typeof User; Service: typeof Service }) {
     // Associate Order with User
     Order.belongsTo(models.User, {
