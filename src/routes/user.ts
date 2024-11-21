@@ -1,4 +1,3 @@
-// src/routes/user.ts
 import express, { Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct path to your User model
 import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing

@@ -5,28 +5,21 @@ import { ServiceCreationAttributes } from '../models/services'; // Import the co
 
 const router = Router(); // Initialize the router
 
-// Service creation validation function
-const validateServiceData = (data: ServiceCreationAttributes) => {
-  const { userId, title, description, price } = data;
-  if (!userId || !title || !description || price === undefined) {
-    return { valid: false, message: 'Missing required fields' };
-  }
-  return { valid: true };
-};
-
-router.post('/path', async (req: Request, res: Response): Promise<Response> => {
-  const { userId, title, description, price }: ServiceCreationAttributes = req.body; // Get data from request body
-
-  const validation = validateServiceData({ userId, title, description, price }); // Use validation function
-  if (!validation.valid) {
-    return res.status(400).json({ message: validation.message }); // Return validation error
-  }
+// Define the service creation route
+router.post('/services', async (req: Request, res: Response): Promise<Response> => {
+  // Destructure the necessary fields from the request body
+  const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
+    // Validate the incoming data
+    if (!userId || !title || !description || price === undefined) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
     // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' }); // User not found error
+      return res.status(404).json({ message: 'User not found' });
     }
 
     // Create the new service
@@ -41,7 +34,7 @@ router.post('/path', async (req: Request, res: Response): Promise<Response> => {
     return res.status(201).json(service);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' }); // Handle unexpected errors
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 

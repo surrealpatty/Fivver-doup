@@ -28,6 +28,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             return res.status(404).json({ message: 'Service not found' });
         }
 
+        // Create a new review
         const review = await Review.create({
             serviceId,
             userId: userIdAsNumber,
@@ -52,9 +53,15 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
 export const getServiceReviews = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId } = req.params;
 
+    // Validate serviceId
+    const parsedServiceId = parseInt(serviceId, 10);
+    if (isNaN(parsedServiceId)) {
+        return res.status(400).json({ message: 'Invalid serviceId' });
+    }
+
     try {
         const reviews = await Review.findAll({
-            where: { serviceId },
+            where: { serviceId: parsedServiceId },
             include: [
                 {
                     model: User,
@@ -105,8 +112,8 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Update the review with new values
-        if (rating) review.rating = rating;
-        if (comment) review.comment = comment;
+        if (rating !== undefined) review.rating = rating;
+        if (comment !== undefined) review.comment = comment;
 
         await review.save(); // Save the updated review
 

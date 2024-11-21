@@ -1,22 +1,29 @@
-export { sequelize };
+import { sequelize } from './config/database'; // Import sequelize instance
 
-const resetDatabase = async () => {
+// Function to reset the database
+const resetDatabase = async (): Promise<void> => {
   try {
+    console.log('Starting database reset process...');
+
+    // Step 1: Drop all tables in the database
     console.log('Dropping all tables...');
-    // Drop all tables in the database
-    await sequelize.drop();
+    await sequelize.drop(); // Drops all tables
     console.log('Tables dropped successfully.');
 
+    // Step 2: Re-sync models to the database (recreates tables)
     console.log('Re-syncing database...');
-    // Re-sync models to the database (this may recreate the tables)
-    await sequelize.sync({ force: true }); // Set 'force: true' to recreate the tables
+    await sequelize.sync({ force: true }); // 'force: true' drops and recreates tables
     console.log('Database re-synced successfully!');
+    
   } catch (error) {
+    // Handle errors and log them
     console.error('Error resetting the database:', error);
   } finally {
-    // Exiting the process after completing the task
-    process.exit(0);
+    // Graceful shutdown after completing the task
+    console.log('Database reset process complete.');
+    process.exit(0); // Exit the process after completion
   }
 };
 
+// Call the function to reset the database
 resetDatabase();

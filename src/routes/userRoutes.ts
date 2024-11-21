@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 import { authenticateToken } from '../middlewares/authMiddleware';
 import User from '../models/user';
 
@@ -40,10 +41,13 @@ router.post('/users', async (req: Request, res: Response): Promise<Response> => 
       return res.status(400).json({ message: 'Email already in use' });
     }
 
+    // Hash the password before saving it to the database
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       username,
       email,
-      password,
+      password: hashedPassword, // Store hashed password
       isPaid: false, // Default to false
     });
 
@@ -61,6 +65,11 @@ router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, re
     // Check if the logged-in user is trying to update their own profile
     if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only update your own profile' });
+    }
+
+    // Hash the password if it is being updated
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
     }
 
     const [updatedCount, updatedUser] = await User.update(req.body, {
