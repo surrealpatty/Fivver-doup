@@ -1,6 +1,7 @@
+// src/routes/serviceRoute.ts
 import express, { Request, Response } from 'express';
-import Service from '../models/services'; // Adjusted import for clarity
-import User from '../models/user'; // Adjusted import for clarity
+import Service from '../models/services'; // Corrected import for clarity
+import User from '../models/user'; // Corrected import for clarity
 
 // Define types for request body for service creation
 interface ServiceCreationBody {
@@ -31,7 +32,7 @@ router.post('/services', async (req: Request<{}, {}, ServiceCreationBody>, res: 
     // Create a new service
     const service = await Service.create({ userId, title, description, price });
 
-    return res.status(201).json(service);
+    return res.status(201).json({ message: 'Service created successfully', service });
   } catch (error) {
     console.error('Error creating service:', error);
     return res.status(500).json({ message: 'Internal server error while creating service.' });

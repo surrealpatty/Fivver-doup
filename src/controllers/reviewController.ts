@@ -89,6 +89,4 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 
     if (!rating && !comment) {
         return res.status(400).json({ 
-            message: 'At least one of rating or comment is required to update' 
-        });
-    }
+      
