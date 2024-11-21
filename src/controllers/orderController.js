@@ -36,38 +36,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database"); // Ensure the path is correct
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
+var order_1 = require("../models/order"); // Make sure this path is correct
+// CREATE: Add a new order
+var createOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); };
+exports.createOrder = createOrder;
+// GET: Get all orders
+var getAllOrders = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orders, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Dropping all tables...');
-                // Drop all tables in the database
-                return [4 /*yield*/, database_1.sequelize.drop()];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, order_1.default.findAll()];
             case 1:
-                // Drop all tables in the database
-                _a.sent();
-                console.log('Tables dropped successfully.');
-                console.log('Re-syncing database...');
-                // Re-sync models to the database (this may recreate the tables)
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
+                orders = _a.sent();
+                return [2 /*return*/, res.status(200).json(orders)]; // Return the list of orders
             case 2:
-                // Re-sync models to the database (this may recreate the tables)
-                _a.sent(); // Set 'force: true' to recreate the tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
-            case 3:
                 error_1 = _a.sent();
-                console.error('Error resetting the database:', error_1);
-                return [3 /*break*/, 5];
-            case 4:
-                // Exiting the process after completing the task
-                process.exit(0);
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+                console.error('Error fetching orders:', error_1);
+                return [2 /*return*/, res.status(500).json({ message: 'Error fetching orders', error: error_1 })];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-resetDatabase();
+exports.getAllOrders = getAllOrders;
+// GET: Get a single order by ID
+var getOrderById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); };
+exports.getOrderById = getOrderById;
+// PUT: Update an order by ID
+var updateOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); };
+exports.updateOrder = updateOrder;
+// DELETE: Delete an order by ID
+var deleteOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); };
+exports.deleteOrder = deleteOrder;

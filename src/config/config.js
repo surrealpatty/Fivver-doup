@@ -36,38 +36,73 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database"); // Ensure the path is correct
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+var sequelize_1 = require("sequelize");
+var dotenv_1 = require("dotenv");
+// Load environment variables from the .env file
+dotenv_1.default.config();
+// Destructure environment variables
+var _a = process.env, DB_NAME = _a.DB_NAME, DB_USER = _a.DB_USER, DB_PASSWORD = _a.DB_PASSWORD, DB_HOST = _a.DB_HOST, DB_DIALECT = _a.DB_DIALECT, DB_SSL = _a.DB_SSL, NODE_ENV = _a.NODE_ENV, JWT_SECRET = _a.JWT_SECRET;
+// Ensure required environment variables are present
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT || !JWT_SECRET) {
+    throw new Error('Missing required environment variables');
+}
+// Convert DB_SSL to a boolean value if it's set to 'true' or 'false'
+var useSSL = DB_SSL === 'true';
+// Cast DB_DIALECT to a valid Sequelize dialect
+var dialect = DB_DIALECT; // Replace with all valid dialects you support
+// Create a new Sequelize instance
+var sequelize = new sequelize_1.Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: dialect, // Use the type-cast dialect here
+    logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
+    dialectOptions: {
+        ssl: useSSL, // Use SSL if DB_SSL is 'true'
+        rejectUnauthorized: false, // Disable verification if using self-signed certificates
+    },
+});
+// Test the database connection
+var testConnection = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Dropping all tables...');
-                // Drop all tables in the database
-                return [4 /*yield*/, database_1.sequelize.drop()];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, sequelize.authenticate()];
             case 1:
-                // Drop all tables in the database
                 _a.sent();
-                console.log('Tables dropped successfully.');
-                console.log('Re-syncing database...');
-                // Re-sync models to the database (this may recreate the tables)
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
+                console.log('Database connection established successfully');
+                return [3 /*break*/, 3];
             case 2:
-                // Re-sync models to the database (this may recreate the tables)
-                _a.sent(); // Set 'force: true' to recreate the tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error resetting the database:', error_1);
-                return [3 /*break*/, 5];
-            case 4:
-                // Exiting the process after completing the task
-                process.exit(0);
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+                err_1 = _a.sent();
+                if (err_1 instanceof Error) {
+                    console.error('Unable to connect to the database:', err_1.message || err_1);
+                }
+                else {
+                    console.error('An unknown error occurred during database connection');
+                }
+                // Do not call process.exit(1) in a test environment
+                if (NODE_ENV !== 'test') {
+                    process.exit(1); // Exit the process only if it's not a test environment
+                }
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-resetDatabase();
+// Only call testConnection if it's not in a test environment
+if (NODE_ENV !== 'test') {
+    testConnection();
+}
+// Export the config object and sequelize instance
+exports.default = {
+    DB_NAME: DB_NAME,
+    DB_USER: DB_USER,
+    DB_PASSWORD: DB_PASSWORD,
+    DB_HOST: DB_HOST,
+    DB_DIALECT: DB_DIALECT,
+    DB_SSL: DB_SSL,
+    NODE_ENV: NODE_ENV,
+    JWT_SECRET: JWT_SECRET,
+    sequelize: sequelize,
+    testConnection: testConnection,
+};

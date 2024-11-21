@@ -36,38 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database"); // Ensure the path is correct
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+exports.getUserProfile = void 0;
+var user_1 = require("../models/user"); // Change to default import
+// Example function for getting a user profile
+var getUserProfile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, user, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Dropping all tables...');
-                // Drop all tables in the database
-                return [4 /*yield*/, database_1.sequelize.drop()];
+                _a.trys.push([0, 2, , 3]);
+                userId = req.userId;
+                if (!userId) {
+                    return [2 /*return*/, res.status(400).json({ message: 'User ID not found in request' })];
+                }
+                return [4 /*yield*/, user_1.default.findByPk(userId)];
             case 1:
-                // Drop all tables in the database
-                _a.sent();
-                console.log('Tables dropped successfully.');
-                console.log('Re-syncing database...');
-                // Re-sync models to the database (this may recreate the tables)
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, res.status(404).json({ message: 'User not found' })];
+                }
+                return [2 /*return*/, res.json(user)];
             case 2:
-                // Re-sync models to the database (this may recreate the tables)
-                _a.sent(); // Set 'force: true' to recreate the tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
-            case 3:
                 error_1 = _a.sent();
-                console.error('Error resetting the database:', error_1);
-                return [3 /*break*/, 5];
-            case 4:
-                // Exiting the process after completing the task
-                process.exit(0);
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+                console.error('Error fetching user profile:', error_1);
+                return [2 /*return*/, res.status(500).json({ message: 'Internal server error' })];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-resetDatabase();
+exports.getUserProfile = getUserProfile;

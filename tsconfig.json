@@ -1,16 +1,24 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"],  // Add this line if not already included
-    "types": ["node", "express", "jest"],                  // Ensure express is included in the types array
-    "lib": ["ES2018", "DOM"],
-    // other configurations...
+    "target": "ES2018",                            // Set your desired ECMAScript target version
+    "module": "commonjs",                          // Use commonjs module system for Node.js
+    "strict": true,                                // Enable strict type-checking options
+    "esModuleInterop": true,                       // Allow default imports from modules without default exports
+    "skipLibCheck": true,                          // Skip type checking of declaration files to improve build speed
+    "forceConsistentCasingInFileNames": true,      // Ensure consistent casing for file names
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Add custom types path
+    "types": ["node", "express", "jest"],                  // Ensure express and jest are included in the types array
+    "lib": ["ES2018", "DOM"],                      // Add necessary libraries (DOM for browser environments if needed)
+    "outDir": "./dist",                            // Ensure transpiled files go to dist directory
+    "baseUrl": "./",                               // Set base directory for module resolution
+    "resolveJsonModule": true                      // Allow importing JSON files
   },
   "include": [
-    "src/**/*",
-    "**/*.test.ts"
+    "src/**/*",                                    // Include all source files
+    "**/*.test.ts"                                  // Include all test files
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules",                                // Exclude node_modules folder
+    "dist"                                         // Exclude dist folder
   ]
 }

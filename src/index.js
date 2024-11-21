@@ -36,38 +36,52 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database"); // Ensure the path is correct
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Dropping all tables...');
-                // Drop all tables in the database
-                return [4 /*yield*/, database_1.sequelize.drop()];
-            case 1:
-                // Drop all tables in the database
-                _a.sent();
-                console.log('Tables dropped successfully.');
-                console.log('Re-syncing database...');
-                // Re-sync models to the database (this may recreate the tables)
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
-            case 2:
-                // Re-sync models to the database (this may recreate the tables)
-                _a.sent(); // Set 'force: true' to recreate the tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error resetting the database:', error_1);
-                return [3 /*break*/, 5];
-            case 4:
-                // Exiting the process after completing the task
-                process.exit(0);
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+exports.server = exports.app = void 0;
+var express_1 = require("express"); // Correct TypeScript import
+var user_js_1 = require("./routes/user.js"); // Correct .js extension for ESM
+var authMiddleware_js_1 = require("./middlewares/authMiddleware.js"); // Correct import for ESM
+var app = (0, express_1.default)();
+exports.app = app;
+// Middleware to parse incoming JSON requests (no need for body-parser)
+app.use(express_1.default.json()); // Express built-in JSON parser
+// Public routes (no authentication required)
+app.use('/users', user_js_1.default); // Routes for user-related actions like register, login, etc.
+// Protected routes (require authentication)
+app.use('/profile', authMiddleware_js_1.authenticateToken, function (req, res) {
+    res.json({ message: 'Profile page (authentication required)' });
+});
+// Example of a specific protected route for fetching user profile
+app.use('/users/profile', authMiddleware_js_1.authenticateToken, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId;
+    var _a;
+    return __generator(this, function (_b) {
+        try {
+            userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+            if (!userId) {
+                return [2 /*return*/, res.status(400).json({ message: 'User ID is missing or invalid' })];
+            }
+            // Your logic to fetch and return the user profile data
+            res.json({ message: "User profile data for user with ID: ".concat(userId) });
         }
+        catch (error) {
+            console.error('Error fetching user profile:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+        return [2 /*return*/];
     });
-}); };
-resetDatabase();
+}); });
+// 404 route for undefined routes
+app.use(function (req, res) {
+    res.status(404).json({ message: 'Route not found' });
+});
+// Global error handler for unhandled errors in the application
+app.use(function (err, req, res, next) {
+    console.error('Global error handler:', err.message);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+});
+// Start the server
+var PORT = process.env.PORT || 3000;
+var server = app.listen(PORT, function () {
+    console.log("Server is running on port ".concat(PORT));
+});
+exports.server = server;

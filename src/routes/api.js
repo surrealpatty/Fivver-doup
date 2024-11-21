@@ -36,38 +36,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database"); // Ensure the path is correct
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var express_1 = require("express"); // Importing Router, Request, and Response from express
+var services_1 = require("../models/services"); // Import Service model
+var user_1 = require("../models/user"); // Import User model
+var router = (0, express_1.Router)(); // Initialize the router
+router.post('/services', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, userId, title, description, price, user, service, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Dropping all tables...');
-                // Drop all tables in the database
-                return [4 /*yield*/, database_1.sequelize.drop()];
+                _a = req.body, userId = _a.userId, title = _a.title, description = _a.description, price = _a.price;
+                _b.label = 1;
             case 1:
-                // Drop all tables in the database
-                _a.sent();
-                console.log('Tables dropped successfully.');
-                console.log('Re-syncing database...');
-                // Re-sync models to the database (this may recreate the tables)
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
+                _b.trys.push([1, 4, , 5]);
+                // Validate the incoming data
+                if (!userId || !title || !description || price === undefined) {
+                    return [2 /*return*/, res.status(400).json({ message: 'Missing required fields' })];
+                }
+                return [4 /*yield*/, user_1.default.findByPk(userId)];
             case 2:
-                // Re-sync models to the database (this may recreate the tables)
-                _a.sent(); // Set 'force: true' to recreate the tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
+                user = _b.sent();
+                if (!user) {
+                    return [2 /*return*/, res.status(404).json({ message: 'User not found' })];
+                }
+                return [4 /*yield*/, services_1.default.create({
+                        userId: userId, // 'userId' from the request body
+                        title: title, // 'title' from the request body
+                        description: description, // 'description' from the request body
+                        price: price,
+                    })];
             case 3:
-                error_1 = _a.sent();
-                console.error('Error resetting the database:', error_1);
-                return [3 /*break*/, 5];
+                service = _b.sent();
+                // Return the newly created service
+                return [2 /*return*/, res.status(201).json(service)];
             case 4:
-                // Exiting the process after completing the task
-                process.exit(0);
-                return [7 /*endfinally*/];
+                error_1 = _b.sent();
+                console.error(error_1);
+                return [2 /*return*/, res.status(500).json({ message: 'Internal server error' })];
             case 5: return [2 /*return*/];
         }
     });
-}); };
-resetDatabase();
+}); });
+exports.default = router; // Export the router to be used in other parts of your application
