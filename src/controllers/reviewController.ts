@@ -1,16 +1,13 @@
-// src/controllers/reviewController.ts
-
 import { Request, Response } from 'express';
 import { models } from '../models'; // Import models from the index.ts file
-import ServiceModel from '../models/services'; // Rename the import to avoid conflicts
-
-const { Review, User, Service } = models; // Destructure the models
+import { Review, User, Service } from '../models'; // Explicitly import the models
 
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsNumber = parseInt(req.params.id, 10);
-    // Convert userId from string to number
+    const userIdAsNumber = parseInt(req.params.id, 10); // Convert userId from string to number
+
+    // Validate input
     if (!serviceId || !rating || !comment) {
         return res.status(400).json({ message: 'Service ID, rating, and comment are required' });
     }
@@ -21,7 +18,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
 
     try {
         // Check if the service exists
-        const service = await ServiceModel.findByPk(serviceId); // Use the correct model reference
+        const service = await Service.findByPk(serviceId); // Correct model reference
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }
@@ -72,9 +69,9 @@ export const getServiceReviews = async (req: Request, res: Response): Promise<Re
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
     const { rating, comment } = req.body;
-    const { id } = req.user as { id: string };
+    const { id } = req.user as { id: string }; // Extract userId from req.user (ensure user is authenticated)
 
-    const userIdAsNumber = parseInt(req.params.id, 10);
+    const userIdAsNumber = parseInt(id, 10); // Convert to number if necessary
 
     // Validate input
     if (!rating && !comment) {
@@ -114,8 +111,9 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // 4. Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params; // Get review ID from request params
-    const { id } = req.user as { id: string };
-    const userIdAsNumber = parseInt(id, 10); // Convert to a number if necessary
+    const { id } = req.user as { id: string }; // Extract userId from req.user (ensure user is authenticated)
+
+    const userIdAsNumber = parseInt(id, 10); // Convert to number if necessary
 
     if (isNaN(userIdAsNumber)) {
         return res.status(400).json({ message: 'Invalid userId' });

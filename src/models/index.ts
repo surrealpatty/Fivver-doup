@@ -1,12 +1,12 @@
 import { sequelize } from '../config/database'; // Import sequelize instance
-import { Model, Sequelize } from 'sequelize';  // Import the Sequelize Model class
-import { User } from './user';  // Named import for User
-import { Service } from './services'; // Named import for Service
-import { Order } from './order'; // Named import for Order
-import { Review } from './review'; // Named import for Review
+import { Model } from 'sequelize';  // Import the Sequelize Model class
+import { User } from './user';  // Named import for User model
+import { Service } from './services'; // Named import for Service model
+import { Order } from './order'; // Named import for Order model
+import { Review } from './review'; // Named import for Review model
 
 // Define the models interface for association typing
-interface ModelWithAssociations {
+interface ModelWithAssociations extends Model {
   associate?: (models: { [key: string]: typeof Model }) => void;
 }
 

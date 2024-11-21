@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure this path is correct
-import  Service  from './services'; // Import associated models
+import { sequelize } from '../config/database';  // Ensure this path is correct
+import Service from './services';  // Import associated models
 
 // Define the User model interface
 interface UserAttributes {
@@ -8,8 +8,11 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string; // Add password to UserAttributes interface
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
+// Define the User creation attributes interface (without id)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 // Define the User class
@@ -19,6 +22,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password!: string; // Add password field
 
+  // Readonly timestamps provided by Sequelize
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
   // Define associations type for TypeScript
   public static associations: {
     services: Association<User, Service>;
@@ -26,21 +33,21 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
   // Static method to define associations
   public static associate(models: { Service: typeof Service }) {
-    // Example association: User can have many services
+    // User can have many services
     User.hasMany(models.Service, {
       foreignKey: 'userId',  // Adjust based on your schema
       as: 'services',        // Alias for the relationship
     });
   }
 
-  // Define any instance methods or virtuals here if needed
+  // You can add instance methods or virtuals here if needed
 }
 
 // Initialize the User model with the sequelize instance
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -62,6 +69,8 @@ User.init(
     sequelize,        // Sequelize instance
     modelName: 'User', // Model name
     tableName: 'users', // Table name in DB
+    underscored: true,  // Use snake_case for column names
+    timestamps: true,   // Sequelize handles timestamps automatically
   }
 );
 
