@@ -5,16 +5,17 @@ import { checkAuth } from '../middleware/authMiddleware'; // Assuming you have a
 const router = Router();
 
 // 1. Create a Service
-router.post('/services', checkAuth, async (req: Request, res: Response): Promise<Response> => {
+router.post('/services', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { title, description, price } = req.body;
   const userId = req.user?.id; // Get user ID from the authenticated user
 
   // Validate input data
   if (!title || !description || !price) {
-    return res.status(400).json({
+    res.status(400).json({
       message: 'Title, description, and price are required',
       error: 'Invalid input',
     });
+    return; // Ensure no further processing
   }
 
   try {
@@ -26,13 +27,13 @@ router.post('/services', checkAuth, async (req: Request, res: Response): Promise
       price,
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       message: 'Service created successfully',
       service,
     });
   } catch (error) {
     console.error('Error creating service:', error);
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Internal server error',
       error: (error as Error).message,
     });
@@ -40,24 +41,25 @@ router.post('/services', checkAuth, async (req: Request, res: Response): Promise
 });
 
 // 2. Get all Services
-router.get('/services', async (req: Request, res: Response): Promise<Response> => {
+router.get('/services', async (req: Request, res: Response): Promise<void> => {
   try {
     // Fetch all services
     const services = await Service.findAll();
 
     if (!services.length) {
-      return res.status(404).json({
+      res.status(404).json({
         message: 'No services found',
       });
+      return; // Ensure no further processing
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Services fetched successfully',
       services,
     });
   } catch (error) {
     console.error('Error fetching services:', error);
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Internal server error',
       error: (error as Error).message,
     });
@@ -65,7 +67,7 @@ router.get('/services', async (req: Request, res: Response): Promise<Response> =
 });
 
 // 3. Get a single Service by ID
-router.get('/services/:id', async (req: Request, res: Response): Promise<Response> => {
+router.get('/services/:id', async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -73,18 +75,19 @@ router.get('/services/:id', async (req: Request, res: Response): Promise<Respons
     const service = await Service.findByPk(id);
 
     if (!service) {
-      return res.status(404).json({
+      res.status(404).json({
         message: 'Service not found',
       });
+      return; // Ensure no further processing
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Service fetched successfully',
       service,
     });
   } catch (error) {
     console.error('Error fetching service:', error);
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Internal server error',
       error: (error as Error).message,
     });
@@ -92,17 +95,18 @@ router.get('/services/:id', async (req: Request, res: Response): Promise<Respons
 });
 
 // 4. Update a Service by ID
-router.put('/services/:id', checkAuth, async (req: Request, res: Response): Promise<Response> => {
+router.put('/services/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { title, description, price } = req.body;
   const userId = req.user?.id; // Get user ID from the authenticated user
 
   // Validate input data
   if (!title && !description && !price) {
-    return res.status(400).json({
+    res.status(400).json({
       message: 'At least one of title, description, or price is required to update',
       error: 'Invalid input',
     });
+    return; // Ensure no further processing
   }
 
   try {
@@ -110,16 +114,18 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
     const service = await Service.findByPk(id);
 
     if (!service) {
-      return res.status(404).json({
+      res.status(404).json({
         message: 'Service not found',
       });
+      return; // Ensure no further processing
     }
 
     // Ensure the service belongs to the logged-in user (userId check)
     if (service.userId !== userId) {
-      return res.status(403).json({
+      res.status(403).json({
         message: 'You can only update your own services',
       });
+      return; // Ensure no further processing
     }
 
     // Update the service with the new values
@@ -129,13 +135,13 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
 
     await service.save(); // Save updated service to the database
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Service updated successfully',
       service,
     });
   } catch (error) {
     console.error('Error updating service:', error);
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Internal server error',
       error: (error as Error).message,
     });
@@ -143,7 +149,7 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
 });
 
 // 5. Delete a Service by ID
-router.delete('/services/:id', checkAuth, async (req: Request, res: Response): Promise<Response> => {
+router.delete('/services/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const userId = req.user?.id; // Get user ID from the authenticated user
 
@@ -152,27 +158,29 @@ router.delete('/services/:id', checkAuth, async (req: Request, res: Response): P
     const service = await Service.findByPk(id);
 
     if (!service) {
-      return res.status(404).json({
+      res.status(404).json({
         message: 'Service not found',
       });
+      return; // Ensure no further processing
     }
 
     // Ensure the service belongs to the logged-in user (userId check)
     if (service.userId !== userId) {
-      return res.status(403).json({
+      res.status(403).json({
         message: 'You can only delete your own services',
       });
+      return; // Ensure no further processing
     }
 
     // Delete the service
     await service.destroy();
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Service deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting service:', error);
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Internal server error',
       error: (error as Error).message,
     });
