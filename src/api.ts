@@ -7,7 +7,7 @@ const router = Router(); // Initialize the router
 
 // Define the service creation route
 router.post('/services', async (req: Request, res: Response): Promise<Response> => {
-  // Destructure the necessary fields from the request body
+  // Destructure the necessary fields from the request body and type it with ServiceCreationAttributes
   const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {
