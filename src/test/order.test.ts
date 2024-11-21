@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { app } from '../index'; // Correct named import for app
-import { sequelize } from '../config/database'; // Correctly imports Sequelize instance
-import User from '../models/user'; // Adjust based on your models directory structure
-import Service from '../models/services';
-import Order from '../models/order';
+import { app } from '../index'; // Ensure this points to the correct entry point for your app
+import sequelize from '../config/database'; // Correct import for Sequelize instance
+import User from '../models/user'; // Correct path for User model
+import Service from '../models/services'; // Correct path for Service model
+import Order from '../models/order'; // Correct path for Order model
 
 // Mock the models
 jest.mock('../models/user', () => ({
@@ -21,15 +21,15 @@ jest.mock('../models/order', () => ({
 
 describe('Order Controller Tests', () => {
   beforeAll(async () => {
-    await sequelize.sync({ force: true }); // Ensure database tables are reset before tests
+    await sequelize.sync({ force: true }); // Reset database tables before tests
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Clear all mock implementations
+    jest.clearAllMocks(); // Reset mock implementations after each test
   });
 
   afterAll(async () => {
-    await sequelize.close(); // Close Sequelize connection after tests are done
+    await sequelize.close(); // Close database connection after tests
   });
 
   // Test Create Order
@@ -38,11 +38,11 @@ describe('Order Controller Tests', () => {
     const mockService = { id: 1, name: 'Test Service' };
 
     // Mock User and Service `findByPk` methods
-    (User.findByPk as jest.Mock).mockResolvedValue(mockUser);
-    (Service.findByPk as jest.Mock).mockResolvedValue(mockService);
+    (User.findByPk as jest.Mock).mockResolvedValueOnce(mockUser);
+    (Service.findByPk as jest.Mock).mockResolvedValueOnce(mockService);
 
     // Mock Order creation
-    (Order.create as jest.Mock).mockResolvedValue({
+    (Order.create as jest.Mock).mockResolvedValueOnce({
       id: 1,
       userId: mockUser.id,
       serviceId: mockService.id,
@@ -81,7 +81,7 @@ describe('Order Controller Tests', () => {
     };
 
     // Mock finding the order by ID
-    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrderInstance);
+    (Order.findByPk as jest.Mock).mockResolvedValueOnce(mockOrderInstance);
 
     const response = await request(app)
       .put('/api/orders/1')
@@ -93,7 +93,7 @@ describe('Order Controller Tests', () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Order updated successfully');
     expect(response.body.order.status).toBe('Completed');
-    expect(mockOrderInstance.save).toHaveBeenCalled(); // Verify save method was called
+    expect(mockOrderInstance.save).toHaveBeenCalled(); // Ensure save method is called
   });
 
   // Test Delete Order
@@ -108,23 +108,40 @@ describe('Order Controller Tests', () => {
     };
 
     // Mock finding the order by ID
-    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrderInstance);
+    (Order.findByPk as jest.Mock).mockResolvedValueOnce(mockOrderInstance);
 
     const response = await request(app).delete('/api/orders/1');
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Order deleted successfully');
-    expect(mockOrderInstance.destroy).toHaveBeenCalled(); // Verify destroy method was called
+    expect(mockOrderInstance.destroy).toHaveBeenCalled(); // Ensure destroy method is called
   });
 
   // Test Get Order by ID (Order Not Found)
   it('should return 404 if the order is not found', async () => {
     // Mock finding a non-existing order
-    (Order.findByPk as jest.Mock).mockResolvedValue(null);
+    (Order.findByPk as jest.Mock).mockResolvedValueOnce(null);
 
     const response = await request(app).get('/api/orders/9999');
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe('Order not found');
+  });
+
+  // Test Fetch All Orders
+  it('should fetch all orders', async () => {
+    const mockOrders = [
+      { id: 1, orderDetails: 'Test order 1', status: 'Pending' },
+      { id: 2, orderDetails: 'Test order 2', status: 'Completed' },
+    ];
+
+    // Mock Order `findAll` method
+    (Order.findAll as jest.Mock).mockResolvedValueOnce(mockOrders);
+
+    const response = await request(app).get('/api/orders');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(2);
+    expect(response.body[0].orderDetails).toBe('Test order 1');
   });
 });
