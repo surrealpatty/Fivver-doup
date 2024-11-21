@@ -6,11 +6,14 @@ import User from '../models/user'; // Mock User model
 jest.mock('../models/user', () => ({
   findOne: jest.fn(), // Mock findOne method
   create: jest.fn(),  // Mock create method
+  findByPk: jest.fn(),
+  update: jest.fn(),
+  destroy: jest.fn(),
 }));
 
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(), // Mock verify method
-  sign: jest.fn(),   // Mock sign method (if needed)
+  sign: jest.fn(() => 'mockedToken'),   // Mock sign method (if needed)
 }));
 
 jest.mock('../config/database', () => ({
@@ -36,5 +39,4 @@ afterEach(() => {
 afterAll(() => {
   // Perform any clean-up operations here if necessary (e.g., closing DB connections or removing global mocks)
   // Since `sequelize.authenticate` is already mocked, no need to restore here unless you need to mock it again.
-  // You can remove or comment out the mockRestore as it's not necessary unless you're testing DB interactions in a way that needs resetting.
 });
