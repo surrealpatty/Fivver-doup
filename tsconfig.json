@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES6",                                 // Target ES6 for compatibility
-    "module": "ESNext",                              // Use ESNext module system
-    "moduleResolution": "bundler",                    // Better for bundling and modern module resolution
+    "module": "ESNext",                              // Use ESNext module system (for better tree shaking)
+    "moduleResolution": "node",                       // Use Node.js module resolution strategy
     "strict": true,                                  // Enable strict type checking
     "esModuleInterop": true,                         // Enable interoperability with CommonJS modules
     "skipLibCheck": true,                            // Skip library checks (useful for large projects)
@@ -14,8 +14,8 @@
     "paths": {
       "*": ["node_modules/*", "src/types/*"]         // Ensure custom types are resolved from src/types
     },
-    "declaration": true,                             // Generate .d.ts declaration files
-    "declarationDir": "./dist/types",                // Specify where declaration files should be stored
+    "declaration": true,                             // Generate .d.ts declaration files (optional, remove if not needed)
+    "declarationDir": "./dist/types",                // Specify where declaration files should be stored (optional)
     "sourceMap": true,                               // Generate source maps for debugging
     "allowSyntheticDefaultImports": true,            // Allow default imports for CommonJS modules
     "noImplicitAny": true,                           // Disallow implicit 'any' types

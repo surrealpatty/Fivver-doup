@@ -1,3 +1,4 @@
+// src/types/env.d.ts
 declare global {
   namespace Express {
     interface Request {
