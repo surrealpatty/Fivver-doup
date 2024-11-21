@@ -8,11 +8,9 @@ dotenv.config();
 const {
   DB_HOST = 'localhost',
   DB_USER = 'root',
-  DB_PASSWORD = '',
-  DB_NAME = 'fivver_doup',
-  DB_PORT = '3306',
+  DB_PASS = '',
   NODE_ENV = 'development',
-}: { [key: string]: string } = process.env;
+}: { [key: string]: string | undefined } = process.env;
 
 // Validate critical environment variables (except in the test environment)
 if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
