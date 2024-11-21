@@ -1,6 +1,6 @@
 // src/models/userModel.ts
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // assuming sequelize is already configured
+export { sequelize };
 
 // Define interface for the User model attributes
 export interface UserAttributes {

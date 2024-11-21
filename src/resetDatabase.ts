@@ -1,4 +1,4 @@
-import { sequelize } from './config/database';  // Ensure the path is correct
+export { sequelize };
 
 const resetDatabase = async () => {
   try {

@@ -5,8 +5,10 @@ import { ServiceCreationAttributes } from '../models/services'; // Import the co
 
 const router = Router(); // Initialize the router
 
-router.post('/services', async (req: Request, res: Response) => {
-  // Destructure the body of the request and specify types for 'userId', 'title', 'description', and 'price'
+router.post('/path', async (req: Request, res: Response): Promise<Response> => {
+  // handler logic here
+});
+
   const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
   try {

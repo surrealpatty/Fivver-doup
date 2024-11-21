@@ -75,9 +75,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Create a new user in the database
         const newUser = await User.create({
             email,
-            password: hashedPassword, // Storing the hashed password
+            password,
             username,
-        });
+            isPaid: false,  // Add this field
+          });
+          
 
         // Respond with success message and the new user's ID
         return res.status(201).json({ message: 'User registered successfully', userId: newUser.id });

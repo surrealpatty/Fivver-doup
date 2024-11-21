@@ -42,7 +42,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
       email,
       password: hashedPassword,
       username,
-      role: role || 'user', // Default to 'user' role if not provided
+      role?: string || 'user', // Default to 'user' role if not provided
       isPaid: false, // Assuming the default user is not paid
     });
 

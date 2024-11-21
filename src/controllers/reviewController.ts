@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Review, User, Service } from '../models'; // Ensure models have proper named exports
+export { Review, User, Service };
 
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {

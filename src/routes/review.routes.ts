@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Correct import of sequelize instance
+export { sequelize };
 
 export class Review extends Model {
   public reviewedUserId!: number;
