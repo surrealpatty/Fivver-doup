@@ -1,32 +1,32 @@
 import { sequelize } from '../config/database'; // Import sequelize instance
-import { Model } from 'sequelize'; // Import the Sequelize Model class
-import User from './user'; // Named import for User model
-import Service from './services'; // Named import for Service model
-import { Order } from './order'; // Named import for Order model
-import { Review } from './review'; // Named import for Review model
+import { Model, Sequelize } from 'sequelize'; // Import Sequelize classes
+import User from './user'; // Import User model
+import Service from './services'; // Import Service model
+import Order from './order'; // Import Order model
+import Review from './review'; // Import Review model
 
-// Define the models interface for association typing
+// Define an interface for models with associations
 interface ModelWithAssociations extends Model {
-  associate?: (models: { [key: string]: typeof Model }) => void;
+  associate?: (models: Record<string, typeof Model>) => void;
 }
 
-// Initialize models with proper typing and ensure they extend Model
-const models: { [key: string]: typeof Model } = {
-  User: User, // Use the models directly without explicit casting
+// Initialize models
+const models: Record<string, typeof ModelWithAssociations> = {
+  User: User,
   Service: Service,
   Order: Order,
   Review: Review,
 };
 
-// Set up associations if the associate method exists
+// Set up associations for each model if the `associate` method exists
 Object.values(models).forEach((model) => {
-  if (model.associate) {
-    model.associate(models); // Call associate if it exists
+  if (typeof model.associate === 'function') {
+    model.associate(models);
   }
 });
 
-// Export models and sequelize instance
+// Export models and the Sequelize instance
 export { sequelize, models };
 
-// Add types for models to ensure proper inference and usage in other parts of your app
+// Add types for the models to ensure proper usage in other parts of your app
 export type { User, Service, Order, Review };
