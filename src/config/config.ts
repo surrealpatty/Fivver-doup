@@ -4,75 +4,86 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-// Destructure environment variables
-const {
-  DB_NAME,
-  DB_USER,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_DIALECT,
-  DB_SSL,
-  NODE_ENV,
-  JWT_SECRET, // Assuming you also want JWT_SECRET here
-} = process.env;
-
-// Ensure required environment variables are present
-if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT || !JWT_SECRET) {
-  throw new Error('Missing required environment variables');
+// Extend the NodeJS.ProcessEnv interface to include custom properties
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            DB_HOST?: string;
+            DB_USER?: string;
+            DB_PASSWORD?: string;
+            DB_NAME?: string;
+            DB_PORT?: string;
+            NODE_ENV?: string;
+        }
+    }
 }
 
-// Convert DB_SSL to a boolean value if it's set to 'true' or 'false'
-const useSSL = DB_SSL === 'true';
+// Destructure and validate environment variables
+const {
+    DB_HOST = 'localhost',
+    DB_USER = 'root',
+    DB_PASSWORD = '',
+    DB_NAME = 'fivver_doup',
+    DB_PORT = '3306',
+    NODE_ENV = 'development',
+}: NodeJS.ProcessEnv = process.env;
 
-// Cast DB_DIALECT to a valid Sequelize dialect
-const dialect = DB_DIALECT as 'mysql' | 'postgres' | 'sqlite' | 'mariadb'; // Replace with all valid dialects you support
+// Validate critical environment variables (except in test environment)
+if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
+    console.error('Missing required database environment variables. Check your .env file.');
+    process.exit(1);
+}
 
-// Create a new Sequelize instance
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect, // Use the type-cast dialect here
-  logging: NODE_ENV === 'development' ? console.log : false, // Enable logging only in development
-
-  dialectOptions: {
-    ssl: useSSL, // Use SSL if DB_SSL is 'true'
-    rejectUnauthorized: false, // Disable verification if using self-signed certificates
-  },
+// Initialize Sequelize instance
+const sequelize = new Sequelize({
+    dialect: 'mysql',
+    host: DB_HOST,
+    username: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: parseInt(DB_PORT, 10), // Parse port as an integer
+    logging: NODE_ENV === 'development' ? console.log : false, // Log SQL queries only in development
+    dialectOptions: {
+        timezone: 'Z', // Use UTC timezone for MySQL queries
+    },
+    define: {
+        timestamps: true, // Enable timestamps by default
+    },
 });
 
 // Test the database connection
-const testConnection = async (): Promise<void> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection established successfully');
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error('Unable to connect to the database:', err.message || err);
-    } else {
-      console.error('An unknown error occurred during database connection');
+export const testConnection = async (): Promise<void> => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection established successfully.');
+    } catch (error) {
+        console.error(
+            'Error connecting to the database:',
+            error instanceof Error ? error.message : error
+        );
+        if (NODE_ENV !== 'test') {
+            process.exit(1); // Exit the process if not in test environment
+        }
     }
-
-    // Do not call process.exit(1) in a test environment
-    if (NODE_ENV !== 'test') {
-      process.exit(1); // Exit the process only if it's not a test environment
-    }
-  }
 };
 
-// Only call testConnection if it's not in a test environment
+// Close the database connection
+export const closeConnection = async (): Promise<void> => {
+    try {
+        await sequelize.close();
+        console.log('Database connection closed successfully.');
+    } catch (error) {
+        console.error('Error closing the database connection:', error);
+    }
+};
+
+// Automatically test the connection unless in a test environment
 if (NODE_ENV !== 'test') {
-  testConnection();
+    testConnection().catch((err) => {
+        console.error('Unhandled error during initial database connection test:', err);
+        if (NODE_ENV !== 'test') process.exit(1);
+    });
 }
 
-// Export the config object and sequelize instance
-export default {
-  DB_NAME,
-  DB_USER,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_DIALECT,
-  DB_SSL,
-  NODE_ENV,
-  JWT_SECRET,
-  sequelize,
-  testConnection,
-};
+// Export Sequelize instance as a default export
+export default sequelize;

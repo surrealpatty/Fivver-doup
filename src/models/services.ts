@@ -1,4 +1,3 @@
-// src/models/services.ts
 import { Model, DataTypes, Optional, Association } from 'sequelize';
 import sequelize from '../config/database';  // Import sequelize instance
 import User from './user';  // Import the associated User model
