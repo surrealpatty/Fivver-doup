@@ -1,6 +1,5 @@
 import express from 'express';
-import { sequelize } from './config/database';  // Import the Sequelize instance
-import { User } from './models/user';  // Example import of your User model
+import { sequelize, models } from './models';  // Import sequelize instance and models from index.ts
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +18,15 @@ sequelize.authenticate()
   })
   .catch((error: Error) => {
     console.error('Unable to connect to the database:', error);
+  });
+
+// Example of using the User model
+models.User.findAll()  // You can query the User model like this
+  .then(users => {
+    console.log('Users:', users);
+  })
+  .catch((error: Error) => {
+    console.error('Error fetching users:', error);
   });
 
 // Starting the server

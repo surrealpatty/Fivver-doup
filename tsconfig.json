@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                           // Use ES2020 for modern Node.js features
-    "module": "commonjs",                         // Use CommonJS module system for Node.js
-    "strict": true,                               // Enable strict type-checking for better type safety
-    "esModuleInterop": true,                      // Enables default imports from modules without default exports
-    "skipLibCheck": true,                         // Skip type-checking declaration files to improve build speed
-    "forceConsistentCasingInFileNames": true,     // Ensure consistent file name casing
+    "target": "ES2020",                            // Use ES2020 for modern Node.js features
+    "module": "commonjs",                          // Use CommonJS module system for Node.js
+    "strict": true,                                // Enable strict type-checking for better type safety
+    "esModuleInterop": true,                       // Enables default imports from modules without default exports
+    "skipLibCheck": true,                          // Skip type-checking declaration files to improve build speed
+    "forceConsistentCasingInFileNames": true,      // Ensure consistent file name casing
     "typeRoots": ["./node_modules/@types", "./src/types"],  // Include custom type definitions
-    "types": ["node", "express", "jest"],         // Include types for Node.js, Express, and Jest
-    "lib": ["ES2020"],                            // Set the library to ES2020 for modern JavaScript features
-    "outDir": "./dist",                           // Output transpiled files into the dist directory
-    "baseUrl": "./",                              // Set base directory for module resolution
-    "resolveJsonModule": true,                    // Allow importing JSON files as modules
-    "moduleResolution": "node",                   // Ensure Node.js-style module resolution
-    "allowJs": false,                             // Disallow mixing JavaScript and TypeScript files
-    "skipDefaultLibCheck": true,                  // Skip default library file type-checking for faster builds
-    "noEmit": false                               // Emit JavaScript files to dist directory
+    "types": ["node", "express", "jest"],          // Include types for Node.js, Express, and Jest
+    "lib": ["ES2020"],                             // Set the library to ES2020 for modern JavaScript features
+    "outDir": "./dist",                            // Output transpiled files into the dist directory
+    "baseUrl": "./",                               // Set base directory for module resolution
+    "resolveJsonModule": true,                     // Allow importing JSON files as modules
+    "moduleResolution": "node",                    // Ensure Node.js-style module resolution
+    "allowJs": false,                              // Disallow mixing JavaScript and TypeScript files
+    "skipDefaultLibCheck": true,                   // Skip default library file type-checking for faster builds
+    "noEmit": false                                // Emit JavaScript files to dist directory
   },
   "include": [
-    "src/**/*",                                   // Include all TypeScript files in the src folder
-    "**/*.test.ts"                                 // Include test files with a .test.ts extension
+    "src/**/*",                                    // Include all TypeScript files in the src folder
+    "**/*.test.ts"                                  // Include test files with .test.ts extension
   ],
   "exclude": [
-    "node_modules",                               // Exclude node_modules folder
-    "dist"                                        // Exclude dist folder from compilation
+    "node_modules",                                // Exclude node_modules folder
+    "dist"                                         // Exclude dist folder from compilation
   ]
 }
