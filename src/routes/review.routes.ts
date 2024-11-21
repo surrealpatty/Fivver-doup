@@ -1,28 +1,28 @@
 import { Router, Request, Response } from 'express';
 import { Review, User, Service } from '../models'; // Correctly import models
-import { checkAuth } from '../middleware/authMiddleware'; // Assuming you have an auth middleware
+import { checkAuth } from '../middlewares/authMiddleware'; // Assuming you have an auth middleware
 
 const router = Router();
 
 // 1. Create a Review
-router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Promise<void> => { 
+router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
     const { serviceId, rating, comment } = req.body;
     const userIdAsNumber = parseInt(req.params.id, 10); // Convert userId from string to number
 
     // Input validation
     if (!serviceId || typeof rating !== 'number' || !comment) {
-        res.status(400).json({ 
-            message: 'Service ID, rating, and comment are required', 
-            error: 'Invalid input' 
+        res.status(400).json({
+            message: 'Service ID, rating, and comment are required',
+            error: 'Invalid input'
         });
         return; // Ensure the function returns void after sending a response
     }
 
     // Check if userId is a valid number
     if (isNaN(userIdAsNumber)) {
-        res.status(400).json({ 
-            message: 'Invalid userId', 
-            error: 'User ID must be a valid number' 
+        res.status(400).json({
+            message: 'Invalid userId',
+            error: 'User ID must be a valid number'
         });
         return;
     }
@@ -41,15 +41,15 @@ router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Prom
             comment,
         });
 
-        res.status(201).json({ 
-            message: 'Review created successfully', 
-            review 
+        res.status(201).json({
+            message: 'Review created successfully',
+            review
         });
     } catch (error) {
         console.error('Error creating review:', error);
-        res.status(500).json({ 
-            message: 'Internal server error', 
-            error: (error as Error).message 
+        res.status(500).json({
+            message: 'Internal server error',
+            error: (error as Error).message
         });
     }
 });
@@ -74,15 +74,15 @@ router.get('/reviews/:serviceId', async (req: Request, res: Response): Promise<v
             return;
         }
 
-        res.status(200).json({ 
-            message: 'Reviews fetched successfully', 
-            reviews 
+        res.status(200).json({
+            message: 'Reviews fetched successfully',
+            reviews
         });
     } catch (error) {
         console.error('Error fetching reviews:', error);
-        res.status(500).json({ 
-            message: 'Internal server error', 
-            error: (error as Error).message 
+        res.status(500).json({
+            message: 'Internal server error',
+            error: (error as Error).message
         });
     }
 });
@@ -95,8 +95,8 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
     const userIdAsNumber = parseInt(userId, 10);
 
     if (!rating && !comment) {
-        res.status(400).json({ 
-            message: 'At least one of rating or comment is required to update' 
+        res.status(400).json({
+            message: 'At least one of rating or comment is required to update'
         });
         return;
     }
@@ -107,3 +107,62 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
             res.status(404).json({ message: 'Review not found' });
             return;
         }
+
+        // Only allow updating reviews by the user who created the review
+        if (review.userId !== userIdAsNumber) {
+            res.status(403).json({ message: 'You can only update your own review' });
+            return;
+        }
+
+        // Update the review
+        review.rating = rating ?? review.rating; // Update rating if provided, else keep existing
+        review.comment = comment ?? review.comment; // Update comment if provided, else keep existing
+        await review.save();
+
+        res.status(200).json({
+            message: 'Review updated successfully',
+            review
+        });
+    } catch (error) {
+        console.error('Error updating review:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: (error as Error).message
+        });
+    }
+});
+
+// 4. Delete a Review (Optional: add a route for deleting reviews)
+router.delete('/reviews/:reviewId', checkAuth, async (req: Request, res: Response): Promise<void> => {
+    const { reviewId } = req.params;
+    const { id: userId } = req.user as { id: string }; // Extract authenticated user ID
+    const userIdAsNumber = parseInt(userId, 10);
+
+    try {
+        const review = await Review.findByPk(reviewId);
+        if (!review) {
+            res.status(404).json({ message: 'Review not found' });
+            return;
+        }
+
+        // Only allow deleting reviews by the user who created the review
+        if (review.userId !== userIdAsNumber) {
+            res.status(403).json({ message: 'You can only delete your own review' });
+            return;
+        }
+
+        await review.destroy();
+
+        res.status(200).json({
+            message: 'Review deleted successfully'
+        });
+    } catch (error) {
+        console.error('Error deleting review:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: (error as Error).message
+        });
+    }
+});
+
+export default router;
