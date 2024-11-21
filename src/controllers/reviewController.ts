@@ -14,6 +14,14 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
+    // Check if rating is within a valid range (1-5)
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({
+            message: 'Rating must be between 1 and 5',
+            error: 'Invalid rating'
+        });
+    }
+
     // Check if userId is a valid number
     if (isNaN(userIdAsNumber)) {
         return res.status(400).json({ 
@@ -94,6 +102,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
     const { id: userId } = req.user as { id: string }; // Extract authenticated user ID
     const userIdAsNumber = parseInt(userId, 10);
 
+    // Ensure at least one of rating or comment is provided for update
     if (!rating && !comment) {
         return res.status(400).json({ 
             message: 'At least one of rating or comment is required to update' 

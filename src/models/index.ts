@@ -1,27 +1,43 @@
-import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database'; // Import your sequelize instance
+import { Sequelize, DataTypes } from 'sequelize';
+import { ModelWithAssociations } from './ModelWithAssociations'; // Import the interface if needed
 
-// Define a model interface with the optional 'associate' method
-interface ModelWithAssociations extends Model {
-  associate?: (models: Record<string, typeof Model>) => void; // Correct typing for associate method
-}
+// Import your models
+import User from './user';
+import Service from './services';
+import Review from './review';
 
-// Initialize an empty object to hold all models
-const models: Record<string, ModelWithAssociations> = {};
+// Initialize Sequelize
+const sequelize = new Sequelize({
+  dialect: 'mysql', // Set the appropriate dialect (e.g., mysql, postgres)
+  host: 'localhost', // Replace with your database host
+  database: 'fivver_doup', // Replace with your database name
+  username: 'root', // Replace with your database username
+  password: '', // Replace with your database password
+});
 
-// Dynamically import all models
-import(path.resolve(__dirname, './user'));
-import(path.resolve(__dirname, './services'));
+// Add all models to Sequelize instance
+const models = {
+  User: User(sequelize, DataTypes),
+  Service: Service(sequelize, DataTypes),
+  Review: Review(sequelize, DataTypes),
+};
 
-// Loop over models to set up associations
-Object.values(models).forEach((model) => {
-  if (model.associate) {
-    model.associate(models);
+// Set up associations (if any)
+Object.keys(models).forEach((modelName) => {
+  if (models[modelName].associate) {
+    models[modelName].associate(models); // Call the associate method if it exists
   }
 });
 
-// Export models
-export { models };
+// Export sequelize and models
+export { sequelize, models };
 
-// Example of how you might use the models elsewhere in the app
-// export default models;
+// Example associations (optional, adapt as per your needs)
+models.User.hasMany(models.Service, { foreignKey: 'userId' });
+models.Service.belongsTo(models.User, { foreignKey: 'userId' });
+
+models.Service.hasMany(models.Review, { foreignKey: 'serviceId' });
+models.Review.belongsTo(models.Service, { foreignKey: 'serviceId' });
+
+models.User.hasMany(models.Review, { foreignKey: 'userId' });
+models.Review.belongsTo(models.User, { foreignKey: 'userId' });

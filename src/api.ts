@@ -16,6 +16,11 @@ router.post('/services', async (req: Request, res: Response): Promise<Response> 
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
+    // Ensure price is a valid number
+    if (typeof price !== 'number' || isNaN(price)) {
+      return res.status(400).json({ message: 'Price must be a valid number' });
+    }
+
     // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
