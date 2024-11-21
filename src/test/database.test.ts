@@ -52,13 +52,16 @@ describe('Database Connection', () => {
     // Assertions
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection has been established successfully.'); // Check success log
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Database connection has been established successfully.'
+    ); // Check success log
   });
 
   // Test for a failed database connection
   it('should log an error when the database connection fails', async () => {
     // Simulate a connection failure
-    mockAuthenticate.mockRejectedValueOnce(new Error('Connection failed'));
+    const errorMessage = 'Connection failed';
+    mockAuthenticate.mockRejectedValueOnce(new Error(errorMessage));
 
     // Execute the `testConnection` function
     await testConnection();
@@ -66,6 +69,9 @@ describe('Database Connection', () => {
     // Assertions
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Unable to connect to the database:', 'Connection failed'); // Check error log
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Unable to connect to the database:',
+      errorMessage
+    ); // Check error log
   });
 });

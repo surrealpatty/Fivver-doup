@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-// Extend the NodeJS.ProcessEnv interface to include our custom properties
+// Extend the NodeJS.ProcessEnv interface to include custom properties
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
@@ -25,10 +25,10 @@ const {
     DB_PASSWORD = '',
     DB_NAME = 'fivver_doup',
     DB_PORT = '3306',
-    NODE_ENV,
+    NODE_ENV = 'development',
 }: NodeJS.ProcessEnv = process.env;
 
-// Ensure critical environment variables are defined, except in test environment
+// Validate critical environment variables (except in test environment)
 if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
     console.error('Missing required database environment variables. Check your .env file.');
     process.exit(1);
@@ -41,13 +41,13 @@ const sequelize = new Sequelize({
     username: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
-    port: parseInt(DB_PORT, 10), // Ensure correct conversion of DB_PORT to an integer
-    logging: NODE_ENV === 'development', // Log SQL queries only in development
+    port: parseInt(DB_PORT, 10), // Parse port as an integer
+    logging: NODE_ENV === 'development' ? console.log : false, // Log SQL queries only in development
     dialectOptions: {
         timezone: 'Z', // Use UTC timezone for MySQL queries
     },
     define: {
-        timestamps: true, // Allow Sequelize to manage timestamps by default
+        timestamps: true, // Enable timestamps by default
     },
 });
 
@@ -57,9 +57,12 @@ export const testConnection = async (): Promise<void> => {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
     } catch (error) {
-        console.error('Error connecting to the database:', error instanceof Error ? error.message : error);
+        console.error(
+            'Error connecting to the database:',
+            error instanceof Error ? error.message : error
+        );
         if (NODE_ENV !== 'test') {
-            process.exit(1); // Exit process if not in test environment
+            process.exit(1); // Exit the process if not in test environment
         }
     }
 };
@@ -76,8 +79,11 @@ export const closeConnection = async (): Promise<void> => {
 
 // Automatically test the connection unless in a test environment
 if (NODE_ENV !== 'test') {
-    testConnection();
+    testConnection().catch((err) => {
+        console.error('Unhandled error during initial database connection test:', err);
+        if (NODE_ENV !== 'test') process.exit(1);
+    });
 }
 
-// Export Sequelize instance for usage in models
-export default sequelize;
+// Export Sequelize instance for models
+export { sequelize };

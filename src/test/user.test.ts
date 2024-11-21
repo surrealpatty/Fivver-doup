@@ -24,25 +24,25 @@ jest.setTimeout(10000); // Set timeout to 10 seconds for all tests
 describe('User Controller Tests', () => {
   beforeAll(async () => {
     // Set up mocked responses for User model methods
-    (User.findOne as jest.MockedFunction<typeof User.findOne>).mockResolvedValue({
+    (User.findOne as jest.Mock).mockResolvedValue({
       id: 1,
       email: 'test@example.com',
       password: 'hashedpassword',
     } as any);
 
-    (User.create as jest.MockedFunction<typeof User.create>).mockResolvedValue({
+    (User.create as jest.Mock).mockResolvedValue({
       id: 1,
       email: 'test@example.com',
       password: 'hashedpassword',
     } as any);
 
-    (User.findByPk as jest.MockedFunction<typeof User.findByPk>).mockResolvedValue({
+    (User.findByPk as jest.Mock).mockResolvedValue({
       id: 1,
       email: 'test@example.com',
     } as any);
 
-    (User.update as jest.MockedFunction<typeof User.update>).mockResolvedValue([1]); // Sequelize update returns [affectedRows]
-    (User.destroy as jest.MockedFunction<typeof User.destroy>).mockResolvedValue(1); // Return affected rows count
+    (User.update as jest.Mock).mockResolvedValue([1]); // Sequelize update returns [affectedRows]
+    (User.destroy as jest.Mock).mockResolvedValue(1); // Return affected rows count
   });
 
   afterAll(async () => {
