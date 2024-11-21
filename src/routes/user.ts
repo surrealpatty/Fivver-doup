@@ -19,7 +19,7 @@ interface LoginRequestBody {
 }
 
 // Register new user
-router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
+router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<Response> => {
   const { email, password, username, role } = req.body;
 
   try {
@@ -76,7 +76,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
 });
 
 // Login user
-router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
+router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response): Promise<Response> => {
   const { email, password } = req.body;
 
   try {
@@ -126,4 +126,4 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
   }
 });
 
-export default router;
+export default router; // Export the router to be used in other parts of your application

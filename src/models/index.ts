@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
+import { Sequelize, DataTypes, ModelCtor } from 'sequelize';
 import User from './user'; // Assuming the User model is exported as a function
 import Service from './services'; // Assuming the Service model is exported as a function
 import { Review } from './review'; // Assuming the Review model is exported as a function
@@ -21,8 +21,9 @@ const models = {
 
 // Set up associations (if any)
 Object.keys(models).forEach((modelName) => {
-  if ((models[modelName as keyof typeof models]).associate) {
-    (models[modelName as keyof typeof models]).associate(models); // Call the associate method if it exists
+  const model = models[modelName as keyof typeof models];
+  if (model.associate) {
+    model.associate(models); // Call the associate method if it exists
   }
 });
 
@@ -42,7 +43,7 @@ export { sequelize, models };
 // If you want to define interfaces for your models (optional, but recommended for TypeScript):
 
 // Example User model interface
-export interface IUser extends Model {
+export interface IUser extends ModelCtor<Model<any, any>> {
   id: number;
   username: string;
   email: string;
@@ -50,7 +51,7 @@ export interface IUser extends Model {
 }
 
 // Example Service model interface
-export interface IService extends Model {
+export interface IService extends ModelCtor<Model<any, any>> {
   id: number;
   title: string;
   description: string;
@@ -58,7 +59,7 @@ export interface IService extends Model {
 }
 
 // Example Review model interface
-export interface IReview extends Model {
+export interface IReview extends ModelCtor<Model<any, any>> {
   id: number;
   rating: number;
   comment: string;

@@ -41,8 +41,12 @@ router.post('/services', async (req: Request, res: Response): Promise<Response> 
       service,
     });
   } catch (error) {
+    // Improved error handling for different error types
     console.error('Error creating service:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    if (error instanceof Error) {
+      return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+    return res.status(500).json({ message: 'Internal server error', error: 'Unknown error' });
   }
 });
 

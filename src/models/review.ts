@@ -1,7 +1,7 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import  sequelize  from '../config/database';  // Ensure the sequelize instance is imported
-import  User  from './user';  // Import User model as a named import
-import  Service  from './services';  // Import Service model as a named import
+import { DataTypes, Model, Optional, Association } from 'sequelize';
+import sequelize from '../config/database';  // Ensure the sequelize instance is imported
+import User from './user';  // Import User model as a named import
+import Service from './services';  // Import Service model as a named import
 
 // Define the attributes for the Review model
 export interface ReviewAttributes {
@@ -29,6 +29,11 @@ class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implement
   public readonly updatedAt!: Date;
 
   // Define associations between models
+  public static associations: {
+    user: Association<Review, User>;
+    service: Association<Review, Service>;
+  };
+
   static associate(models: { User: typeof User; Service: typeof Service }) {
     // A review belongs to a user
     Review.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
@@ -68,8 +73,8 @@ Review.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        min: 1,
-        max: 5,
+        min: 1, // Rating must be at least 1
+        max: 5, // Rating can be at most 5
       },
     },
     comment: {
