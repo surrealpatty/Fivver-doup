@@ -1,20 +1,21 @@
-// src/models/review.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Ensure the sequelize instance is imported
-import User from './user';  // Import User model
-import Service from './services';  // Import Service model
+import { User } from './user';  // Import User model as a named import
+import { Service } from './services';  // Import Service model as a named import
 
 // Define the attributes for the Review model
-interface ReviewAttributes {
+export interface ReviewAttributes {
   id: number;
   userId: number;
   serviceId: number;
   rating: number;
   comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // Define the attributes required for creating a Review (exclude id)
-type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
+export type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
 
 class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
   public id!: number;
@@ -28,12 +29,12 @@ class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implement
   public readonly updatedAt!: Date;
 
   // Define associations between models
-  static associate(models: any) {
+  static associate(models: { User: typeof User; Service: typeof Service }) {
     // A review belongs to a user
-    Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+    Review.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
 
     // A review belongs to a service
-    Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+    Review.belongsTo(models.Service, { foreignKey: 'serviceId', as: 'service' });
   }
 }
 
@@ -48,10 +49,20 @@ Review.init(
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+      references: {
+        model: 'users',  // Ensure 'users' is the correct table name
+        key: 'id',
+      },
+      onDelete: 'CASCADE',  // Ensure cascading delete behavior
     },
     serviceId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+      references: {
+        model: 'services',  // Ensure 'services' is the correct table name
+        key: 'id',
+      },
+      onDelete: 'CASCADE',  // Ensure cascading delete behavior
     },
     rating: {
       type: DataTypes.INTEGER,
@@ -69,8 +80,10 @@ Review.init(
   {
     sequelize,
     modelName: 'Review',
+    tableName: 'reviews',  // Ensure it matches the table name
     timestamps: true,  // Sequelize handles timestamps automatically
+    underscored: true,  // Use snake_case for column names
   }
 );
 
-export default Review;
+export { Review };

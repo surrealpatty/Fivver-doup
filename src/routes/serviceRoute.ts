@@ -4,7 +4,7 @@ import User from '../models/user'; // Import the User model (for user existence 
 
 // Define types for request body for service creation and update
 interface ServiceCreationBody {
-  userId: string;
+  userId: number; // userId should likely be a number instead of string
   title: string;
   description: string;
   price: number;

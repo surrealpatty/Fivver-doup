@@ -1,7 +1,7 @@
 // Import the Sequelize models correctly
-import User from './user';
-import Service from './services';  // Correct path for importing Service
-import Order from './order';  // Correct path for importing Order
+import { User } from './user';  // Correct path for importing User
+import { Service } from './services';  // Correct path for importing Service
+import { Order } from './order';  // Correct path for importing Order
 
 // Define the associations
 User.hasMany(Service, { foreignKey: 'userId' }); // A user can have many services

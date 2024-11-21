@@ -27,10 +27,6 @@ class User
   public readonly updatedAt!: Date;
 }
 
-// Export the User model as a named export
-export { User };
-
-
 // Initialize the User model with the Sequelize instance
 User.init(
   {
@@ -80,4 +76,4 @@ User.init(
   }
 );
 
-export { User };
+export { User }; // Export the User model

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user';  // Ensure this is correctly imported
-import Service from './services';  // Ensure this is correctly imported
+import { User } from './user';  // Ensure this is correctly imported (use named import for TypeScript)
+import { Service } from './services';  // Ensure this is correctly imported (use named import for TypeScript)
 
 // Define the Order attributes interface
 export interface OrderAttributes {
@@ -105,4 +105,4 @@ Order.init(
   }
 );
 
-export default Order;
+export { Order };

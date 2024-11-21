@@ -1,3 +1,5 @@
+// src/types/global.d.ts
+
 // Extend the Express namespace to include the custom `user` property in the Request object
 declare global {
   namespace Express {

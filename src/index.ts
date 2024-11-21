@@ -12,6 +12,7 @@ app.use(express.json());
 app.use('/users', userRoutes); // User-related actions like registration and login
 
 // Protected routes (require authentication)
+app.use(authenticateToken); // Middleware for authentication on protected routes
 app.use('/profile', profileRoutes); // Profile-related actions (protected)
 
 // 404 route for undefined routes
