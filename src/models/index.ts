@@ -2,6 +2,7 @@ import { Sequelize, DataTypes, ModelCtor, Model } from 'sequelize';
 import User from './user'; // Assuming the User model is exported as a function
 import Service from './services'; // Assuming the Service model is exported as a function
 import Review from './review'; // Assuming the Review model is exported as a function
+export { User, Service, Review } from './user'; // Or use correct paths for your models
 
 // Initialize Sequelize
 const sequelize = new Sequelize({
