@@ -1,9 +1,7 @@
-// src/controllers/authController.ts
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Assuming you have a User model
-import { NextFunction } from 'express';
+import { User } from '../models/user'; // Ensure User is correctly imported
 
 // Login handler for user authentication
 export const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -33,12 +31,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         const token = jwt.sign(
             { userId: user.id }, // Payload, including user ID
             jwtSecret, // Secret key
-            { expiresIn: '1h' } // Token expiration time
+            { expiresIn: process.env.JWT_EXPIRE_TIME || '1h' } // Flexible expiration time from env
         );
 
         // Return the token to the client
         res.json({ message: 'Login successful', token });
     } catch (error) {
+        // Log the error for debugging
+        console.error('Login error:', error);
         next(error); // Pass error to the error handling middleware
     }
 };
@@ -67,6 +67,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         res.status(201).json({ message: 'User registered successfully', userId: newUser.id });
     } catch (error) {
+        // Log the error for debugging
+        console.error('Registration error:', error);
         next(error); // Pass error to the error handling middleware
     }
 };

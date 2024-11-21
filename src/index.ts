@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
-import userRoutes from './routes/user.js'; // Correct .js extension for ESM
-import { authenticateToken } from './middlewares/authMiddleware.js'; // Correct import for ESM
+import userRoutes from './routes/user'; // Correct import for TypeScript, use .ts extension for local files
+import { authenticateToken } from './middlewares/authMiddleware'; // Correct import for TypeScript
 
 const app = express();
 

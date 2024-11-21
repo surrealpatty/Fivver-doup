@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure correct path to sequelize instance
+import { sequelize } from '../config/database'; // Correct path to sequelize instance
 import { v4 as uuidv4 } from 'uuid'; // Import UUID generation for `id`
 import Review from './review'; // Import the Review model
 import Order from './order'; // Import the Order model
@@ -34,19 +34,19 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   // Define associations after the model is defined
   static associate() {
     // A user can have many reviews
-    User.hasMany(sequelize.models.Review, {
+    User.hasMany(Review, {
       foreignKey: 'userId',
       as: 'reviews', // Alias for the associated model
     });
 
     // A user can have many orders
-    User.hasMany(sequelize.models.Order, {
+    User.hasMany(Order, {
       foreignKey: 'userId',
       as: 'orders', // Alias for the associated model
     });
 
     // A user can have many services
-    User.hasMany(sequelize.models.Service, {
+    User.hasMany(Service, {
       foreignKey: 'userId',
       as: 'services', // Alias for the associated model
     });
