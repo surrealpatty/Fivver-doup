@@ -1,37 +1,18 @@
 import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
-import userRoutes from './routes/user'; // Correct import for TypeScript, use .ts extension for local files
-import { authenticateToken } from './middlewares/authMiddleware'; // Correct import for TypeScript
+import userRoutes from './routes/user'; // Correct import for user routes
+import profileRoutes from './routes/profile'; // Import profile routes
+import { authenticateToken } from './middlewares/authMiddleware'; // Correct middleware import
 
 const app = express();
 
-// Middleware to parse incoming JSON requests (no need for body-parser)
-app.use(express.json()); // Express built-in JSON parser
+// Middleware to parse incoming JSON requests
+app.use(express.json());
 
 // Public routes (no authentication required)
-app.use('/users', userRoutes); // Routes for user-related actions like register, login, etc.
+app.use('/users', userRoutes); // User-related actions like registration and login
 
 // Protected routes (require authentication)
-app.use('/profile', authenticateToken, (req: Request, res: Response) => {
-  res.json({ message: 'Profile page (authentication required)' });
-});
-
-// Example of a specific protected route for fetching user profile
-app.use('/users/profile', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    // Accessing req.user after authentication
-    const userId = req.user?.id; // Ensure `req.user` is populated by `authenticateToken`
-    
-    if (!userId) {
-      return res.status(400).json({ message: 'User ID is missing or invalid' });
-    }
-    
-    // Your logic to fetch and return the user profile data
-    res.json({ message: `User profile data for user with ID: ${userId}` });
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+app.use('/profile', profileRoutes); // Profile-related actions (protected)
 
 // 404 route for undefined routes
 app.use((req: Request, res: Response) => {
@@ -57,7 +38,7 @@ export { app, server };
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; username: string }; // Adjust the user object properties as per your logic
+      user?: { id: string; username: string }; // Adjust the user object properties as per your application logic
     }
   }
 }

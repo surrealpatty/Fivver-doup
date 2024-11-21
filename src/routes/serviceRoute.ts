@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import Service from '../models/services'; // Import Service model
-import User from '../models/user'; // Import User model (to check user existence)
+import Service from '../models/services'; // Import the Service model
+import User from '../models/user'; // Import the User model (for user existence validation)
 
 // Define types for request body for service creation and update
 interface ServiceCreationBody {
@@ -17,22 +17,16 @@ router.post('/services', async (req: Request<{}, {}, ServiceCreationBody>, res: 
   const { userId, title, description, price } = req.body;
 
   try {
-    // Validate that the user exists
+    // Validate user existence
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: `User with ID ${userId} not found` });
     }
 
     // Create a new service
-    const service = await Service.create({
-      userId,
-      title,
-      description,
-      price,
-    });
+    const service = await Service.create({ userId, title, description, price });
 
-    // Return the newly created service
-    return res.status(201).json(service);
+    return res.status(201).json(service); // Return the newly created service
   } catch (error) {
     console.error('Error creating service:', error);
     return res.status(500).json({ message: 'Internal server error while creating service' });
@@ -52,7 +46,7 @@ router.get('/services', async (req: Request, res: Response) => {
       ],
     });
 
-    return res.status(200).json(services);
+    return res.status(200).json(services); // Return all services
   } catch (error) {
     console.error('Error fetching services:', error);
     return res.status(500).json({ message: 'Internal server error while fetching services' });
@@ -62,9 +56,8 @@ router.get('/services', async (req: Request, res: Response) => {
 // READ: Get a specific service by ID
 router.get('/services/:id', async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
-  const serviceId = parseInt(id, 10); // Convert id to number
+  const serviceId = parseInt(id, 10); // Convert id to a number
 
-  // Check if the serviceId is a valid number
   if (isNaN(serviceId)) {
     return res.status(400).json({ message: 'Invalid service ID format' });
   }
@@ -85,7 +78,7 @@ router.get('/services/:id', async (req: Request<{ id: string }>, res: Response) 
       return res.status(404).json({ message: `Service with ID ${serviceId} not found` });
     }
 
-    return res.status(200).json(service);
+    return res.status(200).json(service); // Return the specific service
   } catch (error) {
     console.error('Error fetching service:', error);
     return res.status(500).json({ message: 'Internal server error while fetching service' });
@@ -93,12 +86,11 @@ router.get('/services/:id', async (req: Request<{ id: string }>, res: Response) 
 });
 
 // UPDATE: Update a service
-router.put('/services/:id', async (req: Request<{ id: string }, {}, ServiceCreationBody>, res: Response) => {
+router.put('/services/:id', async (req: Request<{ id: string }, {}, Partial<ServiceCreationBody>>, res: Response) => {
   const { id } = req.params;
-  const serviceId = parseInt(id, 10); // Convert id to number
+  const serviceId = parseInt(id, 10); // Convert id to a number
   const { title, description, price } = req.body;
 
-  // Check if the serviceId is a valid number
   if (isNaN(serviceId)) {
     return res.status(400).json({ message: 'Invalid service ID format' });
   }
@@ -110,12 +102,12 @@ router.put('/services/:id', async (req: Request<{ id: string }, {}, ServiceCreat
     }
 
     // Update the service fields
-    service.title = title || service.title;
-    service.description = description || service.description;
-    service.price = price || service.price;
+    if (title !== undefined) service.title = title;
+    if (description !== undefined) service.description = description;
+    if (price !== undefined) service.price = price;
 
-    await service.save(); // Save the updated service
-    return res.status(200).json(service);
+    await service.save(); // Save changes
+    return res.status(200).json(service); // Return updated service
   } catch (error) {
     console.error('Error updating service:', error);
     return res.status(500).json({ message: 'Internal server error while updating service' });
@@ -125,9 +117,8 @@ router.put('/services/:id', async (req: Request<{ id: string }, {}, ServiceCreat
 // DELETE: Delete a service
 router.delete('/services/:id', async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
-  const serviceId = parseInt(id, 10); // Convert id to number
+  const serviceId = parseInt(id, 10); // Convert id to a number
 
-  // Check if the serviceId is a valid number
   if (isNaN(serviceId)) {
     return res.status(400).json({ message: 'Invalid service ID format' });
   }
@@ -139,11 +130,11 @@ router.delete('/services/:id', async (req: Request<{ id: string }>, res: Respons
     }
 
     await service.destroy(); // Delete the service
-    return res.status(204).send(); // Return no content (204) status after deletion
+    return res.status(204).send(); // No content response
   } catch (error) {
     console.error('Error deleting service:', error);
     return res.status(500).json({ message: 'Internal server error while deleting service' });
   }
 });
 
-export default router; // Export the router to use in the app
+export default router;
