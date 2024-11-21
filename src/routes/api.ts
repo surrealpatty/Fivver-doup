@@ -6,10 +6,7 @@ import { ServiceCreationAttributes } from '../models/services'; // Import the co
 const router = Router(); // Initialize the router
 
 router.post('/path', async (req: Request, res: Response): Promise<Response> => {
-  // handler logic here
-});
-
-  const { userId, title, description, price }: ServiceCreationAttributes = req.body;
+  const { userId, title, description, price }: ServiceCreationAttributes = req.body; // Move this inside the function
 
   try {
     // Validate the incoming data
