@@ -1,11 +1,24 @@
 import { Router, Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware'; // Named import of authenticateToken
-import User from '../models/user'; // Import User model for database operations
+import { User } from '../models/user'; // Named import of User model for database operations
+
+// Define the UserPayload interface to match the expected structure of the authenticated user
+interface UserPayload {
+  id: string;
+  username: string;
+  email: string;
+  // Add any other properties that are part of the user object
+}
+
+// Define a custom request interface to include 'user' for authentication
+interface AuthenticatedRequest extends Request {
+  user?: UserPayload; // Ensure the user object matches the UserPayload type
+}
 
 const router = Router();
 
 // Route for getting all users (admin or authenticated user can access it)
-router.get('/users', authenticateToken, async (req: Request, res: Response) => {
+router.get('/users', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Assuming the authenticated user is an admin, or you can add a check for role-based access
     const users = await User.findAll(); // Fetch all users from the database
@@ -40,10 +53,10 @@ router.post('/users', async (req: Request, res: Response) => {
 });
 
 // Route for updating a user (only authenticated users can update their own profile)
-router.put('/users/:id', authenticateToken, async (req: Request, res: Response) => {
+router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.params.id;
-    
+
     // Ensure the user ID in the request matches the authenticated user ID
     if (req.user?.id !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only update your own profile' });
@@ -67,7 +80,7 @@ router.put('/users/:id', authenticateToken, async (req: Request, res: Response) 
 });
 
 // Route for deleting a user (only authenticated users can delete their own profile)
-router.delete('/users/:id', authenticateToken, async (req: Request, res: Response) => {
+router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.params.id;
 

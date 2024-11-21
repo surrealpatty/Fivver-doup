@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES2018",                            // Set ECMAScript target version for Node.js
-    "module": "commonjs",                          // Use commonjs module system
-    "strict": true,                                // Enable strict type-checking options
-    "esModuleInterop": true,                       // Allows default imports from modules without default exports
-    "skipLibCheck": true,                          // Skip type checking of declaration files to improve build speed
-    "forceConsistentCasingInFileNames": true,      // Ensure consistent casing for file names
-    "typeRoots": ["./node_modules/@types", "./src/types"],  // Custom types path
-    "types": ["node", "express", "jest"],          // Include Express and Jest types
-    "lib": ["ES2018", "DOM"],                      // Add necessary libraries (DOM for browser environments)
-    "outDir": "./dist",                            // Directory for transpiled files
-    "baseUrl": "./",                               // Set base directory for module resolution
-    "resolveJsonModule": true,                     // Allows importing JSON files
-    "moduleResolution": "node",                    // Ensure proper module resolution for Node.js
-    "allowJs": true,                               // Allow JavaScript files to be included in the project
-    "skipDefaultLibCheck": true,                   // Skip checking the default library files to speed up build
-    "noEmit": false                                // Ensure that files are emitted to dist
+    "target": "ES2020",                           // Use ES2020 for modern Node.js features
+    "module": "commonjs",                         // Use CommonJS module system for Node.js
+    "strict": true,                               // Enable strict type-checking for better type safety
+    "esModuleInterop": true,                      // Enables default imports from modules without default exports
+    "skipLibCheck": true,                         // Skip type-checking declaration files to improve build speed
+    "forceConsistentCasingInFileNames": true,     // Ensure consistent file name casing
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Include custom type definitions
+    "types": ["node", "express", "jest"],         // Include types for Node.js, Express, and Jest
+    "lib": ["ES2020"],                            // Set the library to ES2020 for modern JavaScript features
+    "outDir": "./dist",                           // Output transpiled files into the dist directory
+    "baseUrl": "./",                              // Set base directory for module resolution
+    "resolveJsonModule": true,                    // Allow importing JSON files as modules
+    "moduleResolution": "node",                   // Ensure Node.js-style module resolution
+    "allowJs": false,                             // Disallow mixing JavaScript and TypeScript files
+    "skipDefaultLibCheck": true,                  // Skip default library file type-checking for faster builds
+    "noEmit": false                               // Emit JavaScript files to dist directory
   },
   "include": [
-    "src/**/*",                                    // Include all source files in the src directory
-    "**/*.test.ts"                                  // Include all test files with .test.ts extension
+    "src/**/*",                                   // Include all TypeScript files in the src folder
+    "**/*.test.ts"                                 // Include test files with a .test.ts extension
   ],
   "exclude": [
-    "node_modules",                                // Exclude node_modules folder
-    "dist"                                         // Exclude dist folder
+    "node_modules",                               // Exclude node_modules folder
+    "dist"                                        // Exclude dist folder from compilation
   ]
 }

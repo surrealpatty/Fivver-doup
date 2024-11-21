@@ -1,33 +1,33 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Import the Sequelize instance from your config
+import { DataTypes, Model, Optional, Association } from 'sequelize';
+import { sequelize } from '../config/database'; // Ensure this path is correct
+import Service from './services'; // Import associated models
 
-// Define the interface for User attributes
+// Define the User model interface
 interface UserAttributes {
   id: number;
-  email: string;
-  password: string;
   username: string;
+  email: string;
 }
 
-// Define the interface for User creation (excluding the id since it auto-generates)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User model
-class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
-{
+// Define the User class
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
-  public email!: string;
-  public password!: string;
   public username!: string;
+  public email!: string;
 
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  // Add other fields as necessary
+
+  // Define associations
+  public static associations: {
+    services: Association<User, Service>;
+  };
+
+  // Define any instance methods or virtuals here if needed
 }
 
-// Initialize the User model with the Sequelize instance
+// Initialize the User model with the sequelize instance
 User.init(
   {
     id: {
@@ -35,45 +35,32 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true, // Ensure email is unique
-      validate: {
-        isEmail: {
-          msg: 'Must be a valid email address', // Custom error message for validation
-        },
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          args: [8, 128], // Enforce password length between 8 and 128 characters
-          msg: 'Password must be between 8 and 128 characters',
-        },
-      },
-    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Ensure username is unique
-      validate: {
-        len: {
-          args: [3, 50], // Enforce username length between 3 and 50 characters
-          msg: 'Username must be between 3 and 50 characters',
-        },
-      },
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    // Add other fields as necessary
   },
   {
-    sequelize, // Pass the Sequelize instance
-    tableName: 'users', // Custom table name
-    timestamps: true, // Enable timestamps (createdAt and updatedAt)
-    underscored: true, // Use snake_case for database column names
-    modelName: 'User', // Optional: Name of the model
+    sequelize,        // Sequelize instance
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in DB
   }
 );
 
-export { User }; // Export the User model
+// Define the static associate method
+User.associate = (models: any) => {
+  // Example association: User can have many services
+  User.hasMany(models.Service, {
+    foreignKey: 'userId',  // Adjust based on your schema
+    as: 'services',        // Alias for the relationship
+  });
+  // Add other associations here if needed
+};
+
+export default User;  // Default export as per the import style in index.ts

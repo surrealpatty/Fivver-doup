@@ -1,10 +1,10 @@
 import { sequelize } from '../config/database';
-import User from './user';       // Default import for User
-import  Service  from './services'; // Named import for Service
-import Order from './order';     // Default import for Order
-import Review from './review';   // Default import for Review
+import User from './user'; // Default import for User
+import Service from './services'; // Named import for Service
+import Order from './order'; // Default import for Order
+import Review from './review'; // Default import for Review
 
-// Initialize models with the correct types
+// Initialize models
 const models = {
   User,
   Service,
@@ -12,7 +12,7 @@ const models = {
   Review,
 };
 
-// Set up associations only if the associate method exists
+// Set up associations if the associate method exists
 Object.values(models).forEach((model: any) => {
   if (model.associate) {
     model.associate(models); // Call associate if it exists
@@ -21,3 +21,6 @@ Object.values(models).forEach((model: any) => {
 
 // Export models and sequelize instance
 export { sequelize, models };
+
+// Add types for models to ensure proper inference and usage in other parts of your app
+export type { User, Service, Order, Review };
