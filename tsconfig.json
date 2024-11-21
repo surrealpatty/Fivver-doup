@@ -1,42 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES6",                                 // Target ES6 for compatibility
-    "module": "ESNext",                              // Use ESNext module system (for better tree shaking)
-    "moduleResolution": "node",                      // Use Node.js module resolution strategy
-    "strict": true,                                  // Enable strict type checking
-    "esModuleInterop": true,                         // Enable interoperability with CommonJS modules
-    "skipLibCheck": true,                            // Skip library checks (useful for large projects)
-    "forceConsistentCasingInFileNames": true,        // Ensure consistent file name casing
-    "outDir": "./dist",                              // Output directory for compiled files
-    "rootDir": "./src",                              // Root directory for source files
-    "baseUrl": ".",                                  // Base URL for module resolution
-    "resolveJsonModule": true,                       // Allow importing JSON files
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]         // Ensure custom types are resolved from src/types
-    },
-    "declaration": true,                             // Generate .d.ts declaration files (optional, remove if not needed)
-    "declarationDir": "./dist/types",                // Specify where declaration files should be stored (optional)
-    "sourceMap": true,                               // Generate source maps for debugging
-    "allowSyntheticDefaultImports": true,            // Allow default imports for CommonJS modules
-    "noImplicitAny": true,                           // Disallow implicit 'any' types
-    "strictNullChecks": true,                        // Enable strict null checks
-    "experimentalDecorators": true,                  // Enable decorators if you're using them
-    "emitDecoratorMetadata": true,                   // Emit decorator metadata for TypeScript decorators
-    "noUnusedLocals": true,                          // Disallow unused local variables
-    "noUnusedParameters": true,                      // Disallow unused function parameters
-    "strictPropertyInitialization": true,            // Ensure properties are initialized in class constructors
-    "types": ["node", "express", "jest"],            // Include types for node, express, and jest
-    "lib": ["ESNext", "DOM"],                        // Include standard library files
-    "skipDefaultLibCheck": true,                     // Skip default lib check for performance
-    "resolveRootDir": true,                          // Ensure correct resolution of the root directory
-    "allowJs": true                                  // Allow JavaScript files in the project (useful if you mix JS and TS)
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Add this line if not already included
+    "types": ["node", "express", "jest"],                  // Ensure express is included in the types array
+    "lib": ["ES2018", "DOM"],
+    // other configurations...
   },
   "include": [
-    "src/**/*",                                      // Include all files under src directory
-    "**/*.test.ts"                                   // Include .test.ts files for Jest tests
+    "src/**/*",
+    "**/*.test.ts"
   ],
   "exclude": [
-    "node_modules",                                  // Exclude node_modules directory
-    "dist"                                           // Exclude dist directory
+    "node_modules",
+    "dist"
   ]
 }
