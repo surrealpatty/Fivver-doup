@@ -10,9 +10,9 @@
     "resolveJsonModule": true,         // Allow importing JSON files as modules
     "outDir": "./dist",                // Output compiled files into the dist directory
     "rootDir": "./src",                // Root directory of your TypeScript files
-    "types": ["node"],                 // Include the 'node' types to use Node.js built-in modules
+    "types": ["node", "jest"],         // Include both 'node' and 'jest' types
     "typeRoots": ["./node_modules/@types", "./src/types"], // Look for type declarations in these directories
-    "allowJs": true,                   // Allow JavaScript files to be included in the compilation
+    "allowJs": true                    // Allow JavaScript files to be included in the compilation
   },
   "include": [
     "src/**/*",                        // Include all files in the src directory

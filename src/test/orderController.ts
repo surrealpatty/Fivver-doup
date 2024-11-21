@@ -5,10 +5,22 @@ import Order from '../models/order'; // Default import for Order model
 import User from '../models/user'; // Correct import path for User model
 import Service from '../models/services'; // Correct import path for Service model
 
-// Mocking models
+// Mocking models with proper types
 jest.mock('../models/user');
 jest.mock('../models/services');
 jest.mock('../models/order');
+
+// Mock types for Sequelize model instances
+const mockFindByPk = jest.fn();
+const mockFindAll = jest.fn();
+const mockSave = jest.fn();
+const mockDestroy = jest.fn();
+
+// Extend the models with mock methods
+(User.findByPk as jest.Mock) = mockFindByPk;
+(Service.findByPk as jest.Mock) = mockFindByPk;
+(Order.findByPk as jest.Mock) = mockFindByPk;
+(Order.findAll as jest.Mock) = mockFindAll;
 
 describe('Order Controller', () => {
   beforeAll(async () => {
@@ -30,8 +42,8 @@ describe('Order Controller', () => {
   describe('POST /orders', () => {
     it('should create a new order successfully', async () => {
       // Mock User and Service findByPk
-      (User.findByPk as jest.Mock).mockResolvedValue({ id: 1, name: 'Test User' });
-      (Service.findByPk as jest.Mock).mockResolvedValue({ id: 1, name: 'Test Service' });
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test User' });
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
 
       const response = await request(app)
         .post('/orders')
@@ -48,8 +60,8 @@ describe('Order Controller', () => {
     });
 
     it('should return 404 if user or service not found', async () => {
-      (User.findByPk as jest.Mock).mockResolvedValue(null);
-      (Service.findByPk as jest.Mock).mockResolvedValue({ id: 1, name: 'Test Service' });
+      mockFindByPk.mockResolvedValueOnce(null); // User not found
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
 
       const response = await request(app)
         .post('/orders')
@@ -68,7 +80,7 @@ describe('Order Controller', () => {
   describe('GET /orders', () => {
     it('should fetch all orders', async () => {
       // Mock Order findAll
-      (Order.findAll as jest.Mock).mockResolvedValue([{ id: 1, orderDetails: 'Order 1' }]);
+      mockFindAll.mockResolvedValueOnce([{ id: 1, orderDetails: 'Order 1' }]);
 
       const response = await request(app).get('/orders');
 
@@ -82,7 +94,7 @@ describe('Order Controller', () => {
   describe('GET /orders/:id', () => {
     it('should fetch order by ID', async () => {
       // Mock Order findByPk
-      (Order.findByPk as jest.Mock).mockResolvedValue({ id: 1, orderDetails: 'Order 1' });
+      mockFindByPk.mockResolvedValueOnce({ id: 1, orderDetails: 'Order 1' });
 
       const response = await request(app).get('/orders/1');
 
@@ -92,7 +104,7 @@ describe('Order Controller', () => {
 
     it('should return 404 if order not found', async () => {
       // Mock Order findByPk to return null
-      (Order.findByPk as jest.Mock).mockResolvedValue(null);
+      mockFindByPk.mockResolvedValueOnce(null);
 
       const response = await request(app).get('/orders/999');
 
@@ -105,8 +117,8 @@ describe('Order Controller', () => {
   describe('PUT /orders/:id', () => {
     it('should update the order', async () => {
       // Mock Order findByPk and save
-      const mockOrder = { id: 1, orderDetails: 'Old details', status: 'Pending', save: jest.fn() };
-      (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
+      const mockOrder = { id: 1, orderDetails: 'Old details', status: 'Pending', save: mockSave };
+      mockFindByPk.mockResolvedValueOnce(mockOrder);
 
       const response = await request(app)
         .put('/orders/1')
@@ -123,7 +135,7 @@ describe('Order Controller', () => {
 
     it('should return 404 if order not found', async () => {
       // Mock Order findByPk to return null
-      (Order.findByPk as jest.Mock).mockResolvedValue(null);
+      mockFindByPk.mockResolvedValueOnce(null);
 
       const response = await request(app)
         .put('/orders/999')
@@ -140,8 +152,8 @@ describe('Order Controller', () => {
   describe('DELETE /orders/:id', () => {
     it('should delete the order', async () => {
       // Mock Order findByPk and destroy
-      const mockOrder = { id: 1, destroy: jest.fn() };
-      (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
+      const mockOrder = { id: 1, destroy: mockDestroy };
+      mockFindByPk.mockResolvedValueOnce(mockOrder);
 
       const response = await request(app).delete('/orders/1');
 
@@ -152,7 +164,7 @@ describe('Order Controller', () => {
 
     it('should return 404 if order not found', async () => {
       // Mock Order findByPk to return null
-      (Order.findByPk as jest.Mock).mockResolvedValue(null);
+      mockFindByPk.mockResolvedValueOnce(null);
 
       const response = await request(app).delete('/orders/999');
 
