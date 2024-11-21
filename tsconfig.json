@@ -27,7 +27,9 @@
     "strictPropertyInitialization": true,            // Ensure properties are initialized in class constructors
     "types": ["node", "express", "jest"],            // Include types for node, express, and jest
     "lib": ["ESNext", "DOM"],                        // Include standard library files
-    "skipDefaultLibCheck": true                      // Skip default lib check for performance
+    "skipDefaultLibCheck": true,                     // Skip default lib check for performance
+    "resolveRootDir": true,                          // Ensure correct resolution of the root directory
+    "allowJs": true                                  // Allow JavaScript files in the project (useful if you mix JS and TS)
   },
   "include": [
     "src/**/*",                                      // Include all files under src directory
