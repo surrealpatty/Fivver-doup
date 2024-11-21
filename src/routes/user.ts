@@ -56,7 +56,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, username: newUser.username },
       jwtSecret,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' } // 1 hour expiration time
     );
 
     // Send the response with the token
@@ -107,7 +107,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
       jwtSecret,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' } // 1 hour expiration time
     );
 
     // Send the response with the token

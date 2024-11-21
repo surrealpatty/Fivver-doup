@@ -7,7 +7,7 @@ dotenv.config();
 // Destructure environment variables from process.env
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, NODE_ENV } = process.env;
 
-// TypeScript type declaration for process.env
+// TypeScript type declaration for process.env (ensure all required variables are present)
 if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
     if (NODE_ENV !== 'test') {
         console.error('Missing required environment variables. Please check your .env file.');
@@ -15,8 +15,8 @@ if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_NAME || !DB_PORT) {
     }
 }
 
-// Sequelize instance for database connection
-export const sequelize = new Sequelize({
+// Default values for database connection settings if not provided
+const sequelize = new Sequelize({
     dialect: 'mysql',
     host: DB_HOST || 'localhost', // Default to 'localhost' if not provided
     username: DB_USER || 'root', // Default to 'root' if not provided
@@ -33,7 +33,7 @@ export const sequelize = new Sequelize({
 });
 
 // Function to test the database connection
-export const testConnection = async () => {
+export const testConnection = async (): Promise<void> => {
     try {
         await sequelize.authenticate();
         console.log('Database connection has been established successfully.');
@@ -44,15 +44,15 @@ export const testConnection = async () => {
             console.error('An unknown error occurred during the database connection');
         }
 
-        // Do not call process.exit(1) in a test environment
+        // Exit the process only if it's not in a test environment
         if (NODE_ENV !== 'test') {
-            process.exit(1); // Exit the process only if it's not a test environment
+            process.exit(1); // Exit the process if connection fails
         }
     }
 };
 
 // Ensure sequelize connection is properly closed after tests or app shutdown
-export const closeConnection = async () => {
+export const closeConnection = async (): Promise<void> => {
     try {
         await sequelize.close();
         console.log('Database connection has been closed.');
@@ -65,3 +65,5 @@ export const closeConnection = async () => {
 if (NODE_ENV !== 'test') {
     testConnection();
 }
+
+export { sequelize }; // Export sequelize instance for use elsewhere in the app
