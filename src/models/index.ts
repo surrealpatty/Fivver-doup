@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database'; // Import sequelize instance
-import { Model } from 'sequelize';  // Import the Sequelize Model class
-import User from './user';  // Named import for User model 
-import Service from './services'; // Named import for Service model 
+import { Model } from 'sequelize'; // Import the Sequelize Model class
+import User from './user'; // Named import for User model
+import Service from './services'; // Named import for Service model
 import { Order } from './order'; // Named import for Order model
 import { Review } from './review'; // Named import for Review model
 
@@ -12,7 +12,7 @@ interface ModelWithAssociations extends Model {
 
 // Initialize models with proper typing and ensure they extend Model
 const models: { [key: string]: typeof Model } = {
-  User: User,  // Use the models directly without explicit casting
+  User: User, // Use the models directly without explicit casting
   Service: Service,
   Order: Order,
   Review: Review,
