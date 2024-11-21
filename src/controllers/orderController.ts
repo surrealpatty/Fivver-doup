@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Order from '../models/order';  // Make sure this path is correct
+import { Order } from '../models/order';  // Correct the import to use named import
 
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response) => {
