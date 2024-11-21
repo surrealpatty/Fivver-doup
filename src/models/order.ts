@@ -1,7 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
-import { User } from './user';  // Ensure this is correctly imported (use named import for TypeScript)
-import  Service  from './services';  // Ensure this is correctly imported (use named import for TypeScript)
+import { sequelize } from '../config/database';  // Import sequelize instance from config
+
+// Import models without causing circular dependency issues
+import  User  from './user';  // Use the correct import for User model
+import  Service  from './services';  // Use the correct import for Service model
 
 // Define the Order attributes interface
 export interface OrderAttributes {
@@ -35,17 +37,17 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     // Each Order belongs to a User (foreign key `userId`)
     Order.belongsTo(models.User, {
       foreignKey: 'userId',
-      as: 'user',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
+      as: 'user',  // Alias to refer to the association
+      onDelete: 'SET NULL',  // When User is deleted, set userId to null
+      onUpdate: 'CASCADE',  // If User is updated, cascade the change
     });
 
     // Each Order belongs to a Service (foreign key `serviceId`)
     Order.belongsTo(models.Service, { 
       foreignKey: 'serviceId', 
-      as: 'service',  // Correct usage of 'as' in the association definition
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
+      as: 'service',  // Alias to refer to the association
+      onDelete: 'SET NULL',  // When Service is deleted, set serviceId to null
+      onUpdate: 'CASCADE',  // If Service is updated, cascade the change
     });
   }
 }
@@ -59,10 +61,10 @@ Order.init(
       autoIncrement: true,  // Auto increment the id
     },
     userId: {
-      type: DataTypes.UUID,  // Use UUID for userId
+      type: DataTypes.UUID,  // UUID for userId
       allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
-        model: User,
+        model: User,  // Reference to the User model
         key: 'id',
       },
       onUpdate: 'CASCADE',
@@ -72,7 +74,7 @@ Order.init(
       type: DataTypes.INTEGER,  // INTEGER for serviceId, since Service uses INTEGER ID
       allowNull: true,  // Allow null for ON DELETE SET NULL behavior
       references: {
-        model: Service,
+        model: Service,  // Reference to the Service model
         key: 'id',
       },
       onUpdate: 'CASCADE',
@@ -80,7 +82,7 @@ Order.init(
     },
     orderDetails: {
       type: DataTypes.STRING,  // Adjust type based on your needs
-      allowNull: false,
+      allowNull: false,  // Ensure orderDetails is required
     },
     quantity: {
       type: DataTypes.INTEGER,  // INTEGER for quantity

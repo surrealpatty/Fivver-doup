@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user'; // Named import for User model
+import  User  from '../models/user'; // Named import for User model
 
 // Example function for getting a user profile
 export const getUserProfile = async (req: Request, res: Response) => {

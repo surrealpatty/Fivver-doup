@@ -1,5 +1,5 @@
 import express from 'express';
-import { sequelize, models } from './models';  // Import sequelize instance and models from index.ts
+import { sequelize, models } from './models';  // Import sequelize instance and models from models/index.ts
 
 const app = express();
 const port = process.env.PORT || 3000;
