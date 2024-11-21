@@ -41,7 +41,7 @@ export { app, server };
 declare global {
   namespace Express {
     interface Request {
-      user: { id: string; username: string; email?: string }; // Make `user` required in both global declaration and middleware
+      user: { id: string; username: string; email: string };
     }
   }
 }

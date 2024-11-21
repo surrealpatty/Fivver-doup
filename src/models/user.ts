@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure this path is correct
+import sequelize from '../config/database';  // Ensure this path is correct
 import Service from './services';  // Import associated models
 
 // Define the User model interface
@@ -8,6 +8,7 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string; // Add password to UserAttributes interface
+  isPaid: boolean;  // Add isPaid to UserAttributes
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,6 +22,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public username!: string;
   public email!: string;
   public password!: string; // Add password field
+  public isPaid!: boolean;  // Add isPaid field
 
   // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
@@ -63,6 +65,10 @@ User.init(
     password: {
       type: DataTypes.STRING,  // Add the password field to the model
       allowNull: false,
+    },
+    isPaid: {
+      type: DataTypes.BOOLEAN, // Define isPaid as a boolean
+      defaultValue: false,     // Set default value to false
     },
   },
   {
