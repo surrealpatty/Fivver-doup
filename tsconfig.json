@@ -14,7 +14,8 @@
     "resolveJsonModule": true,                     // Allows importing JSON files
     "moduleResolution": "node",                    // Ensure proper module resolution for Node.js
     "allowJs": true,                               // Allow JavaScript files to be included in the project
-    "skipDefaultLibCheck": true                    // Skip checking the default library files to speed up build
+    "skipDefaultLibCheck": true,                   // Skip checking the default library files to speed up build
+    "noEmit": false                                // Ensure that files are emitted to dist
   },
   "include": [
     "src/**/*",                                    // Include all source files in the src directory

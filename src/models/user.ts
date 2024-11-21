@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Import the Sequelize instance from your config
-import  User  from '../models/user'; // Correct named import for User
 
 // Define the interface for User attributes
 interface UserAttributes {
@@ -27,6 +26,10 @@ class User
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
+
+// Export the User model as a named export
+export { User };
+
 
 // Initialize the User model with the Sequelize instance
 User.init(
