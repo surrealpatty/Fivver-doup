@@ -5,75 +5,93 @@ import {
   getOrderById, 
   updateOrder, 
   deleteOrder 
-} from '../controllers/orderController';  // Ensure the path is correct
+} from '../controllers/orderController';
 
 const router = express.Router();
 
 // Route to create an order
-router.post('/', async (req: Request, res: Response): Promise<Response> => {
+router.post('/', async (req: Request, res: Response) => {
   try {
-    return createOrder(req, res);  // Pass the request and response to the controller
+    return await createOrder(req, res);  // Pass the request and response to the controller
   } catch (error) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
 // Route to get all orders
-router.get('/', async (req: Request, res: Response): Promise<Response> => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    return getAllOrders(req, res);  // Pass the request and response to the controller
+    return await getAllOrders(req, res);  // Pass the request and response to the controller
   } catch (error) {
     console.error('Error fetching orders:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
 // Route to get an order by its ID
-router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
+router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
+  // Improved validation using regular expression for a valid ID format (number)
+  if (!/^\d+$/.test(id)) {
     return res.status(400).json({ message: 'Invalid order ID' });  // Validate order ID
   }
 
   try {
-    return getOrderById(req, res);  // Pass the request and response to the controller
+    return await getOrderById(req, res);  // Pass the request and response to the controller
   } catch (error) {
-    console.error('Error fetching order:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    console.error('Error fetching order with ID:', id, error);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
 // Route to update an order by its ID
-router.put('/:id', async (req: Request, res: Response): Promise<Response> => {
+router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
+  // Improved validation using regular expression for a valid ID format (number)
+  if (!/^\d+$/.test(id)) {
     return res.status(400).json({ message: 'Invalid order ID' });  // Validate order ID
   }
 
   try {
-    return updateOrder(req, res);  // Pass the request and response to the controller
+    return await updateOrder(req, res);  // Pass the request and response to the controller
   } catch (error) {
-    console.error('Error updating order:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    console.error('Error updating order with ID:', id, error);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
 // Route to delete an order by its ID
-router.delete('/:id', async (req: Request, res: Response): Promise<Response> => {
+router.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
+  // Improved validation using regular expression for a valid ID format (number)
+  if (!/^\d+$/.test(id)) {
     return res.status(400).json({ message: 'Invalid order ID' });  // Validate order ID
   }
 
   try {
-    return deleteOrder(req, res);  // Pass the request and response to the controller
+    return await deleteOrder(req, res);  // Pass the request and response to the controller
   } catch (error) {
-    console.error('Error deleting order:', error);
-    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
+    console.error('Error deleting order with ID:', id, error);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 

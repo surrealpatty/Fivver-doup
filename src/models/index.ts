@@ -1,22 +1,23 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import { ModelWithAssociations } from './ModelWithAssociations'; // Import the interface if needed
-
-// Import your models
-import User from './user';
-import Service from './services';
-import Review from './review';
+import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
+import { User } from './user'; // Assuming the User model is exported as a function
+import { Service } from './services'; // Assuming the Service model is exported as a function
+import { Review } from './review'; // Assuming the Review model is exported as a function
 
 // Initialize Sequelize
 const sequelize = new Sequelize({
-  dialect: 'mysql', // Set the appropriate dialect (e.g., mysql, postgres)
-  host: 'localhost', // Replace with your database host
-  database: 'fivver_doup', // Replace with your database name
-  username: 'root', // Replace with your database username
-  password: '', // Replace with your database password
+  dialect: 'mysql', // MySQL dialect
+  host: 'localhost', // Database host
+  database: 'fivver_doup', // Database name
+  username: 'root', // Database username
+  password: '', // Database password
 });
 
-// Add all models to Sequelize instance
-const models = {
+// Define the models using the functions that return model definitions
+const models: {
+  User: ModelCtor<Model>,
+  Service: ModelCtor<Model>,
+  Review: ModelCtor<Model>,
+} = {
   User: User(sequelize, DataTypes),
   Service: Service(sequelize, DataTypes),
   Review: Review(sequelize, DataTypes),
@@ -24,13 +25,10 @@ const models = {
 
 // Set up associations (if any)
 Object.keys(models).forEach((modelName) => {
-  if (models[modelName].associate) {
-    models[modelName].associate(models); // Call the associate method if it exists
+  if ((models[modelName as keyof typeof models]).associate) {
+    (models[modelName as keyof typeof models]).associate(models); // Call the associate method if it exists
   }
 });
-
-// Export sequelize and models
-export { sequelize, models };
 
 // Example associations (optional, adapt as per your needs)
 models.User.hasMany(models.Service, { foreignKey: 'userId' });
@@ -41,3 +39,33 @@ models.Review.belongsTo(models.Service, { foreignKey: 'serviceId' });
 
 models.User.hasMany(models.Review, { foreignKey: 'userId' });
 models.Review.belongsTo(models.User, { foreignKey: 'userId' });
+
+// Export sequelize and models with better type inference
+export { sequelize, models };
+
+// If you want to define interfaces for your models (optional, but recommended for TypeScript):
+
+// Example User model interface
+export interface IUser extends Model {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+}
+
+// Example Service model interface
+export interface IService extends Model {
+  id: number;
+  title: string;
+  description: string;
+  userId: number;
+}
+
+// Example Review model interface
+export interface IReview extends Model {
+  id: number;
+  rating: number;
+  comment: string;
+  serviceId: number;
+  userId: number;
+}

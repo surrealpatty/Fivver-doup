@@ -4,14 +4,18 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-// TypeScript type definition for environment variables
-interface ProcessEnv {
-    DB_HOST?: string;
-    DB_USER?: string;
-    DB_PASSWORD?: string;
-    DB_NAME?: string;
-    DB_PORT?: string;
-    NODE_ENV?: string;
+// Extend the NodeJS.ProcessEnv interface to include our custom properties
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            DB_HOST?: string;
+            DB_USER?: string;
+            DB_PASSWORD?: string;
+            DB_NAME?: string;
+            DB_PORT?: string;
+            NODE_ENV?: string;
+        }
+    }
 }
 
 // Destructure and validate environment variables
@@ -22,7 +26,7 @@ const {
     DB_NAME = 'fivver_doup',
     DB_PORT = '3306',
     NODE_ENV,
-}: ProcessEnv = process.env;
+}: NodeJS.ProcessEnv = process.env;
 
 // Ensure critical environment variables are defined, except in test environment
 if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
