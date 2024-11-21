@@ -1,4 +1,4 @@
-import { Router, Request, Response, RequestHandler } from 'express';
+import { Router, Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware';
 import User from '../models/user';
 
@@ -16,17 +16,17 @@ interface AuthenticatedRequest extends Request {
 const router = Router();
 
 // Route for getting all users
-router.get('/users', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/users', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const users = await User.findAll();
     return res.json(users); // Ensure returning a response
   } catch (error) {
     return res.status(500).json({ message: 'Error fetching users', error: (error as Error).message });
   }
-} as RequestHandler); // Cast to RequestHandler
+});
 
 // Route for creating a user
-router.post('/users', async (req: Request, res: Response) => {
+router.post('/users', async (req: Request, res: Response): Promise<Response> => {
   try {
     const { username, email, password } = req.body;
 
@@ -45,10 +45,10 @@ router.post('/users', async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({ message: 'Error creating user', error: (error as Error).message });
   }
-} as RequestHandler); // Cast to RequestHandler
+});
 
 // Route for updating a user
-router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.params.id;
 
@@ -69,10 +69,10 @@ router.put('/users/:id', authenticateToken, async (req: AuthenticatedRequest, re
   } catch (error) {
     return res.status(500).json({ message: 'Error updating user', error: (error as Error).message });
   }
-} as RequestHandler); // Cast to RequestHandler
+});
 
 // Route for deleting a user
-router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.params.id;
 
@@ -90,6 +90,6 @@ router.delete('/users/:id', authenticateToken, async (req: AuthenticatedRequest,
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting user', error: (error as Error).message });
   }
-} as RequestHandler); // Cast to RequestHandler
+});
 
 export default router;
