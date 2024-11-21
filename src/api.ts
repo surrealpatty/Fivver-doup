@@ -31,10 +31,13 @@ router.post('/services', async (req: Request, res: Response): Promise<Response> 
     });
 
     // Return the newly created service
-    return res.status(201).json(service);
+    return res.status(201).json({
+      message: 'Service created successfully',
+      service,
+    });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error('Error creating service:', error);
+    return res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 });
 

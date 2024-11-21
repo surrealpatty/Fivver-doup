@@ -25,6 +25,6 @@
   "exclude": [
     "node_modules",                              // Exclude node_modules
     "dist",                                      // Exclude the dist directory (output directory)
-    "config"                                     // Exclude config folder from being transpiled
+    "config"                                     // Exclude config folder from being transpiled (if no TS files)
   ]
 }
