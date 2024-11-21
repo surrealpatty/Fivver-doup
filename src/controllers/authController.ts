@@ -1,13 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Ensure the User model is correctly imported
+import User from '../models/user'; // Ensure the User model is correctly imported
 
 // Login handler for user authentication
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     try {
+        // Ensure that the email and password are provided
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
         // Find the user by email
         const user = await User.findOne({ where: { email } });
 
@@ -52,6 +57,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const { email, password, username } = req.body;
 
     try {
+        // Ensure that the email, password, and username are provided
+        if (!email || !password || !username) {
+            return res.status(400).json({ message: 'Email, password, and username are required' });
+        }
+
         // Check if the email already exists in the database
         const existingUser = await User.findOne({ where: { email } });
 
@@ -65,7 +75,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Create a new user in the database
         const newUser = await User.create({
             email,
-            password: hashedPassword,
+            password: hashedPassword, // Storing the hashed password
             username,
         });
 

@@ -7,6 +7,7 @@ interface UserAttributes {
   id: number;
   username: string;
   email: string;
+  password: string; // Add password to UserAttributes interface
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
@@ -16,8 +17,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public id!: number;
   public username!: string;
   public email!: string;
-
-  // Add other fields as necessary
+  public password!: string; // Add password field
 
   // Define associations
   public static associations: {
@@ -44,7 +44,10 @@ User.init(
       allowNull: false,
       unique: true,
     },
-    // Add other fields as necessary
+    password: {
+      type: DataTypes.STRING,  // Add the password field to the model
+      allowNull: false,
+    },
   },
   {
     sequelize,        // Sequelize instance
