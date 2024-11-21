@@ -1,3 +1,4 @@
+// src/routes/user.ts
 import express, { Request, Response } from 'express';
 import User from '../models/user'; // Ensure correct path to your User model
 import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing
@@ -25,13 +26,13 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
   try {
     // Validate the incoming data
     if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Please provide email, password, and username' });
+      return res.status(400).json({ message: 'Please provide email, password, and username.' });
     }
 
     // Check if the user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res.status(400).json({ message: 'Email already in use.' });
     }
 
     // Hash password
@@ -60,7 +61,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     );
 
     // Send the response with the token
-    res.status(201).json({
+    return res.status(201).json({
       message: 'User registered successfully',
       token,
       user: {
@@ -71,7 +72,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     });
   } catch (error) {
     console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error during user registration.' });
   }
 });
 
@@ -82,22 +83,22 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
   try {
     // Validate the incoming data
     if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide email and password' });
+      return res.status(400).json({ message: 'Please provide email and password.' });
     }
 
     // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+      return res.status(400).json({ message: 'User not found.' });
     }
 
     // Compare the password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'Invalid credentials.' });
     }
 
-    // Ensure JWT_SECRET is present
+    // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       return res.status(500).json({ message: 'JWT secret is not configured properly.' });
@@ -111,7 +112,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     );
 
     // Send the response with the token
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Login successful',
       token,
       user: {
@@ -122,7 +123,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     });
   } catch (error) {
     console.error('Error logging in user:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error during user login.' });
   }
 });
 

@@ -1,98 +1,48 @@
-// src/api.ts
-import express, { Request, Response } from 'express';
-import  User  from './models/user';  // Make sure to import User model
+import { Router, Request, Response } from 'express'; // Importing Router, Request, and Response from express
+import Service from '../models/services'; // Import Service model
+import User from '../models/user'; // Import User model
+import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for Service creation
 
-const router = express.Router();
+const router = Router(); // Initialize the router
 
-// Create a new user
-router.post('/users', async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+// Service creation validation function
+const validateServiceData = (data: ServiceCreationAttributes) => {
+  const { userId, title, description, price } = data;
+  if (!userId || !title || !description || price === undefined) {
+    return { valid: false, message: 'Missing required fields' };
+  }
+  return { valid: true };
+};
 
-    try {
-        // Check if the user already exists
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(400).json({ error: 'User with this email already exists' });
-        }
+router.post('/path', async (req: Request, res: Response): Promise<Response> => {
+  const { userId, title, description, price }: ServiceCreationAttributes = req.body; // Get data from request body
 
-        // Create the user
-        const user = await User.create({ email, password });
+  const validation = validateServiceData({ userId, title, description, price }); // Use validation function
+  if (!validation.valid) {
+    return res.status(400).json({ message: validation.message }); // Return validation error
+  }
 
-        return res.status(201).json(user);  // Send the created user back in the response
-    } catch (error) {
-        console.error('Error creating user:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+  try {
+    // Check if the user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' }); // User not found error
     }
+
+    // Create the new service
+    const service = await Service.create({
+      userId,       // 'userId' from the request body
+      title,        // 'title' from the request body
+      description,  // 'description' from the request body
+      price,        // 'price' from the request body
+    });
+
+    // Return the newly created service
+    return res.status(201).json(service);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' }); // Handle unexpected errors
+  }
 });
 
-// Get all users
-router.get('/users', async (req: Request, res: Response) => {
-    try {
-        const users = await User.findAll();  // Fetch all users
-        return res.status(200).json(users);  // Return users in response
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Get a single user by ID
-router.get('/users/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    
-    try {
-        const user = await User.findByPk(id);  // Find user by primary key
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        return res.status(200).json(user);  // Return the found user
-    } catch (error) {
-        console.error('Error fetching user:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Update a user's information
-router.put('/users/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.findByPk(id);  // Find user by ID
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Update user attributes
-        user.email = email || user.email;
-        user.password = password || user.password;
-        await user.save();  // Save the updated user
-
-        return res.status(200).json(user);  // Return the updated user
-    } catch (error) {
-        console.error('Error updating user:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Delete a user
-router.delete('/users/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-
-    try {
-        const user = await User.findByPk(id);  // Find user by ID
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Delete the user
-        await user.destroy();
-        return res.status(204).json({ message: 'User deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-export default router;  // Export the router to be used in your server setup
+export default router; // Export the router to be used in other parts of your application

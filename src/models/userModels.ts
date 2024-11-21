@@ -1,6 +1,6 @@
 // src/models/userModel.ts
 import { DataTypes, Model, Optional } from 'sequelize';
-export { sequelize };
+import  sequelize  from '../config/database';  // Ensure you're importing the sequelize instance
 
 // Define interface for the User model attributes
 export interface UserAttributes {
@@ -19,6 +19,7 @@ export interface UserAttributes {
 // Define interface for creation - excludes id (because it’s auto-generated)
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>
 
+// Define the User model
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
@@ -43,12 +44,12 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // You may want to enforce uniqueness for username
+      unique: true,  // Enforce uniqueness for username
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // You may want to enforce uniqueness for email
+      unique: true,  // Enforce uniqueness for email
     },
     password: {
       type: DataTypes.STRING,
@@ -74,7 +75,7 @@ User.init(
     },
   },
   {
-    sequelize,  // Pass the sequelize instance
+    sequelize,  // Pass the sequelize instance from the config
     modelName: 'User',  // Model name
     tableName: 'users',  // Table name in the database
     timestamps: true,  // Enable createdAt and updatedAt fields
