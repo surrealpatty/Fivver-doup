@@ -12,21 +12,19 @@ declare global {
 }
 
 // Authentication middleware to verify JWT token
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
   // Extract the token from the Authorization header (Bearer token)
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    res.status(401).json({ message: 'Authentication required' }); // Send response without returning
-    return; // Explicitly end the function execution here
+    return res.status(401).json({ message: 'Authentication required' }); // Return response immediately
   }
 
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
-    console.error('JWT_SECRET is missing from environment variables'); // Added logging for clarity
-    res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' }); // Send response without returning
-    return; // Explicitly end the function execution here
+    console.error('JWT_SECRET is missing from environment variables');
+    return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' }); // Return response immediately
   }
 
   try {
@@ -39,7 +37,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
-    console.error('JWT verification failed:', error); // Added logging for clarity
-    res.status(403).json({ message: 'Invalid or expired token' }); // Send response without returning
+    console.error('JWT verification failed:', error);
+    return res.status(403).json({ message: 'Invalid or expired token' }); // Return response immediately
   }
 };

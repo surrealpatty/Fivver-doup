@@ -1,6 +1,7 @@
+// src/routes/review.routes.ts
 import { Router, Request, Response } from 'express';
 import { Review, User, Service } from '../models'; // Correctly import models
-import { checkAuth } from '../middlewares/authMiddleware'; // Assuming you have an auth middleware
+import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAuth middleware
 
 const router = Router();
 
@@ -132,7 +133,7 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
     }
 });
 
-// 4. Delete a Review (Optional: add a route for deleting reviews)
+// 4. Delete a Review
 router.delete('/reviews/:reviewId', checkAuth, async (req: Request, res: Response): Promise<void> => {
     const { reviewId } = req.params;
     const { id: userId } = req.user as { id: string }; // Extract authenticated user ID
