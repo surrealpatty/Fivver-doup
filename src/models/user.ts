@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure this path is correct
-import Service from './services'; // Import associated models
+import  Service  from './services'; // Import associated models
 
 // Define the User model interface
 interface UserAttributes {
@@ -19,10 +19,19 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password!: string; // Add password field
 
-  // Define associations
+  // Define associations type for TypeScript
   public static associations: {
     services: Association<User, Service>;
   };
+
+  // Static method to define associations
+  public static associate(models: { Service: typeof Service }) {
+    // Example association: User can have many services
+    User.hasMany(models.Service, {
+      foreignKey: 'userId',  // Adjust based on your schema
+      as: 'services',        // Alias for the relationship
+    });
+  }
 
   // Define any instance methods or virtuals here if needed
 }
@@ -55,15 +64,5 @@ User.init(
     tableName: 'users', // Table name in DB
   }
 );
-
-// Define the static associate method
-User.associate = (models: any) => {
-  // Example association: User can have many services
-  User.hasMany(models.Service, {
-    foreignKey: 'userId',  // Adjust based on your schema
-    as: 'services',        // Alias for the relationship
-  });
-  // Add other associations here if needed
-};
 
 export default User;  // Default export as per the import style in index.ts
