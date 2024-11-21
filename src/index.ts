@@ -34,11 +34,10 @@ const server = app.listen(PORT, () => {
 // Export the app and server for testing purposes
 export { app, server };
 
-// Fixing the `req.user` typing:
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; username: string }; // Adjust the user object properties as per your application logic
+      user?: { id: string; username: string; email?: string }; // Optional `email`
     }
   }
 }
