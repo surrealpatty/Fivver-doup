@@ -35,10 +35,11 @@ const server = app.listen(PORT, () => {
 // Export the app and server for testing purposes
 export { app, server };
 
+// Ensure consistent global declaration for `user` property
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; username: string; email?: string }; // Optional `email`
+      user: { id: string; username: string; email?: string }; // `user` is now required, not optional
     }
   }
 }

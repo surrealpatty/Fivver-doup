@@ -6,7 +6,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 declare global {
   namespace Express {
     interface Request {
-      userId: number; // userId should be required after middleware sets it
+      userId?: number; // `userId` should be optional before the middleware sets it
     }
   }
 }
@@ -17,14 +17,16 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ message: 'Authentication required' });
+    res.status(401).json({ message: 'Authentication required' }); // Send response without returning
+    return; // Explicitly end the function execution here
   }
 
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
     console.error('JWT_SECRET is missing from environment variables'); // Added logging for clarity
-    return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
+    res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' }); // Send response without returning
+    return; // Explicitly end the function execution here
   }
 
   try {
@@ -38,6 +40,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     next();
   } catch (error) {
     console.error('JWT verification failed:', error); // Added logging for clarity
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    res.status(403).json({ message: 'Invalid or expired token' }); // Send response without returning
   }
 };
