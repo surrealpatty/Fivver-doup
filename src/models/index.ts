@@ -1,7 +1,7 @@
-import { Sequelize, DataTypes, ModelCtor } from 'sequelize';
+import { Sequelize, DataTypes, ModelCtor, Model } from 'sequelize';
 import User from './user'; // Assuming the User model is exported as a function
 import Service from './services'; // Assuming the Service model is exported as a function
-import { Review } from './review'; // Assuming the Review model is exported as a function
+import Review from './review'; // Assuming the Review model is exported as a function
 
 // Initialize Sequelize
 const sequelize = new Sequelize({
@@ -12,22 +12,22 @@ const sequelize = new Sequelize({
   password: '', // Database password
 });
 
-// Define the models using the functions that return model definitions
+// Define the models using their respective functions
 const models = {
   User: User(sequelize, DataTypes),
   Service: Service(sequelize, DataTypes),
   Review: Review(sequelize, DataTypes),
 };
 
-// Set up associations (if any)
+// Set up associations (if they exist)
 Object.keys(models).forEach((modelName) => {
   const model = models[modelName as keyof typeof models];
-  if (model.associate) {
+  if (typeof model.associate === 'function') {
     model.associate(models); // Call the associate method if it exists
   }
 });
 
-// Example associations (optional, adapt as per your needs)
+// Define relationships explicitly if not defined in `associate` methods
 models.User.hasMany(models.Service, { foreignKey: 'userId' });
 models.Service.belongsTo(models.User, { foreignKey: 'userId' });
 
@@ -37,29 +37,26 @@ models.Review.belongsTo(models.Service, { foreignKey: 'serviceId' });
 models.User.hasMany(models.Review, { foreignKey: 'userId' });
 models.Review.belongsTo(models.User, { foreignKey: 'userId' });
 
-// Export sequelize and models with better type inference
+// Export the Sequelize instance and models
 export { sequelize, models };
 
-// If you want to define interfaces for your models (optional, but recommended for TypeScript):
+// Define interfaces for models for TypeScript type safety
 
-// Example User model interface
-export interface IUser extends ModelCtor<Model<any, any>> {
+export interface IUser extends Model {
   id: number;
   username: string;
   email: string;
   password: string;
 }
 
-// Example Service model interface
-export interface IService extends ModelCtor<Model<any, any>> {
+export interface IService extends Model {
   id: number;
   title: string;
   description: string;
   userId: number;
 }
 
-// Example Review model interface
-export interface IReview extends ModelCtor<Model<any, any>> {
+export interface IReview extends Model {
   id: number;
   rating: number;
   comment: string;
@@ -67,5 +64,5 @@ export interface IReview extends ModelCtor<Model<any, any>> {
   userId: number;
 }
 
-// The type for the models object, with associations and interfaces applied
+// Export a typed Models object
 export type Models = typeof models;

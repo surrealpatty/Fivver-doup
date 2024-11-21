@@ -8,13 +8,15 @@ dotenv.config();
 const {
   DB_HOST = 'localhost',
   DB_USER = 'root',
-  DB_PASS = '',
+  DB_PASSWORD = '',
+  DB_NAME = 'database_name',
+  DB_PORT = '3306',
   NODE_ENV = 'development',
-}: { [key: string]: string | undefined } = process.env;
+} = process.env;
 
-// Validate critical environment variables (except in the test environment)
-if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
-  console.error('Missing required database environment variables. Check your .env file.');
+// Validate critical environment variables
+if (!DB_NAME) {
+  console.error('Missing required database name. Please check your .env file for DB_NAME.');
   process.exit(1);
 }
 
@@ -25,46 +27,34 @@ const sequelize = new Sequelize({
   username: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
-  port: parseInt(DB_PORT, 10), // Parse port as an integer
-  logging: NODE_ENV === 'development' ? console.log : false, // Log SQL queries only in development
+  port: parseInt(DB_PORT, 10), // Convert port to an integer
+  logging: NODE_ENV === 'development' ? console.log : false, // Enable logging in development
   dialectOptions: {
-    timezone: 'Z', // Use UTC timezone for MySQL queries
+    timezone: 'Z', // Use UTC for MySQL queries
   },
   define: {
-    timestamps: true, // Enable timestamps by default
+    timestamps: true, // Add timestamps to models by default
   },
 });
 
-// Test the database connection
+// Function to test the database connection
 export const testConnection = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
   } catch (error) {
     console.error('Error connecting to the database:', error instanceof Error ? error.message : error);
-    if (NODE_ENV !== 'test') {
-      process.exit(1); // Exit the process if not in the test environment
-    }
+    process.exit(1); // Exit the process on connection failure
   }
 };
 
-// Close the database connection
-export const closeConnection = async (): Promise<void> => {
-  try {
-    await sequelize.close();
-    console.log('Database connection closed successfully.');
-  } catch (error) {
-    console.error('Error closing the database connection:', error);
-  }
-};
-
-// Automatically test the connection unless in a test environment
+// Automatically test the connection unless in the test environment
 if (NODE_ENV !== 'test') {
-  testConnection().catch((err) => {
-    console.error('Unhandled error during initial database connection test:', err);
-    if (NODE_ENV !== 'test') process.exit(1);
+  testConnection().catch((error) => {
+    console.error('Unhandled error during database connection test:', error);
+    process.exit(1);
   });
 }
 
-// Export Sequelize instance for models
+// Export Sequelize instance for use in models
 export { sequelize };

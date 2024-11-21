@@ -1,53 +1,66 @@
-import { Router, Request, Response } from 'express'; // Importing Router, Request, and Response from express
-import Service from '../models/services'; // Import Service model
-import User from '../models/user'; // Import User model
-import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for Service creation
+import { Router, Request, Response } from 'express'; // Import Router, Request, and Response from express
+import Service from '../models/services'; // Ensure the Service model is correctly imported
+import User from '../models/user'; // Import the User model
+import { ServiceCreationAttributes } from '../models/services'; // Import the type for Service creation
 
 const router = Router(); // Initialize the router
 
-// Define the service creation route
+/**
+ * POST /services
+ * Route to create a new service
+ */
 router.post('/services', async (req: Request, res: Response): Promise<Response> => {
-  // Destructure the necessary fields from the request body and type it with ServiceCreationAttributes
-  const { userId, title, description, price }: ServiceCreationAttributes = req.body;
-
   try {
-    // Validate the incoming data
+    // Destructure and type the incoming request body
+    const { userId, title, description, price }: ServiceCreationAttributes = req.body;
+
+    // Validate required fields
     if (!userId || !title || !description || price === undefined) {
-      return res.status(400).json({ message: 'Missing required fields' });
+      return res.status(400).json({
+        message: 'Missing required fields: userId, title, description, and price are mandatory.',
+        error: 'ValidationError',
+      });
     }
 
-    // Ensure price is a valid number
-    if (typeof price !== 'number' || isNaN(price)) {
-      return res.status(400).json({ message: 'Price must be a valid number' });
+    // Validate price
+    if (typeof price !== 'number' || price <= 0 || isNaN(price)) {
+      return res.status(400).json({
+        message: 'Invalid price: must be a positive number.',
+        error: 'ValidationError',
+      });
     }
 
     // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({
+        message: `User with ID ${userId} not found.`,
+        error: 'NotFoundError',
+      });
     }
 
     // Create the new service
     const service = await Service.create({
-      userId,       // 'userId' from the request body
-      title,        // 'title' from the request body
-      description,  // 'description' from the request body
-      price,        // 'price' from the request body
+      userId,       // User ID associated with the service
+      title,        // Service title
+      description,  // Service description
+      price,        // Service price
     });
 
-    // Return the newly created service
+    // Respond with the created service
     return res.status(201).json({
-      message: 'Service created successfully',
+      message: 'Service created successfully.',
       service,
     });
   } catch (error) {
-    // Improved error handling for different error types
     console.error('Error creating service:', error);
-    if (error instanceof Error) {
-      return res.status(500).json({ message: 'Internal server error', error: error.message });
-    }
-    return res.status(500).json({ message: 'Internal server error', error: 'Unknown error' });
+
+    // Return an appropriate error response
+    return res.status(500).json({
+      message: 'Internal server error while creating the service.',
+      error: error instanceof Error ? error.message : 'UnknownError',
+    });
   }
 });
 
-export default router; // Export the router to be used in other parts of your application
+export default router; // Export the router for use in the application

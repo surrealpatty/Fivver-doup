@@ -1,5 +1,6 @@
 import express from 'express';
-import { sequelize, models } from './models';  // Import sequelize instance and models from models/index.ts
+import { sequelize } from './models/database';  // Adjust the path if necessary (assuming sequelize is in the database.ts file)
+import { User } from './models/user'; // Import User model explicitly
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,7 +22,7 @@ sequelize.authenticate()
   });
 
 // Example of using the User model
-models.User.findAll()  // You can query the User model like this
+User.findAll()  // Use the imported User model directly
   .then(users => {
     console.log('Users:', users);
   })
