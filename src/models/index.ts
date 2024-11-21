@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
-import { User } from './user'; // Assuming the User model is exported as a function
-import { Service } from './services'; // Assuming the Service model is exported as a function
+import User from './user'; // Assuming the User model is exported as a function
+import Service from './services'; // Assuming the Service model is exported as a function
 import { Review } from './review'; // Assuming the Review model is exported as a function
 
 // Initialize Sequelize
@@ -13,11 +13,7 @@ const sequelize = new Sequelize({
 });
 
 // Define the models using the functions that return model definitions
-const models: {
-  User: ModelCtor<Model>,
-  Service: ModelCtor<Model>,
-  Review: ModelCtor<Model>,
-} = {
+const models = {
   User: User(sequelize, DataTypes),
   Service: Service(sequelize, DataTypes),
   Review: Review(sequelize, DataTypes),
@@ -69,3 +65,6 @@ export interface IReview extends Model {
   serviceId: number;
   userId: number;
 }
+
+// The type for the models object, with associations and interfaces applied
+export type Models = typeof models;
