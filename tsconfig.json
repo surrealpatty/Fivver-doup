@@ -1,21 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ES2018",                            // Set your desired ECMAScript target version
-    "module": "commonjs",                          // Use commonjs module system for Node.js
+    "target": "ES2018",                            // Set ECMAScript target version for Node.js
+    "module": "commonjs",                          // Use commonjs module system
     "strict": true,                                // Enable strict type-checking options
-    "esModuleInterop": true,                       // Allow default imports from modules without default exports
+    "esModuleInterop": true,                       // Allows default imports from modules without default exports
     "skipLibCheck": true,                          // Skip type checking of declaration files to improve build speed
     "forceConsistentCasingInFileNames": true,      // Ensure consistent casing for file names
-    "typeRoots": ["./node_modules/@types", "./src/types"],  // Add custom types path
-    "types": ["node", "express", "jest"],                  // Ensure express and jest are included in the types array
-    "lib": ["ES2018", "DOM"],                      // Add necessary libraries (DOM for browser environments if needed)
-    "outDir": "./dist",                            // Ensure transpiled files go to dist directory
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Custom types path
+    "types": ["node", "express", "jest"],          // Include Express and Jest types
+    "lib": ["ES2018", "DOM"],                      // Add necessary libraries (DOM for browser environments)
+    "outDir": "./dist",                            // Directory for transpiled files
     "baseUrl": "./",                               // Set base directory for module resolution
-    "resolveJsonModule": true                      // Allow importing JSON files
+    "resolveJsonModule": true,                     // Allows importing JSON files
+    "moduleResolution": "node",                    // Ensure proper module resolution for Node.js
+    "allowJs": true,                               // Allow JavaScript files to be included in the project
+    "skipDefaultLibCheck": true                    // Skip checking the default library files to speed up build
   },
   "include": [
-    "src/**/*",                                    // Include all source files
-    "**/*.test.ts"                                  // Include all test files
+    "src/**/*",                                    // Include all source files in the src directory
+    "**/*.test.ts"                                  // Include all test files with .test.ts extension
   ],
   "exclude": [
     "node_modules",                                // Exclude node_modules folder

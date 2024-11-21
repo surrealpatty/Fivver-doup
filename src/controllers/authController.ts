@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Ensure User is correctly imported
+import { User } from '../models/user'; // Ensure the User model is correctly imported
 
 // Login handler for user authentication
 export const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,18 +28,22 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' });
         }
 
+        // Use a secure default expiration time if none is provided in the env
+        const jwtExpireTime = process.env.JWT_EXPIRE_TIME || '1h';
+
+        // Generate the JWT token
         const token = jwt.sign(
-            { userId: user.id }, // Payload, including user ID
-            jwtSecret, // Secret key
-            { expiresIn: process.env.JWT_EXPIRE_TIME || '1h' } // Flexible expiration time from env
+            { userId: user.id }, // Payload with user ID
+            jwtSecret, // Secret key for signing the token
+            { expiresIn: jwtExpireTime } // Token expiration
         );
 
         // Return the token to the client
-        res.json({ message: 'Login successful', token });
+        return res.json({ message: 'Login successful', token });
     } catch (error) {
-        // Log the error for debugging
+        // Log the error for debugging purposes
         console.error('Login error:', error);
-        next(error); // Pass error to the error handling middleware
+        return next(error); // Pass the error to the error handling middleware
     }
 };
 
@@ -48,27 +52,28 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const { email, password, username } = req.body;
 
     try {
-        // Check if the email already exists
+        // Check if the email already exists in the database
         const existingUser = await User.findOne({ where: { email } });
 
         if (existingUser) {
             return res.status(409).json({ message: 'Email already in use' });
         }
 
-        // Hash the password
+        // Hash the password before storing it in the database
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create the new user
+        // Create a new user in the database
         const newUser = await User.create({
             email,
             password: hashedPassword,
             username,
         });
 
-        res.status(201).json({ message: 'User registered successfully', userId: newUser.id });
+        // Respond with success message and the new user's ID
+        return res.status(201).json({ message: 'User registered successfully', userId: newUser.id });
     } catch (error) {
-        // Log the error for debugging
+        // Log the error for debugging purposes
         console.error('Registration error:', error);
-        next(error); // Pass error to the error handling middleware
+        return next(error); // Pass the error to the error handling middleware
     }
 };
