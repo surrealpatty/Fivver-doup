@@ -1,4 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express'; // Correct TypeScript import
+// src/index.ts
+
+import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/user'; // Correct import for user routes
 import profileRoutes from './routes/profile'; // Import profile routes
 import { authenticateToken } from './middlewares/authMiddleware'; // Correct middleware import

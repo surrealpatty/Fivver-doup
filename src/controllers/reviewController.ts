@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { models } from '../models'; // Import models from the index.ts file
-import { Review, User, Service } from '../models'; // Explicitly import the models
+import { Review, User, Service } from '../models'; // Correct import statements for explicit models
 
 // 1. Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
