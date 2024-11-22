@@ -28,8 +28,8 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): Re
     if (decoded && typeof decoded === 'object' && 'id' in decoded) {
       const decodedToken = decoded as JwtPayload;
       
-      // Add the userId to the Request object (which is now extended with userId in src/types/express.d.ts)
-      req.userId = decodedToken.id;
+      // Cast decodedToken.id to number if necessary
+      req.userId = Number(decodedToken.id);  // Explicitly cast to number
 
       return next();
     } else {
