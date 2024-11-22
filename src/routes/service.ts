@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { Service } from '../models'; // Import the Service model
-import { checkAuth } from '../middleware/authMiddleware'; // Assuming you have an auth middleware
+import { checkAuth } from '../middleware/authMiddleware'; // Ensure correct import for auth middleware
 
 const router = Router();
 

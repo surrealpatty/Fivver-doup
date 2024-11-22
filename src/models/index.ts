@@ -69,3 +69,4 @@ export type Models = typeof models;
 export interface IUserCreationAttributes extends Optional<IUser, 'id'> {}
 export interface IServiceCreationAttributes extends Optional<IService, 'id'> {}
 export interface IReviewCreationAttributes extends Optional<IReview, 'id'> {}
+

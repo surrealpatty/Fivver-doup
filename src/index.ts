@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';  // Import express and types for Request and Response
-import reviewsRouter from './routes/reviews.ts';  // With .ts extension if needed
+import reviewsRouter from './routes/reviews';  // Import the reviews router (no need for .ts extension)
 import userRouter from './routes/user';  // Import the user router from the routes folder
-import serviceRouter from './routes/servicesRoute.ts';  // Import the services router from the routes folder
+import serviceRouter from './routes/servicesRoute';  // Import the services router (no need for .ts extension)
 import cors from 'cors';  // Import CORS (for cross-origin requests)
 import dotenv from 'dotenv';  // Import dotenv for environment variable management
 

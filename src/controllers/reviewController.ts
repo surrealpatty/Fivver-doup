@@ -7,7 +7,7 @@ import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAu
  */
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsNumber = parseInt(req.params.id, 10); // Convert userId from string to number
+    const userIdAsNumber = parseInt(req.user?.id ?? '', 10); // Convert userId from string to number
 
     // Input validation
     if (!serviceId || typeof rating !== 'number' || !comment) {

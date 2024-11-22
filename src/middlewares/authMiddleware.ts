@@ -33,11 +33,6 @@ export const authenticateToken = (
     // Extract the token after "Bearer"
     const token = authorizationHeader.split(' ')[1];
 
-    // Check if the token is present
-    if (!token) {
-      return res.status(401).json({ message: 'Authorization token is missing' });
-    }
-
     // Ensure the JWT_SECRET is configured in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
