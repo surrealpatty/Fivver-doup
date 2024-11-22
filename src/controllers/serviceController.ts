@@ -1,10 +1,11 @@
+// src/controllers/serviceController.ts
 import { Request, Response } from 'express'; // Import types for Express
 import Service from '../models/services'; // Ensure the correct path to the Service model
-import { UserPayload } from '../types'; // Import UserPayload from a central place, if applicable
+import { UserPayload } from '../types'; // Correct import from the central types file
 
-// Ensure req.user is correctly typed
+// Extend the Request interface to ensure `user` is typed correctly
 interface ServiceRequest extends Request {
-  user?: UserPayload; // Ensure user is correctly typed
+  user?: UserPayload; // `user` is optional, it may be undefined
 }
 
 // 1. Create a Service
@@ -43,7 +44,7 @@ export const createService = async (req: ServiceRequest, res: Response) => {
 };
 
 // 2. Read Services (fetch all or by user)
-export const getServices = async (req: Request, res: Response) => {
+export const getServices = async (req: ServiceRequest, res: Response) => {
   let { userId } = req.query; // Extract userId from query parameters
 
   // Ensure userId is properly typed
@@ -73,8 +74,15 @@ export const updateService = async (req: ServiceRequest, res: Response) => {
   const { title, description, price, category } = req.body; // Updated fields
 
   try {
+    // Assert that req.user is defined and ensure it is safe to access
+    const userId = req.user?.id; // This can be undefined if user is not logged in
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
     // Find the service to update, making sure it's associated with the current user
-    const service = await Service.findOne({ where: { id, userId: req.user?.id } });
+    const service = await Service.findOne({ where: { id, userId } });
 
     if (!service) {
       return res.status(404).json({ message: 'Service not found or unauthorized access' });
@@ -98,8 +106,15 @@ export const deleteService = async (req: ServiceRequest, res: Response) => {
   const { id } = req.params; // Service ID from URL parameters
 
   try {
+    // Assert that req.user is defined and ensure it is safe to access
+    const userId = req.user?.id; // This can be undefined if user is not logged in
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
     // Find the service to delete, making sure it's associated with the current user
-    const service = await Service.findOne({ where: { id, userId: req.user?.id } });
+    const service = await Service.findOne({ where: { id, userId } });
 
     if (!service) {
       return res.status(404).json({ message: 'Service not found or unauthorized access' });

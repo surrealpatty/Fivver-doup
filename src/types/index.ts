@@ -1,7 +1,6 @@
 // src/types/index.ts
-
 export interface UserPayload {
-    id: string;
-    email?: string;
-    username?: string;
+    id: string;         // `id` should always be a string
+    email: string;      // Ensure `email` is required
+    username?: string;  // `username` is still optional
 }

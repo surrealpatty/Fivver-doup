@@ -11,7 +11,7 @@
     "outDir": "./dist",                        // Directory for compiled output
     "rootDir": "./src",                        // Root directory for input files
     "types": ["node", "jest", "express"],      // Include specific global types
-    "typeRoots": ["./node_modules/@types"],    // Look for type declarations in node_modules/@types
+    "typeRoots": ["./node_modules/@types", "./src/types"],    // Ensure TypeScript picks up custom types
     "allowJs": true,                           // Include JavaScript files in the compilation
     "baseUrl": "./",                           // Base directory for module resolution
     "paths": {                                 
@@ -27,7 +27,7 @@
   },
   "include": [
     "src/**/*",                                // Include all files in the src directory
-    "src/types/**/*.d.ts"                     // Include custom type declarations
+    "src/types/**/*.d.ts"                     // Ensure TypeScript includes custom type definitions
   ],
   "exclude": [
     "node_modules",                            // Exclude node_modules
