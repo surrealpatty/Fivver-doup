@@ -3,7 +3,6 @@ import { IUserCreationAttributes, IUserAttributes } from '../types'; // Import i
 
 // Define the User model class
 export class User extends Model<IUserAttributes, IUserCreationAttributes> implements IUserAttributes {
-  // Define properties for the model with the correct types
   id!: string;  // UUID for user ID (string type, assumed from your design)
   username!: string;
   email!: string;

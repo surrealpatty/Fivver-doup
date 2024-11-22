@@ -1,8 +1,9 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import { defineUser } from './user';
-import { defineService } from './services';
-import { defineReview } from './review';
+import { Sequelize } from 'sequelize';
+import defineUser from './user';  // Default import
+import defineService from './services';  // Default import
+import defineReview from './review';  // Default import
 
+// Initialize Sequelize instance
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
@@ -11,11 +12,12 @@ const sequelize = new Sequelize({
   password: '',
 });
 
-const User = defineUser(sequelize, DataTypes);
-const Service = defineService(sequelize, DataTypes);
-const Review = defineReview(sequelize, DataTypes);
+// Define models using the factory functions (pass only `sequelize`)
+const User = defineUser(sequelize); // Define the User model
+const Service = defineService(sequelize); // Define the Service model
+const Review = defineReview(sequelize); // Define the Review model
 
-// Define relationships
+// Define relationships (associations) between models
 User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
 Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
@@ -25,4 +27,5 @@ Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
 User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
 Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
+// Export models and sequelize instance
 export { sequelize, User, Service, Review };
