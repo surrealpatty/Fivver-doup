@@ -1,48 +1,39 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import User from './user';  // Assuming User model is in user.ts
-import Service from './services';  // Assuming Service model is in services.ts
+import { DataTypes, Model, Sequelize } from 'sequelize';
+
+class Review extends Model {
+  public id!: number;
+  public userId!: string;
+  public serviceId!: number;
+  public content!: string;
+  public rating!: number;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
 const defineReview = (sequelize: Sequelize) => {
-  class Review extends Model {
-    public id!: number;
-    public rating!: number;
-    public comment!: string;
-    public serviceId!: number;
-    public userId!: string;
-  }
-
   Review.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      rating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      comment: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      serviceId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-          model: 'services',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
+        primaryKey: true,
+        autoIncrement: true,
       },
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
+      },
+      serviceId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
     {
@@ -50,11 +41,10 @@ const defineReview = (sequelize: Sequelize) => {
       modelName: 'Review',
       tableName: 'reviews',
       timestamps: true,
-      underscored: true,
     }
   );
 
   return Review;
 };
 
-export default defineReview;  // Default export
+export default defineReview;

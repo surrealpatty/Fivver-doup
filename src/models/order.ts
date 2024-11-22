@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional, Association } from 'sequelize';
-import { sequelize } from '../config/database';  // Named import
-import User from './user'; // Import User model
-import Service from './services'; // Import Service model
+import sequelize from '../config/database'; // Named import
+import User from './user'; // Import User model as the actual model (constructor function)
+import Service from './services'; // Import Service model as the actual model (constructor function)
 
 // Define the Order attributes interface
 export interface OrderAttributes {

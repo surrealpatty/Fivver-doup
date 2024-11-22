@@ -1,59 +1,29 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import User from './user';  // Assuming User model is in user.ts
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database';
 
-const defineService = (sequelize: Sequelize) => {
-  class Service extends Model {
-    public id!: number;
-    public title!: string;
-    public description!: string;
-    public price!: number;
-    public category!: string;
-    public userId!: string;
-  }
+class Service extends Model {
+  // Your Service model definition...
+}
 
-  Service.init(
-    {
-      id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      category: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
-      },
+Service.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-      sequelize,
-      modelName: 'Service',
-      tableName: 'services',
-      timestamps: true,
-      underscored: true,
-    }
-  );
+    serviceName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    // Other fields...
+  },
+  {
+    sequelize,
+    modelName: 'Service',
+    tableName: 'services',
+    timestamps: true,
+  }
+);
 
-  return Service;
-};
-
-export default defineService;  // Default export
+export default Service; // Ensure you're using export default here
