@@ -23,7 +23,7 @@ export const authenticateToken = (
 ): Response<any, Record<string, any>> | void => {
   try {
     // Extract the token from the Authorization header
-    const authorizationHeader: string | undefined = req.headers['authorization'] as string | undefined;
+    const authorizationHeader = req.headers['authorization'] as string | undefined;
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {

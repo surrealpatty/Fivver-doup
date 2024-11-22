@@ -47,12 +47,13 @@ router.post('/services', async (req: Request<{}, {}, ServiceCreationBody>, res: 
 
     // Create a new service
     const service = await Service.create({
-      userId: userId.toString(),     // User ID associated with the service
-      title,        // Service title
-      description,  // Service description
-      price,        // Service price
+      userId: userId.toString(), // Ensure userId is treated as a string if required by the model
+      title,                     // Service title
+      description,               // Service description
+      price,                     // Service price
     });
 
+    // Return the created service in the response
     return res.status(201).json({
       message: 'Service created successfully.',
       service,

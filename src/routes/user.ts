@@ -50,6 +50,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
+      console.error('JWT_SECRET is not set');
       return res.status(500).json({ message: 'JWT secret is not configured properly.' });
     }
 
@@ -103,6 +104,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
+      console.error('JWT_SECRET is not set');
       return res.status(500).json({ message: 'JWT secret is not configured properly.' });
     }
 

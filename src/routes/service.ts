@@ -46,7 +46,7 @@ router.get('/services', async (req: Request, res: Response): Promise<void> => {
     // Fetch all services
     const services = await Service.findAll();
 
-    if (!services.length) {
+    if (services.length === 0) {
       res.status(404).json({
         message: 'No services found',
       });
