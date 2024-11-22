@@ -1,134 +1,38 @@
-// src/controllers/serviceController.ts
-import { Request, Response } from 'express'; // Import types for Express
-import Service from '../models/services'; // Ensure the correct path to the Service model
-import { UserPayload } from '../types'; // Correct import from the central types file
+import { Request, Response } from 'express';
+import { User } from '../models/user';  // Named import for User model
+import { UserPayload } from '../types'; // Import the UserPayload type to ensure the user data structure
 
-// Extend the Request interface to ensure `user` is typed correctly
-interface ServiceRequest extends Request {
+// Extend the Request interface to include the user object, which may be undefined
+interface AuthRequest extends Request {
   user?: UserPayload; // `user` is optional, it may be undefined
 }
 
-// 1. Create a Service
-export const createService = async (req: ServiceRequest, res: Response) => {
-  const { title, description, price, category } = req.body;
-  const userId = req.user?.id; // Extract user ID from the request's user object
+// Example function for getting a service profile (or a service, depending on your app structure)
+export const getServiceProfile = async (req: AuthRequest, res: Response) => {
+    try {
+        // Check if the `user` object exists on the request
+        const userId = req.user?.id;
 
-  // Validation check for userId
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
+        // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
+        if (!userId || typeof userId !== 'string') {
+            return res.status(400).json({ message: 'Invalid or missing User ID in request' });
+        }
 
-  // Validate required fields
-  if (!title || !description || !price || !category) {
-    return res.status(400).json({ message: 'All fields (title, description, price, category) are required' });
-  }
+        // Fetch the service by userId or another unique identifier (you may need to adjust this logic)
+        const service = await User.findOne({ where: { id: userId } });  // Adjust if fetching a service instead of user
 
-  try {
-    // Create new service using Sequelize
-    const newService = await Service.create({
-      title,
-      description,
-      price,
-      category, // Ensure category is part of the model
-      userId,
-    });
+        // Check if service exists
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
 
-    return res.status(201).json(newService); // Return the newly created service
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error creating service:', error.message);
-      return res.status(500).json({ message: 'Error creating service', error: error.message });
+        // Send back the service data
+        return res.json(service);
+    } catch (error) {
+        // Log the error for debugging purposes
+        console.error('Error fetching service profile:', error);
+
+        // Return a generic error message
+        return res.status(500).json({ message: 'Internal server error' });
     }
-    return res.status(500).json({ message: 'Unknown error creating service' });
-  }
-};
-
-// 2. Read Services (fetch all or by user)
-export const getServices = async (req: ServiceRequest, res: Response) => {
-  let { userId } = req.query; // Extract userId from query parameters
-
-  // Ensure userId is properly typed
-  if (userId && Array.isArray(userId)) {
-    userId = userId[0]; // If userId is an array, get the first value
-  }
-
-  try {
-    // Fetch services based on userId if provided, otherwise fetch all services
-    const services = userId
-      ? await Service.findAll({ where: { userId: userId as string } }) // Ensure userId is cast to string
-      : await Service.findAll();
-
-    return res.status(200).json(services); // Return the list of services
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error fetching services:', error.message);
-      return res.status(500).json({ message: 'Error fetching services', error: error.message });
-    }
-    return res.status(500).json({ message: 'Unknown error fetching services' });
-  }
-};
-
-// 3. Update a Service
-export const updateService = async (req: ServiceRequest, res: Response) => {
-  const { id } = req.params; // Service ID from URL parameters
-  const { title, description, price, category } = req.body; // Updated fields
-
-  try {
-    // Assert that req.user is defined and ensure it is safe to access
-    const userId = req.user?.id; // This can be undefined if user is not logged in
-
-    if (!userId) {
-      return res.status(400).json({ message: 'User ID is required' });
-    }
-
-    // Find the service to update, making sure it's associated with the current user
-    const service = await Service.findOne({ where: { id, userId } });
-
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found or unauthorized access' });
-    }
-
-    // Update the service with new data
-    await service.update({ title, description, price, category });
-
-    return res.status(200).json(service); // Return the updated service
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error updating service:', error.message);
-      return res.status(500).json({ message: 'Error updating service', error: error.message });
-    }
-    return res.status(500).json({ message: 'Unknown error updating service' });
-  }
-};
-
-// 4. Delete a Service
-export const deleteService = async (req: ServiceRequest, res: Response) => {
-  const { id } = req.params; // Service ID from URL parameters
-
-  try {
-    // Assert that req.user is defined and ensure it is safe to access
-    const userId = req.user?.id; // This can be undefined if user is not logged in
-
-    if (!userId) {
-      return res.status(400).json({ message: 'User ID is required' });
-    }
-
-    // Find the service to delete, making sure it's associated with the current user
-    const service = await Service.findOne({ where: { id, userId } });
-
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found or unauthorized access' });
-    }
-
-    // Delete the service from the database
-    await service.destroy();
-
-    return res.status(200).json({ message: 'Service deleted successfully' }); // Return success message
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error deleting service:', error.message);
-      return res.status(500).json({ message: 'Error deleting service', error: error.message });
-    }
-    return res.status(500).json({ message: 'Unknown error deleting service' });
-  }
 };

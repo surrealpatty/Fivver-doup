@@ -1,14 +1,20 @@
 import { Request, Response } from 'express';
-import  User  from '../models/user'; // Named import for User model
+import { User } from '../models/user';  // Named import for User model
+import { UserPayload } from '../types'; // Import the UserPayload type to ensure the user data structure
+
+// Extend the Request interface to include the user object, which may be undefined
+interface AuthRequest extends Request {
+  user?: UserPayload; // `user` is optional, it may be undefined
+}
 
 // Example function for getting a user profile
-export const getUserProfile = async (req: Request, res: Response) => {
+export const getUserProfile = async (req: AuthRequest, res: Response) => {
     try {
-        // req.userId should be a number now, ensure it's set before
-        const userId = req.userId;
+        // Check if the `user` object exists on the request
+        const userId = req.user?.id;
 
-        // Check if userId is valid and ensure it's a number
-        if (!userId || typeof userId !== 'number') {
+        // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
+        if (!userId || typeof userId !== 'string') {
             return res.status(400).json({ message: 'Invalid or missing User ID in request' });
         }
 
