@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Named import for User model
-import { UserPayload } from '../types'; // Import the UserPayload type to ensure the user data structure
+import User from '../models/user';  // Default import for User model
+import { UserPayload } from '../types'; // Import the UserPayload type
 
 // Extend the Request interface to include the user object, which may be undefined
 interface AuthRequest extends Request {
-  user?: UserPayload; // `user` is optional, it may be undefined
+  user?: UserPayload; // user is optional
 }
 
-// Example function for getting a service profile (or a service, depending on your app structure)
+// Example function for getting a service profile
 export const getServiceProfile = async (req: AuthRequest, res: Response) => {
     try {
-        // Check if the `user` object exists on the request
+        // Check if the user object exists on the request
         const userId = req.user?.id;
 
         // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
@@ -18,8 +18,8 @@ export const getServiceProfile = async (req: AuthRequest, res: Response) => {
             return res.status(400).json({ message: 'Invalid or missing User ID in request' });
         }
 
-        // Fetch the service by userId or another unique identifier (you may need to adjust this logic)
-        const service = await User.findOne({ where: { id: userId } });  // Adjust if fetching a service instead of user
+        // Fetch user or service by userId (you can adjust logic to fetch service instead of user)
+        const service = await User.findOne({ where: { id: userId } }); // Adjust if you're fetching a service
 
         // Check if service exists
         if (!service) {

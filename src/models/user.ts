@@ -1,15 +1,20 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { IUserCreationAttributes } from './index';  // Import the IUserCreationAttributes interface
+import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
+import { IUserCreationAttributes, IUserAttributes } from '../types';  // Adjust the path to your interfaces
 
-export const defineUser = (sequelize: Sequelize, DataTypes: any) => {
-  class User extends Model<IUserCreationAttributes> implements IUserCreationAttributes {
+// Define the User model class
+export const defineUser = (sequelize: Sequelize) => {
+  class User extends Model<IUserAttributes, IUserCreationAttributes> implements IUserAttributes {
+    // Define properties for the model
     id!: string;  // UUID for user ID
     username!: string;
     email!: string;
     password!: string;
     isPaid!: boolean;
+
+    // You can add class or instance methods here if needed
   }
 
+  // Initialize the User model with the attributes
   User.init(
     {
       username: {
@@ -31,7 +36,7 @@ export const defineUser = (sequelize: Sequelize, DataTypes: any) => {
       },
     },
     {
-      sequelize,
+      sequelize,  // Sequelize instance
       modelName: 'User',
       tableName: 'users',
       timestamps: true,

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Named import for User model
-import { UserPayload } from '../types'; // Import the UserPayload type to ensure the user data structure
+import User from '../models/user';  // Default import for User model (if default export in models/user.ts)
+import { UserPayload } from '../types'; // Import the UserPayload type
 
 // Extend the Request interface to include the user object, which may be undefined
 interface AuthRequest extends Request {
-  user?: UserPayload; // `user` is optional, it may be undefined
+  user?: UserPayload; // user is optional
 }
 
 // Example function for getting a user profile
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
     try {
-        // Check if the `user` object exists on the request
+        // Check if the user object exists on the request
         const userId = req.user?.id;
 
         // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
