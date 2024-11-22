@@ -1,15 +1,22 @@
 import { Request, Response } from 'express';
-import Order from '../models/order';  // Correct the import to use named import
+import { Order } from '../models'; // Use named import if Order is a named export, otherwise default import
 
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { userId, serviceId, quantity, totalPrice } = req.body;
 
-    // Validate required fields
+    // Validate required fields and types
     if (!userId || !serviceId || !quantity || !totalPrice) {
       return res.status(400).json({
         message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.',
+        error: 'ValidationError',
+      });
+    }
+
+    if (isNaN(userId) || isNaN(serviceId) || isNaN(quantity) || isNaN(totalPrice)) {
+      return res.status(400).json({
+        message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
         error: 'ValidationError',
       });
     }
@@ -29,8 +36,6 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     });
   } catch (error) {
     console.error('Error creating order:', error);
-
-    // Return an appropriate error response
     return res.status(500).json({
       message: 'Internal server error while creating the order.',
       error: error instanceof Error ? error.message : 'UnknownError',
@@ -81,10 +86,17 @@ export const updateOrder = async (req: Request, res: Response): Promise<Response
     const { id } = req.params;
     const { userId, serviceId, quantity, totalPrice } = req.body;
 
-    // Validate required fields
+    // Validate required fields and types
     if (!userId || !serviceId || !quantity || !totalPrice) {
       return res.status(400).json({
         message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.',
+        error: 'ValidationError',
+      });
+    }
+
+    if (isNaN(userId) || isNaN(serviceId) || isNaN(quantity) || isNaN(totalPrice)) {
+      return res.status(400).json({
+        message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
         error: 'ValidationError',
       });
     }

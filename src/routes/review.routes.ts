@@ -13,7 +13,7 @@ router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Prom
     if (!serviceId || typeof rating !== 'number' || !comment) {
         res.status(400).json({
             message: 'Service ID, rating, and comment are required',
-            error: 'Invalid input'
+            error: 'Invalid input',
         });
         return;
     }
@@ -22,7 +22,7 @@ router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Prom
     if (isNaN(userIdAsNumber)) {
         res.status(400).json({
             message: 'Invalid userId',
-            error: 'User ID must be a valid number'
+            error: 'User ID must be a valid number',
         });
         return;
     }
@@ -43,13 +43,13 @@ router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Prom
 
         res.status(201).json({
             message: 'Review created successfully',
-            review
+            review,
         });
     } catch (error) {
         console.error('Error creating review:', error);
         res.status(500).json({
             message: 'Internal server error',
-            error: (error as Error).message
+            error: (error as Error).message,
         });
     }
 });
@@ -76,13 +76,13 @@ router.get('/reviews/:serviceId', async (req: Request, res: Response): Promise<v
 
         res.status(200).json({
             message: 'Reviews fetched successfully',
-            reviews
+            reviews,
         });
     } catch (error) {
         console.error('Error fetching reviews:', error);
         res.status(500).json({
             message: 'Internal server error',
-            error: (error as Error).message
+            error: (error as Error).message,
         });
     }
 });
@@ -106,7 +106,7 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
 
     if (!rating && !comment) {
         res.status(400).json({
-            message: 'At least one of rating or comment is required to update'
+            message: 'At least one of rating or comment is required to update',
         });
         return;
     }
@@ -131,13 +131,13 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
 
         res.status(200).json({
             message: 'Review updated successfully',
-            review
+            review,
         });
     } catch (error) {
         console.error('Error updating review:', error);
         res.status(500).json({
             message: 'Internal server error',
-            error: (error as Error).message
+            error: (error as Error).message,
         });
     }
 });
@@ -174,13 +174,13 @@ router.delete('/reviews/:reviewId', checkAuth, async (req: Request, res: Respons
         await review.destroy();
 
         res.status(200).json({
-            message: 'Review deleted successfully'
+            message: 'Review deleted successfully',
         });
     } catch (error) {
         console.error('Error deleting review:', error);
         res.status(500).json({
             message: 'Internal server error',
-            error: (error as Error).message
+            error: (error as Error).message,
         });
     }
 });

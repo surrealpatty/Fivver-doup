@@ -1,10 +1,11 @@
-import { Review, User, Service } from '../models'; // Correctly import models
+import { Request, Response } from 'express';
+import { Review, User, Service } from '../models';  // Correctly import models
 import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAuth middleware
 
 /**
  * Create a Review
  */
-export const createReview = async (req, res) => {
+export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
     const userIdAsNumber = parseInt(req.params.id, 10); // Convert userId from string to number
 
@@ -45,7 +46,7 @@ export const createReview = async (req, res) => {
         console.error('Error creating review:', error);
         return res.status(500).json({
             message: 'Internal server error',
-            error: error.message,
+            error: error instanceof Error ? error.message : 'UnknownError',
         });
     }
 };
@@ -53,7 +54,7 @@ export const createReview = async (req, res) => {
 /**
  * Get Reviews for a Service
  */
-export const getReviewsForService = async (req, res) => {
+export const getReviewsForService = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId } = req.params;
 
     try {
@@ -79,7 +80,7 @@ export const getReviewsForService = async (req, res) => {
         console.error('Error fetching reviews:', error);
         return res.status(500).json({
             message: 'Internal server error',
-            error: error.message,
+            error: error instanceof Error ? error.message : 'UnknownError',
         });
     }
 };
@@ -87,7 +88,7 @@ export const getReviewsForService = async (req, res) => {
 /**
  * Update a Review
  */
-export const updateReview = async (req, res) => {
+export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params;
     const { rating, comment } = req.body;
 
@@ -132,7 +133,7 @@ export const updateReview = async (req, res) => {
         console.error('Error updating review:', error);
         return res.status(500).json({
             message: 'Internal server error',
-            error: error.message,
+            error: error instanceof Error ? error.message : 'UnknownError',
         });
     }
 };
@@ -140,7 +141,7 @@ export const updateReview = async (req, res) => {
 /**
  * Delete a Review
  */
-export const deleteReview = async (req, res) => {
+export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params;
 
     // Ensure the user is authenticated
@@ -174,7 +175,7 @@ export const deleteReview = async (req, res) => {
         console.error('Error deleting review:', error);
         return res.status(500).json({
             message: 'Internal server error',
-            error: error.message,
+            error: error instanceof Error ? error.message : 'UnknownError',
         });
     }
 };
