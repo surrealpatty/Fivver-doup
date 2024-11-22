@@ -31,6 +31,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             return res.status(404).json({ message: 'Service not found' });
         }
 
+        // Create the review
         const review = await Review.create({
             serviceId,
             userId: userIdAsNumber,

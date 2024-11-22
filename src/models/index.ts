@@ -39,7 +39,7 @@ export { sequelize, models };
 
 // TypeScript interfaces for type safety (for use in other files)
 export interface IUser extends Model {
-  id: string;  // UUID for user ID (updated for UUID type)
+  id: string;  // UUID for user ID
   username: string;
   email: string;
   password: string;
@@ -51,7 +51,7 @@ export interface IService extends Model {
   title: string;
   description: string;
   price: number;
-  userId: string;  // Updated to string to match UUID type
+  userId: string;  // UUID for the userId
 }
 
 export interface IReview extends Model {
@@ -59,7 +59,7 @@ export interface IReview extends Model {
   rating: number;
   comment: string;
   serviceId: number;
-  userId: string;  // Updated to string to match UUID type
+  userId: string;  // UUID for the userId
 }
 
 // Export a typed Models object for stronger type safety
@@ -69,4 +69,3 @@ export type Models = typeof models;
 export interface IUserCreationAttributes extends Optional<IUser, 'id'> {}
 export interface IServiceCreationAttributes extends Optional<IService, 'id'> {}
 export interface IReviewCreationAttributes extends Optional<IReview, 'id'> {}
-
