@@ -129,4 +129,4 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
   }
 });
 
-export default router; 
+export default router;
