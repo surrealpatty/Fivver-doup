@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { app } from '../index'; // Ensure this import points to the correct entry point for your app
-import  sequelize  from '../config/database'; // Ensure sequelize instance is correctly imported
-import Order from '../models/order'; // Default import for Order model
+import  app  from '../index'; // Ensure this import points to the correct entry point for your app
+import sequelize from '../config/database'; // Ensure sequelize instance is correctly imported
+import Order from '../models/order'; // Correct import path for Order model
 import User from '../models/user'; // Correct import path for User model
 import Service from '../models/services'; // Correct import path for Service model
 
@@ -42,8 +42,8 @@ describe('Order Controller', () => {
   describe('POST /orders', () => {
     it('should create a new order successfully', async () => {
       // Mock User and Service findByPk
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test User' });
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test User' }); // Mock User found
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
 
       const response = await request(app)
         .post('/orders')
@@ -61,7 +61,7 @@ describe('Order Controller', () => {
 
     it('should return 404 if user or service not found', async () => {
       mockFindByPk.mockResolvedValueOnce(null); // User not found
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
+      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
 
       const response = await request(app)
         .post('/orders')

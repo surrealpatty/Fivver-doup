@@ -3,7 +3,7 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest', // Use ts-jest preset for TypeScript
   testEnvironment: 'node', // Set the testing environment to Node.js
-  maxWorkers: process.env.CI ? '2' : '1', // Optimize workers based on CI environment
+  maxWorkers: process.env.CI ? 2 : 1, // Optimize workers based on CI environment
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files with ts-jest
   },

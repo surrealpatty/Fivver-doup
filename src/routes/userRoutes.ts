@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
-import { authenticateToken } from '../middlewares/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure this is typed correctly
 import User from '../models/user';
 
 // Define the UserPayload interface to match the expected structure of the authenticated user
@@ -19,7 +19,7 @@ const router = Router();
 // Route for getting all users (accessible only for admin or authorized users)
 router.get(
   '/users',
-  authenticateToken,
+  authenticateToken, // Ensure authenticateToken is correctly typed and returns `void`
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
       const users = await User.findAll();
@@ -69,7 +69,7 @@ router.post(
 // Route for updating a user (ensures users can only update their own profile)
 router.put(
   '/users/:id',
-  authenticateToken,
+  authenticateToken, // Ensure authenticateToken is correctly typed and returns `void`
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
       const userId = req.params.id;
@@ -105,7 +105,7 @@ router.put(
 // Route for deleting a user (ensures users can only delete their own profile)
 router.delete(
   '/users/:id',
-  authenticateToken,
+  authenticateToken, // Ensure authenticateToken is correctly typed and returns `void`
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
       const userId = req.params.id;
