@@ -18,11 +18,11 @@ declare global {
     }
 }
 
-// Destructure and validate environment variables
+// Destructure and validate environment variables with defaults
 const {
     DB_HOST = 'localhost',
     DB_USER = 'root',
-    DB_PASSWORD = '',
+    DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',  // Use actual password or make it configurable
     DB_NAME = 'fivver_doup',
     DB_PORT = '3306',
     NODE_ENV = 'development',
@@ -34,13 +34,10 @@ if (NODE_ENV !== 'test' && (!DB_HOST || !DB_USER || !DB_NAME || !DB_PORT)) {
     process.exit(1);
 }
 
-// Initialize Sequelize instance
-export const sequelize = new Sequelize({
-    dialect: 'mysql',
+// Initialize Sequelize instance with environment variables
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
+    dialect: 'mysql',
     port: parseInt(DB_PORT, 10), // Parse port as an integer
     logging: NODE_ENV === 'development' ? console.log : false, // Log SQL queries only in development
     dialectOptions: {
@@ -84,3 +81,6 @@ if (NODE_ENV !== 'test') {
         if (NODE_ENV !== 'test') process.exit(1);
     });
 }
+
+// Export Sequelize instance for use in models
+export default sequelize;
