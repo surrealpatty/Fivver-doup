@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Correct named import for User model
-import { UserPayload } from '../types'; // Import the UserPayload type
+import { User } from '../models/user';  // Named import
+import { UserPayload } from '../types'; // Make sure UserPayload is correctly defined and exported
 
 // Extend the Request interface to include the user object, which may be undefined
 interface AuthRequest extends Request {

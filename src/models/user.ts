@@ -19,9 +19,10 @@ export const defineUser = (sequelize: Sequelize) => {
   User.init(
     {
       id: { 
-        type: DataTypes.STRING,  // UUID type for 'id'
-        primaryKey: true,         // Mark this as the primary key
-        allowNull: false,         // Ensure 'id' is not null
+        type: DataTypes.UUID,  // Use UUID type for 'id'
+        primaryKey: true,       // Mark this as the primary key
+        allowNull: false,       // Ensure 'id' is not null
+        defaultValue: DataTypes.UUIDV4, // Auto-generate UUIDv4
       },
       username: {
         type: DataTypes.STRING,
@@ -42,10 +43,10 @@ export const defineUser = (sequelize: Sequelize) => {
       },
     },
     {
-      sequelize,  // Sequelize instance
+      sequelize,           // Sequelize instance
       modelName: 'User',  // Model name
       tableName: 'users',  // Table name in the database
-      timestamps: true,  // Enable automatic timestamps (createdAt, updatedAt)
+      timestamps: true,    // Enable automatic timestamps (createdAt, updatedAt)
     }
   );
 
