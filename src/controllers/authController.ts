@@ -72,14 +72,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Hash the password before storing it in the database
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user in the database
+        // Create a new user in the database, using the hashed password
         const newUser = await User.create({
             email,
-            password,
+            password: hashedPassword, // <-- Use hashedPassword here
             username,
             isPaid: false,  // Add this field
-          });
-          
+        });
 
         // Respond with success message and the new user's ID
         return res.status(201).json({ message: 'User registered successfully', userId: newUser.id });

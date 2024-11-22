@@ -1,14 +1,14 @@
 import express, { Request, Response } from 'express'; // Import express and types for Request and Response
-import reviewsRouter from './routes/reviews'; // Import the reviews router from routes folder
-import userRouter from './routes/user'; // Import the user router from routes folder
-import serviceRouter from './routes/servicesRoute'; // Import the services router from routes folder
+import reviewsRouter from './routes/reviews'; // Import the reviews router from the routes folder
+import userRouter from './routes/user'; // Import the user router from the routes folder
+import serviceRouter from './routes/servicesRoute'; // Import the services router from the routes folder
 
 const app = express(); // Create an instance of the express app
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Mount routers
+// Mount routers to their respective API endpoints
 app.use('/api/reviews', reviewsRouter); // Reviews routes
 app.use('/api/users', userRouter); // User routes
 app.use('/api/services', serviceRouter); // Services routes

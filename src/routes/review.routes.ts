@@ -1,4 +1,3 @@
-// src/routes/review.routes.ts
 import { Router, Request, Response } from 'express';
 import { Review, User, Service } from '../models'; // Correctly import models
 import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAuth middleware
@@ -16,7 +15,7 @@ router.post('/reviews/:id', checkAuth, async (req: Request, res: Response): Prom
             message: 'Service ID, rating, and comment are required',
             error: 'Invalid input'
         });
-        return; // Ensure the function returns void after sending a response
+        return;
     }
 
     // Check if userId is a valid number
@@ -92,8 +91,18 @@ router.get('/reviews/:serviceId', async (req: Request, res: Response): Promise<v
 router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response): Promise<void> => {
     const { reviewId } = req.params;
     const { rating, comment } = req.body;
-    const { id: userId } = req.user as { id: string }; // Extract authenticated user ID
-    const userIdAsNumber = parseInt(userId, 10);
+
+    // Ensure the user is authenticated
+    const user = req.user as { id: string }; // Extract authenticated user
+    if (!user || !user.id) {
+        res.status(401).json({
+            message: 'Unauthorized',
+            error: 'User not authenticated',
+        });
+        return;
+    }
+
+    const userIdAsNumber = parseInt(user.id, 10);
 
     if (!rating && !comment) {
         res.status(400).json({
@@ -136,8 +145,18 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
 // 4. Delete a Review
 router.delete('/reviews/:reviewId', checkAuth, async (req: Request, res: Response): Promise<void> => {
     const { reviewId } = req.params;
-    const { id: userId } = req.user as { id: string }; // Extract authenticated user ID
-    const userIdAsNumber = parseInt(userId, 10);
+
+    // Ensure the user is authenticated
+    const user = req.user as { id: string }; // Extract authenticated user
+    if (!user || !user.id) {
+        res.status(401).json({
+            message: 'Unauthorized',
+            error: 'User not authenticated',
+        });
+        return;
+    }
+
+    const userIdAsNumber = parseInt(user.id, 10);
 
     try {
         const review = await Review.findByPk(reviewId);

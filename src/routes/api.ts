@@ -47,10 +47,11 @@ router.post('/services', async (req: Request, res: Response): Promise<Response> 
       price,        // Service price
     });
 
-    // Respond with the created service
+    // Return only necessary information to the client, omitting sensitive data
     return res.status(201).json({
       message: 'Service created successfully.',
-      service,
+      serviceId: service.id,  // Return just the service ID
+      title: service.title,   // Optionally, return some basic info
     });
   } catch (error) {
     console.error('Error creating service:', error);
