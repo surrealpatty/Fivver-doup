@@ -1,12 +1,12 @@
 // src/types/express.d.ts
 
-import { UserPayload } from './index'; // Import UserPayload from your types
+import { JwtPayload } from './index';  // Assuming JwtPayload is defined elsewhere
 
-// Augment the global Express namespace to include the `user` property on Request
+// Augment the global Express namespace to include the `userId` property on Request
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // `user` is optional and follows the UserPayload structure
+      userId?: string;  // Ensure userId is typed as string to match the JWT payload
     }
   }
 }
