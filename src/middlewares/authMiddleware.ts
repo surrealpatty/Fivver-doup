@@ -8,10 +8,10 @@ interface UserPayload extends JwtPayload {
   username: string;
 }
 
-// Augment the Request interface to include the `user` property
+// Extend the Request interface to include the `user` property
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: UserPayload;  // User information will be attached to the request object
+    user?: UserPayload;
   }
 }
 
@@ -20,24 +20,32 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => {
+): void => {
   try {
     // Extract the token from the Authorization header
-    const authorizationHeader = req.headers['authorization'] as string | undefined;
+    const authorizationHeader = req.headers['authorization'];
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      return; // Stop further processing
     }
 
-    // Extract the token after "Bearer"
-    const token = authorizationHeader.split(' ')[1];
+    const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
+
+    // Check if the token is present
+    if (!token) {
+      res.status(401).json({ message: 'Authorization token is missing' });
+      return; // Stop further processing
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
 
     // Ensure the JWT_SECRET is configured in the environment variables
-    const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error('JWT_SECRET is not configured in the environment variables');
-      return res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error' });
+      return; // Stop further processing
     }
 
     // Verify the token and decode the payload
@@ -51,17 +59,8 @@ export const authenticateToken = (
   } catch (error) {
     console.error('Token authentication failed:', error);
 
-    // Handle different types of errors more specifically
-    if (error instanceof jwt.JsonWebTokenError) {
-      // If the token is invalid or malformed
-      return res.status(403).json({ message: 'Invalid token' });
-    } else if (error instanceof jwt.TokenExpiredError) {
-      // If the token has expired
-      return res.status(401).json({ message: 'Token has expired' });
-    } else {
-      // Catch any other errors
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+    // Handle token verification errors
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
 
@@ -70,10 +69,11 @@ export const checkAuth = (
   req: Request,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => {
+): void => {
   // Check if `user` exists on the request object (i.e., token has been authenticated)
   if (!req.user) {
-    return res.status(401).json({ message: 'User is not authenticated' });
+    res.status(401).json({ message: 'User is not authenticated' });
+    return; // Stop further processing
   }
 
   // User is authenticated, proceed to the next middleware or route handler
