@@ -2,38 +2,38 @@
   "compilerOptions": {
     "target": "ES2020",                         // Target modern JavaScript features
     "module": "CommonJS",                       // Use CommonJS for Node.js
-    "moduleResolution": "node",                // Resolve modules like Node.js does
-    "strict": true,                            // Enable all strict type-checking options
-    "esModuleInterop": true,                   // Enable compatibility with ESModules
-    "skipLibCheck": true,                      // Skip type checking for declaration files
-    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in file names
-    "resolveJsonModule": true,                 // Allow importing JSON files as modules
-    "outDir": "./dist",                        // Directory for compiled output
-    "rootDir": "./src",                        // Root directory for input files
-    "types": ["node", "jest", "express"],      // Include specific global types
+    "moduleResolution": "node",                 // Resolve modules like Node.js does
+    "strict": true,                             // Enable all strict type-checking options
+    "esModuleInterop": true,                    // Enable compatibility with ESModules
+    "skipLibCheck": true,                       // Skip type checking for declaration files
+    "forceConsistentCasingInFileNames": true,   // Enforce consistent casing in file names
+    "resolveJsonModule": true,                  // Allow importing JSON files as modules
+    "outDir": "./dist",                         // Directory for compiled output
+    "rootDir": "./src",                         // Root directory for input files
+    "types": ["node", "jest", "express"],       // Include specific global types
     "typeRoots": ["./node_modules/@types", "./src/types"],    // Ensure TypeScript picks up custom types
-    "allowJs": true,                           // Include JavaScript files in the compilation
-    "baseUrl": "./",                           // Base directory for module resolution
-    "paths": {                                 
-      "@/*": ["src/*"],                        // Simplified alias for imports from src
-      "*": ["node_modules/*", "src/*"]         // Default resolution for modules
+    "allowJs": true,                            // Include JavaScript files in the compilation
+    "baseUrl": "./",                            // Base directory for module resolution
+    "paths": {                                  // Path aliases for easy imports
+      "@/*": ["src/*"],                         // Simplified alias for imports from src
+      "*": ["node_modules/*", "src/*"]          // Default resolution for modules
     },
-    "incremental": true,                       // Enable incremental compilation for faster builds
-    "noImplicitAny": true,                     // Ensure all variables have explicit types
-    "noUnusedLocals": true,                    // Report errors on unused local variables
-    "noUnusedParameters": true,                // Report errors on unused function parameters
-    "noImplicitReturns": true,                 // Ensure all code paths return a value
-    "noFallthroughCasesInSwitch": true         // Prevent fallthrough in switch statements
+    "incremental": true,                        // Enable incremental compilation for faster builds
+    "noImplicitAny": true,                      // Ensure all variables have explicit types
+    "noUnusedLocals": true,                     // Report errors on unused local variables
+    "noUnusedParameters": true,                 // Report errors on unused function parameters
+    "noImplicitReturns": true,                  // Ensure all code paths return a value
+    "noFallthroughCasesInSwitch": true          // Prevent fallthrough in switch statements
   },
   "include": [
-    "src/**/*",                                // Include all files in the src directory
-    "src/types/**/*.d.ts"                     // Ensure TypeScript includes custom type definitions
+    "src/**/*",                                 // Include all files in the src directory
+    "src/types/**/*.d.ts"                       // Ensure TypeScript includes custom type definitions
   ],
   "exclude": [
-    "node_modules",                            // Exclude node_modules
-    "dist",                                    // Exclude output directory
-    "config",                                  // Exclude config if not TypeScript
-    "**/*.test.ts",                            // Exclude test files if not needed in the build
-    "**/*.spec.ts"                             // Exclude spec files if not needed in the build
+    "node_modules",                             // Exclude node_modules
+    "dist",                                     // Exclude output directory
+    "config",                                   // Exclude config directory if not TypeScript
+    "**/*.test.ts",                             // Exclude test files (modify if needed)
+    "**/*.spec.ts"                              // Exclude spec files (modify if needed)
   ]
 }

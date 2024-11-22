@@ -10,15 +10,18 @@ interface AuthRequest extends Request {
 // Example function for getting a service profile
 export const getServiceProfile = async (req: AuthRequest, res: Response) => {
   try {
-    // Check if the user object exists on the request and assert the type
-    const userId = (req.user as UserPayload)?.id;
+    // Check if the user object exists on the request
+    const user = req.user;
 
-    // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
-    if (!userId || typeof userId !== 'string') {
+    // If user is undefined or userId is not available, return an error
+    if (!user || !user.id || typeof user.id !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing User ID in request' });
     }
 
-    // Fetch user or service by userId (you can adjust logic to fetch service instead of user)
+    // Extract userId from user object
+    const userId = user.id;
+
+    // Fetch the service associated with the userId (adjust the logic if needed)
     const service = await User.findOne({ where: { id: userId } });
 
     // Check if service exists

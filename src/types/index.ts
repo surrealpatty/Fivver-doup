@@ -20,3 +20,9 @@ export interface UserPayload {
   email?: string;     // The user's email (optional)
   username?: string;  // The user's username (optional)
 }
+
+// Optionally, you could assert that `email` and `username` are never `undefined` in the request context
+// when they are expected, as in the AuthRequest type where we assume user data is available after auth.
+export interface AuthRequest extends Request {
+  user?: UserPayload; // `user` is optional, can be `undefined`
+}

@@ -10,24 +10,27 @@ interface AuthRequest extends Request {
 // Example function for getting a user profile
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   try {
-    // Check if the user object exists on the request and assert the type
-    const userId = (req.user as UserPayload)?.id;
+    // Check if the user object exists on the request
+    const user = req.user;
 
-    // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
-    if (!userId || typeof userId !== 'string') {
+    // If the user object is undefined or userId is not available, return an error
+    if (!user || !user.id || typeof user.id !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing User ID in request' });
     }
 
-    // Fetch user by primary key (userId)
-    const user = await User.findByPk(userId);
+    // Extract userId from the user object
+    const userId = user.id;
+
+    // Fetch the user from the database using the userId
+    const foundUser = await User.findByPk(userId);
 
     // Check if user exists
-    if (!user) {
+    if (!foundUser) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     // Send back the user data
-    return res.json(user);
+    return res.json(foundUser);
   } catch (error) {
     // Log the error for debugging purposes
     console.error('Error fetching user profile:', error);
