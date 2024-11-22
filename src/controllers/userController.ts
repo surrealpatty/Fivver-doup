@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Named import
+import { User } from '../models/user'; // Named import for User model
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined
@@ -22,15 +22,15 @@ export const getUserProfile = async (req: AuthRequest, res: Response) => {
     const userId = user.id;
 
     // Fetch the user from the database using the userId
-    const foundUser = await User.findByPk(userId);
+    const foundUser = await User.findByPk(userId);  // Use the Sequelize findByPk method
 
-    // Check if user exists
+    // Check if the user exists
     if (!foundUser) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Send back the user data
-    return res.json(foundUser);
+    // Send back the user data (in case it's a user model instance, convert to plain object if necessary)
+    return res.json(foundUser.toJSON()); // .toJSON() converts Sequelize instance to plain object
   } catch (error) {
     // Log the error for debugging purposes
     console.error('Error fetching user profile:', error);

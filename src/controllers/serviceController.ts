@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Named import
+import { User } from '../models/user';  // Named import for User model
+import { Service } from '../models/services';  // Ensure Service model is imported
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined
@@ -21,8 +22,8 @@ export const getServiceProfile = async (req: AuthRequest, res: Response) => {
     // Extract userId from user object
     const userId = user.id;
 
-    // Fetch the service associated with the userId (adjust the logic if needed)
-    const service = await User.findOne({ where: { id: userId } });
+    // Fetch the service associated with the userId (ensure this is the correct model)
+    const service = await Service.findOne({ where: { userId: userId } });  // Assuming Service model has a userId field
 
     // Check if service exists
     if (!service) {

@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 // IUserAttributes interface for model instances (used after the user is created)
 export interface IUserAttributes {
   id: string;         // UUID or unique identifier for the user
@@ -26,3 +28,4 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
   user?: UserPayload; // `user` is optional, can be `undefined`
 }
+

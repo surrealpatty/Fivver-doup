@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user'; // Ensure the correct model path
+import User from '../models/user';  // Ensure the correct model path
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -18,9 +18,13 @@ interface LoginRequestBody {
   password: string;
 }
 
-/**
- * Register a new user.
- */
+// Check if the JWT_SECRET environment variable is set
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  console.error('JWT_SECRET is not set');
+}
+
+// Register a new user.
 router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<Response> => {
   const { email, password, username, role } = req.body;
 
@@ -47,13 +51,6 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
       role: role || 'user', // Default to 'user' if role is not provided
     });
 
-    // Ensure JWT_SECRET is present in the environment variables
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      console.error('JWT_SECRET is not set');
-      return res.status(500).json({ message: 'JWT secret is not configured properly.' });
-    }
-
     // Generate a JWT token
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, username: newUser.username },
@@ -77,9 +74,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
   }
 });
 
-/**
- * Login an existing user.
- */
+// Login an existing user.
 router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response): Promise<Response> => {
   const { email, password } = req.body;
 
@@ -99,13 +94,6 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid credentials.' });
-    }
-
-    // Ensure JWT_SECRET is present in the environment variables
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      console.error('JWT_SECRET is not set');
-      return res.status(500).json({ message: 'JWT secret is not configured properly.' });
     }
 
     // Generate a JWT token
