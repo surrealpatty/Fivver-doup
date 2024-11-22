@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import defineUser from './user';  // Import User model definition
 import defineService from './services';  // Import Service model definition
 import defineReview from './review';  // Import Review model definition
@@ -39,10 +39,11 @@ export { sequelize, models };
 
 // TypeScript interfaces for type safety (for use in other files)
 export interface IUser extends Model {
-  id: number;
+  id: string;  // UUID for user ID (updated for UUID type)
   username: string;
   email: string;
   password: string;
+  isPaid: boolean;
 }
 
 export interface IService extends Model {
@@ -50,7 +51,7 @@ export interface IService extends Model {
   title: string;
   description: string;
   price: number;
-  userId: number;
+  userId: string;  // Updated to string to match UUID type
 }
 
 export interface IReview extends Model {
@@ -58,7 +59,7 @@ export interface IReview extends Model {
   rating: number;
   comment: string;
   serviceId: number;
-  userId: number;
+  userId: string;  // Updated to string to match UUID type
 }
 
 // Export a typed Models object for stronger type safety
