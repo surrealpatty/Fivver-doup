@@ -20,7 +20,7 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => { // Updated return type here
+): Response<any, Record<string, any>> | void => {
   try {
     // Extract the token from the Authorization header
     const authorizationHeader = req.headers['authorization'];
@@ -56,7 +56,16 @@ export const authenticateToken = (
   } catch (error) {
     console.error('Token authentication failed:', error);
 
-    // Handle token verification errors (e.g., expired or invalid token)
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    // Handle different types of errors more specifically
+    if (error instanceof jwt.JsonWebTokenError) {
+      // If the token is invalid or malformed
+      return res.status(403).json({ message: 'Invalid token' });
+    } else if (error instanceof jwt.TokenExpiredError) {
+      // If the token has expired
+      return res.status(401).json({ message: 'Token has expired' });
+    } else {
+      // Catch any other errors
+      return res.status(500).json({ message: 'Internal server error' });
+    }
   }
 };

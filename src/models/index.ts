@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import defineUser from './user';  // Import User model definition
 import defineService from './services';  // Import Service model definition
 import defineReview from './review';  // Import Review model definition
@@ -64,3 +64,9 @@ export interface IReview extends Model {
 
 // Export a typed Models object for stronger type safety
 export type Models = typeof models;
+
+// Updated interface with Optional for "create" purposes
+export interface IUserCreationAttributes extends Optional<IUser, 'id'> {}
+export interface IServiceCreationAttributes extends Optional<IService, 'id'> {}
+export interface IReviewCreationAttributes extends Optional<IReview, 'id'> {}
+
