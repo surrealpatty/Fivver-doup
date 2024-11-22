@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Service } from '../models/service'; // Assuming the Service model exists
+import  Service  from '../models/service'; // Assuming the Service model exists
 
 // Interface for creating a new service
 export interface CreateServiceRequest extends Request {
