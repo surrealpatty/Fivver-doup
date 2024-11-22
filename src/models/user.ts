@@ -2,20 +2,19 @@ import { Sequelize, DataTypes, Model } from 'sequelize';
 import { IUserCreationAttributes, IUserAttributes } from '../types'; // Import interfaces
 
 // Define the User model class
+export class User extends Model<IUserAttributes, IUserCreationAttributes> implements IUserAttributes {
+  // Define properties for the model with the correct types
+  id!: string;  // UUID for user ID (string type, assumed from your design)
+  username!: string;
+  email!: string;
+  password!: string;
+  isPaid!: boolean;
+
+  // Optionally, you can add class or instance methods here
+}
+
+// Initialize the User model with attributes and options
 export const defineUser = (sequelize: Sequelize) => {
-  // The User class implements IUserAttributes and uses IUserCreationAttributes for the creation process
-  class User extends Model<IUserAttributes, IUserCreationAttributes> implements IUserAttributes {
-    // Define properties for the model with the correct types
-    id!: string;  // UUID for user ID (string type, assumed from your design)
-    username!: string;
-    email!: string;
-    password!: string;
-    isPaid!: boolean;
-
-    // Optionally, you can add class or instance methods here
-  }
-
-  // Initialize the User model with attributes and options
   User.init(
     {
       id: { 

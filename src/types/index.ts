@@ -12,3 +12,10 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
   // All attributes except 'id' are required for creation
   // The 'id' will be auto-generated, so it is omitted here
 }
+
+// UserPayload interface for user-related data passed with the request (e.g., JWT)
+export interface UserPayload {
+  id: string;         // The user's ID
+  email?: string;     // The user's email (optional)
+  username?: string;  // The user's username (optional)
+}
