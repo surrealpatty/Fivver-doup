@@ -1,126 +1,40 @@
-import { DataTypes, Model, Optional, Association } from 'sequelize';
-import sequelize from '../config/database'; // Named import
-import User from './user'; // Import User model as the actual model (constructor function)
-import Service from './services'; // Import Service model as the actual model (constructor function)
+import { DataTypes, Sequelize, Model } from 'sequelize';
 
-// Define the Order attributes interface
-export interface OrderAttributes {
-  id: number;
-  userId: string | null; // UUID type for userId
-  serviceId: number | null; // INTEGER for serviceId
-  orderDetails: string;
-  quantity: number; // Quantity of the service ordered
-  totalAmount: number; // Total amount for the order
-  totalPrice: number; // New field for total price (calculated)
-  status: 'Pending' | 'Completed' | 'Cancelled'; // Enum for order status
-  createdAt?: Date | null; // Auto-managed by Sequelize
-  updatedAt?: Date | null; // Auto-managed by Sequelize
-}
+export default (sequelize: Sequelize) => {
+    class Order extends Model {
+        public id!: number;
+        public userId!: string;
+        public serviceId!: number;
+        public status!: string;
+    }
 
-// Define creation attributes (id is excluded because it's auto-incremented)
-export type OrderCreationAttributes = Optional<OrderAttributes, 'id'>;
+    Order.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            userId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+            },
+            serviceId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            status: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+        },
+        {
+            sequelize,
+            modelName: 'Order',
+            tableName: 'orders',
+            timestamps: true,
+        }
+    );
 
-// Define the Order model class
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
-  public id!: number;
-  public userId!: string | null;
-  public serviceId!: number | null;
-  public orderDetails!: string;
-  public quantity!: number;
-  public totalAmount!: number;
-  public totalPrice!: number; // Include totalPrice
-  public status!: 'Pending' | 'Completed' | 'Cancelled';
-
-  // Timestamps are read-only and managed by Sequelize
-  public readonly createdAt!: Date | null;
-  public readonly updatedAt!: Date | null;
-
-  // Define model associations
-  public static associations: {
-    user: Association<Order, User>;
-    service: Association<Order, Service>;
-  };
-
-  static associate(models: { User: typeof User; Service: typeof Service }) {
-    // Associate Order with User
-    Order.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'user',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-    });
-
-    // Associate Order with Service
-    Order.belongsTo(models.Service, {
-      foreignKey: 'serviceId',
-      as: 'service',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-    });
-  }
-}
-
-// Initialize the Order model
-Order.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    userId: {
-      type: DataTypes.UUID, // UUID for userId
-      allowNull: true, // Supports ON DELETE SET NULL
-      references: {
-        model: User, // Reference to the User model
-        key: 'id', // Foreign key points to 'id' in the User model
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
-    },
-    serviceId: {
-      type: DataTypes.INTEGER, // Integer for serviceId
-      allowNull: true, // Supports ON DELETE SET NULL
-      references: {
-        model: Service, // Reference to the Service model
-        key: 'id', // Foreign key points to 'id' in the Service model
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
-    },
-    orderDetails: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    totalAmount: {
-      type: DataTypes.DECIMAL(10, 2), // Decimal with precision and scale
-      allowNull: false,
-    },
-    totalPrice: {
-      type: DataTypes.VIRTUAL, // Virtual field (calculated dynamically)
-      get() {
-        const quantity = this.getDataValue('quantity');
-        const totalAmount = this.getDataValue('totalAmount');
-        return quantity * totalAmount; // Assuming totalPrice is quantity * totalAmount
-      },
-    },
-    status: {
-      type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),
-      allowNull: false,
-      defaultValue: 'Pending', // Default status
-    },
-  },
-  {
-    sequelize, // Sequelize instance
-    modelName: 'Order',
-    tableName: 'orders',
-    timestamps: true, // Enable createdAt and updatedAt
-    underscored: true, // Use snake_case for column names
-  }
-);
-
-export default Order;
+    return Order;
+};

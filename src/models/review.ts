@@ -1,50 +1,39 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+// src/models/review.ts
 
-class Review extends Model {
-  public id!: number;
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database'; // Ensure you're importing sequelize instance
+
+export class Review extends Model {
+  public serviceId!: string;
   public userId!: string;
-  public serviceId!: number;
-  public content!: string;
   public rating!: number;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public comment!: string;
 }
 
-const defineReview = (sequelize: Sequelize) => {
-  Review.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      userId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
-      serviceId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      rating: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+Review.init(
+  {
+    serviceId: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    {
-      sequelize,
-      modelName: 'Review',
-      tableName: 'reviews',
-      timestamps: true,
-    }
-  );
+    userId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    comment: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'Review',
+    tableName: 'reviews',
+  }
+);
 
-  return Review;
-};
-
-export default defineReview;
+export default Review;  // Make sure to export the Review model

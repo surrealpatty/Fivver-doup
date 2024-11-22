@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { Review, User, Service } from '../models'; // Import the actual Sequelize models
-import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAuth middleware
+import Review from '../models/review';  // Use default import if exported as default
+import { User, Service } from '../models'; // Import other models
+import { checkAuth } from '../middlewares/authMiddleware'; 
 
 // Middleware to ensure user is authenticated
-export const ensureAuthenticated = checkAuth; // Reuse checkAuth as a middleware for routes
+export const ensureAuthenticated = checkAuth; 
 
 // Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsString = req.user?.id; // Keep userId as string (UUID)
+    const userIdAsString = req.user?.id; 
 
-    // Input validation
     if (!serviceId || typeof rating !== 'number' || !comment) {
         return res.status(400).json({
             message: 'Service ID, rating, and comment are required',
@@ -18,7 +18,6 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    // Check if userId is valid
     if (!userIdAsString) {
         return res.status(400).json({
             message: 'Invalid userId',
@@ -27,16 +26,14 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
     }
 
     try {
-        // Ensure the service exists
         const service = await Service.findByPk(serviceId);
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }
 
-        // Create the review
         const review = await Review.create({
             serviceId,
-            userId: userIdAsString,  // Store the userId as string (UUID)
+            userId: userIdAsString,
             rating,
             comment,
         });
@@ -59,20 +56,19 @@ export const getReviewsForService = async (req: Request, res: Response): Promise
     const { serviceId } = req.params;
 
     try {
-        // Fetch reviews for the given service
         const reviews = await Review.findAll({
             where: { serviceId },
             include: [
                 {
                     model: User,
-                    attributes: ['id', 'username', 'email'], // Include user details
+                    attributes: ['id', 'username', 'email'],
                 },
             ],
         });
 
         return res.status(200).json({
             message: 'Reviews fetched successfully',
-            reviews: reviews.length > 0 ? reviews : [],  // Return an empty array if no reviews found
+            reviews: reviews.length > 0 ? reviews : [],
         });
     } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -88,7 +84,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
     const { reviewId } = req.params;
     const { rating, comment } = req.body;
 
-    const user = req.user; // Extract authenticated user from middleware
+    const user = req.user; 
     if (!user || !user.id) {
         return res.status(401).json({
             message: 'Unauthorized',
@@ -96,7 +92,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    const userIdAsString = user.id;  // Keep userId as string (UUID)
+    const userIdAsString = user.id; 
 
     if (!rating && !comment) {
         return res.status(400).json({
@@ -114,7 +110,6 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
             return res.status(403).json({ message: 'You can only update your own review' });
         }
 
-        // Update review fields
         review.rating = rating ?? review.rating;
         review.comment = comment ?? review.comment;
         await review.save();
@@ -136,7 +131,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params;
 
-    const user = req.user; // Extract authenticated user from middleware
+    const user = req.user;
     if (!user || !user.id) {
         return res.status(401).json({
             message: 'Unauthorized',
@@ -144,7 +139,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    const userIdAsString = user.id;  // Keep userId as string (UUID)
+    const userIdAsString = user.id; 
 
     try {
         const review = await Review.findByPk(reviewId);

@@ -1,29 +1,40 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../config/database';
+import { DataTypes, Sequelize, Model } from 'sequelize';
 
-class Service extends Model {
-  // Your Service model definition...
-}
+export default (sequelize: Sequelize) => {
+    class Service extends Model {
+        public id!: number;
+        public userId!: string;
+        public title!: string;
+        public description!: string;
+    }
 
-Service.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-    },
-    serviceName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    // Other fields...
-  },
-  {
-    sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true,
-  }
-);
+    Service.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            userId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+            },
+            title: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+            },
+        },
+        {
+            sequelize,
+            modelName: 'Service',
+            tableName: 'services',
+            timestamps: true,
+        }
+    );
 
-export default Service; // Ensure you're using export default here
+    return Service;
+};

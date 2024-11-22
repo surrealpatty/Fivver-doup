@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import defineUser from './user';  // Function that defines User model
 import defineService from './services';  // Function that defines Service model
-import defineReview from './review';  // Function that defines Review model
+import defineOrder from './order';  // Function that defines Order model
 
 // Initialize Sequelize instance
 const sequelize = new Sequelize({
@@ -15,17 +15,24 @@ const sequelize = new Sequelize({
 // Define models using the factory functions (pass only `sequelize`)
 const User = defineUser(sequelize); // Define the User model
 const Service = defineService(sequelize); // Define the Service model
-const Review = defineReview(sequelize); // Define the Review model
+const Order = defineOrder(sequelize); // Define the Order model
 
-// Define relationships (associations) between models
-User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
-Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+// Define associations between models
+const defineAssociations = () => {
+  // User <-> Service Association
+  User.hasMany(Service, { foreignKey: 'userId' }); // A user can have many services
+  Service.belongsTo(User, { foreignKey: 'userId' }); // A service belongs to one user
 
-Service.hasMany(Review, { foreignKey: 'serviceId', as: 'reviews' });
-Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+  // Service <-> Order Association
+  Service.hasMany(Order, { foreignKey: 'serviceId' }); // A service has many orders
+  Order.belongsTo(Service, { foreignKey: 'serviceId' }); // An order belongs to a service
 
-User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
-Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+  // User <-> Order Association
+  User.hasMany(Order, { foreignKey: 'userId' }); // A user can have many orders
+  Order.belongsTo(User, { foreignKey: 'userId' }); // An order belongs to a user
+};
 
-// Export models and sequelize instance
-export { sequelize, User, Service, Review };
+// Call defineAssociations function to establish the relationships
+defineAssociations();
+
+export { sequelize, User, Service, Order };

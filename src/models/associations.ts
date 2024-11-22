@@ -1,7 +1,4 @@
-// Import the Sequelize models correctly with named imports
-import  User  from './user'; // Correct import for named export User
-import  Service  from './services'; // Correct import for named export Service
-import  Order  from './order'; // Correct import for named export Order
+import { User, Service, Order } from './index'; // Import models after they are defined
 
 // Define associations between the models
 const defineAssociations = () => {
