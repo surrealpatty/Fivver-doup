@@ -1,4 +1,4 @@
-import express from 'express'; 
+import express, { Request, Response } from 'express';  // Import express and types for request and response
 import {
     createReview,
     getReviewsForService,
@@ -22,8 +22,8 @@ router.put('/:reviewId', authenticateToken, updateReview);
 router.delete('/:reviewId', authenticateToken, deleteReview);
 
 // Optional: Health check or confirmation route
-router.get('/health', (req, res) => {
-    res.json({ message: 'Reviews route is working!' });
+router.get('/health', (req: Request, res: Response): Response => {
+    return res.json({ message: 'Reviews route is working!' });
 });
 
 export default router;

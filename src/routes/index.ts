@@ -1,7 +1,7 @@
-import express from 'express';  // Import express
-import reviewsRouter from './reviews';  // Import the reviews router (no need for .js extension)
-import userRouter from './user';  // Import the user router (no need for .js extension)
-import serviceRouter from './servicesRoute';  // Import the services router (no need for .js extension)
+import express, { Request, Response } from 'express';  // Import express and the types for request and response
+import reviewsRouter from './reviews';  // Import the reviews router
+import userRouter from './user';  // Import the user router
+import serviceRouter from './servicesRoute';  // Import the services router
 
 // Create an instance of the router
 const router = express.Router();
@@ -12,7 +12,7 @@ router.use('/api/users', userRouter);  // Use user router for /api/users endpoin
 router.use('/api/services', serviceRouter);  // Use services router for /api/services endpoint
 
 // Optional: Health check route
-router.get('/health', (req, res) => {
+router.get('/health', (req: Request, res: Response) => {
   res.json({ message: 'API is running' });
 });
 
