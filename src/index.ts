@@ -1,28 +1,38 @@
-import express from 'express'; // Import express
-import reviewsRouter from './reviews.js'; // Import the reviews router
-import userRouter from './user.js'; // Import the user router
-import serviceRouter from './servicesRoute.js'; // Import the services router
+import express, { Request, Response } from 'express'; // Import express and types for Request and Response
+import reviewsRouter from './routes/reviews'; // Import the reviews router from routes folder
+import userRouter from './routes/user'; // Import the user router from routes folder
+import serviceRouter from './routes/servicesRoute'; // Import the services router from routes folder
 
-// Create an instance of the router
-const router = express.Router();
+const app = express(); // Create an instance of the express app
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Mount routers
-router.use('/api/reviews', reviewsRouter); // Reviews routes
-router.use('/api/users', userRouter); // User routes
-router.use('/api/services', serviceRouter); // Services routes
+app.use('/api/reviews', reviewsRouter); // Reviews routes
+app.use('/api/users', userRouter); // User routes
+app.use('/api/services', serviceRouter); // Services routes
 
 // Health check route
-router.get('/health', (req, res) => {
+app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'API is running' });
 });
 
 // Handle undefined routes
-router.all('*', (req, res) => {
+app.all('*', (req: Request, res: Response) => {
   res.status(404).json({
     message: 'Route not found',
     error: 'NotFoundError',
   });
 });
 
-// Export the router
-export default router;
+// Set the port number (use an environment variable or default to 3000)
+const PORT = process.env.PORT || 3000;
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+// Export the app for use in server setup (e.g., testing or deployment)
+export default app;
