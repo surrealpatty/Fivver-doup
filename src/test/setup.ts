@@ -1,8 +1,4 @@
-import sequelize from '../config/database'; // Mock the Sequelize connection
-import User from '../models/user'; // Mock User model
-import Order from '../models/order'; // Correctly import Order model
-import Service from '../models/services'; // Correct import path for Service model
-import jwt from 'jsonwebtoken'; // Mock JWT methods
+import { sequelize } from '../config/database'; // Correctly import the named export `sequelize`
 
 // Mock User model methods
 jest.mock('../models/user', () => ({

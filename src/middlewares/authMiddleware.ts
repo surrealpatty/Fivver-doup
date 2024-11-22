@@ -1,42 +1,65 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-// Extending Express Request to include the userId
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: number; // `userId` should be optional before the middleware sets it
-    }
+// Define the expected structure of the decoded JWT payload
+interface UserPayload extends JwtPayload {
+  id: string;
+  email: string;
+  username: string;
+}
+
+// Extend the Request interface to include the `user` property
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: UserPayload;
   }
 }
 
-// Authentication middleware to verify JWT token
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
-  // Extract the token from the Authorization header (Bearer token)
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Authentication required' }); // Return response immediately
-  }
-
-  const jwtSecret = process.env.JWT_SECRET;
-
-  if (!jwtSecret) {
-    console.error('JWT_SECRET is missing from environment variables');
-    return res.status(500).json({ message: 'Server configuration error: Missing JWT_SECRET' }); // Return response immediately
-  }
-
+// Middleware to authenticate the token
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
-    // Verify and decode the JWT token
-    const decoded = jwt.verify(token, jwtSecret) as JwtPayload & { userId: number };
+    // Extract the token from the Authorization header
+    const authorizationHeader = req.headers['authorization'];
 
-    // Attach the `userId` to the request object
-    req.userId = decoded.userId;
+    // Check if the header exists and starts with "Bearer"
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      return; // Return here to stop further processing
+    }
+
+    const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
+
+    // Check if the token is present
+    if (!token) {
+      res.status(401).json({ message: 'Authorization token is missing' });
+      return; // Return here to stop further processing
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+
+    // Ensure the JWT_SECRET is configured in the environment variables
+    if (!jwtSecret) {
+      console.error('JWT_SECRET is not configured in the environment variables');
+      res.status(500).json({ message: 'Internal server error' });
+      return; // Return here to stop further processing
+    }
+
+    // Verify the token and decode the payload
+    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
+
+    // Attach the user data from the decoded token to the request object
+    req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
-    console.error('JWT verification failed:', error);
-    return res.status(403).json({ message: 'Invalid or expired token' }); // Return response immediately
+    console.error('Token authentication failed:', error);
+
+    // Handle token verification errors
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
