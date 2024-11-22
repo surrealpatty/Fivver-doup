@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'; // Import Router, Request, and Response from express
-import { Service } from '../models/services'; // Correct the import
-import { User } from '../models/user'; // Correct the import
+import  Service  from './models/services';  // Adjust the import path
+import  User  from './models/user';  // Adjust the import path
 import { ServiceCreationAttributes } from '../models/services'; // Import the type for Service creation
 
 const router = Router(); // Initialize the router

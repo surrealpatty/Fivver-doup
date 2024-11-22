@@ -38,13 +38,13 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create new user in the database
-    const newUser = await User.create({
-      email,
-      password: hashedPassword,
-      username,
-      role: role || 'user', // Default to 'user' role if not provided
-      isPaid: false, // Assuming the default user is not paid
-    });
+    interface UserCreationAttributes {
+    username: string;
+    email: string;
+    password: string;
+    role: string;  // Add role if it's a required field
+}
+
 
     // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;

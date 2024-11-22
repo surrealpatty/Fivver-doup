@@ -48,7 +48,7 @@ router.post('/services', async (req: Request<{}, {}, ServiceCreationBody>, res: 
 
     // Create a new service
     const service = await Service.create({
-      userId,       // User ID associated with the service
+      userId: userId.toString(),     // User ID associated with the service
       title,        // Service title
       description,  // Service description
       price,        // Service price
