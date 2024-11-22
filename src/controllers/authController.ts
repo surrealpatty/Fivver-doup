@@ -75,7 +75,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Create a new user in the database, using the hashed password
         const newUser = await User.create({
             email,
-            password: hashedPassword, // <-- Use hashedPassword here
+            password: hashedPassword, // Use hashedPassword here
             username,
             isPaid: false,  // Add this field
         });

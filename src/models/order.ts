@@ -11,6 +11,7 @@ export interface OrderAttributes {
   orderDetails: string;
   quantity: number; // Quantity of the service ordered
   totalAmount: number; // Total amount for the order
+  totalPrice: number; // New field for total price (calculated)
   status: 'Pending' | 'Completed' | 'Cancelled'; // Enum for order status
   createdAt?: Date | null; // Auto-managed by Sequelize
   updatedAt?: Date | null; // Auto-managed by Sequelize
@@ -27,6 +28,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   public orderDetails!: string;
   public quantity!: number;
   public totalAmount!: number;
+  public totalPrice!: number; // Include totalPrice
   public status!: 'Pending' | 'Completed' | 'Cancelled';
 
   // Timestamps are read-only and managed by Sequelize
@@ -97,6 +99,14 @@ Order.init(
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2), // Decimal with precision and scale
       allowNull: false,
+    },
+    totalPrice: {
+      type: DataTypes.VIRTUAL, // Virtual field (calculated dynamically)
+      get() {
+        const quantity = this.getDataValue('quantity');
+        const totalAmount = this.getDataValue('totalAmount');
+        return quantity * totalAmount; // Assuming totalPrice is quantity * totalAmount
+      },
     },
     status: {
       type: DataTypes.ENUM('Pending', 'Completed', 'Cancelled'),

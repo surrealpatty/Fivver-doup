@@ -9,6 +9,7 @@ interface UserAttributes {
   email: string;
   password: string;
   isPaid: boolean;
+  bio: string | null;  // Add bio field (nullable)
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -22,6 +23,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password!: string;
   public isPaid!: boolean;
+  public bio!: string | null;  // Include bio field
 
   // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
@@ -66,6 +68,10 @@ User.init(
     isPaid: {
       type: DataTypes.BOOLEAN, // isPaid field type (boolean)
       defaultValue: false,     // Default to false (free user)
+    },
+    bio: {
+      type: DataTypes.STRING,  // bio field type (string)
+      allowNull: true,         // Allow null for bio (optional)
     },
   },
   {

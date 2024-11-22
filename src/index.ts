@@ -34,7 +34,7 @@ app.all('*', (req: Request, res: Response) => {
 });
 
 // Set the port number (use an environment variable or default to 3000)
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 // Start the server and handle asynchronous errors
 const startServer = async () => {
@@ -48,17 +48,23 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Start the server if the environment variable is set correctly
+if (!process.env.PORT) {
+  console.error('PORT environment variable is not defined.');
+  process.exit(1);
+} else {
+  startServer();
+}
 
 // Graceful shutdown: ensure the server closes properly
 process.on('SIGINT', () => {
   console.log('Received SIGINT. Closing server...');
-  process.exit();
+  process.exit(0);
 });
 
 process.on('SIGTERM', () => {
   console.log('Received SIGTERM. Closing server...');
-  process.exit();
+  process.exit(0);
 });
 
 // Export the app for use in server setup (e.g., testing or deployment)

@@ -1,84 +1,95 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Path to your sequelize instance
-import { User } from './user'; // Assuming the User model is in src/models/user.ts
-import { Service } from './service'; // Assuming the Service model is in src/models/service.ts
+import { DataTypes, Model, Optional, Association } from 'sequelize';
+import { sequelize } from '../config/database';  // Named import for Sequelize instance
+import User from './user';  // Import the associated User model
+import Service from './services';  // Import the associated Service model
 
-// Define the attributes of the Review model
-interface ReviewAttributes {
+// Define the attributes for the Review model
+export interface ReviewAttributes {
   id: number;
-  userId: string; // Assuming the user is referenced by UUID
-  serviceId: number; // Assuming the service is referenced by its numeric ID
-  rating: number; // A numeric rating (e.g., 1-5 stars)
-  comment: string; // Review comment
-  createdAt: Date;
-  updatedAt: Date;
+  userId: string;  // UUID type for userId
+  serviceId: number;
+  rating: number;
+  comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Define the creation attributes (optional fields that can be omitted in creation)
-interface ReviewCreationAttributes extends Optional<ReviewAttributes, 'id'> {}
+// Define the attributes required for creating a Review (exclude id)
+export type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
 
 class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
   public id!: number;
-  public userId!: string;
+  public userId!: string;  // UUID for userId
   public serviceId!: number;
   public rating!: number;
   public comment!: string;
+
+  // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Define associations (optional)
-  public static associate: (models: { User: typeof User; Service: typeof Service }) => void;
+  // Define associations between models (use static method)
+  public static associations: {
+    user: Association<Review, User>;
+    service: Association<Review, Service>;
+  };
+
+  // Static method to define associations between models
+  static associate(models: { User: typeof User; Service: typeof Service }) {
+    // A review belongs to a user (one-to-many)
+    Review.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+
+    // A review belongs to a service (one-to-many)
+    Review.belongsTo(models.Service, { foreignKey: 'serviceId', as: 'service' });
+  }
 }
 
+// Initialize the Review model
 Review.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
     },
     userId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID,  // UUID to match the User model
       allowNull: false,
       references: {
-        model: 'users', // Reference to the users table
-        key: 'id', // Foreign key to the user's id
+        model: 'users',  // Reference to 'users' table
+        key: 'id',
       },
+      onDelete: 'CASCADE',  // Cascade delete if a user is deleted
     },
     serviceId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
-        model: 'services', // Reference to the services table
-        key: 'id', // Foreign key to the service's id
+        model: 'services',  // Reference to 'services' table
+        key: 'id',
       },
+      onDelete: 'CASCADE',  // Cascade delete if a service is deleted
     },
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        min: 1,
+        min: 1,  // Rating must be between 1 and 5
         max: 5,
       },
     },
     comment: {
-      type: DataTypes.TEXT,
-      allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
-    sequelize,
+    sequelize,  // Pass the sequelize instance to the model
     modelName: 'Review',
-    tableName: 'reviews', // Ensure the table name matches your DB
-    timestamps: true,
+    tableName: 'reviews',  // Ensure the table name is correct
+    timestamps: true,  // Sequelize will automatically manage createdAt and updatedAt fields
+    underscored: true,  // Use snake_case for column names (if needed)
   }
 );
 
-// Define associations (optional, but recommended for Sequelize's automatic association handling)
-Review.associate = (models) => {
-  Review.belongsTo(models.User, { foreignKey: 'userId' });
-  Review.belongsTo(models.Service, { foreignKey: 'serviceId' });
-};
-
-export { Review, ReviewAttributes, ReviewCreationAttributes };
+export { Review };

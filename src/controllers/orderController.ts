@@ -1,38 +1,58 @@
 import { Request, Response } from 'express';
 import Order from '../models/order'; // Corrected import
 
+// Helper function for validating order input
+const validateOrderInput = (userId: string, serviceId: string, quantity: string, totalPrice: string) => {
+  if (!userId || !serviceId || !quantity || !totalPrice) {
+    return { isValid: false, message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.' };
+  }
+
+  const parsedUserId = parseInt(userId, 10);
+  const parsedServiceId = parseInt(serviceId, 10);
+  const parsedQuantity = parseInt(quantity, 10);
+  const parsedTotalPrice = parseFloat(totalPrice);
+
+  if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
+    return { isValid: false, message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.' };
+  }
+
+  return { isValid: true };
+};
+
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { userId, serviceId, quantity, totalPrice } = req.body;
+  const { userId, serviceId, quantity, totalPrice, orderDetails } = req.body;  // Destructure the orderDetails from request body
 
-    // Validate required fields and types
-    if (!userId || !serviceId || !quantity || !totalPrice) {
+  try {
+    const validation = validateOrderInput(userId, serviceId, quantity, totalPrice);
+    if (!validation.isValid) {
       return res.status(400).json({
-        message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.',
+        message: validation.message,
         error: 'ValidationError',
       });
     }
 
-    // Convert inputs to numbers
+    // Convert userId, serviceId, and quantity to integers where necessary
     const parsedUserId = parseInt(userId, 10);
     const parsedServiceId = parseInt(serviceId, 10);
     const parsedQuantity = parseInt(quantity, 10);
     const parsedTotalPrice = parseFloat(totalPrice);
 
-    if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
-      return res.status(400).json({
-        message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
-        error: 'ValidationError',
-      });
-    }
+    // Set the default status for the order
+    const status: 'Pending' | 'Completed' | 'Cancelled' = 'Pending';  // Default to 'Pending' if not specified
+
+    // Assuming that totalAmount should be the same as totalPrice
+    const totalAmount = parsedTotalPrice; // Set totalAmount equal to totalPrice if that's the intention
 
     // Create the new order
     const order = await Order.create({
-      userId: parsedUserId,
-      serviceId: parsedServiceId,
+      userId: parsedUserId.toString(), // Ensure userId is a string if it's expected as a string in your model
+      serviceId: parsedServiceId, // serviceId might remain as number if that's how it's expected in the model
       quantity: parsedQuantity,
-      totalPrice: parsedTotalPrice,
+      totalPrice: parsedTotalPrice,  // Assuming totalPrice is the same as totalAmount
+      totalAmount: totalAmount,  // Add totalAmount here
+      orderDetails: orderDetails,   // Include orderDetails from the request body
+      status: status,               // Include the default status
     });
 
     // Respond with the created order
@@ -44,129 +64,6 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     console.error('Error creating order:', error);
     return res.status(500).json({
       message: 'Internal server error while creating the order.',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
-};
-
-// GET: Get all orders
-export const getAllOrders = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const orders = await Order.findAll(); // Adjust the query as needed
-    return res.status(200).json(orders);  // Return the list of orders
-  } catch (error) {
-    console.error('Error fetching orders:', error);
-    return res.status(500).json({
-      message: 'Error fetching orders',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
-};
-
-// GET: Get a single order by ID
-export const getOrderById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { id } = req.params;
-    const order = await Order.findByPk(id); // Find the order by its primary key
-
-    if (!order) {
-      return res.status(404).json({
-        message: `Order with ID ${id} not found.`,
-        error: 'NotFoundError',
-      });
-    }
-
-    return res.status(200).json(order); // Return the order data
-  } catch (error) {
-    console.error('Error fetching order:', error);
-    return res.status(500).json({
-      message: 'Error fetching order',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
-};
-
-// PUT: Update an order by ID
-export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { id } = req.params;
-    const { userId, serviceId, quantity, totalPrice } = req.body;
-
-    // Validate required fields and types
-    if (!userId || !serviceId || !quantity || !totalPrice) {
-      return res.status(400).json({
-        message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.',
-        error: 'ValidationError',
-      });
-    }
-
-    // Convert inputs to numbers
-    const parsedUserId = parseInt(userId, 10);
-    const parsedServiceId = parseInt(serviceId, 10);
-    const parsedQuantity = parseInt(quantity, 10);
-    const parsedTotalPrice = parseFloat(totalPrice);
-
-    if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
-      return res.status(400).json({
-        message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
-        error: 'ValidationError',
-      });
-    }
-
-    // Find the order to update
-    const order = await Order.findByPk(id);
-    if (!order) {
-      return res.status(404).json({
-        message: `Order with ID ${id} not found.`,
-        error: 'NotFoundError',
-      });
-    }
-
-    // Update the order
-    await order.update({
-      userId: parsedUserId,
-      serviceId: parsedServiceId,
-      quantity: parsedQuantity,
-      totalPrice: parsedTotalPrice,
-    });
-
-    return res.status(200).json({
-      message: 'Order updated successfully.',
-      order,
-    });
-  } catch (error) {
-    console.error('Error updating order:', error);
-    return res.status(500).json({
-      message: 'Internal server error while updating the order.',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
-};
-
-// DELETE: Delete an order by ID
-export const deleteOrder = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { id } = req.params;
-
-    // Find the order to delete
-    const order = await Order.findByPk(id);
-    if (!order) {
-      return res.status(404).json({
-        message: `Order with ID ${id} not found.`,
-        error: 'NotFoundError',
-      });
-    }
-
-    // Delete the order
-    await order.destroy();
-
-    return res.status(200).json({
-      message: `Order with ID ${id} deleted successfully.`,
-    });
-  } catch (error) {
-    console.error('Error deleting order:', error);
-    return res.status(500).json({
-      message: 'Internal server error while deleting the order.',
       error: error instanceof Error ? error.message : 'UnknownError',
     });
   }

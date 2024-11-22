@@ -1,10 +1,11 @@
-const { User } = require('../models/user'); // Adjust the path as necessary
-const jwt = require('jsonwebtoken');
+import { Request, Response } from 'express';
+import User from '../models/user'; // Adjusted to use default import
+import { JwtPayload } from 'jsonwebtoken';
 
 // Get User Profile
-exports.getProfile = async (req, res) => {
+export const getProfile = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { userId } = req.user; // Assuming the user ID is stored in the JWT payload
+        const { userId } = req.user as JwtPayload; // Assuming user ID is stored in the JWT payload as JwtPayload
 
         // Fetch user data from the database using the user ID
         const user = await User.findByPk(userId);
@@ -18,13 +19,13 @@ exports.getProfile = async (req, res) => {
         return res.status(200).json(userProfile); // Respond with user profile
     } catch (error) {
         console.error('Error fetching profile:', error);
-        return res.status(500).json({ message: 'Error fetching profile', error: error.message });
+        return res.status(500).json({ message: 'Error fetching profile', error: error instanceof Error ? error.message : 'UnknownError' });
     }
 };
 
 // Update User Profile
-exports.updateProfile = async (req, res) => {
-    const { userId } = req.user; // Get the user ID from the JWT token (assumed to be in req.user)
+export const updateProfile = async (req: Request, res: Response): Promise<Response> => {
+    const { userId } = req.user as JwtPayload; // Get the user ID from the JWT token (assumed to be in req.user)
     const { username, email, bio } = req.body; // Assuming these are the fields you're allowing to update
 
     // Validate the input
@@ -53,13 +54,13 @@ exports.updateProfile = async (req, res) => {
         return res.status(200).json({ message: 'Profile updated successfully', profile: updatedProfile });
     } catch (error) {
         console.error('Error updating profile:', error);
-        return res.status(500).json({ message: 'Error updating profile', error: error.message });
+        return res.status(500).json({ message: 'Error updating profile', error: error instanceof Error ? error.message : 'UnknownError' });
     }
 };
 
 // Delete User Profile (optional)
-exports.deleteProfile = async (req, res) => {
-    const { userId } = req.user; // Get user ID from the token
+export const deleteProfile = async (req: Request, res: Response): Promise<Response> => {
+    const { userId } = req.user as JwtPayload; // Get user ID from the token
 
     try {
         const user = await User.findByPk(userId);
@@ -75,6 +76,6 @@ exports.deleteProfile = async (req, res) => {
         return res.status(200).json({ message: 'Profile deleted successfully' });
     } catch (error) {
         console.error('Error deleting profile:', error);
-        return res.status(500).json({ message: 'Error deleting profile', error: error.message });
+        return res.status(500).json({ message: 'Error deleting profile', error: error instanceof Error ? error.message : 'UnknownError' });
     }
 };

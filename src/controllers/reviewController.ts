@@ -2,12 +2,15 @@ import { Request, Response } from 'express';
 import { Review, User, Service } from '../models';  // Correctly import models
 import { checkAuth } from '../middlewares/authMiddleware'; // Import the checkAuth middleware
 
+// Middleware to ensure user is authenticated
+export const ensureAuthenticated = checkAuth; // Reuse checkAuth as a middleware for routes
+
 /**
  * Create a Review
  */
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsNumber = parseInt(req.user?.id ?? '', 10); // Convert userId from string to number
+    const userIdAsString = req.user?.id; // Keep userId as string (UUID)
 
     // Input validation
     if (!serviceId || typeof rating !== 'number' || !comment) {
@@ -17,11 +20,11 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    // Check if userId is a valid number
-    if (isNaN(userIdAsNumber)) {
+    // Check if userId is valid
+    if (!userIdAsString) {
         return res.status(400).json({
             message: 'Invalid userId',
-            error: 'User ID must be a valid number',
+            error: 'User ID must be provided',
         });
     }
 
@@ -34,7 +37,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create the review
         const review = await Review.create({
             serviceId,
-            userId: userIdAsNumber,
+            userId: userIdAsString,  // Store the userId as string (UUID)
             rating,
             comment,
         });
@@ -69,13 +72,9 @@ export const getReviewsForService = async (req: Request, res: Response): Promise
             ],
         });
 
-        if (!reviews.length) {
-            return res.status(404).json({ message: 'No reviews found for this service' });
-        }
-
         return res.status(200).json({
             message: 'Reviews fetched successfully',
-            reviews,
+            reviews: reviews.length > 0 ? reviews : [],  // Return an empty array if no reviews found
         });
     } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -102,7 +101,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    const userIdAsNumber = parseInt(user.id, 10);
+    const userIdAsString = user.id;  // Keep userId as string (UUID)
 
     if (!rating && !comment) {
         return res.status(400).json({
@@ -117,13 +116,13 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Only allow updating reviews by the user who created the review
-        if (review.userId !== userIdAsNumber) {
+        if (review.userId !== userIdAsString) {
             return res.status(403).json({ message: 'You can only update your own review' });
         }
 
         // Update the review
-        review.rating = rating ?? review.rating; // Update rating if provided, else keep existing
-        review.comment = comment ?? review.comment; // Update comment if provided, else keep existing
+        review.rating = rating ?? review.rating;  // Update rating if provided, else keep existing
+        review.comment = comment ?? review.comment;  // Update comment if provided, else keep existing
         await review.save();
 
         return res.status(200).json({
@@ -154,7 +153,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    const userIdAsNumber = parseInt(user.id, 10);
+    const userIdAsString = user.id;  // Keep userId as string (UUID)
 
     try {
         const review = await Review.findByPk(reviewId);
@@ -163,7 +162,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
         }
 
         // Only allow deleting reviews by the user who created the review
-        if (review.userId !== userIdAsNumber) {
+        if (review.userId !== userIdAsString) {
             return res.status(403).json({ message: 'You can only delete your own review' });
         }
 

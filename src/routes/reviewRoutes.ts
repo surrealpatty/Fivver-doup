@@ -93,8 +93,8 @@ router.put('/reviews/:reviewId', checkAuth, async (req: Request, res: Response):
     const { rating, comment } = req.body;
 
     // Ensure the user is authenticated
-    const user = req.user as { id: string }; // Extract authenticated user
-    if (!user || !user.id) {
+    const user = req.user as User; // Extract authenticated user (with correct type)
+    if (!user?.id) {
         res.status(401).json({
             message: 'Unauthorized',
             error: 'User not authenticated',
@@ -147,8 +147,8 @@ router.delete('/reviews/:reviewId', checkAuth, async (req: Request, res: Respons
     const { reviewId } = req.params;
 
     // Ensure the user is authenticated
-    const user = req.user as { id: string }; // Extract authenticated user
-    if (!user || !user.id) {
+    const user = req.user as User; // Extract authenticated user (with correct type)
+    if (!user?.id) {
         res.status(401).json({
             message: 'Unauthorized',
             error: 'User not authenticated',

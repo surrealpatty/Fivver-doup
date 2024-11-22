@@ -64,3 +64,17 @@ export const authenticateToken = (
     }
   }
 };
+
+// Middleware to check if the user is authenticated
+export const checkAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response<any, Record<string, any>> | void => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'User is not authenticated' });
+  }
+
+  // User is authenticated, proceed to the next middleware or route handler
+  next();
+};
