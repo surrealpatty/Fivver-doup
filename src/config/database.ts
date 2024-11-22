@@ -84,4 +84,3 @@ if (NODE_ENV !== 'test') {
         if (NODE_ENV !== 'test') process.exit(1);
     });
 }
-
