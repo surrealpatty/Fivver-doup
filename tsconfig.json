@@ -22,7 +22,8 @@
     "noUnusedLocals": true,                     // Report errors on unused local variables
     "noUnusedParameters": true,                 // Report errors on unused function parameters
     "noImplicitReturns": true,                  // Ensure all code paths return a value
-    "noFallthroughCasesInSwitch": true          // Prevent fallthrough in switch statements
+    "noFallthroughCasesInSwitch": true,         // Prevent fallthrough in switch statements
+    "typeRoots": ["node_modules/@types", "src/types"] // Ensure custom types are picked up
   },
   "include": [
     "src/**/*",                                 // Include all files in the src directory
