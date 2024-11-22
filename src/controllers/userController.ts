@@ -10,8 +10,8 @@ interface AuthRequest extends Request {
 // Example function for getting a user profile
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   try {
-    // Check if the user object exists on the request
-    const userId = req.user?.id;
+    // Check if the user object exists on the request and assert the type
+    const userId = (req.user as UserPayload)?.id;
 
     // Check if userId is valid and ensure it's a string (or handle appropriately if it's another type)
     if (!userId || typeof userId !== 'string') {
