@@ -1,7 +1,5 @@
 // src/types/index.d.ts
 
-import { Request } from 'express'; // Importing Request from Express
-
 declare global {
   namespace Express {
     interface Request {
@@ -15,3 +13,5 @@ declare global {
     }
   }
 }
+
+export {}; // Ensures TypeScript treats this as a module
