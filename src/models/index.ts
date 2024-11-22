@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from 'sequelize';
+import { Sequelize, DataTypes, Model } from 'sequelize';
 import defineUser from './user';  // Import User model definition
 import defineService from './services';  // Import Service model definition
 import defineReview from './review';  // Import Review model definition

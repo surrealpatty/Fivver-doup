@@ -20,7 +20,7 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Response<any, Record<string, any>> | void => { // Updated return type here
   try {
     // Extract the token from the Authorization header
     const authorizationHeader = req.headers['authorization'];
