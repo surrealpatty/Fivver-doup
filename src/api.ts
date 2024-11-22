@@ -1,66 +1,62 @@
-import { Router, Request, Response } from 'express'; // Import Router, Request, and Response from express
-import Service from '../models/services'; // Import the Service model
-import User from '../models/user'; // Import the User model
-import { ServiceCreationAttributes } from '../models/services'; // Import the type for Service creation
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-const router = Router(); // Initialize the router
+// Define the expected structure of the decoded JWT payload
+interface UserPayload extends JwtPayload {
+  id: string;
+  email: string;
+  username: string;
+}
 
-/**
- * POST /services
- * Route to create a new service
- */
-router.post('/services', async (req: Request<{}, {}, ServiceCreationAttributes>, res: Response): Promise<Response> => {
-  try {
-    // Destructure the incoming request body
-    const { userId, title, description, price } = req.body;
-
-    // Validate required fields
-    if (!userId || !title || !description || price === undefined) {
-      return res.status(400).json({
-        message: 'Missing required fields: userId, title, description, and price are mandatory.',
-        error: 'ValidationError',
-      });
-    }
-
-    // Validate price
-    if (typeof price !== 'number' || price <= 0 || isNaN(price)) {
-      return res.status(400).json({
-        message: 'Invalid price: must be a positive number.',
-        error: 'ValidationError',
-      });
-    }
-
-    // Check if the user exists
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(404).json({
-        message: `User with ID ${userId} not found.`,
-        error: 'NotFoundError',
-      });
-    }
-
-    // Create the new service
-    const service = await Service.create({
-      userId,       // User ID associated with the service
-      title,        // Service title
-      description,  // Service description
-      price,        // Service price
-    });
-
-    // Respond with the created service
-    return res.status(201).json({
-      message: 'Service created successfully.',
-      service,
-    });
-  } catch (error) {
-    console.error('Error creating service:', error);
-
-    // Return an appropriate error response
-    return res.status(500).json({
-      message: 'Internal server error while creating the service.',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
+// Augment the Request interface to include the `user` property
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: UserPayload;
   }
-});
+}
 
-export default router; // Export the router for use in the application
+// Middleware to authenticate the token
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response<any, Record<string, any>> | void => { // Updated return type here
+  try {
+    // Extract the token from the Authorization header
+    const authorizationHeader = req.headers['authorization'];
+
+    // Check if the header exists and starts with "Bearer"
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    }
+
+    // Extract the token after "Bearer"
+    const token = authorizationHeader.split(' ')[1];
+
+    // Check if the token is present
+    if (!token) {
+      return res.status(401).json({ message: 'Authorization token is missing' });
+    }
+
+    // Ensure the JWT_SECRET is configured in the environment variables
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET is not configured in the environment variables');
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    // Verify the token and decode the payload
+    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
+
+    // Attach the user data from the decoded token to the request object
+    req.user = decoded;
+
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (error) {
+    console.error('Token authentication failed:', error);
+
+    // Handle token verification errors (e.g., expired or invalid token)
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
+};
