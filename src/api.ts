@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'; // Import Router, Request, and Response from express
-import  Service  from './models/services';  // Adjust the import path
-import  User  from './models/user';  // Adjust the import path
+import Service from '../models/services'; // Import the Service model
+import User from '../models/user'; // Import the User model
 import { ServiceCreationAttributes } from '../models/services'; // Import the type for Service creation
 
 const router = Router(); // Initialize the router
@@ -9,10 +9,10 @@ const router = Router(); // Initialize the router
  * POST /services
  * Route to create a new service
  */
-router.post('/services', async (req: Request, res: Response): Promise<Response> => {
+router.post('/services', async (req: Request<{}, {}, ServiceCreationAttributes>, res: Response): Promise<Response> => {
   try {
-    // Destructure and type the incoming request body
-    const { userId, title, description, price }: ServiceCreationAttributes = req.body;
+    // Destructure the incoming request body
+    const { userId, title, description, price } = req.body;
 
     // Validate required fields
     if (!userId || !title || !description || price === undefined) {

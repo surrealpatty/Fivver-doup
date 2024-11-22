@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user'; // Ensure correct path to your User model
-import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing
-import jwt from 'jsonwebtoken'; // Assuming JWT is used for authentication
+import User from '../models/user'; // Ensure the path is correct
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -18,7 +18,9 @@ interface LoginRequestBody {
   password: string;
 }
 
-// Register new user
+/**
+ * Register a new user.
+ */
 router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<Response> => {
   const { email, password, username, role } = req.body;
 
@@ -34,17 +36,16 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
       return res.status(400).json({ message: 'Email already in use.' });
     }
 
-    // Hash password
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user in the database
-    interface UserCreationAttributes {
-    username: string;
-    email: string;
-    password: string;
-    role: string;  // Add role if it's a required field
-}
-
+    // Create a new user in the database
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role: role || 'user', // Default to 'user' if role is not provided
+    });
 
     // Ensure JWT_SECRET is present in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
@@ -56,7 +57,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, username: newUser.username },
       jwtSecret,
-      { expiresIn: '1h' } // 1 hour expiration time
+      { expiresIn: '1h' }
     );
 
     // Send the response with the token
@@ -75,7 +76,9 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
   }
 });
 
-// Login user
+/**
+ * Login an existing user.
+ */
 router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response): Promise<Response> => {
   const { email, password } = req.body;
 
@@ -91,7 +94,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
       return res.status(400).json({ message: 'User not found.' });
     }
 
-    // Compare the password with the stored hashed password
+    // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid credentials.' });
@@ -107,7 +110,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
       jwtSecret,
-      { expiresIn: '1h' } // 1 hour expiration time
+      { expiresIn: '1h' }
     );
 
     // Send the response with the token
