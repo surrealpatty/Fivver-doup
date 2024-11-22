@@ -8,6 +8,7 @@ interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
+  category: string;  // Added category as part of the model
   userId: string;  // UUID type for User ID
   createdAt?: Date;
   updatedAt?: Date;
@@ -21,6 +22,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
+  public category!: string;  // Category added here
   public userId!: string;  // UUID type for User ID
 
   // Readonly timestamps provided by Sequelize
@@ -60,6 +62,10 @@ Service.init(
     },
     price: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    category: {  // Added category field
+      type: DataTypes.STRING,
       allowNull: false,
     },
     userId: {

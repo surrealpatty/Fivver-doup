@@ -1,13 +1,10 @@
 import { Request, Response } from 'express'; // Import types for Express
 import Service from '../models/services'; // Ensure the correct path to the Service model
+import { UserPayload } from '../types'; // Import UserPayload from a central place, if applicable
 
-// User payload structure from authentication middleware (assuming it is set somewhere)
-interface UserPayload {
-  id: string;
-}
-
+// Ensure req.user is correctly typed
 interface ServiceRequest extends Request {
-  user?: UserPayload; // Ensure req.user is correctly typed
+  user?: UserPayload; // Ensure user is correctly typed
 }
 
 // 1. Create a Service
@@ -36,9 +33,12 @@ export const createService = async (req: ServiceRequest, res: Response) => {
     });
 
     return res.status(201).json(newService); // Return the newly created service
-  } catch (error) {
-    console.error('Error creating service:', error);
-    return res.status(500).json({ message: 'Error creating service', error: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error creating service:', error.message);
+      return res.status(500).json({ message: 'Error creating service', error: error.message });
+    }
+    return res.status(500).json({ message: 'Unknown error creating service' });
   }
 };
 
@@ -58,9 +58,12 @@ export const getServices = async (req: Request, res: Response) => {
       : await Service.findAll();
 
     return res.status(200).json(services); // Return the list of services
-  } catch (error) {
-    console.error('Error fetching services:', error);
-    return res.status(500).json({ message: 'Error fetching services', error: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error fetching services:', error.message);
+      return res.status(500).json({ message: 'Error fetching services', error: error.message });
+    }
+    return res.status(500).json({ message: 'Unknown error fetching services' });
   }
 };
 
@@ -81,9 +84,12 @@ export const updateService = async (req: ServiceRequest, res: Response) => {
     await service.update({ title, description, price, category });
 
     return res.status(200).json(service); // Return the updated service
-  } catch (error) {
-    console.error('Error updating service:', error);
-    return res.status(500).json({ message: 'Error updating service', error: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error updating service:', error.message);
+      return res.status(500).json({ message: 'Error updating service', error: error.message });
+    }
+    return res.status(500).json({ message: 'Unknown error updating service' });
   }
 };
 
@@ -103,8 +109,11 @@ export const deleteService = async (req: ServiceRequest, res: Response) => {
     await service.destroy();
 
     return res.status(200).json({ message: 'Service deleted successfully' }); // Return success message
-  } catch (error) {
-    console.error('Error deleting service:', error);
-    return res.status(500).json({ message: 'Error deleting service', error: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error deleting service:', error.message);
+      return res.status(500).json({ message: 'Error deleting service', error: error.message });
+    }
+    return res.status(500).json({ message: 'Unknown error deleting service' });
   }
 };
