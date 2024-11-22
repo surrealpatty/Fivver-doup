@@ -78,3 +78,4 @@ export const checkAuth = (
   // User is authenticated, proceed to the next middleware or route handler
   next();
 };
+

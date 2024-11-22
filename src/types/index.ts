@@ -1,3 +1,5 @@
+// src/types/index.ts
+
 // IUserAttributes interface for model instances (used after the user is created)
 export interface IUserAttributes {
   id: string;         // UUID or unique identifier for the user
