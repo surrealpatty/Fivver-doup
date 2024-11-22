@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { Order } from '../models';
+import Order from '../models/order'; // Corrected import
+
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -13,7 +14,13 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
       });
     }
 
-    if (isNaN(userId) || isNaN(serviceId) || isNaN(quantity) || isNaN(totalPrice)) {
+    // Convert inputs to numbers
+    const parsedUserId = parseInt(userId, 10);
+    const parsedServiceId = parseInt(serviceId, 10);
+    const parsedQuantity = parseInt(quantity, 10);
+    const parsedTotalPrice = parseFloat(totalPrice);
+
+    if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
       return res.status(400).json({
         message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
         error: 'ValidationError',
@@ -22,10 +29,10 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
 
     // Create the new order
     const order = await Order.create({
-      userId,
-      serviceId,
-      quantity,
-      totalPrice,
+      userId: parsedUserId,
+      serviceId: parsedServiceId,
+      quantity: parsedQuantity,
+      totalPrice: parsedTotalPrice,
     });
 
     // Respond with the created order
@@ -93,7 +100,13 @@ export const updateOrder = async (req: Request, res: Response): Promise<Response
       });
     }
 
-    if (isNaN(userId) || isNaN(serviceId) || isNaN(quantity) || isNaN(totalPrice)) {
+    // Convert inputs to numbers
+    const parsedUserId = parseInt(userId, 10);
+    const parsedServiceId = parseInt(serviceId, 10);
+    const parsedQuantity = parseInt(quantity, 10);
+    const parsedTotalPrice = parseFloat(totalPrice);
+
+    if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
       return res.status(400).json({
         message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.',
         error: 'ValidationError',
@@ -110,7 +123,12 @@ export const updateOrder = async (req: Request, res: Response): Promise<Response
     }
 
     // Update the order
-    await order.update({ userId, serviceId, quantity, totalPrice });
+    await order.update({
+      userId: parsedUserId,
+      serviceId: parsedServiceId,
+      quantity: parsedQuantity,
+      totalPrice: parsedTotalPrice,
+    });
 
     return res.status(200).json({
       message: 'Order updated successfully.',

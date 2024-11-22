@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import defineUser from './user';  // Import User model definition
-import defineService from './services';  // Import Service model definition
-import defineReview from './review';  // Import Review model definition
+import { defineUser } from './user';  // Corrected to named import
+import { defineService } from './services';  // Corrected to named import
+import { defineReview } from './review';  // Corrected to named import
 
 // Initialize Sequelize with configuration
 const sequelize = new Sequelize({
@@ -13,9 +13,9 @@ const sequelize = new Sequelize({
 });
 
 // Define the models using their respective definition functions
-const User = defineUser(sequelize, DataTypes);  // User model definition
-const Service = defineService(sequelize, DataTypes);  // Service model definition
-const Review = defineReview(sequelize, DataTypes);  // Review model definition
+const User = defineUser(sequelize, DataTypes);  // Ensure defineUser returns a function that takes sequelize and DataTypes
+const Service = defineService(sequelize, DataTypes);  // Ensure defineService returns a function that takes sequelize and DataTypes
+const Review = defineReview(sequelize, DataTypes);  // Ensure defineReview returns a function that takes sequelize and DataTypes
 
 // Define associations (relationships) between models
 User.hasMany(Service, { foreignKey: 'userId', as: 'services' });  // One User can have many Services
@@ -69,4 +69,3 @@ export type Models = typeof models;
 export interface IUserCreationAttributes extends Optional<IUser, 'id'> {}
 export interface IServiceCreationAttributes extends Optional<IService, 'id'> {}
 export interface IReviewCreationAttributes extends Optional<IReview, 'id'> {}
-
