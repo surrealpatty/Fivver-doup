@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 // IUserAttributes interface for model instances (used after the user is created)
 export interface IUserAttributes {
   id: string;         // UUID or unique identifier for the user
@@ -16,8 +14,9 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
 }
 
 // UserPayload interface for user-related data passed with the request (e.g., JWT)
+// Allow `email` and `username` to be optional in the payload
 export interface UserPayload {
-  id: string;         // The user's ID
+  id: string;         // The user's ID (required)
   email?: string;     // The user's email (optional)
   username?: string;  // The user's username (optional)
 }
