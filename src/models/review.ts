@@ -1,55 +1,60 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
-import sequelize from '../config/database';  // Ensure this points to your Sequelize instance
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import User from './user';  // Assuming User model is in user.ts
+import Service from './services';  // Assuming Service model is in services.ts
 
-// Define the Review model interface for type safety
-export interface IReview {
-  id: number;
-  serviceId: string;
-  userId: string;
-  rating: number;
-  comment: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// Define the Review model class
-export class Review extends Model<IReview> implements IReview {
-  public id!: number;
-  public serviceId!: string;
-  public userId!: string;
-  public rating!: number;
-  public comment!: string;
-  public createdAt!: Date;
-  public updatedAt!: Date;
-}
-
-// Initialize the Review model
-Review.init(
-  {
-    serviceId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,  // Pass the sequelize instance
-    modelName: 'Review',
-    tableName: 'reviews',
-    timestamps: true,  // Sequelize will automatically handle createdAt and updatedAt
+const defineReview = (sequelize: Sequelize) => {
+  class Review extends Model {
+    public id!: number;
+    public rating!: number;
+    public comment!: string;
+    public serviceId!: number;
+    public userId!: string;
   }
-);
 
-// Export the Review model for use elsewhere
-export default Review;
+  Review.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      comment: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      serviceId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+          model: 'services',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Review',
+      tableName: 'reviews',
+      timestamps: true,
+      underscored: true,
+    }
+  );
+
+  return Review;
+};
+
+export default defineReview;  // Default export

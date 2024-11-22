@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
-import defineUser from './user';  // Default import
-import defineService from './services';  // Default import
-import defineReview from './review';  // Default import
+import defineUser from './user';  // Default import, assuming it's exported as a default function
+import defineService from './services';  // Default import, assuming it's exported as a default function
+import defineReview from './review';  // Default import, assuming it's exported as a default function
 
 // Initialize Sequelize instance
 const sequelize = new Sequelize({
