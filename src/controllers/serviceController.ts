@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user';  // Named import for User model
-import { Service } from '../models/services';  // Ensure Service model is imported
+import  Service  from '../models/services';  // Ensure Service model is imported
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined
@@ -8,8 +7,13 @@ interface AuthRequest extends Request {
   user?: UserPayload; // user is optional, can be undefined
 }
 
-// Example function for getting a service profile
-export const getServiceProfile = async (req: AuthRequest, res: Response) => {
+/**
+ * Get the service profile for the authenticated user.
+ * @param req - Request object, including user information from JWT.
+ * @param res - Response object.
+ * @returns The service data or an error message.
+ */
+export const getServiceProfile = async (req: AuthRequest, res: Response): Promise<Response> => {
   try {
     // Check if the user object exists on the request
     const user = req.user;
@@ -22,12 +26,12 @@ export const getServiceProfile = async (req: AuthRequest, res: Response) => {
     // Extract userId from user object
     const userId = user.id;
 
-    // Fetch the service associated with the userId (ensure this is the correct model)
-    const service = await Service.findOne({ where: { userId: userId } });  // Assuming Service model has a userId field
+    // Fetch the service associated with the userId (ensure this is the correct model field)
+    const service = await Service.findOne({ where: { userId: userId } });  // Assuming 'userId' links to User
 
     // Check if service exists
     if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+      return res.status(404).json({ message: 'Service not found for the given user' });
     }
 
     // Send back the service data
@@ -37,6 +41,6 @@ export const getServiceProfile = async (req: AuthRequest, res: Response) => {
     console.error('Error fetching service profile:', error);
 
     // Return a generic error message
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error fetching service profile' });
   }
 };

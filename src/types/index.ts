@@ -16,11 +16,11 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
 }
 
 // UserPayload interface for user-related data passed with the request (e.g., JWT)
-// Allow `email` and `username` to be optional in the payload
+// Make `email` and `username` required for the authenticated request context
 export interface UserPayload {
   id: string;         // The user's ID (required)
-  email?: string;     // The user's email (optional)
-  username?: string;  // The user's username (optional)
+  email: string;      // The user's email (required)
+  username: string;   // The user's username (required)
 }
 
 // Optionally, you could assert that `email` and `username` are never `undefined` in the request context
@@ -28,4 +28,3 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
   user?: UserPayload; // `user` is optional, can be `undefined`
 }
-
