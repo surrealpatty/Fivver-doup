@@ -1,4 +1,4 @@
-
+{
   "compilerOptions": {
     "target": "ES2020",                         // Target modern JavaScript features
     "module": "CommonJS",                       // Use CommonJS for Node.js
@@ -36,4 +36,4 @@
     "**/*.test.ts",                             // Exclude test files (modify if needed)
     "**/*.spec.ts"                              // Exclude spec files (modify if needed)
   ]
-
+}
