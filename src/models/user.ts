@@ -34,9 +34,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
   // Static method to define associations
   public static associate(models: { Service: typeof Service }) {
-    // User can have many services
+    // A user can have many services
     User.hasMany(models.Service, {
-      foreignKey: 'userId',  // Foreign key reference
+      foreignKey: 'userId',  // Foreign key in the services table
       as: 'services',        // Alias for the relationship
     });
   }

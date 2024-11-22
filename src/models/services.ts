@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional, Association } from 'sequelize';
-import { sequelize } from '../config/database';  // Named import
+import { sequelize } from '../config/database';  // Named import for sequelize instance
 import User from './user';  // Import the associated User model
 
 // Define the attributes for the Service model
@@ -8,7 +8,7 @@ interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
-  userId: string;  // Updated to string to match UUID type
+  userId: string;  // UUID type for User ID
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,7 +21,7 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public title!: string;
   public description!: string;
   public price!: number;
-  public userId!: string;  // Updated to string to match UUID type
+  public userId!: string;  // UUID type for User ID
 
   // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
@@ -63,19 +63,19 @@ Service.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.UUID,  // Updated to UUID to match the User model
+      type: DataTypes.UUID,  // UUID for User ID
       allowNull: false,
       references: {
-        model: 'users',  // Ensure it matches the User table name
+        model: 'users',  // Reference to the User table
         key: 'id',
       },
       onDelete: 'CASCADE',  // Ensures cascading deletes when a user is deleted
     },
   },
   {
-    sequelize,          // Sequelize instance
+    sequelize,           // Sequelize instance
     modelName: 'Service', // Model name
-    tableName: 'services', // Table name in the DB
+    tableName: 'services', // Table name
     timestamps: true,     // Sequelize will handle createdAt and updatedAt
     underscored: true,    // Use snake_case for column names in the DB
   }

@@ -1,6 +1,4 @@
-// src/models/service.d.ts
-
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional, Association } from 'sequelize';
 
 // Define the attributes for the Service model
 export interface ServiceAttributes {
@@ -8,16 +6,25 @@ export interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
-  userId: number;  // Assuming userId is a number (foreign key to User model)
+  userId: string;  // userId is a string (UUID) as per your Service model
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // Define the creation attributes interface (excluding `id`)
-export type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>
+export type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
 
 // Define the Service instance, which includes both the attributes and model methods
-export interface ServiceInstance extends Model<ServiceAttributes, ServiceCreationAttributes>, ServiceAttributes {}
+export interface ServiceInstance extends Model<ServiceAttributes, ServiceCreationAttributes>, ServiceAttributes {
+  // Add any instance methods if necessary here
+}
 
-// Define the Service model, which is a `Model` of the `ServiceInstance`
-declare const Service: Model<ServiceAttributes, ServiceCreationAttributes>;
+// Declare the Service model, which is a `Model` of the `ServiceInstance`
+declare const Service: Model<ServiceAttributes, ServiceCreationAttributes> & {
+  // Define the associations property
+  associations: {
+    user: Association<ServiceInstance, User>;  // Reference to the User model
+  };
+};
 
 export default Service;
