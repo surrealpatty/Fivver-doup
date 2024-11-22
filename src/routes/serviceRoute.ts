@@ -16,7 +16,7 @@ const router = express.Router();
  * POST /services
  * Route to create a new service
  */
-router.post('/services', async (req: Request<{}, {}, ServiceCreationBody>, res: Response) => {
+router.post('/services', async (req: Request<{}, {}, ServiceCreationBody, {}>, res: Response) => {
   const { userId, title, description, price } = req.body;
 
   try {
