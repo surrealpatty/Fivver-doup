@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { Order } from '../models'; // Ensure 'Order' is a named export
-
+import { Order } from '../models';
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   try {
