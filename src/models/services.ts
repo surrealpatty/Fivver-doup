@@ -5,7 +5,8 @@ export interface ServiceAttributes {
     id: number;
     userId: string;
     title: string;
-    description?: string;  // description is optional
+    description?: string;  // Optional description
+    price: number;  // Add price to the attributes
 }
 
 // Define the creation attributes for the Service model
@@ -19,6 +20,7 @@ export default (sequelize: Sequelize) => {
         public userId!: string;
         public title!: string;
         public description?: string;
+        public price!: number;  // Define price as part of the Service model
 
         // Define any additional instance methods or hooks here if necessary
     }
@@ -41,6 +43,10 @@ export default (sequelize: Sequelize) => {
             description: {
                 type: DataTypes.TEXT,
                 allowNull: true, // Since description is optional
+            },
+            price: {
+                type: DataTypes.DECIMAL,  // Price should be a number
+                allowNull: false,  // Price is required
             },
         },
         {
