@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user'; // Ensure the path is correct
+import User from '../models/user'; // Ensure the correct model path
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

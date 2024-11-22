@@ -4,7 +4,7 @@ import Service from './services';  // Import associated models
 
 // Define the User model interface
 interface UserAttributes {
-  id: string;  // Changed to string to match UUID
+  id: string;  // UUID for the user ID
   username: string;
   email: string;
   password: string;
@@ -36,7 +36,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public static associate(models: { Service: typeof Service }) {
     // User can have many services
     User.hasMany(models.Service, {
-      foreignKey: 'userId',  // Adjust based on your schema
+      foreignKey: 'userId',  // Foreign key reference
       as: 'services',        // Alias for the relationship
     });
   }
@@ -60,12 +60,12 @@ User.init(
       unique: true,
     },
     password: {
-      type: DataTypes.STRING,  // Add the password field to the model
+      type: DataTypes.STRING,  // Password field type
       allowNull: false,
     },
     isPaid: {
-      type: DataTypes.BOOLEAN, // Define isPaid as a boolean
-      defaultValue: false,     // Set default value to false
+      type: DataTypes.BOOLEAN, // isPaid field type (boolean)
+      defaultValue: false,     // Default to false (free user)
     },
   },
   {
@@ -73,7 +73,7 @@ User.init(
     modelName: 'User', // Model name
     tableName: 'users', // Table name in DB
     underscored: true,  // Use snake_case for column names
-    timestamps: true,   // Sequelize handles timestamps automatically
+    timestamps: true,   // Automatically manage timestamps
   }
 );
 

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import Service from '../models/services'; // Assuming the correct model file
-import User from '../models/user'; // Assuming the correct model file
+import Service from '../models/services'; // Correct model import path
+import User from '../models/user'; // Correct model import path
 
 // Define types for request body for service creation
 interface ServiceCreationBody {

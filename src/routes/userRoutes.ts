@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
-import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure this is typed correctly
+import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure this is correctly typed
 import User from '../models/user';
 
 // Define the UserPayload interface to match the expected structure of the authenticated user
