@@ -81,5 +81,4 @@ Service.init(
   }
 );
 
-// Export default for easy imports
 export default Service;

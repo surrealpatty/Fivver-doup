@@ -6,7 +6,7 @@ import Service from './services';  // Import Service model as a named import
 // Define the attributes for the Review model
 export interface ReviewAttributes {
   id: number;
-  userId: number;
+  userId: string;  // Updated to string (UUID)
   serviceId: number;
   rating: number;
   comment: string;
@@ -19,7 +19,7 @@ export type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
 
 class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
   public id!: number;
-  public userId!: number;
+  public userId!: string;  // UUID for userId
   public serviceId!: number;
   public rating!: number;
   public comment!: string;
@@ -52,7 +52,7 @@ Review.init(
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.UUID,  // Updated to UUID to match the User model
       allowNull: false,
       references: {
         model: 'users',  // Ensure 'users' is the correct table name

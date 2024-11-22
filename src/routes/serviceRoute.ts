@@ -1,7 +1,6 @@
-// src/routes/serviceRoute.ts
 import express, { Request, Response } from 'express';
-import Service from '../models/services'; // Corrected import for clarity
-import User from '../models/user'; // Corrected import for clarity
+import Service from '../models/services'; // Assuming the correct model file
+import User from '../models/user'; // Assuming the correct model file
 
 // Define types for request body for service creation
 interface ServiceCreationBody {

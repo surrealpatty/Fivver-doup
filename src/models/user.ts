@@ -4,11 +4,11 @@ import Service from './services';  // Import associated models
 
 // Define the User model interface
 interface UserAttributes {
-  id: number;
+  id: string;  // Changed to string to match UUID
   username: string;
   email: string;
-  password: string; // Add password to UserAttributes interface
-  isPaid: boolean;  // Add isPaid to UserAttributes
+  password: string;
+  isPaid: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -16,13 +16,12 @@ interface UserAttributes {
 // Define the User creation attributes interface (without id)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User class
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
+  public id!: string;  // UUID for the user ID
   public username!: string;
   public email!: string;
-  public password!: string; // Add password field
-  public isPaid!: boolean;  // Add isPaid field
+  public password!: string;
+  public isPaid!: boolean;
 
   // Readonly timestamps provided by Sequelize
   public readonly createdAt!: Date;
@@ -41,16 +40,14 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
       as: 'services',        // Alias for the relationship
     });
   }
-
-  // You can add instance methods or virtuals here if needed
 }
 
 // Initialize the User model with the sequelize instance
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
+      type: DataTypes.UUID,  // UUID type for user ID
+      defaultValue: DataTypes.UUIDV4,  // Automatically generate UUID
       primaryKey: true,
     },
     username: {

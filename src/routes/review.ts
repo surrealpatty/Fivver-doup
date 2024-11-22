@@ -4,8 +4,8 @@ import {
     getReviewsForService,
     updateReview,
     deleteReview
-} from '../controllers/reviewController.js'; // Ensure the correct import path for your controllers
-import authMiddleware from '../middlewares/authMiddleware.js'; // Correct import path for authMiddleware
+} from '../controllers/reviewController'; // Assuming reviewController.js is in controllers folder
+import authMiddleware from '../middlewares/authMiddleware'; // Ensure correct import path
 
 const router = express.Router();
 
@@ -26,4 +26,4 @@ router.get('/health', (req, res) => {
     res.json({ message: 'Reviews route is working!' });
 });
 
-export default router; // Use ES module export
+export default router; 
