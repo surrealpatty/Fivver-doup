@@ -11,7 +11,7 @@ interface UserPayload extends JwtPayload {
 // Augment the Request interface to include the `user` property
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: UserPayload;
+    user?: UserPayload;  // User information will be attached to the request object
   }
 }
 
@@ -71,6 +71,7 @@ export const checkAuth = (
   res: Response,
   next: NextFunction
 ): Response<any, Record<string, any>> | void => {
+  // Check if `user` exists on the request object (i.e., token has been authenticated)
   if (!req.user) {
     return res.status(401).json({ message: 'User is not authenticated' });
   }
@@ -78,4 +79,3 @@ export const checkAuth = (
   // User is authenticated, proceed to the next middleware or route handler
   next();
 };
-

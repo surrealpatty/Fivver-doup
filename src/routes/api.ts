@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';  // Import Router, Request, and Response from express
-import Service from '../models/services';  // Ensure the Service model is correctly imported
-import User from '../models/user';  // Import the User model
-import { ServiceCreationAttributes } from '../models/services';  // Import the type for Service creation
+import { Router, Request, Response } from 'express';
+import { Service, User } from '../models';  // Correct the import paths to your models
+import { ServiceCreationAttributes } from '../models/services';  // Import the type for service creation
+import { checkAuth } from '../middlewares/authMiddleware';  // Import the authentication middleware
 
 const router = Router();  // Initialize the router
 
@@ -9,7 +9,7 @@ const router = Router();  // Initialize the router
  * POST /services
  * Route to create a new service
  */
-router.post('/', async (req: Request, res: Response): Promise<Response> => {  // Updated path to match '/api'
+router.post('/services', checkAuth, async (req: Request, res: Response): Promise<Response> => {  // Ensure checkAuth middleware is used
   try {
     // Destructure and type the incoming request body
     const { userId, title, description, price }: ServiceCreationAttributes = req.body;
@@ -30,8 +30,8 @@ router.post('/', async (req: Request, res: Response): Promise<Response> => {  //
       });
     }
 
-    // Check if the user exists
-    const user = await User.findByPk(userId);
+    // Check if the user exists (We can get userId from req.user after checkAuth middleware)
+    const user = await User.findByPk(userId); // Corrected the import of User model
     if (!user) {
       return res.status(404).json({
         message: `User with ID ${userId} not found.`,
