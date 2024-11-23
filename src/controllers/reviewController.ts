@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import Review from '../models/review';  // Default import for Review model
+import Review from '../models/review'; // Default import for Review model
 import { User, Service } from '../models'; // Named imports for other models
-import { checkAuth } from '../middlewares/authMiddleware'; 
+import { checkAuth } from '../middlewares/authMiddleware'; // Middleware for authentication
 
 // Middleware to ensure user is authenticated
-export const ensureAuthenticated = checkAuth; 
+export const ensureAuthenticated = checkAuth;
 
 // Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
