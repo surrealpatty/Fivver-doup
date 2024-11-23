@@ -1,4 +1,4 @@
-import  sequelize  from '../config/database'; // Correctly import the named export `sequelize`
+import sequelize from '../config/database'; // Use default import
 
 // Mock User model methods
 jest.mock('../models/user', () => ({

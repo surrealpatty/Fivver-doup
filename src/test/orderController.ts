@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app } from '../index'; // or adjust the export in index.ts if needed
-import sequelize from '../config/database'; // Corrected import
+import sequelize from '../config/database'; // Use default import
 import Order from '../models/order'; // Correct import path for Order model
 import User from '../models/user'; // Correct import path for User model
 import Service from '../models/services'; // Correct import path for Service model
