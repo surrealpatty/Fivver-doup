@@ -83,4 +83,4 @@ if (NODE_ENV !== 'test') {
 }
 
 // Export Sequelize instance for use in models
-export { sequelize };  // Named export
+export { sequelize };
