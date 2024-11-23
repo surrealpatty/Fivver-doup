@@ -5,21 +5,18 @@ import { sequelize } from '../config/database';  // Correct import path for sequ
 
 // Define the attributes for the Service model
 export interface ServiceAttributes {
-  id: number;  // `id` is of type number (auto-incremented)
-  userId: string;  // Assuming the user ID is of type UUID (adjust if different)
+  id: number;
+  userId: string;
   title: string;
-  description?: string;  // Optional field for description
-  price: number;  // Price field for the service
-  category: string;  // Category field for service classification
-  createdAt: Date;  // Automatically added by Sequelize if enabled
-  updatedAt: Date;  // Automatically added by Sequelize if enabled
+  description?: string;
+  price: number;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// Define the creation attributes for the Service model
-// `id` is optional during creation, since it's auto-incremented
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the Service model
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public userId!: string;
@@ -29,45 +26,42 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public category!: string;
   public createdAt!: Date;
   public updatedAt!: Date;
-
-  // Add any additional instance methods or hooks here if necessary
 }
 
-// Initialize the model
 Service.init(
   {
     id: {
-      type: DataTypes.INTEGER,  // Use INTEGER for auto-incrementing ID
-      autoIncrement: true,  // Automatically increments for each new service
-      primaryKey: true,  // Set as the primary key for the table
+      type: DataTypes.INTEGER,  // Correct usage of DataTypes
+      autoIncrement: true,
+      primaryKey: true,
     },
     userId: {
-      type: DataTypes.UUID,  // Assuming the userId is UUID type, adjust as needed
-      allowNull: false,  // Cannot be null, as it is a foreign key
+      type: DataTypes.UUID,
+      allowNull: false,
     },
     title: {
-      type: DataTypes.STRING,  // Title of the service
-      allowNull: false,  // Title is required
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
-      type: DataTypes.TEXT,  // Description of the service, optional field
-      allowNull: true,  // Allow null values for optional description
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     price: {
-      type: DataTypes.FLOAT,  // Price field to store the service price
-      allowNull: false,  // Price is required
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
     category: {
-      type: DataTypes.STRING,  // Category field for the service
-      allowNull: false,  // Category is required
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
-    sequelize,  // Pass the sequelize instance from the config
-    modelName: 'Service',  // Model name for Sequelize
-    tableName: 'services',  // Corresponding table in the database
-    timestamps: true,  // Automatically add `createdAt` and `updatedAt` fields
+    sequelize,
+    modelName: 'Service',
+    tableName: 'services',
+    timestamps: true,
   }
 );
 
-export default Service;  // Ensure the Service model is exported correctly
+export default Service;
