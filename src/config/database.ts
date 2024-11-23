@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-// Define Sequelize instance
+// Define the Sequelize instance
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
@@ -10,4 +10,5 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
-export default sequelize;
+// Named export for sequelize instance
+export { sequelize };
