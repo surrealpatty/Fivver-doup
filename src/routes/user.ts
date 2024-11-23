@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user';  // Ensure the correct model path
+import User from '../models/user';  // Ensure correct model path
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -21,7 +21,16 @@ interface LoginRequestBody {
 // Check if the JWT_SECRET environment variable is set
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
-  console.error('JWT_SECRET is not set');
+  throw new Error('JWT_SECRET is not set');
+}
+
+// Helper function to generate JWT token
+const generateToken = (user: User): string => {
+  return jwt.sign(
+    { id: user.id, email: user.email, username: user.username },
+    jwtSecret,
+    { expiresIn: '1h' }
+  );
 }
 
 // Register a new user.
@@ -52,11 +61,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
     });
 
     // Generate a JWT token
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, username: newUser.username },
-      jwtSecret,
-      { expiresIn: '1h' }
-    );
+    const token = generateToken(newUser);
 
     // Send the response with the token
     return res.status(201).json({
@@ -97,11 +102,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
     }
 
     // Generate a JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email, username: user.username },
-      jwtSecret,
-      { expiresIn: '1h' }
-    );
+    const token = generateToken(user);
 
     // Send the response with the token
     return res.status(200).json({

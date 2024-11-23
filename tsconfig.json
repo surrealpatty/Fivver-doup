@@ -11,10 +11,10 @@
     "outDir": "./dist",                         // Directory for compiled output
     "rootDir": "./src",                         // Root directory for input files
     "types": ["node", "jest", "express"],       // Include specific global types
-    "allowJs": true,                            // Include JavaScript files in the compilation
-    "baseUrl": "./",                            // Base directory for module resolution
+    "allowJs": false,                           // If you don't need JS files, set to false
+    "baseUrl": "./src",                         // Base directory for module resolution
     "paths": {                                  // Path aliases for easy imports
-      "@/*": ["src/*"],                         // Simplified alias for imports from src
+      "@/*": ["*"],                             // Simplified alias for imports from src
       "*": ["node_modules/*", "src/*"]          // Default resolution for modules
     },
     "incremental": true,                        // Enable incremental compilation for faster builds
