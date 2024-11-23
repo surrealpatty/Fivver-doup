@@ -1,66 +1,41 @@
 // src/models/services.ts
 
-import * as DataTypes from 'sequelize';  // Importing DataTypes in this manner
-import { sequelize } from '../config/database';  // Correct import path for sequelize instance
+import { DataTypes, Model, Sequelize } from 'sequelize';
+import sequelize from '../config/database'; // Assuming sequelize instance is correctly exported
 
-// Define the attributes for the Service model
-export interface ServiceAttributes {
-  id: number;
-  userId: string;
-  title: string;
-  description?: string;
-  price: number;
-  category: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
-
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+// Define the Service model
+class Service extends Model {
   public id!: number;
   public userId!: string;
-  public title!: string;
-  public description?: string;
+  public description!: string;
   public price!: number;
-  public category!: string;
-  public createdAt!: Date;
-  public updatedAt!: Date;
 }
 
+// Initialize the Service model
 Service.init(
   {
     id: {
-      type: DataTypes.DataTypes.INTEGER,  // Correct usage of DataTypes when imported this way
-      autoIncrement: true,
+      type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     userId: {
-      type: DataTypes.DataTypes.UUID,
-      allowNull: false,
-    },
-    title: {
-      type: DataTypes.DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
-      type: DataTypes.DataTypes.TEXT,
-      allowNull: true,
-    },
-    price: {
-      type: DataTypes.DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    category: {
-      type: DataTypes.DataTypes.STRING,
+    price: {
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
   },
   {
-    sequelize,
-    modelName: 'Service',
-    tableName: 'services',
-    timestamps: true,
+    sequelize, // Pass the Sequelize instance
+    tableName: 'services', // Specify the table name
+    modelName: 'Service',  // Specify the model name
   }
 );
 

@@ -1,5 +1,4 @@
-// Import necessary modules
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 require('dotenv').config(); // Load environment variables from the .env file
 
 // Import the config object containing the database configurations for different environments
@@ -28,8 +27,13 @@ const testConnection = async () => {
     try {
         await sequelize.authenticate(); // Test the database connection
         console.log('Database connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error.message);
+    } catch (error: unknown) {
+        // Type assertion to treat 'error' as an instance of 'Error'
+        if (error instanceof Error) {
+            console.error('Unable to connect to the database:', error.message);
+        } else {
+            console.error('An unknown error occurred while connecting to the database');
+        }
         process.exit(1); // Exit the process if the connection fails
     }
 };
