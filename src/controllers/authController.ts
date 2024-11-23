@@ -28,12 +28,15 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Determine if the user is paid or not
+    const isPaid = role === 'paid'; // Default to false if 'paid' is not specified
+
     // Create a new user in the database
     const newUser = await User.create({
       email,
       password: hashedPassword,
       username,
-      isPaid: role === 'paid', // Assume 'paid' role means paid user
+      isPaid, // Set 'isPaid' based on role
     });
 
     // Generate a JWT token
@@ -97,7 +100,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
         id: user.id,
         email: user.email,
         username: user.username,
-        isPaid: user.isPaid,
+        isPaid: user.isPaid, // Ensure 'isPaid' exists on user model
       },
     });
   } catch (error) {

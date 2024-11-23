@@ -1,4 +1,4 @@
-import { Model, Optional } from 'sequelize';
+import { Model } from 'sequelize';
 
 // Define the generic type for the model attributes
 export default class BaseModel<T> extends Model<T> {
