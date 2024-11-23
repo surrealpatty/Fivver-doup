@@ -1,8 +1,7 @@
-// Import necessary modules
-const { registerUser, loginUser } = require('../src/controllers/userController');
-const sequelize = require('../src/config/database'); // Import sequelize (don't redeclare it)
-const User = require('../src/models/user'); // Import User model
-const Service = require('../src/models/services'); // Import Service model
+import { registerUser, loginUser } from '../src/controllers/userController';
+import sequelize from '../src/config/database'; // Use the correct sequelize instance
+import User from '../src/models/user'; // Import User model
+import Service from '../src/models/services'; // Import Service model
 
 console.log('User functions loaded successfully.');
 
