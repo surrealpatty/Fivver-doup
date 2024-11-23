@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../index'; // Ensure this import points to the correct entry point for your app
-import { sequelize } from '../config/database'; // Ensure sequelize instance is correctly imported
+import { app } from '../index'; // or adjust the export in index.ts if needed
+import sequelize from '../config/database'; // Corrected import
 import Order from '../models/order'; // Correct import path for Order model
 import User from '../models/user'; // Correct import path for User model
 import Service from '../models/services'; // Correct import path for Service model
@@ -18,7 +18,7 @@ const mockDestroy = jest.fn();
 
 // Extend the models with mock methods
 (User.findByPk as jest.Mock) = mockFindByPk;
-(Service.findByPk as jest.Mock) = mockFindByPk;
+(Service.findByPk as jest.Mock).mockImplementation(mockFindByPk);
 (Order.findByPk as jest.Mock) = mockFindByPk;
 (Order.findAll as jest.Mock) = mockFindAll;
 

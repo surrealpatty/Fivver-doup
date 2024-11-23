@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user'; // Named import for User model
+import  User  from '../models/user'; // Named import for User model
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined

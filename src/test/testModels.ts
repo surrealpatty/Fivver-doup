@@ -1,7 +1,7 @@
-import { registerUser, loginUser } from '../src/controllers/userController';
-import sequelize from '../src/config/database'; // Use the correct sequelize instance
-import User from '../src/models/user'; // Import User model
-import Service from '../src/models/services'; // Import Service model
+import { registerUser, loginUser } from '../controllers/userController'; // Correct import from userController
+import sequelize from '../config/database'; // Correct import path for sequelize
+import User from '../models/user'; // Correct import path for user model
+import Service from '../models/services'; // Correct import path for services model
 
 console.log('User functions loaded successfully.');
 

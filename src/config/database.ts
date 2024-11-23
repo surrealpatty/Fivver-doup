@@ -1,3 +1,5 @@
+// src/config/database.ts
+
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
@@ -83,4 +85,4 @@ if (NODE_ENV !== 'test') {
 }
 
 // Export Sequelize instance for use in models
-export default sequelize;
+export { sequelize };  // Named export

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user';  // Ensure correct model path
+import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -16,11 +16,10 @@ interface LoginRequestBody {
   password: string;
 }
 
-// Helper function to generate JWT token
-const generateToken = (user: User): string => {
+const generateToken = (user: typeof User): string => {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    throw new Error('JWT_SECRET is not set'); // Gracefully handle missing secret
+    throw new Error('JWT_SECRET is not set');
   }
 
   return jwt.sign(
@@ -37,32 +36,26 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
   const { email, password, username, role } = req.body;
 
   try {
-    // Validate the incoming data
     if (!email || !password || !username) {
       return res.status(400).json({ message: 'Please provide email, password, and username.' });
     }
 
-    // Check if the user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use.' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user in the database
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
-      role: role || 'user', // Default to 'user' if role is not provided
+      role: role || 'user',
     });
 
-    // Generate a JWT token
     const token = generateToken(newUser);
 
-    // Send the response with the token
     return res.status(201).json({
       message: 'User registered successfully',
       token,
@@ -83,27 +76,22 @@ router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Respon
   const { email, password } = req.body;
 
   try {
-    // Validate the incoming data
     if (!email || !password) {
       return res.status(400).json({ message: 'Please provide email and password.' });
     }
 
-    // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: 'User not found.' });
     }
 
-    // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid credentials.' });
     }
 
-    // Generate a JWT token
     const token = generateToken(user);
 
-    // Send the response with the token
     return res.status(200).json({
       message: 'Login successful',
       token,
