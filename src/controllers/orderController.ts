@@ -81,7 +81,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
 /**
  * READ: Get all orders
  */
-export const getAllOrders = async (req: Request, res: Response): Promise<Response> => {
+export const getAllOrders = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const orders = await Order.findAll();
     return res.status(200).json(orders);
