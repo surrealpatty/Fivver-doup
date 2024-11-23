@@ -1,12 +1,25 @@
-// src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import { sequelize } from '../config/database';  // Import the sequelize instance
-import OrderModel from '../models/order';  // Import the factory function
+import { sequelize } from '../config/database';  // Corrected import (named import)
+import Order from '../models/order';  // Import the initialized Order model
 
-// Call the factory function to initialize the model
-const Order = OrderModel(sequelize);
+// Basic input validation for creating an order
+const validateOrderInput = (userId: string, serviceId: string, quantity: string, totalPrice: string) => {
+  const errors: string[] = [];
+  
+  if (!userId || isNaN(parseInt(userId))) errors.push('Invalid or missing user ID.');
+  if (!serviceId || isNaN(parseInt(serviceId))) errors.push('Invalid or missing service ID.');
+  if (!quantity || isNaN(parseInt(quantity)) || parseInt(quantity) <= 0) errors.push('Invalid quantity.');
+  if (!totalPrice || isNaN(parseFloat(totalPrice)) || parseFloat(totalPrice) <= 0) errors.push('Invalid total price.');
 
-// CREATE: Add a new order
+  return {
+    isValid: errors.length === 0,
+    message: errors.join(' ') || '',
+  };
+};
+
+/**
+ * CREATE: Add a new order
+ */
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
   const { userId, serviceId, quantity, totalPrice, orderDetails, status = 'Pending' } = req.body;
 
@@ -37,7 +50,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
 
     // Create the new order
     const order = await Order.create({
-      userId: parsedUserId.toString(),
+      userId: parsedUserId,
       serviceId: parsedServiceId,
       quantity: parsedQuantity,
       totalPrice: parsedTotalPrice,
