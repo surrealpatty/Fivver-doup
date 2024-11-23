@@ -7,6 +7,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
     const { serviceId, rating, comment } = req.body;
     const userId = req.user?.id; // Ensure user ID is available from the token
 
+    // Validate required fields
     if (!serviceId || typeof rating !== 'number' || !comment) {
         return res.status(400).json({
             message: 'Service ID, rating, and comment are required',
@@ -14,6 +15,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
+    // Ensure the user is authenticated
     if (!userId) {
         return res.status(401).json({
             message: 'Unauthorized',
@@ -83,6 +85,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
     const { rating, comment } = req.body;
     const userId = req.user?.id;
 
+    // Ensure the user is authenticated
     if (!userId) {
         return res.status(401).json({
             message: 'Unauthorized',
@@ -90,6 +93,7 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
+    // Ensure that at least one field is provided for update
     if (!rating && !comment) {
         return res.status(400).json({
             message: 'At least one of rating or comment is required to update',
@@ -102,10 +106,12 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
             return res.status(404).json({ message: 'Review not found' });
         }
 
+        // Ensure the user can only update their own review
         if (review.userId !== userId) {
             return res.status(403).json({ message: 'You can only update your own review' });
         }
 
+        // Update review fields only if they are provided
         review.rating = rating ?? review.rating;
         review.comment = comment ?? review.comment;
         await review.save();
@@ -128,6 +134,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
     const { reviewId } = req.params;
     const userId = req.user?.id;
 
+    // Ensure the user is authenticated
     if (!userId) {
         return res.status(401).json({
             message: 'Unauthorized',
@@ -141,6 +148,7 @@ export const deleteReview = async (req: Request, res: Response): Promise<Respons
             return res.status(404).json({ message: 'Review not found' });
         }
 
+        // Ensure the user can only delete their own review
         if (review.userId !== userId) {
             return res.status(403).json({ message: 'You can only delete your own review' });
         }
