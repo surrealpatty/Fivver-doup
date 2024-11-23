@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { sequelize } from '../config/database'; // Ensure the sequelize instance is correctly imported
 import Order from '../models/order'; // Import the initialized Order model
 
 // Basic input validation for creating an order

@@ -1,17 +1,12 @@
 import { Request, Response } from 'express';
 import Review from '../models/review'; // Default import for Review model
 import { User, Service } from '../models'; // Named imports for other models
-import { checkAuth } from '../middlewares/authMiddleware'; // Middleware for authentication
-
-// Middleware to ensure user is authenticated
-export const ensureAuthenticated = checkAuth;
 
 // Create a Review
 export const createReview = async (req: Request, res: Response): Promise<Response> => {
     const { serviceId, rating, comment } = req.body;
-    const userIdAsString = req.user?.id; // Ensure user ID is available from the token
+    const userId = req.user?.id; // Ensure user ID is available from the token
 
-    // Validate input data
     if (!serviceId || typeof rating !== 'number' || !comment) {
         return res.status(400).json({
             message: 'Service ID, rating, and comment are required',
@@ -19,10 +14,10 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         });
     }
 
-    if (!userIdAsString) {
-        return res.status(400).json({
-            message: 'Invalid userId',
-            error: 'User ID must be provided',
+    if (!userId) {
+        return res.status(401).json({
+            message: 'Unauthorized',
+            error: 'User must be authenticated to create a review',
         });
     }
 
@@ -36,7 +31,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
         // Create the review
         const review = await Review.create({
             serviceId,
-            userId: userIdAsString,
+            userId,
             rating,
             comment,
         });
@@ -59,13 +54,12 @@ export const getReviewsForService = async (req: Request, res: Response): Promise
     const { serviceId } = req.params;
 
     try {
-        // Fetch reviews for the given service ID
         const reviews = await Review.findAll({
             where: { serviceId },
             include: [
                 {
                     model: User,
-                    attributes: ['id', 'username', 'email'], // Select specific user attributes
+                    attributes: ['id', 'username', 'email'], // Fetch specific user attributes
                 },
             ],
         });
@@ -87,18 +81,15 @@ export const getReviewsForService = async (req: Request, res: Response): Promise
 export const updateReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params;
     const { rating, comment } = req.body;
+    const userId = req.user?.id;
 
-    const user = req.user; // User object from the JWT token
-    if (!user || !user.id) {
+    if (!userId) {
         return res.status(401).json({
             message: 'Unauthorized',
             error: 'User not authenticated',
         });
     }
 
-    const userIdAsString = user.id; // Ensure user ID is a string
-
-    // Ensure that at least one of the fields (rating or comment) is provided for updating
     if (!rating && !comment) {
         return res.status(400).json({
             message: 'At least one of rating or comment is required to update',
@@ -106,18 +97,15 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
     }
 
     try {
-        // Fetch the review to update
         const review = await Review.findByPk(reviewId);
         if (!review) {
             return res.status(404).json({ message: 'Review not found' });
         }
 
-        // Check if the review belongs to the authenticated user
-        if (review.userId !== userIdAsString) {
+        if (review.userId !== userId) {
             return res.status(403).json({ message: 'You can only update your own review' });
         }
 
-        // Update the review with provided values (or keep existing values if not provided)
         review.rating = rating ?? review.rating;
         review.comment = comment ?? review.comment;
         await review.save();
@@ -138,30 +126,25 @@ export const updateReview = async (req: Request, res: Response): Promise<Respons
 // Delete a Review
 export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
     const { reviewId } = req.params;
+    const userId = req.user?.id;
 
-    const user = req.user; // User object from the JWT token
-    if (!user || !user.id) {
+    if (!userId) {
         return res.status(401).json({
             message: 'Unauthorized',
             error: 'User not authenticated',
         });
     }
 
-    const userIdAsString = user.id; // Ensure user ID is a string
-
     try {
-        // Fetch the review to delete
         const review = await Review.findByPk(reviewId);
         if (!review) {
             return res.status(404).json({ message: 'Review not found' });
         }
 
-        // Check if the review belongs to the authenticated user
-        if (review.userId !== userIdAsString) {
+        if (review.userId !== userId) {
             return res.status(403).json({ message: 'You can only delete your own review' });
         }
 
-        // Delete the review
         await review.destroy();
 
         return res.status(200).json({
