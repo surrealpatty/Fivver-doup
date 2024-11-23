@@ -1,85 +1,111 @@
+// src/controllers/userController.ts
 import { Request, Response } from 'express';
-import User from '../models/user'; // Named import for User model
-import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/user'; // Adjust path if needed
 
-// Extend the Request interface to include the user object, which may be undefined
-interface AuthRequest extends Request {
-  user?: UserPayload; // user is optional, can be undefined
+// Ensure JWT_SECRET exists
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  console.error('JWT_SECRET is not set');
 }
 
-// Example function for getting a user profile
-export const getUserProfile = async (req: AuthRequest, res: Response) => {
+// Register a new user
+export const registerUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, password, username, role } = req.body;
+
   try {
-    // Check if the user object exists on the request
-    const user = req.user;
-
-    // If the user object is undefined or userId is not available, return an error
-    if (!user || !user.id || typeof user.id !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing User ID in request' });
+    // Validate required fields
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'Please provide email, password, and username.' });
     }
 
-    // Extract userId from the user object
-    const userId = user.id;
-
-    // Fetch the user from the database using the userId
-    const foundUser = await User.findByPk(userId);  // Use the Sequelize findByPk method
-
-    // Check if the user exists
-    if (!foundUser) {
-      return res.status(404).json({ message: 'User not found' });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use.' });
     }
 
-    // Send back the user data (in case it's a user model instance, convert to plain object if necessary)
-    return res.json(foundUser.toJSON()); // .toJSON() converts Sequelize instance to plain object
-  } catch (error) {
-    // Log the error for debugging purposes
-    console.error('Error fetching user profile:', error);
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Return a generic error message
-    return res.status(500).json({ message: 'Internal server error' });
-  }
-};
+    // Determine if the user is paid or not
+    const isPaid = role === 'paid'; // Default to false if 'paid' is not specified
 
-// Example function for registering a user
-export const registerUser = async (userData: { username: string; email: string; password: string }) => {
-  try {
-    // Ensure the user data is valid and non-empty
-    if (!userData.username || !userData.email || !userData.password) {
-      throw new Error('All fields (username, email, password) are required');
-    }
+    // Create a new user in the database
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      username,
+      role: isPaid ? 'paid' : 'free', // Ensure role is correctly assigned
+    });
 
-    // Create the user in the database
-    const newUser = await User.create(userData);
-    
-    // Return the newly created user
-    return newUser;
+    // Generate a JWT token
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email, username: newUser.username },
+      jwtSecret,
+      { expiresIn: '1h' }
+    );
+
+    // Return user info and token
+    return res.status(201).json({
+      message: 'User registered successfully.',
+      token,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+        isPaid: newUser.isPaid, // Access the computed 'isPaid' value
+      },
+    });
   } catch (error) {
     console.error('Error registering user:', error);
-    throw new Error('User registration failed');
+    return res.status(500).json({ message: 'Server error during user registration.' });
   }
 };
 
-// Example function for logging in a user
-export const loginUser = async (email: string, password: string) => {
+// Login an existing user
+export const loginUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, password } = req.body;
+
   try {
-    // Fetch the user by email
+    // Validate incoming data
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password.' });
+    }
+
+    // Find the user by email
     const user = await User.findOne({ where: { email } });
-
     if (!user) {
-      throw new Error('User not found');
+      return res.status(400).json({ message: 'User not found.' });
     }
 
-    // Compare the password (assuming you have a method to check passwords)
-    const isPasswordValid = await user.checkPassword(password); // Assuming checkPassword method exists in User model
-
+    // Compare the password with the stored hash
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error('Invalid password');
+      return res.status(400).json({ message: 'Invalid credentials.' });
     }
 
-    // Return the user (you might want to return a token or other user info)
-    return user;
+    // Generate a JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, username: user.username },
+      jwtSecret,
+      { expiresIn: '1h' }
+    );
+
+    // Return the token and user info
+    return res.status(200).json({
+      message: 'Login successful.',
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        isPaid: user.isPaid, // Access the computed 'isPaid' value
+      },
+    });
   } catch (error) {
     console.error('Error logging in user:', error);
-    throw new Error('User login failed');
+    return res.status(500).json({ message: 'Server error during user login.' });
   }
 };
