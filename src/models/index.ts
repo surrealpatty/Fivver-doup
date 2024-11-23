@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import reviewsRouter from './reviews';  // Import the reviews router
+import reviewsRouter from './routes/reviews';
 import userRouter from './user';  // Import the user router
-import serviceRouter from './servicesRoute';  // Import the services router
+import serviceRouter from './routes/servicesRoute';  // Import the services router
 
 // Create an instance of the router
 const router = express.Router();

@@ -1,4 +1,7 @@
-import { User, Service, Order } from './index'; // Import models after they are defined
+export { User } from './user'; // Ensure User is properly exported
+export { Service } from './service'; // Ensure Service is properly exported
+export { Order } from './order'; // Ensure Order is properly exported
+
 
 // Define associations between the models
 const defineAssociations = () => {

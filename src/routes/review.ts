@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, RequestHandler } from 'express';
 import {
   createReview,
   getReviewsForService,
@@ -10,16 +10,16 @@ import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure cor
 const router = express.Router();
 
 // Route to create a new review (requires authentication)
-router.post('/', authenticateToken, createReview);
+router.post('/', authenticateToken, createReview as RequestHandler);
 
 // Route to get reviews for a specific service
-router.get('/:serviceId', getReviewsForService);
+router.get('/:serviceId', getReviewsForService as RequestHandler);
 
 // Route to update a review (requires authentication)
-router.put('/:reviewId', authenticateToken, updateReview);
+router.put('/:reviewId', authenticateToken, updateReview as RequestHandler);
 
 // Route to delete a review (requires authentication)
-router.delete('/:reviewId', authenticateToken, deleteReview);
+router.delete('/:reviewId', authenticateToken, deleteReview as RequestHandler);
 
 // Optional: Health check or confirmation route
 router.get('/health', (req: Request, res: Response): Response => {
