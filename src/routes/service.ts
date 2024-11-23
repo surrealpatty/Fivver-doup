@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { Service } from '../models'; // Import the Service model
-import { checkAuth } from '../middleware/authMiddleware'; // Ensure correct import for auth middleware
+import { checkAuth } from '../middleware/authMiddleware'; // Correct import for auth middleware
 
 const router = Router();
 
@@ -19,6 +19,15 @@ router.post('/services', checkAuth, async (req: Request, res: Response): Promise
   }
 
   try {
+    // Ensure userId is available before creating the service
+    if (!userId) {
+      res.status(400).json({
+        message: 'User ID is missing or invalid',
+        error: 'Authentication required',
+      });
+      return;
+    }
+
     // Create a new service entry
     const service = await Service.create({
       userId, // The user creating the service
@@ -110,6 +119,15 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
   }
 
   try {
+    // Ensure userId is available before attempting to update the service
+    if (!userId) {
+      res.status(400).json({
+        message: 'User ID is missing or invalid',
+        error: 'Authentication required',
+      });
+      return;
+    }
+
     // Find the service by ID
     const service = await Service.findByPk(id);
 
@@ -128,7 +146,7 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
       return; // Ensure no further processing
     }
 
-    // Update the service with the new values
+    // Update the service with the new values (only the provided fields)
     if (title) service.title = title;
     if (description) service.description = description;
     if (price) service.price = price;
@@ -154,6 +172,15 @@ router.delete('/services/:id', checkAuth, async (req: Request, res: Response): P
   const userId = req.user?.id; // Get user ID from the authenticated user
 
   try {
+    // Ensure userId is available before attempting to delete the service
+    if (!userId) {
+      res.status(400).json({
+        message: 'User ID is missing or invalid',
+        error: 'Authentication required',
+      });
+      return;
+    }
+
     // Find the service by ID
     const service = await Service.findByPk(id);
 

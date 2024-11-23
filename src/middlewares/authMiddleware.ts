@@ -1,77 +1,46 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+// src/controllers/serviceController.ts
 
-// Define the expected structure of the decoded JWT payload
-interface UserPayload extends JwtPayload {
-  id: string;
-  email: string;
-  username: string;
+import { Request, Response } from 'express';
+import Service from '../models/services';  // Ensure Service model is correctly imported
+import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
+
+// Extend the Request interface to include the user object, which may be undefined
+interface AuthRequest extends Request {
+  user?: UserPayload; // user is optional, can be undefined
 }
 
-// Extend the Request interface to include the `user` property
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: UserPayload;
-  }
-}
-
-// Middleware to authenticate the token
-export const authenticateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+/**
+ * Get the service profile for the authenticated user.
+ * @param req - Request object, including user information from JWT.
+ * @param res - Response object.
+ * @returns The service data or an error message.
+ */
+export const getServiceProfile = async (req: AuthRequest, res: Response): Promise<Response> => {
   try {
-    // Extract the token from the Authorization header
-    const authorizationHeader = req.headers['authorization'];
+    // Ensure user object exists and has a valid id
+    const user = req.user;
 
-    // Check if the header exists and starts with "Bearer"
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    if (!user || !user.id || typeof user.id !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing User ID in request' });
     }
 
-    const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
+    const userId = user.id;
 
-    // Check if the token is present
-    if (!token) {
-      return res.status(401).json({ message: 'Authorization token is missing' });
+    // Attempt to fetch the service linked to the userId
+    const service = await Service.findOne({ where: { userId } });
+
+    // If no service is found for the given userId, return a 404 error
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found for the given user' });
     }
 
-    const jwtSecret = process.env.JWT_SECRET;
-
-    // Ensure the JWT_SECRET is configured in the environment variables
-    if (!jwtSecret) {
-      console.error('JWT_SECRET is not configured in the environment variables');
-      return res.status(500).json({ message: 'Internal server error: Missing JWT_SECRET' });
-    }
-
-    // Verify the token and decode the payload
-    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
-
-    // Attach the user data from the decoded token to the request object
-    req.user = decoded;
-
-    // Proceed to the next middleware or route handler
-    next();
+    // If the service is found, return it in the response
+    return res.json(service);
   } catch (error) {
-    console.error('Token authentication failed:', error);
+    // Log detailed error for debugging
+    console.error('Error fetching service profile:', error);
 
-    // Handle token verification errors
-    res.status(403).json({ message: 'Invalid or expired token' });
+    // Return a generic server error response
+    return res.status(500).json({ message: 'Internal server error fetching service profile' });
   }
-};
-
-// Middleware to check if the user is authenticated
-export const checkAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  // Check if `user` exists on the request object (i.e., token has been authenticated)
-  if (!req.user) {
-    return res.status(401).json({ message: 'User is not authenticated' });
-  }
-
-  // User is authenticated, proceed to the next middleware or route handler
-  next();
 };
