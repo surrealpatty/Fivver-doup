@@ -1,6 +1,4 @@
-import { Model } from 'sequelize';
-import { Optional } from 'sequelize/types';
-
+import { Model, Optional } from 'sequelize/types'; // Correct import for Optional from sequelize/types
 
 // Base model attributes interface for common fields like 'id', 'createdAt', and 'updatedAt'
 export interface BaseModelAttributes {
@@ -13,6 +11,10 @@ export interface BaseModelAttributes {
 export interface BaseModelCreationAttributes extends Optional<BaseModelAttributes, 'id'> {}
 
 // BaseModel class definition
-export default class BaseModel<TAttributes, TCreationAttributes> extends Model<TAttributes, TCreationAttributes> {
-  static associate?(models: any): void; // Method to define model associations, if needed
+export default class BaseModel<
+  TAttributes extends BaseModelAttributes,
+  TCreationAttributes extends BaseModelCreationAttributes
+> extends Model<TAttributes, TCreationAttributes> {
+  static associate?(models: any): void; // Method for defining associations if needed
 }
+
