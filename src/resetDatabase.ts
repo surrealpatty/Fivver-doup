@@ -1,4 +1,4 @@
-import { sequelize } from './config/database'; // Import sequelize instance
+import sequelize from './config/database'; // Use default import
 
 // Function to reset the database
 const resetDatabase = async (): Promise<void> => {
