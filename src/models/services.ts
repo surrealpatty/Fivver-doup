@@ -1,7 +1,7 @@
 // src/models/services.ts
 
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';  // Correct imports from Sequelize
-import { sequelize } from '../config/database';  // Correct import path for sequelize
+import { sequelize } from '../config/database';  // Correct import path for sequelize instance
 
 // Define the attributes for the Service model
 export interface ServiceAttributes {
@@ -9,8 +9,10 @@ export interface ServiceAttributes {
   userId: string;  // Assuming the user ID is of type UUID (adjust if different)
   title: string;
   description?: string;  // Optional field for description
-  price: number;  // Price field
+  price: number;  // Price field for the service
   category: string;  // Category field for service classification
+  createdAt: Date;  // Automatically added by Sequelize if enabled
+  updatedAt: Date;  // Automatically added by Sequelize if enabled
 }
 
 // Define the creation attributes for the Service model
@@ -40,7 +42,7 @@ Service.init(
       primaryKey: true,  // Set as the primary key for the table
     },
     userId: {
-      type: DataTypes.UUID,  // Assuming the userId is UUID type
+      type: DataTypes.UUID,  // Assuming the userId is UUID type, adjust as needed
       allowNull: false,  // Cannot be null, as it is a foreign key
     },
     title: {
@@ -62,9 +64,9 @@ Service.init(
   },
   {
     sequelize,  // Pass the sequelize instance from the config
-    modelName: 'Service',  // Model name
+    modelName: 'Service',  // Model name for Sequelize
     tableName: 'services',  // Corresponding table in the database
-    timestamps: true,  // Enable automatic `createdAt` and `updatedAt` fields
+    timestamps: true,  // Automatically add `createdAt` and `updatedAt` fields
   }
 );
 

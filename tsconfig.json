@@ -10,7 +10,7 @@
     "resolveJsonModule": true,                   // Allow importing JSON files as modules
     "outDir": "./dist",                          // Directory for compiled output
     "rootDir": "./src",                          // Root directory for input files
-    "types": ["node", "jest", "express"],        // Include global types for node, jest, express
+    "types": ["node", "jest", "express", "sequelize"], // Include global types for node, jest, express, and sequelize
     "allowJs": false,                            // If you don't need JS files, set to false
     "baseUrl": "./src",                          // Base directory for module resolution
     "paths": {                                   // Path aliases for easy imports
