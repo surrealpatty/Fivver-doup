@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user';
+import User from '../models/user';   // Adjust path if necessary
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -32,8 +32,8 @@ const generateToken = (user: User): string => {
 const router = express.Router();
 
 // Register a new user.
-router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
-  const { email, password, username, role } = req.body;
+router.post('/register', async (req: Request, res: Response) => {
+  const { email, password, username, role }: RegisterRequestBody = req.body;
 
   try {
     if (!email || !password || !username) {
@@ -73,8 +73,8 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
 });
 
 // Login an existing user.
-router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-  const { email, password } = req.body;
+router.post('/login', async (req: Request, res: Response) => {
+  const { email, password }: LoginRequestBody = req.body;
 
   try {
     if (!email || !password) {

@@ -1,7 +1,7 @@
 import express from 'express';
-import { sequelize } from './config/database'; // Fixed path for sequelize (assuming it's in src/config/database.ts)
-import { User } from './models/user';  // Fixed path for User model (assuming it's in src/models/user.ts)
-import userRouter from './routes/user'; // Fixed path for userRouter (assuming it's in src/routes/user.ts)
+import { sequelize } from './config/database'; // Path to the sequelize instance
+import { User } from './models/user';  // Path to the User model
+import userRouter from './routes/user'; // Path to userRouter
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,8 +32,8 @@ User.findAll()  // Fetch users as a test
     console.error('Error fetching users:', error);
   });
 
-// Use the userRouter for routes starting with /users
-app.use('/users', userRouter);  // Adjusted route to match the use of userRouter
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', userRouter);  // Register the user routes under /api/users
 
 // Start the server
 app.listen(port, () => {
