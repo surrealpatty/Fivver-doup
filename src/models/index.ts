@@ -1,20 +1,23 @@
-import express, { Request, Response } from 'express';
-import reviewsRouter from './routes/reviews';
-import userRouter from './user';  // Import the user router
-import serviceRouter from './routes/servicesRoute';  // Import the services router
+import { Sequelize } from 'sequelize';
+import User from './user';  // Import the User model
+import Service from './service';  // Import the Service model
+import Review from './review';  // Import the Review model
 
-// Create an instance of the router
-const router = express.Router();
-
-// Define routes
-router.use('/api/reviews', reviewsRouter);  // Use reviews router for /api/reviews endpoint
-router.use('/api/users', userRouter);  // Use user router for /api/users endpoint
-router.use('/api/services', serviceRouter);  // Use services router for /api/services endpoint
-
-// Optional: Health check route
-router.get('/health', (_req: Request, res: Response) => {
-  res.json({ message: 'API is running' });
+// Create an instance of Sequelize (make sure to adjust the database connection details as needed)
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: 'localhost', // Adjust as necessary
+  database: 'fivver_doup', // Adjust as necessary
+  username: 'root', // Adjust as necessary
+  password: 'password', // Adjust as necessary
 });
 
-// Export the router
-export default router;
+// Define associations between models (if required)
+User.hasMany(Review, { foreignKey: 'userId' });
+Review.belongsTo(User, { foreignKey: 'userId' });
+
+Service.hasMany(Review, { foreignKey: 'serviceId' });
+Review.belongsTo(Service, { foreignKey: 'serviceId' });
+
+// Export all models and the sequelize instance
+export { sequelize, User, Service, Review };
