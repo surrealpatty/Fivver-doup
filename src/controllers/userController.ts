@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import  User  from '../models/user'; // Named import for User model
+import User from '../models/user'; // Named import for User model
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined
@@ -37,5 +37,49 @@ export const getUserProfile = async (req: AuthRequest, res: Response) => {
 
     // Return a generic error message
     return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Example function for registering a user
+export const registerUser = async (userData: { username: string; email: string; password: string }) => {
+  try {
+    // Ensure the user data is valid and non-empty
+    if (!userData.username || !userData.email || !userData.password) {
+      throw new Error('All fields (username, email, password) are required');
+    }
+
+    // Create the user in the database
+    const newUser = await User.create(userData);
+    
+    // Return the newly created user
+    return newUser;
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw new Error('User registration failed');
+  }
+};
+
+// Example function for logging in a user
+export const loginUser = async (email: string, password: string) => {
+  try {
+    // Fetch the user by email
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Compare the password (assuming you have a method to check passwords)
+    const isPasswordValid = await user.checkPassword(password); // Assuming checkPassword method exists in User model
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid password');
+    }
+
+    // Return the user (you might want to return a token or other user info)
+    return user;
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    throw new Error('User login failed');
   }
 };

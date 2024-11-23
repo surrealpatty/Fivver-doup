@@ -1,5 +1,5 @@
-import { registerUser, loginUser } from '../controllers/userController'; // Correct import from userController
-import sequelize from '../config/database'; // Correct import path for sequelize
+import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
+import { sequelize } from '../config/database'; // Correct import path for sequelize
 import User from '../models/user'; // Correct import path for user model
 import Service from '../models/services'; // Correct import path for services model
 
