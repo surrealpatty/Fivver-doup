@@ -17,15 +17,15 @@ export interface ReviewAttributes {
 export type ReviewCreationAttributes = Optional<ReviewAttributes, 'id'>;
 
 declare class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
-  public id!: number;
-  public userId!: string;  // UUID for userId
-  public serviceId!: number;
-  public rating!: number;
-  public comment!: string;
+  public id: number;
+  public userId: string;  // UUID for userId
+  public serviceId: number;
+  public rating: number;
+  public comment: string;
 
   // Readonly timestamps provided by Sequelize
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 
   // Define associations between models (use static method)
   public static associations: {

@@ -13,6 +13,6 @@ export interface BaseModelAttributes {
 export interface BaseModelCreationAttributes extends Optional<BaseModelAttributes, 'id'> {}
 
 // BaseModel class definition
-export default class BaseModel<TAttributes, TCreationAttributes> extends Model<TAttributes, TCreationAttributes> { 
+export default class BaseModel<TAttributes, TCreationAttributes> extends Model<TAttributes, TCreationAttributes> {
   static associate?(models: any): void; // Method to define model associations, if needed
 }

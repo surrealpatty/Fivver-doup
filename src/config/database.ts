@@ -1,11 +1,13 @@
 import { Sequelize } from 'sequelize';
 
+// Define Sequelize instance
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
   username: 'root',
-  password: '',
-  database: 'fiverr_clone',
+  password: 'password',
+  database: 'fivver_doup',
+  logging: false,
 });
 
-export { sequelize };  // Named export
+export default sequelize;
