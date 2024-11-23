@@ -15,6 +15,7 @@
     "baseUrl": "./src",                          // Base directory for module resolution
     "paths": {                                   // Path aliases for easy imports
       "@/*": ["*"],                              // Simplified alias for imports from src
+      "@config/*": ["config/*"],                  // Alias for the config directory
       "*": ["node_modules/*", "src/*"]           // Default resolution for modules
     },
     "incremental": true,                         // Enable incremental compilation for faster builds
