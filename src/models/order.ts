@@ -1,7 +1,6 @@
-// src/models/order.ts
-
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Correctly import sequelize from the config
+import { Model, Optional } from 'sequelize';
+import sequelize from '../config/database'; // Correctly import the sequelize instance
+import * as Sequelize from 'sequelize'; // Import all Sequelize exports
 
 // Define the attributes for the Order model
 export interface OrderAttributes {
@@ -25,23 +24,24 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
     // You can add instance methods or hooks here if necessary
 }
 
+// Initialize the Order model with Sequelize
 Order.init(
     {
         id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.DataTypes.INTEGER, // Use DataTypes from the imported `Sequelize`
             primaryKey: true,
             autoIncrement: true,
         },
         userId: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.DataTypes.INTEGER, // Use DataTypes from the imported `Sequelize`
             allowNull: false,
         },
         serviceId: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.DataTypes.INTEGER, // Use DataTypes from the imported `Sequelize`
             allowNull: false,
         },
         status: {
-            type: DataTypes.STRING,
+            type: Sequelize.DataTypes.STRING, // Use DataTypes from the imported `Sequelize`
             allowNull: false,
         },
     },

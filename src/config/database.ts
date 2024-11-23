@@ -1,5 +1,3 @@
-// src/config/database.ts
-
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
@@ -24,7 +22,7 @@ declare global {
 const {
     DB_HOST = 'localhost',
     DB_USER = 'root',
-    DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',  // Use actual password or make it configurable
+    DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',  // Make sure to change to a secure password
     DB_NAME = 'fivver_doup',
     DB_PORT = '3306',
     NODE_ENV = 'development',
