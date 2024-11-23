@@ -1,6 +1,6 @@
 // Import necessary modules
 const { registerUser, loginUser } = require('../src/controllers/userController');
-const sequelize = require('../src/config/database'); // Ensure the path to the Sequelize instance is correct
+const sequelize = require('../src/config/database'); // Import sequelize (don't redeclare it)
 const User = require('../src/models/user'); // Import User model
 const Service = require('../src/models/services'); // Import Service model
 
@@ -14,7 +14,7 @@ Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 const testUserAndServiceModels = async () => {
   try {
     // Synchronize models with the database (use `force: true` cautiously for testing)
-    await sequelize.sync({ force: true }); 
+    await sequelize.sync({ force: true });
 
     // Test User Creation
     const newUser = await User.create({
