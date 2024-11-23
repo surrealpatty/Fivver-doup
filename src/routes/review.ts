@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';  // Import express and types for request and response
+import express, { Request, Response } from 'express';
 import {
-    createReview,
-    getReviewsForService,
-    updateReview,
-    deleteReview
-} from '../controllers/reviewController'; // Assuming reviewController.ts is in controllers folder
+  createReview,
+  getReviewsForService,
+  updateReview,
+  deleteReview
+} from '../controllers/reviewController'; // Ensure correct import path
 import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure correct import path
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.delete('/:reviewId', authenticateToken, deleteReview);
 
 // Optional: Health check or confirmation route
 router.get('/health', (req: Request, res: Response): Response => {
-    return res.json({ message: 'Reviews route is working!' });
+  return res.json({ message: 'Reviews route is working!' });
 });
 
 export default router;
