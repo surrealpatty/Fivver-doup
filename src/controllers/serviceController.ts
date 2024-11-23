@@ -1,7 +1,6 @@
 // src/controllers/serviceController.ts
-
 import { Request, Response } from 'express';
-import Service from '../models/services';  // Correct import of the Service model
+import Service from '../models/services';
 import { UserPayload } from '../types';  // Correctly import UserPayload interface
 
 // Define the AuthRequest interface extending the Request object to include user info
