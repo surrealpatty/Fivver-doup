@@ -27,16 +27,14 @@ export const authenticateToken = (
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      res.status(401).json({ message: 'Authorization token is missing or invalid' });
-      return; // Stop further processing
+      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
     }
 
     const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
 
     // Check if the token is present
     if (!token) {
-      res.status(401).json({ message: 'Authorization token is missing' });
-      return; // Stop further processing
+      return res.status(401).json({ message: 'Authorization token is missing' });
     }
 
     const jwtSecret = process.env.JWT_SECRET;
@@ -44,8 +42,7 @@ export const authenticateToken = (
     // Ensure the JWT_SECRET is configured in the environment variables
     if (!jwtSecret) {
       console.error('JWT_SECRET is not configured in the environment variables');
-      res.status(500).json({ message: 'Internal server error' });
-      return; // Stop further processing
+      return res.status(500).json({ message: 'Internal server error: Missing JWT_SECRET' });
     }
 
     // Verify the token and decode the payload
@@ -72,8 +69,7 @@ export const checkAuth = (
 ): void => {
   // Check if `user` exists on the request object (i.e., token has been authenticated)
   if (!req.user) {
-    res.status(401).json({ message: 'User is not authenticated' });
-    return; // Stop further processing
+    return res.status(401).json({ message: 'User is not authenticated' });
   }
 
   // User is authenticated, proceed to the next middleware or route handler

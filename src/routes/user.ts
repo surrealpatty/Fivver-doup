@@ -3,8 +3,6 @@ import User from '../models/user';  // Ensure correct model path
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const router = express.Router();
-
 // Define the expected shape of request body for TypeScript
 interface RegisterRequestBody {
   email: string;
@@ -18,20 +16,21 @@ interface LoginRequestBody {
   password: string;
 }
 
-// Check if the JWT_SECRET environment variable is set
-const jwtSecret = process.env.JWT_SECRET;
-if (!jwtSecret) {
-  throw new Error('JWT_SECRET is not set');
-}
-
 // Helper function to generate JWT token
 const generateToken = (user: User): string => {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error('JWT_SECRET is not set'); // Gracefully handle missing secret
+  }
+
   return jwt.sign(
     { id: user.id, email: user.email, username: user.username },
     jwtSecret,
     { expiresIn: '1h' }
   );
-}
+};
+
+const router = express.Router();
 
 // Register a new user.
 router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<Response> => {
