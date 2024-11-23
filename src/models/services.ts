@@ -1,6 +1,6 @@
 // src/models/services.ts
 
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';  // Correct imports from Sequelize
+import * as DataTypes from 'sequelize';  // Importing DataTypes in this manner
 import { sequelize } from '../config/database';  // Correct import path for sequelize instance
 
 // Define the attributes for the Service model
@@ -31,28 +31,28 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
 Service.init(
   {
     id: {
-      type: DataTypes.INTEGER,  // Correct usage of DataTypes
+      type: DataTypes.DataTypes.INTEGER,  // Correct usage of DataTypes when imported this way
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.UUID,
+      type: DataTypes.DataTypes.UUID,
       allowNull: false,
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.DataTypes.STRING,
       allowNull: false,
     },
     description: {
-      type: DataTypes.TEXT,
+      type: DataTypes.DataTypes.TEXT,
       allowNull: true,
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DataTypes.FLOAT,
       allowNull: false,
     },
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.DataTypes.STRING,
       allowNull: false,
     },
   },
