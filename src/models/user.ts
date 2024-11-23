@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { sequelize } from '../config/database'; // Import sequelize instance
+import { sequelize } from '../config/database'; // Import the sequelize instance
 
 // Interface defining the attributes of the User model
 export interface UserAttributes {
@@ -28,13 +28,13 @@ class User extends Model<UserAttributes> implements UserAttributes {
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'free' })
   public role!: string; // Role field (default 'free')
 
-  // Define the isPaid getter
+  // Define the `isPaid` getter
   get isPaid(): boolean {
     return this.role === 'paid'; // If the role is 'paid', return true
   }
 }
 
-// Initialize the User model (no need to manually define `id` here)
+// Initialize the User model (no need to manually define 'id' here)
 User.init(
   {
     username: { type: DataType.STRING, allowNull: false },
@@ -45,4 +45,4 @@ User.init(
   { sequelize, modelName: 'User' }
 );
 
-export default User; // Default export of the User model
+export default User; // Export the User model as the default export
