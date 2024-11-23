@@ -5,7 +5,7 @@ import { User } from '../models'; // Import the User model to fetch user data
 const router = express.Router();
 
 // Route to fetch the user's profile data
-router.get('/', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
+router.get('/', authenticateToken, async (req: Request, res: Response) => {
   // Ensure the user is correctly assigned from the token middleware
   const userId = req.user?.id; // Use userId from the token
 

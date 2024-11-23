@@ -13,7 +13,7 @@ const sequelize = new Sequelize({
 });
 
 // Define models using the factory functions (pass only `sequelize`)
-const User = defineUser(sequelize); // Define the User model
+const User = defineUser(sequelize);
 const Service = defineService(sequelize); // Define the Service model
 const Order = defineOrder(sequelize); // Define the Order model
 

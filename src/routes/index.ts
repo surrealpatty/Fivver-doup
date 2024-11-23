@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';  // Import express and the types for request and response
-import reviewsRouter from './reviews';  // Import the reviews router
+import reviewsRouter from './reviews';
 import userRouter from './user';  // Import the user router
 import serviceRouter from './servicesRoute';  // Import the services router
 

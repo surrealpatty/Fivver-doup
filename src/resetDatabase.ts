@@ -1,4 +1,4 @@
-import { sequelize } from '../config/database'; // Use named import instead of default
+import { sequelize } from '../config/database';
 
 
 // Function to reset the database

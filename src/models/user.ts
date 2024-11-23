@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import bcrypt from 'bcrypt';
 
 // Interface defining the attributes of the User model
 export interface UserAttributes {
@@ -34,6 +35,11 @@ class User extends Model<UserAttributes> implements UserAttributes {
   // Define the `isPaid` getter to determine if the user is a paid user
   get isPaid(): boolean {
     return this.role === 'paid';
+  }
+
+  // Method to check if the provided password matches the stored password (hashed)
+  checkPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password); // assuming password is hashed
   }
 }
 
