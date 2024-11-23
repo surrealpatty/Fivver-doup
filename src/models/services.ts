@@ -1,42 +1,19 @@
-// src/models/services.ts
-
-import { DataTypes, Model, Sequelize } from 'sequelize';
-import sequelize from '../config/database'; // Assuming sequelize instance is correctly exported
+import { Column, DataType, Model, Table } from 'sequelize-typescript';  // Adjust imports for sequelize-typescript
 
 // Define the Service model
+@Table({ tableName: 'services', timestamps: true })  // Add the @Table decorator
 class Service extends Model {
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   public id!: number;
+
+  @Column({ type: DataType.STRING, allowNull: false })
   public userId!: string;
+
+  @Column({ type: DataType.STRING, allowNull: false })
   public description!: string;
+
+  @Column({ type: DataType.FLOAT, allowNull: false })
   public price!: number;
 }
-
-// Initialize the Service model
-Service.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize, // Pass the Sequelize instance
-    tableName: 'services', // Specify the table name
-    modelName: 'Service',  // Specify the model name
-  }
-);
 
 export default Service;
