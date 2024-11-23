@@ -7,6 +7,7 @@ export interface UserAttributes {
   email: string;
   password: string;
   role?: string; // Optional role with a default value
+  bio?: string; // Optional bio field
 }
 
 // Sequelize model for the 'users' table
@@ -26,6 +27,9 @@ class User extends Model<UserAttributes> implements UserAttributes {
 
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'free' })
   public role!: string; // Role field (default 'free')
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  public bio?: string; // Optional bio field
 
   // Define the `isPaid` getter to determine if the user is a paid user
   get isPaid(): boolean {
