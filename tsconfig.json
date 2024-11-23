@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
     "target": "ES2020",                         // Target modern JavaScript features
-    "module": "CommonJS",                       // Use CommonJS for Node.js
-    "moduleResolution": "node",                 // Resolve modules like Node.js does
-    "strict": true,                             // Enable all strict type-checking options
-    "esModuleInterop": true,                    // Enable compatibility with ESModules
-    "skipLibCheck": true,                       // Skip type checking for declaration files
-    "forceConsistentCasingInFileNames": true,   // Enforce consistent casing in file names
-    "resolveJsonModule": true,                  // Allow importing JSON files as modules
-    "outDir": "./dist",                         // Directory for compiled output
-    "rootDir": "./src",                         // Root directory for input files
-    "types": ["node", "jest", "express"],       // Include specific global types
-    "allowJs": false,                           // If you don't need JS files, set to false
-    "baseUrl": "./src",                         // Base directory for module resolution
-    "paths": {                                  // Path aliases for easy imports
-      "@/*": ["*"],                             // Simplified alias for imports from src
-      "*": ["node_modules/*", "src/*"]          // Default resolution for modules
+    "module": "commonjs",                        // Use CommonJS for Node.js
+    "moduleResolution": "node",                  // Resolve modules like Node.js does
+    "strict": true,                              // Enable all strict type-checking options
+    "esModuleInterop": true,                     // Enable compatibility with ESModules
+    "skipLibCheck": true,                        // Skip type checking for declaration files
+    "forceConsistentCasingInFileNames": true,    // Enforce consistent casing in file names
+    "resolveJsonModule": true,                   // Allow importing JSON files as modules
+    "outDir": "./dist",                          // Directory for compiled output
+    "rootDir": "./src",                          // Root directory for input files
+    "types": ["node", "jest", "express"],        // Include global types for node, jest, express
+    "allowJs": false,                            // If you don't need JS files, set to false
+    "baseUrl": "./src",                          // Base directory for module resolution
+    "paths": {                                   // Path aliases for easy imports
+      "@/*": ["*"],                              // Simplified alias for imports from src
+      "*": ["node_modules/*", "src/*"]           // Default resolution for modules
     },
-    "incremental": true,                        // Enable incremental compilation for faster builds
-    "noImplicitAny": true,                      // Ensure all variables have explicit types
-    "noUnusedLocals": true,                     // Report errors on unused local variables
-    "noUnusedParameters": true,                 // Report errors on unused function parameters
-    "noImplicitReturns": true,                  // Ensure all code paths return a value
-    "noFallthroughCasesInSwitch": true,         // Prevent fallthrough in switch statements
+    "incremental": true,                         // Enable incremental compilation for faster builds
+    "noImplicitAny": true,                       // Ensure all variables have explicit types
+    "noUnusedLocals": true,                      // Report errors on unused local variables
+    "noUnusedParameters": true,                  // Report errors on unused function parameters
+    "noImplicitReturns": true,                   // Ensure all code paths return a value
+    "noFallthroughCasesInSwitch": true,          // Prevent fallthrough in switch statements
     "typeRoots": ["node_modules/@types", "src/types"] // Ensure custom types are picked up
   },
   "include": [

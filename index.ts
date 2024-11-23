@@ -1,12 +1,13 @@
 import express from 'express';
-import { sequelize } from './models/database';  // Adjust path if necessary
-import { User } from './models/user';  // Explicit import for User model
-import userRouter from './routes/user'; // Adjust path for userRouter
+import { sequelize } from './config/database'; // Fixed path for sequelize (assuming it's in src/config/database.ts)
+import { User } from './models/user';  // Fixed path for User model (assuming it's in src/models/user.ts)
+import userRouter from './routes/user'; // Fixed path for userRouter (assuming it's in src/routes/user.ts)
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());  // Middleware to parse JSON bodies
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Example route
 app.get('/', (req, res) => {
@@ -22,8 +23,8 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', error);
   });
 
-// Example of using the User model
-User.findAll()  // Fetch users (as a test)
+// Example of using the User model (as a test)
+User.findAll()  // Fetch users as a test
   .then(users => {
     console.log('Users:', users);
   })
@@ -31,12 +32,13 @@ User.findAll()  // Fetch users (as a test)
     console.error('Error fetching users:', error);
   });
 
-// Use the userRouter for routes starting with /user
-app.use('/user', userRouter);
+// Use the userRouter for routes starting with /users
+app.use('/users', userRouter);  // Adjusted route to match the use of userRouter
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-export { app };  // Export app for use in testing or elsewhere
+// Export app for use in testing or elsewhere
+export { app };
