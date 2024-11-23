@@ -1,18 +1,29 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';  // Adjust imports for sequelize-typescript
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-// Define the User model
-@Table({ tableName: 'users', timestamps: true })  // Use @Table decorator for the model
-class User extends Model {
+export interface UserAttributes {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+  role?: string; // optional field
+}
+
+@Table({ tableName: 'users', timestamps: true }) // Decorator to define the table and timestamp behavior
+class User extends Model<UserAttributes> implements UserAttributes {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   public id!: number;
+
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  public email!: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   public username!: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  public email!: string;
+  public password!: string;
 
-  // Other attributes can be added here in a similar manner...
+  @Column({ type: DataType.STRING, allowNull: true })
+  public role?: string;
 }
 
 export default User;  // Default export of the User model

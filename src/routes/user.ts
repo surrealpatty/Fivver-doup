@@ -16,7 +16,7 @@ interface LoginRequestBody {
   password: string;
 }
 
-const generateToken = (user: typeof User): string => {
+const generateToken = (user: User): string => {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
     throw new Error('JWT_SECRET is not set');
@@ -32,7 +32,7 @@ const generateToken = (user: typeof User): string => {
 const router = express.Router();
 
 // Register a new user.
-router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<Response> => {
+router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
   const { email, password, username, role } = req.body;
 
   try {
@@ -47,6 +47,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create the user instance
     const newUser = await User.create({
       username,
       email,
@@ -72,7 +73,7 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: 
 });
 
 // Login an existing user.
-router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response): Promise<Response> => {
+router.post('/login', async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
   const { email, password } = req.body;
 
   try {
