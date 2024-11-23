@@ -1,5 +1,6 @@
+// src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import Order from '../models/order'; // Corrected import
+import Order from '../models/order'; // Ensure this points to the correct Order model file
 
 // Helper function for validating order input
 const validateOrderInput = (userId: string, serviceId: string, quantity: string, totalPrice: string) => {
@@ -21,7 +22,7 @@ const validateOrderInput = (userId: string, serviceId: string, quantity: string,
 
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
-  const { userId, serviceId, quantity, totalPrice, orderDetails } = req.body;  // Destructure the orderDetails from request body
+  const { userId, serviceId, quantity, totalPrice, orderDetails } = req.body;
 
   try {
     const validation = validateOrderInput(userId, serviceId, quantity, totalPrice);
@@ -44,7 +45,7 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
     // Assuming that totalAmount should be the same as totalPrice
     const totalAmount = parsedTotalPrice; // Set totalAmount equal to totalPrice if that's the intention
 
-    // Create the new order
+    // Create the new order using Sequelize's create method
     const order = await Order.create({
       userId: parsedUserId.toString(), // Ensure userId is a string if it's expected as a string in your model
       serviceId: parsedServiceId, // serviceId might remain as number if that's how it's expected in the model

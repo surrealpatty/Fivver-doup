@@ -1,13 +1,17 @@
 import { DataTypes, Sequelize, Model } from 'sequelize';
 
-export default (sequelize: Sequelize) => {
-    class Order extends Model {
-        public id!: number;
-        public userId!: string;
-        public serviceId!: number;
-        public status!: string;
-    }
+// Define the Order model class
+class Order extends Model {
+    public id!: number;
+    public userId!: string;
+    public serviceId!: number;
+    public status!: string;
+    public createdAt!: Date;
+    public updatedAt!: Date;
+}
 
+export default (sequelize: Sequelize) => {
+    // Initialize the Order model
     Order.init(
         {
             id: {
