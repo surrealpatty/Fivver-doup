@@ -1,39 +1,19 @@
-// src/models/review.ts
+import { Column, DataType, Model, Table } from 'sequelize-typescript';  // Adjust imports for sequelize-typescript
 
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../config/database'; // Ensure you're importing sequelize instance
-
+// Define the Review model
+@Table({ tableName: 'reviews', timestamps: true })  // Use @Table decorator to specify the table name
 export class Review extends Model {
+  @Column({ type: DataType.STRING, allowNull: false })
   public serviceId!: string;
+
+  @Column({ type: DataType.STRING, allowNull: false })
   public userId!: string;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
   public rating!: number;
+
+  @Column({ type: DataType.TEXT, allowNull: false })
   public comment!: string;
 }
 
-Review.init(
-  {
-    serviceId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    comment: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'Review',
-    tableName: 'reviews',
-  }
-);
-
-export default Review;  // Make sure to export the Review model
+export default Review;  // Default export of the Review model
