@@ -1,5 +1,6 @@
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure correct path to database configuration
+// src/models/services.ts
+import { Sequelize, DataTypes, Model, Optional } from 'sequelize';  // Import from 'sequelize'
+import { sequelize } from '../config/database';  // Ensure correct path to database configuration
 
 // Define the attributes for the Service model
 export interface ServiceAttributes {
