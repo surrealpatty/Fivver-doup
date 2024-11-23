@@ -1,28 +1,14 @@
 // src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import Order from '../models/order'; // Ensure this points to the correct Order model file
+import { sequelize } from '../config/database';  // Import the sequelize instance
+import OrderModel from '../models/order';  // Import the factory function
 
-// Helper function for validating order input
-const validateOrderInput = (userId: string, serviceId: string, quantity: string, totalPrice: string) => {
-  if (!userId || !serviceId || !quantity || !totalPrice) {
-    return { isValid: false, message: 'Missing required fields: userId, serviceId, quantity, and totalPrice are mandatory.' };
-  }
-
-  const parsedUserId = parseInt(userId, 10);
-  const parsedServiceId = parseInt(serviceId, 10);
-  const parsedQuantity = parseInt(quantity, 10);
-  const parsedTotalPrice = parseFloat(totalPrice);
-
-  if (isNaN(parsedUserId) || isNaN(parsedServiceId) || isNaN(parsedQuantity) || isNaN(parsedTotalPrice)) {
-    return { isValid: false, message: 'Invalid input: userId, serviceId, quantity, and totalPrice must be numbers.' };
-  }
-
-  return { isValid: true };
-};
+// Call the factory function to initialize the model
+const Order = OrderModel(sequelize);
 
 // CREATE: Add a new order
 export const createOrder = async (req: Request, res: Response): Promise<Response> => {
-  const { userId, serviceId, quantity, totalPrice, orderDetails } = req.body;
+  const { userId, serviceId, quantity, totalPrice, orderDetails, status = 'Pending' } = req.body;
 
   try {
     const validation = validateOrderInput(userId, serviceId, quantity, totalPrice);
@@ -33,30 +19,33 @@ export const createOrder = async (req: Request, res: Response): Promise<Response
       });
     }
 
-    // Convert userId, serviceId, and quantity to integers where necessary
+    // Prepare data
     const parsedUserId = parseInt(userId, 10);
     const parsedServiceId = parseInt(serviceId, 10);
     const parsedQuantity = parseInt(quantity, 10);
     const parsedTotalPrice = parseFloat(totalPrice);
+    const totalAmount = parsedTotalPrice;
 
-    // Set the default status for the order
-    const status: 'Pending' | 'Completed' | 'Cancelled' = 'Pending';  // Default to 'Pending' if not specified
+    // Validate status
+    const validStatuses: Array<'Pending' | 'Completed' | 'Cancelled'> = ['Pending', 'Completed', 'Cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: 'Invalid order status. Allowed values are Pending, Completed, or Cancelled.',
+        error: 'InvalidStatusError',
+      });
+    }
 
-    // Assuming that totalAmount should be the same as totalPrice
-    const totalAmount = parsedTotalPrice; // Set totalAmount equal to totalPrice if that's the intention
-
-    // Create the new order using Sequelize's create method
+    // Create the new order
     const order = await Order.create({
-      userId: parsedUserId.toString(), // Ensure userId is a string if it's expected as a string in your model
-      serviceId: parsedServiceId, // serviceId might remain as number if that's how it's expected in the model
+      userId: parsedUserId.toString(),
+      serviceId: parsedServiceId,
       quantity: parsedQuantity,
-      totalPrice: parsedTotalPrice,  // Assuming totalPrice is the same as totalAmount
-      totalAmount: totalAmount,  // Add totalAmount here
-      orderDetails: orderDetails,   // Include orderDetails from the request body
-      status: status,               // Include the default status
+      totalPrice: parsedTotalPrice,
+      totalAmount: totalAmount,
+      orderDetails: orderDetails,
+      status: status,
     });
 
-    // Respond with the created order
     return res.status(201).json({
       message: 'Order created successfully.',
       order,
