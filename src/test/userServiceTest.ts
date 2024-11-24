@@ -1,6 +1,6 @@
 import { sequelize } from '../config/database';
 import User from '../models/user';
-import Service, { ServiceCreationAttributes } from '../models/services'; // Correct import
+import Service, { ServiceCreationAttributes } from '../models/services';  // Correct import
 
 describe('User and Service Models', () => {
   beforeAll(async () => {

@@ -11,8 +11,7 @@ export interface ServiceAttributes {
 }
 
 // Define creation attributes where 'id' is optional
-export interface ServiceCreationAttributes
-  extends Optional<ServiceAttributes, 'id'> {}
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   public id!: number;
@@ -57,3 +56,4 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
 Service.initModel();
 
 export default Service;
+
