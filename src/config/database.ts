@@ -1,25 +1,26 @@
 import { Sequelize } from 'sequelize';
 
-// Initialize sequelize instance
+// Initialize Sequelize instance with database configuration
 export const sequelize = new Sequelize({
-  dialect: 'mysql', // Use your database dialect here (e.g., mysql, postgres, etc.)
+  dialect: 'mysql', // Specify your database dialect
   host: 'localhost', // Host for your database
-  username: 'root',  // Your database username
-  password: 'password', // Your database password
-  database: 'fivver_doup_db', // Your database name
+  username: 'root', // Database username
+  password: 'password', // Database password
+  database: 'fivver_doup_db', // Database name
+  logging: false, // Disable logging; set to `true` or provide a custom logger if needed
 });
 
-// Define and export testConnection function to verify the database connection
-export const testConnection = async () => {
+// Define and export `testConnection` function to verify the database connection
+export const testConnection = async (): Promise<void> => {
   try {
-    // Attempt to authenticate the database connection
-    await sequelize.authenticate();
+    await sequelize.authenticate(); // Attempt to authenticate the database connection
     console.log('Database connection has been established successfully.');
-  } catch (error: unknown) {
-    // Check if error is an instance of Error and then access its message
+  } catch (error) {
     if (error instanceof Error) {
+      // Handle standard Error instances
       console.error('Unable to connect to the database:', error.message);
     } else {
+      // Handle non-standard errors
       console.error('An unknown error occurred during the database connection.');
     }
   }
