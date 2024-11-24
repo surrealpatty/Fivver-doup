@@ -1,21 +1,13 @@
-// src/models/service.ts
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Import the sequelize instance
 
-interface ServiceAttributes {
-  id: number;
-  userId: number;
-  title: string;
-  description?: string;
-}
-
-interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
-
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
+// Define the Service model
+class Service extends Model {
   public id!: number;
+  public name!: string;
+  public description!: string;
+  public price!: number;
   public userId!: number;
-  public title!: string;
-  public description?: string;
 }
 
 Service.init(
@@ -25,22 +17,28 @@ Service.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {
     sequelize,
     modelName: 'Service',
+    tableName: 'services',
   }
 );
 
-export default Service;  // Correct export
+export default Service;  // Export the Service model as default
