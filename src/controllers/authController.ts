@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User, { UserCreationAttributes } from '../models/user'; // Correct import
+import { User, UserCreationAttributes } from '../models/user';  // Correctly import UserCreationAttributes
 
 const jwtSecret = process.env.JWT_SECRET;
 
