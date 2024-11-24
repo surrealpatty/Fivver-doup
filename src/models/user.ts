@@ -1,27 +1,57 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript'; // Import necessary modules for sequelize-typescript
-import { Optional } from 'sequelize/types'; // Correct import for Optional type from sequelize/types
+// src/models/user.ts
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import bcrypt from 'bcryptjs';
 
-// Define the User model using sequelize-typescript
-@Table({ tableName: 'users' })
-class User extends Model<User, UserCreation> {  // Use UserCreation type for User model
-  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
-  id!: number;
-
-  @Column({ type: DataType.STRING, allowNull: false, unique: true })
-  username!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false, unique: true })
-  email!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  password!: string;
-
-  @Column({ type: DataType.STRING, allowNull: true, defaultValue: 'user' }) // Default role set to 'user'
-  role!: string;
+// Interface defining the attributes of the User model
+export interface UserAttributes {
+  id?: number; // Optional 'id' for creation scenarios
+  username: string;
+  email: string;
+  password: string;
+  role?: string; // Optional role with a default value
+  bio?: string; // Optional bio field
 }
 
-// Define UserCreation type for creating users (excluding id, createdAt, updatedAt)
-export interface UserCreation extends Optional<User, 'id' | 'createdAt' | 'updatedAt'> {}
+// Type for creation attributes (exported immediately)
+export interface UserCreationAttributes {
+  email: string;
+  password: string;
+  username: string;
+  role?: string;
+  bio?: string;
+}
 
-// Named export for User model
-export { User };
+// Sequelize model for the 'users' table
+@Table({ tableName: 'users', timestamps: true }) // Automatically includes createdAt and updatedAt fields
+class User extends Model<UserAttributes> implements UserAttributes {
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  public id!: number; // Primary key with auto-increment
+
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  public email!: string; // Unique and required email field
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  public username!: string; // Required username field
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  public password!: string; // Required password field
+
+  @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'free' })
+  public role!: string; // Role field (default 'free')
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  public bio?: string; // Optional bio field
+
+  // Define the `isPaid` getter to determine if the user is a paid user
+  get isPaid(): boolean {
+    return this.role === 'paid';
+  }
+
+  // Method to check if the provided password matches the stored password (hashed)
+  checkPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password); // assuming password is hashed
+  }
+}
+
+// Export the User model as the default export
+export default User;

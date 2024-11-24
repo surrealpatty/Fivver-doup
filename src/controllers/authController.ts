@@ -1,10 +1,8 @@
 // src/controllers/authController.ts
-
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Adjust the path if needed
-import { UserCreationAttributes } from '../models/user'; // Import the correct type for creation attributes
+import User, { UserCreationAttributes } from '../models/user'; // Correct imports
 
 const jwtSecret = process.env.JWT_SECRET;
 
