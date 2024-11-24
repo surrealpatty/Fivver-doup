@@ -1,6 +1,6 @@
 import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
 import { sequelize } from '../config/database'; // Correct import path for sequelize
-import { User  UserAttributes } from '../models/user'; // Import User and UserAttributes
+import { User, UserCreationAttributes } from '../models/user'; // Correctly import UserCreationAttributes
 import { Service } from '../models/services'; // Correct import path for services model
 import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for service creation
 import { Optional } from 'sequelize';
@@ -18,15 +18,15 @@ const testUserAndServiceModels = async () => {
     await sequelize.sync({ force: true });
 
     // Test User Creation using UserAttributes type (plain object)
-    const newUserData: UserAttributes = {
+    const newUserData: UserCreationAttributes = {
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',  // Ensure password is part of UserAttributes
-      role: 'user', // Include role field if it's required
+      role: 'free', // Set role to 'free' or 'paid'
     };
 
-    // Use the UserAttributes type here, pass it to the create method
-    const newUser = await User.create(newUserData as Optional<UserAttributes, 'id'>); // Use Optional to omit 'id' during creation
+    // Use the User type here, passing it directly to the create method
+    const newUser = await User.create(newUserData as Optional<User, 'id'>); // Casting to User (not UserAttributes)
     console.log('User created:', newUser.toJSON());
 
     // Test Service Creation (associated with the newly created user)
@@ -34,7 +34,6 @@ const testUserAndServiceModels = async () => {
       title: 'Test Service',
       description: 'This is a test service description.',
       price: 100.0,
-      // Remove category if not in Service model, or add it to ServiceCreationAttributes
       userId: newUser.id, // Ensure the type of newUser.id matches the expected type of userId
     };
 
