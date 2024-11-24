@@ -1,8 +1,9 @@
-import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
-import { sequelize } from '../config/database'; // Correct import path for sequelize
-import { User, UserCreationAttributes } from '../models/user'; // Correctly import UserCreationAttributes
-import { Service } from '../models/services'; // Correct import path for services model
-import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for service creation
+import { registerUser, loginUser } from '../controllers/userController';  // Ensure correct import
+import { sequelize } from '../config/database';  // Correct import path for sequelize
+import User from '../models/user';  // Correct import for default export of User
+import { UserCreationAttributes } from '../models/user';  // Correct import for UserCreationAttributes type
+import Service from '../models/services';  // Correct import for default export of Service
+import { ServiceCreationAttributes } from '../models/services';  // Correct import for ServiceCreationAttributes type
 import { Optional } from 'sequelize';
 
 console.log('User functions loaded successfully.');
