@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript'; // Import from sequelize-typescript
+import { Sequelize, ModelCtor } from 'sequelize-typescript'; // Import the correct type for ModelCtor
 import User from './user'; // Import the default export from the User model
 import Service from './service'; // Import the default export from the Service model
 import Review from './review'; // Import the default export from the Review model
@@ -10,7 +10,7 @@ const sequelize = new Sequelize({
   database: 'fivver_doup', // Adjust as necessary
   username: 'root', // Adjust as necessary
   password: 'password', // Adjust as necessary
-  models: [User, Service, Review], // Register models here using sequelize-typescript
+  models: [User, Service, Review] as ModelCtor[], // Explicitly cast to ModelCtor[] (required by sequelize-typescript)
   logging: false, // Optional: disable logging if not needed
 });
 
