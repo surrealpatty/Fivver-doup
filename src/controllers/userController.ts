@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user'; // Adjust path if needed
 
-
 // Ensure JWT_SECRET exists
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -114,38 +113,3 @@ export const userController = {
   },
 };
 
-// Separate functions for testing purposes (optional)
-export const registerUser = async (userData: { username: string; email: string; password: string }) => {
-  const { username, email, password } = userData;
-
-  // This should ideally call the same logic as above for registration
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({
-    username,
-    email,
-    password: hashedPassword,
-    role: 'free', // Default to free user
-  });
-
-  return newUser;
-};
-
-export const loginUser = async (email: string, password: string) => {
-  const user = await User.findOne({ where: { email } });
-  if (!user) {
-    throw new Error('User not found');
-  }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    throw new Error('Invalid credentials');
-  }
-
-  const token = jwt.sign(
-    { id: user.id, email: user.email, username: user.username },
-    jwtSecret,
-    { expiresIn: '1h' }
-  );
-
-  return { token, user };
-};
