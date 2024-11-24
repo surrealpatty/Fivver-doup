@@ -15,8 +15,8 @@ Order.belongsTo(Service, { foreignKey: 'serviceId' });  // Order belongs to serv
 Service.hasMany(Review, { foreignKey: 'serviceId' });  // Service has many reviews
 Review.belongsTo(Service, { foreignKey: 'serviceId' });  // Review belongs to service
 
-// Add models to Sequelize instance
-sequelize.addModels([User, Service, Order, Review]);
+// Models are automatically added to sequelize.models when they are imported.
+// So no need for addModels() in this case.
 
 // Export models for use elsewhere
 export { User, Service, Order, Review };

@@ -4,18 +4,18 @@ import { sequelize } from '../config/database';
 
 class Review extends Model {
   public id!: number;
-  public serviceId!: number;  // Foreign key to Service
-  public userId!: number;     // Foreign key to User
-  public rating!: number;     // Rating value (e.g., 1 to 5)
-  public comment!: string;    // Review comment
+  public serviceId!: number;
+  public userId!: number;
+  public rating!: number;
+  public comment!: string;
 }
 
 Review.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
     serviceId: {
       type: DataTypes.INTEGER,
@@ -31,13 +31,13 @@ Review.init(
     },
     comment: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
   },
   {
-    sequelize,
-    tableName: 'reviews',
+    sequelize,  // Important! Ensure the sequelize instance is passed in here
+    tableName: 'reviews',  // Name of the table
   }
 );
 
-export default Review;  // Default export
+export default Review;

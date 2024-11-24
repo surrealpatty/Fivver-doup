@@ -1,61 +1,32 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+// src/models/order.ts
+import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
 
-// Define the attributes for the Order model
-export interface OrderAttributes {
-  id: string;
-  serviceId: string;
-  status: string;
-  quantity: number;  // Ensure 'quantity' is here
-  totalPrice: number;
-  createdAt: Date;   // Sequelize will manage this automatically
-  updatedAt: Date;   // Sequelize will manage this automatically
+class Order extends Model {
+  public id!: number;
+  public serviceId!: number;
+  public userId!: number;
 }
 
-// Define the creation attributes, omitting 'id', 'createdAt', and 'updatedAt'
-export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
-// Define the Order model
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
-  public id!: string;
-  public serviceId!: string;
-  public status!: string;
-  public quantity!: number;  // Ensure 'quantity' is declared here
-  public totalPrice!: number;
-  public createdAt!: Date;
-  public updatedAt!: Date;
-}
-
-// Initialize the Order model
 Order.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,  // Use UUID for automatic ID generation
+      autoIncrement: true,
     },
     serviceId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false,  // Make sure this is defined
+      allowNull: false,
     },
-    totalPrice: {
-      type: DataTypes.FLOAT,
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
   {
-    sequelize,
-    tableName: 'orders',
-    timestamps: true,  // Sequelize will handle createdAt and updatedAt automatically
+    sequelize,  // Important! Ensure the sequelize instance is passed in here
+    tableName: 'orders',  // Name of the table
   }
 );
 
