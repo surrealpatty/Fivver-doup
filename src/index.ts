@@ -1,76 +1,23 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { sequelize } from './config/database'; // Corrected relative import
-import User from './models/user'; // Corrected relative import
-import Service from './models/services'; // Corrected relative import
-import { registerUser, loginUser } from './controllers/userController'; // Corrected relative import
+// src/index.ts
+import express from 'express';
+import { sequelize } from './config/database'; // Import sequelize if you need to check DB connection
+import userRoutes from './routes/user'; // Example import for your routes
 
 const app = express();
 
-// Middleware for JSON parsing
+// Middleware and routes setup
 app.use(express.json());
+app.use('/users', userRoutes); // Assuming you have a route file for user routes
 
-// Setting up model associations
-User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
-Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-
-// API routes (you can add more as needed)
-app.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+// Start the server and export both the app and server
+const server = app.listen(3000, async () => {
   try {
-    const user = await registerUser(req.body);  // Call registerUser and pass the request body
-    res.status(201).json(user);  // Send the created user as the response
+    await sequelize.authenticate();
+    console.log('Database connected successfully.');
+    console.log('Server is running on port 3000');
   } catch (error) {
-    next(error);  // Pass any errors to the error handler
+    console.error('Error connecting to the database:', error);
   }
 });
 
-app.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { email, password } = req.body;
-    const { token, user } = await loginUser(email, password);  // Call loginUser with email and password
-    res.status(200).json({ token, user });  // Send the response with token and user data
-  } catch (error) {
-    next(error);  // Pass any errors to the error handler
-  }
-});
-
-// Function to initialize the database and models
-const initializeDatabase = async () => {
-  try {
-    // Synchronize models with the database
-    await sequelize.sync({ force: true }); // Reset database
-
-    console.log('Database synchronized.');
-
-    // Optional: Test data creation (for testing purposes)
-    const newUser = await User.create({
-      username: 'testuser',
-      email: 'testuser@example.com',
-      password: 'password123',
-    });
-    console.log('User created:', newUser.toJSON());
-
-    const newService = await Service.create({
-      title: 'Test Service',
-      description: 'This is a test service description.',
-      price: 100.0,
-      category: 'Testing',
-      userId: newUser.id, // Pass userId as a number, not a string
-    });
-    console.log('Service created:', newService.toJSON());
-    
-  } catch (error) {
-    console.error('Error initializing database:', error);
-  }
-};
-
-// Initialize database on app startup
-initializeDatabase();
-
-// Export the app for use in other files (e.g., for testing or deployment)
-export { app };
-
-// You can also start the server if this file is the entry point for your app
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+export { app, server }; // Export both the app and server
