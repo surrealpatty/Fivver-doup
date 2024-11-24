@@ -1,13 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { testConnection } from './config/database';
-import userRouter from './routes/user';  // Correctly import userRouter
+import userRouter from './routes/user';  // Default import for userRouter
 
 const app = express();
 
 app.use(express.json());  // Use middleware to parse JSON bodies
 
 // Use userRouter for handling user-related routes under the /api/users endpoint
-app.use('/api/users', userRouter);
+app.use('/api/users', userRouter);  // Correct route registration
 
 // Error handler middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
