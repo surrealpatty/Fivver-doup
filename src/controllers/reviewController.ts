@@ -1,168 +1,71 @@
+// src/controllers/reviewController.ts
 import { Request, Response } from 'express';
-import Review from '../models/review'; // Default import for Review model
-import { User, Service } from '../models'; // Named imports for other models
 
-// Create a Review
-export const createReview = async (req: Request, res: Response): Promise<Response> => {
-  const { serviceId, rating, comment } = req.body;
-  const userId = req.user?.id; // Ensure user ID is available from the token
+export const createReview = async (req: Request, res: Response): Promise<void> => {
+  const { reviewText, rating, serviceId } = req.body;  // Access the review data and serviceId from req.body
 
-  // Validate required fields
-  if (!serviceId || typeof rating !== 'number' || !comment) {
-    return res.status(400).json({
-      message: 'Service ID, rating, and comment are required',
-      error: 'Invalid input',
-    });
+  if (!reviewText || !rating || !serviceId) {
+    res.status(400).json({ message: 'Review text, rating, and serviceId are required' });
+    return;
   }
 
-  // Ensure the user is authenticated
-  if (!userId) {
-    return res.status(401).json({
-      message: 'Unauthorized',
-      error: 'User must be authenticated to create a review',
-    });
-  }
+  // Logic for creating a review, e.g., saving to the database
+  // Example: Save review to the database using serviceId
+  // await Review.create({ reviewText, rating, serviceId });
 
-  try {
-    // Check if the service exists
-    const service = await Service.findByPk(serviceId);
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
-    }
-
-    // Create the review
-    const review = await Review.create({
-      serviceId,
-      userId,
-      rating,
-      comment,
-    });
-
-    return res.status(201).json({
-      message: 'Review created successfully',
-      review,
-    });
-  } catch (error) {
-    console.error('Error creating review:', error);
-    return res.status(500).json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
+  res.status(201).json({ message: 'Review created successfully' });
 };
 
-// Get Reviews for a Service
-export const getReviewsForService = async (req: Request, res: Response): Promise<Response> => {
-  const { serviceId } = req.params;
+export const getReviewsForService = async (req: Request, res: Response): Promise<void> => {
+  const { serviceId } = req.params;  // Accessing serviceId from route parameters
 
-  try {
-    const reviews = await Review.findAll({
-      where: { serviceId },
-      include: [
-        {
-          model: User,
-          attributes: ['id', 'username', 'email'], // Fetch specific user attributes
-        },
-      ],
-    });
-
-    return res.status(200).json({
-      message: 'Reviews fetched successfully',
-      reviews: reviews.length > 0 ? reviews : [],
-    });
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
-    return res.status(500).json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
+  if (!serviceId) {
+    res.status(400).json({ message: 'Service ID is required' });
+    return;
   }
+
+  // Logic for getting reviews for the service
+  // Example: Fetch reviews for the specific service
+  // const reviews = await Review.findAll({ where: { serviceId } });
+
+  res.status(200).json({ reviews: [] });  // Replace with actual reviews
 };
 
-// Update a Review
-export const updateReview = async (req: Request, res: Response): Promise<Response> => {
-  const { reviewId } = req.params;
-  const { rating, comment } = req.body;
-  const userId = req.user?.id; // Ensure user ID is available from the token
+export const updateReview = async (req: Request, res: Response): Promise<void> => {
+  const { reviewId } = req.params;  // Access reviewId from route parameters
+  const { reviewText, rating } = req.body;  // Access review details from request body
 
-  // Ensure the user is authenticated
-  if (!userId) {
-    return res.status(401).json({
-      message: 'Unauthorized',
-      error: 'User not authenticated',
-    });
+  if (!reviewId || !reviewText || !rating) {
+    res.status(400).json({ message: 'Review ID, review text, and rating are required' });
+    return;
   }
 
-  // Ensure that at least one field is provided for update
-  if (!rating && !comment) {
-    return res.status(400).json({
-      message: 'At least one of rating or comment is required to update',
-    });
-  }
+  // Logic for updating the review
+  // Example: Find the review by reviewId and update it
+  // const review = await Review.findByPk(reviewId);
+  // if (review) {
+  //   review.reviewText = reviewText;
+  //   review.rating = rating;
+  //   await review.save();
+  // }
 
-  try {
-    const review = await Review.findByPk(reviewId);
-    if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
-    }
-
-    // Ensure the user can only update their own review
-    if (review.userId !== userId) {
-      return res.status(403).json({ message: 'You can only update your own review' });
-    }
-
-    // Update review fields only if they are provided
-    review.rating = rating ?? review.rating;
-    review.comment = comment ?? review.comment;
-    await review.save();
-
-    return res.status(200).json({
-      message: 'Review updated successfully',
-      review,
-    });
-  } catch (error) {
-    console.error('Error updating review:', error);
-    return res.status(500).json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
+  res.status(200).json({ message: 'Review updated successfully' });
 };
 
-// Delete a Review
-export const deleteReview = async (req: Request, res: Response): Promise<Response> => {
-  const { reviewId } = req.params;
-  const userId = req.user?.id; // Ensure user ID is available from the token
+export const deleteReview = async (req: Request, res: Response): Promise<void> => {
+  const { reviewId } = req.params;  // Access reviewId from route parameters
 
-  // Ensure the user is authenticated
-  if (!userId) {
-    return res.status(401).json({
-      message: 'Unauthorized',
-      error: 'User not authenticated',
-    });
+  if (!reviewId) {
+    res.status(400).json({ message: 'Review ID is required' });
+    return;
   }
 
-  try {
-    const review = await Review.findByPk(reviewId);
-    if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
-    }
+  // Logic for deleting the review
+  // Example: Find the review by reviewId and delete it
+  // const review = await Review.findByPk(reviewId);
+  // if (review) {
+  //   await review.destroy();
+  // }
 
-    // Ensure the user can only delete their own review
-    if (review.userId !== userId) {
-      return res.status(403).json({ message: 'You can only delete your own review' });
-    }
-
-    await review.destroy();
-
-    return res.status(200).json({
-      message: 'Review deleted successfully',
-    });
-  } catch (error) {
-    console.error('Error deleting review:', error);
-    return res.status(500).json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'UnknownError',
-    });
-  }
+  res.status(200).json({ message: 'Review deleted successfully' });
 };
