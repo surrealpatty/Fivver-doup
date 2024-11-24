@@ -1,4 +1,3 @@
-// Import necessary modules and configurations
 import express, { Request, Response, NextFunction } from 'express'; // Ensure types are available
 import { sequelize, testConnection } from './config/database'; // Import sequelize and testConnection
 import userRoutes from './routes/user'; // Import user routes, ensure userRoutes is a valid Express Router
