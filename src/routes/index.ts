@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';  // Import express and the types for request and response
-import reviewsRouter from './reviewRoutes';
-import userRouter from './user';  // Import the user router
-import serviceRouter from './serviceRoutes';
+import reviewsRouter from './reviewRoutes';  // Ensure reviewRoutes exists in the same directory
+import userRouter from './user';  // Ensure userRouter is properly defined and exported
+import serviceRouter from './serviceRoutes';  // Ensure serviceRoutes exists in the same directory
 
 // Create an instance of the router
 const router = express.Router();
@@ -12,7 +12,7 @@ router.use('/api/users', userRouter);  // Use user router for /api/users endpoin
 router.use('/api/services', serviceRouter);  // Use services router for /api/services endpoint
 
 // Optional: Health check route
-router.get('/health', (req: Request, res: Response) => {
+router.get('/health', (_req: Request, res: Response) => {  // Use underscore for unused req
   res.json({ message: 'API is running' });
 });
 
