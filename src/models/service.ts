@@ -1,25 +1,32 @@
-import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure sequelize is imported correctly
+// src/models/services.ts
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';
+import User from './user'; // Import the User model
 
-// Define the Service model
-export class Service extends Model {
-  public id!: number;
-  public userId!: number;
+interface ServiceAttributes {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  userId: string; // Make sure 'userId' is defined here
+}
+
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
+  public id!: string;
   public title!: string;
   public description!: string;
   public price!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public userId!: string; // Correctly define 'userId' here
 }
-
-// Define the type for creating a new service
-export interface ServiceCreationAttributes extends Optional<Service, 'id'> {}
 
 Service.init(
   {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     title: {
       type: DataTypes.STRING,
@@ -33,11 +40,19 @@ Service.init(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: User,  // Reference to User model
+        key: 'id',    // Ensure this is the primary key of the User model
+      },
+    },
   },
   {
-    sequelize,  // Database connection
-    modelName: 'Service',  // Name of the model
-    tableName: 'services', // Table name in the DB
+    sequelize,
+    tableName: 'services',  // Ensure this matches your table name
   }
 );
 
+export default Service;
