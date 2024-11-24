@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';  // Import express and the types for request and response
-import reviewsRouter from './reviews';
+import reviewsRouter from './reviewRoutes';
 import userRouter from './user';  // Import the user router
-import serviceRouter from './servicesRoute';  // Import the services router
+import serviceRouter from './serviceRoutes';
 
 // Create an instance of the router
 const router = express.Router();

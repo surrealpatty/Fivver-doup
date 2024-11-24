@@ -1,4 +1,6 @@
-import { User, Service } from './index'; // Only import existing models
+import  User  from './user'; // Import User model
+import { Service } from './service'; // Import Service model
+import { Order } from './order'; // Import Order model (ensure this file exists)
 
 // Define associations between the models
 const defineAssociations = () => {
