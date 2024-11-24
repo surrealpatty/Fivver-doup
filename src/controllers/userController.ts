@@ -1,9 +1,14 @@
-import { User, UserAttributes } from '../models/user'; // Named import for User model
+import { User } from '../models/user'; // Named import for User model
 import bcrypt from 'bcryptjs'; // bcrypt for password hashing and comparison
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
 
 // Define the user data type for creating a user, excluding methods like $add, $set
-type UserCreationAttributes = Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+type UserCreationAttributes = {
+  username: string;
+  email: string;
+  password: string;
+  role: string; // Add role as it's part of user creation
+};
 
 // Register user function
 const registerUser = async ({ username, email, password }: { username: string; email: string; password: string }) => {

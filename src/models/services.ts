@@ -2,7 +2,7 @@ import { Model, Column, DataType, Table, ForeignKey } from 'sequelize-typescript
 import { User } from './user'; // Assuming User model is imported correctly
 
 // Define the attributes for the Service model (for creation)
-export interface ServiceCreationAttributes {
+interface ServiceCreationAttributes {
   userId: number;
   title: string;
   description: string;
@@ -26,6 +26,5 @@ class Service extends Model<ServiceCreationAttributes> {
   price!: number;
 }
 
-// Export the class and interface separately
-export { Service };
-export type { ServiceCreationAttributes }; // Export the interface as a type separately
+// Export both the class and the interface
+export { Service, ServiceCreationAttributes };
