@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware';
-import { User } from '../models';  // Correctly import User as a named export
+import User from '../models';  // Import the default export (User)
 
 const router = express.Router();
 
