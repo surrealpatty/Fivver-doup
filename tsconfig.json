@@ -1,21 +1,22 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES6",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowJs": false
+    "target": "ES6",                              // Keep this as ES6 for compatibility
+    "module": "ESNext",                           // Set this to ESNext (ES Modules)
+    "moduleResolution": "node",                   // Standard module resolution strategy
+    "esModuleInterop": true,                      // Compatibility with non-ESM modules
+    "skipLibCheck": true,                         // Skip checking declaration files
+    "forceConsistentCasingInFileNames": true,     // Consistency in file naming
+    "strict": true,                               // Enable all strict type-checking options
+    "declaration": true,                          // Generate declaration files (.d.ts)
+    "outDir": "./dist",                           // Specify the output directory for compiled files
+    "rootDir": "./src",                           // The root directory of your TypeScript files
+    "allowJs": false                              // Only allow .ts files to be compiled
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts"                                 // Include all .ts files under the src folder
   ],
   "exclude": [
-    "node_modules"
-  ]
+    "node_modules"                                // Exclude node_modules folder from compilation
+  ],
+  "type": "module"                                // Ensure that the project is treated as a module-based system
 }
