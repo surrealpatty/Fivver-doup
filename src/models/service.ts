@@ -1,7 +1,7 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Import the sequelize instance
+// src/models/service.ts
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/database';  // Import sequelize instance
 
-// Define the Service model
 class Service extends Model {
   public id!: number;
   public name!: string;
@@ -41,4 +41,4 @@ Service.init(
   }
 );
 
-export default Service;  // Export the Service model as default
+export default Service;  // Ensure the default export of Service model
