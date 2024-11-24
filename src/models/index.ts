@@ -3,6 +3,5 @@ import Service from './service';
 import Review from './review';
 import Order from './order';
 
-// Export `User` as default
-export default User;
-export { Service, Review, Order };  // Optionally export other models
+// Export User as a named export
+export { User, Service, Review, Order };
