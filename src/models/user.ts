@@ -1,5 +1,7 @@
+// src/models/user.ts
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import bcrypt from 'bcrypt';
+import { sequelize } from '../config/database'; // Ensure correct import path
 
 // Interface defining the attributes of the User model
 export interface UserAttributes {
@@ -45,3 +47,6 @@ class User extends Model<UserAttributes> implements UserAttributes {
 
 // Export the User model as the default export
 export default User;
+
+// Ensure the model is added to sequelize for synchronization
+sequelize.addModels([User]); // Add the User model to Sequelize instance

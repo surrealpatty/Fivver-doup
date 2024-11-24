@@ -1,111 +1,48 @@
-import express, { Request, Response } from 'express';
-import User from '../models/user';   // Adjust path if necessary
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import bcrypt from 'bcrypt';
 
-// Define the expected shape of request body for TypeScript
-interface RegisterRequestBody {
-  email: string;
-  password: string;
+
+// Interface defining the attributes of the User model
+export interface UserAttributes {
+  id?: number; // Optional 'id' for creation scenarios
   username: string;
-  role?: string; // Role is optional
-}
-
-interface LoginRequestBody {
   email: string;
   password: string;
+  role?: string; // Optional role with a default value
+  bio?: string; // Optional bio field
 }
 
-const generateToken = (user: User): string => {
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) {
-    throw new Error('JWT_SECRET is not set');
+// Sequelize model for the 'users' table
+@Table({ tableName: 'users', timestamps: true }) // Automatically includes createdAt and updatedAt fields
+class User extends Model<UserAttributes> implements UserAttributes {
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  public id!: number; // Primary key with auto-increment
+
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  public email!: string; // Unique and required email field
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  public username!: string; // Required username field
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  public password!: string; // Required password field
+
+  @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'free' })
+  public role!: string; // Role field (default 'free')
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  public bio?: string; // Optional bio field
+
+  // Define the `isPaid` getter to determine if the user is a paid user
+  get isPaid(): boolean {
+    return this.role === 'paid';
   }
 
-  return jwt.sign(
-    { id: user.id, email: user.email, username: user.username },
-    jwtSecret,
-    { expiresIn: '1h' }
-  );
-};
-
-const router = express.Router();
-
-// Register a new user.
-router.post('/register', async (req: Request, res: Response) => {
-  const { email, password, username, role }: RegisterRequestBody = req.body;
-
-  try {
-    if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Please provide email, password, and username.' });
-    }
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use.' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create the user instance
-    const newUser = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-      role: role || 'user',
-    });
-
-    const token = generateToken(newUser);
-
-    return res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-      },
-    });
-  } catch (error) {
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Server error during user registration.' });
+  // Method to check if the provided password matches the stored password (hashed)
+  checkPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password); // assuming password is hashed
   }
-});
+}
 
-// Login an existing user.
-router.post('/login', async (req: Request, res: Response) => {
-  const { email, password }: LoginRequestBody = req.body;
-
-  try {
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide email and password.' });
-    }
-
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ message: 'User not found.' });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid credentials.' });
-    }
-
-    const token = generateToken(user);
-
-    return res.status(200).json({
-      message: 'Login successful',
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-      },
-    });
-  } catch (error) {
-    console.error('Error logging in user:', error);
-    return res.status(500).json({ message: 'Server error during user login.' });
-  }
-});
-
-export default router;
+// Export the User model as the default export
+export default User;
