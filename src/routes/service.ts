@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Service } from '../models'; // Ensure this path is correct
+import { Service } from '../models'; // Correct path to Service model
 import { checkAuth } from '../middlewares/authMiddleware'; // Correct import path for auth middleware
 
 const router = Router();
@@ -7,7 +7,7 @@ const router = Router();
 // 1. Create a Service
 router.post('/services', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { title, description, price } = req.body;
-  const userId = req.user?.id; // Ensure `req.user` is populated by `checkAuth`
+  const userId = req.user?.id;
 
   if (!title || !description || !price) {
     res.status(400).json({
@@ -135,15 +135,18 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
       return;
     }
 
-    if (title) service.title = title;
-    if (description) service.description = description;
-    if (price) service.price = price;
+    // Ensure service is treated as an instance
+    const serviceInstance = service as any; // Cast to instance for save method
 
-    await service.save();
+    if (title) serviceInstance.title = title;
+    if (description) serviceInstance.description = description;
+    if (price) serviceInstance.price = price;
+
+    await serviceInstance.save(); // This works since we've cast to the instance
 
     res.status(200).json({
       message: 'Service updated successfully',
-      service,
+      service: serviceInstance,
     });
   } catch (error) {
     console.error('Error updating service:', error);
@@ -183,7 +186,10 @@ router.delete('/services/:id', checkAuth, async (req: Request, res: Response): P
       return;
     }
 
-    await service.destroy();
+    // Ensure service is treated as an instance
+    const serviceInstance = service as any; // Cast to instance for destroy method
+
+    await serviceInstance.destroy(); // This works since we've cast to the instance
 
     res.status(200).json({
       message: 'Service deleted successfully',

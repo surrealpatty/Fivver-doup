@@ -24,27 +24,48 @@ export const authenticateToken = (
     const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
 
     if (!token) {
-      res.status(401).json({ message: 'Access denied, no token provided.' }); // Send response, no return here
-      return; // Ensure the function doesn't continue after sending the response
+      res.status(401).json({ message: 'Access denied, no token provided.' });
+      return;
     }
 
     // Verify the token
     const decoded = jwt.verify(token, jwtSecret as string) as UserPayload;
 
     // Attach the decoded payload to req.user
-    req.user = decoded; // Ensure this matches your `UserPayload` type (e.g., { id, email, username })
+    req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error: unknown) {
-    if (error instanceof Error) {  // Narrow the error to the `Error` type
+    if (error instanceof Error) {
       console.error('Authentication error:', error.message);
-      res.status(403).json({ message: 'Invalid or expired token.' }); // Send response, no return here
-      return; // Ensure the function doesn't continue after sending the response
+      res.status(403).json({ message: 'Invalid or expired token.' });
+      return;
     }
 
     // Fallback for cases when the error is not of type `Error`
     console.error('Unexpected error during authentication:', error);
-    res.status(500).json({ message: 'Internal server error.' }); // Send response, no return here
+    res.status(500).json({ message: 'Internal server error.' });
   }
+};
+
+/**
+ * Middleware to check if the user is authenticated.
+ * It uses `authenticateToken` and adds additional checks if needed.
+ */
+export const checkAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  // Use the authenticateToken middleware to check if the token is valid
+  authenticateToken(req, res, () => {
+    // Additional checks can go here (if needed)
+    if (req.user) {
+      // If user is authenticated, continue to the next route handler
+      next();
+    } else {
+      res.status(401).json({ message: 'Authentication failed.' });
+    }
+  });
 };
