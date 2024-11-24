@@ -1,13 +1,26 @@
 // src/models/user.ts
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-// Define the User model
-export class User extends Model {
+// Define the attributes for the User model
+export interface UserAttributes {
+  id: number;
+  username: string;
+  email: string;
+  password: string;  // Ensure the password field is included
+  role: 'free' | 'paid';
+}
+
+// Define the creation attributes, omitting 'id' for creation
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+// Define the User model class
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
   public email!: string;
-  // Add other fields as needed
+  public password!: string;  // Define the password property
+  public role!: 'free' | 'paid';
 }
 
 // Initialize the User model
@@ -27,12 +40,20 @@ User.init(
       allowNull: false,
       unique: true,
     },
-    // Other fields...
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('free', 'paid'),
+      allowNull: false,
+    },
   },
   {
     sequelize,
-    tableName: 'users', // Specify the table name
+    tableName: 'users',
   }
 );
 
-export default User;
+// Rename the exported interface to avoid conflict
+export { UserCreationAttributes as IUserCreationAttributes };
