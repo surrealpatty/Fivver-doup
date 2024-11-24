@@ -1,13 +1,13 @@
 import path from 'path';
 import request from 'supertest';
+import { Express } from 'express'; // Import the Express type
 
 // Define the path to the compiled `index.js` file in `dist/`
 const appPath = path.resolve(__dirname, '../dist/index');
 
-// Initialize app variable
-let app;
+// Initialize app variable with explicit typing as Express.Application
+let app: Express | undefined; // Type it as Express.Application or undefined (in case it's not loaded)
 
-// Try loading the app and handle errors without terminating the process
 beforeAll(async () => {
   try {
     // Dynamically import the app from the compiled dist/index.js
@@ -25,7 +25,7 @@ describe('Basic Test Suite', () => {
       console.warn("Skipping tests as app could not be loaded");
       return; // Skip the test if app could not be loaded
     }
-    
+
     // Send a GET request to the root endpoint
     const response = await request(app).get('/');
     
