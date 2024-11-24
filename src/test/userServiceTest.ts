@@ -1,6 +1,6 @@
 import { sequelize } from '../config/database';
-import { User } from '../models/user';
-import { Service } from '../models/services';  // Correct import for named export
+import User from '../models/user';  // Default import for User
+import Service from '../models/services';  // Default import for Service
 
 describe('User and Service Models', () => {
   beforeAll(async () => {
@@ -40,7 +40,7 @@ describe('User and Service Models', () => {
       title: 'Test Service',
       description: 'This is a test service description.',
       price: 100.0,
-      userId: user.id,
+      userId: user.id,  // Linking to the user via userId
     });
 
     expect(service).toHaveProperty('id');
