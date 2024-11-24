@@ -1,14 +1,21 @@
-// src/config/database.ts
 import { Sequelize } from 'sequelize';
 
-// Initialize Sequelize instance
-const sequelize = new Sequelize({
-  dialect: 'mysql',  // Make sure the correct dialect is set (mysql, postgres, etc.)
-  host: 'localhost',  // Your database host
-  database: 'fivver_doup',  // Database name
-  username: 'root',  // Your database username
-  password: '',  // Your database password
+// Create a Sequelize instance
+export const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: 'localhost',  // Adjust host if needed
+  username: 'root',   // Replace with actual DB username
+  password: '',       // Replace with actual DB password
+  database: 'fivver_doup',  // Replace with actual DB name
 });
 
-// Export the sequelize instance for use in models
-export { sequelize };
+// Function to test the connection
+export const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection successful');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    throw new Error('Database connection failed');
+  }
+};
