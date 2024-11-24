@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from 'express'; 
 import { Service } from '../models'; // Correct path to Service model
 import { checkAuth } from '../middlewares/authMiddleware'; // Correct import path for auth middleware
 
 const router = Router();
 
 // 1. Create a Service
-router.post('/services', checkAuth, async (req: Request, res: Response): Promise<void> => {
+router.post('/', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { title, description, price } = req.body;
   const userId = req.user?.id;
 
@@ -46,7 +46,7 @@ router.post('/services', checkAuth, async (req: Request, res: Response): Promise
 });
 
 // 2. Get all Services
-router.get('/services', async (_req: Request, res: Response): Promise<void> => {
+router.get('/', async (_req: Request, res: Response): Promise<void> => {
   try {
     const services = await Service.findAll();
 
@@ -71,7 +71,7 @@ router.get('/services', async (_req: Request, res: Response): Promise<void> => {
 });
 
 // 3. Get a single Service by ID
-router.get('/services/:id', async (req: Request, res: Response): Promise<void> => {
+router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -98,7 +98,7 @@ router.get('/services/:id', async (req: Request, res: Response): Promise<void> =
 });
 
 // 4. Update a Service by ID
-router.put('/services/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
+router.put('/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { title, description, price } = req.body;
   const userId = req.user?.id;
@@ -158,7 +158,7 @@ router.put('/services/:id', checkAuth, async (req: Request, res: Response): Prom
 });
 
 // 5. Delete a Service by ID
-router.delete('/services/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
+router.delete('/:id', checkAuth, async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const userId = req.user?.id;
 
