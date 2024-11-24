@@ -1,7 +1,17 @@
 import { Model } from 'sequelize-typescript';
-declare class Service extends Model<Service> {
-    id: number;
-    name: string;
+export interface ServiceCreationAttributes {
+    userId: number;
+    description: string;
     price: number;
+    title: string;
+    category: string;
+}
+declare class Service extends Model<ServiceCreationAttributes> implements ServiceCreationAttributes {
+    id: number;
+    userId: number;
+    title: string;
+    description: string;
+    price: number;
+    category: string;
 }
 export default Service;
