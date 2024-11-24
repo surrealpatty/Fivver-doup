@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowJs": false
+    "target": "ES6",                      // Specifies the target JavaScript version
+    "module": "commonjs",                  // Use CommonJS module system
+    "strict": true,                        // Enable strict type-checking options
+    "esModuleInterop": true,               // Enables compatibility between CommonJS and ES Modules
+    "skipLibCheck": true,                  // Skip type checking of all declaration files (useful for large projects)
+    "forceConsistentCasingInFileNames": true, // Ensures that file names are case-sensitive across the project
+    "moduleResolution": "node",            // Resolve modules in Node.js style (important for handling imports)
+    "outDir": "./dist",                    // Where to output the compiled files
+    "rootDir": "./src",                    // Root directory for TypeScript source files
+    "baseUrl": ".",                        // Base URL for module resolution
+    "resolveJsonModule": true,             // Allow importing of `.json` files as modules
+    "paths": {
+      "*": ["node_modules/*", "src/*"]    // Module resolution from both node_modules and src/
+    }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*"                             // Include all files in the src folder
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",                        // Exclude node_modules from being compiled
+    "dist"                                 // Exclude dist folder if already compiled
   ]
 }

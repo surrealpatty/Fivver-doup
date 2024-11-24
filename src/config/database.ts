@@ -1,28 +1,29 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
 
-// Initialize Sequelize instance with database configuration
-export const sequelize = new Sequelize({
-  dialect: 'mysql', // Specify your database dialect
-  host: 'localhost', // Host for your database
-  username: 'root', // Database username
-  password: 'password', // Database password
-  database: 'fivver_doup_db', // Database name
-  logging: false, // Disable logging; set to `true` or provide a custom logger if needed
+// Define your Sequelize instance
+const sequelize = new Sequelize({
+  dialect: 'mysql',               // Use MySQL
+  host: 'localhost',              // MySQL host
+  username: 'root',               // Database username
+  password: 'password',           // Database password
+  database: 'fivver_doup_db',     // Database name
+  models: [__dirname + '/../models'], // Specify the path to your models directory
+  logging: false,                 // Disable SQL logging (set to true for debugging)
 });
 
-// Define and export `testConnection` function to verify the database connection
+// Function to test the database connection
 export const testConnection = async (): Promise<void> => {
   try {
-    await sequelize.authenticate(); // Attempt to authenticate the database connection
+    await sequelize.authenticate();  // Try to authenticate the connection
     console.log('Database connection has been established successfully.');
   } catch (error) {
     if (error instanceof Error) {
-      // Handle standard Error instances
       console.error('Unable to connect to the database:', error.message);
     } else {
-      // Handle non-standard errors
       console.error('An unknown error occurred during the database connection.');
     }
   }
 };
 
+// Export the sequelize instance to be used in other files
+export { sequelize };

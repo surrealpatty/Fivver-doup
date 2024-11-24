@@ -11,8 +11,8 @@ export interface ServiceCreationAttributes {
 // Sequelize model for the 'services' table
 @Table({ tableName: 'services', timestamps: true })  // Table name 'services' and automatic timestamps
 export class Service extends Model<ServiceCreationAttributes> implements ServiceCreationAttributes {
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  public userId!: number;  // Foreign key for the user
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  public id!: number;  // Primary key with auto-increment
 
   @Column({ type: DataType.STRING, allowNull: false })
   public title!: string;  // Title of the service
@@ -22,6 +22,10 @@ export class Service extends Model<ServiceCreationAttributes> implements Service
 
   @Column({ type: DataType.FLOAT, allowNull: false })
   public price!: number;  // Price of the service
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  public userId!: number;  // Foreign key for the user who created the service
 }
 
-export default Service;  // Export the Service model
+// Export the Service model and the ServiceCreationAttributes interface
+export { Service, ServiceCreationAttributes };
