@@ -1,56 +1,49 @@
+// src/models/service.ts
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // assuming sequelize is correctly configured
+import { sequelize } from '../config/database';
 
-export interface ServiceAttributes {
-    id: string;
-    title: string;
-    description: string;
-    price: number;
-    userId: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+// Define ServiceAttributes interface for typing
+interface ServiceAttributes {
+  id: number;
+  userId: number;
+  title: string;
+  description?: string;
 }
 
-export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+// ServiceCreationAttributes allows for optional fields during creation
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
-    public id!: string;
-    public title!: string;
-    public description!: string;
-    public price!: number;
-    public userId!: string;
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+// Define the model class
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
+  public id!: number;
+  public userId!: number;
+  public title!: string;
+  public description?: string;
 }
 
 Service.init(
-    {
-        id: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false,
-        },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        sequelize,
-        tableName: 'services',
-    }
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    sequelize, // pass the sequelize instance
+    modelName: 'Service', // model name
+  }
 );
 
-export default Service;  // Ensure default export
+export default Service;

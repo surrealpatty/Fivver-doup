@@ -1,50 +1,57 @@
+// src/models/user.ts
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // assuming sequelize is correctly configured
+import { sequelize } from '../config/database';
 
-export interface UserAttributes {
-    id: string;
-    email: string;
-    password: string;
-    username: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+// Define attributes for the User model
+interface UserAttributes {
+  id: number;
+  email: string;
+  password: string;
+  username: string;
+  role: 'free' | 'paid';
 }
 
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+// Define creation attributes for the User model
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-    public id!: string;
-    public email!: string;
-    public password!: string;
-    public username!: string;
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+// Define the User model class
+class User extends Model<UserAttributes, UserCreationAttributes> {
+  public id!: number;
+  public email!: string;
+  public password!: string;
+  public username!: string;
+  public role!: 'free' | 'paid';
 }
 
 User.init(
-    {
-        id: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        sequelize,
-        tableName: 'users',
-    }
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('free', 'paid'),
+      defaultValue: 'free',
+    },
+  },
+  {
+    sequelize, // Pass the sequelize instance
+    modelName: 'User', // Define the model name
+  }
 );
 
-export default User;  // Ensure default export
+export { User, UserCreationAttributes }

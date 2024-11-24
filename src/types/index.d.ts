@@ -3,13 +3,12 @@ import { Request } from 'express';
  * IUserAttributes interface represents the attributes of a user model instance
  * (used after the user is created in the database).
  */
-export interface IUserAttributes {
-    id: string;
-    username: string;
-    email: string;
-    password: string;
-    isPaid: boolean;
-}
+export interface UpdateOrderRequest {
+    status?: string;
+    quantity?: number;
+    totalPrice?: number;
+  }
+  
 /**
  * IUserCreationAttributes interface is used for creating new user instances.
  * This interface excludes the `id` field, as it is auto-generated.

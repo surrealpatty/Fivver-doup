@@ -1,9 +1,8 @@
 // src/controllers/authController.ts
-
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models';
+import { User, UserCreationAttributes } from '../models'; // Ensure User and UserCreationAttributes are imported
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -37,11 +36,11 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
 
     const userData: UserCreationAttributes = {
-      email: "user@example.com",
-      password: "password123",
-      username: "newuser",
-      role: "free",
-  };
+      email: "user@example.com", // Example email, adjust accordingly
+      password: hashedPassword,   // Use hashed password
+      username: "newuser",        // Example username, adjust accordingly
+      role: userRole,
+    };
 
     // Create a new user in the database
     const newUser = await User.create(userData);
