@@ -1,15 +1,19 @@
-// src/config/database.ts
-import { Sequelize } from 'sequelize-typescript';
-import User from '../models/user';
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
+import User from '../models/user';  // Import User model
+import Service from '../models/service';  // Import Service model
+import Order from '../models/order';  // Import Order model
+import Review from '../models/review';  // Import Review model
 
-// Initialize Sequelize with the models directory
+// Initialize sequelize with sequelize-typescript options
 const sequelize = new Sequelize({
-  dialect: 'mysql', // Replace with your DB dialect
-  host: 'localhost', // Your host
-  username: 'root', // Your DB username
-  password: 'password', // Your DB password
-  database: 'fivver_doup', // Your DB name
-  models: [User], // Automatically load models
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'root',
+  password: 'password',
+  database: 'fivver_doup_db',
+  models: [User, Service, Order, Review],  // Add models directly in initialization
+  // Optionally, you can add other sequelize configuration like logging, timezone, etc.
 });
 
+// Export sequelize instance
 export { sequelize };

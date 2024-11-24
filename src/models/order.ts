@@ -1,6 +1,4 @@
-// src/models/order.ts
-import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';  // Import for sequelize-typescript
-import { sequelize } from '../config/database';  // Ensure correct import path
+import { ForeignKey, Column, DataType, Model, Table } from 'sequelize-typescript';  // Correct import for sequelize-typescript
 import User from './user';  // Import the User model
 import Service from './service';  // Import the Service model
 
@@ -46,8 +44,9 @@ class Order extends Model<OrderAttributes> implements OrderAttributes {
   public status!: string; // Status of the order (default: Pending)
 }
 
-// Ensure the model is added to sequelize for synchronization
-sequelize.addModels([Order]); // Add the Order model to Sequelize instance
+// Ensure correct associations are handled for Sequelize
+Order.belongsTo(User, { foreignKey: 'userId' }); // Order belongs to User
+Order.belongsTo(Service, { foreignKey: 'serviceId' }); // Order belongs to Service
 
 // Export the Order model as the default export
 export default Order;

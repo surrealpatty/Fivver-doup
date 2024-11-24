@@ -1,27 +1,18 @@
-import User from './user'; // Import User model
-import Service from './service'; // Import Service model
-import Order from './order'; // Import Order model
+import { sequelize } from '../config/database';
+import User from './user';
+import Service from './service';
+import Order from './order';
+import Review from './review';
 
-// Define associations between the models
-const defineAssociations = () => {
-  // User <-> Service Association
-  // A user can have many services
-  User.hasMany(Service, { foreignKey: 'userId' });
-  Service.belongsTo(User, { foreignKey: 'userId' });
+// Associations
+User.hasMany(Service, { foreignKey: 'userId' });
+Service.belongsTo(User, { foreignKey: 'userId' });
 
-  // Service <-> Order Association
-  // A service has many orders
-  Service.hasMany(Order, { foreignKey: 'serviceId' });
-  Order.belongsTo(Service, { foreignKey: 'serviceId' });
+Service.hasMany(Order, { foreignKey: 'serviceId' });
+Order.belongsTo(Service, { foreignKey: 'serviceId' });
 
-  // User <-> Order Association
-  // A user can have many orders
-  User.hasMany(Order, { foreignKey: 'userId' });
-  Order.belongsTo(User, { foreignKey: 'userId' });
-};
+Service.hasMany(Review, { foreignKey: 'serviceId' });
+Review.belongsTo(Service, { foreignKey: 'serviceId' });
 
-// Ensure the models are associated correctly by calling the function
-defineAssociations();
-
-// Export the associations for later use in the app
-export default defineAssociations;
+// Add models to Sequelize instance
+sequelize.addModels([User, Service, Order, Review]);  // Ensure this correctly adds the models
