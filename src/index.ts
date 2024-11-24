@@ -1,8 +1,8 @@
-import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
-import { sequelize } from '../config/database'; // Correct import path for sequelize
-import User from '../models/user'; // Correct import path for user model
-import Service from '../models/services'; // Correct import path for services model
-import { mockRequest, mockResponse } from 'jest-mock-express'; // Add this utility to mock Request/Response
+import { registerUser, loginUser } from './controllers/userController'; // Corrected relative import
+import { sequelize } from './config/database'; // Corrected relative import
+import User from './models/user'; // Corrected relative import
+import Service from './models/services'; // Corrected relative import
+import { mockRequest, mockResponse } from 'jest-mock-express'; // Mock express utility
 
 console.log('User functions loaded successfully.');
 
