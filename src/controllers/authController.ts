@@ -1,71 +1,44 @@
-import { Request, Response } from 'express';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models/user'; // Correctly import User and UserCreationAttributes
 
-// Make sure the JWT_SECRET is available and valid
-const jwtSecret = process.env.JWT_SECRET;
-
-if (!jwtSecret) {
-  console.error('JWT_SECRET is not set');
-  process.exit(1); // Stop execution if JWT_SECRET is not available
+// Interface defining the attributes of the User model
+export interface UserAttributes {
+  id?: number;
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+  bio?: string;
 }
 
-/**
- * Register a new user
- */
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password, username, role } = req.body;
+@Table({ tableName: 'users', timestamps: true })
+class User extends Model<UserAttributes> implements UserAttributes {
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  public id!: number;
 
-  try {
-    // Validate required fields
-    if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Please provide email, password, and username.' });
-    }
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  public email!: string;
 
-    // Check if the user already exists
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use.' });
-    }
+  @Column({ type: DataType.STRING, allowNull: false })
+  public username!: string;
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+  @Column({ type: DataType.STRING, allowNull: false })
+  public password!: string;
 
-    // Default to 'free' if role is not provided
-    const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
+  @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'free' })
+  public role!: string;
 
-    // Prepare user data based on the UserCreationAttributes type
-    const userData: UserCreationAttributes = {
-      email,
-      password: hashedPassword,
-      username,
-      role: userRole,  // 'role' will either be 'free' or 'paid'
-    };
+  @Column({ type: DataType.STRING, allowNull: true })
+  public bio?: string;
 
-    // Create a new user in the database
-    const newUser = await User.create(userData);
-
-    // Generate a JWT token for the newly created user
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, username: newUser.username },
-      jwtSecret,
-      { expiresIn: '1h' }
-    );
-
-    // Return user info and token in the response
-    return res.status(201).json({
-      message: 'User registered successfully.',
-      token,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        isPaid: newUser.role === 'paid', // Access the 'role' value to determine if paid
-      },
-    });
-  } catch (error) {
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Server error during user registration.' });
+  get isPaid(): boolean {
+    return this.role === 'paid';
   }
-};
+
+  checkPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password);
+  }
+}
+
+export default User;
+
