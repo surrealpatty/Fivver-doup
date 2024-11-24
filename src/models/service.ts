@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
 // Define the attributes for the Service model
-export interface ServiceAttributes {
+interface ServiceAttributes {
   id: number;
   title: string;
   description: string;
@@ -11,10 +11,10 @@ export interface ServiceAttributes {
 }
 
 // Define the creation attributes, omitting 'id' for creation
-export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the Service model as a named export
-export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+// Define the Service model class
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public title!: string;
   public description!: string;
@@ -57,5 +57,5 @@ Service.init(
   }
 );
 
-// Export both the Service model and ServiceCreationAttributes interface as named exports
+// **Single Export Block** for everything
 export { Service, ServiceCreationAttributes };
