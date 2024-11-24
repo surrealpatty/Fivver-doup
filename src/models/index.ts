@@ -1,7 +1,7 @@
-import { Sequelize } from 'sequelize';
-import { User } from './user'; // Import the User model
-import { Service } from './service'; // Import the Service model
-import { Review } from './review'; // Import the Review model
+import { Sequelize } from 'sequelize-typescript'; // Ensure you're using sequelize-typescript
+import User from './user'; // Import the default export from the User model
+import Service from './service'; // Import the default export from the Service model
+import Review from './review'; // Import the default export from the Review model
 
 // Create an instance of Sequelize (adjust the database connection details as necessary)
 const sequelize = new Sequelize({
@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
   database: 'fivver_doup', // Adjust as necessary
   username: 'root', // Adjust as necessary
   password: 'password', // Adjust as necessary
+  models: [User, Service, Review], // Register models here if using sequelize-typescript
 });
 
 // Initialize associations between models
@@ -21,7 +22,8 @@ Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
 
 // Sync associations and ensure models are exported
 const initModels = () => {
-  sequelize.addModels([User, Service, Review]); // If using sequelize-typescript
+  // You can skip the addModels method if you're using models array during initialization
+  sequelize.sync(); // Syncing models (not needed if sync is done elsewhere)
 };
 
 // Export all models and the sequelize instance
