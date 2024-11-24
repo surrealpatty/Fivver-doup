@@ -1,6 +1,7 @@
 import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
 import { sequelize } from '../config/database'; // Correct import path for sequelize
-import { User, UserAttributes } from '../models/user'; // Named import and UserAttributes interface
+import  User from '../models/user'; // Named import and UserAttributes interface
+import { UserAttributes } from '../models/user';
 import Service from '../models/services'; // Correct import path for services model
 
 console.log('User functions loaded successfully.');

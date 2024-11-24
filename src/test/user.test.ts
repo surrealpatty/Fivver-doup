@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app, server } from '../index'; // Import app and server from index.ts
-import { User } from '../models/user'; // Named import
+import  User from '../models/user'; // Named import
 import jwt from 'jsonwebtoken'; // JSON Web Token library
 import { sequelize } from '../config/database'; // Sequelize instance
 

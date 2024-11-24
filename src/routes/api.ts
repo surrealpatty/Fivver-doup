@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';  // Import necessary types from express
-import { Service, User, ServiceCreationAttributes } from '../models';  // Correct the import paths to your models
+import { Service, User } from '../models';  // Correct the import paths to your models
+import {  ServiceCreationAttributes } from '../models';  // Correct the import paths to your models
 import { checkAuth } from '../middlewares/authMiddleware';  // Import the middleware correctly
 
 const router = Router();  // Initialize the router
