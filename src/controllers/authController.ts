@@ -1,8 +1,7 @@
-// src/controllers/authController.ts
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User, { UserCreationAttributes } from '../models/user'; // Correct imports
+import User, { UserCreationAttributes } from '../models/user'; // Correct import
 
 const jwtSecret = process.env.JWT_SECRET;
 
