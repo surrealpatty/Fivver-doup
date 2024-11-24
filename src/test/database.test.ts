@@ -1,4 +1,3 @@
-// src/test/database.test.ts
 import { sequelize, testConnection } from '../config/database'; // Correct import
 
 // Mock the sequelize instance's `authenticate` method to avoid real database calls during tests
