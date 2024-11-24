@@ -1,6 +1,7 @@
 // src/models/services.ts
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';  // Adjust imports for sequelize-typescript
 import User from './user';  // Import the User model to establish the relationship
+import { sequelize } from '../config/database'; // Ensure correct import path
 
 // Define the interface for the Service model creation attributes
 export interface ServiceCreationAttributes {
@@ -36,3 +37,6 @@ class Service extends Model<ServiceCreationAttributes> implements ServiceCreatio
 
 // Export the Service model as the default export
 export default Service;
+
+// Ensure the model is added to sequelize for synchronization
+sequelize.addModels([Service]); // Add the Service model to Sequelize instance

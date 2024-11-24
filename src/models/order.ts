@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript'; // Import for sequelize-typescript
+// src/models/order.ts
+import { Column, DataType, Model, Table } from 'sequelize-typescript';  // Import for sequelize-typescript
+import { sequelize } from '../config/database';  // Ensure correct import path
 
 // Define the attributes for the Order model
 export interface OrderAttributes {
@@ -39,6 +41,9 @@ class Order extends Model<OrderAttributes> implements OrderAttributes {
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'Pending' })
   public status!: string; // Status of the order (default: Pending)
 }
+
+// Ensure the model is added to sequelize for synchronization
+sequelize.addModels([Order]); // Add the Order model to Sequelize instance
 
 // Export the Order model as the default export
 export default Order;
