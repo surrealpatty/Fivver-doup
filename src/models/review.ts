@@ -5,7 +5,7 @@ import Service from './service';
 // Define the Review model class
 @Table({ tableName: 'reviews', timestamps: true })
 class Review extends Model {
-  @ForeignKey(() => Service)
+ 
   @Column({ type: DataType.INTEGER, allowNull: false })
   serviceId!: number;
 
@@ -21,7 +21,6 @@ class Review extends Model {
 }
 
 // Define associations for the Review model
-Review.belongsTo(Service, { foreignKey: 'serviceId' });
 Review.belongsTo(User, { foreignKey: 'userId' });
 
 export default Review;
