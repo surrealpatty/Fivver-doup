@@ -7,12 +7,13 @@ import Review from '../models/review';  // Import Review model
 // Initialize sequelize with sequelize-typescript options
 const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: 'localhost',
-  username: 'root',
-  password: 'password',
-  database: 'fivver_doup_db',
+  host: 'localhost', // Replace with your database host if needed
+  username: 'root',  // Replace with your database username
+  password: 'password', // Replace with your database password
+  database: 'fivver_doup_db', // Replace with your database name
   models: [User, Service, Order, Review],  // Add models directly in initialization
-  // Optionally, you can add other sequelize configuration like logging, timezone, etc.
+  logging: console.log,  // Optional: log SQL queries
+  timezone: '+00:00',  // Optional: configure the timezone, if necessary
 });
 
 // Export sequelize instance

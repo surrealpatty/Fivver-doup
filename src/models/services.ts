@@ -1,7 +1,8 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
+// Define the Service model class
 @Table({ tableName: 'services' })
-class Service extends Model<Service> {
+class Service extends Model {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   id!: number;
 
@@ -10,8 +11,6 @@ class Service extends Model<Service> {
 
   @Column({ type: DataType.TEXT, allowNull: false })
   description!: string;
-
-  // Other columns as needed
 }
 
-export default Service; // Corrected export statement
+export default Service;

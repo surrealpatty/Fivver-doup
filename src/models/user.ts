@@ -1,18 +1,8 @@
 // src/models/user.ts
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-// Define the interface for the User's attributes
-export interface UserAttributes {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  role?: string; // Role is optional
-}
-
-// Define the User model class, which will implement the UserAttributes interface
 @Table({ tableName: 'users' })
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model<User> {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   id!: number;
 
@@ -23,12 +13,10 @@ class User extends Model<UserAttributes> implements UserAttributes {
   email!: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  password!: string; // Ensure that 'password' field is included in the model
+  password!: string;
 
   @Column({ type: DataType.STRING, allowNull: true })
-  role!: string; // Ensure that 'role' field is included in the model
-
-  // You can add other fields here as needed
+  role!: string;
 }
 
-export default User;
+export default User;  // Default export for User model
