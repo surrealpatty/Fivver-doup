@@ -1,51 +1,38 @@
-import { ForeignKey, Column, DataType, Model, Table } from 'sequelize-typescript';
-import { User }from './user';
-import Service from './service'; // Import the Service model
-import { ModelCtor } from 'sequelize-typescript'; // Import ModelCtor for explicit typing
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // assuming sequelize is correctly configured
 
-interface OrderAttributes {
-  id: number;
-  userId: number;
-  serviceId: number;
-  quantity: number;
-  totalPrice: number;
-  totalAmount: number;
-  orderDetails?: string;
-  status: string;
+export interface OrderAttributes {
+    id: string;
+    serviceId: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-@Table({ tableName: 'orders', timestamps: true })
-class Order extends Model<OrderAttributes> {
-  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
-  id!: number;
+export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-  @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number;
-
-  
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  serviceId!: number;
-
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  quantity!: number;
-
-  @Column({ type: DataType.FLOAT, allowNull: false })
-  totalPrice!: number;
-
-  @Column({ type: DataType.FLOAT, allowNull: false })
-  totalAmount!: number;
-
-  @Column({ type: DataType.STRING, allowNull: true })
-  orderDetails?: string;
-
-  @Column({ type: DataType.STRING, allowNull: false, defaultValue: 'Pending' })
-  status!: string;
+class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
+    public id!: string;
+    public serviceId!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
-// Define associations for the Order model
-Order.belongsTo(User, { foreignKey: 'userId' });
-// Explicitly cast Service to ModelCtor after unknown
-Order.belongsTo(Service as unknown as ModelCtor, { foreignKey: 'serviceId' });
+Order.init(
+    {
+        id: {
+            type: DataTypes.STRING,
+            primaryKey: true,
+            allowNull: false,
+        },
+        serviceId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    },
+    {
+        sequelize,
+        tableName: 'orders',
+    }
+);
 
-export default Order;
+export default Order;  // Ensure default export

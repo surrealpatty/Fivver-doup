@@ -1,30 +1,56 @@
-import { Model, Column, DataType, Table, ForeignKey } from 'sequelize-typescript';
-import { User } from './user'; // Assuming User model is imported correctly
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // assuming sequelize is correctly configured
 
-// Define the attributes for the Service model (for creation)
-interface ServiceCreationAttributes {
-  userId: number;
-  title: string;
-  description: string;
-  price: number;
+export interface ServiceAttributes {
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    userId: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-// Define the Sequelize Service model class
-@Table({ tableName: 'services', timestamps: true })
-class Service extends Model<ServiceCreationAttributes> { 
-  @ForeignKey(() => User)  // ForeignKey relation to User model
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number;
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  title!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  description!: string;
-
-  @Column({ type: DataType.FLOAT, allowNull: false })
-  price!: number;
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+    public id!: string;
+    public title!: string;
+    public description!: string;
+    public price!: number;
+    public userId!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
-// Export both the class and the interface
-export { Service, ServiceCreationAttributes };
+Service.init(
+    {
+        id: {
+            type: DataTypes.STRING,
+            primaryKey: true,
+            allowNull: false,
+        },
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        userId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    },
+    {
+        sequelize,
+        tableName: 'services',
+    }
+);
+
+export default Service;  // Ensure default export
