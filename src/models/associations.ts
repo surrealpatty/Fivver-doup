@@ -1,8 +1,6 @@
-// src/models/associations.ts
-import { Sequelize } from 'sequelize-typescript';  // Import Sequelize for correct initialization
-import User from './user';  // Import User model
-import Service from './service';  // Import Service model
-import Order from './order';  // Import Order model
+import User from './user'; // Import User model
+import Service from './service'; // Import Service model
+import Order from './order'; // Import Order model
 
 // Define associations between the models
 const defineAssociations = () => {
@@ -22,7 +20,7 @@ const defineAssociations = () => {
   Order.belongsTo(User, { foreignKey: 'userId' });
 };
 
-// Call defineAssociations function to establish the relationships
+// Ensure the models are associated correctly by calling the function
 defineAssociations();
 
 // Export the associations for later use in the app

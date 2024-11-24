@@ -1,3 +1,4 @@
+// src/models/user.ts
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import bcrypt from 'bcrypt';
 import { sequelize } from '../config/database'; // Ensure correct import path

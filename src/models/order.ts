@@ -1,6 +1,8 @@
 // src/models/order.ts
-import { Column, DataType, Model, Table } from 'sequelize-typescript';  // Import for sequelize-typescript
+import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';  // Import for sequelize-typescript
 import { sequelize } from '../config/database';  // Ensure correct import path
+import User from './user';  // Import the User model
+import Service from './service';  // Import the Service model
 
 // Define the attributes for the Order model
 export interface OrderAttributes {
@@ -20,9 +22,11 @@ class Order extends Model<OrderAttributes> implements OrderAttributes {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   public id!: number;
 
+  @ForeignKey(() => User) // ForeignKey association with User model
   @Column({ type: DataType.INTEGER, allowNull: false })
   public userId!: number; // ID of the user placing the order
 
+  @ForeignKey(() => Service) // ForeignKey association with Service model
   @Column({ type: DataType.INTEGER, allowNull: false })
   public serviceId!: number; // ID of the service being ordered
 
