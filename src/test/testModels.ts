@@ -1,9 +1,9 @@
 import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
 import { sequelize } from '../config/database'; // Correct import path for sequelize
-import User from '../models/user'; // Named import and UserAttributes interface
-import { UserAttributes } from '../models/user'; // Add User to import for creating instances
+import User, { UserAttributes } from '../models/user'; // Import User and UserAttributes
 import Service from '../models/services'; // Correct import path for services model
 import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for service creation
+import { Optional } from 'sequelize-typescript'; // Import Optional from sequelize-typescript
 
 console.log('User functions loaded successfully.');
 
@@ -26,7 +26,7 @@ const testUserAndServiceModels = async () => {
     };
 
     // Use the UserAttributes type here, pass it to the create method
-    const newUser = await User.create(newUserData as Optional<User, 'id'>); // Use Optional to omit 'id' during creation
+    const newUser = await User.create(newUserData as Optional<UserAttributes, 'id'>); // Use Optional to omit 'id' during creation
     console.log('User created:', newUser.toJSON());
 
     // Test Service Creation (associated with the newly created user)
@@ -34,7 +34,7 @@ const testUserAndServiceModels = async () => {
       title: 'Test Service',
       description: 'This is a test service description.',
       price: 100.0,
-      category: 'Testing', // Ensure this field exists in the Service model
+      // Remove category if not in Service model, or add it to ServiceCreationAttributes
       userId: newUser.id, // Ensure the type of newUser.id matches the expected type of userId
     };
 
