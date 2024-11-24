@@ -1,5 +1,4 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'; // Import necessary modules for sequelize-typescript
-import { sequelize } from '../config/database'; // Import the sequelize instance from config
 import { Optional } from 'sequelize/types'; // Import Optional type
 
 // Define the User model
@@ -24,5 +23,5 @@ class User extends Model<User> {
 // Define UserCreation type for creating users (excluding id, createdAt, updatedAt)
 export interface UserCreation extends Optional<User, 'id' | 'createdAt' | 'updatedAt'> {}
 
-// Export the User model as default and the UserCreation interface
-export { User, UserCreation };
+// Named export for User model
+export { User };
