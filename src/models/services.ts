@@ -1,5 +1,5 @@
 import { Model, Column, DataType, Table, ForeignKey } from 'sequelize-typescript';
-import { User } from './user';  // Assuming User model is imported correctly
+import { User } from './user'; // Assuming User model is imported correctly
 
 // Define the attributes for the Service model (for creation)
 export interface ServiceCreationAttributes {
@@ -11,8 +11,8 @@ export interface ServiceCreationAttributes {
 
 // Define the Sequelize Service model class
 @Table({ tableName: 'services', timestamps: true })
-class Service extends Model<ServiceCreationAttributes> {
-  @ForeignKey(() => User)  // Assuming Service has a ForeignKey relationship with User
+class Service extends Model<ServiceCreationAttributes> { 
+  @ForeignKey(() => User)  // ForeignKey relation to User model
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId!: number;
 
@@ -26,5 +26,6 @@ class Service extends Model<ServiceCreationAttributes> {
   price!: number;
 }
 
-// Export both the Service model and the ServiceCreationAttributes interface
-export { Service, ServiceCreationAttributes };
+// Export the class and interface separately
+export { Service };
+export type { ServiceCreationAttributes }; // Export the interface as a type separately

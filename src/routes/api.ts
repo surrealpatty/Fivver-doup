@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Service, User, ServiceCreationAttributes } from '../models'; // Correct import
+import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import
 import { checkAuth } from '../middlewares/authMiddleware';
 
 const router = Router();

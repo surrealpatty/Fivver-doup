@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models/user';  // Correctly import UserCreationAttributes
+import { User, UserCreationAttributes } from '../models/user'; // Correctly import User and UserCreationAttributes
 
+// Make sure the JWT_SECRET is available and valid
 const jwtSecret = process.env.JWT_SECRET;
 
 if (!jwtSecret) {
   console.error('JWT_SECRET is not set');
+  process.exit(1); // Stop execution if JWT_SECRET is not available
 }
 
 /**
@@ -31,26 +33,27 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Default to 'free' if role is not provided
-    const userRole = role === 'paid' ? 'paid' : 'free';
+    const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
 
-    // Create a new user
+    // Prepare user data based on the UserCreationAttributes type
     const userData: UserCreationAttributes = {
       email,
       password: hashedPassword,
       username,
-      role: userRole,
+      role: userRole,  // 'role' will either be 'free' or 'paid'
     };
 
+    // Create a new user in the database
     const newUser = await User.create(userData);
 
-    // Generate a JWT token
+    // Generate a JWT token for the newly created user
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, username: newUser.username },
       jwtSecret,
       { expiresIn: '1h' }
     );
 
-    // Return user info and token
+    // Return user info and token in the response
     return res.status(201).json({
       message: 'User registered successfully.',
       token,
