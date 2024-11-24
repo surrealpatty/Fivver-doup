@@ -27,5 +27,5 @@ export class Service extends Model<ServiceCreationAttributes> implements Service
   public userId!: number;  // Foreign key for the user who created the service
 }
 
-// Export the Service model and the ServiceCreationAttributes interface
-export { Service, ServiceCreationAttributes };
+// Only export the class itself, no need for a separate export of the interface
+export default Service;
