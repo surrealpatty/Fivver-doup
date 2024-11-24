@@ -1,4 +1,4 @@
-import User  from '../models/user'; // Named import
+import { User } from '../models/user'; // Named import
 import bcrypt from 'bcryptjs'; // Add bcrypt for password comparison
 import { Request, Response } from 'express'; // Express types for request and response
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize

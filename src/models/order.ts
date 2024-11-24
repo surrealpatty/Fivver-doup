@@ -1,5 +1,5 @@
 import { ForeignKey, Column, DataType, Model, Table } from 'sequelize-typescript';
-import User from './user';
+import { User }from './user';
 import Service from './service'; // Import the Service model
 import { ModelCtor } from 'sequelize-typescript'; // Import ModelCtor for explicit typing
 

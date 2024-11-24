@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
-import User from './user';
+import { User }from './user';
 import Service from './service';
 
 // Define the Review model class
