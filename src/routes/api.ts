@@ -1,12 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import
+import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import for models
 import { checkAuth } from '../middlewares/authMiddleware';
 
 const router = Router();
 
+// POST route to create a service
 router.post('/services', checkAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    // Type the request body using ServiceCreationAttributes
+    // Type the request body using ServiceCreationAttributes for type safety
     const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
     // Validate required fields
@@ -37,7 +38,7 @@ router.post('/services', checkAuth, async (req: Request, res: Response): Promise
       return;
     }
 
-    // Create a new service
+    // Create a new service for the user
     const service = await Service.create({
       userId,
       title,
