@@ -1,47 +1,43 @@
 // src/models/order.ts
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
-import { OrderAttributes, OrderCreationAttributes } from '../types/order'; // Import OrderAttributes
 
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
-  public id!: string;
-  public serviceId!: string;
-  public status!: string;           // Add status
-  public quantity!: number;        // Add quantity
-  public totalPrice!: number;      // Add totalPrice
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+class Order extends Model {
+  public id!: number;
+  public serviceId!: number; // Foreign key to Service
+  public userId!: number;    // Foreign key to User
+  public status!: string;    // Status of the order (e.g., pending, completed)
+  public totalPrice!: number; // Total price of the order
 }
 
 Order.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
     },
     serviceId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false, // Set appropriate constraints as per your use case
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false, // Set appropriate constraints as per your use case
+      allowNull: false,
     },
     totalPrice: {
-      type: DataTypes.FLOAT,
-      allowNull: false, // Set appropriate constraints as per your use case
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
   },
   {
     sequelize,
     tableName: 'orders',
-    timestamps: true, // Ensure that Sequelize automatically manages createdAt and updatedAt
   }
 );
 
-export default Order; // Ensure default export
+export default Order;  // Default export

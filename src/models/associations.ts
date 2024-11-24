@@ -1,9 +1,9 @@
 // src/models/associations.ts
-import { sequelize } from '../config/database';  // Import the sequelize instance
-import { User } from './user'; // Default import for User model
-import Service from './service';
-import Order from './order'; // Default import for Order model
-import Review from './review'; // Default import for Review model
+import { sequelize } from '../config/database';
+import User from './user';  // Default import for User model
+import Service from './service';  // Default import for Service model
+import Order from './order';  // Default import for Order model
+import Review from './review';  // Default import for Review model
 
 // Define associations between models
 User.hasMany(Service, { foreignKey: 'userId' });  // User has many services

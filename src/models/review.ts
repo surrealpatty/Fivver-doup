@@ -1,50 +1,43 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // assuming sequelize is correctly configured
+// src/models/review.ts
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database';
 
-export interface ReviewAttributes {
-    id: string;
-    serviceId: string;
-    rating: number;
-    comment: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export interface ReviewCreationAttributes extends Optional<ReviewAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
-class Review extends Model<ReviewAttributes, ReviewCreationAttributes> implements ReviewAttributes {
-    public id!: string;
-    public serviceId!: string;
-    public rating!: number;
-    public comment!: string;
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+class Review extends Model {
+  public id!: number;
+  public serviceId!: number;  // Foreign key to Service
+  public userId!: number;     // Foreign key to User
+  public rating!: number;     // Rating value (e.g., 1 to 5)
+  public comment!: string;    // Review comment
 }
 
 Review.init(
-    {
-        id: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false,
-        },
-        serviceId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        rating: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        comment: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-        sequelize,
-        tableName: 'reviews',
-    }
+    serviceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    comment: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+    tableName: 'reviews',
+  }
 );
 
-export default Review;  // Ensure default export
+export default Review;  // Default export
