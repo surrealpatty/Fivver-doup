@@ -1,7 +1,7 @@
 // src/controllers/serviceController.ts
 
 import { Request, Response } from 'express';
-import { Service } from '../models/services';  // Correct import
+import  Service  from '../models/services';  // Correct import
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
 
 // Extend the Request interface to include the user object, which may be undefined

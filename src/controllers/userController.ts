@@ -7,7 +7,7 @@ type UserCreationAttributes = {
   username: string;
   email: string;
   password: string;
-  role: string; // Add role as it's part of user creation
+  role: 'free' | 'paid'; // Define role as 'free' | 'paid'
 };
 
 // Register user function
