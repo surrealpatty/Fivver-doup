@@ -1,2 +1,5 @@
-declare const app: import("express-serve-static-core").Express;
+import { Express } from 'express-serve-static-core';
+
+
+declare const app: Express;
 export { app };
