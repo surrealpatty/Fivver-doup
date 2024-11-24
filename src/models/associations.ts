@@ -3,17 +3,17 @@ import User from './user'; // Default import for User model
 import Service from './service'; // Default import for Service model
 import Order from './order'; // Default import for Order model
 import Review from './review'; // Default import for Review model
-import { ModelStatic } from 'sequelize'; // Import ModelStatic from Sequelize for model class typing
+import { ModelCtor } from 'sequelize'; // Use ModelCtor for typing
 
 // Define associations between models
-(User as ModelStatic<any>).hasMany(Service, { foreignKey: 'userId' });
-(Service as ModelStatic<any>).belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Service, { foreignKey: 'userId' });  // User has many services
+Service.belongsTo(User, { foreignKey: 'userId' });  // Service belongs to user
 
-(Service as ModelStatic<any>).hasMany(Order, { foreignKey: 'serviceId' });
-(Order as ModelStatic<any>).belongsTo(Service, { foreignKey: 'serviceId' });
+Service.hasMany(Order, { foreignKey: 'serviceId' });  // Service has many orders
+Order.belongsTo(Service, { foreignKey: 'serviceId' });  // Order belongs to service
 
-(Service as ModelStatic<any>).hasMany(Review, { foreignKey: 'serviceId' });
-(Review as ModelStatic<any>).belongsTo(Service, { foreignKey: 'serviceId' });
+Service.hasMany(Review, { foreignKey: 'serviceId' });  // Service has many reviews
+Review.belongsTo(Service, { foreignKey: 'serviceId' });  // Review belongs to service
 
 // Add models to Sequelize instance
 sequelize.addModels([User, Service, Order, Review]);

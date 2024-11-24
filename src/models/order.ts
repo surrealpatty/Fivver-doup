@@ -2,6 +2,7 @@ import { ForeignKey, Column, DataType, Model, Table } from 'sequelize-typescript
 import User from './user';
 import Service from './service';
 
+// Sequelize model for the 'orders' table
 @Table({ tableName: 'orders', timestamps: true })
 class Order extends Model {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
@@ -31,6 +32,7 @@ class Order extends Model {
   status!: string;
 }
 
+// Define associations for the Order model
 Order.belongsTo(User, { foreignKey: 'userId' });
 Order.belongsTo(Service, { foreignKey: 'serviceId' });
 
