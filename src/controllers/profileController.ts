@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/user'; // Adjusted to use default import
+import { User }from '../models/user'; // Adjusted to use default import
 import { JwtPayload } from 'jsonwebtoken';
 
 // Get User Profile
