@@ -1,8 +1,9 @@
 import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
 import { sequelize } from '../config/database'; // Correct import path for sequelize
-import  User from '../models/user'; // Named import and UserAttributes interface
-import { UserAttributes } from '../models/user';
+import User from '../models/user'; // Named import and UserAttributes interface
+import { UserAttributes } from '../models/user'; // Add User to import for creating instances
 import Service from '../models/services'; // Correct import path for services model
+import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for service creation
 
 console.log('User functions loaded successfully.');
 
@@ -13,29 +14,32 @@ Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 // Function to test user and service models
 const testUserAndServiceModels = async () => {
   try {
-    // Synchronize models with the database (use `force: true` cautiously for testing)
+    // Synchronize models with the database (use force: true cautiously for testing)
     await sequelize.sync({ force: true });
 
     // Test User Creation using UserAttributes type (plain object)
     const newUserData: UserAttributes = {
       username: 'testuser',
       email: 'testuser@example.com',
-      password: 'password123',
+      password: 'password123',  // Ensure password is part of UserAttributes
       role: 'user', // Include role field if it's required
     };
 
     // Use the UserAttributes type here, pass it to the create method
-    const newUser = await User.create(newUserData);  // Correct usage of User.create with the UserAttributes type
+    const newUser = await User.create(newUserData as Optional<User, 'id'>); // Use Optional to omit 'id' during creation
     console.log('User created:', newUser.toJSON());
 
     // Test Service Creation (associated with the newly created user)
-    const newService = await Service.create({
+    const newServiceData: ServiceCreationAttributes = {
       title: 'Test Service',
       description: 'This is a test service description.',
       price: 100.0,
-      category: 'Testing',
+      category: 'Testing', // Ensure this field exists in the Service model
       userId: newUser.id, // Ensure the type of newUser.id matches the expected type of userId
-    });
+    };
+
+    // Create a new service with associated user
+    const newService = await Service.create(newServiceData);
     console.log('Service created:', newService.toJSON());
 
     // Test User Registration via registerUser function
