@@ -1,8 +1,19 @@
 // src/models/order.ts
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-class Order extends Model {
+// Define Order attributes
+interface OrderAttributes {
+  id: number;
+  serviceId: number;
+  status: string;
+  quantity: number;
+  totalPrice: number;
+}
+
+export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+
+class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
   public serviceId!: number;
   public status!: string;
@@ -12,32 +23,13 @@ class Order extends Model {
 
 Order.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    serviceId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    totalPrice: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    serviceId: { type: DataTypes.INTEGER, allowNull: false },
+    status: { type: DataTypes.STRING, allowNull: false },
+    quantity: { type: DataTypes.INTEGER, allowNull: false },
+    totalPrice: { type: DataTypes.FLOAT, allowNull: false },
   },
-  {
-    sequelize,
-    tableName: 'orders',
-  }
+  { sequelize, tableName: 'orders' }
 );
 
 export default Order;

@@ -1,6 +1,6 @@
 // src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import Order from '../models/order';  // Assuming you have an Order model defined
+import Order from '../models/order';  // Importing the Order model
 
 // Importing RequestHandler type from express
 import { RequestHandler } from 'express';
