@@ -1,6 +1,6 @@
 import { sequelize } from '../config/database';
-import User from '../models/user';  // Default import for User
-import Service from '../models/services';  // Default import for Service
+import User from '../models/user';
+import Service, { ServiceCreationAttributes } from '../models/services'; // Correct import
 
 describe('User and Service Models', () => {
   beforeAll(async () => {
@@ -36,12 +36,14 @@ describe('User and Service Models', () => {
     });
 
     // Create a service for that user
-    const service = await Service.create({
+    const serviceData: ServiceCreationAttributes = {
       title: 'Test Service',
       description: 'This is a test service description.',
       price: 100.0,
-      userId: user.id,  // Linking to the user via userId
-    });
+      userId: user.id, // Linking to the user via userId
+    };
+
+    const service = await Service.create(serviceData);
 
     expect(service).toHaveProperty('id');
     expect(service.userId).toBe(user.id);
