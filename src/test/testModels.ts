@@ -3,7 +3,7 @@ import { sequelize } from '../config/database'; // Correct import path for seque
 import User, { UserAttributes } from '../models/user'; // Import User and UserAttributes
 import Service from '../models/services'; // Correct import path for services model
 import { ServiceCreationAttributes } from '../models/services'; // Import the correct type for service creation
-import { Optional } from 'sequelize-typescript'; // Import Optional from sequelize-typescript
+import { Optional } from 'sequelize';
 
 console.log('User functions loaded successfully.');
 
