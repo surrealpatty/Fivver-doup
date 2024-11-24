@@ -1,11 +1,12 @@
+// src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import { UpdateOrderRequest } from '../types/order';  // Import the UpdateOrderRequest type
-import Order from '../models/order';  // Assuming you have an Order model
+import { UpdateOrderRequest } from '../types/order';  // Correct import path
+import Order from '../models/order';
 
 // Function to update an order
 export const updateOrder = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { status, quantity, totalPrice }: UpdateOrderRequest = req.body;  // Use the defined type for the request body
+  const { status, quantity, totalPrice }: UpdateOrderRequest = req.body;  // Use the defined type
 
   try {
     const order = await Order.findByPk(id);
@@ -14,7 +15,7 @@ export const updateOrder = async (req: Request, res: Response) => {
     }
 
     // Apply updates if provided, otherwise retain the current value
-    order.status = status ?? order.status;  // Use nullish coalescing to check for null or undefined
+    order.status = status ?? order.status;
     order.quantity = quantity ?? order.quantity;
     order.totalPrice = totalPrice ?? order.totalPrice;
 

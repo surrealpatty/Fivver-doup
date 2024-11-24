@@ -1,8 +1,7 @@
-// src/models/services.ts
+// src/models/service.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-// Define ServiceAttributes interface for typing
 interface ServiceAttributes {
   id: number;
   userId: number;
@@ -10,10 +9,8 @@ interface ServiceAttributes {
   description?: string;
 }
 
-// ServiceCreationAttributes allows for optional fields during creation
 interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the model class
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   public id!: number;
   public userId!: number;
@@ -41,15 +38,9 @@ Service.init(
     },
   },
   {
-    sequelize, // pass the sequelize instance
-    modelName: 'Service', // model name
+    sequelize,
+    modelName: 'Service',
   }
 );
 
-// **Correct approach:** Only export once (default or named export)
-
-// Exporting as default
-export default Service;
-
-// Alternatively, you could use a named export (but not both):
-// export { Service };
+export default Service;  // Correct export

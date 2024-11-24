@@ -2,6 +2,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
+// Define UserAttributes interface
 interface UserAttributes {
   id: number;
   email: string;
@@ -10,6 +11,7 @@ interface UserAttributes {
   role: 'free' | 'paid';
 }
 
+// UserCreationAttributes allows for optional fields during creation
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
@@ -51,4 +53,4 @@ User.init(
   }
 );
 
-export { User, UserCreationAttributes };
+export { User, UserCreationAttributes };  // Correct export for User
