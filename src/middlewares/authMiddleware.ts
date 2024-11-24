@@ -17,14 +17,15 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): Response | void => {
+): void => {
   try {
     // Extract token from the Authorization header
     const authHeader = req.headers['authorization'];
     const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
 
     if (!token) {
-      return res.status(401).json({ message: 'Access denied, no token provided.' });
+      res.status(401).json({ message: 'Access denied, no token provided.' }); // Send response, no return here
+      return; // Ensure the function doesn't continue after sending the response
     }
 
     // Verify the token
@@ -35,8 +36,15 @@ export const authenticateToken = (
 
     // Proceed to the next middleware or route handler
     next();
-  } catch (error) {
-    console.error('Authentication error:', error.message);
-    return res.status(403).json({ message: 'Invalid or expired token.' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {  // Narrow the error to the `Error` type
+      console.error('Authentication error:', error.message);
+      res.status(403).json({ message: 'Invalid or expired token.' }); // Send response, no return here
+      return; // Ensure the function doesn't continue after sending the response
+    }
+
+    // Fallback for cases when the error is not of type `Error`
+    console.error('Unexpected error during authentication:', error);
+    res.status(500).json({ message: 'Internal server error.' }); // Send response, no return here
   }
 };
