@@ -1,22 +1,31 @@
-import { registerUser, loginUser } from './controllers/userController'; // Corrected relative import
+import express from 'express';
 import { sequelize } from './config/database'; // Corrected relative import
 import User from './models/user'; // Corrected relative import
 import Service from './models/services'; // Corrected relative import
-import { mockRequest, mockResponse } from 'jest-mock-express'; // Mock express utility
+import { registerUser, loginUser } from './controllers/userController'; // Corrected relative import
 
-console.log('User functions loaded successfully.');
+const app = express();
+
+// Middleware for JSON parsing
+app.use(express.json());
 
 // Setting up model associations
 User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
 Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-// Function to test user and service models
-const testUserAndServiceModels = async () => {
+// API routes (you can add more as needed)
+app.post('/register', registerUser);
+app.post('/login', loginUser);
+
+// Function to initialize the database and models
+const initializeDatabase = async () => {
   try {
     // Synchronize models with the database
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: true }); // Reset database
 
-    // Test User Creation
+    console.log('Database synchronized.');
+
+    // Optional: Test data creation (for testing purposes)
     const newUser = await User.create({
       username: 'testuser',
       email: 'testuser@example.com',
@@ -24,7 +33,6 @@ const testUserAndServiceModels = async () => {
     });
     console.log('User created:', newUser.toJSON());
 
-    // Test Service Creation
     const newService = await Service.create({
       title: 'Test Service',
       description: 'This is a test service description.',
@@ -33,40 +41,20 @@ const testUserAndServiceModels = async () => {
       userId: newUser.id.toString(), // Ensure userId matches Service model's type (string)
     });
     console.log('Service created:', newService.toJSON());
-
-    // Mock the Request and Response for registerUser
-    const req = mockRequest({
-      body: {
-        username: newUser.username,
-        email: newUser.email,
-        password: newUser.password,
-      },
-    });
-    const res = mockResponse();
-
-    // Test User Registration
-    await registerUser(req, res);
-    console.log('User registered via registerUser:', res.json.mock.calls[0][0]);
-
-    // Mock the Request and Response for loginUser
-    const loginReq = mockRequest({
-      body: {
-        email: newUser.email,
-        password: newUser.password,
-      },
-    });
-    const loginRes = mockResponse();
-
-    // Test User Login
-    await loginUser(loginReq, loginRes);
-    console.log('User logged in via loginUser:', loginRes.json.mock.calls[0][0]);
+    
   } catch (error) {
-    console.error('Error testing models:', error);
-  } finally {
-    // Close the database connection
-    await sequelize.close();
+    console.error('Error initializing database:', error);
   }
 };
 
-// Call the test function
-testUserAndServiceModels();
+// Initialize database on app startup
+initializeDatabase();
+
+// Export the app for use in other files (e.g., for testing or deployment)
+export { app };
+
+// You can also start the server if this file is the entry point for your app
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

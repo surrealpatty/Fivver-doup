@@ -3,7 +3,7 @@ import Order from '../models/order';
 import User from '../models/user';
 import Service from '../models/services';
 import request from 'supertest'; // Assuming you're using supertest for API testing
-import { app } from '../index';  // Assuming you export 'app' from your main index file
+import { app } from '../index';  // Now exporting 'app' from the index file
 
 // Mock models with correct types
 jest.mock('../models/user');
@@ -13,10 +13,7 @@ jest.mock('../models/order');
 // Mocking methods for Sequelize models
 const mockFindByPk = jest.fn();
 const mockFindAll = jest.fn();
-const mockSave = jest.fn();
-const mockDestroy = jest.fn();
 
-// Mock the methods for each model
 (User.findByPk as jest.Mock) = mockFindByPk;
 (Service.findByPk as jest.Mock) = mockFindByPk;
 (Order.findByPk as jest.Mock) = mockFindByPk;
