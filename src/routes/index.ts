@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';  // Import express and the types for request and response
-import reviewRouter from './review';  // Correct import path for Review.ts (router in Review.ts)
-import userRouter from './user';  // Ensure userRouter is properly defined and exported as a router
-import serviceRouter from './service';  // Correct import path for service.ts (router in service.ts)
+import express, { Request, Response } from 'express';  // Import express and types for request and response
+import reviewRouter from './review';  // Ensure reviewRouter is correctly exported from review.ts
+import userRouter from './user';  // Correctly imported userRouter from user.ts
+import serviceRouter from './service';  // Ensure serviceRouter is correctly exported from service.ts
 
 // Create an instance of the router
 const router = express.Router();

@@ -58,12 +58,10 @@ export const checkAuth = (
   res: Response,
   next: NextFunction
 ): void => {
-  // Use the authenticateToken middleware to check if the token is valid
   authenticateToken(req, res, () => {
-    // Additional checks can go here (if needed)
+    // Add any additional checks if needed
     if (req.user) {
-      // If user is authenticated, continue to the next route handler
-      next();
+      next(); // If authenticated, proceed to the next route handler
     } else {
       res.status(401).json({ message: 'Authentication failed.' });
     }
