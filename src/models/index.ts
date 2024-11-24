@@ -14,13 +14,6 @@ const sequelize = new Sequelize({
   logging: false, // Optional: disable logging if not needed
 });
 
-// Initialize associations between models
-User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
-Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-
-Service.hasMany(Review, { foreignKey: 'serviceId', as: 'reviews' });
-Review.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
-
 // Sync associations and ensure models are exported
 const initModels = async () => {
   try {

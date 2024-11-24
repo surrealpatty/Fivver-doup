@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
+import Review from './review'; // Import the Review model to define the relationship
 
 // Interface defining the attributes of the Service model
 export interface ServiceCreationAttributes {
@@ -25,6 +26,10 @@ export class Service extends Model<ServiceCreationAttributes> implements Service
 
   @Column({ type: DataType.INTEGER, allowNull: false })
   public userId!: number;  // Foreign key for the user who created the service
+
+  // Define the association with reviews (one-to-many relationship)
+  @HasMany(() => Review)
+  public reviews!: Review[];
 }
 
 // Only export the class itself, no need for a separate export of the interface

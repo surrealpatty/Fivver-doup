@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
+import Review from './review'; // Import Review model to define the relationship
 
 // Define the User model using Sequelize (with sequelize-typescript)
 @Table({ tableName: 'users', timestamps: true })
@@ -20,6 +21,10 @@ export default class User extends Model<User, UserCreationAttributes> {
 
   @Column({ type: DataType.STRING, allowNull: true })
   public role?: string;
+
+  // Define the association with reviews (one-to-many relationship)
+  @HasMany(() => Review)
+  public reviews!: Review[];
 }
 
 // Define the UserCreationAttributes interface for creating a new user
