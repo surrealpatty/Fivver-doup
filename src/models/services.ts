@@ -1,4 +1,4 @@
-// src/models/service.ts
+// src/models/services.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
@@ -46,4 +46,10 @@ Service.init(
   }
 );
 
+// **Correct approach:** Only export once (default or named export)
+
+// Exporting as default
 export default Service;
+
+// Alternatively, you could use a named export (but not both):
+// export { Service };

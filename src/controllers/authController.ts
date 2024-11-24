@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models'; // Ensure User and UserCreationAttributes are imported
+import { User, UserCreationAttributes } from '../models';
 
 const jwtSecret = process.env.JWT_SECRET;
 

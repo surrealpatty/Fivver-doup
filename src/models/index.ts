@@ -1,4 +1,4 @@
-import { User }from './user';  // Import User from user.ts
+export { UserCreationAttributes } from './user';  // Import User from user.ts
 import Service from './service';
 import Review from './review';
 import Order from './order';

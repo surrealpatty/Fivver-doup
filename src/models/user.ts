@@ -2,7 +2,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-// Define attributes for the User model
 interface UserAttributes {
   id: number;
   email: string;
@@ -11,10 +10,8 @@ interface UserAttributes {
   role: 'free' | 'paid';
 }
 
-// Define creation attributes for the User model
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User model class
 class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: number;
   public email!: string;
@@ -49,9 +46,9 @@ User.init(
     },
   },
   {
-    sequelize, // Pass the sequelize instance
-    modelName: 'User', // Define the model name
+    sequelize,
+    modelName: 'User',
   }
 );
 
-export { User, UserCreationAttributes }
+export { User, UserCreationAttributes };
