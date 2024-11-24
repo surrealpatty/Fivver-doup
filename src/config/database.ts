@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
-import User from '../models/user';  // Import User model
+import { User } from '../models/user';  // Import User model
 import Service from '../models/service';  // Import Service model
 import Order from '../models/order';  // Import Order model
 import Review from '../models/review';  // Import Review model
