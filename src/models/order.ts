@@ -5,7 +5,9 @@ import { sequelize } from '../config/database';
 class Order extends Model {
   public id!: number;
   public serviceId!: number;
-  public userId!: number;
+  public status!: string;
+  public quantity!: number;
+  public totalPrice!: number;
 }
 
 Order.init(
@@ -19,14 +21,22 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    userId: {
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    quantity: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    totalPrice: {
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
   },
   {
-    sequelize,  // Important! Ensure the sequelize instance is passed in here
-    tableName: 'orders',  // Name of the table
+    sequelize,
+    tableName: 'orders',
   }
 );
 
