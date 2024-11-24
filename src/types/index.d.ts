@@ -1,17 +1,34 @@
-// src/types/index.d.ts
-
-declare global {
-  namespace Express {
-    interface Request {
-      user: {
-        id: string;         // User ID
-        email: string;      // User email
-        username: string;   // User username
-        password?: string;  // Optional password (depending on your use case)
-        // Add any other properties that are part of your user model
-      };
-    }
-  }
+import { Request } from 'express';
+/**
+ * IUserAttributes interface represents the attributes of a user model instance
+ * (used after the user is created in the database).
+ */
+export interface IUserAttributes {
+    id: string;
+    username: string;
+    email: string;
+    password: string;
+    isPaid: boolean;
 }
-
-export {}; // Ensures TypeScript treats this as a module
+/**
+ * IUserCreationAttributes interface is used for creating new user instances.
+ * This interface excludes the `id` field, as it is auto-generated.
+ */
+export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
+}
+/**
+ * UserPayload interface represents the payload data embedded in a JWT token.
+ * It contains essential user information for authentication.
+ */
+export interface UserPayload {
+    id: string;
+    email: string;
+    username: string;
+}
+/**
+ * AuthRequest interface extends the Express Request type to include a `user` property.
+ * This property represents the authenticated user's data extracted from the JWT.
+ */
+export interface AuthRequest extends Request {
+    user?: UserPayload;
+}
