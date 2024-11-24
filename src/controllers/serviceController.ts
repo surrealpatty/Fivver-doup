@@ -1,34 +1,64 @@
 // src/controllers/serviceController.ts
-import { Request, Response } from 'express';
-import Service from '../models/services';  // Correct import
-import { UserPayload } from '../types'; // Ensure UserPayload is correctly defined
+import { Router, Request, Response } from 'express';
+import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import
+import { checkAuth } from '../middlewares/authMiddleware';
 
-interface AuthRequest extends Request {
-  user?: UserPayload; // user is optional, can be undefined
-}
+const router = Router();
 
-export const getServiceProfile = async (req: AuthRequest, res: Response): Promise<Response> => {
+router.post('/services', checkAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = req.user;
+    // Type the request body using ServiceCreationAttributes for type safety
+    const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
-    if (!user || !user.id || typeof user.id !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing User ID in request' });
+    // Validate required fields
+    if (!userId || !title || !description || price === undefined) {
+      res.status(400).json({
+        message: 'Missing required fields: userId, title, description, and price are mandatory.',
+        error: 'ValidationError',
+      });
+      return;
     }
 
-    const userId = user.id;
+    // Validate price
+    if (typeof price !== 'number' || price <= 0 || isNaN(price)) {
+      res.status(400).json({
+        message: 'Invalid price: must be a positive number.',
+        error: 'ValidationError',
+      });
+      return;
+    }
 
-    // Query the service using the 'userId'
-    const service = await Service.findOne({
-      where: { userId } // This should work as 'userId' is defined in the Service model
+    // Check if the user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({
+        message: `User with ID ${userId} not found.`,
+        error: 'NotFoundError',
+      });
+      return;
+    }
+
+    // Create a new service for the user
+    const service = await Service.create({
+      userId,
+      title,
+      description,
+      price,
     });
 
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found for the given user' });
-    }
-
-    return res.json(service);
+    // Send success response
+    res.status(201).json({
+      message: 'Service created successfully.',
+      serviceId: service.id,
+      title: service.title,
+    });
   } catch (error) {
-    console.error('Error fetching service profile:', error);
-    return res.status(500).json({ message: 'Internal server error fetching service profile' });
+    console.error('Error creating service:', error);
+    res.status(500).json({
+      message: 'Internal server error while creating the service.',
+      error: error instanceof Error ? error.message : 'UnknownError',
+    });
   }
-};
+});
+
+export default router;
