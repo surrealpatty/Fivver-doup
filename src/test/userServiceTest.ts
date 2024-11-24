@@ -1,7 +1,6 @@
-// src/test/userServiceTest.ts
 import { sequelize } from '../config/database';
 import { User } from '../models/user';
-import { Service } from '../models/services';  // This should work after ensuring the named export
+import { Service } from '../models/services';  // Correct import for named export
 
 describe('User and Service Models', () => {
   beforeAll(async () => {

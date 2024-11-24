@@ -1,3 +1,4 @@
+// src/models/services.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
@@ -57,5 +58,5 @@ Service.init(
   }
 );
 
-// **Single Export Block** for everything
+// Named export (no default export)
 export { Service, ServiceCreationAttributes };
