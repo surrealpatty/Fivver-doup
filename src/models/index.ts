@@ -1,32 +1,29 @@
-import { Sequelize, ModelCtor } from 'sequelize-typescript'; // Import the correct type for ModelCtor
-import User from './user'; // Import the default export from the User model
-import Service from './service'; // Import the default export from the Service model
-import Review from './review'; // Import the default export from the Review model
-import Order from './order'; // Add Order to the models
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-// Create an instance of Sequelize with sequelize-typescript configuration
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost', // Adjust as necessary
-  database: 'fivver_doup', // Adjust as necessary
-  username: 'root', // Adjust as necessary
-  password: 'password', // Adjust as necessary
-  models: [User, Service, Review, Order] as ModelCtor[], // Explicitly cast to ModelCtor[] (required by sequelize-typescript)
-  logging: false, // Optional: disable logging if not needed
-});
+// Define the attributes of the Service model
+export interface ServiceAttributes {
+  id?: number; // Optional ID for creation scenarios
+  title: string;
+  description: string;
+  price: number;
+  userId: number;  // Foreign key for the User
+}
 
-// Sync associations and ensure models are exported
-const initModels = async () => {
-  try {
-    // Sync models with the database (use `sequelize.sync()` to sync your models)
-    await sequelize.sync({ force: false }); // Set `force: true` if you want to drop tables
-    console.log('Models synchronized with the database');
-  } catch (error) {
-    console.error('Error syncing models:', error);
-  }
-};
+// Sequelize model for the 'services' table
+@Table({ tableName: 'services', timestamps: true })
+export class Service extends Model<ServiceAttributes> implements ServiceAttributes {
+  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  public id!: number;
 
-// src/models/index.ts
+  @Column({ type: DataType.STRING, allowNull: false })
+  public title!: string;
 
-export { Service, ServiceCreationAttributes } from './service';
-export { User } from './user';
+  @Column({ type: DataType.STRING, allowNull: false })
+  public description!: string;
+
+  @Column({ type: DataType.DECIMAL, allowNull: false })
+  public price!: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  public userId!: number;
+}
