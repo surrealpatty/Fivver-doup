@@ -30,7 +30,7 @@ const testUserAndServiceModels = async () => {
       description: 'This is a test service description.',
       price: 100.0,
       category: 'Testing',
-      userId: newUser.id, // Associate the service with the newly created user
+      userId: newUser.id, // Ensure the type of newUser.id matches the expected type of userId
     });
     console.log('Service created:', newService.toJSON());
 
