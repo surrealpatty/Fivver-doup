@@ -1,9 +1,9 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'; // Import necessary modules for sequelize-typescript
-import { Optional } from 'sequelize/types'; // Import Optional type
+import { Optional } from 'sequelize/types'; // Correct import for Optional type from sequelize/types
 
-// Define the User model
+// Define the User model using sequelize-typescript
 @Table({ tableName: 'users' })
-class User extends Model<User> {
+class User extends Model<User, UserCreation> {  // Use UserCreation type for User model
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   id!: number;
 

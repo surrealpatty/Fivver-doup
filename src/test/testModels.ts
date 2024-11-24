@@ -1,6 +1,6 @@
 import { registerUser, loginUser } from '../controllers/userController'; // Ensure correct import
 import { sequelize } from '../config/database'; // Correct import path for sequelize
-import User from '../models/user'; // Correct import path for user model
+import { User, UserAttributes } from '../models/user'; // Named import and UserAttributes interface
 import Service from '../models/services'; // Correct import path for services model
 
 console.log('User functions loaded successfully.');
@@ -15,13 +15,16 @@ const testUserAndServiceModels = async () => {
     // Synchronize models with the database (use `force: true` cautiously for testing)
     await sequelize.sync({ force: true });
 
-    // Test User Creation
-    const newUser = await User.create({
+    // Test User Creation using UserAttributes type (plain object)
+    const newUserData: UserAttributes = {
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
       role: 'user', // Include role field if it's required
-    });
+    };
+
+    // Use the UserAttributes type here, pass it to the create method
+    const newUser = await User.create(newUserData);  // Correct usage of User.create with the UserAttributes type
     console.log('User created:', newUser.toJSON());
 
     // Test Service Creation (associated with the newly created user)
