@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Import User model
+import { User, UserCreationAttributes } from '../models';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -36,16 +36,15 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Default to 'free' if role is not provided
     const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
 
-    // Define user data for creation, ensuring it's typed correctly
-    const userData: { email: string; password: string; username: string; role: string } = {
-      email,
-      password: hashedPassword,
-      username,
-      role: userRole, // 'role' will either be 'free' or 'paid'
-    };
+    const userData: UserCreationAttributes = {
+      email: "user@example.com",
+      password: "password123",
+      username: "newuser",
+      role: "free",
+  };
 
     // Create a new user in the database
-    const newUser = await User.create(userData);  // Pass the correctly typed userData object
+    const newUser = await User.create(userData);
 
     // Generate a JWT token for the newly created user
     const token = jwt.sign(

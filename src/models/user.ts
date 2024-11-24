@@ -1,28 +1,60 @@
-import { Model, Column, DataType, Table } from 'sequelize-typescript';
+// In src/models/user.ts
 
-// Define the Sequelize User model and its creation attributes
-@Table({ tableName: 'users', timestamps: true })
-class User extends Model<User> {
-  @Column({ type: DataType.STRING, allowNull: false, unique: true })
-  email!: string;
+import { Optional, Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database';  // assuming sequelize is configured
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  password!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  username!: string;
-
-  @Column({ type: DataType.STRING, defaultValue: 'free' })
-  role!: 'free' | 'paid';  // Role is either 'free' or 'paid'
+// Define User attributes (including optional fields like createdAt, updatedAt)
+export interface UserAttributes {
+    id: string;
+    email: string;
+    username: string;
+    password: string;
+    role: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-// Export the User model
-export { User };
+// Define User creation attributes (without id and timestamps)
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-// Separate declaration of UserCreationAttributes inline with the User class
-export interface UserCreationAttributes {
-  email: string;
-  password: string;
-  username: string;
-  role: 'free' | 'paid';  // Role can either be 'free' or 'paid'
+// Define the User model
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+    public id!: string;
+    public email!: string;
+    public username!: string;
+    public password!: string;
+    public role!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
+
+// Initialize the User model
+User.init(
+    {
+        id: {
+            type: DataTypes.STRING,
+            primaryKey: true,
+            allowNull: false,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    },
+    {
+        sequelize,
+        tableName: 'users',
+    }
+);

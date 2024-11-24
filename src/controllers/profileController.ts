@@ -1,4 +1,4 @@
-import { User } from '../models/user'; // Named import
+import { User, UserCreationAttributes } from '../models';
 import bcrypt from 'bcryptjs'; // Add bcrypt for password comparison
 import { Request, Response } from 'express'; // Express types for request and response
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
@@ -9,14 +9,12 @@ export const registerUser = async ({ username, email, password }: { username: st
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Define the type for the user being created (use Optional<User>), set role as "free"
-    const userData: Optional<User, 'id' | 'createdAt' | 'updatedAt'> = {
-      username,
-      email,
-      password: hashedPassword,
-      role: 'free', // Set the default role to "free"
-    };
-
+    const userData: UserCreationAttributes = {
+      username: "newuser",
+      email: "user@example.com",
+      password: "password123",
+      role: "free",
+  };
     // Create the user with hashed password
     const user = await User.create(userData);
 
