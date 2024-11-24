@@ -1,18 +1,15 @@
 // src/config/database.ts
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
+import User from '../models/user';
 
-// Set up environment variables for flexibility (for production, development, etc.)
-const dbConfig = {
-  dialect: 'mysql',
-  host: process.env.DB_HOST || 'localhost',
-  username: process.env.DB_USERNAME || 'root',
-  password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'fivver_doup', // Default to 'fivver_doup' database
-  logging: false, // Disable logging for production (can be turned on in development)
-};
+// Initialize Sequelize with the models directory
+const sequelize = new Sequelize({
+  dialect: 'mysql', // Replace with your DB dialect
+  host: 'localhost', // Your host
+  username: 'root', // Your DB username
+  password: 'password', // Your DB password
+  database: 'fivver_doup', // Your DB name
+  models: [User], // Automatically load models
+});
 
-// Initialize the Sequelize instance with configuration
-const sequelize = new Sequelize(dbConfig);
-
-// Named export for sequelize instance
 export { sequelize };
