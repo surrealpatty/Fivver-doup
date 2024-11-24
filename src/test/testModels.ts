@@ -20,7 +20,7 @@ const testUserAndServiceModels = async () => {
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
-      // No need to pass the 'id' field as it's auto-generated
+      role: 'user', // Include role field if it's required
     });
     console.log('User created:', newUser.toJSON());
 

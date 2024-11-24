@@ -1,89 +1,58 @@
-// src/tests/userController.test.ts
-import request from 'supertest';
-import { app, server } from '../index'; // Import app and server from index.ts
-import User from '../models/user'; // User model
-import jwt from 'jsonwebtoken'; // JSON Web Token library
-import { sequelize } from '../config/database'; // Sequelize instance
+import User from '../models/user';  // Correct import for default export
+import bcrypt from 'bcryptjs'; // Add bcrypt for password comparison
+import { Request, Response } from 'express'; // Express types for request and response
+import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
 
-// Mocking User model and JWT
-jest.mock('../models/user', () => ({
-  findOne: jest.fn(),
-  create: jest.fn(),
-  findByPk: jest.fn(),
-  update: jest.fn(),
-  destroy: jest.fn(),
-}));
+// Register user function
+export const registerUser = async ({ username, email, password }: { username: string; email: string; password: string }) => {
+  try {
+    // Hash the password before saving it
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-jest.mock('jsonwebtoken', () => ({
-  sign: jest.fn(() => 'mockedToken'), // Mocked token for signing
-  verify: jest.fn(() => ({ userId: 1 })), // Mocked decoded token
-}));
+    // Define the type for the user being created (use Optional<User>)
+    const userData: Optional<User, 'id' | 'createdAt' | 'updatedAt'> = {
+      username,
+      email,
+      password: hashedPassword,
+      role: 'user', // Set a default role (if not provided in the request)
+    };
 
-// Set a global timeout for all tests
-jest.setTimeout(10000); // Set timeout to 10 seconds for all tests
+    // Create the user with hashed password
+    const user = await User.create(userData);
 
-describe('User Controller Tests', () => {
-  beforeAll(async () => {
-    // Set up mocked responses for User model methods
-    (User.findOne as jest.Mock).mockResolvedValue({
-      id: 1,
-      email: 'test@example.com',
-      password: 'hashedpassword',
-    } as any);
+    return user; // Return the created user object
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error('Error registering user: ' + error.message); // Return specific error message
+    }
+    throw new Error('Unknown error occurred during user registration'); // Fallback error message
+  }
+};
 
-    (User.create as jest.Mock).mockResolvedValue({
-      id: 1,
-      email: 'test@example.com',
-      password: 'hashedpassword',
-    } as any);
+// Login user function (for testing purposes)
+export const loginUser = async (email: string, password: string) => {
+  try {
+    // Find the user by email
+    const user = await User.findOne({ where: { email } });
 
-    (User.findByPk as jest.Mock).mockResolvedValue({
-      id: 1,
-      email: 'test@example.com',
-    } as any);
+    // If user does not exist, throw error
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-    (User.update as jest.Mock).mockResolvedValue([1]); // Sequelize update returns [affectedRows]
-    (User.destroy as jest.Mock).mockResolvedValue(1); // Return affected rows count
-  });
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  afterAll(async () => {
-    // Close Sequelize connection and Express server
-    await sequelize.close();
-    server.close();
-  });
+    // If password is invalid, throw error
+    if (!isPasswordValid) {
+      throw new Error('Invalid password');
+    }
 
-  test('should log in a user and return a token', async () => {
-    const response = await request(app)
-      .post('/users/login') // Login route
-      .send({
-        email: 'test@example.com',
-        password: 'password123', // Mocked login credentials
-      });
-
-    expect(response.status).toBe(200); // Expect HTTP 200 OK
-    expect(response.body).toHaveProperty('token', 'mockedToken'); // Mocked token
-  });
-
-  test('should update the user profile', async () => {
-    const response = await request(app)
-      .put('/users/profile') // Profile update route
-      .set('Authorization', 'Bearer mockedToken') // Mocked Authorization header
-      .send({
-        email: 'updated@example.com',
-        password: 'newpassword123',
-      });
-
-    expect(response.status).toBe(200); // Expect HTTP 200 OK
-    expect(response.body).toHaveProperty('id', 1); // Updated user ID
-    expect(response.body).toHaveProperty('email', 'updated@example.com'); // Updated email
-  });
-
-  test('should delete the user account', async () => {
-    const response = await request(app)
-      .delete('/users/profile') // Delete user route
-      .set('Authorization', 'Bearer mockedToken'); // Mocked Authorization header
-
-    expect(response.status).toBe(200); // Expect HTTP 200 OK
-    expect(response.body).toHaveProperty('message', 'User deleted successfully'); // Deletion message
-  });
-});
+    return user; // Return the user if login is successful
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error('Error logging in: ' + error.message); // Return specific error message
+    }
+    throw new Error('Unknown error occurred during login'); // Fallback error message
+  }
+};
