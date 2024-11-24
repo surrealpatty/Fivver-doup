@@ -22,8 +22,9 @@ router.put('/:reviewId', authenticateToken, updateReview as RequestHandler);
 router.delete('/:reviewId', authenticateToken, deleteReview as RequestHandler);
 
 // Optional: Health check or confirmation route
-router.get('/health', (req: Request, res: Response): Response => {
-  return res.json({ message: 'Reviews route is working!' });
+router.get('/health', (_req: Request, res: Response): void => {
+  // Return the health check response with a message
+  res.json({ message: 'Reviews route is working!' });
 });
 
 export default router;
