@@ -26,5 +26,7 @@ const initModels = async () => {
   }
 };
 
-// Export all models and the sequelize instance
-export { sequelize, User, Service, Review, Order, initModels };
+// src/models/index.ts
+
+export { Service, ServiceCreationAttributes } from './service';
+export { User } from './user';
