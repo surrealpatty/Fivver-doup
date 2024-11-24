@@ -2,6 +2,7 @@ import { Sequelize, ModelCtor } from 'sequelize-typescript'; // Import the corre
 import User from './user'; // Import the default export from the User model
 import Service from './service'; // Import the default export from the Service model
 import Review from './review'; // Import the default export from the Review model
+import Order from './order'; // Add Order to the models
 
 // Create an instance of Sequelize with sequelize-typescript configuration
 const sequelize = new Sequelize({
@@ -10,7 +11,7 @@ const sequelize = new Sequelize({
   database: 'fivver_doup', // Adjust as necessary
   username: 'root', // Adjust as necessary
   password: 'password', // Adjust as necessary
-  models: [User, Service, Review] as ModelCtor[], // Explicitly cast to ModelCtor[] (required by sequelize-typescript)
+  models: [User, Service, Review, Order] as ModelCtor[], // Explicitly cast to ModelCtor[] (required by sequelize-typescript)
   logging: false, // Optional: disable logging if not needed
 });
 
@@ -26,4 +27,4 @@ const initModels = async () => {
 };
 
 // Export all models and the sequelize instance
-export { sequelize, User, Service, Review, initModels };
+export { sequelize, User, Service, Review, Order, initModels };

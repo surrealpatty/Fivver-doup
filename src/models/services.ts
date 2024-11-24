@@ -2,6 +2,15 @@ import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
 import Review from './review'; // Import the Review model to define the relationship
 
 // Interface defining the attributes of the Service model
+export interface ServiceAttributes {
+  id: number;            // ID of the service
+  userId: number;        // ID of the user associated with the service
+  title: string;         // Title of the service
+  description: string;   // Description of the service
+  price: number;         // Price of the service
+}
+
+// Interface defining the attributes required for creating a Service
 export interface ServiceCreationAttributes {
   userId: number;         // ID of the user associated with the service
   title: string;          // Title of the service
@@ -11,7 +20,7 @@ export interface ServiceCreationAttributes {
 
 // Sequelize model for the 'services' table
 @Table({ tableName: 'services', timestamps: true })  // Table name 'services' and automatic timestamps
-export class Service extends Model<ServiceCreationAttributes> implements ServiceCreationAttributes {
+export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   public id!: number;  // Primary key with auto-increment
 
@@ -32,5 +41,5 @@ export class Service extends Model<ServiceCreationAttributes> implements Service
   public reviews!: Review[];
 }
 
-// Only export the class itself, no need for a separate export of the interface
+// Export the Service model class
 export default Service;

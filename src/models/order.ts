@@ -1,10 +1,21 @@
 import { ForeignKey, Column, DataType, Model, Table } from 'sequelize-typescript';
 import User from './user';
-import Service from './service';
+import Service from './service'; // Import the Service model
+import { ModelCtor } from 'sequelize-typescript'; // Import ModelCtor for explicit typing
 
-// Sequelize model for the 'orders' table
+interface OrderAttributes {
+  id: number;
+  userId: number;
+  serviceId: number;
+  quantity: number;
+  totalPrice: number;
+  totalAmount: number;
+  orderDetails?: string;
+  status: string;
+}
+
 @Table({ tableName: 'orders', timestamps: true })
-class Order extends Model {
+class Order extends Model<OrderAttributes> {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   id!: number;
 
@@ -12,7 +23,7 @@ class Order extends Model {
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId!: number;
 
-  @ForeignKey(() => Service)
+  
   @Column({ type: DataType.INTEGER, allowNull: false })
   serviceId!: number;
 
@@ -34,6 +45,7 @@ class Order extends Model {
 
 // Define associations for the Order model
 Order.belongsTo(User, { foreignKey: 'userId' });
-Order.belongsTo(Service, { foreignKey: 'serviceId' });
+// Explicitly cast Service to ModelCtor after unknown
+Order.belongsTo(Service as unknown as ModelCtor, { foreignKey: 'serviceId' });
 
 export default Order;
