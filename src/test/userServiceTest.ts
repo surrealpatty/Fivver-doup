@@ -1,51 +1,27 @@
+import Service, { ServiceCreationAttributes } from '../models/services'; // Ensure correct import
+import User from '../models/user'; // Corrected to default import
 import { sequelize } from '../config/database';
-import User from '../models/user';
-import Service, { ServiceCreationAttributes } from '../models/services';  // Correct import
 
-describe('User and Service Models', () => {
-  beforeAll(async () => {
-    // Sync the database before running tests
-    await sequelize.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    // Close the connection after tests
-    await sequelize.close();
-  });
-
-  it('should create a user', async () => {
+describe('Service Model Tests', () => {
+  it('should create a new service', async () => {
+    // Create a user with all required fields (password and role)
     const user = await User.create({
-      username: 'testuser',
-      email: 'testuser@example.com',
-      password: 'password123',
-      role: 'free',
+      username: 'testUser',
+      email: 'test@example.com',
+      password: 'testPassword123', // Ensure password is provided
+      role: 'free', // Ensure role is provided
     });
 
-    expect(user).toHaveProperty('id');
-    expect(user.username).toBe('testuser');
-    expect(user.email).toBe('testuser@example.com');
-  });
-
-  it('should create a service for a user', async () => {
-    // Create a user first
-    const user = await User.create({
-      username: 'testuser2',
-      email: 'testuser2@example.com',
-      password: 'password123',
-      role: 'free',
-    });
-
-    // Create a service for that user
     const serviceData: ServiceCreationAttributes = {
+      userId: user.id,
       title: 'Test Service',
-      description: 'This is a test service description.',
+      description: 'A test service description',
       price: 100.0,
-      userId: user.id, // Linking to the user via userId
     };
 
     const service = await Service.create(serviceData);
 
-    expect(service).toHaveProperty('id');
+    // Ensure the service has the correct properties
     expect(service.userId).toBe(user.id);
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(100.0);

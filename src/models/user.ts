@@ -1,35 +1,32 @@
+// src/models/user.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import Service from './services'; // Import the Service model for the association
 
 interface UserAttributes {
-  id: number;
+  id: string;
   username: string;
   email: string;
-  password: string;
+  password: string;  // Ensure password is part of the UserAttributes interface
   role: string;
 }
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
+  public id!: string;
   public username!: string;
   public email!: string;
-  public password!: string;
+  public password!: string;  // Define password here
   public role!: string;
 }
-
-// One-to-many relationship with Service
-User.hasMany(Service, { foreignKey: 'userId', as: 'services' });
-Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING,
       primaryKey: true,
+      allowNull: false,
+      unique: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -40,7 +37,7 @@ User.init(
       allowNull: false,
       unique: true,
     },
-    password: {
+    password: {  // Define the password field
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -51,8 +48,8 @@ User.init(
   },
   {
     sequelize,
-    modelName: 'User',
+    tableName: 'users',
   }
 );
 
-export default User;  // Default export for User model
+export default User;

@@ -1,8 +1,9 @@
+// src/models/services.ts
+
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user'; // Assuming this is the User model
+import User from './user';  // Ensure correct import of User model
 
-// Define the type for the Service model
 interface ServiceAttributes {
   id: number;
   userId: string;
@@ -11,19 +12,15 @@ interface ServiceAttributes {
   price: number;
 }
 
-// Define the type for creating a Service (optional properties are allowed)
-export interface ServiceCreationAttributes
-  extends Optional<ServiceAttributes, 'id'> {}
+// ServiceCreationAttributes allows for creating a Service without the `id`
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
-  implements ServiceAttributes {
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public userId!: string;
   public title!: string;
   public description!: string;
   public price!: number;
-
-  // Other model-related methods and associations
 }
 
 Service.init(
@@ -56,7 +53,7 @@ Service.init(
   }
 );
 
-// Associations
 Service.belongsTo(User, { foreignKey: 'userId' });
 
 export default Service;
+// You no longer need to export 'ServiceCreationAttributes' here.
