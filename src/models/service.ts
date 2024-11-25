@@ -1,4 +1,5 @@
 // src/models/services.ts
+
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
@@ -12,10 +13,10 @@ export interface ServiceAttributes {
 }
 
 // Define creation attributes where 'id' is optional
-export interface NewServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+export type ServiceCreationAttributes = Optional<ServiceAttributes, 'id'>;
 
 // Define the Service model
-class Service extends Model<ServiceAttributes, NewServiceCreationAttributes> {
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   public id!: number;
   public title!: string;
   public description!: string;
@@ -58,6 +59,7 @@ class Service extends Model<ServiceAttributes, NewServiceCreationAttributes> {
 // Initialize the model
 Service.initModel();
 
-// Export updated definitions
+// Export the model and type separately
 export default Service;
-export { NewServiceCreationAttributes as ServiceCreationAttributes };
+export { ServiceCreationAttributes };  // Exporting the type separately
+
