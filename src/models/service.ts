@@ -56,4 +56,4 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
 Service.initModel();
 
 export default Service;
-
+export { ServiceCreationAttributes };  // Export ServiceCreationAttributes
