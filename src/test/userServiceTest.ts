@@ -1,5 +1,5 @@
-import Service, { ServiceCreationAttributes } from '../models/services'; // Ensure correct import
-import User from '../models/user'; // Corrected to default import
+import { Service, ServiceCreationAttributes } from '../models/services';  // Correct named import
+import User from '../models/user';  // Correct default import
 import { sequelize } from '../config/database';
 
 describe('Service Model Tests', () => {
@@ -19,6 +19,7 @@ describe('Service Model Tests', () => {
       price: 100.0,
     };
 
+    // Ensure service is typed correctly as an instance of Service
     const service = await Service.create(serviceData);
 
     // Ensure the service has the correct properties
