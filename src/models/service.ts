@@ -58,5 +58,5 @@ Service.init(
 // Define the relationship with the User model
 Service.belongsTo(User, { foreignKey: 'userId' });
 
-// Export the Service class and ServiceCreationAttributes interface together
+// Ensure we are exporting correctly
 export { Service, ServiceCreationAttributes };
