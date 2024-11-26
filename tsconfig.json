@@ -13,7 +13,8 @@
     "allowJs": true,                  // Allow JavaScript files to be compiled
     "paths": {
       "*": ["node_modules/*", "src/*"] // Support for custom module paths
-    }
+    },
+    "forceConsistentCasingInFileNames": true  // Enforce consistent file name casing
   },
   "include": [
     "src/**/*"                         // Include all files in the src directory
