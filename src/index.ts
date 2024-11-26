@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { testConnection } from './config/database';
-import userRouter from './routes/user';  // Default import for userRouter
+import { testConnection } from './config/database.js';
+import userRouter from './routes/user.js';
 import { sequelize } from './config/database'; // Relative path
 
 const app = express();
