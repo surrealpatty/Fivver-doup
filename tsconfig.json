@@ -10,16 +10,16 @@
     "rootDir": "./src",               // Root directory for source files
     "baseUrl": ".",                   // Base URL for relative module resolution
     "resolveJsonModule": true,        // Allow importing JSON files
+    "allowJs": true,                  // Allow JavaScript files to be compiled
     "paths": {
       "*": ["node_modules/*", "src/*"] // Support for custom module paths
-    },
-    "allowJs": true                   // Allow JavaScript files to be compiled
+    }
   },
   "include": [
     "src/**/*"                         // Include all files in the src directory
   ],
   "exclude": [
-    "node_modules",                   // Exclude node_modules from the compilation
+    "node_modules",                    // Exclude node_modules from the compilation
     "dist"                             // Exclude dist directory from source files
   ]
 }
