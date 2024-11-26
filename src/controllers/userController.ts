@@ -1,7 +1,7 @@
 import User from '../models/user'; // Named import for User model
 import bcrypt from 'bcryptjs'; // bcrypt for password hashing and comparison
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
-
+import { sequelize } from '../config/database';
 // Define the user data type for creating a user, excluding methods like $add, $set
 type UserCreationAttributes = {
   username: string;
