@@ -1,7 +1,7 @@
 // src/routes/auth.ts
 
 import { Router, Request, Response } from 'express';
-import { registerUser } from '../controllers/authController';  // Correctly import registerUser
+import { registerUser } from '../controllers/authController'; // Correctly import registerUser
 
 const router = Router();
 

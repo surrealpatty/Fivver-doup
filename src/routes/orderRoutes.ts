@@ -6,7 +6,7 @@ import {
   getOrderById,
   updateOrder,
   deleteOrder,
-} from '../controllers/orderController';  // Ensure correct import
+} from '../controllers/orderController'; // Ensure correct import
 
 const router = express.Router();
 

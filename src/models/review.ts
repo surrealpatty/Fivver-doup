@@ -35,8 +35,8 @@ Review.init(
     },
   },
   {
-    sequelize,  // Important! Ensure the sequelize instance is passed in here
-    tableName: 'reviews',  // Name of the table
+    sequelize, // Important! Ensure the sequelize instance is passed in here
+    tableName: 'reviews', // Name of the table
   }
 );
 

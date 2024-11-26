@@ -7,7 +7,11 @@ import { UserPayload } from '../types'; // Import the interface for user payload
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 
 // Middleware to check if the user is authenticated
-export const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
+export const checkAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
@@ -18,7 +22,7 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction): void
   try {
     // Verify the token
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
-    
+
     // Attach user information to the request object for further use in the route
     req.user = decoded;
 

@@ -8,13 +8,13 @@ export interface BaseModelAttributes {
 }
 
 // Optional attributes for model creation (where 'id' can be omitted)
-export interface BaseModelCreationAttributes extends Optional<BaseModelAttributes, 'id'> {}
+export interface BaseModelCreationAttributes
+  extends Optional<BaseModelAttributes, 'id'> {}
 
 // BaseModel class definition
 export default class BaseModel<
   TAttributes extends BaseModelAttributes,
-  TCreationAttributes extends BaseModelCreationAttributes
+  TCreationAttributes extends BaseModelCreationAttributes,
 > extends Model<TAttributes, TCreationAttributes> {
   static associate?(models: any): void; // Method for defining associations if needed
 }
-

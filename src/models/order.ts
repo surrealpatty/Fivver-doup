@@ -11,9 +11,13 @@ interface OrderAttributes {
   totalPrice: number;
 }
 
-export interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+export interface OrderCreationAttributes
+  extends Optional<OrderAttributes, 'id'> {}
 
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
+class Order
+  extends Model<OrderAttributes, OrderCreationAttributes>
+  implements OrderAttributes
+{
   public id!: number;
   public serviceId!: number;
   public status!: string;

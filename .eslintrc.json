@@ -6,10 +6,7 @@
     "project": "./tsconfig.json",
     "tsconfigRootDir": "__dirname"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "vue"
-  ],
+  "plugins": ["@typescript-eslint", "vue"],
   "extends": [
     "airbnb-typescript/base",
     "plugin:import/typescript",
@@ -29,12 +26,12 @@
         ]
       }
     ],
-    "vue/multi-word-component-names": "off",  // To avoid unnecessary warning in Vue component names
+    "vue/multi-word-component-names": "off", // To avoid unnecessary warning in Vue component names
     "@typescript-eslint/no-unused-vars": "warn", // Ensures unused variables are warned
     "vue/require-default-prop": "off", // Optionally, if you want to avoid warnings for missing default props in Vue
     "vue/singleline-html-element-content-newline": "off", // Disable newline requirement in single-line HTML elements
-    "@typescript-eslint/explicit-module-boundary-types": "off",  // Optional: Disable explicit return types on functions (depending on preference)
-    "import/prefer-default-export": "off"  // Optional: Disable preference for default export
+    "@typescript-eslint/explicit-module-boundary-types": "off", // Optional: Disable explicit return types on functions (depending on preference)
+    "import/prefer-default-export": "off" // Optional: Disable preference for default export
   },
   "overrides": [
     {

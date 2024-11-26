@@ -3,9 +3,9 @@
 declare global {
   namespace Express {
     interface Request {
-      userId?: string;  // Ensure userId is a string
+      userId?: string; // Ensure userId is a string
     }
   }
 }
 
-export {};  // Ensure this file is treated as a module
+export {}; // Ensure this file is treated as a module

@@ -7,12 +7,16 @@ const JWT_EXPIRATION: string = config.JWT_EXPIRATION || '1h';
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
-  id: string;  // Keep as string for typical JWT payloads
-  [key: string]: any;  // Allow for other properties in the JWT payload
+  id: string; // Keep as string for typical JWT payloads
+  [key: string]: any; // Allow for other properties in the JWT payload
 }
 
 // The `verifyToken` middleware to check JWT in headers
-export const verifyToken = (req: Request, res: Response, next: NextFunction): Response<any> | void => {
+export const verifyToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response<any> | void => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
@@ -21,15 +25,17 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): Re
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Unauthorized', error: err.message });
+      return res
+        .status(401)
+        .json({ message: 'Unauthorized', error: err.message });
     }
 
     // Handle decoding and verifying the JWT payload
     if (decoded && typeof decoded === 'object' && 'id' in decoded) {
       const decodedToken = decoded as JwtPayload;
-      
+
       // Cast decodedToken.id to number if necessary
-      req.userId = Number(decodedToken.id);  // Explicitly cast to number
+      req.userId = Number(decodedToken.id); // Explicitly cast to number
 
       return next();
     } else {

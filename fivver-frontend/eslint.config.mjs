@@ -7,15 +7,15 @@ export default defineConfig({
       sourceType: 'module', // Specify source type if using ES modules
     },
     globals: {
-      window: 'readonly',  // 'window' is a read-only global variable
+      window: 'readonly', // 'window' is a read-only global variable
       document: 'readonly', // 'document' is a read-only global variable
-      process: 'readonly',  // 'process' is a read-only global variable
+      process: 'readonly', // 'process' is a read-only global variable
       // Add more global variables as needed
     },
   },
   rules: {
     'no-console': 'warn', // Warns on console usage
-    'semi': ['off'], // Enforce semicolons
+    semi: ['off'], // Enforce semicolons
     // Add other rules here
   },
 });

@@ -1,12 +1,15 @@
 // src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import Order from '../models/order';  // Importing the Order model
+import Order from '../models/order'; // Importing the Order model
 
 // Importing RequestHandler type from express
 import { RequestHandler } from 'express';
 
 // Function to create a new order
-export const createOrder: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+export const createOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { serviceId, status, quantity, totalPrice } = req.body;
 
   try {
@@ -16,7 +19,7 @@ export const createOrder: RequestHandler = async (req: Request, res: Response): 
       quantity,
       totalPrice,
     });
-    res.status(201).json(newOrder);  // Sending the response
+    res.status(201).json(newOrder); // Sending the response
   } catch (error) {
     console.error('Error creating order:', error);
     res.status(500).json({
@@ -27,10 +30,13 @@ export const createOrder: RequestHandler = async (req: Request, res: Response): 
 };
 
 // Function to get all orders
-export const getAllOrders: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+export const getAllOrders: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const orders = await Order.findAll();
-    res.status(200).json(orders);  // Sending the response
+    res.status(200).json(orders); // Sending the response
   } catch (error) {
     console.error('Error fetching orders:', error);
     res.status(500).json({
@@ -41,16 +47,19 @@ export const getAllOrders: RequestHandler = async (req: Request, res: Response):
 };
 
 // Function to get an order by its ID
-export const getOrderById: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+export const getOrderById: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
-  
+
   try {
     const order = await Order.findByPk(id);
     if (!order) {
       res.status(404).json({ message: 'Order not found' });
       return;
     }
-    res.status(200).json(order);  // Sending the response
+    res.status(200).json(order); // Sending the response
   } catch (error) {
     console.error(`Error fetching order with ID ${id}:`, error);
     res.status(500).json({
@@ -61,7 +70,10 @@ export const getOrderById: RequestHandler = async (req: Request, res: Response):
 };
 
 // Function to update an order
-export const updateOrder: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+export const updateOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   const { status, quantity, totalPrice } = req.body;
 
@@ -77,7 +89,7 @@ export const updateOrder: RequestHandler = async (req: Request, res: Response): 
     order.totalPrice = totalPrice ?? order.totalPrice;
     await order.save();
 
-    res.status(200).json(order);  // Sending the response
+    res.status(200).json(order); // Sending the response
   } catch (error) {
     console.error(`Error updating order with ID ${id}:`, error);
     res.status(500).json({
@@ -88,7 +100,10 @@ export const updateOrder: RequestHandler = async (req: Request, res: Response): 
 };
 
 // Function to delete an order
-export const deleteOrder: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+export const deleteOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -99,7 +114,7 @@ export const deleteOrder: RequestHandler = async (req: Request, res: Response): 
     }
 
     await order.destroy();
-    res.status(204).json({ message: 'Order deleted successfully' });  // Sending the response
+    res.status(204).json({ message: 'Order deleted successfully' }); // Sending the response
   } catch (error) {
     console.error(`Error deleting order with ID ${id}:`, error);
     res.status(500).json({

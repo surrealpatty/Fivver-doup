@@ -14,13 +14,18 @@ if (!jwtSecret) {
 /**
  * Register a new user
  */
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { email, password, username, role } = req.body;
 
   try {
     // Validate required fields
     if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Please provide email, password, and username.' });
+      return res
+        .status(400)
+        .json({ message: 'Please provide email, password, and username.' });
     }
 
     // Check if the user already exists
@@ -36,9 +41,9 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
 
     const userData: UserCreationAttributes = {
-      email: "user@example.com", // Example email, adjust accordingly
-      password: hashedPassword,   // Use hashed password
-      username: "newuser",        // Example username, adjust accordingly
+      email: 'user@example.com', // Example email, adjust accordingly
+      password: hashedPassword, // Use hashed password
+      username: 'newuser', // Example username, adjust accordingly
       role: userRole,
     };
 
@@ -65,6 +70,8 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     });
   } catch (error) {
     console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Server error during user registration.' });
+    return res
+      .status(500)
+      .json({ message: 'Server error during user registration.' });
   }
 };

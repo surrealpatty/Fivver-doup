@@ -3,10 +3,10 @@ import { Sequelize } from 'sequelize';
 // Create and export the Sequelize instance
 export const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: 'localhost',          // Adjust host if needed
-  username: 'root',           // Replace with actual DB username
-  password: '',               // Replace with actual DB password
-  database: 'fivver_doup',    // Replace with actual DB name
+  host: 'localhost', // Adjust host if needed
+  username: 'root', // Replace with actual DB username
+  password: '', // Replace with actual DB password
+  database: 'fivver_doup', // Replace with actual DB name
 });
 
 // Function to test the connection

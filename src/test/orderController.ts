@@ -1,9 +1,9 @@
 import { sequelize } from '../config/database'; // Correct named import
 import Order from '../models/order';
-import  User  from '../models/user';
-import  Service  from '../models/services';
+import User from '../models/user';
+import Service from '../models/services';
 import request from 'supertest'; // Assuming you're using supertest for API testing
-import { app } from '../index';  // Now exporting 'app' from the index file
+import { app } from '../index'; // Now exporting 'app' from the index file
 
 // Mock models with correct types
 jest.mock('../models/user');
@@ -42,13 +42,11 @@ describe('Order Controller', () => {
       mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test User' }); // Mock User found
       mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
 
-      const response = await request(app)
-        .post('/orders')
-        .send({
-          userId: 1,
-          serviceId: 1,
-          orderDetails: 'Test order details',
-        });
+      const response = await request(app).post('/orders').send({
+        userId: 1,
+        serviceId: 1,
+        orderDetails: 'Test order details',
+      });
 
       expect(response.status).toBe(201);
       expect(response.body.message).toBe('Order created successfully');
@@ -60,13 +58,11 @@ describe('Order Controller', () => {
       mockFindByPk.mockResolvedValueOnce(null); // User not found
       mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
 
-      const response = await request(app)
-        .post('/orders')
-        .send({
-          userId: 1,
-          serviceId: 1,
-          orderDetails: 'Test order details',
-        });
+      const response = await request(app).post('/orders').send({
+        userId: 1,
+        serviceId: 1,
+        orderDetails: 'Test order details',
+      });
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('User or Service not found');

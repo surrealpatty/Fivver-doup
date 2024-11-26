@@ -1,6 +1,6 @@
 import express from 'express';
 import { sequelize } from './config/database'; // Path to the sequelize instance
-import { User } from './models/user';  // Path to the User model
+import { User } from './models/user'; // Path to the User model
 import userRouter from './routes/user'; // Path to userRouter
 
 const app = express();
@@ -15,7 +15,8 @@ app.get('/', (req, res) => {
 });
 
 // Database connection check
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
     console.log('Database connection established.');
   })
@@ -24,8 +25,8 @@ sequelize.authenticate()
   });
 
 // Example of using the User model (as a test)
-User.findAll()  // Fetch users as a test
-  .then(users => {
+User.findAll() // Fetch users as a test
+  .then((users) => {
     console.log('Users:', users);
   })
   .catch((error: Error) => {
@@ -33,7 +34,7 @@ User.findAll()  // Fetch users as a test
   });
 
 // Use the userRouter for routes starting with /api/users
-app.use('/api/users', userRouter);  // Register the user routes under /api/users
+app.use('/api/users', userRouter); // Register the user routes under /api/users
 
 // Start the server
 app.listen(port, () => {

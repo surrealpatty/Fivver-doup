@@ -1,4 +1,4 @@
-import  User  from '../models/user'; // Named import for User model
+import User from '../models/user'; // Named import for User model
 import bcrypt from 'bcryptjs'; // bcrypt for password hashing and comparison
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
 
@@ -11,7 +11,15 @@ type UserCreationAttributes = {
 };
 
 // Register user function
-const registerUser = async ({ username, email, password }: { username: string; email: string; password: string }) => {
+const registerUser = async ({
+  username,
+  email,
+  password,
+}: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   try {
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);

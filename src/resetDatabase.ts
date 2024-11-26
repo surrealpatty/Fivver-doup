@@ -14,7 +14,6 @@ const resetDatabase = async (): Promise<void> => {
     console.log('Re-syncing database...');
     await sequelize.sync({ force: true }); // 'force: true' drops and recreates tables
     console.log('Database re-synced successfully!');
-    
   } catch (error) {
     // Handle errors and log them
     console.error('Error resetting the database:', error);

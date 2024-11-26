@@ -3,7 +3,7 @@ import { sequelize } from '../config/database'; // Correct named import
 // Mock User model methods
 jest.mock('../models/user', () => ({
   findOne: jest.fn(), // Mock findOne method
-  create: jest.fn(),  // Mock create method
+  create: jest.fn(), // Mock create method
   findByPk: jest.fn(), // Mock findByPk method
   update: jest.fn(), // Mock update method
   destroy: jest.fn(), // Mock destroy method

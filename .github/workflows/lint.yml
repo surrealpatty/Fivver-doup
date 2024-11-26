@@ -2,9 +2,9 @@ name: Lint
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   lint:
@@ -23,4 +23,4 @@ jobs:
         run: npm install
 
       - name: Run linter
-        run: npm run lint  # Adjust this to your lint command
+        run: npm run lint # Adjust this to your lint command

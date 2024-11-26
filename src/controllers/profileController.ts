@@ -4,17 +4,25 @@ import { Request, Response } from 'express'; // Express types for request and re
 import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
 
 // Register user function
-export const registerUser = async ({ username, email, password }: { username: string; email: string; password: string }) => {
+export const registerUser = async ({
+  username,
+  email,
+  password,
+}: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   try {
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userData: UserCreationAttributes = {
-      username: "newuser",
-      email: "user@example.com",
-      password: "password123",
-      role: "free",
-  };
+      username: 'newuser',
+      email: 'user@example.com',
+      password: 'password123',
+      role: 'free',
+    };
     // Create the user with hashed password
     const user = await User.create(userData);
 

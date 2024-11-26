@@ -5,11 +5,11 @@ import { Request } from 'express';
  * (used after the user is created in the database).
  */
 export interface IUserAttributes {
-  id: string;         // UUID or unique identifier for the user
-  username: string;   // The user's username
-  email: string;      // The user's email address
-  password: string;   // The user's hashed password
-  isPaid: boolean;    // Whether the user has a paid subscription
+  id: string; // UUID or unique identifier for the user
+  username: string; // The user's username
+  email: string; // The user's email address
+  password: string; // The user's hashed password
+  isPaid: boolean; // Whether the user has a paid subscription
 }
 
 /**
@@ -25,9 +25,9 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
  * It contains essential user information for authentication.
  */
 export interface UserPayload {
-  id: string;         // The user's ID (required)
-  email: string;      // The user's email (required)
-  username: string;   // The user's username (required)
+  id: string; // The user's ID (required)
+  email: string; // The user's email (required)
+  username: string; // The user's username (required)
 }
 
 /**

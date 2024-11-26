@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app, server } from '../index'; // Import app and server from index.ts
-import   User from '../models/user'; // Named import
+import User from '../models/user'; // Named import
 import jwt from 'jsonwebtoken'; // JSON Web Token library
 import { sequelize } from '../config/database'; // Sequelize instance
 
@@ -83,6 +83,9 @@ describe('User Controller Tests', () => {
       .set('Authorization', 'Bearer mockedToken'); // Mocked Authorization header
 
     expect(response.status).toBe(200); // Expect HTTP 200 OK
-    expect(response.body).toHaveProperty('message', 'User deleted successfully'); // Deletion message
+    expect(response.body).toHaveProperty(
+      'message',
+      'User deleted successfully'
+    ); // Deletion message
   });
 });

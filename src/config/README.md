@@ -19,4 +19,3 @@ This directory contains configuration files for different environments (developm
 1. Set environment variables in a `.env` file.
 2. Choose the appropriate environment by setting `NODE_ENV` (development, production, or test).
 3. Run migrations and seeders as needed.
-

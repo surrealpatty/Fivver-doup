@@ -1,11 +1,16 @@
 // src/controllers/reviewController.ts
 import { Request, Response } from 'express';
 
-export const createReview = async (req: Request, res: Response): Promise<void> => {
-  const { reviewText, rating, serviceId } = req.body;  // Access the review data and serviceId from req.body
+export const createReview = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { reviewText, rating, serviceId } = req.body; // Access the review data and serviceId from req.body
 
   if (!reviewText || !rating || !serviceId) {
-    res.status(400).json({ message: 'Review text, rating, and serviceId are required' });
+    res
+      .status(400)
+      .json({ message: 'Review text, rating, and serviceId are required' });
     return;
   }
 
@@ -16,8 +21,11 @@ export const createReview = async (req: Request, res: Response): Promise<void> =
   res.status(201).json({ message: 'Review created successfully' });
 };
 
-export const getReviewsForService = async (req: Request, res: Response): Promise<void> => {
-  const { serviceId } = req.params;  // Accessing serviceId from route parameters
+export const getReviewsForService = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { serviceId } = req.params; // Accessing serviceId from route parameters
 
   if (!serviceId) {
     res.status(400).json({ message: 'Service ID is required' });
@@ -28,15 +36,20 @@ export const getReviewsForService = async (req: Request, res: Response): Promise
   // Example: Fetch reviews for the specific service
   // const reviews = await Review.findAll({ where: { serviceId } });
 
-  res.status(200).json({ reviews: [] });  // Replace with actual reviews
+  res.status(200).json({ reviews: [] }); // Replace with actual reviews
 };
 
-export const updateReview = async (req: Request, res: Response): Promise<void> => {
-  const { reviewId } = req.params;  // Access reviewId from route parameters
-  const { reviewText, rating } = req.body;  // Access review details from request body
+export const updateReview = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { reviewId } = req.params; // Access reviewId from route parameters
+  const { reviewText, rating } = req.body; // Access review details from request body
 
   if (!reviewId || !reviewText || !rating) {
-    res.status(400).json({ message: 'Review ID, review text, and rating are required' });
+    res
+      .status(400)
+      .json({ message: 'Review ID, review text, and rating are required' });
     return;
   }
 
@@ -52,8 +65,11 @@ export const updateReview = async (req: Request, res: Response): Promise<void> =
   res.status(200).json({ message: 'Review updated successfully' });
 };
 
-export const deleteReview = async (req: Request, res: Response): Promise<void> => {
-  const { reviewId } = req.params;  // Access reviewId from route parameters
+export const deleteReview = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { reviewId } = req.params; // Access reviewId from route parameters
 
   if (!reviewId) {
     res.status(400).json({ message: 'Review ID is required' });

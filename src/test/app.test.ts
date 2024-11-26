@@ -14,7 +14,7 @@ beforeAll(async () => {
     const module = await import(appPath);
     app = module.default || module.app; // Adjust depending on how your app is exported
   } catch (error) {
-    console.error("Error loading app from dist:", error);
+    console.error('Error loading app from dist:', error);
   }
 });
 
@@ -22,13 +22,13 @@ beforeAll(async () => {
 describe('Basic Test Suite', () => {
   it('should respond with a message from the root endpoint', async () => {
     if (!app) {
-      console.warn("Skipping tests as app could not be loaded");
+      console.warn('Skipping tests as app could not be loaded');
       return; // Skip the test if app could not be loaded
     }
 
     // Send a GET request to the root endpoint
     const response = await request(app).get('/');
-    
+
     // Check the response
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe('Fiverr backend is running');

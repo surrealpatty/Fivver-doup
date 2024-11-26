@@ -21,7 +21,9 @@ export const authenticateToken = (
   try {
     // Extract token from the Authorization header
     const authHeader = req.headers['authorization'];
-    const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
+    const token = authHeader?.startsWith('Bearer ')
+      ? authHeader.split(' ')[1]
+      : undefined;
 
     if (!token) {
       res.status(401).json({ message: 'Access denied, no token provided.' });

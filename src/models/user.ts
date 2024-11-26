@@ -6,17 +6,21 @@ interface UserAttributes {
   id: string;
   username: string;
   email: string;
-  password: string;  // Ensure password is part of the UserAttributes interface
+  password: string; // Ensure password is part of the UserAttributes interface
   role: string;
 }
 
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, 'id'> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
   public id!: string;
   public username!: string;
   public email!: string;
-  public password!: string;  // Define password here
+  public password!: string; // Define password here
   public role!: string;
 }
 
@@ -37,7 +41,8 @@ User.init(
       allowNull: false,
       unique: true,
     },
-    password: {  // Define the password field
+    password: {
+      // Define the password field
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -27,7 +27,9 @@ export const authenticateToken = (
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      res
+        .status(401)
+        .json({ message: 'Authorization token is missing or invalid' });
       return; // Return here to stop further processing
     }
 
@@ -43,7 +45,9 @@ export const authenticateToken = (
 
     // Ensure the JWT_SECRET is configured in the environment variables
     if (!jwtSecret) {
-      console.error('JWT_SECRET is not configured in the environment variables');
+      console.error(
+        'JWT_SECRET is not configured in the environment variables'
+      );
       res.status(500).json({ message: 'Internal server error' });
       return; // Return here to stop further processing
     }

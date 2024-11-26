@@ -1,9 +1,9 @@
-import express, { Request, Response, RequestHandler } from 'express'; 
+import express, { Request, Response, RequestHandler } from 'express';
 import {
   createReview,
   getReviewsForService,
   updateReview,
-  deleteReview
+  deleteReview,
 } from '../controllers/reviewController'; // Ensure correct import path
 import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure correct import path
 

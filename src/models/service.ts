@@ -1,7 +1,7 @@
 // src/models/service.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user';  // Correct import of User model
+import User from './user'; // Correct import of User model
 
 // Define the interface for Service attributes
 interface ServiceAttributes {
@@ -16,7 +16,10 @@ interface ServiceAttributes {
 interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 // Define the Service model class
-class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+class Service
+  extends Model<ServiceAttributes, ServiceCreationAttributes>
+  implements ServiceAttributes
+{
   public id!: number;
   public userId!: string;
   public title!: string;

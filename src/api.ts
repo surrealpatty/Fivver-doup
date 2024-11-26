@@ -20,14 +20,17 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => { // Updated return type here
+): Response<any, Record<string, any>> | void => {
+  // Updated return type here
   try {
     // Extract the token from the Authorization header
     const authorizationHeader = req.headers['authorization'];
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      return res
+        .status(401)
+        .json({ message: 'Authorization token is missing or invalid' });
     }
 
     // Extract the token after "Bearer"
@@ -35,13 +38,17 @@ export const authenticateToken = (
 
     // Check if the token is present
     if (!token) {
-      return res.status(401).json({ message: 'Authorization token is missing' });
+      return res
+        .status(401)
+        .json({ message: 'Authorization token is missing' });
     }
 
     // Ensure the JWT_SECRET is configured in the environment variables
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      console.error('JWT_SECRET is not configured in the environment variables');
+      console.error(
+        'JWT_SECRET is not configured in the environment variables'
+      );
       return res.status(500).json({ message: 'Internal server error' });
     }
 

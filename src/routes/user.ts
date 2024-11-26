@@ -10,7 +10,9 @@ router.post('/register', async (req: Request, res: Response) => {
     const newUser = await registerUser({ username, email, password }); // Call registerUser function
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(500).json({ message: error instanceof Error ? error.message : 'Unknown error' }); // Handle errors
+    res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }); // Handle errors
   }
 });
 
@@ -21,7 +23,9 @@ router.post('/login', async (req: Request, res: Response) => {
     const user = await loginUser(email, password); // Call loginUser function
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error instanceof Error ? error.message : 'Unknown error' }); // Handle errors
+    res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }); // Handle errors
   }
 });
 

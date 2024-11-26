@@ -1,12 +1,11 @@
 import request from 'supertest';
 import { app } from '../index'; // Ensure this points to the correct entry point for your app
 import { sequelize } from '../config/database'; // Correct import for Sequelize instance
-import  User  from '../models/user'; // Correct default import for User model
-import  Service  from '../models/services'; // Correct default import for Service model
+import User from '../models/user'; // Correct default import for User model
+import Service from '../models/services'; // Correct default import for Service model
 import Order from '../models/order'; // Correct default import for Order model
 
-// Mock the models
-jest.mock('../models/user', () => ({
+jest.mock('../models/service', () => ({ // Adjust the path if needed
   default: {
     findByPk: jest.fn(),
   },
@@ -55,13 +54,11 @@ describe('Order Controller Tests', () => {
       status: 'Pending',
     });
 
-    const response = await request(app)
-      .post('/api/orders')
-      .send({
-        userId: mockUser.id,
-        serviceId: mockService.id,
-        orderDetails: 'Test order details',
-      });
+    const response = await request(app).post('/api/orders').send({
+      userId: mockUser.id,
+      serviceId: mockService.id,
+      orderDetails: 'Test order details',
+    });
 
     expect(response.status).toBe(201);
     expect(response.body.message).toBe('Order created successfully');

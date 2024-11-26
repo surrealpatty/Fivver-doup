@@ -2,7 +2,7 @@
 
 import { sequelize } from '../config/database'; // Import sequelize instance
 import User from '../models/user'; // Import User model
-import { Service, ServiceCreationAttributes } from '../models/service';  // Correct path
+import { Service, ServiceCreationAttributes } from '../models/service'; // Correct path
 
 // Function to test user and service models
 const testModels = async () => {
