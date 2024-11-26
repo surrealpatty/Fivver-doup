@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // Use ESNext for the latest ECMAScript features
-    "module": "ESNext", // ES module output for proper import/export behavior
-    "strict": true, // Enable strict type-checking
-    "esModuleInterop": true, // Enable interop between CommonJS and ES modules
-    "skipLibCheck": true, // Skip type-checking of declaration files
-    "moduleResolution": "node", // Use Node's resolution strategy for imports
-    "outDir": "./dist", // Output directory for compiled files
-    "rootDir": "./src", // Root directory for source files
-    "baseUrl": ".", // Base URL for relative module resolution
-    "resolveJsonModule": true, // Allow importing JSON files
-    "allowJs": true, // Allow JavaScript files to be compiled
+    "target": "ESNext",                       // Use ESNext for the latest ECMAScript features
+    "module": "ESNext",                       // ES module output for proper import/export behavior
+    "strict": true,                           // Enable strict type-checking
+    "esModuleInterop": true,                  // Enable interop between CommonJS and ES modules
+    "skipLibCheck": true,                     // Skip type-checking of declaration files
+    "moduleResolution": "node",               // Use Node's resolution strategy for imports
+    "outDir": "./dist",                       // Output directory for compiled files
+    "rootDir": "./src",                       // Root directory for source files
+    "baseUrl": ".",                           // Base URL for relative module resolution
+    "resolveJsonModule": true,                // Allow importing JSON files
+    "allowJs": true,                          // Allow JavaScript files to be compiled
     "paths": {
-      "*": ["node_modules/*", "src/*"] // Support for custom module paths
+      "*": ["node_modules/*", "src/*"]        // Support for custom module paths
     },
-    "forceConsistentCasingInFileNames": true // Enforce consistent file name casing
+    "forceConsistentCasingInFileNames": true  // Enforce consistent file name casing
   },
   "include": [
-    "src/**/*" // Include all files in the src directory
+    "src/**/*"                                // Include all files in the src directory
   ],
   "exclude": [
-    "node_modules", // Exclude node_modules from the compilation
-    "dist" // Exclude dist directory from source files
+    "node_modules",                           // Exclude node_modules from the compilation
+    "dist"                                    // Exclude dist directory from source files
   ]
 }
