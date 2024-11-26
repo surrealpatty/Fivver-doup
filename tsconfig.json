@@ -12,7 +12,8 @@
     "resolveJsonModule": true,        // Allow importing JSON files
     "paths": {
       "*": ["node_modules/*", "src/*"] // Support for custom module paths
-    }
+    },
+    "allowJs": true                   // Allow JavaScript files to be compiled
   },
   "include": [
     "src/**/*"                         // Include all files in the src directory
