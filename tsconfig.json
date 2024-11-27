@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                      // Use ESNext for the latest ECMAScript features
+    "target": "ES6",                      // Use ESNext for the latest ECMAScript features
     "module": "ESNext",                      // ES module output for proper import/export behavior
     "strict": true,                          // Enable strict type-checking
     "esModuleInterop": true,                 // Enable interop between CommonJS and ES modules
