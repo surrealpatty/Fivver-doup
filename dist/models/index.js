@@ -16,8 +16,8 @@ const models = {
     Order: order_1.default,
 };
 exports.models = models;
-// Set up associations (each model associates with others)
-user_1.default.associate(models);
-services_1.default.associate(models);
-order_1.default.associate(models); // This should work now
+// Set up associations (ensure each model file has an associate method)
+user_1.default.associate(models); // Assuming `associate` is defined in the User model
+services_1.default.associate(models); // Assuming `associate` is defined in the Service model
+order_1.default.associate(models); // Assuming `associate` is defined in the Order model
 //# sourceMappingURL=index.js.map

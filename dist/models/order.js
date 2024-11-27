@@ -15,6 +15,7 @@ class Order extends sequelize_1.Model {
         });
     }
 }
+// Initialize the model
 Order.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -29,20 +30,13 @@ Order.init({
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
-    createdAt: {
-        type: sequelize_1.DataTypes.DATE,
-        allowNull: false,
-        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
-    },
-    updatedAt: {
-        type: sequelize_1.DataTypes.DATE,
-        allowNull: false,
-        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
-    },
 }, {
-    sequelize: database_1.sequelize,
+    sequelize: database_1.sequelize, // Reference to Sequelize instance
     modelName: 'Order',
+    tableName: 'orders', // Ensure it matches the table name
     timestamps: true, // Enable automatic timestamps (createdAt, updatedAt)
+    createdAt: 'createdAt', // Explicitly define custom timestamps if necessary
+    updatedAt: 'updatedAt',
 });
 exports.default = Order;
 //# sourceMappingURL=order.js.map

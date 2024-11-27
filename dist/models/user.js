@@ -4,6 +4,12 @@ const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Use named import
 // Define the User model class
 class User extends sequelize_1.Model {
+    // Optional: Define associations here if needed, e.g., User.hasMany(Order)
+    static associate(models) {
+        // Define associations here
+        // For example, if you have orders, you could do:
+        // User.hasMany(models.Order);
+    }
 }
 // Initialize the model
 User.init({
