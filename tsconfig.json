@@ -1,20 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": ".",
-    "resolveJsonModule": true,
+    "target": "ES6",                            // Use ES6 features (e.g., classes, promises)
+    "module": "ESNext",                         // Use ESNext for module resolution
+    "strict": true,                             // Enable strict type-checking options
+    "esModuleInterop": true,                    // Enable interop between CommonJS and ES modules
+    "skipLibCheck": true,                       // Skip type-checking of declaration files
+    "moduleResolution": "node",                 // Use Node.js module resolution strategy
+    "outDir": "./dist",                         // Output directory for compiled files
+    "rootDir": "./src",                         // Root directory for source files
+    "baseUrl": ".",                             // Base URL for resolving non-relative modules
+    "resolveJsonModule": true,                  // Allow importing JSON files as modules
     "paths": {
-      "*": ["node_modules/*", "src/*"]
+      "*": ["node_modules/*", "src/*"]          // Allow resolution of files from the 'src' folder
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*"                                  // Include all files under the src directory
   ]
 }
