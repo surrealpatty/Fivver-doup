@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",                          // Use ESNext for the latest ECMAScript features
-    "module": "ES2020",                        // Set module to ES2020 (or node16, nodeNext) for dynamic imports
+    "module": "ESNext",                        // Set module to ES2020 (or node16, nodeNext) for dynamic imports
     "strict": true,                            // Enable strict type-checking
     "esModuleInterop": true,                   // Enable interop between CommonJS and ES modules
     "skipLibCheck": true,                      // Skip type-checking of declaration files
@@ -12,7 +12,8 @@
     "resolveJsonModule": true,                 // Allow importing JSON files
     "allowJs": true,                           // Allow JavaScript files to be compiled
     "paths": {
-      "*": ["node_modules/*", "src/*"]         // Support for custom module paths
+      "*": ["node_modules/*", "src/*"],         // Support for custom module paths
+      "types": ["node"]
     },
     "forceConsistentCasingInFileNames": true   // Enforce consistent file name casing
   },
