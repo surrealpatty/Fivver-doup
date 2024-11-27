@@ -1,53 +1,35 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Use named import
-// Define the User model class
-class User extends sequelize_1.Model {
-    // Optional: Define associations here if needed, e.g., User.hasMany(Order)
-    static associate(models) {
-        // Define associations here
-        // For example, if you have orders, you could do:
-        // User.hasMany(models.Order);
-    }
+// src/models/user.ts
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/database';
+class User extends Model {
 }
-// Initialize the model
 User.init({
-    username: {
-        type: sequelize_1.DataTypes.STRING,
+    id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
         allowNull: false,
         unique: true,
     },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     email: {
-        type: sequelize_1.DataTypes.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
     password: {
-        type: sequelize_1.DataTypes.STRING,
+        // Define the password field
+        type: DataTypes.STRING,
         allowNull: false,
-    },
-    firstName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-    },
-    lastName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
     },
     role: {
-        type: sequelize_1.DataTypes.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'Free',
-    },
-    subscriptionStatus: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Inactive',
     },
 }, {
-    sequelize: database_1.sequelize, // Reference the sequelize instance here
+    sequelize,
     tableName: 'users',
 });
-exports.default = User;
-//# sourceMappingURL=user.js.map
+export default User;

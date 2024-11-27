@@ -1,74 +1,77 @@
+// src/controllers/authController.ts
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models'; // Adjust the import path if necessary
+import { User, UserCreationAttributes } from '../models';
 
-// User Registration
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-    const { username, email, password, firstName, lastName, role, subscriptionStatus } = req.body;
+const jwtSecret = process.env.JWT_SECRET;
 
-    // Input validation
-    if (!username || !email || !password || !firstName || !lastName || !role || !subscriptionStatus) {
-        return res.status(400).json({ error: 'All fields are required.' });
+if (!jwtSecret) {
+  console.error('JWT_SECRET is not set');
+  process.exit(1);
+}
+
+/**
+ * Register a new user
+ */
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { email, password, username, role } = req.body;
+
+  try {
+    // Validate required fields
+    if (!email || !password || !username) {
+      return res
+        .status(400)
+        .json({ message: 'Please provide email, password, and username.' });
     }
 
-    try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(409).json({ error: 'User already exists.' }); // Conflict error
-        }
-
-        // Hash the password before saving
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({
-            username,
-            email,
-            password: hashedPassword,
-            firstName,
-            lastName,
-            role: role || 'user',  // Set a default role if not provided
-            subscriptionStatus: subscriptionStatus || 'free',  // Set default subscriptionStatus
-        });
-        
-        // Return success message
-        return res.status(201).json({ message: 'User registered successfully', user: newUser });
-    } catch (error) {
-        console.error('Registration error:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-};
-
-// User Login
-export const loginUser = async (req: Request, res: Response): Promise<Response> => {
-    const { email, password } = req.body;
-
-    // Input validation
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required.' });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use.' });
     }
 
-    try {
-        const user = await User.findOne({ where: { email } });
-        
-        // Check if user exists and password matches
-        if (user && await bcrypt.compare(password, user.password)) {
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-            
-            // Set the JWT in a cookie
-            res.cookie('jwt', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-            return res.status(200).json({ message: 'Login successful', token });
-        } else {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-};
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// User Logout
-export const logoutUser = (req: Request, res: Response): Response => {
-    res.clearCookie('jwt'); // Clear the JWT cookie on logout
-    return res.status(200).json({ message: 'Logout successful' }); // Return a success message
+    // Default to 'free' if role is not provided
+    const userRole: 'free' | 'paid' = role === 'paid' ? 'paid' : 'free';
+
+    const userData: UserCreationAttributes = {
+      email: 'user@example.com', // Example email, adjust accordingly
+      password: hashedPassword, // Use hashed password
+      username: 'newuser', // Example username, adjust accordingly
+      role: userRole,
+    };
+
+    // Create a new user in the database
+    const newUser = await User.create(userData);
+
+    // Generate a JWT token for the newly created user
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email, username: newUser.username },
+      jwtSecret,
+      { expiresIn: '1h' }
+    );
+
+    // Return user info and token in the response
+    return res.status(201).json({
+      message: 'User registered successfully.',
+      token,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+        isPaid: newUser.role === 'paid',
+      },
+    });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error during user registration.' });
+  }
 };

@@ -1,35 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2020",                          
-    "module": "commonjs",                         
-    "esModuleInterop": true,                     
-    "allowSyntheticDefaultImports": true,        
-    "strict": true,                              
-    "skipLibCheck": true,                         
-    "noEmit": false,                             
-    "outDir": "./dist",                          
-    "rootDir": "./src",                          
-    "resolveJsonModule": true,                   
-    "moduleResolution": "node",                  
-    "lib": ["es2020"],                            
-    "declaration": false,                         
-    "sourceMap": true,                            
-    "baseUrl": ".",                              
+    "target": "ES6",                          // Use ESNext for the latest ECMAScript features
+    "module": "ES2020",                        // Set module to ES2020 (or node16, nodeNext) for dynamic imports
+    "strict": true,                            // Enable strict type-checking
+    "esModuleInterop": true,                   // Enable interop between CommonJS and ES modules
+    "skipLibCheck": true,                      // Skip type-checking of declaration files
+    "moduleResolution": "node",                // Use Node's resolution strategy for imports
+    "outDir": "./dist",                        // Output directory for compiled files
+    "rootDir": "./src",                        // Root directory for source files
+    "baseUrl": ".",                            // Base URL for relative module resolution
+    "resolveJsonModule": true,                 // Allow importing JSON files
+    "allowJs": true,                           // Allow JavaScript files to be compiled
     "paths": {
-      "@/*": ["src/*"]                            
+      "*": ["node_modules/*", "src/*"]         // Support for custom module paths
     },
-    "jsx": "preserve",                           
-    "types": ["node", "jest"]                    
+    "forceConsistentCasingInFileNames": true   // Enforce consistent file name casing
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",  
-    "src/**/*.vue"
+    "src/**/*"                                 // Include all files in the src directory
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "node_modules",                            // Exclude node_modules from the compilation
+    "dist"                                     // Exclude dist directory from source files
   ]
 }
+

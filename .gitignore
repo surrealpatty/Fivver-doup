@@ -1,4 +1,17 @@
+# Node modules
 node_modules/
+
+# Build directory
 dist/
+
+# Log files
 *.log
+
+# Environment files
 *.env
+
+# Coverage directory
+coverage/
+
+# Swap files
+*.swp

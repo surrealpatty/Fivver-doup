@@ -1,10 +1,10 @@
-name: "CodeQL Advanced"
+name: 'CodeQL Advanced'
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
   schedule:
     - cron: '33 13 * * 2' # This schedule will run the workflow every Tuesday at 13:33 UTC
 
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [javascript-typescript]  # Define languages for analysis
+        language: [javascript-typescript] # Define languages for analysis
 
     steps:
       - name: Checkout repository
@@ -31,12 +31,12 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          build-mode: none  # No build mode needed for static analysis
+          build-mode: none # No build mode needed for static analysis
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{ matrix.language }}"
+          category: '/language:${{ matrix.language }}'
 
       - name: Upload CodeQL results
         uses: github/codeql-action/upload-sarif@v1

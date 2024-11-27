@@ -1,65 +1,130 @@
 {
-  "name": "fivver_doup",
+  "name": "fivver-doup",
   "version": "1.0.0",
+  "description": "A Fiverr-like platform for skill-based posts.",
+  "author": "Patty",
   "main": "dist/index.js",
+  "type": "module",
   "directories": {
-    "doc": "docs"
+    "doc": "docs",
+    "test": "src/test"
   },
   "scripts": {
-    "pretest": "npm run build",
+    "format": "prettier --write .",
+    "clean-build": "rimraf dist && tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "jest",
+    "pretest": "npm run build",
+    "test": "jest --config jest.config.ts",
     "test:watch": "jest --watch",
-    "lint": "eslint 'src/**/*.ts' --fix",
-    "test:ci": "jest --ci --maxWorkers=4"
+    "test:coverage": "jest --coverage --detectOpenHandles",
+    "test:ci": "jest --ci --maxWorkers=4",
+    "lint": "eslint \"src/**/*.{ts,js,vue}\" --fix",
+    "lint:check": "eslint \"src/**/*.{ts,js,vue}\"",
+    "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all",
+    "prepublishOnly": "npm run build",
+    "prepare": "husky install"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "fiverr-clone",
+    "skills",
+    "platform"
+  ],
   "license": "ISC",
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.14",
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^20.9.0",
-    "@types/supertest": "^6.0.2",
-    "eslint": "^8.30.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "jest-environment-node": "^29.7.0",
-    "jsdom": "^25.0.1",
-    "mock-local-storage": "^1.1.24",
-    "nodemon": "^3.1.7",
-    "sequelize-typescript": "^2.1.0",
-    "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.3"
-  },
   "dependencies": {
+    "axios": "^1.7.8",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "core-js": "^3.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.4",
-    "sequelize": "^6.37.5"
+    "react": "^18.3.1",
+    "sequelize": "^6.37.5",
+    "sequelize-typescript": "^2.1.6",
+    "tsconfig-paths": "^4.2.0",
+    "uuid": "^11.0.3",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.9.4",
+    "@types/sequelize": "^4.28.20",
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/parser": "^8.16.0",
+    "@vue/compiler-sfc": "^3.5.13",
+    "@vue/test-utils": "^2.4.6",
+    "babel-jest": "^29.7.0",
+    "cypress": "^13.16.0",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-define-config": "^2.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-vue": "^9.31.0",
+    "husky": "^8.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-mock-express": "^0.1.1",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "sequelize-cli": "^6.6.2",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "vue-eslint-parser": "^9.4.3",
+    "vue-tsc": "^2.1.10"
   },
   "eslintConfig": {
     "extends": [
       "airbnb-typescript/base",
-      "plugin:import/typescript"
+      "plugin:import/typescript",
+      "plugin:vue/vue3-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "vue"
     ],
     "parserOptions": {
-      "project": "./tsconfig.json"
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "rules": {
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "**/*.test.ts",
+            "**/jest.config.ts"
+          ]
+        }
+      ],
+      "vue/multi-word-component-names": "off",
+      "@typescript-eslint/no-unused-vars": "warn"
     }
-  }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "types": "dist/index.d.ts"
 }

@@ -14,7 +14,7 @@ export default {
       default: 'Default message', // Provide a default value here
     },
   },
-}; 
+};
 </script>
 
 <style scoped>

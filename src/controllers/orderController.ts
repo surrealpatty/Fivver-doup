@@ -1,117 +1,125 @@
+// src/controllers/orderController.ts
 import { Request, Response } from 'express';
-import { User, Service, Order } from '../models';
+import Order from '../models/order'; // Importing the Order model
 
-// Create an Order
-export const createOrder = async (req: Request, res: Response): Promise<Response> => {
-  const { userId, serviceId, orderDetails } = req.body;
+// Importing RequestHandler type from express
+import { RequestHandler } from 'express';
+
+// Function to create a new order
+export const createOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { serviceId, status, quantity, totalPrice } = req.body;
 
   try {
-    // Fetch the User and Service from the database
-    const user = await User.findByPk(userId);
-    const service = await Service.findByPk(serviceId);
-
-    if (!user || !service) {
-      return res.status(404).json({ message: 'User or Service not found' });
-    }
-
-    // Create the order
-    const order = await Order.create({
-      userId,
+    const newOrder = await Order.create({
       serviceId,
-      orderDetails,
-      status: 'Pending', // Default status
+      status,
+      quantity,
+      totalPrice,
     });
-
-    return res.status(201).json({
-      message: 'Order created successfully',
-      order,
-    });
-  } catch (error: unknown) {
+    res.status(201).json(newOrder); // Sending the response
+  } catch (error) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Error creating order', error: (error as Error).message });
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 
-// Get All Orders
-export const getAllOrders = async (req: Request, res: Response): Promise<Response> => {
+// Function to get all orders
+export const getAllOrders: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    // Fetch all orders from the database
     const orders = await Order.findAll();
-
-    return res.status(200).json(orders);
-  } catch (error: unknown) {
+    res.status(200).json(orders); // Sending the response
+  } catch (error) {
     console.error('Error fetching orders:', error);
-    return res.status(500).json({ message: 'Error fetching orders', error: (error as Error).message });
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 
-// Get Order by ID
-export const getOrderById = async (req: Request, res: Response): Promise<Response> => {
+// Function to get an order by its ID
+export const getOrderById: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
 
   try {
-    // Find the order by ID
     const order = await Order.findByPk(id);
-
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      res.status(404).json({ message: 'Order not found' });
+      return;
     }
-
-    return res.status(200).json(order);
-  } catch (error: unknown) {
-    console.error('Error fetching order:', error);
-    return res.status(500).json({ message: 'Error fetching order', error: (error as Error).message });
+    res.status(200).json(order); // Sending the response
+  } catch (error) {
+    console.error(`Error fetching order with ID ${id}:`, error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 
-// Update Order
-export const updateOrder = async (req: Request, res: Response): Promise<Response> => {
+// Function to update an order
+export const updateOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
-  const { orderDetails, status } = req.body;
+  const { status, quantity, totalPrice } = req.body;
 
   try {
-    // Find the order by ID
     const order = await Order.findByPk(id);
-
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      res.status(404).json({ message: 'Order not found' });
+      return;
     }
 
-    // Update the order with the new details
-    order.orderDetails = orderDetails || order.orderDetails;
-    order.status = status || order.status;
-
-    // Save the updated order
+    order.status = status ?? order.status;
+    order.quantity = quantity ?? order.quantity;
+    order.totalPrice = totalPrice ?? order.totalPrice;
     await order.save();
 
-    return res.status(200).json({
-      message: 'Order updated successfully',
-      order,
+    res.status(200).json(order); // Sending the response
+  } catch (error) {
+    console.error(`Error updating order with ID ${id}:`, error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
-  } catch (error: unknown) {
-    console.error('Error updating order:', error);
-    return res.status(500).json({ message: 'Error updating order', error: (error as Error).message });
   }
 };
 
-// Delete Order
-export const deleteOrder = async (req: Request, res: Response): Promise<Response> => {
+// Function to delete an order
+export const deleteOrder: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
 
   try {
-    // Find the order by ID
     const order = await Order.findByPk(id);
-
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      res.status(404).json({ message: 'Order not found' });
+      return;
     }
 
-    // Destroy the order
     await order.destroy();
-
-    return res.status(200).json({ message: 'Order deleted successfully' });
-  } catch (error: unknown) {
-    console.error('Error deleting order:', error);
-    return res.status(500).json({ message: 'Error deleting order', error: (error as Error).message });
+    res.status(204).json({ message: 'Order deleted successfully' }); // Sending the response
+  } catch (error) {
+    console.error(`Error deleting order with ID ${id}:`, error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };

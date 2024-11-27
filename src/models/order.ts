@@ -1,64 +1,39 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+// src/models/order.ts
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user';
-import Service from './services';
 
-// Define model attributes for TypeScript
+// Define Order attributes
 interface OrderAttributes {
   id: number;
-  userId: number;
   serviceId: number;
-  createdAt: Date | null;  // Allowing null for auto-generated timestamp
-  updatedAt: Date | null;  // Allowing null for auto-generated timestamp
+  status: string;
+  quantity: number;
+  totalPrice: number;
 }
 
-interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
+export interface OrderCreationAttributes
+  extends Optional<OrderAttributes, 'id'> {}
 
-class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
+class Order
+  extends Model<OrderAttributes, OrderCreationAttributes>
+  implements OrderAttributes
+{
   public id!: number;
-  public userId!: number;
   public serviceId!: number;
-  public createdAt!: Date | null;
-  public updatedAt!: Date | null;
-
-  // Define associations inside the `associate` method
-  static associate(models: any) {
-    Order.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'user',
-    });
-    Order.belongsTo(models.Service, {
-      foreignKey: 'serviceId',
-      as: 'service',
-    });
-  }
+  public status!: string;
+  public quantity!: number;
+  public totalPrice!: number;
 }
 
-// Initialize the model
 Order.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,  // Auto increment the id
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    serviceId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    serviceId: { type: DataTypes.INTEGER, allowNull: false },
+    status: { type: DataTypes.STRING, allowNull: false },
+    quantity: { type: DataTypes.INTEGER, allowNull: false },
+    totalPrice: { type: DataTypes.FLOAT, allowNull: false },
   },
-  {
-    sequelize,  // Reference to Sequelize instance
-    modelName: 'Order',
-    tableName: 'orders',  // Ensure it matches the table name
-    timestamps: true,  // Enable automatic timestamps (createdAt, updatedAt)
-    createdAt: 'createdAt',  // Explicitly define custom timestamps if necessary
-    updatedAt: 'updatedAt',
-  }
+  { sequelize, tableName: 'orders' }
 );
 
 export default Order;
