@@ -1,6 +1,5 @@
-// src/controllers/serviceController.ts
 import { Router, Request, Response } from 'express';
-import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import
+import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import for models
 import { checkAuth } from '../middlewares/authMiddleware';
 
 const router = Router();
@@ -11,14 +10,12 @@ router.post(
   async (req: Request, res: Response): Promise<void> => {
     try {
       // Type the request body using ServiceCreationAttributes for type safety
-      const { userId, title, description, price }: ServiceCreationAttributes =
-        req.body;
+      const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
       // Validate required fields
       if (!userId || !title || !description || price === undefined) {
         res.status(400).json({
-          message:
-            'Missing required fields: userId, title, description, and price are mandatory.',
+          message: 'Missing required fields: userId, title, description, and price are mandatory.',
           error: 'ValidationError',
         });
         return;
@@ -43,7 +40,7 @@ router.post(
         return;
       }
 
-      // Create a new service for the user
+      // Create the service directly in the controller
       const service = await Service.create({
         userId,
         title,

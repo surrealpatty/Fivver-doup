@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">26.08% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/22</span>
+                <span class='fraction'>6/23</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">26.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/22</span>
+                <span class='fraction'>6/23</span>
             </div>
         
             
@@ -130,29 +130,23 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,9 +197,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/controllers/serviceController.ts
-import { Router, Request, Response } from 'express';
-import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router, Request, Response } from 'express';
+import { Service, ServiceCreationAttributes, User } from '../models'; // Correct import for models
 import { checkAuth } from '../middlewares/authMiddleware';
 &nbsp;
 const router = Router();
@@ -213,17 +206,15 @@ const router = Router();
 router.post(
   '/services',
   checkAuth,
-<span class="fstat-no" title="function not covered" >  async </span>(req: Request, res: Response): Promise&lt;void&gt; =&gt; {
+<span class="fstat-no" title="function not covered" >  async (r</span>eq: Request, res: Response): Promise&lt;void&gt; =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       // Type the request body using ServiceCreationAttributes for type safety
-      const { userId, title, description, price }: ServiceCreationAttributes =
-<span class="cstat-no" title="statement not covered" >        req.body;</span>
+      const { userId, title, description, price }: ServiceCreationAttributes = <span class="cstat-no" title="statement not covered" >req.body;</span>
 &nbsp;
       // Validate required fields
 <span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!userId || !title || !description || price === undefined) {</span>
 <span class="cstat-no" title="statement not covered" >        res.status(400).json({</span>
-          message:
-            'Missing required fields: userId, title, description, and price are mandatory.',
+          message: 'Missing required fields: userId, title, description, and price are mandatory.',
           error: 'ValidationError',
         });
 <span class="cstat-no" title="statement not covered" >        return;</span>
@@ -248,7 +239,7 @@ router.post(
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
 &nbsp;
-      // Create a new service for the user
+      // Create the service directly in the controller
       const service = <span class="cstat-no" title="statement not covered" >await Service.create({</span>
         userId,
         title,
@@ -280,7 +271,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-27T00:15:16.407Z
+                at 2024-11-27T03:14:08.983Z
             </div>
         <script src="../prettify.js"></script>
         <script>
