@@ -1,6 +1,7 @@
+// src/config/database.ts
 import { Sequelize } from 'sequelize';
 
-// Create and export the Sequelize instance
+// Create and export the Sequelize instance with configuration details
 export const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost', // Adjust host if needed
