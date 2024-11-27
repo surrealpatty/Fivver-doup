@@ -6,7 +6,7 @@
     "esModuleInterop": true,                 // Enable interop between CommonJS and ES modules
     "skipLibCheck": true,                    // Skip type-checking of declaration files
     "moduleResolution": "node",              // Use Node's resolution strategy for imports
-    "outDir": "./dist",                      // Output directory for compiled files
+    "outDir": "./dist",                      // Output directory for compiled files (already correct)
     "rootDir": "./src",                      // Root directory for source files
     "baseUrl": ".",                          // Base URL for relative module resolution
     "resolveJsonModule": true,               // Allow importing JSON files

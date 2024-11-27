@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Assuming you have the UserPayload interface
 
-// Get JWT secret from environment variables
 const jwtSecret = process.env.JWT_SECRET;
 
 if (!jwtSecret) {

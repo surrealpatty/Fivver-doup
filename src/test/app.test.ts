@@ -3,7 +3,7 @@ import request from 'supertest';
 import { Express } from 'express'; // Import the Express type
 
 // Define the path to the compiled `index.js` file in `dist/`
-const appPath = path.resolve(__dirname, '../dist/index');
+const appPath = path.resolve(__dirname, '../../dist/index'); // Adjusted path
 
 // Initialize app variable with explicit typing as Express.Application
 let app: Express | undefined; // Type it as Express.Application or undefined (in case it's not loaded)

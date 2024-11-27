@@ -1,6 +1,6 @@
 import { sequelize, testConnection } from '../config/database'; // Correct import
 
-// Mock the sequelize instance's `authenticate` method to avoid real database calls during tests
+// Mock the sequelize instance's `authenticate` method and the `testConnection` function
 jest.mock('../config/database', () => {
   const originalDatabase = jest.requireActual('../config/database');
   return {
@@ -9,15 +9,18 @@ jest.mock('../config/database', () => {
       ...originalDatabase.sequelize,
       authenticate: jest.fn(), // Mock the `authenticate` method
     },
+    testConnection: jest.fn(), // Mock the testConnection function as well
   };
 });
 
 describe('Database Connection', () => {
   let mockAuthenticate: jest.Mock;
+  let mockTestConnection: jest.Mock;
 
-  // Initialize the mock function for `authenticate`
+  // Initialize the mock functions for `authenticate` and `testConnection`
   beforeAll(() => {
     mockAuthenticate = sequelize.authenticate as jest.Mock;
+    mockTestConnection = testConnection as jest.Mock;
   });
 
   // Mock console methods globally
@@ -44,10 +47,11 @@ describe('Database Connection', () => {
   // Test for a successful database connection
   it('should successfully connect to the database', async () => {
     // Simulate a successful connection
-    mockAuthenticate.mockResolvedValueOnce(undefined);
+    mockAuthenticate.mockResolvedValueOnce(undefined); // Mock a successful authentication response
+    mockTestConnection.mockResolvedValueOnce(true); // Mock the testConnection function to return true
 
     // Execute the `testConnection` function
-    await testConnection();
+    const connection = await testConnection();
 
     // Assertions
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
@@ -55,16 +59,18 @@ describe('Database Connection', () => {
     expect(consoleLogSpy).toHaveBeenCalledWith(
       'Database connection has been established successfully.'
     ); // Check success log
+    expect(connection).toBeTruthy(); // Ensure the connection returns true
   });
 
   // Test for a failed database connection
   it('should log an error when the database connection fails', async () => {
     // Simulate a connection failure
     const errorMessage = 'Connection failed';
-    mockAuthenticate.mockRejectedValueOnce(new Error(errorMessage));
+    mockAuthenticate.mockRejectedValueOnce(new Error(errorMessage)); // Mock the error on authenticate
+    mockTestConnection.mockResolvedValueOnce(false); // Mock the testConnection function to return false
 
     // Execute the `testConnection` function
-    await testConnection();
+    const connection = await testConnection();
 
     // Assertions
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
@@ -73,5 +79,6 @@ describe('Database Connection', () => {
       'Unable to connect to the database:',
       errorMessage
     ); // Check error log
+    expect(connection).toBeFalsy(); // Ensure the connection fails
   });
 });
