@@ -1,27 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES6",                          // Use ES6 for compatibility with Node.js
-    "module": "ESNext",                        // For dynamic imports and compatibility with modern modules
-    "strict": true,                            // Enable strict type checking
-    "esModuleInterop": true,                   // Ensure compatibility between CommonJS and ES modules
-    "skipLibCheck": true,                      // Skip type-checking of declaration files
-    "moduleResolution": "node",                // Use Node's resolution strategy
-    "outDir": "./dist",                        // Output directory for compiled files
-    "rootDir": "./src",                        // Root directory for source files
-    "baseUrl": ".",                            // Base URL for resolving modules
-    "resolveJsonModule": true,                 // Allow importing JSON files
-    "allowJs": true,                           // Allow JavaScript files to be compiled
+    "target": "ES6",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*", "src/*"],        // Support for custom module paths
-      "types": ["node"]                        // Ensure Node.js types are available
-    },
-    "forceConsistentCasingInFileNames": true   // Ensure consistent casing in file names
+      "*": ["node_modules/*", "src/*"]
+    }
   },
   "include": [
-    "src/**/*"                                 // Include all files in the src directory
-  ],
-  "exclude": [
-    "node_modules",                            // Exclude node_modules from the compilation
-    "dist"                                     // Exclude dist directory from source files
+    "src/**/*"
   ]
 }
