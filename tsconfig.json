@@ -11,11 +11,11 @@
     "baseUrl": ".",                            // Base URL for relative module resolution
     "resolveJsonModule": true,                 // Allow importing JSON files
     "allowJs": true,                           // Allow JavaScript files to be compiled
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent file name casing
+    "types": ["node"],                         // Define node types for type-checking
     "paths": {
-      "*": ["node_modules/*", "src/*"],         // Support for custom module paths
-      "types": ["node"]
-    },
-    "forceConsistentCasingInFileNames": true   // Enforce consistent file name casing
+      "*": ["node_modules/*", "src/*"]         // Support for custom module paths
+    }
   },
   "include": [
     "src/**/*"                                 // Include all files in the src directory
@@ -25,4 +25,5 @@
     "dist"                                     // Exclude dist directory from source files
   ]
 }
+
 
