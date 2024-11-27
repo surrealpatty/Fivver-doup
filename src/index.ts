@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { testConnection } from './config/database'; // Ensure this is for testing DB connection
 import userRouter from './routes/user'; // Use correct route for user-related endpoints
-import { sequelize } from './config/database'; // Use named import for sequelize instance
+import { sequelize } from './config/database'; 
 import dotenv from 'dotenv';
 import User from './models/user'; // Import User model
 
