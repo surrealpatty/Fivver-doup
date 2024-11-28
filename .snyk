@@ -1,0 +1,15 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:lodash:20180130':
+    - mock-response > mock-generator > lodash:
+        patched: '2024-11-06T22:34:48.124Z'
+        id: 'npm:lodash:20180130'
+        path: mock-response > mock-generator > lodash
+  'npm:uglify-js:20151024':
+    - mock-response > handlebars > uglify-js:
+        patched: '2024-11-06T22:34:48.124Z'
+        id: 'npm:uglify-js:20151024'
+        path: mock-response > handlebars > uglify-js
