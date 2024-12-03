@@ -14,5 +14,14 @@
   "module": {
     "type": "commonjs"
   },
+  "sourceMaps": true,
+  "env": {
+    "targets": "node 16"
+  },
+  "paths": {
+    "@config/*": ["src/config/*"],
+    "@models/*": ["src/models/*"],
+    "@services/*": ["src/services/*"]
+  },
   "exclude": ["node_modules"]
 }
