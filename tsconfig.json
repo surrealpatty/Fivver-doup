@@ -38,7 +38,7 @@
     "node_modules",  // Exclude node_modules
     "dist",  // Exclude build output
     "build",  // Exclude build folder if exists
-    "src/test/**/*.test.ts",  // Exclude test files
-    "src/test/**/*.test.tsx"  // Exclude JSX test files if exists
+    "src/test/**/*.test.ts",  // Exclude test files that end in .test.ts
+    "src/test/**/*.test.tsx"  // Exclude test files that end in .test.tsx
   ]
 }
