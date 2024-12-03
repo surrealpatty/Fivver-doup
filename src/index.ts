@@ -10,7 +10,18 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
-const port = process.env.PORT || 3000; // Use environment variable for port or default to 3000
+
+// Verify necessary environment variables are set
+const port = process.env.PORT || 3000; // Default to 3000 if not provided
+const dbName = process.env.DB_NAME;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const dbHost = process.env.DB_HOST;
+
+if (!dbName || !dbUser || !dbPassword || !dbHost) {
+  console.error('Missing required environment variables for database connection.');
+  process.exit(1); // Exit the app if critical variables are missing
+}
 
 // Middleware to parse JSON bodies
 app.use(express.json());
