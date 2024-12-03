@@ -13,7 +13,7 @@
     "clean-build": "rimraf dist && tsc",
     "start": "npm run build && node dist/index.js",
     "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",
-    "build": "swc src/index.ts -d dist && move dist\\index.ts dist\\index.js",
+    "build": "swc src/index.ts -d dist",  
     "build:watch": "swc src -d dist --watch",
     "pretest": "npm run build",
     "test": "cross-env NODE_ENV=test jest --config jest.config.ts",
