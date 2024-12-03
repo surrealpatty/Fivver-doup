@@ -1,0 +1,68 @@
+{
+  "name": "fivver-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "core-js": "^3.39.0",
+    "uuid": "^11.0.2",
+    "vue-router": "^4.4.5",
+    "vuex": "^4.1.0",
+    "webpack-dev-middleware": "^7.4.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/eslint-parser": "^7.25.9",
+    "@babel/plugin-transform-async-generator-functions": "^7.25.9",
+    "@babel/plugin-transform-json-strings": "^7.25.9",
+    "@babel/plugin-transform-object-rest-spread": "^7.25.9",
+    "@types/node": "^22.8.7",
+    "@types/vue": "^2.0.0",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.5.12",
+    "eslint": "^8.57.1",
+    "eslint-define-config": "^2.1.0",
+    "eslint-plugin-vue": "^9.30.0",
+    "eslint-webpack-plugin": "^4.2.0",
+    "globals": "^15.11.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3",
+    "vue": "^3.5.12",
+    "webpack": "^5.96.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "rules"
+    ],
+    "env": {
+      "root": true,
+      "env": {
+        "browser": true,
+        "es20201": true,
+        "node": true
+      }
+    },
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module",
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "some-rule": "error"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

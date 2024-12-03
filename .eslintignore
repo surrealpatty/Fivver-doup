@@ -1,0 +1,23 @@
+# Node modules (ignore linting inside node_modules)
+node_modules/
+
+# Build directory (ignore linting inside dist)
+dist/
+
+# Log files (they don't need linting)
+*.log
+
+# Coverage directory (ignore linting inside coverage reports)
+coverage/
+
+# OS generated files (e.g., macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# IDE and editor specific files (for VSCode, etc.)
+.vscode/
+.idea/
+
+# Optional: Ignore test files (if you don't want them linted)
+*.test.ts
+*.test.js

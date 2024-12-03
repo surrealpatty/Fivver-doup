@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",  // Set ECMAScript target version
+    "module": "CommonJS",  // Use CommonJS for Node.js compatibility
+    "moduleResolution": "node",  // Use Node.js-style module resolution
+    "strict": false,  // Disable strict type checking for a temporary workaround
+    "skipLibCheck": true,  // Skip type checking of declaration files
+    "esModuleInterop": true,  // Ensure compatibility between CommonJS and ES Modules
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent file name casing
+    "baseUrl": "./src",  // Base URL for module resolution
+    "paths": {
+      "*": ["node_modules/*", "src/*"],  // Allow imports from node_modules and src
+      "@models/*": ["models/*"],  // Alias for models
+      "@config/*": ["config/*"],  // Alias for config
+      "@services/*": ["services/*"]  // Alias for services
+    },
+    "outDir": "./dist",  // Output directory for compiled files
+    "rootDir": "./src",  // Root directory for source files
+    "allowJs": true,  // Include JavaScript files in build
+    "declaration": true,  // Generate declaration files
+    "sourceMap": true,  // Generate source maps for debugging
+    "experimentalDecorators": true,  // Enable experimental decorators
+    "emitDecoratorMetadata": true,  // Emit metadata for decorators
+    "resolveJsonModule": true,  // Allow JSON module imports
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Include custom type definitions
+    "lib": ["esnext"],  // Use modern ECMAScript features
+    "types": ["node", "jest", "sequelize", "express"],  // Include Node.js, Jest, Sequelize, and Express types
+    "noImplicitAny": false  // Temporarily allow implicit any types
+  },
+  "include": [
+    "src/**/*.ts",  // Include all TypeScript files in src folder
+    "src/models/**/*.ts",  // Include models
+    "src/types/**/*.ts",  // Include custom types
+    "src/test/**/*.ts",  // Include test files
+    "src/test/**/*.tsx"  // Include JSX test files if any
+  ],
+  "exclude": [
+    "node_modules",  // Exclude node_modules
+    "dist",  // Exclude build output
+    "build",  // Exclude build folder if exists
+    "src/test/**/*.test.ts",  // Exclude test files
+    "src/test/**/*.test.tsx"  // Exclude JSX test files if exists
+  ]
+}
