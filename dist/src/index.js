@@ -148,7 +148,16 @@ function _ts_generator(thisArg, body) {
 _dotenv.default.config();
 // Initialize Express app
 var app = (0, _express.default)();
-var port = process.env.PORT || 3000; // Use environment variable for port or default to 3000
+// Verify necessary environment variables are set
+var port = process.env.PORT || 3000; // Default to 3000 if not provided
+var dbName = process.env.DB_NAME;
+var dbUser = process.env.DB_USER;
+var dbPassword = process.env.DB_PASSWORD;
+var dbHost = process.env.DB_HOST;
+if (!dbName || !dbUser || !dbPassword || !dbHost) {
+    console.error('Missing required environment variables for database connection.');
+    process.exit(1); // Exit the app if critical variables are missing
+}
 // Middleware to parse JSON bodies
 app.use(_express.default.json());
 // Register routes
