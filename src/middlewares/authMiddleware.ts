@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index';
+import { UserPayload } from '../types/index'; // Ensure this is correctly imported from your types
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -59,7 +59,7 @@ export const checkAuth = (
   next: NextFunction
 ): void => {
   authenticateToken(req, res, () => {
-    // Add any additional checks if needed
+    // Additional checks can be added here if needed (e.g., check if user is active)
     if (req.user) {
       next(); // If authenticated, proceed to the next route handler
     } else {
@@ -77,7 +77,7 @@ export const generateToken = (user: { id: string; email: string; username: strin
   const payload: UserPayload = { 
     id: user.id, 
     email: user.email,
-    username: user.username  // Add the username here
+    username: user.username  // Include username in the token
   };
 
   return jwt.sign(payload, jwtSecret as string, { expiresIn: '1h' }); // You can modify expiration as needed
