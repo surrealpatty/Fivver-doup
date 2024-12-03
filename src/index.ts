@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv'; // For loading environment variables
-import { sequelize } from './config/database'; // Ensure the path to your Sequelize instance is correct
+import { sequelize } from './config/database';
 import userRouter from './routes/user'; // User routes
 import testEmailRoute from './routes/testEmailRoute'; // Test email route
 import { User } from './models/user'; // Ensure the User model is imported correctly

@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'; // Import Sequelize from sequelize-typescript
-import dotenv from 'dotenv';                      // Import dotenv for environment variables
+import dotenv from 'dotenv'; // Import dotenv for environment variables
 
 // Load environment variables from .env file
 dotenv.config();
