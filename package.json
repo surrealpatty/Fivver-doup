@@ -143,5 +143,10 @@
       "pre-commit": "lint-staged"
     }
   },
+  "_moduleAliases": {
+    "@config": "dist/config",
+    "@models": "dist/models",
+    "@services": "dist/services"
+  },
   "types": "dist/index.d.ts"
 }
