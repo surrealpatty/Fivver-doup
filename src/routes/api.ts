@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
+import { authenticateJWT, checkAuth } from '../middlewares/authMiddleware';  // Corrected import
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
 import { User } from '@models/user';  // Correct alias for User model
 import Service from '@models/services';  // Correct alias for Service model

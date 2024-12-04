@@ -5,16 +5,13 @@ import dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 
-// Define a type for the `user` object that will be attached to the request
-declare global {
-  namespace Express {
-    interface Request {
-      user?: { id: string; email: string; username: string }; // Adjust to match your JWT payload structure
-    }
-  }
+// Adjust the 'user' property to match the type definition in src/types/express/index.d.ts
+interface CustomRequest extends Request {
+  user?: { id: string; email: string; username: string };
 }
 
-export const authenticateJWT = (req: Request, res: Response, next: NextFunction): void => {
+// Export the middleware functions using the custom request interface
+export const authenticateJWT = (req: CustomRequest, res: Response, next: NextFunction): void => {
   // Extract the token from the Authorization header
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -38,7 +35,7 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
 };
 
 // Optional: A simple middleware to check if the user is authenticated
-export const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
+export const checkAuth = (req: CustomRequest, res: Response, next: NextFunction): void => {
   if (!req.user) {
     return res.status(403).json({ message: 'Access denied. No user found in request' });
   }
