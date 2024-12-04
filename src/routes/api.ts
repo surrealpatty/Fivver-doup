@@ -1,18 +1,18 @@
 import { Router, Request, Response } from 'express';
-import { User } from '@models/user';  // Correct alias for User model
 import { checkAuth } from '../middlewares/authMiddleware';  // Ensure this middleware is correctly defined
-import { ServiceCreationAttributes } from '@models/services';  // Correct alias for Service model attributes
+import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
+import { User } from '@models/user';  // Correct alias for User model
 import Service from '@models/services';  // Correct alias for Service model
 
 const router = Router();
 
 // POST route to create a service
 router.post(
-  '/services',
-  checkAuth,  // Ensure this middleware is correctly defined
+  '/services',  // Define the endpoint
+  checkAuth,  // Apply the authentication middleware (if required)
   async (req: Request, res: Response): Promise<void> => {
     try {
-      // Type the request body using ServiceCreationAttributes for type safety
+      // Destructure and type the request body using ServiceCreationAttributes
       const { userId, title, description, price }: ServiceCreationAttributes = req.body;
 
       // Validate required fields

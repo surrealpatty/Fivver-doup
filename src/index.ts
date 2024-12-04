@@ -1,9 +1,10 @@
 import express from 'express';
-import dotenv from 'dotenv'; // For loading environment variables
-import { sequelize } from '@config/database'; // Correctly use the alias path to resolve config/database
-import userRouter from './routes/user'; // User routes
-import testEmailRoute from './routes/testEmailRoute'; // Test email route
-import { User } from '@models/user'; // Correct alias for models
+import dotenv from 'dotenv';  // For loading environment variables
+import { sequelize } from '@config/database';  // Correct path for sequelize config
+import apiRoutes from './routes/api';  // Importing api routes (includes /services, etc.)
+import userRouter from './routes/user';  // User routes
+import testEmailRoute from './routes/testEmailRoute';  // Test email route
+import { User } from '@models/user';  // Correct model path for User
 
 // Load environment variables from .env file
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(express.json());
 
 // Register routes
 app.use('/api/users', userRouter); // All user-related routes
+app.use('/api', apiRoutes);  // Register /services and other API routes here
 app.use('/test', testEmailRoute); // Test email route
 
 // Root route
