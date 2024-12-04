@@ -27,13 +27,14 @@ router.post('/register', // Validate user inputs
     (0, _expressvalidator.check)('password').isLength({
         min: 6
     }).withMessage('Password must be at least 6 characters long')
-], async (req, res)=>{
+], // Define the route handler with a return type of void
+async (req, res)=>{
     // Check for validation errors
     const errors = (0, _expressvalidator.validationResult)(req);
     if (!errors.isEmpty()) {
         res.status(400).json({
             errors: errors.array()
-        }); // Return response directly
+        });
         return; // Ensure we stop here if validation fails
     }
     try {
@@ -48,7 +49,7 @@ router.post('/register', // Validate user inputs
             res.status(400).json({
                 message: 'User already exists'
             });
-            return;
+            return; // Stop execution if user exists
         }
         // Check if username already exists
         const existingUsername = await _models.User.findOne({
@@ -60,7 +61,7 @@ router.post('/register', // Validate user inputs
             res.status(400).json({
                 message: 'Username already taken'
             });
-            return;
+            return; // Stop execution if username exists
         }
         // Hash the password before saving it
         const hashedPassword = await _bcryptjs.default.hash(password, 10);
