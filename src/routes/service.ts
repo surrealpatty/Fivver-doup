@@ -2,8 +2,7 @@ import express, { Response } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Import authenticateJWT
 import { checkTier } from '../middlewares/tierMiddleware'; // Ensure checkTier is correct
 import Service from '../models/services'; // Correct import for Service model
-import { AuthRequest } from 'src/types'; // Absolute path (optional debugging)
-
+import { AuthRequest } from 'types';  // Absolute import if using baseUrl in tsconfig
 
 const router = express.Router();
 
