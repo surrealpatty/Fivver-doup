@@ -8,6 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
 dotenv_1.default.config();
+// Export the middleware functions using the custom request interface
 const authenticateJWT = (req, res, next) => {
     // Extract the token from the Authorization header
     const token = req.header('Authorization')?.replace('Bearer ', '');

@@ -25,14 +25,14 @@ const registerUser = async (req, res) => {
         // Create a new user
         const user = await user_1.User.create({ email, username, password: hashedPassword });
         // Send success response with user data (excluding password for security)
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User created successfully',
             user: { id: user.id, email: user.email, username: user.username },
         });
     }
     catch (error) {
         console.error('Error during user registration:', error);
-        res.status(500).json({ message: 'Server error during user registration' });
+        return res.status(500).json({ message: 'Server error during user registration' });
     }
 };
 exports.registerUser = registerUser;
@@ -59,14 +59,14 @@ const loginUser = async (req, res) => {
         { expiresIn: '1h' } // Token expiration time
         );
         // Send the token in the response
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Login successful',
             token, // Send JWT token to the user
         });
     }
     catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ message: 'Server error during login' });
+        return res.status(500).json({ message: 'Server error during login' });
     }
 };
 exports.loginUser = loginUser;

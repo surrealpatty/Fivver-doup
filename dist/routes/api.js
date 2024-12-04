@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Adjust path as needed
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Corrected import
 const user_1 = require("@models/user"); // Correct alias for User model
 const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
 const router = (0, express_1.Router)();
