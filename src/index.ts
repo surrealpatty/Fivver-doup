@@ -1,8 +1,11 @@
 import express from 'express';
-import { sequelize } from './config/database'; // Correct path to sequelize instance
-import { User } from './models/user'; // Correct path to the User model
-import userRouter from './routes/user'; // Correct path to userRouter
 import cors from 'cors';
+import { sequelize } from './config/database';  // Import sequelize instance
+import userRouter from './routes/user';  // Import the user routes
+import dotenv from 'dotenv';  // To load environment variables
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Create Express app instance
 const app = express();
@@ -13,34 +16,18 @@ const port = process.env.PORT || 3000; // Port is now 3000
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Enable CORS (if you need it, for handling cross-origin requests)
+// Enable CORS (if needed for handling cross-origin requests)
 app.use(cors());
 
-// Example route
+// Example route to test the server
 app.get('/', (req, res) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
-// Function to fetch users as a test (or could be moved to routes later)
-async function fetchUsers() {
-  try {
-    const users = await User.findAll({ raw: true }); // Use 'raw: true' to get plain data
-    console.log('Users:', users); // Log users to verify
-    if (users.length === 0) {
-      console.log('No users found.');
-    }
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  }
-}
-
 // Synchronize models with the database
-sequelize.sync({ alter: true }) // Using 'alter' instead of 'force' to avoid dropping tables
+sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
   .then(() => {
     console.log('Models are synchronized with the database.');
-    
-    // Call fetchUsers() after models are synced
-    fetchUsers();
   })
   .catch((error: Error) => {
     console.error('Error syncing models:', error);
@@ -48,6 +35,15 @@ sequelize.sync({ alter: true }) // Using 'alter' instead of 'force' to avoid dro
 
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', userRouter); // Register the user routes under /api/users
+
+// Test database connection
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection established.');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });
 
 // Start the server
 app.listen(port, () => {

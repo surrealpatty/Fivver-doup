@@ -21,7 +21,7 @@ if (!checkEnvVars()) {
   process.exit(1);  // Exit if environment variables are missing
 }
 
-// Import the models after verifying environment variables
+// Import models after ensuring environment variables are loaded
 import { User } from '../models/user';  // Correct path to User model
 import Service from '../models/services';  // Correct path to Service model
 
@@ -35,7 +35,7 @@ const sequelize = new Sequelize({
   models: [User, Service],  // Register models explicitly here
   dialectOptions: {
     authPlugins: {
-      mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8
+      mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8 (if needed)
     },
   },
   logging: false,  // Disable Sequelize logging (optional)
