@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _service = /*#__PURE__*/ _interop_require_default(require("../models/service"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _user = require("../models/user");
 const _database = require("../config/database");
 function _interop_require_default(obj) {
@@ -34,7 +34,7 @@ describe('Service Model Tests', ()=>{
             price: 100.0
         };
         // Create the service and ensure it's properly typed
-        const service = await _service.default.create(serviceData);
+        const service = await _services.default.create(serviceData);
         // Check that the service has the correct properties
         expect(service.userId).toBe(user.id);
         expect(service.title).toBe('Test Service');

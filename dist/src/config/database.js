@@ -46,6 +46,10 @@ const checkEnvVars = ()=>{
 if (!checkEnvVars()) {
     process.exit(1); // Exit if environment variables are missing
 }
+// **Option 2: Use relative imports (if alias path issue persists)**
+// import { User } from '../models/user';  // Relative path to user model
+// import Service from '../models/services';  // Relative path to services model
+// Initialize Sequelize instance with database connection details
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST,

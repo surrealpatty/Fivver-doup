@@ -11,7 +11,7 @@ Object.defineProperty(exports, "default", {
 const _express = /*#__PURE__*/ _interop_require_default(require("express"));
 const _authMiddleware = require("../middlewares/authMiddleware");
 const _tierMiddleware = require("../middlewares/tierMiddleware");
-const _service = /*#__PURE__*/ _interop_require_default(require("../models/service"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -38,7 +38,7 @@ router.post('/post-service', _authMiddleware.authenticateToken, (0, _tierMiddlew
             return;
         }
         // Create a new service entry
-        const service = await _service.default.create({
+        const service = await _services.default.create({
             userId,
             title,
             description,

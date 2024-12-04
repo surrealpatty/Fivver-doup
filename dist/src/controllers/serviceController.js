@@ -9,7 +9,7 @@ Object.defineProperty(exports, "createService", {
         return createService;
     }
 });
-const _service = /*#__PURE__*/ _interop_require_default(require("../models/service"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -18,7 +18,7 @@ function _interop_require_default(obj) {
 const createService = async (req, res)=>{
     try {
         const { title, description, price, userId } = req.body;
-        const newService = await _service.default.create({
+        const newService = await _services.default.create({
             title,
             description,
             price,

@@ -12,7 +12,7 @@ Object.defineProperty(exports, // Export the function using ES module syntax
 });
 const _database = require("../config/database");
 const _user = require("../models/user");
-const _service = /*#__PURE__*/ _interop_require_default(require("../models/service"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -42,7 +42,7 @@ const testModels = async ()=>{
             userId: testUser.id
         };
         // Create the test service using the ServiceCreationAttributes type
-        const testService = await _service.default.create(testServiceData);
+        const testService = await _services.default.create(testServiceData);
         console.log('Test Service created:', testService.toJSON());
     } catch (error) {
         console.error('Error testing models:', error);
