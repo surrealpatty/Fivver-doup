@@ -1,5 +1,5 @@
-import { Sequelize } from 'sequelize-typescript'; // Import Sequelize from sequelize-typescript
-import dotenv from 'dotenv'; // Import dotenv for environment variables
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
+import dotenv from 'dotenv';  // Import dotenv to load environment variables
 
 // Load environment variables from .env file
 dotenv.config();
@@ -8,7 +8,7 @@ dotenv.config();
 const checkEnvVars = (): boolean => {
   const requiredVars = ['DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST'];
   const missingVars = requiredVars.filter(varName => !process.env[varName]);
-  
+
   if (missingVars.length > 0) {
     console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
     return false;
@@ -18,23 +18,26 @@ const checkEnvVars = (): boolean => {
 
 // Ensure environment variables are available
 if (!checkEnvVars()) {
-  process.exit(1); // Exit if environment variables are missing
+  process.exit(1);  // Exit if environment variables are missing
 }
 
-// Create Sequelize instance and configure connection using sequelize-typescript
+// Import the models after verifying environment variables
+import { User } from '@models/user';
+import { Service } from '@models/services';
+
 const sequelize = new Sequelize({
-  database: process.env.DB_NAME as string,  // Database name from .env (type assertion)
-  dialect: 'mysql',                        // Using MySQL dialect
+  dialect: 'mysql',  // Using MySQL dialect
+  host: process.env.DB_HOST,  // Database host from .env
   username: process.env.DB_USER as string,  // Database user from .env (type assertion)
   password: process.env.DB_PASSWORD as string,  // Database password from .env (type assertion)
-  host: process.env.DB_HOST,               // Database host from .env
-  models: [__dirname + '/../models'],      // Automatically load models from the models directory
+  database: process.env.DB_NAME as string,  // Database name from .env (type assertion)
+  models: [User, Service],  // Register models explicitly here
   dialectOptions: {
     authPlugins: {
-      mysql_native_password: () => {}     // Disable default auth plugin for MySQL 8
-    }
+      mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8
+    },
   },
-  logging: false,                          // Disable Sequelize logging (optional)
+  logging: false,  // Disable Sequelize logging (optional)
 });
 
 // Test database connection
