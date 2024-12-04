@@ -8,7 +8,7 @@ const authenticateToken = (req, res, next) => {
         if (!token) {
             return res.status(401).json({ message: 'No token provided' });
         }
-        // Simulate token decoding here (this should be your actual logic)
+        // Simulate token decoding here (replace this with your actual logic)
         const decodedUser = {
             id: '123',
             email: 'user@example.com',
@@ -21,7 +21,8 @@ const authenticateToken = (req, res, next) => {
             username: decodedUser.username,
             tier: decodedUser.tier,
         };
-        req.user = payload; // Attach the user object to req.user
+        // Attach the user object to req.user
+        req.user = payload;
         next(); // Proceed to the next middleware or route handler
     }
     catch (error) {

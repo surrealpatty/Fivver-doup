@@ -1,33 +1,29 @@
-// src/routes/service.ts
 import express, { Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';  // Adjust path as needed
-import { checkTier } from '../middlewares/tierMiddleware'; // Tier-based access control middleware
-import Service from '../models/services'; // Service model
-import { AuthRequest } from '../types'; // Import the AuthRequest type
+import { authenticateToken } from '../middlewares/authMiddleware';  
+import { checkTier } from '../middlewares/tierMiddleware';
+import Service from '../models/services'; 
+import { AuthRequest } from '../types'; 
 
 const router = express.Router();
 
 // POST /services route to create a new service (only for paid users)
 router.post(
   '/',
-  authenticateToken, // Authenticate the user
-  checkTier('paid'), // Restrict route access to users with 'paid' tier
-  async (req: AuthRequest, res: Response): Promise<void> => {
+  authenticateToken, 
+  checkTier('paid'), 
+  async (req: AuthRequest, res: Response): Promise<Response> => {  // Ensure return type is Response
     try {
       const { title, description, price } = req.body;
 
-      // Validate request body
       if (!title || !description || price === undefined) {
         return res.status(400).json({ message: 'All fields are required.' });
       }
 
-      // Retrieve the user ID from the authenticated token
-      const userId = parseInt(req.user?.id || '', 10); // req.user is now typed as UserPayload
+      const userId = parseInt(req.user?.id || '', 10);
       if (isNaN(userId)) {
         return res.status(400).json({ message: 'Invalid user ID.' });
       }
 
-      // Create a new service entry
       const service = await Service.create({
         userId,
         title,
@@ -35,7 +31,6 @@ router.post(
         price,
       });
 
-      // Respond with the created service
       return res.status(201).json({ message: 'Service created successfully.', service });
     } catch (error) {
       console.error(error);

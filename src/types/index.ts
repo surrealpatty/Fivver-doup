@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 import { Request } from 'express';
 
 // Interface for user attributes, including required fields like id, username, and email
