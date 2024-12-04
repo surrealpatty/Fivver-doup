@@ -1,6 +1,7 @@
 // src/types/index.ts
 import { Request } from 'express';
 
+// Define the UserPayload interface
 export interface UserPayload {
   id: string;
   email: string;

@@ -11,12 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/models/service.ts
 const sequelize_typescript_1 = require("sequelize-typescript");
-const user_1 = require("./user"); // Import the User model for the foreign key
+const user_1 = require("./user");
 let Service = class Service extends sequelize_typescript_1.Model {
     title;
     description;
     price;
-    userId; // Foreign key to User
+    userId;
 };
 __decorate([
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),

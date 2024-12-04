@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const tierMiddleware_1 = require("../middlewares/tierMiddleware");
+const service_1 = __importDefault(require("../models/service")); // Correct import for Service model
 const router = express_1.default.Router();
 router.post('/', authMiddleware_1.authenticateToken, (0, tierMiddleware_1.checkTier)('paid'), // Ensure checkTier is a valid middleware function
 async (req, res) => {
@@ -19,7 +20,7 @@ async (req, res) => {
         if (isNaN(userId)) {
             return res.status(400).json({ message: 'Invalid user ID.' });
         }
-        const service = await Service.create({
+        const service = await service_1.default.create({
             userId,
             title,
             description,
