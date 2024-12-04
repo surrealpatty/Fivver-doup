@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="../types/express.d.ts" />  // Explicitly reference the custom types file (only if needed)
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -31,7 +32,7 @@ const authenticateToken = (req, res, next) => {
                 return; // Explicit return to end execution
             }
             // Attach the decoded payload to req.user
-            req.user = decoded;
+            req.user = decoded; // Ensure 'user' is typed as UserPayload
             // Proceed to the next middleware or route handler
             next();
         });
