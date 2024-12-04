@@ -12,7 +12,8 @@
       "*": ["node_modules/*"],               // Path resolution for node_modules
       "src/*": ["./*"],                       // Allow absolute imports from the 'src' directory
       "@models/*": ["models/*"],             // Define custom path for models (if you use "@models" in imports)
-      "@config/*": ["config/*"]              // Define custom path for config (if you use "@config" in imports)
+      "@config/*": ["config/*"],             // Define custom path for config (if you use "@config" in imports)
+      "types/*": ["src/types/*"]             // Ensure 'types' is mapped correctly to 'src/types'
     },
     "outDir": "./dist",                      // Output directory for compiled files
     "rootDir": "./src",                      // Root directory for source files
