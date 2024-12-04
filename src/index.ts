@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import { sequelize } from './config/database';  // Import sequelize instance
-import userRouter from './routes/user';  // Import the user routes
-import dotenv from 'dotenv';  // To load environment variables
+import { sequelize } from './config/database'; // Import sequelize instance
+import userRouter from './routes/user'; // Import user routes
+import profileRouter from './routes/profile'; // Import the profile routes
+import dotenv from 'dotenv'; // To load environment variables
 
 // Load environment variables from .env file
 dotenv.config();
@@ -11,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // Set up the server port
-const port = process.env.PORT || 3000; // Port is now 3000
+const port = process.env.PORT || 3000; // Default port is 3000
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -35,6 +36,9 @@ sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
 
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', userRouter); // Register the user routes under /api/users
+
+// Register the profile route under /api/profile
+app.use('/api/profile', profileRouter); // Register profile route
 
 // Test database connection
 sequelize.authenticate()
