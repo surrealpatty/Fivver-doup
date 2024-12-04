@@ -11,7 +11,7 @@
   "scripts": {
     "format": "prettier --write .",
     "clean-build": "rimraf dist && tsc",
-    "start": "npm run build && node -r tsconfig-paths/register dist/index.js",  
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",  
     "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",
     "build": "swc src/index.ts -d dist && move dist\\src\\index.js dist\\index.js",
     "build:watch": "swc src -d dist --watch",
@@ -144,9 +144,9 @@
     }
   },
   "_moduleAliases": {
-    "@config": "src/config",  
-    "@models": "src/models",  
-    "@services": "src/services"  
+    "@config": "src/config",
+    "@models": "src/models",
+    "@services": "src/services"
   },
   "types": "dist/index.d.ts"
 }
