@@ -3,6 +3,7 @@ import express, { Response } from 'express';
 import { AuthRequest } from '../types'; // Ensure correct import path
 import { authenticateToken } from '../middlewares/authMiddleware';
 import { checkTier } from '../middlewares/tierMiddleware';
+import Service from '../models/service';  // Correct default import for Service model
 
 const router = express.Router();
 

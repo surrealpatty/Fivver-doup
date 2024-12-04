@@ -23,8 +23,8 @@ if (!checkEnvVars()) {
     process.exit(1); // Exit if environment variables are missing
 }
 // Import the models after verifying environment variables
-const user_1 = require("@models/user"); // Correct alias for User model
-const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
+const user_1 = require("../models/user"); // Correct alias for User model
+const services_1 = __importDefault(require("../models/services")); // Correct alias for Service model
 // Initialize Sequelize instance with database connection details
 const sequelize = new sequelize_typescript_1.Sequelize({
     dialect: 'mysql', // Using MySQL dialect

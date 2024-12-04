@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/service.ts
 const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const tierMiddleware_1 = require("../middlewares/tierMiddleware");
 const router = express_1.default.Router();
-router.post('/', authenticateToken, checkTier('paid'), async (req, res) => {
+router.post('/', authMiddleware_1.authenticateToken, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
     try {
         const { title, description, price } = req.body;
         if (!title || !description || price === undefined) {

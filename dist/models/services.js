@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/models/service.ts
 const sequelize_typescript_1 = require("sequelize-typescript");
 const user_1 = require("./user"); // Import the User model for the foreign key
 let Service = class Service extends sequelize_typescript_1.Model {

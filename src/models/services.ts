@@ -11,7 +11,7 @@ export interface ServiceCreationAttributes {
 }
 
 @Table({ tableName: 'services' })
-export default class Service extends Model<Service, ServiceCreationAttributes> {  
+export default class Service extends Model<Service, ServiceCreationAttributes> {
   @Column(DataType.STRING)
   title!: string;
 
