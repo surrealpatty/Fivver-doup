@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/models/review.d.ts"],"sourcesContent":["import { Model } from 'sequelize-typescript';\r\nexport declare class Review extends Model {\r\n  serviceId: string;\r\n  userId: string;\r\n  rating: number;\r\n  comment: string;\r\n}\r\nexport default Review;\r\n"],"names":["Review"],"mappings":";;;;+BAOA;;;eAAA;;;qCAPsB;MAOtB,WAAeA"}

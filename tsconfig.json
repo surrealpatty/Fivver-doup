@@ -7,7 +7,7 @@
     "skipLibCheck": true,  // Skip type checking of declaration files
     "esModuleInterop": true,  // Ensure compatibility between CommonJS and ES Modules
     "forceConsistentCasingInFileNames": true,  // Enforce consistent file name casing
-    "baseUrl": "./src",  // Base URL for module resolution
+    "baseUrl": "./src",  // Base URL for module resolution (root of your src folder)
     "paths": {
       "*": ["node_modules/*", "src/*"],  // Allow imports from node_modules and src
       "@models/*": ["models/*"],  // Alias for models inside src
