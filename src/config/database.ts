@@ -22,9 +22,10 @@ if (!checkEnvVars()) {
 }
 
 // Import the models after verifying environment variables
-import { User } from '@models/user';
-import  Service from '@models/services';
+import { User } from '@models/user';  // Correct alias for User model
+import Service from '@models/services';  // Correct alias for Service model
 
+// Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({
   dialect: 'mysql',  // Using MySQL dialect
   host: process.env.DB_HOST,  // Database host from .env

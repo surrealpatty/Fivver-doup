@@ -1,6 +1,6 @@
 // src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import  Service  from '../models/service'; // Named import of the Service model
+import  Service  from '../models/services'; // Named import of the Service model
 import { User } from '../models/user'; // Named import of the User model
 
 export const createService = async (req: Request, res: Response) => {

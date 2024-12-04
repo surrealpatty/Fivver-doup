@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware'; // JWT authentication middleware
 import { checkTier } from '../middlewares/tierMiddleware'; // Tier-based access control middleware
-import Service from '../models/service'; // Service model
+import Service from '../models/services'; // Service model
 
 const router = express.Router();
 

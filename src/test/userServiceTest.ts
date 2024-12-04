@@ -1,5 +1,5 @@
 // src/test/userServiceTest.ts
-import Service, { ServiceCreationAttributes } from '../models/service';  // Import the interface and class
+import Service, { ServiceCreationAttributes } from '../models/services';  // Import the interface and class
 import { User } from '../models/user'; // Correct named import for User
 import { sequelize } from '../config/database'; // Import the sequelize instance
 
