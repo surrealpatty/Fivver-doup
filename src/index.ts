@@ -31,14 +31,18 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-// Example of using the User model (this could be moved to a service or controller later)
-User.findAll() // Fetch users as a test
-  .then((users) => {
-    console.log('Users:', users);
-  })
-  .catch((error: Error) => {
+// Fetch users as a test on startup
+const fetchUsers = async () => {
+  try {
+    const users = await User.findAll(); // Fetch all users
+    console.log('Users:', users.map(user => user.toJSON())); // Log user data
+  } catch (error) {
     console.error('Error fetching users:', error);
-  });
+  }
+};
+
+// Call the function to fetch users
+fetchUsers();
 
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', userRouter); // Register the user routes under /api/users

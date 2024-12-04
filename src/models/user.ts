@@ -8,7 +8,7 @@ export interface UserCreationAttributes {
   password: string;
   role?: string; // Optional role field
   tier?: string; // Optional tier field
-  isVerified?: boolean; // Add isVerified as an optional field
+  isVerified?: boolean; // Optional verified field
 }
 
 @Table({ tableName: 'users', timestamps: true })
