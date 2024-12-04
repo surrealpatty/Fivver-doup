@@ -1,33 +1,30 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/review.ts
-const express_1 = require("express");
-const reviewController_1 = require("../controllers/reviewController"); // Ensure correct import path
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Adjust path as needed
-const router = (0, express_1.Router)();
-// Route to create a new review (requires authentication)
+const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const router = express_1.default.Router();
+// Example route to create a new review
 router.post('/', authMiddleware_1.authenticateToken, (req, res, next) => {
-    // Assuming createReview function is implemented elsewhere in the controller
-    (0, reviewController_1.createReview)(req, res, next);
+    // Your review creation logic
+    return res.status(201).json({ message: 'Review created successfully.' });
 });
-// Route to get reviews for a specific service
-router.get('/:serviceId', (req, res, next) => {
-    // Assuming getReviewsForService function is implemented elsewhere in the controller
-    (0, reviewController_1.getReviewsForService)(req, res, next);
+// Example route to get reviews for a service
+router.get('/:serviceId', authMiddleware_1.authenticateToken, (req, res, next) => {
+    // Logic to fetch reviews for the service
+    return res.status(200).json({ message: 'Reviews fetched successfully.' });
 });
-// Route to update a review (requires authentication)
+// Update review route
 router.put('/:reviewId', authMiddleware_1.authenticateToken, (req, res, next) => {
-    // Assuming updateReview function is implemented elsewhere in the controller
-    (0, reviewController_1.updateReview)(req, res, next);
+    // Logic to update review
+    return res.status(200).json({ message: 'Review updated successfully.' });
 });
-// Route to delete a review (requires authentication)
+// Delete review route
 router.delete('/:reviewId', authMiddleware_1.authenticateToken, (req, res, next) => {
-    // Assuming deleteReview function is implemented elsewhere in the controller
-    (0, reviewController_1.deleteReview)(req, res, next);
-});
-// Optional: Health check or confirmation route
-router.get('/health', (_req, res) => {
-    res.json({ message: 'Reviews route is working!' });
+    // Logic to delete review
+    return res.status(200).json({ message: 'Review deleted successfully.' });
 });
 exports.default = router;
 //# sourceMappingURL=review.js.map

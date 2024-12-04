@@ -1,35 +1,65 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Correct import for AuthRequest type
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-// Middleware to authenticate the token (JWT)
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
+// Define the expected structure of the decoded JWT payload
+interface UserPayload extends JwtPayload {
+  id: string;
+  email: string;
+  username: string;
+}
+
+// Extend the Request interface to include the `user` property
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: UserPayload;
+  }
+}
+
+// Middleware to authenticate the token
+export const authenticateToken = (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+): void => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
+    // Extract the token from the Authorization header
+    const authorizationHeader = req.headers['authorization'];
+
+    // Check if the header exists and starts with "Bearer"
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      return; // Stop further processing if no token
     }
 
-    // Simulate token decoding here (replace with actual decoding logic)
-    const decodedUser = { 
-      id: '123',
-      email: 'user@example.com',
-      username: 'exampleUser',
-      tier: 'paid', // This should come from the JWT or database
-    };
+    const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
 
-    // Attach the user object to req.user
-    req.user = decodedUser;
+    // Check if the token is present
+    if (!token) {
+      res.status(401).json({ message: 'Authorization token is missing' });
+      return; // Stop further processing if no token
+    }
 
-    next(); // Proceed to the next middleware or route handler
+    const jwtSecret = process.env.JWT_SECRET;
+
+    // Ensure the JWT_SECRET is configured in the environment variables
+    if (!jwtSecret) {
+      console.error('JWT_SECRET is not configured in the environment variables');
+      res.status(500).json({ message: 'Internal server error' });
+      return; // Stop further processing if JWT_SECRET is missing
+    }
+
+    // Verify the token and decode the payload
+    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
+
+    // Attach the user data from the decoded token to the request object
+    req.user = decoded;
+
+    // Proceed to the next middleware or route handler
+    next();
   } catch (error) {
-    return res.status(401).json({ message: 'Authentication failed' });
-  }
-};
+    console.error('Token authentication failed:', error);
 
-// Middleware to check if the user is authenticated (i.e., req.user exists)
-export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    // Handle token verification errors
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
-  next(); // Proceed to the next middleware or route handler
 };

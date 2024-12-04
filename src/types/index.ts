@@ -1,6 +1,7 @@
+// src/types/index.ts
 import { Request } from 'express';
 
-// Interface for user attributes, including required fields like id, username, and email
+// Interface for user attributes, including required fields like id, username, email, and password
 export interface IUserAttributes {
   id: string;
   username: string;
@@ -24,5 +25,3 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
   user?: UserPayload; // Optional user object added after authentication
 }
-
-// Other interfaces can be added here...
