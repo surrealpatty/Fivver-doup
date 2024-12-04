@@ -6,7 +6,7 @@ export interface UserPayload {
   id: string;
   email: string;
   username: string;
-  tier: string;
+  tier?: string;  // Mark 'tier' as optional
 }
 
 // Extend the Express Request type to include an optional 'user' object
