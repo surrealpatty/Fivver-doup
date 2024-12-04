@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware'; // JWT authentication middleware
+import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
 import { checkTier } from '../middlewares/tierMiddleware'; // Tier-based access control middleware
 import Service from '../models/services'; // Service model
 

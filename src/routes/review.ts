@@ -5,7 +5,7 @@ import {
   updateReview,
   deleteReview,
 } from '../controllers/reviewController'; // Ensure correct import path
-import { authenticateToken } from '../middlewares/authMiddleware'; // Ensure correct import path
+import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
 
 const router = express.Router();
 

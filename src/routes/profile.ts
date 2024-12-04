@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
+import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
 import { User } from '../models/user'; // Correct
 
 const router = express.Router();

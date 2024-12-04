@@ -1,31 +1,20 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, // Export app for testing
-"default", {
-    enumerable: true,
-    get: function() {
-        return _default;
-    }
-});
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-const _database = require("@config/database");
-const _api = /*#__PURE__*/ _interop_require_default(require("./routes/api"));
-const _user = /*#__PURE__*/ _interop_require_default(require("./routes/user"));
-const _testEmailRoute = /*#__PURE__*/ _interop_require_default(require("./routes/testEmailRoute"));
-const _service = /*#__PURE__*/ _interop_require_default(require("./routes/service"));
-const _user1 = require("@models/user");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
+const database_1 = require("@config/database"); // Correct path for sequelize config
+const api_1 = __importDefault(require("./routes/api")); // Importing API routes (includes /services, etc.)
+const user_1 = __importDefault(require("./routes/user")); // User routes
+const testEmailRoute_1 = __importDefault(require("./routes/testEmailRoute")); // Test email route
+const service_1 = __importDefault(require("./routes/service")); // Import services route
+const user_2 = require("@models/user"); // Correct model path for User
 // Load environment variables from .env file
-_dotenv.default.config();
+dotenv_1.default.config();
 // Initialize Express app
-const app = (0, _express.default)();
+const app = (0, express_1.default)();
 // Verify necessary environment variables are set
 const port = process.env.PORT || 3000; // Default to 3000 if not provided
 const dbName = process.env.DB_NAME;
@@ -37,43 +26,52 @@ if (!dbName || !dbUser || !dbPassword || !dbHost) {
     process.exit(1); // Exit the app if critical variables are missing
 }
 // Middleware to parse JSON bodies
-app.use(_express.default.json());
+app.use(express_1.default.json());
 // Register routes
-app.use('/api/users', _user.default); // All user-related routes
-app.use('/api', _api.default); // Register /services and other API routes here
-app.use('/test', _testEmailRoute.default); // Test email route
-app.use('/services', _service.default); // Register /services route here
+app.use('/api/users', user_1.default); // All user-related routes
+app.use('/api', api_1.default); // Register /services and other API routes here
+app.use('/test', testEmailRoute_1.default); // Test email route
+app.use('/services', service_1.default); // Register /services route here
 // Root route
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
 // Verify database connection
-_database.sequelize.authenticate().then(()=>{
+database_1.sequelize
+    .authenticate()
+    .then(() => {
     console.log('Database connection established.');
-}).catch((error)=>{
+})
+    .catch((error) => {
     console.error('Unable to connect to the database:', error);
     process.exit(1); // Exit the app if database connection fails
 });
 // Sync models with the database
-_database.sequelize.sync().then(()=>{
+database_1.sequelize
+    .sync()
+    .then(() => {
     console.log('Database synced successfully.');
-}).catch((err)=>{
+})
+    .catch((err) => {
     console.error('Error syncing database:', err);
     process.exit(1); // Exit the app if syncing fails
 });
 // Fetch users as a test (ensure it runs after the database sync)
-_database.sequelize.sync().then(async ()=>{
+database_1.sequelize
+    .sync()
+    .then(async () => {
     try {
-        const users = await _user1.User.findAll();
+        const users = await user_2.User.findAll();
         console.log('Users:', users);
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error fetching users:', error.message);
     }
 });
 // Start the server
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-const _default = app;
-
+// Export app for testing
+exports.default = app;
 //# sourceMappingURL=index.js.map
