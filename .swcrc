@@ -8,15 +8,14 @@
     "transform": {
       "legacyDecorator": true,
       "decoratorMetadata": true
-    },
-    "target": "es2015"
+    }
   },
   "module": {
     "type": "commonjs"
   },
   "sourceMaps": true,
   "env": {
-    "targets": "node 16"
+    "targets": "node 16"  // Use `env` to specify the Node.js 16 target
   },
   "exclude": ["node_modules"]
 }
