@@ -1,47 +1,43 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                     // Keep the target as ESNext for modern features
-    "module": "CommonJS",                    // Use CommonJS modules for Node.js compatibility
-    "moduleResolution": "node",              // Resolve modules using Node.js style resolution
-    "strict": true,                          // Enable strict type checking (recommended for better type safety)
-    "skipLibCheck": true,                    // Skip library checking for faster compilation
-    "esModuleInterop": true,                 // Enable ES Module interoperability
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
-    "baseUrl": "./src",                      // Set base URL for module resolution
+    "target": "ESNext",                     
+    "module": "CommonJS",                   
+    "moduleResolution": "node",             
+    "strict": true,                         
+    "skipLibCheck": true,                   
+    "esModuleInterop": true,                
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",                     
     "paths": {
-      "*": ["node_modules/*"],               // Path resolution for node_modules
-      "src/*": ["./*"],                       // Allow absolute imports from the 'src' directory
-      "@models/*": ["models/*"],             // Define custom path for models (if you use "@models" in imports)
-      "@config/*": ["config/*"]              // Define custom path for config (if you use "@config" in imports)
+      "*": ["node_modules/*"],
+      "src/*": ["./*"]                    
     },
-    "outDir": "./dist",                      // Output directory for compiled files
-    "rootDir": "./src",                      // Root directory for source files
-    "allowJs": true,                         // Allow JavaScript files (useful if you have JS code)
-    "declaration": true,                     // Generate declaration files
-    "sourceMap": true,                       // Generate source maps
-    "experimentalDecorators": true,          // Enable experimental decorators
-    "emitDecoratorMetadata": true,           // Enable decorator metadata
-    "resolveJsonModule": true,               // Allow importing JSON files
+    "outDir": "./dist",                     
+    "rootDir": "./src",                     
+    "allowJs": true,                        
+    "declaration": true,                    
+    "sourceMap": true,                      
+    "experimentalDecorators": true,         
+    "emitDecoratorMetadata": true,          
+    "resolveJsonModule": true,              
     "typeRoots": [
       "./node_modules/@types", 
-      "./src/types"                          // Ensure custom types are included
+      "./src/types"                       
     ],
-    "lib": ["esnext"],                       // Use latest ES features
-    "types": ["node", "jest", "sequelize", "express"], // Include global types
-    "noImplicitAny": false                   // Allow 'any' type (you can enable this for stricter typing)
+    "types": ["node", "jest", "sequelize", "express"]
   },
   "include": [
-    "src/**/*.ts",                           // Include all TS files in the src directory
-    "src/models/**/*.ts",                    // Include models
-    "src/types/**/*.ts",                     // Include custom types
-    "src/test/**/*.ts",                      // Include test files
-    "src/test/**/*.tsx"                      // Include JSX/TSX files in tests
+    "src/**/*.ts",                         
+    "src/models/**/*.ts",                   
+    "src/types/**/*.ts",                    
+    "src/test/**/*.ts",                     
+    "src/test/**/*.tsx"
   ],
   "exclude": [
-    "node_modules",                          // Exclude node_modules
-    "dist",                                  // Exclude dist (build directory)
-    "build",                                 // Exclude build directory
-    "src/test/**/*.test.ts",                 // Exclude test files (assuming you don't need them for compilation)
-    "src/test/**/*.test.tsx"                 // Exclude TSX test files
+    "node_modules",                         
+    "dist",                                 
+    "build",                                
+    "src/test/**/*.test.ts",                
+    "src/test/**/*.test.tsx"                
   ]
 }
