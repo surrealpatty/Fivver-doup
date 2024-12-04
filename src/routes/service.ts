@@ -1,16 +1,15 @@
 // src/routes/service.ts
-import express, { Response } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 import { AuthRequest } from '../types'; // Ensure correct import path
 import { authenticateToken } from '../middlewares/authMiddleware';
 import { checkTier } from '../middlewares/tierMiddleware';
-import Service from '../models/service';  // Correct default import for Service model
 
 const router = express.Router();
 
 router.post(
   '/',
   authenticateToken,
-  checkTier('paid'),
+  checkTier('paid'), // Ensure checkTier is a valid middleware function
   async (req: AuthRequest, res: Response): Promise<Response> => { // Explicitly set return type to Response
     try {
       const { title, description, price } = req.body;
