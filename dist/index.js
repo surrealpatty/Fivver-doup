@@ -21,7 +21,7 @@ function _interop_require_default(obj) {
 // Create Express app instance
 const app = (0, _express.default)();
 // Set up the server port
-const port = process.env.PORT || 5000; // Port is now 5000 as per your original setup
+const port = process.env.PORT || 3000; // Port is now 3000
 // Middleware to parse JSON bodies
 app.use(_express.default.json());
 // Enable CORS (if you need it, for handling cross-origin requests)
@@ -36,16 +36,26 @@ _database.sequelize.authenticate().then(()=>{
 }).catch((error)=>{
     console.error('Unable to connect to the database:', error);
 });
-// Fetch users as a test on startup
-const fetchUsers = async ()=>{
+// Synchronize models with the database
+_database.sequelize.sync().then(()=>{
+    console.log('Models are synchronized with the database.');
+}).catch((error)=>{
+    console.error('Error syncing models:', error);
+});
+// Example of using the User model (this could be moved to a service or controller later)
+async function fetchUsers() {
     try {
-        const users = await _user.User.findAll(); // Fetch all users
-        console.log('Users:', users.map((user)=>user.toJSON())); // Log user data
+        const users = await _user.User.findAll(); // Fetch users as a test
+        console.log('Users:', users); // Log users to verify
+        // If users are present, return them; otherwise, return a message
+        if (users.length === 0) {
+            console.log('No users found.');
+        }
     } catch (error) {
         console.error('Error fetching users:', error);
     }
-};
-// Call the function to fetch users
+}
+// Call fetchUsers() to check the users in the database
 fetchUsers();
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', _user1.default); // Register the user routes under /api/users
