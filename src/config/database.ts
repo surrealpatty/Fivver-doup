@@ -23,7 +23,7 @@ if (!checkEnvVars()) {
 
 // Import the models after verifying environment variables
 import { User } from '@models/user';
-import  Service  from '@models/services';
+import  Service from '@models/services';
 
 const sequelize = new Sequelize({
   dialect: 'mysql',  // Using MySQL dialect

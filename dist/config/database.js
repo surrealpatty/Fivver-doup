@@ -24,14 +24,14 @@ if (!checkEnvVars()) {
 }
 // Import the models after verifying environment variables
 const user_1 = require("@models/user");
-const services_1 = require("@models/services");
+const services_1 = __importDefault(require("@models/services"));
 const sequelize = new sequelize_typescript_1.Sequelize({
     dialect: 'mysql', // Using MySQL dialect
     host: process.env.DB_HOST, // Database host from .env
     username: process.env.DB_USER, // Database user from .env (type assertion)
     password: process.env.DB_PASSWORD, // Database password from .env (type assertion)
     database: process.env.DB_NAME, // Database name from .env (type assertion)
-    models: [user_1.User, services_1.Service], // Register models explicitly here
+    models: [user_1.User, services_1.default], // Register models explicitly here
     dialectOptions: {
         authPlugins: {
             mysql_native_password: () => { }, // Disable default auth plugin for MySQL 8
