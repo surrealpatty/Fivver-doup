@@ -16,12 +16,14 @@ async (req, res) => {
         const { title, description, price } = req.body;
         // Input validation
         if (!title || !description || price === undefined) {
-            return res.status(400).json({ message: 'All fields are required.' });
+            res.status(400).json({ message: 'All fields are required.' });
+            return; // Return after sending the response to prevent further execution
         }
         // Get the user ID from the JWT (from the `req.user` property)
         const userId = parseInt(req.user?.id || '', 10);
         if (isNaN(userId)) {
-            return res.status(400).json({ message: 'Invalid user ID.' });
+            res.status(400).json({ message: 'Invalid user ID.' });
+            return; // Return after sending the response
         }
         // Create the service in the database
         const service = await services_1.default.create({
@@ -31,11 +33,11 @@ async (req, res) => {
             price,
         });
         // Return success response with created service
-        return res.status(201).json({ message: 'Service created successfully.', service });
+        res.status(201).json({ message: 'Service created successfully.', service });
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error.', error });
+        res.status(500).json({ message: 'Internal server error.', error });
     }
 });
 exports.default = router;
