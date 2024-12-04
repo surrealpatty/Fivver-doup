@@ -1,11 +1,9 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types'; // Ensure this path is correct
+import { UserPayload } from '../types'; // Ensure the path is correct
 
-// Middleware to authenticate the token (you can implement your JWT logic here)
+// Middleware to authenticate the token (JWT)
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    // Token verification logic (this is a placeholder, use your JWT logic here)
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
@@ -13,28 +11,27 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
       return res.status(401).json({ message: 'No token provided' });
     }
 
-    // Here you would verify the token and extract user data
-    // For the sake of the example, we simulate a decoded user object
+    // Simulate token decoding here (this should be your actual logic)
     const decodedUser = { 
-      id: '123', 
-      email: 'user@example.com', 
-      username: 'exampleUser', 
+      id: '123',
+      email: 'user@example.com',
+      username: 'exampleUser',
       tier: 'paid' // This should come from your JWT or database
     };
 
-    // Assign decoded user data to req.user
+    // Create the payload object with decoded user data
     const payload: UserPayload = {
       id: decodedUser.id,
       email: decodedUser.email,
       username: decodedUser.username,
-      tier: decodedUser.tier, // Ensure tier is included
+      tier: decodedUser.tier,
     };
 
-    req.user = payload; // Attach the user to the request object
+    req.user = payload; // Attach the user object to req.user
 
-    next(); // Proceed to the next middleware/route handler
+    next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    // Return immediately after sending a response
+    // Return immediately after sending a response if an error occurs
     return res.status(401).json({ message: 'Authentication failed' });
   }
 };
@@ -42,8 +39,8 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 // Middleware to check if the user is authenticated (i.e., req.user exists)
 export const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
   if (!req.user) {
-    // Return immediately after sending a response
+    // Return immediately after sending a response if user is not authenticated
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  next(); // Proceed to the next middleware/route handler
+  next(); // Proceed to the next middleware or route handler
 };

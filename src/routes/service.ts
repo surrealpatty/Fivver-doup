@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
 import { checkTier } from '../middlewares/tierMiddleware'; // Tier-based access control middleware
 import Service from '../models/services'; // Service model
+import { AuthRequest } from '../types'; // Import the AuthRequest type
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.post(
   '/',
   authenticateToken, // Authenticate the user
   checkTier('paid'), // Restrict route access to users with 'paid' tier
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const { title, description, price } = req.body;
 
@@ -21,7 +22,7 @@ router.post(
       }
 
       // Retrieve the user ID from the authenticated token
-      const userId = parseInt(req.user?.id || '', 10);
+      const userId = parseInt(req.user?.id || '', 10); // req.user is now typed as UserPayload
       if (isNaN(userId)) {
         res.status(400).json({ message: 'Invalid user ID.' });
         return;
