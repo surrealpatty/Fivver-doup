@@ -7,10 +7,10 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",  // Base URL for module resolution
+    "baseUrl": "./src",
     "paths": {
-      "@models/*": ["src/models/*"],  // Correct alias for models
-      "@config/*": ["src/config/*"]  // Correct alias for config (removed @services if unused)
+      "@models/*": ["models/*"],
+      "@config/*": ["config/*"]
     },
     "outDir": "./dist",
     "rootDir": "./src",
