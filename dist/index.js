@@ -3,40 +3,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
-const database_1 = require("@config/database"); // Correct path for sequelize config
-const api_1 = __importDefault(require("./routes/api")); // Importing API routes (includes /services, etc.)
-const user_1 = __importDefault(require("./routes/user")); // User routes
-const testEmailRoute_1 = __importDefault(require("./routes/testEmailRoute")); // Test email route
-const service_1 = __importDefault(require("./routes/service")); // Import services route
-const user_2 = require("@models/user"); // Correct model path for User
-// Load environment variables from .env file
-dotenv_1.default.config();
-// Initialize Express app
+const database_1 = require("./config/database"); // Correct path to sequelize instance
+const user_1 = require("./models/user"); // Correct path to the User model
+const user_2 = __importDefault(require("./routes/user")); // Correct path to userRouter
+const cors_1 = __importDefault(require("cors"));
+// Create Express app instance
 const app = (0, express_1.default)();
-// Verify necessary environment variables are set
-const port = process.env.PORT || 3000; // Default to 3000 if not provided
-const dbName = process.env.DB_NAME;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbHost = process.env.DB_HOST;
-if (!dbName || !dbUser || !dbPassword || !dbHost) {
-    console.error('Missing required environment variables for database connection.');
-    process.exit(1); // Exit the app if critical variables are missing
-}
+exports.app = app;
+// Set up the server port
+const port = process.env.PORT || 5000; // Port is now 5000 as per your original setup
 // Middleware to parse JSON bodies
 app.use(express_1.default.json());
-// Register routes
-app.use('/api/users', user_1.default); // All user-related routes
-app.use('/api', api_1.default); // Register /services and other API routes here
-app.use('/test', testEmailRoute_1.default); // Test email route
-app.use('/services', service_1.default); // Register /services route here
-// Root route
+// Enable CORS (if you need it, for handling cross-origin requests)
+app.use((0, cors_1.default)());
+// Example route
 app.get('/', (req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
-// Verify database connection
+// Database connection check
 database_1.sequelize
     .authenticate()
     .then(() => {
@@ -44,34 +30,19 @@ database_1.sequelize
 })
     .catch((error) => {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit the app if database connection fails
 });
-// Sync models with the database
-database_1.sequelize
-    .sync()
-    .then(() => {
-    console.log('Database synced successfully.');
+// Example of using the User model (this could be moved to a service or controller later)
+user_1.User.findAll() // Fetch users as a test
+    .then((users) => {
+    console.log('Users:', users);
 })
-    .catch((err) => {
-    console.error('Error syncing database:', err);
-    process.exit(1); // Exit the app if syncing fails
+    .catch((error) => {
+    console.error('Error fetching users:', error);
 });
-// Fetch users as a test (ensure it runs after the database sync)
-database_1.sequelize
-    .sync()
-    .then(async () => {
-    try {
-        const users = await user_2.User.findAll();
-        console.log('Users:', users);
-    }
-    catch (error) {
-        console.error('Error fetching users:', error.message);
-    }
-});
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', user_2.default); // Register the user routes under /api/users
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on port ${port}`);
 });
-// Export app for testing
-exports.default = app;
 //# sourceMappingURL=index.js.map

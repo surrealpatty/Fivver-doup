@@ -1,5 +1,5 @@
 import request from 'supertest'; // Import 'supertest' for testing HTTP requests
-import  app  from '../index'; // Adjust as necessary
+import { app } from '../index'; // Correctly import the named export 'app'
 
 // Describe a basic test suite
 describe('Basic Test Suite', () => {
