@@ -6,7 +6,8 @@ import { AuthRequest } from '../types'; // Ensure correct path
 export const checkTier = (requiredTier: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || req.user.tier !== requiredTier) {
-      return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
+      res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
+      return; // Explicitly return to prevent further processing
     }
     next(); // Proceed to the next middleware or route handler
   };

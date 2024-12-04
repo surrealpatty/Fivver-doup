@@ -9,7 +9,7 @@ const tierMiddleware_1 = require("../middlewares/tierMiddleware");
 const services_1 = __importDefault(require("../models/services"));
 const router = express_1.default.Router();
 // POST /services route to create a new service (only for paid users)
-router.post('/', authMiddleware_1.authenticateToken, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
+router.post('/', authMiddleware_1.authenticateToken, (0, tierMiddleware_1.checkTier)('paid'), async (req, res, next) => {
     try {
         const { title, description, price } = req.body;
         if (!title || !description || price === undefined) {
@@ -25,11 +25,11 @@ router.post('/', authMiddleware_1.authenticateToken, (0, tierMiddleware_1.checkT
             description,
             price,
         });
-        return res.status(201).json({ message: 'Service created successfully.', service });
+        res.status(201).json({ message: 'Service created successfully.', service });
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error.', error });
+        next(error); // Pass errors to the global error handler
     }
 });
 exports.default = router;
