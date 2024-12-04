@@ -20,11 +20,12 @@ router.post(
       .isLength({ min: 6 })
       .withMessage('Password must be at least 6 characters long')
   ],
-  async (req: Request, res: Response): Promise<void> => {  // Ensure return type is void
+  // Define the route handler with a return type of void
+  async (req: Request, res: Response): Promise<void> => {  // Return type is void
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });  // Return response directly
+      res.status(400).json({ errors: errors.array() });
       return;  // Ensure we stop here if validation fails
     }
 
@@ -35,14 +36,14 @@ router.post(
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         res.status(400).json({ message: 'User already exists' });
-        return;
+        return;  // Stop execution if user exists
       }
 
       // Check if username already exists
       const existingUsername = await User.findOne({ where: { username } });
       if (existingUsername) {
         res.status(400).json({ message: 'Username already taken' });
-        return;
+        return;  // Stop execution if username exists
       }
 
       // Hash the password before saving it

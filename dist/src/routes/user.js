@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Other user-related routes (e.g., login, profile update) would go here
+Object.defineProperty(exports, // Export router to use in the main app
 "default", {
     enumerable: true,
     get: function() {
@@ -13,7 +13,6 @@ const _express = require("express");
 const _expressvalidator = require("express-validator");
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _models = require("../models");
-const _emailService = require("../services/emailService");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -34,12 +33,12 @@ router.post('/register', // Validate user inputs
     if (!errors.isEmpty()) {
         res.status(400).json({
             errors: errors.array()
-        });
-        return; // Explicit return to satisfy the TypeScript `void` requirement
+        }); // Return response directly
+        return; // Ensure we stop here if validation fails
     }
     try {
         const { email, username, password } = req.body;
-        // Check if user already exists
+        // Check if user already exists by email
         const existingUser = await _models.User.findOne({
             where: {
                 email
@@ -49,7 +48,19 @@ router.post('/register', // Validate user inputs
             res.status(400).json({
                 message: 'User already exists'
             });
-            return; // Explicit return after error response
+            return;
+        }
+        // Check if username already exists
+        const existingUsername = await _models.User.findOne({
+            where: {
+                username
+            }
+        });
+        if (existingUsername) {
+            res.status(400).json({
+                message: 'Username already taken'
+            });
+            return;
         }
         // Hash the password before saving it
         const hashedPassword = await _bcryptjs.default.hash(password, 10);
@@ -59,41 +70,19 @@ router.post('/register', // Validate user inputs
             username,
             password: hashedPassword
         });
-        // Optionally send a welcome email
-        const emailDetails = {
-            to: user.email,
-            subject: 'Welcome to Our Platform!',
-            text: `Hello ${user.username}, welcome to our platform. We're glad to have you!`
-        };
-        await (0, _emailService.sendEmail)(emailDetails);
-        // Send success response
+        // Send success response with user data
         res.status(201).json({
-            message: 'User created successfully'
+            message: 'User created successfully',
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
         });
     } catch (error) {
-        console.error(error);
+        console.error('Error creating user:', error);
         res.status(500).json({
             message: 'Server error'
-        });
-    }
-});
-// Test email route (useful for testing your email service)
-router.get('/test-email', async (req, res)=>{
-    try {
-        const emailDetails = {
-            to: 'test@example.com',
-            subject: 'Test Email',
-            text: 'This is a test email sent from the email service.'
-        };
-        // Send test email
-        await (0, _emailService.sendEmail)(emailDetails);
-        res.status(200).json({
-            message: 'Test email sent successfully!'
-        });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({
-            message: 'Error sending test email.'
         });
     }
 });
