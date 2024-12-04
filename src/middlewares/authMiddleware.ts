@@ -1,3 +1,5 @@
+/// <reference path="../types/express.d.ts" />  // Explicitly reference the custom types file (only if needed)
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types/index'; // Ensure this is correctly imported from your types
@@ -37,7 +39,7 @@ export const authenticateToken = (
       }
 
       // Attach the decoded payload to req.user
-      req.user = decoded as UserPayload;
+      req.user = decoded as UserPayload;  // Ensure 'user' is typed as UserPayload
 
       // Proceed to the next middleware or route handler
       next();

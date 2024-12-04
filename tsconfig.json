@@ -1,42 +1,45 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "strict": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",
+    "target": "ESNext",                     // Keep the target as ESNext for modern features
+    "module": "CommonJS",                    // Use CommonJS modules for Node.js compatibility
+    "moduleResolution": "node",              // Resolve modules using Node.js style resolution
+    "strict": false,                         // Disable strict type checking (you may choose to enable this later)
+    "skipLibCheck": true,                    // Skip library checking for faster compilation
+    "esModuleInterop": true,                 // Enable ES Module interoperability
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
+    "baseUrl": "./src",                      // Set base URL for module resolution
     "paths": {
-      "@models/*": ["models/*"],
-      "@config/*": ["config/*"]
+      "@models/*": ["models/*"],             // Define custom path for models
+      "@config/*": ["config/*"]              // Define custom path for config
     },
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowJs": true,
-    "declaration": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],  // Ensure the custom @types folder is included
-    "lib": ["esnext"],
-    "types": ["node", "jest", "sequelize", "express"],
-    "noImplicitAny": false
+    "outDir": "./dist",                      // Output directory for compiled files
+    "rootDir": "./src",                      // Root directory for source files
+    "allowJs": true,                         // Allow JavaScript files (useful if you have JS code)
+    "declaration": true,                     // Generate declaration files
+    "sourceMap": true,                       // Generate source maps
+    "experimentalDecorators": true,          // Enable experimental decorators
+    "emitDecoratorMetadata": true,           // Enable decorator metadata
+    "resolveJsonModule": true,               // Allow importing JSON files
+    "typeRoots": [
+      "./node_modules/@types", 
+      "./src/types"                          // Ensure the custom types are included
+    ],
+    "lib": ["esnext"],                       // Use latest ES features
+    "types": ["node", "jest", "sequelize", "express"], // Include global types
+    "noImplicitAny": false                   // Allow 'any' type (you can enable this for stricter typing)
   },
   "include": [
-    "src/**/*.ts",
-    "src/models/**/*.ts",
-    "src/types/**/*.ts",
-    "src/test/**/*.ts",
-    "src/test/**/*.tsx"
+    "src/**/*.ts",                           // Include all TS files in the src directory
+    "src/models/**/*.ts",                    // Include models
+    "src/types/**/*.ts",                     // Include custom types
+    "src/test/**/*.ts",                      // Include test files
+    "src/test/**/*.tsx"                      // Include JSX/TSX files in tests
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "src/test/**/*.test.ts",
-    "src/test/**/*.test.tsx"
+    "node_modules",                          // Exclude node_modules
+    "dist",                                  // Exclude dist (build directory)
+    "build",                                 // Exclude build directory
+    "src/test/**/*.test.ts",                 // Exclude test files (assuming you don't need them for compilation)
+    "src/test/**/*.test.tsx"                 // Exclude TSX test files
   ]
 }
