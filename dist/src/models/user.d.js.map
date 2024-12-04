@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../src/models/user.d.ts"],"sourcesContent":["import { Model } from 'sequelize-typescript';\r\ndeclare class User extends Model<User> {\r\n  id: number;\r\n  username: string;\r\n  email: string;\r\n}\r\nexport default User;\r\n"],"names":["User"],"mappings":";;;;+BAMA;;;eAAA;;;qCANsB;MAMtB,WAAeA"}
