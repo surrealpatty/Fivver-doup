@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Import authenticateJWT
 import { checkTier } from '../middlewares/tierMiddleware'; // Ensure checkTier is correct
 import Service from '../models/services'; // Correct import for Service model
-import { AuthRequest } from 'types'; // or '../types' for relative path
+import { AuthRequest } from '../types/authMiddleware'; // Correct relative path for AuthRequest
 
 const router = express.Router();
 
