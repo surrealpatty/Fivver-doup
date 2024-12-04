@@ -21,9 +21,13 @@ if (!checkEnvVars()) {
   process.exit(1);  // Exit if environment variables are missing
 }
 
-// Import the models after verifying environment variables
+// **Option 1: Use alias imports (if path mappings are correct in tsconfig.json)**
 import { User } from '@models/user';  // Correct alias for User model
 import Service from '@models/services';  // Correct alias for Service model
+
+// **Option 2: Use relative imports (if alias path issue persists)**
+// import { User } from '../models/user';  // Relative path to user model
+// import Service from '../models/services';  // Relative path to services model
 
 // Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({
