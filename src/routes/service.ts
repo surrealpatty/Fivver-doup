@@ -1,3 +1,4 @@
+// src/routes/service.ts
 import express, { Request, Response } from 'express';
 import { authenticateToken, checkAuth } from '../middlewares/authMiddleware';  // Adjust path as needed
 import { checkTier } from '../middlewares/tierMiddleware'; // Tier-based access control middleware

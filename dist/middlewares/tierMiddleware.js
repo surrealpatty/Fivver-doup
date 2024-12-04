@@ -1,18 +1,15 @@
 "use strict";
+// src/middlewares/tierMiddleware.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkTier = void 0;
-/**
- * Middleware to restrict access based on user tier.
- * @param requiredTier The required tier for access (e.g., "paid").
- */
+// Middleware to check the user's tier
 const checkTier = (requiredTier) => {
     return (req, res, next) => {
-        // Check if the user's tier matches the required tier
-        if (req.user?.tier !== requiredTier) {
-            res.status(403).json({ message: `Access restricted to ${requiredTier} users only.` });
-            return; // Explicitly return after sending a response
+        // Ensure req.user exists and has the expected tier
+        if (!req.user || req.user.tier !== requiredTier) {
+            return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
         }
-        next();
+        next(); // Proceed to the next middleware or route handler
     };
 };
 exports.checkTier = checkTier;
