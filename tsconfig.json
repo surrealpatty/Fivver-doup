@@ -10,9 +10,9 @@
     "baseUrl": "./src",  // Base URL for module resolution (root of your src folder)
     "paths": {
       "*": ["node_modules/*", "src/*"],  // Allow imports from node_modules and src
-      "@models/*": ["models/*"],  // Alias for models inside src
-      "@config/*": ["config/*"],  // Alias for config inside src
-      "@services/*": ["services/*"]  // Alias for services inside src
+      "@models/*": ["src/models/*"],  // Correct alias for models inside src
+      "@config/*": ["src/config/*"],  // Correct alias for config inside src
+      "@services/*": ["src/services/*"]  // Correct alias for services inside src
     },
     "outDir": "./dist",  // Output directory for compiled files
     "rootDir": "./src",  // Root directory for source files
