@@ -8,8 +8,8 @@ const authMiddleware_1 = require("../middlewares/authMiddleware"); // JWT authen
 const tierMiddleware_1 = require("../middlewares/tierMiddleware"); // Tier-based access control middleware
 const services_1 = __importDefault(require("../models/services")); // Service model
 const router = express_1.default.Router();
-// Create a service (only for paid users)
-router.post('/post-service', authMiddleware_1.authenticateToken, // Authenticate the user
+// POST /services route to create a new service (only for paid users)
+router.post('/', authMiddleware_1.authenticateToken, // Authenticate the user
 (0, tierMiddleware_1.checkTier)('paid'), // Restrict route access to users with 'paid' tier
 async (req, res) => {
     try {

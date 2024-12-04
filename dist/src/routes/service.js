@@ -18,8 +18,8 @@ function _interop_require_default(obj) {
     };
 }
 const router = _express.default.Router();
-// Create a service (only for paid users)
-router.post('/post-service', _authMiddleware.authenticateToken, (0, _tierMiddleware.checkTier)('paid'), async (req, res)=>{
+// POST /services route to create a new service (only for paid users)
+router.post('/', _authMiddleware.authenticateToken, (0, _tierMiddleware.checkTier)('paid'), async (req, res)=>{
     try {
         const { title, description, price } = req.body;
         // Validate request body

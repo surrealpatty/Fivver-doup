@@ -15,6 +15,7 @@ const _database = require("@config/database");
 const _api = /*#__PURE__*/ _interop_require_default(require("./routes/api"));
 const _user = /*#__PURE__*/ _interop_require_default(require("./routes/user"));
 const _testEmailRoute = /*#__PURE__*/ _interop_require_default(require("./routes/testEmailRoute"));
+const _service = /*#__PURE__*/ _interop_require_default(require("./routes/service"));
 const _user1 = require("@models/user");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -41,6 +42,7 @@ app.use(_express.default.json());
 app.use('/api/users', _user.default); // All user-related routes
 app.use('/api', _api.default); // Register /services and other API routes here
 app.use('/test', _testEmailRoute.default); // Test email route
+app.use('/services', _service.default); // Register /services route here
 // Root route
 app.get('/', (req, res)=>{
     res.send('Welcome to Fiverr Clone!');
@@ -50,14 +52,14 @@ _database.sequelize.authenticate().then(()=>{
     console.log('Database connection established.');
 }).catch((error)=>{
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit the process if database connection fails
+    process.exit(1); // Exit the app if database connection fails
 });
 // Sync models with the database
 _database.sequelize.sync().then(()=>{
     console.log('Database synced successfully.');
 }).catch((err)=>{
     console.error('Error syncing database:', err);
-    process.exit(1); // Exit the process if syncing fails
+    process.exit(1); // Exit the app if syncing fails
 });
 // Fetch users as a test (ensure it runs after the database sync)
 _database.sequelize.sync().then(async ()=>{

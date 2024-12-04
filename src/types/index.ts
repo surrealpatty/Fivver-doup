@@ -1,7 +1,6 @@
 // src/types/index.ts
 
-// Importing Request from Express for extending the Request type
-import { Request } from 'express'; 
+import { Request } from 'express';
 
 // Interface for user attributes, including required fields like id, username, and email
 export interface IUserAttributes {
@@ -22,6 +21,7 @@ export interface UserPayload {
   id: string; // The user's ID (required)
   email: string; // The user's email (required)
   username: string; // The user's username (required)
+  tier: string; // The user's tier (required)
 }
 
 // Extend the Express Request type to include user object
