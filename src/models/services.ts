@@ -1,7 +1,9 @@
+// src/models/service.ts
 import { Column, Model, DataType, ForeignKey, Table } from 'sequelize-typescript';
 import { User } from './user'; // Import the User model for the foreign key
 
-export interface ServiceCreationAttributes {  
+// Interface for creating a service
+export interface ServiceCreationAttributes {
   title: string;
   description: string;
   price: number;

@@ -22,8 +22,8 @@ if (!checkEnvVars()) {
 }
 
 // Import the models after verifying environment variables
-import { User } from '@models/user';  // Correct alias for User model
-import Service from '@models/services';  // Correct alias for Service model
+import { User } from '../models/user';  // Correct alias for User model
+import Service from '../models/services';  // Correct alias for Service model
 
 // Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({

@@ -21,14 +21,16 @@ export const authenticateToken = (
 
     // Check if the header exists and starts with "Bearer"
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      res.status(401).json({ message: 'Authorization token is missing or invalid' });
+      return; // Return here to stop further processing
     }
 
     const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
 
     // Check if the token is present
     if (!token) {
-      return res.status(401).json({ message: 'Authorization token is missing' });
+      res.status(401).json({ message: 'Authorization token is missing' });
+      return; // Return here to stop further processing
     }
 
     const jwtSecret = process.env.JWT_SECRET;
@@ -36,7 +38,8 @@ export const authenticateToken = (
     // Ensure the JWT_SECRET is configured in the environment variables
     if (!jwtSecret) {
       console.error('JWT_SECRET is not configured in the environment variables');
-      return res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error' });
+      return; // Return here to stop further processing
     }
 
     // Verify the token and decode the payload
@@ -51,19 +54,6 @@ export const authenticateToken = (
     console.error('Token authentication failed:', error);
 
     // Handle token verification errors
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
-};
-
-// Example checkAuth middleware (if you need it for specific routes)
-export const checkAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  // You can add custom logic for checking if the user is authenticated
-  if (!req.user) {
-    return res.status(401).json({ message: 'User not authenticated' });
-  }
-  next();
 };
