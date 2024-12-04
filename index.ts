@@ -2,6 +2,8 @@ import express from 'express';
 import { sequelize } from './src/config/database'; // Correct path to sequelize instance
 import { User } from './src/models/user'; // Correct path to the User model
 import userRouter from './src/routes/user'; // Correct path to userRouter
+import cors from 'cors';
+
 
 // Create Express app instance
 const app = express();

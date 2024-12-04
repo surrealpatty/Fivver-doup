@@ -1,45 +1,27 @@
 import express from 'express';
-import dotenv from 'dotenv';  // For loading environment variables
-import { sequelize } from '@config/database';  // Correct path for sequelize config
-import apiRoutes from './routes/api';  // Importing API routes (includes /services, etc.)
-import userRouter from './routes/user';  // User routes
-import testEmailRoute from './routes/testEmailRoute';  // Test email route
-import servicesRouter from './routes/service';  // Import services route
-import { User } from '@models/user';  // Correct model path for User
+import { sequelize } from './config/database'; // Correct path to sequelize instance
+import { User } from './models/user'; // Correct path to the User model
+import userRouter from './routes/user'; // Correct path to userRouter
+import cors from 'cors';
 
-// Load environment variables from .env file
-dotenv.config();
-
-// Initialize Express app
+// Create Express app instance
 const app = express();
 
-// Verify necessary environment variables are set
-const port = process.env.PORT || 3000; // Default to 3000 if not provided
-const dbName = process.env.DB_NAME;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbHost = process.env.DB_HOST;
-
-if (!dbName || !dbUser || !dbPassword || !dbHost) {
-  console.error('Missing required environment variables for database connection.');
-  process.exit(1); // Exit the app if critical variables are missing
-}
+// Set up the server port
+const port = process.env.PORT || 5000; // Port is now 5000 as per your original setup
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Register routes
-app.use('/api/users', userRouter);  // All user-related routes
-app.use('/api', apiRoutes);  // Register /services and other API routes here
-app.use('/test', testEmailRoute);  // Test email route
-app.use('/services', servicesRouter); // Register /services route here
+// Enable CORS (if you need it, for handling cross-origin requests)
+app.use(cors());
 
-// Root route
+// Example route
 app.get('/', (req, res) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
-// Verify database connection
+// Database connection check
 sequelize
   .authenticate()
   .then(() => {
@@ -47,36 +29,24 @@ sequelize
   })
   .catch((error: Error) => {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit the app if database connection fails
   });
 
-// Sync models with the database
-sequelize
-  .sync()
-  .then(() => {
-    console.log('Database synced successfully.');
+// Example of using the User model (this could be moved to a service or controller later)
+User.findAll() // Fetch users as a test
+  .then((users) => {
+    console.log('Users:', users);
   })
-  .catch((err: Error) => {
-    console.error('Error syncing database:', err);
-    process.exit(1); // Exit the app if syncing fails
+  .catch((error: Error) => {
+    console.error('Error fetching users:', error);
   });
 
-// Fetch users as a test (ensure it runs after the database sync)
-sequelize
-  .sync()
-  .then(async () => {
-    try {
-      const users = await User.findAll();
-      console.log('Users:', users);
-    } catch (error: any) {
-      console.error('Error fetching users:', error.message);
-    }
-  });
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', userRouter); // Register the user routes under /api/users
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
-// Export app for testing
-export default app;
+// Export app for use in testing or elsewhere (if necessary)
+export { app };  // Optional: Exporting app in case it's needed for tests or elsewhere
