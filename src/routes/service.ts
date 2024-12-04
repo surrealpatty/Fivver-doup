@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';  
+import express, { Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authMiddleware';
 import { checkTier } from '../middlewares/tierMiddleware';
-import Service from '../models/services'; 
-import { AuthRequest } from '../types'; 
+import Service from '../models/services';
+import { AuthRequest } from '../types'; // Ensure correct import path
 
 const router = express.Router();
 
@@ -10,8 +10,8 @@ const router = express.Router();
 router.post(
   '/',
   authenticateToken, 
-  checkTier('paid'), 
-  async (req: AuthRequest, res: Response): Promise<Response> => {  // Ensure return type is Response
+  checkTier('paid'),
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Use void as the return type
     try {
       const { title, description, price } = req.body;
 
@@ -31,10 +31,10 @@ router.post(
         price,
       });
 
-      return res.status(201).json({ message: 'Service created successfully.', service });
+      res.status(201).json({ message: 'Service created successfully.', service });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: 'Internal server error.', error });
+      next(error); // Pass errors to the global error handler
     }
   }
 );

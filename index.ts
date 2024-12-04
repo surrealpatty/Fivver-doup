@@ -2,8 +2,11 @@ import express from 'express';
 import { sequelize } from './src/config/database'; // Correct path to sequelize instance
 import { User } from './src/models/user'; // Correct path to the User model
 import userRouter from './src/routes/user'; // Correct path to userRouter
-import app from './src/index';  // Correct relative path for default import
 
+// Create Express app instance
+const app = express();
+
+// Set up the server port
 const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
@@ -24,7 +27,7 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-// Example of using the User model (as a test)
+// Example of using the User model (this could be moved to a service or controller later)
 User.findAll() // Fetch users as a test
   .then((users) => {
     console.log('Users:', users);
