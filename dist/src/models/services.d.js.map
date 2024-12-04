@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/models/services.d.ts"],"sourcesContent":["import { Model } from 'sequelize-typescript';\r\ndeclare class Service extends Model<Service> {\r\n  id: number;\r\n  name: string;\r\n  description: string;\r\n}\r\nexport default Service;\r\n"],"names":["Service"],"mappings":";;;;+BAMA;;;eAAA;;;qCANsB;MAMtB,WAAeA"}
