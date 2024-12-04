@@ -9,8 +9,10 @@
     "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
     "baseUrl": "./src",                      // Set base URL for module resolution
     "paths": {
-      "@models/*": ["models/*"],             // Define custom path for models
-      "@config/*": ["config/*"]              // Define custom path for config
+      "*": ["node_modules/*"],               // Path resolution for node_modules
+      "src/*": ["./*"],                       // Allow absolute imports from the 'src' directory
+      "@models/*": ["models/*"],             // Define custom path for models (if you use "@models" in imports)
+      "@config/*": ["config/*"]              // Define custom path for config (if you use "@config" in imports)
     },
     "outDir": "./dist",                      // Output directory for compiled files
     "rootDir": "./src",                      // Root directory for source files
@@ -22,7 +24,7 @@
     "resolveJsonModule": true,               // Allow importing JSON files
     "typeRoots": [
       "./node_modules/@types", 
-      "./src/types"                          // Ensure the custom types are included
+      "./src/types"                          // Ensure custom types are included
     ],
     "lib": ["esnext"],                       // Use latest ES features
     "types": ["node", "jest", "sequelize", "express"], // Include global types
