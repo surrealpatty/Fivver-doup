@@ -1,15 +1,16 @@
 // src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types'; // Make sure the import path is correct
+import { UserPayload } from '../types'; // Ensure this path is correct
 
-// Example middleware to authenticate the token (you can implement your JWT logic here)
+// Middleware to authenticate the token (you can implement your JWT logic here)
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   try {
     // Token verification logic (this is a placeholder, use your JWT logic here)
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
-      return res.status(401).json({ message: 'No token provided' }); // Return here after sending the response
+      // Return immediately after sending a response
+      return res.status(401).json({ message: 'No token provided' });
     }
 
     // Here you would verify the token and extract user data
@@ -33,14 +34,16 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
     next(); // Proceed to the next middleware/route handler
   } catch (error) {
-    return res.status(401).json({ message: 'Authentication failed' }); // Return here after sending the response
+    // Return immediately after sending a response
+    return res.status(401).json({ message: 'Authentication failed' });
   }
 };
 
 // Middleware to check if the user is authenticated (i.e., req.user exists)
 export const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
   if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized' }); // Return here after sending the response
+    // Return immediately after sending a response
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   next(); // Proceed to the next middleware/route handler
 };
