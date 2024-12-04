@@ -1,5 +1,5 @@
 import { User } from './user';       // Import the User model
-import { Service } from './services'; // Import the Service model (fixing the import to match the model path)
+import  Service  from './services'; // Import the Service model (fixing the import to match the model path)
 import { Order } from './order';     // Import the Order model
 import { Review } from './review';   // Import the Review model
 import { sequelize } from '@config/database';  // Import the sequelize instance
