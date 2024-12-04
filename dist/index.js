@@ -12,6 +12,7 @@ Object.defineProperty(exports, // Export app for testing
 const _express = /*#__PURE__*/ _interop_require_default(require("express"));
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _database = require("@config/database");
+const _api = /*#__PURE__*/ _interop_require_default(require("./routes/api"));
 const _user = /*#__PURE__*/ _interop_require_default(require("./routes/user"));
 const _testEmailRoute = /*#__PURE__*/ _interop_require_default(require("./routes/testEmailRoute"));
 const _user1 = require("@models/user");
@@ -38,6 +39,7 @@ if (!dbName || !dbUser || !dbPassword || !dbHost) {
 app.use(_express.default.json());
 // Register routes
 app.use('/api/users', _user.default); // All user-related routes
+app.use('/api', _api.default); // Register /services and other API routes here
 app.use('/test', _testEmailRoute.default); // Test email route
 // Root route
 app.get('/', (req, res)=>{

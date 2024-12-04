@@ -20,7 +20,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],  // Ensure the custom @types folder is included
     "lib": ["esnext"],
     "types": ["node", "jest", "sequelize", "express"],
     "noImplicitAny": false

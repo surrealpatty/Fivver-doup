@@ -9,8 +9,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _express = require("express");
-const _user = require("@models/user");
 const _authMiddleware = require("../middlewares/authMiddleware");
+const _user = require("@models/user");
 const _services = /*#__PURE__*/ _interop_require_default(require("@models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -21,7 +21,7 @@ const router = (0, _express.Router)();
 // POST route to create a service
 router.post('/services', _authMiddleware.checkAuth, async (req, res)=>{
     try {
-        // Type the request body using ServiceCreationAttributes for type safety
+        // Destructure and type the request body using ServiceCreationAttributes
         const { userId, title, description, price } = req.body;
         // Validate required fields
         if (!userId || !title || !description || price === undefined) {

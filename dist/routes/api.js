@@ -4,15 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_1 = require("@models/user"); // Correct alias for User model
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Ensure this middleware is correctly defined
+const user_1 = require("@models/user"); // Correct alias for User model
 const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
 const router = (0, express_1.Router)();
 // POST route to create a service
-router.post('/services', authMiddleware_1.checkAuth, // Ensure this middleware is correctly defined
+router.post('/services', // Define the endpoint
+authMiddleware_1.checkAuth, // Apply the authentication middleware (if required)
 async (req, res) => {
     try {
-        // Type the request body using ServiceCreationAttributes for type safety
+        // Destructure and type the request body using ServiceCreationAttributes
         const { userId, title, description, price } = req.body;
         // Validate required fields
         if (!userId || !title || !description || price === undefined) {
