@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 // Function to fetch users as a test (or could be moved to routes later)
 async function fetchUsers() {
   try {
-    const users = await User.findAll(); // Fetch users as a test
+    const users = await User.findAll({ raw: true }); // Use 'raw: true' to get plain data
     console.log('Users:', users); // Log users to verify
     if (users.length === 0) {
       console.log('No users found.');

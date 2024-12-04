@@ -30,24 +30,11 @@ app.use((0, _cors.default)());
 app.get('/', (req, res)=>{
     res.send('Welcome to Fiverr Clone!');
 });
-// Database connection check
-_database.sequelize.authenticate().then(()=>{
-    console.log('Database connection established.');
-}).catch((error)=>{
-    console.error('Unable to connect to the database:', error);
-});
-// Synchronize models with the database
-_database.sequelize.sync().then(()=>{
-    console.log('Models are synchronized with the database.');
-}).catch((error)=>{
-    console.error('Error syncing models:', error);
-});
-// Example of using the User model (this could be moved to a service or controller later)
+// Function to fetch users as a test (or could be moved to routes later)
 async function fetchUsers() {
     try {
         const users = await _user.User.findAll(); // Fetch users as a test
         console.log('Users:', users); // Log users to verify
-        // If users are present, return them; otherwise, return a message
         if (users.length === 0) {
             console.log('No users found.');
         }
@@ -55,8 +42,17 @@ async function fetchUsers() {
         console.error('Error fetching users:', error);
     }
 }
-// Call fetchUsers() to check the users in the database
-fetchUsers();
+// Synchronize models with the database
+_database.sequelize.sync({
+    alter: true
+}) // Using 'alter' instead of 'force' to avoid dropping tables
+.then(()=>{
+    console.log('Models are synchronized with the database.');
+    // Call fetchUsers() after models are synced
+    fetchUsers();
+}).catch((error)=>{
+    console.error('Error syncing models:', error);
+});
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', _user1.default); // Register the user routes under /api/users
 // Start the server
