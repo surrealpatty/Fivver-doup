@@ -5,9 +5,9 @@ import Service from '../models/services'; // Service model
 
 const router = express.Router();
 
-// Create a service (only for paid users)
+// POST /services route to create a new service (only for paid users)
 router.post(
-  '/post-service',
+  '/',
   authenticateToken, // Authenticate the user
   checkTier('paid'), // Restrict route access to users with 'paid' tier
   async (req: Request, res: Response): Promise<void> => {

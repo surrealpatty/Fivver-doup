@@ -1,9 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';  // For loading environment variables
 import { sequelize } from '@config/database';  // Correct path for sequelize config
-import apiRoutes from './routes/api';  // Importing api routes (includes /services, etc.)
+import apiRoutes from './routes/api';  // Importing API routes (includes /services, etc.)
 import userRouter from './routes/user';  // User routes
 import testEmailRoute from './routes/testEmailRoute';  // Test email route
+import servicesRouter from './routes/service';  // Import services route
 import { User } from '@models/user';  // Correct model path for User
 
 // Load environment variables from .env file
@@ -28,9 +29,10 @@ if (!dbName || !dbUser || !dbPassword || !dbHost) {
 app.use(express.json());
 
 // Register routes
-app.use('/api/users', userRouter); // All user-related routes
+app.use('/api/users', userRouter);  // All user-related routes
 app.use('/api', apiRoutes);  // Register /services and other API routes here
-app.use('/test', testEmailRoute); // Test email route
+app.use('/test', testEmailRoute);  // Test email route
+app.use('/services', servicesRouter); // Register /services route here
 
 // Root route
 app.get('/', (req, res) => {
@@ -45,7 +47,7 @@ sequelize
   })
   .catch((error: Error) => {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit the process if database connection fails
+    process.exit(1); // Exit the app if database connection fails
   });
 
 // Sync models with the database
@@ -56,7 +58,7 @@ sequelize
   })
   .catch((err: Error) => {
     console.error('Error syncing database:', err);
-    process.exit(1); // Exit the process if syncing fails
+    process.exit(1); // Exit the app if syncing fails
   });
 
 // Fetch users as a test (ensure it runs after the database sync)
