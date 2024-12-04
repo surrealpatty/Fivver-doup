@@ -1,6 +1,6 @@
 // src/middlewares/tierMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure correct path
+import { AuthRequest } from '../types'; // Ensure this import path is correct
 
 // Middleware to check the user's tier
 export const checkTier = (requiredTier: string) => {

@@ -1,17 +1,14 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
-import { checkTier } from '../middlewares/tierMiddleware';
-import Service from '../models/services';
+// src/routes/service.ts
+import express, { Response } from 'express';
 import { AuthRequest } from '../types'; // Ensure correct import path
 
 const router = express.Router();
 
-// POST /services route to create a new service (only for paid users)
 router.post(
   '/',
-  authenticateToken, 
+  authenticateToken,
   checkTier('paid'),
-  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Use void as the return type
+  async (req: AuthRequest, res: Response): Promise<Response> => { // Explicitly set return type to Response
     try {
       const { title, description, price } = req.body;
 
@@ -31,10 +28,10 @@ router.post(
         price,
       });
 
-      res.status(201).json({ message: 'Service created successfully.', service });
+      return res.status(201).json({ message: 'Service created successfully.', service });
     } catch (error) {
       console.error(error);
-      next(error); // Pass errors to the global error handler
+      return res.status(500).json({ message: 'Internal server error.', error });
     }
   }
 );
