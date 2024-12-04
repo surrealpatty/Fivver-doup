@@ -1,11 +1,9 @@
 "use strict";
-// src/middlewares/tierMiddleware.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkTier = void 0;
 // Middleware to check the user's tier
 const checkTier = (requiredTier) => {
     return (req, res, next) => {
-        // Ensure req.user exists and has the expected tier
         if (!req.user || req.user.tier !== requiredTier) {
             return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
         }

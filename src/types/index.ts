@@ -14,17 +14,17 @@ export interface IUserAttributes {
 // Interface for creating a user, excludes the 'id' as it's auto-generated
 export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {}
 
-// UserPayload interface for authentication or authorization
+// UserPayload interface for authentication or authorization, includes the 'tier' field
 export interface UserPayload {
   id: string;
   email: string;
   username: string;
-  tier: string; // Add this field
+  tier: string; // Add this field to represent the user's subscription tier (free or paid)
 }
 
-// Extend the Express Request type to include user object
+// Extend the Express Request type to include an optional 'user' object
 export interface AuthRequest extends Request {
   user?: UserPayload; // Optional user object added after authentication
 }
 
-// Other interfaces here...
+// Other interfaces can be added here...

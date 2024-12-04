@@ -1,10 +1,10 @@
 // src/middlewares/tierMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure the correct path
+import { AuthRequest } from '../types'; // Ensure correct path
 
 // Middleware to check the user's tier
 export const checkTier = (requiredTier: string) => {
-  return (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || req.user.tier !== requiredTier) {
       return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
     }
