@@ -1,6 +1,6 @@
 // src/routes/service.ts
 import express, { Response, Request, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure correct import path
+import { AuthRequest } from '../types/index'; // Ensure correct import path
 import { authenticateToken } from '../middlewares/authMiddleware';
 import { checkTier } from '../middlewares/tierMiddleware';
 import Service from '../models/services'; // Correct import for Service model

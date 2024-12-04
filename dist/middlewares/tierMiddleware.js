@@ -4,9 +4,11 @@ exports.checkTier = checkTier;
 function checkTier(tier) {
     return (req, res, next) => {
         if (req.user?.tier !== tier) {
-            return res.status(403).json({ message: 'Insufficient tier' });
+            res.status(403).json({ message: 'Insufficient tier' }); // Error response
         }
-        next();
+        else {
+            next(); // Move to next middleware if check passes
+        }
     };
 }
 //# sourceMappingURL=tierMiddleware.js.map
