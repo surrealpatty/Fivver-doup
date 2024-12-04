@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_1 = require("@models/user"); // Correctly resolving user model
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Ensure this middleware is correctly defined
-const service_1 = __importDefault(require("@models/service")); // Correct named import for Service model
+const user_1 = require("@models/user"); // Correct alias for User model
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Ensure this middleware is defined correctly
+const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
 const router = (0, express_1.Router)();
 // POST route to create a service
 router.post('/services', authMiddleware_1.checkAuth, // Ensure this middleware is correctly defined
@@ -40,7 +40,7 @@ async (req, res) => {
             return;
         }
         // Create a new service for the user
-        const service = await service_1.default.create({
+        const service = await services_1.default.create({
             userId,
             title,
             description,
