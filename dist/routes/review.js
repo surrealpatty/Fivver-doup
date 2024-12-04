@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const reviewController_1 = require("../controllers/reviewController"); // Ensure correct import path
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Ensure correct import path
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Adjust path as needed
 const router = express_1.default.Router();
 // Route to create a new review (requires authentication)
 router.post('/', authMiddleware_1.authenticateToken, reviewController_1.createReview);

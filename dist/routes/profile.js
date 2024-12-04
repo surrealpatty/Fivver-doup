@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Adjust path as needed
 const user_1 = require("../models/user"); // Correct
 const router = express_1.default.Router();
 // Route to fetch the user's profile data
