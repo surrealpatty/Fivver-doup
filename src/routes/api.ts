@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { User } from '@models/user';  // Correct alias for User model
-import { checkAuth } from '../middlewares/authMiddleware';  // Ensure this middleware is defined correctly
-import { ServiceCreationAttributes } from '@models/service';  // Correct alias for Service model attributes
+import { checkAuth } from '../middlewares/authMiddleware';  // Ensure this middleware is correctly defined
+import { ServiceCreationAttributes } from '@models/services';  // Correct alias for Service model attributes
 import Service from '@models/services';  // Correct alias for Service model
 
 const router = Router();
