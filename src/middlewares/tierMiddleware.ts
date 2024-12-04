@@ -1,22 +1,15 @@
+// src/middlewares/tierMiddleware.ts
+
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types/index'; // Ensure the import path is correct
+import { AuthRequest } from '../types'; // Ensure the correct path
 
-// Extending the Request type to include a user property typed as UserPayload
-interface RequestWithUser extends Request {
-  user?: UserPayload; // Ensuring req.user is correctly typed
-}
-
-/**
- * Middleware to restrict access based on user tier.
- * @param requiredTier The required tier for access (e.g., "paid").
- */
+// Middleware to check the user's tier
 export const checkTier = (requiredTier: string) => {
-  return (req: RequestWithUser, res: Response, next: NextFunction): void => {
-    // Check if the user's tier matches the required tier
-    if (req.user?.tier !== requiredTier) {
-      res.status(403).json({ message: `Access restricted to ${requiredTier} users only.` });
-      return;  // Explicitly return after sending a response
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
+    // Ensure req.user exists and has the expected tier
+    if (!req.user || req.user.tier !== requiredTier) {
+      return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
     }
-    next();
+    next(); // Proceed to the next middleware or route handler
   };
 };

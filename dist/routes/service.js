@@ -20,7 +20,7 @@ async (req, res) => {
             return;
         }
         // Retrieve the user ID from the authenticated token
-        const userId = parseInt(req.user?.id || '', 10);
+        const userId = parseInt(req.user?.id || '', 10); // req.user is now typed as UserPayload
         if (isNaN(userId)) {
             res.status(400).json({ message: 'Invalid user ID.' });
             return;

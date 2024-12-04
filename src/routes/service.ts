@@ -17,15 +17,13 @@ router.post(
 
       // Validate request body
       if (!title || !description || price === undefined) {
-        res.status(400).json({ message: 'All fields are required.' });
-        return;
+        return res.status(400).json({ message: 'All fields are required.' });
       }
 
       // Retrieve the user ID from the authenticated token
       const userId = parseInt(req.user?.id || '', 10); // req.user is now typed as UserPayload
       if (isNaN(userId)) {
-        res.status(400).json({ message: 'Invalid user ID.' });
-        return;
+        return res.status(400).json({ message: 'Invalid user ID.' });
       }
 
       // Create a new service entry
@@ -37,10 +35,10 @@ router.post(
       });
 
       // Respond with the created service
-      res.status(201).json({ message: 'Service created successfully.', service });
+      return res.status(201).json({ message: 'Service created successfully.', service });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Internal server error.', error });
+      return res.status(500).json({ message: 'Internal server error.', error });
     }
   }
 );
