@@ -23,5 +23,11 @@ declare global {
   }
 }
 
+// Define and export the AuthRequest interface that extends Express.Request
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Optional user data from JWT
+  userId?: number;     // Optional userId property
+}
+
 // This ensures the file is treated as a module.
 export {};
