@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/service.ts
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import JWT authentication middleware
-const services_1 = require("../models/services"); // Correct path to Service model
+const services_1 = require("../models/services"); // Correct named import
 const tierMiddleware_1 = require("../middlewares/tierMiddleware"); // Import tier check middleware
 const router = express_1.default.Router();
 // Route to edit a service (PUT /service/:id)

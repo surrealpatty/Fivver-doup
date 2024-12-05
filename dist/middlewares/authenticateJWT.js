@@ -9,12 +9,12 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
     if (!token) {
-        return res.status(403).json({ message: 'No token provided.' });
+        return res.status(403).json({ message: 'No token provided.' }); // Return response and stop execution
     }
     // Verify the token using the secret key
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res.status(403).json({ message: 'Invalid token.' });
+            return res.status(403).json({ message: 'Invalid token.' }); // Return response and stop execution
         }
         // Attach the user object to the request, ensuring 'tier' is included
         req.user = {
@@ -23,7 +23,7 @@ const authenticateJWT = (req, res, next) => {
             username: decoded.username,
             tier: decoded.tier, // Include the 'tier' field from the decoded JWT payload
         };
-        next();
+        next(); // Proceed to the next middleware or route handler
     });
 };
 exports.authenticateJWT = authenticateJWT;

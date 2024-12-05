@@ -1,42 +1,43 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/service.ts
-const sequelize_typescript_1 = require("sequelize-typescript");
-const user_1 = require("./user");
-let Service = class Service extends sequelize_typescript_1.Model {
+// src/models/services.ts
+const sequelize_1 = require("sequelize");
+const database_1 = __importDefault(require("../config/database")); // Make sure sequelize instance is correctly imported
+class Service extends sequelize_1.Model {
+    id;
     title;
     description;
     price;
     userId;
-};
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], Service.prototype, "title", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], Service.prototype, "description", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.FLOAT),
-    __metadata("design:type", Number)
-], Service.prototype, "price", void 0);
-__decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => user_1.User),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
-    __metadata("design:type", Number)
-], Service.prototype, "userId", void 0);
-Service = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'services' })
-], Service);
-exports.default = Service;
+}
+Service.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    title: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    description: {
+        type: sequelize_1.DataTypes.TEXT,
+        allowNull: false,
+    },
+    price: {
+        type: sequelize_1.DataTypes.FLOAT,
+        allowNull: false,
+    },
+    userId: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+}, {
+    sequelize: database_1.default,
+    modelName: 'Service',
+});
+exports.default = Service; // Default export
 //# sourceMappingURL=services.js.map
