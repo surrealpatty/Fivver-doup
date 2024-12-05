@@ -1,7 +1,8 @@
-// jest.config.js
-
 module.exports = {
   preset: 'ts-jest', // Use ts-jest for handling TypeScript files
+  testEnvironment: 'node', // Use Node.js environment for testing
+
+  // Module name mapping for easier imports
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',                 // Map `@/` to `src/`
     '^dist/(.*)$': '<rootDir>/dist/$1',             // Map `dist/` to `dist/`
@@ -11,18 +12,28 @@ module.exports = {
     '^@config/(.*)$': '<rootDir>/src/config/$1',    // Map `@config/` to `src/config/`
     '^@types/(.*)$': '<rootDir>/src/types/$1',      // Map `@types/` to `src/types/`
   },
-  moduleDirectories: ['node_modules', 'dist', 'src'],  // Resolve modules from node_modules, dist, and src
+
+  // Module directories to resolve imports
+  moduleDirectories: ['node_modules', 'src'], // Resolve modules from node_modules and src
+
+  // Transform files using ts-jest for TypeScript and babel-jest for JavaScript
   transform: {
-    '^.+\\.ts$': 'ts-jest',                         // Use ts-jest for TypeScript files
-    '^.+\\.js$': 'babel-jest',                       // Use babel-jest for JavaScript files
+    '^.+\\.ts$': 'ts-jest', // Use ts-jest for TypeScript files
+    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
   },
-  extensionsToTreatAsEsm: ['.ts'],                    // Treat TypeScript files as ESM (if needed)
-  testEnvironment: 'node',  // Use Node.js environment for testing
-  roots: ['<rootDir>/src/test'],                      // Point to the test folder
-  collectCoverage: true,                              // Enable code coverage collection
-  coverageDirectory: '<rootDir>/coverage',           // Output code coverage directory
-  verbose: true,                                      // Enable verbose output for tests
-  moduleFileExtensions: ['ts', 'tsx', 'js'],          // Include .ts, .tsx, and .js extensions
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],  // Set up environment before running tests
-  setupFiles: ['<rootDir>/src/test/setup.ts'],        // Load setup.ts before tests run (to load environment)
+
+  // Setup files to be loaded before running tests
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Load setup.ts after environment is set up
+
+  // Test directories and options
+  roots: ['<rootDir>/src/test'], // Point to the test folder
+  collectCoverage: true, // Enable code coverage collection
+  coverageDirectory: '<rootDir>/coverage', // Directory for code coverage output
+  verbose: true, // Enable verbose output for tests
+
+  // Supported file extensions
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'], // Include .ts, .tsx, .js, and .json extensions
+
+  // Treat TypeScript files as ESM (if needed)
+  extensionsToTreatAsEsm: ['.ts'],
 };

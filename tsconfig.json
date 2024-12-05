@@ -1,47 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                      // Keep the target as ESNext for modern features
-    "module": "CommonJS",                     // Use CommonJS modules for Node.js compatibility
-    "moduleResolution": "node",               // Resolve modules using Node.js style resolution
-    "strict": true,                           // Enable strict type checking (recommended for better type safety)
-    "skipLibCheck": true,                     // Skip library checking for faster compilation
-    "esModuleInterop": true,                  // Enable ES Module interoperability
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
+    "target": "ESNext",                      // Use the latest ECMAScript features
+    "module": "CommonJS",                     // Use CommonJS for Node.js compatibility
+    "moduleResolution": "node",               // Resolve modules like Node.js (default for Node)
+    "strict": true,                           // Enable strict type checking for better safety
+    "skipLibCheck": true,                     // Skip type checking of declaration files for faster build
+    "esModuleInterop": true,                  // Ensure compatibility with ES Modules
+    "forceConsistentCasingInFileNames": true, // Ensure consistent file name casing
     "baseUrl": "./src",                       // Set base URL for module resolution
     "paths": {
-      "@models/*": ["src/models/*"],           // Correct model path alias
-      "@config/*": ["src/config/*"],           // Correct config path alias
-      "@types/*": ["src/types/*"],             // Ensure types are correctly mapped
-      "types/*": ["src/types/*"]               // Map the 'types' directory correctly
+      "@models/*": ["src/models/*"],          // Path alias for models
+      "@config/*": ["src/config/*"],          // Path alias for config
+      "@types/*": ["src/types/*"],            // Path alias for custom types
+      "types/*": ["src/types/*"]              // Ensure custom types are included
     },
-    "outDir": "./dist",                       // Output directory for compiled files
-    "rootDir": "./src",                       // Root directory for source files
-    "allowJs": true,                          // Allow JavaScript files (useful if you have JS code)
-    "declaration": true,                      // Generate declaration files
-    "sourceMap": true,                        // Generate source maps
-    "experimentalDecorators": true,           // Enable experimental decorators
-    "emitDecoratorMetadata": true,            // Enable decorator metadata
+    "outDir": "./dist",                       // Directory for compiled files
+    "rootDir": "./src",                       // Root directory for source code
+    "allowJs": true,                          // Allow JavaScript files (useful for mixed codebases)
+    "declaration": true,                      // Generate declaration files for type definitions
+    "sourceMap": true,                        // Generate source maps for debugging
+    "experimentalDecorators": true,           // Enable decorators (e.g., for Sequelize models)
+    "emitDecoratorMetadata": true,            // Enable metadata reflection for decorators
     "resolveJsonModule": true,                // Allow importing JSON files
     "typeRoots": [
       "./node_modules/@types", 
-      "./src/types"                           // Ensure custom types are included
+      "./src/types"                           // Include custom types from the src/types folder
     ],
-    "lib": ["esnext"],                        // Use latest ES features
-    "types": ["node", "jest", "sequelize", "express"], // Include global types
-    "noImplicitAny": false                    // Allow 'any' type (you can enable this for stricter typing)
+    "lib": ["esnext"],                        // Use the latest ES features for type checking
+    "types": ["node", "jest", "sequelize", "express"], // Global types for Node.js, Jest, Sequelize, and Express
+    "noImplicitAny": false                    // Allow 'any' type (optional for stricter typing)
   },
   "include": [
-    "src/**/*.ts",                            // Include all TS files in the src directory
-    "src/models/**/*.ts",                     // Include models
+    "src/**/*.ts",                            // Include all TypeScript files in the src folder
+    "src/models/**/*.ts",                     // Include model files
     "src/types/**/*.ts",                      // Include custom types
     "src/test/**/*.ts",                       // Include test files
-    "src/test/**/*.tsx"                       // Include JSX/TSX files in tests
+    "src/test/**/*.tsx"                       // Include test files with TSX (if you use JSX in tests)
   ],
   "exclude": [
-    "node_modules",                           // Exclude node_modules
-    "dist",                                   // Exclude dist (build directory)
-    "build",                                  // Exclude build directory
-    "src/test/**/*.test.ts",                  // Exclude test files (assuming you don't need them for compilation)
-    "src/test/**/*.test.tsx"                  // Exclude TSX test files
+    "node_modules",                           // Exclude node_modules directory
+    "dist",                                   // Exclude the dist (build output) folder
+    "build",                                  // Exclude build folder (if used)
+    "src/test/**/*.test.ts",                  // Exclude test files from compilation
+    "src/test/**/*.test.tsx"                  // Exclude TSX test files from compilation
   ]
 }

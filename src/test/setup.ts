@@ -1,4 +1,3 @@
-// src/test/setup.ts
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -63,3 +62,7 @@ afterAll(async () => {
     await module.sequelize.close(); // Close the mocked DB connection
   });
 });
+
+// Ensure Jest global functions are available for all tests
+import '@jest/globals'; // Import Jest globals to ensure they are available globally in tests
+
