@@ -1,15 +1,13 @@
-// src/config/database.ts
-
 import { Sequelize } from 'sequelize';
-import Service from '../models/services'; // Default import
 
 // Define your database connection here
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
-  username: 'root',
-  password: '',
-  database: 'fiverr_clone',
+  username: 'root',   // Your MySQL username
+  password: '',       // Your MySQL password (empty in your case)
+  database: 'fiverr_clone',  // Your database name
 });
 
+// Export sequelize instance for use in other parts of the application
 export { sequelize };
