@@ -1,15 +1,14 @@
 import { Request } from 'express';
-import { JwtPayload } from 'jsonwebtoken'; // Import JwtPayload for token structure
 
-// Define the expected structure of the User payload in the JWT
-export interface UserPayload extends JwtPayload {
-  id: string;         // User's unique identifier
-  email?: string;     // Optional email
-  username?: string;  // Optional username
-  tier?: string;      // Optional subscription tier (e.g., 'free', 'paid')
+// Assuming this is your UserPayload structure
+export interface UserPayload {
+    id: string;
+    email: string;
+    username: string;
+    tier: string;  // Make sure 'tier' is present in the payload
 }
 
-// Extend the Express Request interface to include `user` property
+// Extending the Request type to include the `user` object
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Attach the UserPayload type to the req.user property
+    user?: UserPayload;  // This should include the `tier` field
 }

@@ -7,7 +7,7 @@ import { checkTier } from '../middlewares/tierMiddleware';
 const router = express.Router();
 
 // Route to edit a service (PUT /service/:id)
-router.put('/:id', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {  // Removed Promise<Response>
+router.put('/:id', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {
   try {
     const serviceId = req.params.id; // Get the service ID from the URL params
     const userId = req.user?.id; // Get the user ID from the authenticated JWT user
@@ -37,7 +37,7 @@ router.put('/:id', authenticateJWT, checkTier('paid'), async (req: AuthRequest, 
 });
 
 // Route to view all services (GET /services)
-router.get('/', authenticateJWT, async (req: AuthRequest, res: Response) => {  // Removed Promise<Response>
+router.get('/', authenticateJWT, async (req: AuthRequest, res: Response) => {
   try {
     const services = await Service.findAll(); // Fetch all services from the database
     return res.status(200).json({ services });
@@ -48,7 +48,7 @@ router.get('/', authenticateJWT, async (req: AuthRequest, res: Response) => {  /
 });
 
 // Route to create a new service (POST /services)
-router.post('/', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {  // Removed Promise<Response>
+router.post('/', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {
   try {
     const { title, description, price } = req.body;
 
@@ -80,7 +80,7 @@ router.post('/', authenticateJWT, checkTier('paid'), async (req: AuthRequest, re
 });
 
 // Route to delete a service (DELETE /services/:id)
-router.delete('/:id', authenticateJWT, async (req: AuthRequest, res: Response) => {  // Removed Promise<Response>
+router.delete('/:id', authenticateJWT, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   try {
