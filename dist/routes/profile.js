@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
-const services_1 = __importDefault(require("@models/services")); // Import the Service model to retrieve services
+const services_1 = __importDefault(require("models/services")); // Import the Service model to retrieve services
 const router = (0, express_1.Router)();
 exports.router = router;
 // GET route for retrieving user profile and services

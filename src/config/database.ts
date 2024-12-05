@@ -1,12 +1,11 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost',
-  username: 'root',
-  password: '',
-  database: 'fiverr_clone',
-  models: [__dirname + '/models'], // Path to your models directory
+// Initialize Sequelize instance
+export const sequelize = new Sequelize({
+  dialect: 'mysql',  // or your database dialect
+  host: 'localhost', // your database host
+  username: 'root',  // your database username
+  password: '',      // your database password
+  database: 'fiverr_doup', // your database name
 });
 
-export { sequelize };

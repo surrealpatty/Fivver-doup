@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
+const database_1 = require("config/database"); // Correct alias for the sequelize instance
 // Sequelize Service model class
 class Service extends sequelize_1.Model {
     id;
@@ -36,6 +36,7 @@ Service.init({
 }, {
     sequelize: database_1.sequelize, // Reference to the Sequelize instance
     modelName: 'Service', // Name of the model in database
+    tableName: 'services', // The table name in the database
     timestamps: true, // Enable timestamps if you want to use createdAt and updatedAt
 });
 exports.default = Service; // Default export of the Service model

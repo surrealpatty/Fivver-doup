@@ -36,7 +36,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/test/setup.ts
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
 dotenv_1.default.config(); // Ensure the environment variables are loaded before any tests run
@@ -92,4 +91,6 @@ afterAll(async () => {
         await module.sequelize.close(); // Close the mocked DB connection
     });
 });
+// Ensure Jest global functions are available for all tests
+require("@jest/globals"); // Import Jest globals to ensure they are available globally in tests
 //# sourceMappingURL=setup.js.map
