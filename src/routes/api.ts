@@ -1,5 +1,3 @@
-// src/routes/api.ts
-
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT, checkAuth } from '../middlewares/authMiddleware';  // Corrected import
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type

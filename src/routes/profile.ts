@@ -1,5 +1,3 @@
-// src/routes/profile.ts
-
 import express, { Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';
 import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for typing

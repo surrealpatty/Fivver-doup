@@ -33,7 +33,7 @@ async (req, res) => {
             });
             return;
         }
-        // Check if the user exists
+        // Check if the user exists (use the userId from the authenticated request)
         const user = await user_1.User.findByPk(userId);
         if (!user) {
             res.status(404).json({
