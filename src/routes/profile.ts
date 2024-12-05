@@ -13,11 +13,17 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
       return res.status(401).json({ message: 'User not authenticated.' }); // Returning response if user not authenticated
     }
 
+    // Optionally, you can access the user's tier here
+    const userTier = req.user.tier;  // Access the tier property from the user object
+
     // Fetch user profile using the authenticated user's ID
     const profileData = await getUserProfile(req.user.id); // Pass the user ID to the controller function
 
     // Send the profile data as a response
-    res.status(200).json(profileData); // We don't need a return here, just send the response
+    res.status(200).json({
+      profile: profileData,   // Include the profile data
+      tier: userTier          // Include the user's tier in the response (optional)
+    });
   } catch (error) {
     // Pass any error to the next middleware (typically an error handler)
     next(error); // Pass the error to next middleware

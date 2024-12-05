@@ -5,7 +5,7 @@ export interface UserPayload {
     id: string;
     email: string;
     username: string;
-    tier: string;  // Make sure 'tier' is present in the payload
+    tier: string;  // Make sure 'tier' is required here
 }
 
 // Extending the Request type to include the `user` object
