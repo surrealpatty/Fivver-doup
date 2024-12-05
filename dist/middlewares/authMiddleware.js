@@ -3,45 +3,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = exports.authenticateJWT = void 0;
+exports.authenticateJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-// Load environment variables from .env file
-dotenv_1.default.config();
-// Middleware to authenticate JWT and attach user data to the request object
+// Middleware to authenticate JWT and attach user data (including 'tier') to the request object
 const authenticateJWT = (req, res, next) => {
-    return new Promise((resolve, reject) => {
-        // Extract the token from the Authorization header
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-        if (!token) {
-            return res.status(401).json({ message: 'Authorization token missing' });
-        }
-        try {
-            // Verify the token using the secret key from the environment variable
-            const secretKey = process.env.JWT_SECRET || 'fallback-secret-key'; // Use fallback if not defined
-            const decoded = jsonwebtoken_1.default.verify(token, secretKey);
-            // Attach decoded user information to the request object
-            req.user = decoded;
-            // Proceed to the next middleware
-            next();
-            resolve(); // Complete the promise
-        }
-        catch (error) {
-            return res.status(401).json({ message: 'Invalid or expired token' });
-            reject(); // Reject promise if token is invalid
-        }
-    });
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+        return res.status(401).json({ message: 'Access denied. No token provided.' });
+    }
+    try {
+        // Decode the token, assuming the payload contains 'id', 'email', 'username', and 'tier'
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        // Attach decoded user information (including tier) to the request object
+        req.user = {
+            id: decoded.id,
+            email: decoded.email,
+            username: decoded.username,
+            tier: decoded.tier
+        };
+        next(); // Proceed to the next middleware or route handler
+    }
+    catch (error) {
+        res.status(400).json({ message: 'Invalid token.' });
+    }
 };
 exports.authenticateJWT = authenticateJWT;
-// Optional: Middleware to check if the user is authenticated (user data is available in the request)
-const checkAuth = (req, res, next) => {
-    return new Promise((resolve, reject) => {
-        if (!req.user) {
-            return res.status(403).json({ message: 'Access denied. No user found in request' });
-        }
-        next(); // Proceed to the next middleware or route handler
-        resolve(); // Complete the promise
-    });
-};
-exports.checkAuth = checkAuth;
 //# sourceMappingURL=authMiddleware.js.map
