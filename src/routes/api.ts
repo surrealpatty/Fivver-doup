@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import (no need for checkAuth)
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
 import { User } from '@models/user';  // Correct alias for User model

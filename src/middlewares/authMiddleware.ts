@@ -6,14 +6,18 @@ import { AuthRequest } from '../types/authMiddleware';  // Correct import for Au
 import { UserPayload } from '../types/authMiddleware';  // Correct import for UserPayload
 
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  // Get token from Authorization header (split to remove 'Bearer ')
+  const token = req.header('Authorization')?.split(' ')[1];  
 
+  // If no token is found, send a 403 response
   if (!token) {
     return res.status(403).json({ message: 'No token provided.' });
   }
 
+  // Verify the JWT token
   jwt.verify(token, 'your_secret_key', (err, decoded: any) => {
     if (err) {
+      // If token is invalid or expired, send a 403 response
       return res.status(403).json({ message: 'Invalid or expired token.' });
     }
 
@@ -25,8 +29,10 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
       tier: decoded.tier,  // 'tier' should be present in decoded token
     };
 
-    // Type cast req.user to AuthRequest to include the correct user payload
+    // Add the user payload to the request object, type cast to AuthRequest
     (req as AuthRequest).user = userPayload;
+
+    // Proceed to the next middleware or route handler
     next();
   });
 };

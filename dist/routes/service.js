@@ -1,41 +1,66 @@
 "use strict";
 // src/routes/service.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import
+const user_1 = require("@models/user"); // Correct alias for User model
+const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
 const router = (0, express_1.Router)();
-// GET route example to fetch services
-router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
+// POST route to create a service
+router.post('/services', // Define the endpoint
+authMiddleware_1.authenticateJWT, // Apply the authentication middleware
+async (req, res) => {
     try {
-        // Safely check if user is authenticated
-        if (!req.user) {
-            return res.status(401).json({ message: 'User not authenticated.' });
+        // Destructure and type the request body using ServiceCreationAttributes
+        const { userId, title, description, price } = req.body;
+        // Validate required fields
+        if (!userId || !title || !description || price === undefined) {
+            res.status(400).json({
+                message: 'Missing required fields: userId, title, description, and price are mandatory.',
+                error: 'ValidationError',
+            });
+            return;
         }
-        // Destructure user data, ensuring 'tier' is available
-        const { id, email, username, tier } = req.user;
-        // Logic for retrieving services, considering the user's tier
-        res.json({ message: `User ${username} with tier ${tier}` });
+        // Validate price
+        if (typeof price !== 'number' || price <= 0 || isNaN(price)) {
+            res.status(400).json({
+                message: 'Invalid price: must be a positive number.',
+                error: 'ValidationError',
+            });
+            return;
+        }
+        // Check if the user exists (use the userId from the authenticated request)
+        const user = await user_1.User.findByPk(userId);
+        if (!user) {
+            res.status(404).json({
+                message: `User with ID ${userId} not found.`,
+                error: 'NotFoundError',
+            });
+            return;
+        }
+        // Create a new service for the user
+        const service = await services_1.default.create({
+            userId,
+            title,
+            description,
+            price,
+        });
+        // Send success response
+        res.status(201).json({
+            message: 'Service created successfully.',
+            serviceId: service.id,
+            title: service.title,
+        });
     }
     catch (error) {
-        res.status(500).json({ message: 'Error fetching services.' });
-    }
-});
-// PUT route example to update a service
-router.put('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
-    try {
-        // Safely check if user is authenticated
-        if (!req.user) {
-            return res.status(401).json({ message: 'User not authenticated.' });
-        }
-        // Check if the user has the required tier for editing the service
-        if (req.user.tier !== 'paid') {
-            return res.status(403).json({ message: 'Access denied. You need a paid tier to edit services.' });
-        }
-        // Proceed with service update logic (Add your specific logic here)
-        res.json({ message: 'Service updated successfully.' });
-    }
-    catch (error) {
-        res.status(500).json({ message: 'Error updating service.' });
+        console.error('Error creating service:', error);
+        res.status(500).json({
+            message: 'Internal server error while creating the service.',
+            error: error instanceof Error ? error.message : 'UnknownError',
+        });
     }
 });
 exports.default = router;

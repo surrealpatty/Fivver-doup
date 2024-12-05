@@ -5,31 +5,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import JwtPayload from jsonwebtoken
-// Define your JWT secret key (make sure this is securely handled in production, e.g., from environment variables)
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // Use an environment variable for security
-// Middleware to authenticate JWT token
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
-    // Extract the token from the Authorization header
-    const token = req.headers.authorization?.split(' ')[1]; // Bearer token
+    const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
-        return res.status(403).json({ message: 'Access denied. No token provided.' });
+        return res.status(403).json({ message: 'No token provided.' });
     }
-    // Verify the token and decode it
-    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
+    jsonwebtoken_1.default.verify(token, 'your_secret_key', (err, decoded) => {
         if (err) {
-            return res.status(403).json({ message: 'Invalid token.' });
+            return res.status(403).json({ message: 'Invalid or expired token.' });
         }
-        // Ensure decoded is typed as JwtPayload, and assert as UserPayload for proper typing
-        const decodedPayload = decoded; // Correct typing with tier included
-        // Attach the user data to the request object
-        req.user = {
-            id: decodedPayload.id,
-            email: decodedPayload.email,
-            username: decodedPayload.username,
-            tier: decodedPayload.tier, // Ensure 'tier' is present
+        // Ensure decoded JWT contains the required properties, including 'tier'
+        const userPayload = {
+            id: decoded.id,
+            email: decoded.email,
+            username: decoded.username,
+            tier: decoded.tier, // 'tier' should be present in decoded token
         };
-        // Pass control to the next middleware
+        // Type cast req.user to AuthRequest to include the correct user payload
+        req.user = userPayload;
         next();
     });
 };
