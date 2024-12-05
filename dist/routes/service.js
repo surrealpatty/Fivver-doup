@@ -1,5 +1,4 @@
 "use strict";
-// src/routes/service.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,11 +15,13 @@ router.put('/services/:id', authMiddleware_1.authenticateJWT, async (req, res) =
         const service = await services_1.default.findByPk(serviceId);
         // Check if the service exists
         if (!service) {
-            return res.status(404).json({ message: 'Service not found' });
+            res.status(404).json({ message: 'Service not found' });
+            return; // Make sure to return after sending the response
         }
         // Check if the authenticated user is the owner of the service
-        if (!req.user || service.userId.toString() !== req.user.id) { // Ensure req.user exists
-            return res.status(403).json({ message: 'You can only edit your own services' });
+        if (!req.user || service.userId.toString() !== req.user.id) {
+            res.status(403).json({ message: 'You can only edit your own services' });
+            return; // Return after sending the response
         }
         // Update the service
         service.title = title;
@@ -31,8 +32,13 @@ router.put('/services/:id', authMiddleware_1.authenticateJWT, async (req, res) =
         res.status(200).json({ message: 'Service updated successfully', service });
     }
     catch (error) {
-        console.error('Error updating service:', error);
-        res.status(500).json({ message: 'Error updating service', error: error.message });
+        // Fix for the error type
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Error updating service', error: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Error updating service', error: 'Unknown error' });
+        }
     }
 });
 exports.default = router;
