@@ -1,6 +1,7 @@
+// src/routes/service.ts
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Import JWT authentication middleware
-import { Service } from '../models/services'; // Correct path to Service model
+import { Service } from '../models/services'; // Correct named import
 import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for type safety
 import { checkTier } from '../middlewares/tierMiddleware'; // Import tier check middleware
 

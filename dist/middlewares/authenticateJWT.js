@@ -18,10 +18,10 @@ const authenticateJWT = (req, res, next) => {
         }
         // Attach the user object to the request, ensuring 'tier' is included
         req.user = {
-            id: decoded?.id,
-            email: decoded?.email,
-            username: decoded?.username,
-            tier: decoded?.tier, // Include the 'tier' field from the decoded JWT payload
+            id: decoded.id, // Explicit cast to JwtPayload
+            email: decoded.email,
+            username: decoded.username,
+            tier: decoded.tier, // Include the 'tier' field from the decoded JWT payload
         };
         next();
     });

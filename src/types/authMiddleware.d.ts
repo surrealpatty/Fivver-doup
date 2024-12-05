@@ -1,34 +1,16 @@
+// src/types/authMiddleware.ts
 import { Request } from 'express';
+import { JwtPayload } from 'jsonwebtoken'; // Import JwtPayload for token structure
 
-/**
- * UserPayload interface represents the payload data embedded in a JWT token.
- * It contains essential user information for authentication.
- */
-export interface UserPayload {
-  id: string;      // User ID
-  email: string;   // User email address
-  username: string; // User's username
-  tier: string;    // User tier (e.g., 'free' or 'paid')
+// Define the expected structure of the User payload in the JWT
+export interface UserPayload extends JwtPayload {
+  id: string;         // Add any properties you expect in the JWT payload
+  email?: string;
+  username?: string;
+  tier?: string;      // Example of adding a 'tier' property if it exists
 }
 
-/**
- * Augment the Express Request interface to include both `user` and `userId` properties.
- * This ensures the authenticated user and their ID are available in the request object.
- */
-declare global {
-  namespace Express {
-    interface Request {
-      user?: UserPayload;  // Optional user object containing the user data from JWT
-      userId?: string;     // Optional userId property, use string to match `id` type in UserPayload
-    }
-  }
-}
-
-// Define and export the AuthRequest interface that extends Express.Request
+// Extend the Express Request interface to include `user` property
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Optional user data from JWT, including the 'tier' field
-  userId?: string;     // Optional userId property (should be consistent with the rest of the app)
+  user?: UserPayload;  // Attach UserPayload to req.user
 }
-
-// Ensure the file is treated as a module, preventing it from being interpreted as a script.
-export {};

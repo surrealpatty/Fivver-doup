@@ -1,26 +1,43 @@
-// src/models/service.ts
-import { Column, Model, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { User } from './user';
+// src/models/services.ts
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database';  // Make sure sequelize instance is correctly imported
 
-export interface ServiceCreationAttributes {
-  title: string;
-  description: string;
-  price: number;
-  userId: number;
+class Service extends Model {
+  public id!: number;
+  public title!: string;
+  public description!: string;
+  public price!: number;
+  public userId!: number;
 }
 
-@Table({ tableName: 'services' })
-export default class Service extends Model<Service, ServiceCreationAttributes> {
-  @Column(DataType.STRING)
-  title!: string;
+Service.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'Service',
+  }
+);
 
-  @Column(DataType.STRING)
-  description!: string;
-
-  @Column(DataType.FLOAT)
-  price!: number;
-
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  userId!: number;
-}
+export default Service;  // Default export

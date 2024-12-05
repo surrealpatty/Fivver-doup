@@ -34,8 +34,8 @@ export const verifyToken = (
     if (decoded && typeof decoded === 'object' && 'id' in decoded) {
       const decodedToken = decoded as JwtPayload;
 
-      // Cast decodedToken.id to number if necessary
-      req.userId = Number(decodedToken.id); // Explicitly cast to number
+      // Cast decodedToken.id to string (if necessary)
+      req.userId = String(decodedToken.id); // Explicitly cast to string
 
       return next();
     } else {
