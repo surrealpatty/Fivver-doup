@@ -6,7 +6,7 @@ import { AuthRequest } from '../types/authMiddleware';  // Ensure this is import
 const router = express.Router();
 
 // Route to view the user's profile (GET /profile)
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Ensure Promise<void> return type
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Updated return type to Promise<void>
   try {
     // Check if the user is authenticated (the user ID should be available from JWT middleware)
     if (!req.user?.id) {

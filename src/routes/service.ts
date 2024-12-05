@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; 
-import Service from '../models/services'; // Correct default import
+import  Service from '../models/services'; // Correct default import
 import { AuthRequest } from '../types/authMiddleware'; 
 import { checkTier } from '../middlewares/tierMiddleware'; 
 

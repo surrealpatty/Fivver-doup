@@ -1,57 +1,15 @@
-import { Sequelize } from 'sequelize-typescript';  // Using sequelize-typescript
-import dotenv from 'dotenv';  // To load environment variables
+// src/config/database.ts
 
-// Load environment variables from .env file
-dotenv.config();
+import { Sequelize } from 'sequelize';
+import Service from '../models/services'; // Default import
 
-// TypeScript type guard to ensure environment variables are set
-const checkEnvVars = (): boolean => {
-  const requiredVars = ['DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST'];
-  const missingVars = requiredVars.filter(varName => !process.env[varName]);
-
-  if (missingVars.length > 0) {
-    console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
-    return false;
-  }
-  return true;
-};
-
-// Ensure environment variables are available
-if (!checkEnvVars()) {
-  process.exit(1);  // Exit if environment variables are missing
-}
-
-// Import models after ensuring environment variables are loaded
-import { User } from '../models/user';  // Correct path to User model
-import { Service } from '../models/services';  // Ensure you're importing named Service model correctly
-
-// Initialize Sequelize instance with database connection details
+// Define your database connection here
 const sequelize = new Sequelize({
-  dialect: 'mysql',  // Using MySQL dialect
-  host: process.env.DB_HOST,  // Database host from .env
-  username: process.env.DB_USER as string,  // Database user from .env (type assertion)
-  password: process.env.DB_PASSWORD as string,  // Database password from .env (type assertion)
-  database: process.env.DB_NAME as string,  // Database name from .env (type assertion)
-  models: [User, Service],  // Pass model classes directly to sequelize-typescript
-  dialectOptions: {
-    authPlugins: {
-      mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8 (if needed)
-    },
-  },
-  logging: false,  // Disable Sequelize logging (optional)
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'root',
+  password: '',
+  database: 'fiverr_clone',
 });
 
-// Test database connection
-const testConnection = async (): Promise<boolean> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection successful');
-    return true;
-  } catch (error) {
-    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
-    return false;
-  }
-};
-
-// Export sequelize instance and testConnection function
-export { sequelize, testConnection };
+export { sequelize };
