@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for type safety
+import { AuthRequest } from '../types/authMiddleware';  // Import AuthRequest for type safety
 import { JwtPayload } from 'jsonwebtoken';  // Import JwtPayload for type safety
 
 // Middleware to authenticate JWT and attach user info to the request
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+export const authenticateJWT = (
+  req: AuthRequest, 
+  res: Response, 
+  next: NextFunction
+): void => {
+  const token = req.headers['authorization']?.split(' ')[1];  // Extract token from Authorization header
 
   if (!token) {
     return res.status(403).json({ message: 'No token provided.' });  // Return response and stop execution

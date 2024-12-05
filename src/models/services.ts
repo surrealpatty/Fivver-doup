@@ -1,8 +1,19 @@
-// src/models/services.ts
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../config/database';  // Make sure sequelize instance is correctly imported
+import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Make sure sequelize instance is correctly imported
 
-class Service extends Model {
+// Define the interface for the Service model attributes
+export interface ServiceAttributes {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  userId: number;
+}
+
+// Define the interface for the creation of a Service (without the 'id' field)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public title!: string;
   public description!: string;

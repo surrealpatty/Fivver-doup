@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';  // Using sequelize-typescript
 import dotenv from 'dotenv';  // To load environment variables
 
 // Load environment variables from .env file
@@ -23,7 +23,7 @@ if (!checkEnvVars()) {
 
 // Import models after ensuring environment variables are loaded
 import { User } from '../models/user';  // Correct path to User model
-import Service from '../models/services';  // Correct path to Service model
+import { Service } from '../models/services';  // Ensure named import for Service model
 
 // Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({
@@ -32,7 +32,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USER as string,  // Database user from .env (type assertion)
   password: process.env.DB_PASSWORD as string,  // Database password from .env (type assertion)
   database: process.env.DB_NAME as string,  // Database name from .env (type assertion)
-  models: [User, Service],  // Register models explicitly here
+  models: [User, Service],  // Pass models correctly, no default imports
   dialectOptions: {
     authPlugins: {
       mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8 (if needed)

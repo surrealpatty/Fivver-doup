@@ -11,9 +11,14 @@ interface JwtPayload {
   [key: string]: any; // Allow for other properties in the JWT payload
 }
 
+// Extend Express' Request interface to include userId
+interface AuthRequest extends Request {
+  userId?: string; // This is where the userId from JWT will be stored
+}
+
 // The `verifyToken` middleware to check JWT in headers
 export const verifyToken = (
-  req: Request,
+  req: AuthRequest,  // Use the custom AuthRequest type
   res: Response,
   next: NextFunction
 ): Response<any> | void => {
@@ -49,4 +54,17 @@ export const generateToken = (userId: string): string => {
   return jwt.sign({ id: userId }, JWT_SECRET, {
     expiresIn: JWT_EXPIRATION,
   });
+};
+
+// Example middleware to authenticate the user using the token
+export const authenticateJWT = (
+  req: AuthRequest,  // Use the custom AuthRequest type here as well
+  res: Response,
+  next: NextFunction
+) => {
+  // Check if userId exists in request
+  if (!req.userId) {
+    return res.status(403).json({ message: 'No valid token or userId found.' });
+  }
+  next();
 };
