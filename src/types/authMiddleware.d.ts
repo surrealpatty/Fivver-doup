@@ -19,7 +19,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: UserPayload;  // Optional user object containing the user data from JWT
-      userId?: number;     // Optional userId property to store the user's ID (could be redundant if 'user' is present)
+      userId?: string;     // Optional userId property, use string to match `id` type in UserPayload
     }
   }
 }
@@ -27,8 +27,8 @@ declare global {
 // Define and export the AuthRequest interface that extends Express.Request
 export interface AuthRequest extends Request {
   user?: UserPayload;  // Optional user data from JWT, including the 'tier' field
-  userId?: number;     // Optional userId property (should be consistent with the rest of the app)
+  userId?: string;     // Optional userId property (should be consistent with the rest of the app)
 }
 
-// This ensures the file is treated as a module, preventing it from being interpreted as a script.
+// Ensure the file is treated as a module, preventing it from being interpreted as a script.
 export {};

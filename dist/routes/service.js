@@ -4,14 +4,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import your JWT authentication middleware
-const tierMiddleware_1 = require("../middlewares/tierMiddleware"); // Import the checkTier middleware to validate user tier
-const services_1 = __importDefault(require("../models/services")); // Import the Service model
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import JWT authentication middleware
+const services_1 = require("../models/services"); // Import Service model
+const tierMiddleware_1 = require("../middlewares/tierMiddleware"); // Import tier check middleware
 const router = express_1.default.Router();
-// View all services (GET /services)
+// Route to edit a service (PUT /service/:id)
+router.put('/:id', authMiddleware_1.authenticateJWT, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
+    try {
+        const serviceId = req.params.id; // Get the service ID from the URL params
+        const userId = req.user?.id; // Get the user ID from the authenticated JWT user
+        if (!userId) {
+            return res.status(401).json({ message: 'User not authenticated.' });
+        }
+        // Fetch the service to update from the database
+        const service = await services_1.Service.findOne({ where: { id: serviceId, userId } });
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found.' });
+        }
+        // Update the service with the provided data in the request body
+        await service.update(req.body);
+        return res.status(200).json({
+            message: 'Service updated successfully',
+            service, // Return the updated service details
+        });
+    }
+    catch (error) {
+        console.error('Error updating service:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+// Route to view all services (GET /services)
 router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
     try {
-        const services = await services_1.default.findAll(); // Fetch all services from the database
+        const services = await services_1.Service.findAll(); // Fetch all services from the database
         res.status(200).json({ services });
     }
     catch (error) {
@@ -19,7 +44,7 @@ router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 });
-// Create a new service (POST /services)
+// Route to create a new service (POST /services)
 router.post('/', authMiddleware_1.authenticateJWT, // Protect this route with JWT authentication
 (0, tierMiddleware_1.checkTier)('paid'), // Ensure the user has the required tier (e.g., 'paid')
 async (req, res) => {
@@ -37,13 +62,13 @@ async (req, res) => {
             return;
         }
         // Create the service in the database
-        const service = await services_1.default.create({
+        const service = await services_1.Service.create({
             userId: Number(userId), // Ensure the ID is converted to a number
             title,
             description,
             price,
         });
-        // Return success response with created service
+        // Return success response with the created service
         res.status(201).json({ message: 'Service created successfully.', service });
     }
     catch (error) {
@@ -51,39 +76,11 @@ async (req, res) => {
         res.status(500).json({ message: 'Internal server error.', error });
     }
 });
-// Edit an existing service (PUT /services/:id)
-router.put('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
-    const { id } = req.params;
-    const { title, description, price } = req.body;
-    try {
-        const service = await services_1.default.findByPk(id);
-        // Check if the service exists
-        if (!service) {
-            res.status(404).json({ message: 'Service not found.' });
-            return;
-        }
-        // Ensure the user can only edit their own services
-        if (service.userId !== Number(req.user?.id)) {
-            res.status(403).json({ message: 'Forbidden: You can only edit your own services.' });
-            return;
-        }
-        // Update the service
-        service.title = title || service.title;
-        service.description = description || service.description;
-        service.price = price || service.price;
-        await service.save(); // Save the updated service
-        res.status(200).json({ message: 'Service updated successfully.', service });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error.', error });
-    }
-});
-// Delete a service (DELETE /services/:id)
+// Route to delete a service (DELETE /services/:id)
 router.delete('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
     const { id } = req.params;
     try {
-        const service = await services_1.default.findByPk(id); // Find the service by primary key
+        const service = await services_1.Service.findByPk(id); // Find the service by primary key
         if (!service) {
             res.status(404).json({ message: 'Service not found.' });
             return;
