@@ -51,6 +51,34 @@ async (req, res) => {
         res.status(500).json({ message: 'Internal server error.', error });
     }
 });
+// Edit an existing service (PUT /services/:id)
+router.put('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { title, description, price } = req.body;
+    try {
+        const service = await services_1.default.findByPk(id);
+        // Check if the service exists
+        if (!service) {
+            res.status(404).json({ message: 'Service not found.' });
+            return;
+        }
+        // Ensure the user can only edit their own services
+        if (service.userId !== Number(req.user?.id)) {
+            res.status(403).json({ message: 'Forbidden: You can only edit your own services.' });
+            return;
+        }
+        // Update the service
+        service.title = title || service.title;
+        service.description = description || service.description;
+        service.price = price || service.price;
+        await service.save(); // Save the updated service
+        res.status(200).json({ message: 'Service updated successfully.', service });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error.', error });
+    }
+});
 // Delete a service (DELETE /services/:id)
 router.delete('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
     const { id } = req.params;
