@@ -9,6 +9,7 @@ const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct im
 const router = express_1.default.Router();
 // Example route to create a new review
 router.post('/', authMiddleware_1.authenticateJWT, (req, res, next) => {
+    // Ensure req.user is defined and has a tier
     if (req.user && req.user.tier) {
         res.status(201).json({ message: 'Review created successfully.' });
     }
@@ -18,6 +19,7 @@ router.post('/', authMiddleware_1.authenticateJWT, (req, res, next) => {
 });
 // Example route to get reviews for a service
 router.get('/:serviceId', authMiddleware_1.authenticateJWT, (req, res, next) => {
+    // Ensure req.user is defined
     if (req.user) {
         res.status(200).json({ message: 'Reviews fetched successfully.' });
     }

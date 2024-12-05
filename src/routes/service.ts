@@ -2,7 +2,7 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for typing
+import { AuthRequest } from '../types/authMiddleware';  // Import AuthRequest for typing
 
 const router = Router();
 

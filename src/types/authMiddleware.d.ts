@@ -7,7 +7,7 @@ export interface UserPayload {
   id: string;
   email?: string;  // Optional: email can be omitted
   username?: string;  // Optional: username can be omitted
-  tier: string;  // Required 'tier' property
+  tier: string;  // Ensure tier is required here
 }
 
 // Extend the Request interface to include user data

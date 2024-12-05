@@ -1,22 +1,19 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+// src/routes/profile.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
-const router = express_1.default.Router();
-// Route handler for getting user profile
+const router = (0, express_1.Router)();
+// Profile route with authentication
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
-    try {
-        // Access the user from req.user with 'tier' correctly included
-        const { id, email, username, tier } = req.user; // req.user is now typed and should have the 'tier' property
-        // Respond with the user data
-        res.json({ id, email, username, tier });
+    // Check if req.user is not defined
+    if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
     }
-    catch (error) {
-        next(error); // Forward the error to the error handler
-    }
+    // Destructure user data from req.user
+    const { id, email, username, tier } = req.user;
+    // Return user profile in response
+    return res.json({ id, email, username, tier });
 });
 exports.default = router;
 //# sourceMappingURL=profile.js.map
