@@ -1,4 +1,3 @@
-// src/routes/profile.ts
 import express, { Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Import JWT authentication middleware
 import { getUserProfile } from '../controllers/profileController'; // Import getUserProfile function from the controller
@@ -7,7 +6,7 @@ import { AuthRequest } from '../types/authMiddleware';  // Ensure this is import
 const router = express.Router();
 
 // Route to view the user's profile (GET /profile)
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Check if the user is authenticated (the user ID should be available from JWT middleware)
     if (!req.user?.id) {
@@ -18,7 +17,7 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
     const profileData = await getUserProfile(req.user.id); // Pass the user ID to the controller function
 
     // Return the profile data in the response
-    return res.status(200).json(profileData);
+    res.status(200).json(profileData);
   } catch (error) {
     // Pass any error to the next middleware (typically an error handler)
     next(error);

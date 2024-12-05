@@ -23,7 +23,7 @@ if (!checkEnvVars()) {
 
 // Import models after ensuring environment variables are loaded
 import { User } from '../models/user';  // Correct path to User model
-import { Service } from '../models/services';  // Ensure named import for Service model
+import Service from '../models/services';  // Corrected to use default import
 
 // Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({

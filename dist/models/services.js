@@ -1,11 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/services.ts
 const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("../config/database")); // Make sure sequelize instance is correctly imported
+const database_1 = require("../config/database"); // Make sure sequelize instance is correctly imported
 class Service extends sequelize_1.Model {
     id;
     title;
@@ -36,7 +32,7 @@ Service.init({
         allowNull: false,
     },
 }, {
-    sequelize: database_1.default,
+    sequelize: database_1.sequelize,
     modelName: 'Service',
 });
 exports.default = Service; // Default export

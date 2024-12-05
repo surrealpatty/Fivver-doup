@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateToken = exports.verifyToken = void 0;
+exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config/config")); // Importing config for JWT_SECRET and JWT_EXPIRATION
 const JWT_SECRET = config_1.default.JWT_SECRET;
 const JWT_EXPIRATION = config_1.default.JWT_EXPIRATION || '1h';
 // The `verifyToken` middleware to check JWT in headers
-const verifyToken = (req, res, next) => {
+const verifyToken = (req, // Use the custom AuthRequest type
+res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
@@ -40,4 +41,14 @@ const generateToken = (userId) => {
     });
 };
 exports.generateToken = generateToken;
+// Example middleware to authenticate the user using the token
+const authenticateJWT = (req, // Use the custom AuthRequest type here as well
+res, next) => {
+    // Check if userId exists in request
+    if (!req.userId) {
+        return res.status(403).json({ message: 'No valid token or userId found.' });
+    }
+    next();
+};
+exports.authenticateJWT = authenticateJWT;
 //# sourceMappingURL=auth.js.map
