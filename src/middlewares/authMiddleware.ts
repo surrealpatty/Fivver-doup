@@ -1,11 +1,13 @@
+// src/middlewares/authMiddleware.ts
+
 import jwt from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
 import { AuthRequest } from '../types/authMiddleware'; // Adjust import if necessary
 
 // Middleware to authenticate JWT and attach user data (including 'tier') to the request object
 export const authenticateJWT = (
-  req: AuthRequest, 
-  res: Response, 
+  req: AuthRequest,
+  res: Response,
   next: NextFunction
 ) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -30,4 +32,12 @@ export const authenticateJWT = (
   } catch (error) {
     res.status(400).json({ message: 'Invalid token.' });
   }
+};
+
+// Middleware to check if the user is authenticated (i.e., has a user object attached to the request)
+export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized. No user data found.' });
+  }
+  next();
 };
