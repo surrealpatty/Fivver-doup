@@ -1,17 +1,17 @@
 "use strict";
+// src/routes/api.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Corrected import
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import (remove checkAuth)
 const user_1 = require("@models/user"); // Correct alias for User model
 const services_1 = __importDefault(require("@models/services")); // Correct alias for Service model
 const router = (0, express_1.Router)();
 // POST route to create a service
 router.post('/services', // Define the endpoint
-authMiddleware_1.authenticateJWT, // Apply the authentication middleware (if required)
-authMiddleware_1.checkAuth, // Apply the authentication check middleware
+authMiddleware_1.authenticateJWT, // Apply the authentication middleware (no need for checkAuth)
 async (req, res) => {
     try {
         // Destructure and type the request body using ServiceCreationAttributes
