@@ -8,6 +8,7 @@ export interface UserPayload {
   id: string;
   email: string;
   username: string;
+  tier: string;  // Added 'tier' field here
 }
 
 /**
@@ -25,7 +26,7 @@ declare global {
 
 // Define and export the AuthRequest interface that extends Express.Request
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Optional user data from JWT
+  user?: UserPayload;  // Optional user data from JWT, including the 'tier' field
   userId?: number;     // Optional userId property
 }
 

@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Import JWT authentication middleware
 import { User } from '../models/user'; // Import User model
-import { Service } from '../models/services'; // Import Service model
+import Service from '../models/services'; // Use default import for Service model
 import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for type safety
 
 const router = express.Router();
