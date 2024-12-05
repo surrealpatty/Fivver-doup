@@ -6,21 +6,23 @@ import { AuthRequest } from '../types/authMiddleware';  // Ensure this is import
 const router = express.Router();
 
 // Route to view the user's profile (GET /profile)
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Updated return type to Promise<void>
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => { 
   try {
     // Check if the user is authenticated (the user ID should be available from JWT middleware)
     if (!req.user?.id) {
-      return res.status(401).json({ message: 'User not authenticated.' });  // Returning response with 401 if user not authenticated
+      // Returning response with 401 if user not authenticated
+      return res.status(401).json({ message: 'User not authenticated.' });
     }
 
     // Fetch user profile using the authenticated user's ID
     const profileData = await getUserProfile(req.user.id); // Pass the user ID to the controller function
 
-    // Return the profile data in the response
+    // Send the profile data as a response (this does not return anything)
     res.status(200).json(profileData);
+    // No return value after res.status() to maintain the expected void return type
   } catch (error) {
     // Pass any error to the next middleware (typically an error handler)
-    next(error);
+    next(error); // Don't need to explicitly return anything from here
   }
 });
 
