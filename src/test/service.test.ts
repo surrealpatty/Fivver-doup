@@ -1,16 +1,27 @@
 import request from 'supertest';
 import app from '../app'; // Import your Express app
 import { createMockUserToken } from './testHelpers'; // Import helper function to generate mock JWT tokens for users
+import { User } from '@models/user'; // Import User model if needed for DB interactions
+import Service from '@models/services';  // Import Service model for DB interactions
 
 describe('Service Routes', () => {
   let mockUserToken: string;
+  let userId: string;
 
   // Setup before all tests to create a mock user and generate JWT token
   beforeAll(async () => {
-    // In your real test setup, you may need to create a mock user in the database
-    // and then generate a valid JWT token for that user.
-    const user = { id: '1', email: 'testuser@example.com', username: 'testuser', password: 'password123' };
-    mockUserToken = createMockUserToken(user); // Mock the JWT token for this user
+    // Create a mock user in the database (if needed)
+    const user = await User.create({ email: 'testuser@example.com', username: 'testuser', password: 'password123' });
+    userId = user.id;  // Store the user ID for later tests
+
+    // Generate a valid JWT token for that user
+    mockUserToken = createMockUserToken({ id: user.id, email: user.email, username: user.username });
+  });
+
+  afterAll(async () => {
+    // Clean up the mock user and any associated services after all tests
+    await Service.destroy({ where: { userId } });  // Delete any services created for the user
+    await User.destroy({ where: { id: userId } });  // Delete the mock user
   });
 
   it('should create a new service', async () => {
@@ -32,7 +43,7 @@ describe('Service Routes', () => {
       .send({ title: 'Test Service' }); // Missing description and price
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('All fields are required.');
+    expect(response.body.message).toBe('Missing required fields: userId, title, description, and price are mandatory.');
   });
 
   it('should update an existing service', async () => {
@@ -91,7 +102,7 @@ describe('Service Routes', () => {
 
   it('should fail to delete a service if the user is not the owner', async () => {
     // Create a service for another user (assuming user with id '2' exists)
-    const otherUserToken = createMockUserToken({ id: '2' }); // Mock JWT for another user
+    const otherUserToken = createMockUserToken({ id: '2', email: 'another@example.com', username: 'anotheruser' });
     const createResponse = await request(app)
       .post('/services')
       .set('Authorization', `Bearer ${otherUserToken}`)
