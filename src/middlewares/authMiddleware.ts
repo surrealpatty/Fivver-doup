@@ -9,7 +9,11 @@ import { UserPayload } from '../types/authMiddleware';  // Ensure proper import 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';  // Use an environment variable for security
 
 // Middleware to authenticate JWT token
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticateJWT = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void => {
   // Extract the token from the Authorization header
   const token = req.headers.authorization?.split(' ')[1];  // Bearer token
   

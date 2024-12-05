@@ -1,4 +1,4 @@
-// src/types/authMiddleware.ts
+// src/types/authMiddleware.d.ts
 
 import { Request } from 'express';
 
