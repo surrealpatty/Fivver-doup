@@ -1,20 +1,23 @@
-import express, { Response, NextFunction } from 'express';
+// src/routes/profile.ts
+
+import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for typing
+import { AuthRequest } from '../types/authMiddleware'; // Correctly import the AuthRequest type
 
-const router = express.Router();
+const router = Router();
 
-// Route handler for getting user profile
+// Profile route with authentication
 router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  try {
-    // Access the user from req.user with 'tier' correctly included
-    const { id, email, username, tier } = req.user!; // req.user is now typed and should have the 'tier' property
-
-    // Respond with the user data
-    res.json({ id, email, username, tier });
-  } catch (error) {
-    next(error); // Forward the error to the error handler
+  // Check if req.user is not defined
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
+
+  // Destructure user data from req.user
+  const { id, email, username, tier } = req.user; 
+
+  // Return user profile in response
+  return res.json({ id, email, username, tier });
 });
 
 export default router;

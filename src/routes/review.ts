@@ -8,6 +8,7 @@ const router = express.Router();
 
 // Example route to create a new review
 router.post('/', authenticateJWT, (req: AuthRequest, res: Response, next: NextFunction): void => {
+  // Ensure req.user is defined and has a tier
   if (req.user && req.user.tier) {
     res.status(201).json({ message: 'Review created successfully.' });
   } else {
@@ -17,6 +18,7 @@ router.post('/', authenticateJWT, (req: AuthRequest, res: Response, next: NextFu
 
 // Example route to get reviews for a service
 router.get('/:serviceId', authenticateJWT, (req: AuthRequest, res: Response, next: NextFunction): void => {
+  // Ensure req.user is defined
   if (req.user) {
     res.status(200).json({ message: 'Reviews fetched successfully.' });
   } else {
