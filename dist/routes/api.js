@@ -1,4 +1,5 @@
 "use strict";
+// src/routes/api.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -10,7 +11,8 @@ const services_1 = __importDefault(require("@models/services")); // Correct alia
 const router = (0, express_1.Router)();
 // POST route to create a service
 router.post('/services', // Define the endpoint
-authMiddleware_1.checkAuth, // Apply the authentication middleware (if required)
+authMiddleware_1.authenticateJWT, // Apply the authentication middleware (if required)
+authMiddleware_1.checkAuth, // Apply the authentication check middleware
 async (req, res) => {
     try {
         // Destructure and type the request body using ServiceCreationAttributes
