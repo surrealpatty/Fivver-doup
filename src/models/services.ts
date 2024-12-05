@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from 'config/database'; // Correct alias for the sequelize instance
 
 // Service attributes and creation attributes interface
 export interface ServiceAttributes {
@@ -53,6 +53,7 @@ Service.init(
   {
     sequelize, // Reference to the Sequelize instance
     modelName: 'Service', // Name of the model in database
+    tableName: 'services', // The table name in the database
     timestamps: true, // Enable timestamps if you want to use createdAt and updatedAt
   }
 );
