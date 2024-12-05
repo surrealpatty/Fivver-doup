@@ -1,10 +1,11 @@
 // src/routes/api.ts
 
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT, checkAuth } from '../middlewares/authMiddleware';  // Corrected import
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
 import { User } from '@models/user';  // Correct alias for User model
 import Service from '@models/services';  // Correct alias for Service model
+import { AuthRequest } from '../types/authMiddleware';  // Import AuthRequest interface
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.post(
   '/services',  // Define the endpoint
   authenticateJWT,  // Apply the authentication middleware (if required)
   checkAuth,  // Apply the authentication check middleware
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: AuthRequest, res: Response): Promise<void> => {  // Updated to use AuthRequest
     try {
       // Destructure and type the request body using ServiceCreationAttributes
       const { userId, title, description, price }: ServiceCreationAttributes = req.body;
@@ -36,7 +37,7 @@ router.post(
         return;
       }
 
-      // Check if the user exists
+      // Check if the user exists (use the userId from the authenticated request)
       const user = await User.findByPk(userId);
       if (!user) {
         res.status(404).json({
