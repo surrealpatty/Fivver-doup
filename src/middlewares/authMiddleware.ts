@@ -1,37 +1,35 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middlewares/authMiddleware.ts
+
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types/authMiddleware';  // Correct import for AuthRequest
-import { UserPayload } from '../types/authMiddleware';  // Correct import for UserPayload
+import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types/authMiddleware';  // Importing AuthRequest type
+import { UserPayload } from '../types/authMiddleware';  // Importing UserPayload type
 
-// Declare the return type of the middleware as void
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
-  // Get token from Authorization header (split to remove 'Bearer ')
-  const token = req.header('Authorization')?.split(' ')[1];  
+export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
+  const token = req.headers.authorization?.split(' ')[1];
 
-  // If no token is found, send a 403 response
   if (!token) {
-    return res.status(403).json({ message: 'No token provided.' });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  // Verify the JWT token
-  jwt.verify(token, 'your_secret_key', (err, decoded: any) => {
+  jwt.verify(token, process.env.JWT_SECRET || '', (err, user) => {
     if (err) {
-      // If token is invalid or expired, send a 403 response
-      return res.status(403).json({ message: 'Invalid or expired token.' });
+      return res.status(403).json({ message: 'Forbidden' });
     }
 
-    // Ensure decoded JWT contains the required properties, including 'tier'
-    const userPayload: UserPayload = {
-      id: decoded.id,
-      email: decoded.email,
-      username: decoded.username,
-      tier: decoded.tier,  // 'tier' should be present in decoded token
-    };
-
-    // Add the user payload to the request object, type cast to AuthRequest
-    (req as AuthRequest).user = userPayload;
-
-    // Proceed to the next middleware or route handler
+    // Assuming the 'user' object from JWT contains the 'tier' information
+    if (user) {
+      // Cast the 'user' to match our UserPayload interface
+      const userPayload: UserPayload = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        tier: user.tier, // Make sure 'tier' is coming from the JWT or elsewhere
+      };
+      
+      req.user = userPayload;  // Attach the user info (including tier) to req.user
+    }
+    
     next();
   });
 };
