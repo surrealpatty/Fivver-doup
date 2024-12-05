@@ -1,5 +1,3 @@
-// src/types/authMiddleware.d.ts
-
 import { Request } from 'express';
 
 // Define the structure of the user data attached to the request
