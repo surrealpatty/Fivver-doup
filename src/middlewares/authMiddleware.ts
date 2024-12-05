@@ -1,5 +1,3 @@
-// src/middlewares/authMiddleware.ts
-
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/authMiddleware';  // Importing AuthRequest type
@@ -8,12 +6,14 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' });  // Return response directly
+    res.status(401).json({ message: 'Unauthorized' });  // Send response directly, no return needed
+    return;  // Terminate the function, no need to return anything
   }
 
   jwt.verify(token, process.env.JWT_SECRET || '', (err, user) => {
     if (err) {
-      return res.status(403).json({ message: 'Forbidden' });  // Return response directly
+      res.status(403).json({ message: 'Forbidden' });  // Send response directly, no return needed
+      return;  // Terminate the function, no need to return anything
     }
 
     if (user) {
@@ -28,6 +28,6 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
       req.user = userPayload;  // Attach user info to req.user
     }
     
-    next();  // Move to next middleware
+    next();  // Proceed to next middleware
   });
 };

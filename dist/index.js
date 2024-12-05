@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Import sequelize instance
 const user_1 = __importDefault(require("./routes/user")); // Import user routes
-const profile_1 = __importDefault(require("./routes/profile")); // Import the profile routes
+const profile_1 = require("./routes/profile"); // Correct named import
 const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
@@ -36,7 +36,7 @@ database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data lo
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', user_1.default); // Register the user routes under /api/users
 // Register the profile route under /api/profile
-app.use('/api/profile', profile_1.default); // Register profile route
+app.use('/api/profile', profile_1.router); // Register profile route
 // Test database connection
 database_1.sequelize.authenticate()
     .then(() => {
