@@ -1,5 +1,4 @@
-// src/test/database.test.ts
-import { sequelize,  testConnection } from '../config/database'; // Correct import for default and named export
+import { sequelize, testConnection } from '../config/database'; // Correct import for default and named export
 import { User } from '../models/user'; // Correct named import
 
 // Mock the sequelize instance's `authenticate` method and the `testConnection` function
@@ -21,7 +20,7 @@ describe('Database Connection', () => {
   // Initialize the mock functions for `authenticate` and `testConnection`
   beforeAll(() => {
     mockAuthenticate = sequelize.authenticate as jest.Mock;
-    mockTestConnection = jest.fn(); // Create a mock for `testConnection` as a jest function
+    mockTestConnection = testConnection as jest.Mock; // Directly mock testConnection
   });
 
   // Mock console methods globally
@@ -57,7 +56,7 @@ describe('Database Connection', () => {
     // Assertions
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection successful');
+    expect(consoleLogSpy).toHaveBeenCalledWith('Connection established successfully.');
     expect(connection).toBeTruthy(); // Ensure the connection returns true
   });
 

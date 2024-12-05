@@ -11,3 +11,13 @@ const sequelize = new Sequelize({
 
 // Export sequelize instance for use in other parts of the application
 export { sequelize };
+
+// Function to test the database connection
+export const testConnection = async () => {
+  try {
+    await sequelize.authenticate(); // Test the database connection
+    console.log('Connection established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
