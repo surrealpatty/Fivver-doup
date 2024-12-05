@@ -11,7 +11,7 @@ export interface UserCreationAttributes {
   isVerified?: boolean; // Optional verified field
 }
 
-@Table({ tableName: 'users', timestamps: true })
+@Table({ tableName: 'users', timestamps: true }) // Only use table-specific options here
 export class User extends Model<User, UserCreationAttributes> {
   // Primary key for the user
   @PrimaryKey
