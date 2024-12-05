@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import JWT authentication middleware
 const user_1 = require("../models/user"); // Import User model
-const services_1 = require("../models/services"); // Import Service model
+const services_1 = __importDefault(require("../models/services")); // Use default import for Service model
 const router = express_1.default.Router();
 // Route to view the user's profile and their services (GET /profile)
 router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
@@ -19,7 +19,7 @@ router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
         // Fetch user details from the database
         const user = await user_1.User.findByPk(userId);
         // Fetch all services that belong to the user
-        const services = await services_1.Service.findAll({ where: { userId } });
+        const services = await services_1.default.findAll({ where: { userId } });
         // If the user is not found, return a 404 error
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });

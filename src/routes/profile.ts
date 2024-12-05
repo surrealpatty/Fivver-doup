@@ -34,6 +34,7 @@ router.get('/', authenticateJWT, async (req: AuthRequest, res: Response): Promis
         id: user.id,
         username: user.username,
         email: user.email,
+        tier: req.user?.tier, // Include the user's tier from the JWT
       },
       services, // Include the services related to the user
     });
