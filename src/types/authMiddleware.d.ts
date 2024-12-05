@@ -1,14 +1,10 @@
-import { Request } from 'express';
-
-// Define the structure of the UserPayload interface
 export interface UserPayload {
-    id: string;
-    email: string;
-    username: string;
-    tier: string;  // Ensure 'tier' is required here
+  id: string;
+  email: string;
+  username: string;
+  tier: string;  // Ensure 'tier' is defined as a required field here
 }
 
-// Extending the Express Request type to include the `user` object
 export interface AuthRequest extends Request {
-    user?: UserPayload;  // This will include the 'tier' field
+  user?: UserPayload;  // UserPayload includes 'tier' and other fields
 }

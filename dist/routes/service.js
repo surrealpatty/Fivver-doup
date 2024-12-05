@@ -17,24 +17,63 @@ router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
         // Your route logic, e.g., fetching services or performing actions based on the user's tier
         res.status(200).json({ message: 'Success', tier: userTier });
     }
-    catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
+    catch (error) { // Type 'error' as 'unknown'
+        // Narrow the type before accessing properties
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Server error', error: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Unknown error' });
+        }
     }
 });
 // Example of a route using checkTier middleware
 router.put('/:id', authMiddleware_1.authenticateJWT, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
-    // Your update logic
-    res.status(200).json({ message: 'Service updated successfully' });
+    try {
+        // Your update logic
+        res.status(200).json({ message: 'Service updated successfully' });
+    }
+    catch (error) { // Type 'error' as 'unknown'
+        // Narrow the type before accessing properties
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Server error', error: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Unknown error' });
+        }
+    }
 });
 // Example of a POST route with user tier check
 router.post('/', authMiddleware_1.authenticateJWT, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
-    // Your post logic
-    res.status(201).json({ message: 'Service created successfully' });
+    try {
+        // Your post logic
+        res.status(201).json({ message: 'Service created successfully' });
+    }
+    catch (error) { // Type 'error' as 'unknown'
+        // Narrow the type before accessing properties
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Server error', error: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Unknown error' });
+        }
+    }
 });
 // Example of a DELETE route
 router.delete('/:id', authMiddleware_1.authenticateJWT, async (req, res) => {
-    // Your delete logic
-    res.status(204).json({ message: 'Service deleted successfully' });
+    try {
+        // Your delete logic
+        res.status(204).json({ message: 'Service deleted successfully' });
+    }
+    catch (error) { // Type 'error' as 'unknown'
+        // Narrow the type before accessing properties
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Server error', error: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Unknown error' });
+        }
+    }
 });
 exports.default = router;
 //# sourceMappingURL=service.js.map
