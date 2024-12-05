@@ -23,7 +23,7 @@ if (!checkEnvVars()) {
 
 // Import models after ensuring environment variables are loaded
 import { User } from '../models/user';  // Correct path to User model
-import Service from '../models/services';  // Corrected to use default import
+import { Service } from '../models/services';  // Ensure you're importing named Service model correctly
 
 // Initialize Sequelize instance with database connection details
 const sequelize = new Sequelize({
@@ -32,7 +32,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USER as string,  // Database user from .env (type assertion)
   password: process.env.DB_PASSWORD as string,  // Database password from .env (type assertion)
   database: process.env.DB_NAME as string,  // Database name from .env (type assertion)
-  models: [User, Service],  // Pass models correctly, no default imports
+  models: [User, Service],  // Pass model classes directly to sequelize-typescript
   dialectOptions: {
     authPlugins: {
       mysql_native_password: () => {},  // Disable default auth plugin for MySQL 8 (if needed)

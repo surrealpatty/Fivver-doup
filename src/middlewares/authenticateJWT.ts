@@ -8,7 +8,7 @@ export const authenticateJWT = (
   req: AuthRequest, 
   res: Response, 
   next: NextFunction
-): Promise<Response> | void => {
+): Promise<void> | void => {  // The return type is now `Promise<void>` or `void`
   const token = req.headers['authorization']?.split(' ')[1];  // Extract token from Authorization header
 
   if (!token) {

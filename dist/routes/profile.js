@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/profile.ts
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import JWT authentication middleware
 const profileController_1 = require("../controllers/profileController"); // Import getUserProfile function from the controller
@@ -18,7 +17,7 @@ router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) 
         // Fetch user profile using the authenticated user's ID
         const profileData = await (0, profileController_1.getUserProfile)(req.user.id); // Pass the user ID to the controller function
         // Return the profile data in the response
-        return res.status(200).json(profileData);
+        res.status(200).json(profileData);
     }
     catch (error) {
         // Pass any error to the next middleware (typically an error handler)
