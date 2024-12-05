@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import JWT authentication middleware
+const authMiddleware_1 = require("../middlewares/authMiddleware");
 const services_1 = __importDefault(require("../models/services")); // Correct default import
-const tierMiddleware_1 = require("../middlewares/tierMiddleware"); // Import tier check middleware
+const tierMiddleware_1 = require("../middlewares/tierMiddleware");
 const router = express_1.default.Router();
 // Route to edit a service (PUT /service/:id)
 router.put('/:id', authMiddleware_1.authenticateJWT, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
@@ -45,9 +45,7 @@ router.get('/', authMiddleware_1.authenticateJWT, async (req, res) => {
     }
 });
 // Route to create a new service (POST /services)
-router.post('/', authMiddleware_1.authenticateJWT, // Protect this route with JWT authentication
-(0, tierMiddleware_1.checkTier)('paid'), // Ensure the user has the required tier (e.g., 'paid')
-async (req, res) => {
+router.post('/', authMiddleware_1.authenticateJWT, (0, tierMiddleware_1.checkTier)('paid'), async (req, res) => {
     try {
         const { title, description, price } = req.body;
         // Input validation

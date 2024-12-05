@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Make sure sequelize instance is correctly imported
+import { sequelize } from '../config/database';
 
-// Define the interface for the Service model attributes
+// Service attributes and creation attributes interface
 export interface ServiceAttributes {
   id: number;
   title: string;
@@ -10,17 +10,22 @@ export interface ServiceAttributes {
   userId: number;
 }
 
-// Define the interface for the creation of a Service (without the 'id' field)
+// Service creation attributes - id is optional on creation
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
+// Sequelize Service model class
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public title!: string;
   public description!: string;
   public price!: number;
   public userId!: number;
+
+  // Timestamps (createdAt, updatedAt) are handled automatically by Sequelize, 
+  // so no need to define them unless you want custom names.
 }
 
+// Initialize the Service model
 Service.init(
   {
     id: {
@@ -46,9 +51,10 @@ Service.init(
     },
   },
   {
-    sequelize,
-    modelName: 'Service',
+    sequelize, // Reference to the Sequelize instance
+    modelName: 'Service', // Name of the model in database
+    timestamps: true, // Enable timestamps if you want to use createdAt and updatedAt
   }
 );
 
-export default Service;  // Default export
+export default Service;  // Default export of the Service model

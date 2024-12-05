@@ -12,7 +12,7 @@ router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) 
     try {
         // Check if the user is authenticated (the user ID should be available from JWT middleware)
         if (!req.user?.id) {
-            return res.status(401).json({ message: 'User not authenticated.' });
+            return res.status(401).json({ message: 'User not authenticated.' }); // Returning response with 401 if user not authenticated
         }
         // Fetch user profile using the authenticated user's ID
         const profileData = await (0, profileController_1.getUserProfile)(req.user.id); // Pass the user ID to the controller function
