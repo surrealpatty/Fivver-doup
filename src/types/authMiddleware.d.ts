@@ -7,7 +7,7 @@ export interface UserPayload {
   id: string;
   email: string;
   username: string;
-  tier: string;  // Ensure that tier is included
+  tier: string;  // Ensure that 'tier' is included in the UserPayload structure
 }
 
 // Extend the Request interface to include user data
