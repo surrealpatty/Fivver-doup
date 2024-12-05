@@ -1,3 +1,5 @@
+// src/routes/api.ts
+
 import { Router, Request, Response } from 'express';
 import { authenticateJWT, checkAuth } from '../middlewares/authMiddleware';  // Corrected import
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
@@ -9,7 +11,8 @@ const router = Router();
 // POST route to create a service
 router.post(
   '/services',  // Define the endpoint
-  checkAuth,  // Apply the authentication middleware (if required)
+  authenticateJWT,  // Apply the authentication middleware (if required)
+  checkAuth,  // Apply the authentication check middleware
   async (req: Request, res: Response): Promise<void> => {
     try {
       // Destructure and type the request body using ServiceCreationAttributes
