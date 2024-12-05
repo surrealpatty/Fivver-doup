@@ -1,48 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                     // Keep the target as ESNext for modern features
-    "module": "CommonJS",                    // Use CommonJS modules for Node.js compatibility
-    "moduleResolution": "node",              // Resolve modules using Node.js style resolution
-    "strict": true,                          // Enable strict type checking (recommended for better type safety)
-    "skipLibCheck": true,                    // Skip library checking for faster compilation
-    "esModuleInterop": true,                 // Enable ES Module interoperability
+    "target": "ESNext",                      // Keep the target as ESNext for modern features
+    "module": "CommonJS",                     // Use CommonJS modules for Node.js compatibility
+    "moduleResolution": "node",               // Resolve modules using Node.js style resolution
+    "strict": true,                           // Enable strict type checking (recommended for better type safety)
+    "skipLibCheck": true,                     // Skip library checking for faster compilation
+    "esModuleInterop": true,                  // Enable ES Module interoperability
     "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
-    "baseUrl": "./src",                      // Set base URL for module resolution
+    "baseUrl": "./src",                       // Set base URL for module resolution
     "paths": {
-      "*": ["node_modules/*"],               // Path resolution for node_modules
-      "src/*": ["./*"],                       // Allow absolute imports from the 'src' directory
-      "@models/*": ["models/*"],             // Define custom path for models (if you use "@models" in imports)
-      "@config/*": ["config/*"],             // Define custom path for config (if you use "@config" in imports)
-      "types/*": ["src/types/*"]             // Ensure 'types' is mapped correctly to 'src/types'
+      "@models/*": ["src/models/*"],           // Correct model path alias
+      "@config/*": ["src/config/*"],           // Correct config path alias
+      "@types/*": ["src/types/*"],             // Ensure types are correctly mapped
+      "types/*": ["src/types/*"]               // Map the 'types' directory correctly
     },
-    "outDir": "./dist",                      // Output directory for compiled files
-    "rootDir": "./src",                      // Root directory for source files
-    "allowJs": true,                         // Allow JavaScript files (useful if you have JS code)
-    "declaration": true,                     // Generate declaration files
-    "sourceMap": true,                       // Generate source maps
-    "experimentalDecorators": true,          // Enable experimental decorators
-    "emitDecoratorMetadata": true,           // Enable decorator metadata
-    "resolveJsonModule": true,               // Allow importing JSON files
+    "outDir": "./dist",                       // Output directory for compiled files
+    "rootDir": "./src",                       // Root directory for source files
+    "allowJs": true,                          // Allow JavaScript files (useful if you have JS code)
+    "declaration": true,                      // Generate declaration files
+    "sourceMap": true,                        // Generate source maps
+    "experimentalDecorators": true,           // Enable experimental decorators
+    "emitDecoratorMetadata": true,            // Enable decorator metadata
+    "resolveJsonModule": true,                // Allow importing JSON files
     "typeRoots": [
       "./node_modules/@types", 
-      "./src/types"                          // Ensure custom types are included
+      "./src/types"                           // Ensure custom types are included
     ],
-    "lib": ["esnext"],                       // Use latest ES features
+    "lib": ["esnext"],                        // Use latest ES features
     "types": ["node", "jest", "sequelize", "express"], // Include global types
-    "noImplicitAny": false                   // Allow 'any' type (you can enable this for stricter typing)
+    "noImplicitAny": false                    // Allow 'any' type (you can enable this for stricter typing)
   },
   "include": [
-    "src/**/*.ts",                           // Include all TS files in the src directory
-    "src/models/**/*.ts",                    // Include models
-    "src/types/**/*.ts",                     // Include custom types
-    "src/test/**/*.ts",                      // Include test files
-    "src/test/**/*.tsx"                      // Include JSX/TSX files in tests
+    "src/**/*.ts",                            // Include all TS files in the src directory
+    "src/models/**/*.ts",                     // Include models
+    "src/types/**/*.ts",                      // Include custom types
+    "src/test/**/*.ts",                       // Include test files
+    "src/test/**/*.tsx"                       // Include JSX/TSX files in tests
   ],
   "exclude": [
-    "node_modules",                          // Exclude node_modules
-    "dist",                                  // Exclude dist (build directory)
-    "build",                                 // Exclude build directory
-    "src/test/**/*.test.ts",                 // Exclude test files (assuming you don't need them for compilation)
-    "src/test/**/*.test.tsx"                 // Exclude TSX test files
+    "node_modules",                           // Exclude node_modules
+    "dist",                                   // Exclude dist (build directory)
+    "build",                                  // Exclude build directory
+    "src/test/**/*.test.ts",                  // Exclude test files (assuming you don't need them for compilation)
+    "src/test/**/*.test.tsx"                  // Exclude TSX test files
   ]
 }
