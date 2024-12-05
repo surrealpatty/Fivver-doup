@@ -16,27 +16,59 @@ router.get('/', authenticateJWT, async (req: AuthRequest, res: Response) => {
 
     // Your route logic, e.g., fetching services or performing actions based on the user's tier
     res.status(200).json({ message: 'Success', tier: userTier });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+  } catch (error: unknown) {  // Type 'error' as 'unknown'
+    // Narrow the type before accessing properties
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Unknown error' });
+    }
   }
 });
 
 // Example of a route using checkTier middleware
 router.put('/:id', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {
-  // Your update logic
-  res.status(200).json({ message: 'Service updated successfully' });
+  try {
+    // Your update logic
+    res.status(200).json({ message: 'Service updated successfully' });
+  } catch (error: unknown) {  // Type 'error' as 'unknown'
+    // Narrow the type before accessing properties
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
 });
 
 // Example of a POST route with user tier check
 router.post('/', authenticateJWT, checkTier('paid'), async (req: AuthRequest, res: Response) => {
-  // Your post logic
-  res.status(201).json({ message: 'Service created successfully' });
+  try {
+    // Your post logic
+    res.status(201).json({ message: 'Service created successfully' });
+  } catch (error: unknown) {  // Type 'error' as 'unknown'
+    // Narrow the type before accessing properties
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
 });
 
 // Example of a DELETE route
 router.delete('/:id', authenticateJWT, async (req: AuthRequest, res: Response) => {
-  // Your delete logic
-  res.status(204).json({ message: 'Service deleted successfully' });
+  try {
+    // Your delete logic
+    res.status(204).json({ message: 'Service deleted successfully' });
+  } catch (error: unknown) {  // Type 'error' as 'unknown'
+    // Narrow the type before accessing properties
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
 });
 
 export default router;
