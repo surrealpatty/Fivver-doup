@@ -86,7 +86,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 exports.User = User = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true })
+    (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true }) // Only use table-specific options here
 ], User);
 exports.default = User;
 //# sourceMappingURL=user.js.map
