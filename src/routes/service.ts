@@ -1,36 +1,47 @@
-import express, { Response } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Import authenticateJWT
-import { checkTier } from '../middlewares/tierMiddleware'; // Ensure checkTier is correct
-import Service from '../models/services'; // Correct import for Service model
-import { AuthRequest } from '../types/authMiddleware'; // Correct relative path for AuthRequest
+import express, { Response, Request } from 'express';
+import { authenticateJWT } from '../middlewares/authMiddleware'; // Import your JWT authentication middleware
+import { checkTier } from '../middlewares/tierMiddleware'; // Import the checkTier middleware to validate user tier
+import Service from '../models/services'; // Import the Service model
+import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for type safety
 
 const router = express.Router();
 
-// POST route to create a service
+// View all services (GET /services)
+router.get('/', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const services = await Service.findAll(); // Fetch all services from the database
+    res.status(200).json({ services });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+// Create a new service (POST /services)
 router.post(
   '/',
   authenticateJWT, // Protect this route with JWT authentication
   checkTier('paid'), // Ensure the user has the required tier (e.g., 'paid')
-  async (req: AuthRequest, res: Response): Promise<void> => { // Ensure the handler returns Promise<void>
+  async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const { title, description, price } = req.body;
 
       // Input validation
       if (!title || !description || price === undefined) {
         res.status(400).json({ message: 'All fields are required.' });
-        return; // Return after sending the response to prevent further execution
+        return;
       }
 
       // Get the user ID from the JWT (from the `req.user` property)
-      const userId = parseInt(req.user?.id || '', 10);
-      if (isNaN(userId)) {
+      const userId = req.user?.id;
+      if (!userId || isNaN(Number(userId))) {
         res.status(400).json({ message: 'Invalid user ID.' });
-        return; // Return after sending the response
+        return;
       }
 
       // Create the service in the database
       const service = await Service.create({
-        userId,
+        userId: Number(userId), // Ensure the ID is converted to a number
         title,
         description,
         price,
@@ -44,5 +55,30 @@ router.post(
     }
   }
 );
+
+// Delete a service (DELETE /services/:id)
+router.delete('/:id', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const service = await Service.findByPk(id); // Find the service by primary key
+    if (!service) {
+      res.status(404).json({ message: 'Service not found.' });
+      return;
+    }
+
+    // Ensure the user can only delete their own services
+    if (service.userId !== Number(req.user?.id)) {
+      res.status(403).json({ message: 'Forbidden: You can only delete your own services.' });
+      return;
+    }
+
+    await service.destroy(); // Delete the service from the database
+    res.status(200).json({ message: 'Service deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
 
 export default router;
