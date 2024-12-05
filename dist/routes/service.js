@@ -1,5 +1,4 @@
 "use strict";
-// src/routes/service.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -61,6 +60,38 @@ async (req, res) => {
             message: 'Internal server error while creating the service.',
             error: error instanceof Error ? error.message : 'UnknownError',
         });
+    }
+});
+// PUT route to update a service
+router.put('/services/:id', // Define the endpoint with the service ID in the route
+authMiddleware_1.authenticateJWT, // Apply the authentication middleware
+async (req, res) => {
+    try {
+        const serviceId = req.params.id;
+        const { title, description, price } = req.body;
+        // Find the service by ID
+        const service = await services_1.default.findByPk(serviceId);
+        if (!service) {
+            // If service is not found, return 404
+            return res.status(404).json({ message: 'Service not found' });
+        }
+        // Check if the authenticated user is the owner of the service
+        if (service.userId !== req.user.id) {
+            return res.status(403).json({ message: 'You can only edit your own services' });
+        }
+        // Update the service fields
+        service.title = title;
+        service.description = description;
+        service.price = price;
+        // Save the updated service
+        await service.save();
+        // Return a success message
+        res.status(200).json({ message: 'Service updated successfully' });
+    }
+    catch (error) {
+        // Handle errors and return a 500 response
+        console.error('Error updating service:', error);
+        res.status(500).json({ message: 'Error updating service', error: error instanceof Error ? error.message : 'UnknownError' });
     }
 });
 exports.default = router;
