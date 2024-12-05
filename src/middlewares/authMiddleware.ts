@@ -1,12 +1,12 @@
 // src/middlewares/authMiddleware.ts
 
 import { Response, NextFunction } from 'express';
-import { JwtPayload } from 'jsonwebtoken';  // Import JwtPayload to type the decoded token correctly
-import { AuthRequest } from '../types/authMiddleware'; // Import the correct type for request
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload as JWTDecodedPayload } from 'jsonwebtoken';  // Import JwtPayload from jsonwebtoken
+import { AuthRequest } from '../types/authMiddleware';  // Correct import for custom request type
+import { UserPayload } from '../types/authMiddleware';  // Ensure proper import of UserPayload type
 
-// Define your JWT secret key
-const JWT_SECRET = 'your_jwt_secret_key';  // Replace with your actual secret key
+// Define your JWT secret key (make sure this is securely handled in production, e.g., from environment variables)
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';  // Use an environment variable for security
 
 // Middleware to authenticate JWT token
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -24,7 +24,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
     }
 
     // Ensure decoded is typed as JwtPayload, and assert as UserPayload for proper typing
-    const decodedPayload = decoded as JwtPayload & { id: string; email?: string; username?: string; tier: string };
+    const decodedPayload = decoded as JWTDecodedPayload & UserPayload;  // Correct typing with tier included
 
     // Attach the user data to the request object
     req.user = {
@@ -34,6 +34,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
       tier: decodedPayload.tier,  // Ensure 'tier' is present
     };
 
+    // Pass control to the next middleware
     next();
   });
 };

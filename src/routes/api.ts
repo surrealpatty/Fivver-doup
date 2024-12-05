@@ -1,7 +1,5 @@
-// src/routes/api.ts
-
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import (remove checkAuth)
+import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import (no need for checkAuth)
 import { ServiceCreationAttributes } from '@models/services';  // Import the model attributes type
 import { User } from '@models/user';  // Correct alias for User model
 import Service from '@models/services';  // Correct alias for Service model
@@ -12,7 +10,7 @@ const router = Router();
 // POST route to create a service
 router.post(
   '/services',  // Define the endpoint
-  authenticateJWT,  // Apply the authentication middleware (no need for checkAuth)
+  authenticateJWT,  // Apply the authentication middleware
   async (req: AuthRequest, res: Response): Promise<void> => {  // Updated to use AuthRequest
     try {
       // Destructure and type the request body using ServiceCreationAttributes
