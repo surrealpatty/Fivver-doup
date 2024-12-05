@@ -1,8 +1,8 @@
 import request from 'supertest';
-import app from '../app'; // Import your Express app
+import { app } from '../index'; // Import your Express app
 import { createMockUserToken } from './testHelpers'; // Import helper function to generate mock JWT tokens for users
-import { User } from '@models/user'; // Import User model if needed for DB interactions
-import Service from '@models/services';  // Import Service model for DB interactions
+import { User } from 'models/user'; // Import User model if needed for DB interactions
+import Service from 'models/service';  // Import Service model for DB interactions
 
 describe('Service Routes', () => {
   let mockUserToken: string;
