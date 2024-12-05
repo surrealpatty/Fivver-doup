@@ -1,34 +1,31 @@
 "use strict";
+// src/middlewares/authMiddleware.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Declare the return type of the middleware as void
 const authenticateJWT = (req, res, next) => {
-    // Get token from Authorization header (split to remove 'Bearer ')
-    const token = req.header('Authorization')?.split(' ')[1];
-    // If no token is found, send a 403 response
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(403).json({ message: 'No token provided.' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
-    // Verify the JWT token
-    jsonwebtoken_1.default.verify(token, 'your_secret_key', (err, decoded) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || '', (err, user) => {
         if (err) {
-            // If token is invalid or expired, send a 403 response
-            return res.status(403).json({ message: 'Invalid or expired token.' });
+            return res.status(403).json({ message: 'Forbidden' });
         }
-        // Ensure decoded JWT contains the required properties, including 'tier'
-        const userPayload = {
-            id: decoded.id,
-            email: decoded.email,
-            username: decoded.username,
-            tier: decoded.tier, // 'tier' should be present in decoded token
-        };
-        // Add the user payload to the request object, type cast to AuthRequest
-        req.user = userPayload;
-        // Proceed to the next middleware or route handler
+        // Assuming the 'user' object from JWT contains the 'tier' information
+        if (user) {
+            // Cast the 'user' to match our UserPayload interface
+            const userPayload = {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                tier: user.tier, // Make sure 'tier' is coming from the JWT or elsewhere
+            };
+            req.user = userPayload; // Attach the user info (including tier) to req.user
+        }
         next();
     });
 };

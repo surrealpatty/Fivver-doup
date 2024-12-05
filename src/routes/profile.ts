@@ -2,22 +2,16 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types/authMiddleware'; // Correctly import the AuthRequest type
+import { AuthRequest } from '../types/authMiddleware';
 
 const router = Router();
 
-// Profile route with authentication
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  // Check if req.user is not defined
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    res.status(403).json({ message: 'User not authenticated' });
+    return;  // Ensure flow terminates after returning the response
   }
 
-  // Destructure user data from req.user
-  const { id, email, username, tier } = req.user; 
-
-  // Return user profile in response
-  return res.json({ id, email, username, tier });
+  // Profile logic here...
+  res.status(200).json({ profile: req.user });  // Send the profile
 });
-
-export default router;
