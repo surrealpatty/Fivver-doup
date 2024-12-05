@@ -1,4 +1,4 @@
-// src/types/authMiddleware.ts
+// src/types/authMiddleware.d.ts
 
 import { Request } from 'express';
 
@@ -12,5 +12,5 @@ export interface UserPayload {
 
 // Extend the Request interface to include user data
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // This user will contain id, email, username, and tier
+  user?: UserPayload;  // The user object is optional and contains id, email, username, and tier
 }
