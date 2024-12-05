@@ -10,3 +10,5 @@ export const sequelize = new Sequelize({
   database: 'fiverr_doup', // Your database name
   models: [path.join(__dirname, '../models')], // Ensure the path to models is correct (relative to config folder)
 });
+
+export const testConnection = sequelize.authenticate;

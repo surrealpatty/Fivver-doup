@@ -1,5 +1,5 @@
 import { sequelize } from '../config/database';  // Import your sequelize instance
-import { User } from '../models/user';           // Import the User model
+import { User } from '../models/user'; // Adjust path as needed
 
 describe('User Model Tests', () => {
   // Before all tests, ensure the database connection is established

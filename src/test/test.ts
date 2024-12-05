@@ -1,5 +1,6 @@
 import request from 'supertest'; // Import 'supertest' for testing HTTP requests
 import { app } from '../index'; // Correctly import the named export 'app'
+import  Service  from '../models/services';  // Adjust path as needed
 
 // Describe a basic test suite
 describe('Basic Test Suite', () => {
