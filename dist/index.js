@@ -1,61 +1,52 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "app", {
-    enumerable: true,
-    get: function() {
-        return app;
-    }
-});
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _cors = /*#__PURE__*/ _interop_require_default(require("cors"));
-const _database = require("./config/database");
-const _user = /*#__PURE__*/ _interop_require_default(require("./routes/user"));
-const _profile = require("./routes/profile");
-const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const database_1 = require("./config/database"); // Import sequelize instance
+const user_1 = __importDefault(require("./routes/user")); // Import user routes
+const profile_1 = require("./routes/profile"); // Correct named import
+const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
 // Load environment variables from .env file
-_dotenv.default.config();
+dotenv_1.default.config();
 // Create Express app instance
-const app = (0, _express.default)();
+const app = (0, express_1.default)();
+exports.app = app;
 // Set up the server port
 const port = process.env.PORT || 3000; // Default port is 3000
 // Middleware to parse JSON bodies
-app.use(_express.default.json());
+app.use(express_1.default.json());
 // Enable CORS (if needed for handling cross-origin requests)
-app.use((0, _cors.default)());
+app.use((0, cors_1.default)());
 // Example route to test the server
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
 // Synchronize models with the database
-_database.sequelize.sync({
-    alter: true
-}) // Using 'alter' to ensure no data loss
-.then(()=>{
+database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
+    .then(() => {
     console.log('Models are synchronized with the database.');
-}).catch((error)=>{
+})
+    .catch((error) => {
     console.error('Error syncing models:', error);
 });
 // Use the userRouter for routes starting with /api/users
-app.use('/api/users', _user.default); // Register the user routes under /api/users
+app.use('/api/users', user_1.default); // Register the user routes under /api/users
 // Register the profile route under /api/profile
-app.use('/api/profile', _profile.router); // Register profile route
+app.use('/api/profile', profile_1.router); // Register profile route
 // Test database connection
-_database.sequelize.authenticate().then(()=>{
+database_1.sequelize.authenticate()
+    .then(() => {
     console.log('Database connection established.');
-}).catch((error)=>{
+})
+    .catch((error) => {
     console.error('Unable to connect to the database:', error);
 });
 // Start the server
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
- // Optional: Exporting app in case it's needed for tests or elsewhere
-
 //# sourceMappingURL=index.js.map
