@@ -1,5 +1,4 @@
 "use strict";
-// src/middlewares/authMiddleware.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,11 +8,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' }); // Return response directly
+        res.status(401).json({ message: 'Unauthorized' }); // Send response directly, no return needed
+        return; // Terminate the function, no need to return anything
     }
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || '', (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Forbidden' }); // Return response directly
+            res.status(403).json({ message: 'Forbidden' }); // Send response directly, no return needed
+            return; // Terminate the function, no need to return anything
         }
         if (user) {
             // Cast the 'user' to match our UserPayload interface
@@ -25,7 +26,7 @@ const authenticateJWT = (req, res, next) => {
             };
             req.user = userPayload; // Attach user info to req.user
         }
-        next(); // Move to next middleware
+        next(); // Proceed to next middleware
     });
 };
 exports.authenticateJWT = authenticateJWT;
