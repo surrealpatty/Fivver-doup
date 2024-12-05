@@ -1,44 +1,46 @@
-import { Router, Request, Response } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import path
-import { User } from '../models/user'; // Correct import for User model
+import express, { Request, Response } from 'express';
+import { authenticateJWT } from '../middlewares/authMiddleware'; // Import JWT authentication middleware
+import { User } from '../models/user'; // Import User model
+import { Service } from '../models/services'; // Import Service model
+import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest for type safety
 
-const router = Router();
+const router = express.Router();
 
-// Route to fetch the user's profile data
-router.get(
-  '/profile',
-  authenticateJWT,  // Ensure the JWT middleware is applied to protect the route
-  async (req: Request, res: Response): Promise<void> => {
-    const userId = req.user?.id;  // Access user info from the JWT payload
+// Route to view the user's profile and their services (GET /profile)
+router.get('/', authenticateJWT, async (req: AuthRequest, res: Response): Promise<Response> => {
+  try {
+    const userId = req.user?.id; // Get the user ID from the authenticated request
 
+    // If the user ID is not available, return an unauthorized error
     if (!userId) {
-      res.status(400).json({ message: 'User ID is missing or invalid' });
-      return;  // End function early if the user ID is invalid
+      return res.status(401).json({ message: 'User not authenticated.' });
     }
 
-    try {
-      // Fetch user profile from the database
-      const userProfile = await User.findByPk(userId);
+    // Fetch user details from the database
+    const user = await User.findByPk(userId);
 
-      if (!userProfile) {
-        res.status(404).json({ message: 'User profile not found' });
-        return;  // End function early if the profile is not found
-      }
+    // Fetch all services that belong to the user
+    const services = await Service.findAll({ where: { userId } });
 
-      // Return profile data
-      res.status(200).json({
-        message: 'Profile data fetched successfully',
-        profile: {
-          id: userProfile.id,
-          username: userProfile.username,
-          email: userProfile.email,
-        },
-      });
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      res.status(500).json({ message: 'Internal server error' });
+    // If the user is not found, return a 404 error
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
     }
+
+    // Return the user's profile along with their services
+    return res.status(200).json({
+      message: 'Profile data fetched successfully',
+      profile: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+      services, // Include the services related to the user
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    return res.status(500).json({ message: 'Internal server error.' });
   }
-);
+});
 
 export default router;
