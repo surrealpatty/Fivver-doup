@@ -1,17 +1,19 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/api.ts
+Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = (0, express_1.Router)();
 router.post('/services', authMiddleware_1.authenticateJWT, async (req, res) => {
     if (!req.user) {
-        return res.status(403).json({ message: 'User not authenticated' });
+        res.status(403).json({ message: 'User not authenticated' });
+        return; // Ensure flow terminates after returning the response
     }
-    // Make sure the 'tier' exists in req.user
     if (!req.user.tier) {
-        return res.status(400).json({ message: 'User tier is missing' });
+        res.status(400).json({ message: 'User tier is missing' });
+        return; // Ensure flow terminates after returning the response
     }
-    // rest of your route logic...
+    // Proceed with creating or updating the service logic here...
+    res.status(201).json({ message: 'Service created successfully' });
 });
 //# sourceMappingURL=api.js.map

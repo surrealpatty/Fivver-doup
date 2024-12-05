@@ -15,3 +15,6 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
   // Profile logic here...
   res.status(200).json({ profile: req.user });  // Send the profile
 });
+
+// Named export (not default export)
+export { router };

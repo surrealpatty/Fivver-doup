@@ -9,24 +9,23 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized' }); // Return response directly
     }
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || '', (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Forbidden' });
+            return res.status(403).json({ message: 'Forbidden' }); // Return response directly
         }
-        // Assuming the 'user' object from JWT contains the 'tier' information
         if (user) {
             // Cast the 'user' to match our UserPayload interface
             const userPayload = {
-                id: user.id,
+                id: user.id, // Explicit cast here to access 'id' and other fields
                 email: user.email,
                 username: user.username,
-                tier: user.tier, // Make sure 'tier' is coming from the JWT or elsewhere
+                tier: user.tier, // Ensure 'tier' is available
             };
-            req.user = userPayload; // Attach the user info (including tier) to req.user
+            req.user = userPayload; // Attach user info to req.user
         }
-        next();
+        next(); // Move to next middleware
     });
 };
 exports.authenticateJWT = authenticateJWT;

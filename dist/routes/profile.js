@@ -4,16 +4,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = (0, express_1.Router)();
-// Profile route with authentication
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
-    // Check if req.user is not defined
     if (!req.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        res.status(403).json({ message: 'User not authenticated' });
+        return; // Ensure flow terminates after returning the response
     }
-    // Destructure user data from req.user
-    const { id, email, username, tier } = req.user;
-    // Return user profile in response
-    return res.json({ id, email, username, tier });
+    // Profile logic here...
+    res.status(200).json({ profile: req.user }); // Send the profile
 });
-exports.default = router;
 //# sourceMappingURL=profile.js.map
