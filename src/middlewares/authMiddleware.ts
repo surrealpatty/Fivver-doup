@@ -1,9 +1,10 @@
+// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../types';  // Correct import path
 
 // Middleware to authenticate JWT and attach the decoded user to the request object
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
   const token = req.headers['authorization']?.split(' ')[1];  // Token is expected as "Bearer <token>"
 
   // If no token is provided, respond with a 401 Unauthorized error
