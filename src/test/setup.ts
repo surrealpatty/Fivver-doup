@@ -1,3 +1,5 @@
+// src/test/setup.ts
+
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -30,7 +32,7 @@ jest.mock('jsonwebtoken', () => ({
 
 // Mock Sequelize connection
 jest.mock('../config/database', () => ({
-  sequelize: {
+  default: {
     authenticate: jest.fn().mockResolvedValue(undefined), // Mock DB authentication
     close: jest.fn().mockResolvedValue(undefined), // Mock DB connection close
   },
@@ -59,10 +61,9 @@ afterEach(() => {
 afterAll(async () => {
   console.log('Cleaning up after all tests...');
   await import('../config/database').then(async (module) => {
-    await module.sequelize.close(); // Close the mocked DB connection
+    await module.default.close(); // Close the mocked DB connection
   });
 });
 
 // Ensure Jest global functions are available for all tests
 import '@jest/globals'; // Import Jest globals to ensure they are available globally in tests
-
