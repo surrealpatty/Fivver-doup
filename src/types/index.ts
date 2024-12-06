@@ -4,8 +4,8 @@
  */
 export interface UserPayload {
   id: string;       // The unique identifier for the user
-  email: string;    // The email of the user, assuming it's part of the JWT payload
-  username: string; // The username of the user, assuming it's part of the JWT payload
+  email?: string;    // The email of the user, assuming it's part of the JWT payload
+  username?: string; // The username of the user, assuming it's part of the JWT payload
 }
 
 /**

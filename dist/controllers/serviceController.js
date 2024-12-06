@@ -33,7 +33,12 @@ const createService = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error creating service', error });
+        // Narrow the error type to `Error` and handle it
+        if (error instanceof Error) {
+            return res.status(500).json({ message: 'Error creating service', error: error.message });
+        }
+        // If it's not an instance of `Error`, send a generic error response
+        return res.status(500).json({ message: 'Error creating service', error: 'Unknown error' });
     }
 };
 exports.createService = createService;
@@ -61,7 +66,12 @@ const updateService = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error updating service', error: error.message });
+        // Narrow the error type to `Error` and handle it
+        if (error instanceof Error) {
+            return res.status(500).json({ message: 'Error updating service', error: error.message });
+        }
+        // If it's not an instance of `Error`, send a generic error response
+        return res.status(500).json({ message: 'Error updating service', error: 'Unknown error' });
     }
 };
 exports.updateService = updateService;

@@ -7,7 +7,7 @@ export interface AuthRequest extends Request {
   user?: UserPayload; // Now matches the UserPayload structure
 }
 
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
   const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is sent in the Authorization header as "Bearer token"
   
   if (!token) {

@@ -1,13 +1,17 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const serviceController_1 = require("../controllers/serviceController"); // Import the controller to handle the service update
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Import the authentication middleware
-const router = express_1.default.Router();
+const express_1 = require("express");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const serviceController_1 = require("../controllers/serviceController"); // Import the controller
+const router = (0, express_1.Router)();
 // Add a PUT route for updating services
-router.put('/services/:id', authMiddleware_1.authenticateJWT, serviceController_1.updateService);
+router.put('/services/:id', authMiddleware_1.authenticateJWT, async (req, res, next) => {
+    try {
+        await (0, serviceController_1.updateService)(req, res); // Wait for the async function to complete
+    }
+    catch (error) {
+        next(error); // Pass any errors to Express's error handling middleware
+    }
+});
 exports.default = router;
 //# sourceMappingURL=service.js.map

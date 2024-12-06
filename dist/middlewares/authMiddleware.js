@@ -14,7 +14,7 @@ const authenticateJWT = (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: 'Token is invalid' });
         }
-        req.user = decoded; // Add the decoded user ID to the request object
+        req.user = decoded; // Now matches the UserPayload structure
         next();
     });
 };
