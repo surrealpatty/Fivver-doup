@@ -4,11 +4,11 @@ import { Request } from 'express';  // Import Express's Request type
 // Define the UserPayload interface with optional fields
 export interface UserPayload {
   id: string;
-  email?: string;  // Optional email field
-  username?: string;  // Optional username field
+  email?: string;
+  username?: string;
 }
 
 // Define the AuthRequest interface that extends Express's Request
-export interface AuthRequest<ReqBody = any, ReqQuery = any, ReqParams = any, ReqLocals = any> extends Request<ReqParams, any, ReqBody, ReqQuery, ReqLocals> {
-  user?: UserPayload;  // Attach the user property to the Request type
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Make `user` optional
 }
