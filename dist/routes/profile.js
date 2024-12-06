@@ -26,5 +26,5 @@ router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) 
         next(error); // Pass the error to the next error handler
     }
 });
-exports.default = router;
+exports.default = router; // Correct default export for the router
 //# sourceMappingURL=profile.js.map
