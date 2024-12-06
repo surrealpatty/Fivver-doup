@@ -1,6 +1,7 @@
+// src/routes/api.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import path
-import { AuthRequest } from '@types';  // Should match the alias defined in tsconfig.json
+import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.post('/services', authenticateJWT, async (req: AuthRequest, res: Response
   }
 });
 
+// Define the /profile route with correct typing
 router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (!req.user) {

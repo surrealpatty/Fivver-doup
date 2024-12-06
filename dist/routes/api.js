@@ -6,6 +6,7 @@ const router = (0, express_1.Router)();
 // Explicitly type the route handler as RequestHandler
 router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
+        // Your service creation logic here
         res.status(200).json({ message: 'Service created successfully' });
     }
     catch (error) {

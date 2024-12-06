@@ -1,7 +1,7 @@
 // src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types';  // Correct import path
+import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
 
 // Middleware to authenticate JWT and attach the decoded user to the request object
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {

@@ -1,14 +1,15 @@
-import { Request } from 'express';  // Import Express's Request type
+// src/types/index.ts
+import { Request } from 'express';
 
-// Define the UserPayload interface with required email and optional username
+// UserPayload interface
 export interface UserPayload {
   id: string;
-  email: string;  // Email is required
-  username?: string;  // Username remains optional
+  email: string;
+  username?: string;
 }
 
-// Define the AuthRequest interface that extends Express's Request
+// AuthRequest interface that extends Express Request
 export interface AuthRequest<ReqBody = any, ReqQuery = any, ReqParams = any, ReqLocals = Record<string, any>> 
   extends Request<ReqParams, any, ReqBody, ReqQuery, ReqLocals> {
-  user?: UserPayload;  // Make 'user' optional
+  user?: UserPayload;  // Add 'user' field, which is optional
 }
