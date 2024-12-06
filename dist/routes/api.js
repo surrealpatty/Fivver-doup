@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import path
 const router = (0, express_1.Router)();
+// Explicitly type the route handler as RequestHandler
 router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
         res.status(200).json({ message: 'Service created successfully' });
@@ -14,7 +15,11 @@ router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next
 });
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
-        res.status(200).json({ profile: req.user }); // Access `req.user` safely
+        if (!req.user) {
+            res.status(401).send('Unauthorized');
+            return;
+        }
+        res.status(200).json({ profile: req.user }); // Safely access req.user
         return; // Explicitly return void to match function signature
     }
     catch (error) {
