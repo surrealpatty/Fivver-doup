@@ -2,7 +2,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types';
+import { UserPayload } from '../types'; // Correct import path for UserPayload
 
 // Define the AuthRequest type to include the user object
 export interface AuthRequest extends Request {
