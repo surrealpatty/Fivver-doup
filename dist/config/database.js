@@ -1,5 +1,7 @@
 "use strict";
+// src/config/database.ts
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 // Initialize Sequelize with configuration
 const sequelize = new sequelize_1.Sequelize({
@@ -9,6 +11,5 @@ const sequelize = new sequelize_1.Sequelize({
     password: 'password',
     database: 'fivver_doup',
 });
-// Export sequelize instance for use in other parts of your application
-exports.default = sequelize;
+exports.sequelize = sequelize;
 //# sourceMappingURL=database.js.map

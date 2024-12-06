@@ -1,10 +1,10 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../config/database';
+import { sequelize } from '../config/database'; // Ensure this is a named import if you're using named exports
 
 // Define the attributes for the Service model
 interface ServiceAttributes {
   id: number;
-  userId: number; 
+  userId: number;
   title: string;
   description: string;
   price: number;
@@ -51,7 +51,7 @@ Service.init(
     },
   },
   {
-    sequelize,
+    sequelize, // Make sure sequelize instance is passed here
     modelName: 'Service',
   }
 );

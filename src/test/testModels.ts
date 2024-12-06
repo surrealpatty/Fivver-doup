@@ -1,5 +1,5 @@
 // src/test/testModels.ts
-import  sequelize  from '../config/database'; // Import sequelize instance
+import { sequelize } from '../config/database'; // Import sequelize instance
 import { User } from '../models/user'; // Use named import for User model
 import Service, { ServiceCreationAttributes } from '../models/services';  // Import Service and ServiceCreationAttributes
 

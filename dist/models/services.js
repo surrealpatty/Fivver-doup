@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database"); // Ensure this is a named import if you're using named exports
 // Define the Service model class
 class Service extends sequelize_1.Model {
     id;
@@ -38,7 +35,7 @@ Service.init({
         allowNull: false,
     },
 }, {
-    sequelize: database_1.default,
+    sequelize: database_1.sequelize, // Make sure sequelize instance is passed here
     modelName: 'Service',
 });
 exports.default = Service;

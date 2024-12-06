@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import sequelize from './config/database'; // Named import for sequelize
+import { sequelize} from './config/database'; // Named import for sequelize
 import userRouter from './routes/user'; // Import user routes
 import { router as profileRouter } from './routes/profile'; // Correct named import for profile router
 import dotenv from 'dotenv'; // For loading environment variables

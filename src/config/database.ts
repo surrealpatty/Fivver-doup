@@ -1,3 +1,5 @@
+// src/config/database.ts
+
 import { Sequelize } from 'sequelize';
 
 // Initialize Sequelize with configuration
@@ -9,5 +11,5 @@ const sequelize = new Sequelize({
   database: 'fivver_doup',
 });
 
-// Export sequelize instance for use in other parts of your application
-export default sequelize;
+// Export sequelize instance as a named export
+export { sequelize };
