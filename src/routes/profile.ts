@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure the import path is correct
-import { authenticateJWT } from '../middlewares/authMiddleware';
-import Service from '@models/services'; // Use the alias '@models/services'
+import { AuthRequest } from '../types'; // Correct import path for AuthRequest
+import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
+import Service from '@models/services'; // Ensure alias for services model is working correctly
 
 const router = Router();
 

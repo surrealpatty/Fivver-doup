@@ -1,7 +1,7 @@
 // src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '@types';  // Ensure correct path to UserPayload type
+import { UserPayload } from '../types';  // Use relative path instead of @types
 
 // Define the AuthRequest type to include the user object
 export interface AuthRequest extends Request {

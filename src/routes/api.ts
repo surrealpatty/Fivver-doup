@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure proper import
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Assuming authenticateJWT is a middleware
+import { AuthRequest } from '../types'; // Correct import for AuthRequest
+import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
 
 const router = Router();
 
@@ -34,7 +34,7 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
     // Ensure the user is authenticated
     if (!req.user) {
       res.status(403).json({ message: 'User not authenticated' });
-      return;
+      return; // Ensure flow terminates after returning the response
     }
 
     // Fetch the profile data logic (replace with actual logic)
