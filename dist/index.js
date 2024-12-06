@@ -12,8 +12,8 @@ const profile_1 = require("./routes/profile"); // Correct named import for profi
 const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
-// Create Express app instance
-const app = (0, express_1.default)();
+// Create Express app instance (local declaration)
+const app = (0, express_1.default)(); // This is the local declaration, no need to import it
 exports.app = app;
 // Set up the server port
 const port = process.env.PORT || 3000; // Default port is 3000
