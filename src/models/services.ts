@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import  sequelize  from 'config/database'; // Correct alias for the sequelize instance
+import sequelize from '../config/database'; // Import the sequelize instance from config
 
-// Service attributes and creation attributes interface
+// Service attributes interface
 export interface ServiceAttributes {
   id: number;
   title: string;
@@ -21,11 +21,11 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public price!: number;
   public userId!: number;
 
-  // Timestamps (createdAt, updatedAt) are handled automatically by Sequelize, 
-  // so no need to define them unless you want custom names.
+  // Timestamps (createdAt, updatedAt) are handled automatically by Sequelize
+  // No need to define them unless you want custom names or additional fields
 }
 
-// Initialize the Service model
+// Initialize the Service model using Sequelize's `init` method
 Service.init(
   {
     id: {
@@ -35,27 +35,27 @@ Service.init(
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Ensure the title is not null
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false, // Ensure the description is not null
     },
     price: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false, // Ensure price is not null
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false, // Ensure userId is not null
     },
   },
   {
-    sequelize, // Reference to the Sequelize instance
-    modelName: 'Service', // Name of the model in database
-    tableName: 'services', // The table name in the database
-    timestamps: true, // Enable timestamps if you want to use createdAt and updatedAt
+    sequelize, // Pass the Sequelize instance to initialize the model
+    modelName: 'Service', // The name of the model in the database
+    tableName: 'services', // The name of the table in the database
+    timestamps: true, // Enable timestamps if you want createdAt and updatedAt fields
   }
 );
 
-export default Service;  // Default export of the Service model
+export default Service;  // Export the Service model as the default export

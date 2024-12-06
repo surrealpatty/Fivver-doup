@@ -1,9 +1,8 @@
-// src/test/setup.ts
-
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
-dotenv.config();  // Ensure the environment variables are loaded before any tests run
+dotenv.config();  // Ensure environment variables are loaded before any tests run
 
 // Mocking modules and models for testing
 
@@ -31,12 +30,18 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 // Mock Sequelize connection
-jest.mock('../config/database', () => ({
-  default: {
-    authenticate: jest.fn().mockResolvedValue(undefined), // Mock DB authentication
-    close: jest.fn().mockResolvedValue(undefined), // Mock DB connection close
-  },
-}));
+jest.mock('../config/database', () => {
+  const mockSequelize = new Sequelize('mysql://user:pass@localhost:3306/database');
+  
+  // Mock sequelize methods (e.g., define, authenticate, close)
+  mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock DB authentication
+  mockSequelize.close = jest.fn().mockResolvedValue(undefined); // Mock DB connection close
+  mockSequelize.define = jest.fn(); // Mock the define method for models
+
+  return {
+    default: mockSequelize,
+  };
+});
 
 /**
  * Global setup for environment variables or mock configurations.
@@ -60,9 +65,8 @@ afterEach(() => {
  */
 afterAll(async () => {
   console.log('Cleaning up after all tests...');
-  await import('../config/database').then(async (module) => {
-    await module.default.close(); // Close the mocked DB connection
-  });
+  const { default: sequelize } = await import('../config/database');
+  await sequelize.close(); // Close the mocked DB connection
 });
 
 // Ensure Jest global functions are available for all tests

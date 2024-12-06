@@ -1,7 +1,7 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
-import { sequelize } from '../config/database';
+import  sequelize  from '../config/database';
 import { User } from '../models/user';
 import  Service  from '../models/services'; // Correct relative path
 
