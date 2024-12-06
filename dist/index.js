@@ -1,5 +1,4 @@
 "use strict";
-// src/index.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const database_1 = __importDefault(require("./config/database")); // Import sequelize instance
+const database_1 = __importDefault(require("./config/database")); // Named import for sequelize
 const user_1 = __importDefault(require("./routes/user")); // Import user routes
-const profile_1 = require("./routes/profile"); // Correct named import
-const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
+const profile_1 = require("./routes/profile"); // Correct named import for profile router
+const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app instance

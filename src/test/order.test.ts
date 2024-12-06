@@ -1,10 +1,11 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
-import sequelize  from '../config/database'; // Ensure correct import of sequelize
+import sequelize from '../config/database'; // Ensure correct import of sequelize
 import { User } from '../models/user';
-import Service from '../models/services'; // Correct relative path
-import { Order } from '../models/order'; // Correctly import Order model
+import Service from '../models/services';
+import { Order } from '../models/order';
+import { app } from '../../src/index';  // Going up two levels to reach src
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
@@ -23,24 +24,18 @@ jest.mock('../models/order', () => ({
   destroy: jest.fn(),
 }));
 
-// Define the path to the compiled `index.js` file in `dist/`
-const appPath = path.resolve(__dirname, '../dist/index');
-
 // Initialize `app` variable with explicit typing as `Express.Application`
 let app: Express;
 
 beforeAll(async () => {
   try {
-    // Dynamically import the app from the compiled dist/index.js
-    const module = await import(appPath);
-    app = module.default || module.app; // Adjust depending on how your app is exported
+    // You no longer need to import `app` dynamically because it's already imported at the top
+    // You only need to sync the database before the tests
+    await sequelize.sync({ force: true });
   } catch (error) {
-    console.error('Error loading app from dist:', error);
-    throw error; // Ensure the test fails if the app can't be loaded
+    console.error('Error syncing database:', error);
+    throw error; // Ensure the test fails if the database sync fails
   }
-
-  // Sync database (force drop & recreate tables before tests)
-  await sequelize.sync({ force: true });
 });
 
 afterEach(() => {

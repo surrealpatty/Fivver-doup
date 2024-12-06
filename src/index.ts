@@ -1,17 +1,15 @@
-// src/index.ts
-
 import express from 'express';
 import cors from 'cors';
-import sequelize from './config/database'; // Import sequelize instance
+import sequelize from './config/database'; // Named import for sequelize
 import userRouter from './routes/user'; // Import user routes
-import { router as profileRouter } from './routes/profile'; // Correct named import
-import dotenv from 'dotenv'; // To load environment variables
+import { router as profileRouter } from './routes/profile'; // Correct named import for profile router
+import dotenv from 'dotenv'; // For loading environment variables
 
 // Load environment variables from .env file
 dotenv.config();
 
-// Create Express app instance
-const app = express();
+// Create Express app instance (local declaration)
+const app = express(); // This is the local declaration, no need to import it
 
 // Set up the server port
 const port = process.env.PORT || 3000; // Default port is 3000
@@ -62,5 +60,5 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Export app for use in testing or elsewhere (if necessary)
-export { app };  // Optional: Exporting app in case it's needed for tests or elsewhere
+// Export app for use in testing or elsewhere (for testing purposes)
+export { app };  // Exporting the app instance for testing (if necessary)
