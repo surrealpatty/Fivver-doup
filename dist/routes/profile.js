@@ -3,13 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.router = void 0;
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const services_1 = __importDefault(require("@models/services")); // Use the alias '@models/services'
 const router = (0, express_1.Router)();
-exports.router = router;
-// GET route for retrieving user profile and services
+// GET route for retrieving user profile and associated services
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
         const user = req.user; // req.user comes from the authenticateJWT middleware
@@ -25,7 +23,8 @@ router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) 
     }
     catch (error) {
         console.error('Error fetching profile:', error);
-        res.status(500).json({ message: 'Error fetching profile' });
+        next(error); // Pass the error to the next error handler
     }
 });
+exports.default = router;
 //# sourceMappingURL=profile.js.map

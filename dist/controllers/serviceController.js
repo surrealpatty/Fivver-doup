@@ -3,75 +3,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateService = exports.createService = void 0;
-const services_1 = __importDefault(require("../models/services")); // Named import of the Service model
-// Controller function to handle POST /services (Create Service)
-const createService = async (req, res) => {
-    try {
-        const { title, description, price } = req.body;
-        // Validate request body
-        if (!title || !description || price === undefined) {
-            return res.status(400).json({ message: 'All fields (title, description, price) are required.' });
-        }
-        // Retrieve the user ID from the authenticated token (assumed to be in req.user)
-        const userId = parseInt(req.user?.id || '', 10);
-        if (isNaN(userId)) {
-            return res.status(400).json({ message: 'Invalid user ID.' });
-        }
-        // Create the new service using Sequelize ORM
-        const newService = await services_1.default.create({
-            title,
-            description,
-            price,
-            userId
-        });
-        // Respond with the created service
-        return res.status(201).json({
-            message: 'Service created successfully.',
-            service: newService
-        });
-    }
-    catch (error) {
-        console.error(error);
-        // Narrow the error type to `Error` and handle it
-        if (error instanceof Error) {
-            return res.status(500).json({ message: 'Error creating service', error: error.message });
-        }
-        // If it's not an instance of `Error`, send a generic error response
-        return res.status(500).json({ message: 'Error creating service', error: 'Unknown error' });
-    }
-};
-exports.createService = createService;
-// Controller function to handle PUT /services/:serviceId (Update Service)
+exports.updateService = void 0;
+const services_1 = __importDefault(require("@models/services")); // Ensure correct path to Service model
+// Function to update an existing service
 const updateService = async (req, res) => {
-    const { serviceId } = req.params; // Get the service ID from the route parameters
-    const { title, description, price } = req.body; // Get the updated data from the request body
+    const { id } = req.params; // Extract service ID from the URL params
+    const { name, description, price } = req.body; // Extract data from the request body
     try {
-        // Validate request body
-        if (!title || !description || price === undefined) {
-            return res.status(400).json({ message: 'All fields (title, description, price) are required.' });
-        }
-        // Find the service by its ID using Sequelize
-        const service = await services_1.default.findByPk(serviceId);
+        // Attempt to find the service by primary key (ID)
+        const service = await services_1.default.findByPk(id);
+        // If the service is not found, respond with a 404 error
         if (!service) {
-            return res.status(404).json({ message: 'Service not found.' });
+            res.status(404).json({ message: 'Service not found' });
+            return;
         }
-        // Check if the user is the owner of the service (optional but recommended)
-        if (service.userId !== parseInt(req.user?.id || '', 10)) {
-            return res.status(403).json({ message: 'You are not authorized to update this service.' });
-        }
-        // Update the service with new values
-        await service.update({ title, description, price });
-        return res.status(200).json({ message: 'Service updated successfully.', service });
+        // Update the service fields if new values are provided
+        service.name = name ?? service.name; // Use nullish coalescing to only update if value is not null or undefined
+        service.description = description ?? service.description;
+        service.price = price ?? service.price;
+        // Save the updated service object to the database
+        await service.save();
+        // Respond with success message and the updated service data
+        res.status(200).json({ message: 'Service updated successfully', service });
     }
     catch (error) {
-        console.error(error);
-        // Narrow the error type to `Error` and handle it
-        if (error instanceof Error) {
-            return res.status(500).json({ message: 'Error updating service', error: error.message });
-        }
-        // If it's not an instance of `Error`, send a generic error response
-        return res.status(500).json({ message: 'Error updating service', error: 'Unknown error' });
+        // Catch and log any errors, then send a 500 response with the error message
+        console.error('Error updating service:', error);
+        res.status(500).json({ message: 'Error updating service', error: error.message });
     }
 };
 exports.updateService = updateService;

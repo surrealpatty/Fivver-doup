@@ -4,13 +4,14 @@ const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const serviceController_1 = require("../controllers/serviceController"); // Import the controller
 const router = (0, express_1.Router)();
-// Add a PUT route for updating services
+// PUT route for updating a service by ID
 router.put('/services/:id', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
-        await (0, serviceController_1.updateService)(req, res); // Wait for the async function to complete
+        // Call the updateService controller function and wait for it to complete
+        await (0, serviceController_1.updateService)(req, res); // Assuming the updateService function handles the request logic
     }
-    catch (error) {
-        next(error); // Pass any errors to Express's error handling middleware
+    catch (err) {
+        next(err); // Pass any errors to the error handling middleware
     }
 });
 exports.default = router;

@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/api.ts
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Assuming authenticateJWT is a middleware
 const router = (0, express_1.Router)();
-// Updated route handler with correct async signature
+// POST route for creating a service
 router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next) => {
     try {
-        // Ensure user is authenticated
+        // Ensure the user is authenticated
         if (!req.user) {
             res.status(403).json({ message: 'User not authenticated' });
             return; // Ensure flow terminates after returning the response
@@ -18,7 +17,23 @@ router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next
             return; // Ensure flow terminates after returning the response
         }
         // Proceed with creating or updating the service logic here
+        // Replace with actual logic to create the service
         res.status(201).json({ message: 'Service created successfully' });
+    }
+    catch (error) {
+        next(error); // Pass errors to the error handler
+    }
+});
+// GET route for fetching profile data
+router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
+    try {
+        // Ensure the user is authenticated
+        if (!req.user) {
+            res.status(403).json({ message: 'User not authenticated' });
+            return;
+        }
+        // Fetch the profile data logic (replace with actual logic)
+        res.status(200).json({ message: 'Profile data', user: req.user });
     }
     catch (error) {
         next(error); // Pass errors to the error handler
