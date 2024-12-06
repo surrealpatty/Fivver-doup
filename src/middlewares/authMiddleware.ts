@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types'; // Ensure UserPayload is imported
+import { UserPayload } from '../types';  // Make sure the path is correct
 
 // Define the AuthRequest type to include the user
 export interface AuthRequest extends Request {

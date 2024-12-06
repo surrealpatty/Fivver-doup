@@ -8,8 +8,8 @@ import { Request } from 'express';
  */
 export interface UserPayload {
   id: string;        // The unique identifier for the user
-  email?: string;    // The email of the user, assuming it's part of the JWT payload
-  username?: string; // The username of the user, assuming it's part of the JWT payload
+  email?: string;    // The email of the user, assuming it's part of the JWT payload (optional)
+  username?: string; // The username of the user, assuming it's part of the JWT payload (optional)
 }
 
 /**
@@ -19,3 +19,4 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
   user?: UserPayload; // The `user` property is optional and contains the authenticated user data
 }
+
