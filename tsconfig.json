@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                          // Use the latest ECMAScript version
-    "module": "CommonJS",                        // Use CommonJS module format (required for Node.js)
-    "moduleResolution": "node",                  // Use Node.js-style module resolution
-    "strict": true,                              // Enable strict type-checking
-    "skipLibCheck": true,                        // Skip type checking of declaration files for faster builds
-    "esModuleInterop": true,                     // Enable compatibility with CommonJS-style modules
-    "forceConsistentCasingInFileNames": true,    // Ensure consistent casing in filenames
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",                          // Base URL set to the 'src' directory
     "paths": {
       "@models/*": ["models/*"],                 // Alias for models
@@ -14,33 +14,33 @@
       "@types/*": ["types/*"],                   // Alias for types
       "@/*": ["*"]                               // Alias for everything inside src
     },
-    "outDir": "./dist",                          // Output compiled files to dist/
-    "rootDir": "./src",                          // Root directory for source files
-    "allowJs": true,                             // Allow JavaScript files
-    "declaration": true,                         // Generate declaration files
-    "sourceMap": true,                           // Enable source maps for debugging
-    "experimentalDecorators": true,              // Enable experimental decorators for TypeORM, class-validator, etc.
-    "emitDecoratorMetadata": true,               // Emit metadata for decorators
-    "resolveJsonModule": true,                   // Allow importing JSON files as modules
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "allowJs": true,
+    "declaration": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
     "typeRoots": [
-      "./node_modules/@types",                   // Default type declarations
-      "./src/types"                              // Custom type declarations in src/types
+      "./node_modules/@types",
+      "./src/types"
     ],
-    "types": ["node", "jest", "sequelize", "express"], // Ensure these types are included
-    "noImplicitAny": false                       // Disable error on variables with `any` type
+    "types": ["node", "jest", "sequelize", "express"],
+    "noImplicitAny": false
   },
   "include": [
-    "src/**/*.ts",                              // Include all TypeScript files in src/
-    "src/models/**/*.ts",                       // Include all TypeScript files in src/models/
-    "src/types/**/*.ts",                        // Include all TypeScript files in src/types/
-    "src/test/**/*.ts",                         // Include test files in src/test/
-    "src/test/**/*.tsx"                         // Include test files with JSX (if needed)
+    "src/**/*.ts",
+    "src/models/**/*.ts",
+    "src/types/**/*.ts",
+    "src/test/**/*.ts",
+    "src/test/**/*.tsx"
   ],
   "exclude": [
-    "node_modules",                             // Exclude node_modules folder
-    "dist",                                     // Exclude dist folder
-    "build",                                    // Exclude build folder
-    "src/test/**/*.test.ts",                    // Exclude .test.ts files from src/test (if they are already included in include)
-    "src/test/**/*.test.tsx"                    // Exclude .test.tsx files from src/test (if they are already included in include)
+    "node_modules",
+    "dist",
+    "build",
+    "src/test/**/*.test.ts",
+    "src/test/**/*.test.tsx"
   ]
 }

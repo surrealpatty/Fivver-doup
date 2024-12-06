@@ -1,4 +1,3 @@
-// src/types/index.ts
 import { Request } from 'express';  // Import Express's Request type
 
 // Define the UserPayload interface with required email and optional username
