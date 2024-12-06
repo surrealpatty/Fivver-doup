@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
 const router = (0, express_1.Router)();
 // POST route to create a new review
 router.post('/', authMiddleware_1.authenticateJWT, async (req, res, next) => {
@@ -9,6 +9,8 @@ router.post('/', authMiddleware_1.authenticateJWT, async (req, res, next) => {
         // Ensure req.user is authenticated and has a tier
         if (req.user && req.user.tier) {
             // Logic to create a review (e.g., saving it in the database)
+            // Example: Save review to DB
+            // const review = await Review.create({ userId: req.user.id, content: req.body.content, serviceId: req.body.serviceId });
             res.status(201).json({ message: 'Review created successfully.' });
         }
         else {
@@ -24,7 +26,10 @@ router.get('/:serviceId', authMiddleware_1.authenticateJWT, async (req, res, nex
     try {
         // Ensure req.user is authenticated
         if (req.user) {
+            const serviceId = req.params.serviceId;
             // Logic to fetch reviews for the given serviceId (e.g., querying the database)
+            // Example: Fetch reviews for the service
+            // const reviews = await Review.findAll({ where: { serviceId: serviceId } });
             res.status(200).json({ message: 'Reviews fetched successfully.' });
         }
         else {

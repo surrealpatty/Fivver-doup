@@ -9,6 +9,7 @@ class Service extends sequelize_1.Model {
     title;
     description;
     price;
+    name; // Add name property to class
 }
 // Initialize the model
 Service.init({
@@ -33,6 +34,10 @@ Service.init({
     price: {
         type: sequelize_1.DataTypes.FLOAT,
         allowNull: false,
+    },
+    name: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false, // Ensure the name field is not null
     },
 }, {
     sequelize: database_1.sequelize, // Make sure sequelize instance is passed here

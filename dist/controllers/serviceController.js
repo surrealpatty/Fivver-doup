@@ -26,10 +26,15 @@ const updateService = async (req, res) => {
         // Respond with success message and the updated service data
         res.status(200).json({ message: 'Service updated successfully', service });
     }
-    catch (error) {
-        // Catch and log any errors, then send a 500 response with the error message
-        console.error('Error updating service:', error);
-        res.status(500).json({ message: 'Error updating service', error: error.message });
+    catch (error) { // Explicitly typing the error as 'unknown'
+        // Check if the error is an instance of Error
+        if (error instanceof Error) {
+            res.status(500).json({ message: 'Error updating service', error: error.message });
+        }
+        else {
+            // Fallback for unknown error types
+            res.status(500).json({ message: 'Unknown error occurred' });
+        }
     }
 };
 exports.updateService = updateService;

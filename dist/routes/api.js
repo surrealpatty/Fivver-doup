@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Assuming authenticateJWT is a middleware
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
 const router = (0, express_1.Router)();
 // POST route for creating a service
 router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next) => {
@@ -30,7 +30,7 @@ router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) 
         // Ensure the user is authenticated
         if (!req.user) {
             res.status(403).json({ message: 'User not authenticated' });
-            return;
+            return; // Ensure flow terminates after returning the response
         }
         // Fetch the profile data logic (replace with actual logic)
         res.status(200).json({ message: 'Profile data', user: req.user });

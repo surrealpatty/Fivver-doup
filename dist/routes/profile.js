@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
-const services_1 = __importDefault(require("@models/services")); // Use the alias '@models/services'
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
+const services_1 = __importDefault(require("@models/services")); // Ensure alias for services model is working correctly
 const router = (0, express_1.Router)();
 // GET route for retrieving user profile and associated services
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
