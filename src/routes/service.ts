@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import
-import Service from 'models/services'; // Correct alias for Service model
+import Service from '@models/services';  // Use the alias '@models/services'
 import { AuthRequest } from '../types/authMiddleware'; // Correct type for request
 
 const router = Router();
