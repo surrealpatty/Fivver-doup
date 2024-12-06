@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types'; // Correct import path for AuthRequest
+import { AuthRequest } from '../types';  // Correct import path for AuthRequest
 
 // Middleware to authenticate JWT and attach the decoded user to the request object
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -18,7 +18,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
     }
 
     // Attach the decoded user payload to the request object (req.user)
-    req.user = decoded as AuthRequest['user']; // Cast decoded object to AuthRequest['user'] type
+    req.user = decoded as AuthRequest['user'];  // Cast decoded object to AuthRequest['user'] type
     next();  // Proceed to the next middleware or route handler
   });
 };
