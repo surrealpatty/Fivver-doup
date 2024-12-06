@@ -1,10 +1,12 @@
+// src/middlewares/authMiddleware.ts
+
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types';  // Make sure the path is correct
+import { UserPayload } from '../types';  // Ensure the path is correct
 
 // Define the AuthRequest type to include the user
 export interface AuthRequest extends Request {
-  user?: UserPayload; // Now matches the UserPayload structure
+  user?: UserPayload; // Matches the UserPayload structure
 }
 
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
@@ -19,7 +21,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
       return res.status(403).json({ message: 'Token is invalid' });
     }
 
-    req.user = decoded as UserPayload; // Now matches the UserPayload structure
+    req.user = decoded as UserPayload; // Now correctly assigning the decoded token to the user
     next();
   });
 };

@@ -7,12 +7,12 @@
     "skipLibCheck": true,                        // Skip type checking of declaration files for faster builds
     "esModuleInterop": true,                     // Enable compatibility with CommonJS-style modules
     "forceConsistentCasingInFileNames": true,    // Ensure consistent casing in filenames
-    "baseUrl": ".",                              // Base URL set to the project root
+    "baseUrl": "./src",                          // Base URL set to the 'src' directory
     "paths": {
-      "@models/*": ["src/models/*"],             // Alias for models
-      "@config/*": ["src/config/*"],             // Alias for config
-      "@types/*": ["src/types/*"],               // Alias for types
-      "@/*": ["src/*"]                           // Alias for everything inside src
+      "@models/*": ["models/*"],                 // Alias for models
+      "@config/*": ["config/*"],                 // Alias for config
+      "@types/*": ["types/*"],                   // Alias for types
+      "@/*": ["*"]                               // Alias for everything inside src
     },
     "outDir": "./dist",                          // Output compiled files to dist/
     "rootDir": "./src",                          // Root directory for source files
