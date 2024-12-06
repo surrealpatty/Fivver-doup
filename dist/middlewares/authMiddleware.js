@@ -6,27 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authenticateJWT = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
+    const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is sent in the Authorization header as "Bearer token"
     if (!token) {
-        res.status(401).json({ message: 'Unauthorized' }); // Send response directly, no return needed
-        return; // Terminate the function, no need to return anything
+        return res.status(401).json({ message: 'No token provided' });
     }
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || '', (err, user) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            res.status(403).json({ message: 'Forbidden' }); // Send response directly, no return needed
-            return; // Terminate the function, no need to return anything
+            return res.status(403).json({ message: 'Token is invalid' });
         }
-        if (user) {
-            // Cast the 'user' to match our UserPayload interface
-            const userPayload = {
-                id: user.id, // Explicit cast here to access 'id' and other fields
-                email: user.email,
-                username: user.username,
-                tier: user.tier, // Ensure 'tier' is available
-            };
-            req.user = userPayload; // Attach user info to req.user
-        }
-        next(); // Proceed to next middleware
+        req.user = decoded; // Add the decoded user ID to the request object
+        next();
     });
 };
 exports.authenticateJWT = authenticateJWT;
