@@ -2,10 +2,10 @@
 
 export interface UserPayload {
   id: string;
-  email?: string;
+  email?: string;  // Make email optional
   username?: string;
 }
 
 export interface AuthRequest extends Request {
-  user?: UserPayload; // The 'user' object is optional, matching the UserPayload structure
+  user?: UserPayload; // `user` property can optionally be present with `UserPayload`
 }
