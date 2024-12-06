@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
+exports.server = exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Named import for sequelize
@@ -12,11 +12,11 @@ const profile_1 = require("./routes/profile"); // Correct named import for profi
 const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
-// Create Express app instance (local declaration)
-const app = (0, express_1.default)(); // This is the local declaration, no need to import it
+// Create Express app instance
+const app = (0, express_1.default)();
 exports.app = app;
-// Set up the server port
-const port = process.env.PORT || 3000; // Default port is 3000
+// Set up the server port, defaulting to process.env.PORT or 3000
+const port = process.env.PORT || 3000; // Default port is 3000, can be overridden for testing
 // Middleware to parse JSON bodies
 app.use(express_1.default.json());
 // Enable CORS (if needed for handling cross-origin requests)
@@ -50,8 +50,9 @@ app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json({ message: 'Something went wrong!' });
 });
-// Start the server
-app.listen(port, () => {
+// Start the server on dynamic port (use process.env.PORT or 3000)
+const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+exports.server = server;
 //# sourceMappingURL=index.js.map
