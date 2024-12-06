@@ -27,4 +27,4 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
   }
 });
 
-export default router;
+export default router;  // Correct default export for the router
