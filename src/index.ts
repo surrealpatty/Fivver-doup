@@ -1,6 +1,8 @@
+// src/index.ts
+
 import express from 'express';
 import cors from 'cors';
-import  sequelize  from './config/database'; // Import sequelize instance
+import sequelize from './config/database'; // Import sequelize instance
 import userRouter from './routes/user'; // Import user routes
 import { router as profileRouter } from './routes/profile'; // Correct named import
 import dotenv from 'dotenv'; // To load environment variables
@@ -49,6 +51,12 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', error);
   });
 
+// Global error handler middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: 'Something went wrong!' });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -56,3 +64,5 @@ app.listen(port, () => {
 
 // Export app for use in testing or elsewhere (if necessary)
 export { app };  // Optional: Exporting app in case it's needed for tests or elsewhere
+// src/index.ts
+export const something = 'some value';

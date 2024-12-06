@@ -11,6 +11,7 @@ module.exports = {
     '^@routes/(.*)$': '<rootDir>/src/routes/$1',    // Map `@routes/` to `src/routes/`
     '^@config/(.*)$': '<rootDir>/src/config/$1',    // Map `@config/` to `src/config/`
     '^@types/(.*)$': '<rootDir>/src/types/$1',      // Map `@types/` to `src/types/`
+    '^@src/(.*)$': '<rootDir>/src/$1',              // Map `@src/` to `src/`
   },
 
   // Module directories to resolve imports
@@ -36,4 +37,12 @@ module.exports = {
 
   // Treat TypeScript files as ESM (if needed)
   extensionsToTreatAsEsm: ['.ts'],
+
+  // Additional Jest options to avoid common path resolution issues
+  globals: {
+    'ts-jest': {
+      isolatedModules: true, // Speed up compilation by avoiding type-checking
+      tsconfig: '<rootDir>/tsconfig.json', // Use the project's TypeScript configuration
+    },
+  },
 };

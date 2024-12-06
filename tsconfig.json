@@ -7,11 +7,12 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",  // Set base URL to src folder
+    "baseUrl": ".",  // Set base URL to project root
     "paths": {
-      "@models/*": ["models/*"],  // Update paths to remove src prefix
-      "@config/*": ["config/*"],
-      "@types/*": ["types/*"]
+      "@models/*": ["src/models/*"],  // Correct alias for models
+      "@config/*": ["src/config/*"],  // Correct alias for config
+      "@types/*": ["src/types/*"],    // Correct alias for types
+      "@/*": ["src/*"]  // Generic alias for 'src'
     },
     "outDir": "./dist",
     "rootDir": "./src",

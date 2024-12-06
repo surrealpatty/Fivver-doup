@@ -1,42 +1,9 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
+const sequelize_1 = require("sequelize"); // Import Sequelize for typing
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
 dotenv_1.default.config(); // Ensure environment variables are loaded before any tests run
@@ -68,9 +35,7 @@ jest.mock('../config/database', () => {
     mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock DB authentication
     mockSequelize.close = jest.fn().mockResolvedValue(undefined); // Mock DB connection close
     mockSequelize.define = jest.fn(); // Mock the define method for models
-    return {
-        default: mockSequelize,
-    };
+    return { sequelize: mockSequelize }; // Return sequelize as a named export
 });
 /**
  * Global setup for environment variables or mock configurations.
@@ -92,7 +57,8 @@ afterEach(() => {
  */
 afterAll(async () => {
     console.log('Cleaning up after all tests...');
-    const { default: sequelize } = await Promise.resolve().then(() => __importStar(require('../config/database')));
+    // Ensure correct import and close the mock sequelize connection
+    const { sequelize } = require('../config/database');
     await sequelize.close(); // Close the mocked DB connection
 });
 // Ensure Jest global functions are available for all tests

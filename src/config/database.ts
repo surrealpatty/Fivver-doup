@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-// Create a new Sequelize instance
+// Initialize Sequelize with configuration
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: 'localhost',
@@ -9,4 +9,5 @@ const sequelize = new Sequelize({
   database: 'fivver_doup',
 });
 
-export default sequelize;  // Default export of sequelize instance
+// Export sequelize instance for use in other parts of your application
+export default sequelize;
