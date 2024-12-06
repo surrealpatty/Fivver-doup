@@ -64,5 +64,3 @@ app.listen(port, () => {
 
 // Export app for use in testing or elsewhere (if necessary)
 export { app };  // Optional: Exporting app in case it's needed for tests or elsewhere
-// src/index.ts
-export const something = 'some value';

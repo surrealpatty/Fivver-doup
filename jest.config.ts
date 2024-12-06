@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   preset: 'ts-jest', // Use ts-jest for handling TypeScript files
   testEnvironment: 'node', // Use Node.js environment for testing
 
@@ -19,7 +19,7 @@ module.exports = {
 
   // Transform files using ts-jest for TypeScript and babel-jest for JavaScript
   transform: {
-    '^.+\\.ts$': 'ts-jest', // Use ts-jest for TypeScript files
+    '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }], // Use ts-jest for TypeScript files
     '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
   },
 
@@ -37,12 +37,4 @@ module.exports = {
 
   // Treat TypeScript files as ESM (if needed)
   extensionsToTreatAsEsm: ['.ts'],
-
-  // Additional Jest options to avoid common path resolution issues
-  globals: {
-    'ts-jest': {
-      isolatedModules: true, // Speed up compilation by avoiding type-checking
-      tsconfig: '<rootDir>/tsconfig.json', // Use the project's TypeScript configuration
-    },
-  },
 };
