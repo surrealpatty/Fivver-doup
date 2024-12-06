@@ -1,10 +1,9 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
-import  sequelize  from '../config/database';
+import sequelize  from '../config/database'; // Ensure correct import of sequelize
 import { User } from '../models/user';
-import  Service  from '../models/services'; // Correct relative path
-
+import Service from '../models/services'; // Correct relative path
 import { Order } from '../models/order'; // Correctly import Order model
 
 // Mock the methods of the models

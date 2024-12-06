@@ -1,12 +1,11 @@
-// src/test/database.test.ts
-import sequelize from '../config/database'; // Import the sequelize instance
-import { Sequelize } from 'sequelize'; // Import Sequelize for type safety
+import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported correctly
+import  sequelize  from '../config/database'; // Import sequelize as a named export
 
 // Mocking the database connection
 jest.mock('../config/database', () => {
   const mockSequelize = new Sequelize('mysql://user:pass@localhost:3306/database');
   mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock successful authentication
-  return { default: mockSequelize };
+  return { sequelize: mockSequelize }; // Mock sequelize as a named export
 });
 
 describe('Database Connection', () => {

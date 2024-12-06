@@ -1,47 +1,46 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                      // Use the latest ECMAScript features
-    "module": "CommonJS",                     // Use CommonJS for Node.js compatibility
-    "moduleResolution": "node",               // Resolve modules like Node.js (default for Node)
-    "strict": true,                           // Enable strict type checking for better safety
-    "skipLibCheck": true,                     // Skip type checking of declaration files for faster build
-    "esModuleInterop": true,                  // Ensure compatibility with ES Modules
-    "forceConsistentCasingInFileNames": true, // Ensure consistent file name casing
-    "baseUrl": "./src",                       // Set base URL for module resolution
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",  // Set base URL to src folder
     "paths": {
-      "@models/*": ["src/models/*"],          // Path alias for models
-      "@config/*": ["src/config/*"],          // Path alias for config
-      "@types/*": ["src/types/*"],            // Path alias for custom types
-      "types/*": ["src/types/*"]              // Ensure custom types are included
+      "@models/*": ["models/*"],  // Update paths to remove src prefix
+      "@config/*": ["config/*"],
+      "@types/*": ["types/*"]
     },
-    "outDir": "./dist",                       // Directory for compiled files
-    "rootDir": "./src",                       // Root directory for source code
-    "allowJs": true,                          // Allow JavaScript files (useful for mixed codebases)
-    "declaration": true,                      // Generate declaration files for type definitions
-    "sourceMap": true,                        // Generate source maps for debugging
-    "experimentalDecorators": true,           // Enable decorators (e.g., for Sequelize models)
-    "emitDecoratorMetadata": true,            // Enable metadata reflection for decorators
-    "resolveJsonModule": true,                // Allow importing JSON files
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "allowJs": true,
+    "declaration": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types", 
-      "./src/types"                           // Include custom types from the src/types folder
+      "./src/types"
     ],
-    "lib": ["esnext"],                        // Use the latest ES features for type checking
-    "types": ["node", "jest", "sequelize", "express"], // Global types for Node.js, Jest, Sequelize, and Express
-    "noImplicitAny": false                    // Allow 'any' type (optional for stricter typing)
+    "lib": ["esnext"],
+    "types": ["node", "jest", "sequelize", "express"],
+    "noImplicitAny": false
   },
   "include": [
-    "src/**/*.ts",                            // Include all TypeScript files in the src folder
-    "src/models/**/*.ts",                     // Include model files
-    "src/types/**/*.ts",                      // Include custom types
-    "src/test/**/*.ts",                       // Include test files
-    "src/test/**/*.tsx"                       // Include test files with TSX (if you use JSX in tests)
+    "src/**/*.ts",
+    "src/models/**/*.ts",
+    "src/types/**/*.ts",
+    "src/test/**/*.ts",
+    "src/test/**/*.tsx"
   ],
   "exclude": [
-    "node_modules",                           // Exclude node_modules directory
-    "dist",                                   // Exclude the dist (build output) folder
-    "build",                                  // Exclude build folder (if used)
-    "src/test/**/*.test.ts",                  // Exclude test files from compilation
-    "src/test/**/*.test.tsx"                  // Exclude TSX test files from compilation
+    "node_modules",
+    "dist",
+    "build",
+    "src/test/**/*.test.ts",
+    "src/test/**/*.test.tsx"
   ]
 }

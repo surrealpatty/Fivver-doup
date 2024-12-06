@@ -1,4 +1,3 @@
-// In src/test/auth.test.ts
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
@@ -10,7 +9,7 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(() => ({ id: 'test_user_id' })),
 }));
 
-// Define the path to the compiled `index.js` file in `dist/`
+// Define the path to the compiled `index.js` file in `dist/` (This will be removed in favor of direct import)
 const appPath = path.resolve(__dirname, '../dist/index.js');
 
 // Initialize app variable with explicit typing as Express.Application
@@ -18,11 +17,18 @@ let app: Express | undefined;
 
 beforeAll(async () => {
   try {
-    // Dynamically import the app from the compiled dist/index.js
+    // Dynamically import the app from the compiled dist/index.js (This will be replaced with direct import)
     const module = await import(appPath);
     app = module.default || module.app; // Adjust depending on how your app is exported
   } catch (error) {
     console.error('Error loading app from dist:', error);
+    try {
+      // Load the app directly from the source directory (src/index.ts)
+      const module = await import('../src/index'); // Direct import from src/index.ts
+      app = module.default || module.app; // Adjust depending on how your app is exported
+    } catch (err) {
+      console.error('Error loading app from src:', err);
+    }
   }
 });
 

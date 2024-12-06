@@ -1,8 +1,7 @@
-import { User } from '../models/user';  // Ensure correct import path for the User model
-
-jest.mock('../src/models/user', () => ({
+import { User } from '../models/user';  // Adjusted relative path to the User model
+jest.mock('../models/user', () => ({
   User: {
-    create: jest.fn(),  // Mock create method
+    create: jest.fn(),
   },
 }));
 
