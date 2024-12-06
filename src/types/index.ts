@@ -1,9 +1,13 @@
+// src/types/index.ts
+
+import { Request } from 'express';
+
 /**
  * UserPayload interface represents the payload data embedded in a JWT token.
  * It contains essential user information for authentication.
  */
 export interface UserPayload {
-  id: string;       // The unique identifier for the user
+  id: string;        // The unique identifier for the user
   email?: string;    // The email of the user, assuming it's part of the JWT payload
   username?: string; // The username of the user, assuming it's part of the JWT payload
 }
