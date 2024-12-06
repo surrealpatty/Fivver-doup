@@ -9,6 +9,7 @@ export interface UserPayload {
 }
 
 // Define the AuthRequest interface that extends Express's Request
-export interface AuthRequest<ReqBody = any, ReqQuery = any, ReqParams = any, ReqLocals = Record<string, any>> extends Request<ReqParams, any, ReqBody, ReqQuery, ReqLocals> {
-  user: UserPayload | undefined;  // Ensure 'user' can be undefined
+export interface AuthRequest<ReqBody = any, ReqQuery = any, ReqParams = any, ReqLocals = Record<string, any>> 
+  extends Request<ReqParams, any, ReqBody, ReqQuery, ReqLocals> {
+  user?: UserPayload;  // Make 'user' optional
 }
