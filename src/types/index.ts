@@ -1,4 +1,6 @@
-import { Request } from 'express';
+// src/types/index.ts
+
+import { Request } from 'express'; // Import Request from express to extend it
 
 /**
  * UserPayload interface represents the payload data embedded in a JWT token.

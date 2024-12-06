@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../src/types/jest-mock-express.d.ts"],"sourcesContent":["// src/types/jest-mock-express.d.ts\r\ndeclare module 'jest-mock-express';\r\n"],"names":[],"mappings":"AAAA,mCAAmC"}
