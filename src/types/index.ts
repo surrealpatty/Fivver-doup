@@ -6,7 +6,7 @@ import { Request } from 'express';
  */
 export interface UserPayload {
   id: string;        // The unique identifier for the user
-  email?: string;    // Email is optional
+  email: string;     // Email is now required
   username: string;  // Ensure username is always required (non-nullable)
 }
 
