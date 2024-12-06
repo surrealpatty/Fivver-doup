@@ -5,7 +5,7 @@ import sequelize from '../config/database'; // Ensure correct import of sequeliz
 import { User } from '../models/user';
 import Service from '../models/services';
 import { Order } from '../models/order';
-import { app } from '../../src/index';  // Going up two levels to reach src
+import { app } from '../../src/index';  // Import app from src/index directly
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
@@ -24,13 +24,9 @@ jest.mock('../models/order', () => ({
   destroy: jest.fn(),
 }));
 
-// Initialize `app` variable with explicit typing as `Express.Application`
-let app: Express;
-
 beforeAll(async () => {
   try {
-    // You no longer need to import `app` dynamically because it's already imported at the top
-    // You only need to sync the database before the tests
+    // Sync the database before running tests
     await sequelize.sync({ force: true });
   } catch (error) {
     console.error('Error syncing database:', error);

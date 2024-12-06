@@ -3,31 +3,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/services.ts
 const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("../config/database")); // Ensure named import from your config
+const database_1 = __importDefault(require("../config/database"));
 // Define the Service model class
 class Service extends sequelize_1.Model {
     id;
-    name;
+    userId;
+    title;
+    description;
+    price;
 }
 // Initialize the model
 Service.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true, // Mark the 'id' as primary key
+        allowNull: false, // Ensure 'id' cannot be null
     },
-    name: {
+    userId: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    title: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    // Add more fields as necessary
+    description: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    price: {
+        type: sequelize_1.DataTypes.FLOAT,
+        allowNull: false,
+    },
 }, {
-    sequelize: database_1.default, // Pass the sequelize instance
-    modelName: 'Service', // Specify the model name
-    tableName: 'services', // Optional, specify table name if needed
-    timestamps: true, // Optional, set to false if you don't want timestamps
+    sequelize: database_1.default,
+    modelName: 'Service',
 });
 exports.default = Service;
 //# sourceMappingURL=services.js.map
