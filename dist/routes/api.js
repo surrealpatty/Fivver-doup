@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/api.ts
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import path
 const router = (0, express_1.Router)();
