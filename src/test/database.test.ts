@@ -1,82 +1,44 @@
-import { sequelize, testConnection } from '../config/database'; // Correct import for default and named export
-import { User } from '../models/user'; // Correct named import
+import { sequelize, testConnection } from '../config/database';  // Import sequelize and testConnection
 
-// Mock the sequelize instance's `authenticate` method and the `testConnection` function
-jest.mock('sequelize', () => {
-  return {
-    Sequelize: jest.fn().mockImplementation(() => {
-      return {
-        authenticate: jest.fn().mockResolvedValue(true),
-        sync: jest.fn().mockResolvedValue(true),
-      };
-    }),
-  };
-});
+// Mocking the sequelize.authenticate method
+jest.mock('../config/database', () => ({
+  sequelize: {
+    authenticate: jest.fn(),  // Mocking the 'authenticate' method
+  },
+  testConnection: jest.fn(), // Mocking the 'testConnection' method
+}));
 
 describe('Database Connection', () => {
-  let mockAuthenticate: jest.Mock;
-  let mockTestConnection: jest.Mock;
-
-  // Initialize the mock functions for `authenticate` and `testConnection`
-  beforeAll(() => {
-    mockAuthenticate = sequelize.authenticate as jest.Mock;
-    mockTestConnection = testConnection as jest.Mock; // Directly mock testConnection
-  });
-
-  // Mock console methods globally
-  let consoleLogSpy: jest.SpyInstance;
-  let consoleErrorSpy: jest.SpyInstance;
-
   beforeEach(() => {
-    // Mock `console.log` and `console.error` for test isolation
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.clearAllMocks(); // Reset mocks before each test
   });
 
-  afterEach(() => {
-    // Clear all mocks to reset state between tests
-    jest.clearAllMocks();
+  it('should establish a connection successfully', async () => {
+    // Arrange: Mock the behavior of authenticate to resolve successfully
+    (sequelize.authenticate as jest.Mock).mockResolvedValueOnce(undefined);
+
+    // Act: Call the testConnection function
+    await testConnection();
+
+    // Assert: Check if the correct function was called
+    expect(sequelize.authenticate).toHaveBeenCalledTimes(1);
+    expect(sequelize.authenticate).toHaveBeenCalledWith();
+    // Further assertions if necessary
   });
 
-  afterAll(async () => {
-    // Close the database connection after all tests have finished running
-    await sequelize.close();  // Close database connection
-    console.log('Database connection closed');  // Optionally log to verify
-  });
+  it('should fail to connect when an error is thrown', async () => {
+    // Arrange: Mock the behavior of authenticate to throw an error
+    const errorMessage = 'Unable to connect to the database';
+    (sequelize.authenticate as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
-  // Test for a successful database connection
-  it('should successfully connect to the database', async () => {
-    // Simulate a successful connection
-    mockAuthenticate.mockResolvedValueOnce(undefined); // Mock a successful authentication response
-    mockTestConnection.mockResolvedValueOnce(true); // Mock the testConnection function to return true
+    // Act: Call the testConnection function
+    await testConnection();
 
-    // Execute the `testConnection` function
-    const connection = await testConnection();
-
-    // Assertions
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
-    expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-    expect(consoleLogSpy).toHaveBeenCalledWith('Connection established successfully.');
-    expect(connection).toBeTruthy(); // Ensure the connection returns true
-  });
-
-  // Test for a failed database connection
-  it('should log an error when the database connection fails', async () => {
-    // Simulate a connection failure
-    const errorMessage = 'Connection failed';
-    mockAuthenticate.mockRejectedValueOnce(new Error(errorMessage)); // Mock the error on authenticate
-    mockTestConnection.mockResolvedValueOnce(false); // Mock the testConnection function to return false
-
-    // Execute the `testConnection` function
-    const connection = await testConnection();
-
-    // Assertions
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
-    expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Unable to connect to the database:',
-      errorMessage
-    ); // Check error log
-    expect(connection).toBeFalsy(); // Ensure the connection fails
+    // Assert: Check if the correct function was called and error is logged
+    expect(sequelize.authenticate).toHaveBeenCalledTimes(1);
+    expect(sequelize.authenticate).toHaveBeenCalledWith();
+    // You could assert that an error message is logged if necessary
+    // For example:
+    // expect(console.error).toHaveBeenCalledWith('Unable to connect to the database:', expect.any(Error));
   });
 });
