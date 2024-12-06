@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("config/database")); // Correct alias for the sequelize instance
+const database_1 = __importDefault(require("../config/database")); // Import the sequelize instance from config
 // Sequelize Service model class
 class Service extends sequelize_1.Model {
     id;
@@ -13,7 +13,7 @@ class Service extends sequelize_1.Model {
     price;
     userId;
 }
-// Initialize the Service model
+// Initialize the Service model using Sequelize's `init` method
 Service.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -22,25 +22,25 @@ Service.init({
     },
     title: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
+        allowNull: false, // Ensure the title is not null
     },
     description: {
         type: sequelize_1.DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false, // Ensure the description is not null
     },
     price: {
         type: sequelize_1.DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: false, // Ensure price is not null
     },
     userId: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false, // Ensure userId is not null
     },
 }, {
-    sequelize: database_1.default, // Reference to the Sequelize instance
-    modelName: 'Service', // Name of the model in database
-    tableName: 'services', // The table name in the database
-    timestamps: true, // Enable timestamps if you want to use createdAt and updatedAt
+    sequelize: database_1.default, // Pass the Sequelize instance to initialize the model
+    modelName: 'Service', // The name of the model in the database
+    tableName: 'services', // The name of the table in the database
+    timestamps: true, // Enable timestamps if you want createdAt and updatedAt fields
 });
-exports.default = Service; // Default export of the Service model
+exports.default = Service; // Export the Service model as the default export
 //# sourceMappingURL=services.js.map

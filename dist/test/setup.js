@@ -1,5 +1,4 @@
 "use strict";
-// src/test/setup.ts
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -37,9 +36,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
-dotenv_1.default.config(); // Ensure the environment variables are loaded before any tests run
+dotenv_1.default.config(); // Ensure environment variables are loaded before any tests run
 // Mocking modules and models for testing
 // Mock User model methods
 jest.mock('../models/user', () => ({
@@ -62,12 +62,16 @@ jest.mock('jsonwebtoken', () => ({
     sign: jest.fn(() => 'mockedToken'), // Return a constant mocked token
 }));
 // Mock Sequelize connection
-jest.mock('../config/database', () => ({
-    default: {
-        authenticate: jest.fn().mockResolvedValue(undefined), // Mock DB authentication
-        close: jest.fn().mockResolvedValue(undefined), // Mock DB connection close
-    },
-}));
+jest.mock('../config/database', () => {
+    const mockSequelize = new sequelize_1.Sequelize('mysql://user:pass@localhost:3306/database');
+    // Mock sequelize methods (e.g., define, authenticate, close)
+    mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock DB authentication
+    mockSequelize.close = jest.fn().mockResolvedValue(undefined); // Mock DB connection close
+    mockSequelize.define = jest.fn(); // Mock the define method for models
+    return {
+        default: mockSequelize,
+    };
+});
 /**
  * Global setup for environment variables or mock configurations.
  */
@@ -88,9 +92,8 @@ afterEach(() => {
  */
 afterAll(async () => {
     console.log('Cleaning up after all tests...');
-    await Promise.resolve().then(() => __importStar(require('../config/database'))).then(async (module) => {
-        await module.default.close(); // Close the mocked DB connection
-    });
+    const { default: sequelize } = await Promise.resolve().then(() => __importStar(require('../config/database')));
+    await sequelize.close(); // Close the mocked DB connection
 });
 // Ensure Jest global functions are available for all tests
 require("@jest/globals"); // Import Jest globals to ensure they are available globally in tests
