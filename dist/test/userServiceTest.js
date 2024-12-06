@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/test/userServiceTest.ts
 const services_1 = __importDefault(require("../models/services")); // Import the interface and class
 const user_1 = require("../models/user"); // Correct named import for User
-const database_1 = __importDefault(require("../config/database")); // Import the sequelize instance
+const database_1 = require("../config/database"); // Import the sequelize instance
 describe('Service Model Tests', () => {
     beforeAll(async () => {
         // Sync the database (ensure it's ready before tests)
-        await database_1.default.sync({ force: true });
+        await database_1.sequelize.sync({ force: true });
     });
     it('should create a new service', async () => {
         // Create a user with all required fields (password and role)

@@ -12,7 +12,7 @@ const order_1 = require("./order"); // Import the Order model
 Object.defineProperty(exports, "Order", { enumerable: true, get: function () { return order_1.Order; } });
 const review_1 = require("./review"); // Import the Review model
 Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return review_1.Review; } });
-const database_1 = __importDefault(require("@config/database")); // Use the alias '@config/database'
+const database_1 = require("@config/database"); // Use the alias '@config/database'
 // Define associations after registering models
 // User can have many services (a user can post many services)
 user_1.User.hasMany(services_1.default, { foreignKey: 'userId' }); // Foreign key will be userId in Service
@@ -27,7 +27,7 @@ review_1.Review.belongsTo(services_1.default, { foreignKey: 'serviceId' }); // A
 order_1.Order.belongsTo(user_1.User, { foreignKey: 'userId' }); // An order belongs to one user
 order_1.Order.belongsTo(services_1.default, { foreignKey: 'serviceId' }); // An order belongs to one service
 // Optionally, sync models to the database
-database_1.default.sync({ force: false }).then(() => {
+database_1.sequelize.sync({ force: false }).then(() => {
     console.log('Model associations are successfully set up.');
 });
 //# sourceMappingURL=associations.js.map

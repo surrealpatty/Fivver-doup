@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported correctly
-import  sequelize  from '../config/database'; // Import sequelize as a named export
+import { sequelize } from '../config/database';  // Corrected import for sequelize
 
 // Mocking the database connection
 jest.mock('../config/database', () => {

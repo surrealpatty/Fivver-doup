@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { sequelize} from './config/database'; // Named import for sequelize
+import { sequelize } from './config/database'; // Named import for sequelize
 import userRouter from './routes/user'; // Import user routes
 import { router as profileRouter } from './routes/profile'; // Correct named import for profile router
 import dotenv from 'dotenv'; // For loading environment variables
@@ -8,11 +8,11 @@ import dotenv from 'dotenv'; // For loading environment variables
 // Load environment variables from .env file
 dotenv.config();
 
-// Create Express app instance (local declaration)
-const app = express(); // This is the local declaration, no need to import it
+// Create Express app instance
+const app = express();
 
-// Set up the server port
-const port = process.env.PORT || 3000; // Default port is 3000
+// Set up the server port, defaulting to process.env.PORT or 3000
+const port = process.env.PORT || 3000; // Default port is 3000, can be overridden for testing
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -55,10 +55,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Start the server
-app.listen(port, () => {
+// Start the server on dynamic port (use process.env.PORT or 3000)
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Export app for use in testing or elsewhere (for testing purposes)
-export { app };  // Exporting the app instance for testing (if necessary)
+// Export app and server for use in tests or other parts of the application
+export { app, server }; // Export both app and server instance for testing or server shutdown

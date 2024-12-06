@@ -2,7 +2,7 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
-import  sequelize  from '../config/database';  // Corrected import for sequelize
+import { sequelize } from '../config/database';  // Corrected import for sequelize
 import { User } from '../models/user';  // Example import for models
 
 // Define the path to the compiled `index.js` file in `dist/`

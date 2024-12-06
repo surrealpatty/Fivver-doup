@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/test/testModels.ts
-const database_1 = __importDefault(require("../config/database")); // Import sequelize instance
+const database_1 = require("../config/database"); // Import sequelize instance
 const user_1 = require("../models/user"); // Use named import for User model
 const services_1 = __importDefault(require("../models/services")); // Import Service and ServiceCreationAttributes
 // Function to test user and service models
 const testModels = async () => {
     try {
         // Synchronize models with the database
-        await database_1.default.sync({ force: true });
+        await database_1.sequelize.sync({ force: true });
         console.log('Database synced successfully.');
         // Create a test user
         const testUser = await user_1.User.create({
@@ -37,7 +37,7 @@ const testModels = async () => {
     }
     finally {
         // Close the database connection
-        await database_1.default.close();
+        await database_1.sequelize.close();
     }
 };
 // Export the function using ES module syntax

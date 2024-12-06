@@ -1,45 +1,4 @@
-import { Sequelize } from 'sequelize'; // Import Sequelize for typing
-import dotenv from 'dotenv';
-
-// Load environment variables from .env file
-dotenv.config();  // Ensure environment variables are loaded before any tests run
-
-// Mocking modules and models for testing
-
-// Mock User model methods
-jest.mock('../models/user', () => ({
-  findOne: jest.fn(),
-  create: jest.fn(),
-  findByPk: jest.fn(),
-  update: jest.fn(),
-  destroy: jest.fn(),
-}));
-
-// Mock Order model methods
-jest.mock('../models/order', () => ({
-  findByPk: jest.fn(),
-  create: jest.fn(),
-  findAll: jest.fn(),
-  destroy: jest.fn(),
-}));
-
-// Mock JWT methods
-jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
-  sign: jest.fn(() => 'mockedToken'), // Return a constant mocked token
-}));
-
-// Mock Sequelize connection
-jest.mock('../config/database', () => {
-  const mockSequelize = new Sequelize('mysql://user:pass@localhost:3306/database');
-
-  // Mock sequelize methods (e.g., define, authenticate, close)
-  mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock DB authentication
-  mockSequelize.close = jest.fn().mockResolvedValue(undefined); // Mock DB connection close
-  mockSequelize.define = jest.fn(); // Mock the define method for models
-
-  return { sequelize: mockSequelize };  // Return sequelize as a named export
-});
+import { sequelize } from '../config/database'; // Ensure this is correctly imported
 
 /**
  * Global setup for environment variables or mock configurations.
@@ -63,10 +22,14 @@ afterEach(() => {
  */
 afterAll(async () => {
   console.log('Cleaning up after all tests...');
-
-  // Ensure correct import and close the mock sequelize connection
-  const { sequelize } = require('../config/database');
-  await sequelize.close();  // Close the mocked DB connection
+  
+  // Ensure the mock DB connection is properly closed
+  try {
+    await sequelize.close(); // Ensure sequelize connection is closed asynchronously
+    console.log('Sequelize connection closed.');
+  } catch (error) {
+    console.error('Error closing sequelize connection:', error);
+  }
 });
 
 // Ensure Jest global functions are available for all tests

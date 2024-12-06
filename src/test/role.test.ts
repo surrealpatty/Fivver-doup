@@ -1,7 +1,7 @@
 import request from 'supertest';
-import  { app } from '../index'; // Import the app instance
+import { app } from '../index';  // Import the app instance
 import jwt from 'jsonwebtoken'; // For generating tokens
-import  Service  from '../models/services';  // Adjust path as needed
+import Service from '../models/services';  // Adjust path as needed
 
 // Helper function to generate JWT token with a role
 const generateToken = (userId: string, role: 'Free' | 'Paid') => {
@@ -30,5 +30,20 @@ describe('Role-based Access', () => {
 
     expect(response.status).toBe(403); // Forbidden
     expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+  });
+});
+
+// Ensure the app uses a different port if needed for tests
+describe('Basic Test Suite', () => {
+  it('should run the test file successfully', () => {
+    console.log('Test file is running successfully!');
+    expect(true).toBe(true); // Simple test to verify the test file is running
+  });
+
+  // Test to check if the root endpoint is responding correctly
+  it('should respond with a message from the root endpoint', async () => {
+    const response = await request(app).get('/'); // Send a GET request to the root endpoint
+    expect(response.statusCode).toBe(200); // Expect a status code of 200 (OK)
+    expect(response.text).toBe('Fiverr backend is running'); // Expect the correct response message
   });
 });
