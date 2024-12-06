@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/types/express/index.d.ts"],"sourcesContent":["// src/types/express/index.d.ts\r\ndeclare namespace Express {\r\n  export interface Request {\r\n    user?: {\r\n      id: string;\r\n      email?: string;\r\n      username?: string;\r\n    };\r\n  }\r\n}\r\n"],"names":[],"mappings":"AAAA,+BAA+B"}
