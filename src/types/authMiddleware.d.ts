@@ -1,5 +1,6 @@
-// src/types/authMiddleware.d.ts
+// src/types/authMiddleware.ts
 import { Request } from 'express';
+import { AuthRequest } from '../types/authMiddleware';  // Correct import
 
 // Define the structure of the user data attached to the request
 export interface UserPayload {
@@ -9,7 +10,7 @@ export interface UserPayload {
   tier?: string;  // Optional: tier property to define user tier (e.g., 'free' or 'paid')
 }
 
-// Extend the Request interface to include user data
+// Extend the Request interface to include the 'user' data
 export interface AuthRequest extends Request {
   user?: UserPayload;  // The 'user' object is optional and should match the UserPayload structure
 }

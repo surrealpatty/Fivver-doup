@@ -1,15 +1,17 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types'; // Ensure the import path is correct
 import { authenticateJWT } from '../middlewares/authMiddleware';
 import { updateService } from '../controllers/serviceController'; // Import the controller
 
 const router = Router();
 
-// Add a PUT route for updating services
-router.put('/services/:id', authenticateJWT, async (req, res, next) => {
+// PUT route for updating a service by ID
+router.put('/services/:id', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await updateService(req, res); // Wait for the async function to complete
-  } catch (error) {
-    next(error); // Pass any errors to Express's error handling middleware
+    // Call the updateService controller function and wait for it to complete
+    await updateService(req, res); // Assuming the updateService function handles the request logic
+  } catch (err) {
+    next(err); // Pass any errors to the error handling middleware
   }
 });
 

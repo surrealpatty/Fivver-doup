@@ -1,4 +1,5 @@
 "use strict";
+// src/middlewares/authMiddleware.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,7 +15,7 @@ const authenticateJWT = (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: 'Token is invalid' });
         }
-        req.user = decoded; // Now matches the UserPayload structure
+        req.user = decoded; // Now correctly assigning the decoded token to the user
         next();
     });
 };

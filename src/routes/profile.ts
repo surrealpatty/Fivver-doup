@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types'; // Ensure the import path is correct
 import { authenticateJWT } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types/authMiddleware';
-import Service from '@models/services';  // Use the alias '@models/services'
+import Service from '@models/services'; // Use the alias '@models/services'
 
 const router = Router();
 
-// GET route for retrieving user profile and services
+// GET route for retrieving user profile and associated services
 router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = req.user;  // req.user comes from the authenticateJWT middleware
@@ -23,9 +23,8 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
     res.status(200).json({ user, services });
   } catch (error) {
     console.error('Error fetching profile:', error);
-    res.status(500).json({ message: 'Error fetching profile' });
+    next(error);  // Pass the error to the next error handler
   }
 });
 
-// Export the router as a named export
-export { router };
+export default router;

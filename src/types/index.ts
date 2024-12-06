@@ -8,7 +8,7 @@ import { Request } from 'express';
  */
 export interface UserPayload {
   id: string;        // The unique identifier for the user
-  email?: string;    // The email of the user (optional)
+  email: string;     // Ensure email is always a string (required)
   username?: string; // The username of the user (optional)
 }
 
