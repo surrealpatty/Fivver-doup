@@ -1,46 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",                          // Base URL set to the 'src' directory
+    "baseUrl": "./src", // Base URL should be set to 'src' (or the root of your source code)
     "paths": {
-      "@models/*": ["models/*"],                 // Alias for models
-      "@config/*": ["config/*"],                 // Alias for config
-      "@types/*": ["types/*"],                   // Alias for types
-      "@/*": ["*"]                               // Alias for everything inside src
+      "@models/*": ["models/*"],
+      "@config/*": ["config/*"],
+      "@types/*": ["types/*"],
+      "@/*": ["*"]
     },
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowJs": true,
-    "declaration": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
-    ],
-    "types": ["node", "jest", "sequelize", "express"],
-    "noImplicitAny": false
+    "outDir": "./dist",  // Output directory for compiled files
+    "rootDir": "./src",  // Root directory for source files
+    // other settings...
   },
   "include": [
-    "src/**/*.ts",
-    "src/models/**/*.ts",
-    "src/types/**/*.ts",
-    "src/test/**/*.ts",
-    "src/test/**/*.tsx"
+    "src/**/*.ts",  // Include all TypeScript files in the src folder
+    "src/types/**/*.ts",  // Include type definition files
+    "src/test/**/*.ts"  // Include test files
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "build",
-    "src/test/**/*.test.ts",
-    "src/test/**/*.test.tsx"
+    "dist"  // Exclude dist folder
   ]
 }
