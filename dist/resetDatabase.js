@@ -1,17 +1,20 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("./config/database");
+const database_1 = __importDefault(require("./config/database"));
 // Function to reset the database
 const resetDatabase = async () => {
     try {
         console.log('Starting database reset process...');
         // Step 1: Drop all tables in the database
         console.log('Dropping all tables...');
-        await database_1.sequelize.drop(); // Drops all tables
+        await database_1.default.drop(); // Drops all tables
         console.log('Tables dropped successfully.');
         // Step 2: Re-sync models to the database (recreates tables)
         console.log('Re-syncing database...');
-        await database_1.sequelize.sync({ force: true }); // 'force: true' drops and recreates tables
+        await database_1.default.sync({ force: true }); // 'force: true' drops and recreates tables
         console.log('Database re-synced successfully!');
     }
     catch (error) {

@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testConnection = exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
 const order_1 = require("../models/order"); // Correct path for the Order model
-const database_1 = require("../config/database"); // Correct path for the sequelize instance
+const database_1 = __importDefault(require("../config/database")); // Correct path for the sequelize instance
 // Create order controller
 const createOrder = async (req, res) => {
     try {
@@ -81,7 +84,7 @@ exports.deleteOrder = deleteOrder;
 // Function to test the database connection
 const testConnection = async () => {
     try {
-        await database_1.sequelize.authenticate(); // Test the connection
+        await database_1.default.authenticate(); // Test the connection
         console.log('Database connection successful');
         return true; // Return true if connection is successful
     }
