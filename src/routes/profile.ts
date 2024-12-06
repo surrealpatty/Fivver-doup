@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
+import { UserPayload } from '../types';  // Cannot find UserPayload export
 import Service from '@models/services'; // Ensure alias for services model is working correctly
 
 const router = Router();

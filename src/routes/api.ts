@@ -1,7 +1,6 @@
-// src/routes/api.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import path
-import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
+import { AuthRequest } from '@types';  // Ensure this alias is correctly set in tsconfig.json
 
 const router = Router();
 

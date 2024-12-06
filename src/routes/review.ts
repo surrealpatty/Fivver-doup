@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Correct import path for AuthRequest
+import { AuthRequest } from '@types';  // Cannot find module '@types'
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
+import { UserPayload } from '../types';  // Cannot find UserPayload export
 
 const router = Router();
 
