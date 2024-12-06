@@ -12,3 +12,4 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
   user?: UserPayload;  // Attach the user property to the Request type
 }
+ 
