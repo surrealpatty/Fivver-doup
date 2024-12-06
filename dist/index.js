@@ -1,9 +1,10 @@
 "use strict";
+// src/index.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
+exports.something = exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const database_1 = __importDefault(require("./config/database")); // Import sequelize instance
@@ -45,8 +46,15 @@ database_1.default.authenticate()
     .catch((error) => {
     console.error('Unable to connect to the database:', error);
 });
+// Global error handler middleware
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).json({ message: 'Something went wrong!' });
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+// src/index.ts
+exports.something = 'some value';
 //# sourceMappingURL=index.js.map
