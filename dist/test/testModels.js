@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/test/testModels.ts
 const database_1 = require("../config/database"); // Import sequelize instance
 const user_1 = require("../models/user"); // Use named import for User model
 const services_1 = __importDefault(require("../models/services")); // Import Service and ServiceCreationAttributes
@@ -23,7 +22,8 @@ const testModels = async () => {
         console.log('Test User created:', testUser.toJSON());
         // Create a test service associated with the user
         const testServiceData = {
-            title: 'Test Service',
+            name: 'Test Service', // Add the missing name property
+            title: 'Test Service Title',
             description: 'A description of the test service.',
             price: 99.99,
             userId: testUser.id, // Associate with the user

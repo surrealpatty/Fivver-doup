@@ -18,7 +18,8 @@ router.post('/services', authMiddleware_1.authenticateJWT, async (req, res, next
         }
         // Proceed with creating or updating the service logic here
         // Replace with actual logic to create the service
-        res.status(201).json({ message: 'Service created successfully' });
+        // Example: const newService = await Service.create(req.body);
+        res.status(201).json({ message: 'Service created successfully' }); // Send response after service creation
     }
     catch (error) {
         next(error); // Pass errors to the error handler
