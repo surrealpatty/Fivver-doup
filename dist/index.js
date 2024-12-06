@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const database_1 = require("./config/database"); // Import sequelize instance
+const database_1 = __importDefault(require("./config/database")); // Import sequelize instance
 const user_1 = __importDefault(require("./routes/user")); // Import user routes
 const profile_1 = require("./routes/profile"); // Correct named import
 const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
 // Synchronize models with the database
-database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
+database_1.default.sync({ alter: true }) // Using 'alter' to ensure no data loss
     .then(() => {
     console.log('Models are synchronized with the database.');
 })
@@ -38,7 +38,7 @@ app.use('/api/users', user_1.default); // Register the user routes under /api/us
 // Register the profile route under /api/profile
 app.use('/api/profile', profile_1.router); // Register profile route
 // Test database connection
-database_1.sequelize.authenticate()
+database_1.default.authenticate()
     .then(() => {
     console.log('Database connection established.');
 })
