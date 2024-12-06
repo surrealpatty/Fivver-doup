@@ -9,7 +9,7 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(() => ({ id: 'test_user_id' })),
 }));
 
-// Define the path to the compiled `index.js` file in `dist/` (This will be removed in favor of direct import)
+// Define the path to the compiled `index.js` file in `dist/`
 const appPath = path.resolve(__dirname, '../dist/index.js');
 
 // Initialize app variable with explicit typing as Express.Application
@@ -17,7 +17,7 @@ let app: Express | undefined;
 
 beforeAll(async () => {
   try {
-    // Dynamically import the app from the compiled dist/index.js (This will be replaced with direct import)
+    // Dynamically import the app from the compiled dist/index.js
     const module = await import(appPath);
     app = module.default || module.app; // Adjust depending on how your app is exported
   } catch (error) {
