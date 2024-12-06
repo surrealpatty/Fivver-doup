@@ -1,7 +1,7 @@
 // src/routes/api.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import path
-import { AuthRequest } from '../types';  // Correct import from types
+import { AuthRequest } from '../types';  // Correct import path for AuthRequest
 
 const router = Router();
 
