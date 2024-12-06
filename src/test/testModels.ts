@@ -1,4 +1,3 @@
-// src/test/testModels.ts
 import { sequelize } from '../config/database'; // Import sequelize instance
 import { User } from '../models/user'; // Use named import for User model
 import Service, { ServiceCreationAttributes } from '../models/services';  // Import Service and ServiceCreationAttributes
@@ -22,8 +21,9 @@ const testModels = async () => {
     console.log('Test User created:', testUser.toJSON());
 
     // Create a test service associated with the user
-    const testServiceData: ServiceCreationAttributes = {  // Now recognized
-      title: 'Test Service',
+    const testServiceData: ServiceCreationAttributes = {
+      name: 'Test Service', // Add the missing name property
+      title: 'Test Service Title',
       description: 'A description of the test service.',
       price: 99.99,
       userId: testUser.id, // Associate with the user
