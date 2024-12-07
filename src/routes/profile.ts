@@ -1,13 +1,12 @@
 // src/routes/profile.ts
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // JWT middleware
-import { UserPayload } from '../types';  // Adjust if necessary
 import Service from '@models/services';  // Ensure alias for services model
 
 const router = Router();
 
 // GET route for retrieving user profile and associated services
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+router.get('/profile', authenticateJWT, async (req, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = req.user;  // req.user comes from the authenticateJWT middleware
 

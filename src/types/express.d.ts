@@ -1,10 +1,10 @@
 // src/types/express.d.ts
-import { UserPayload } from './index';
+import { UserPayload } from './index';  // Make sure this imports the correct UserPayload type
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;
+      user?: UserPayload;  // Add user to the Request interface
     }
   }
 }

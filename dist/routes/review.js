@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/review.ts
 var express_1 = require("express");
 var authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
 var router = (0, express_1.Router)();
