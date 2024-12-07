@@ -1,28 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES6",  // Ensure the target is set to ES6 or higher
-    "module": "commonjs",  // CommonJS module system
-    "experimentalDecorators": true,  // Enable experimental decorators
-    "emitDecoratorMetadata": true,  // Emit design-time type metadata for decorators
-    "moduleResolution": "node",  // Node-style module resolution
-    "esModuleInterop": true,  // Ensure compatibility with ES6 module imports
-    "baseUrl": "./src",  // Base URL set to 'src' (root of source code)
+    "baseUrl": "./src",  // Base URL is set to the 'src' folder
     "paths": {
-      "@models/*": ["models/*"],   // Resolves to src/models/*
-      "@config/*": ["config/*"],   // Resolves to src/config/*
-      "@types/*": ["types/*"],     // Resolves to src/types/*
-      "@/*": ["*"]                 // Resolves to src/*
+      "@types/*": ["types/*"],   // Resolves @types/* to src/types/*
+      "@/*": ["*"]               // Resolves @/* to src/*
     },
     "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src"  // Root directory for source files
-  },
-  "include": [
-    "src/**/*.ts",  // Include all TypeScript files in the src folder
-    "src/types/**/*.ts",  // Include type definition files
-    "src/test/**/*.ts"  // Include test files
-  ],
-  "exclude": [
-    "node_modules",  // Exclude node_modules
-    "dist"  // Exclude dist folder
-  ]
+    "rootDir": "./src",  // Root directory for source files
+    "moduleResolution": "node",  // Node-style module resolution
+    "esModuleInterop": true  // Ensure compatibility with ES6 module imports
+  }
 }

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken'; // Import jwt and JwtPayload
 
 // Assuming UserPayload is defined as follows:
-import { UserPayload } from '../types'; // Adjust the import path if needed
+import { UserPayload } from '../types';  // Correct relative path
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
