@@ -1,24 +1,31 @@
 {
   "compilerOptions": {
-    "target": "es6",                // Output ES6 JavaScript
-    "module": "commonjs",           // Use commonjs for modules (Node.js standard)
-    "strict": true,                 // Enable all strict type-checking options
-    "esModuleInterop": true,        // Enable interoperability with commonjs modules
-    "skipLibCheck": true,           // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true, // Ensure consistent file casing
-    "outDir": "./dist",             // Where to place compiled JavaScript files
-    "rootDir": "./src",             // Where to find your TypeScript files
-    "moduleResolution": "node",     // Resolve modules like Node.js
-    "allowJs": false,               // Prevent JS files from being compiled
-    "noEmit": false,                // Allow the compiler to output files
-    "removeComments": true          // Remove comments from compiled JavaScript
+    "baseUrl": "./src",  // Ensure this points to the 'src' directory for module resolution
+    "paths": {
+      "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
+      "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
+      "@/*": ["*"],                // Maps '@' to the root of 'src' for other modules
+      "@config/*": ["config/*"]    // Maps '@config' to 'src/config'
+    },
+    "outDir": "./dist",  // Output directory for compiled files
+    "rootDir": "./src",  // Ensure your source code is under the 'src' directory
+    "moduleResolution": "node",  // Use Node.js module resolution
+    "esModuleInterop": true,     // Enables default imports for CommonJS modules
+    "experimentalDecorators": true,  // Enable experimental decorators
+    "emitDecoratorMetadata": true     // Emit metadata for decorators
   },
   "include": [
-    "src/**/*.ts"                   // Include all TypeScript files in src directory
+    "src/**/*.ts",    // Include all TypeScript files inside 'src'
+    "src/types/**/*.ts", // Include TypeScript files from 'types' directory
+    "src/test/**/*.ts"   // Include TypeScript files from 'test' directory
   ],
   "exclude": [
-    "node_modules",                 // Exclude node_modules folder
-    "dist",                          // Exclude the dist folder (compiled files)
-    "src/**/*.js"                    // Ensure no .js files are included in the compilation
+    "node_modules",      // Exclude node_modules
+    "dist",              // Exclude dist directory (output folder)
+    "index.ts",          // Exclude root index.ts
+    "jest.config.ts",    // Exclude Jest config
+    "jest.setup.ts",     // Exclude Jest setup
+    "fivver-frontend",   // Exclude frontend folder
+    "fivver-frontend/**/*.vue" // Exclude all Vue files in the frontend directory
   ]
 }
