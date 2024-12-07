@@ -4,8 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMockUserToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const createMockUserToken = (user) => {
-    return jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username }, 'your_secret_key', { expiresIn: '1h' });
+// Import necessary dependencies
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken for token generation
+// Function to generate a mock JWT token for a user
+var createMockUserToken = function (user) {
+    return jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username }, // Payload
+    'your_secret_key', // Secret key (should be stored securely, not hardcoded)
+    { expiresIn: '1h' } // Token expiration time
+    );
 };
 exports.createMockUserToken = createMockUserToken;
