@@ -1,27 +1,30 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": "./src",  // Base URL for module resolution
     "paths": {
-      "@types/*": ["types/*"],
-      "@/*": ["*"]
+      "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
+      "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
+      "@/*": ["*"]                // Generic mapping for other modules in 'src'
     },
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./src",  // Ensure your source code is under the 'src' directory
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "experimentalDecorators": true,  // Enable experimental decorators
+    "emitDecoratorMetadata": true     // Emit metadata for decorators
   },
   "include": [
-    "src/**/*.ts",  // Include only the TypeScript files in src
-    "src/types/**/*.ts",
-    "src/test/**/*.ts"
+    "src/**/*.ts",    // Include all TypeScript files inside 'src'
+    "src/types/**/*.ts", // Include TypeScript files from the 'types' directory
+    "src/test/**/*.ts"   // Include TypeScript files from the 'test' directory
   ],
   "exclude": [
-    "node_modules",       // Exclude node_modules
-    "dist",               // Exclude dist folder
-    "index.ts",           // Exclude index.ts in root
-    "jest.config.ts",     // Exclude Jest config
-    "jest.setup.ts",      // Exclude Jest setup
-    "fivver-frontend",    // Exclude the entire frontend directory
-    "fivver-frontend/**/*.vue"  // Exclude all Vue files in frontend
+    "node_modules",      // Exclude node_modules
+    "dist",              // Exclude dist directory (output folder)
+    "index.ts",          // Exclude root index.ts
+    "jest.config.ts",    // Exclude Jest config
+    "jest.setup.ts",     // Exclude Jest setup
+    "fivver-frontend",   // Exclude frontend folder
+    "fivver-frontend/**/*.vue" // Exclude all Vue files in the frontend directory
   ]
 }

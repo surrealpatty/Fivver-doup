@@ -1,9 +1,6 @@
-// In src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken'; // Import jwt and JwtPayload
-
-// Assuming UserPayload is defined as follows:
-import { UserPayload } from '../types';  // Correct relative path
+import jwt from 'jsonwebtoken'; // Import jwt for token verification
+import { UserPayload } from '../types';  // Import UserPayload for type safety
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 

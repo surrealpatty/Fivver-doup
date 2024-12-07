@@ -1,24 +1,19 @@
-import { Router, Request, Response } from 'express';
-import { registerUser, loginUser } from '../controllers/authController'; // Import both registerUser and loginUser
+import { AuthRequest } from '../types/authMiddleware';  // Import the AuthRequest interface
+import { Response, NextFunction } from 'express';
 
-const router = Router();
-
-// Registration Route
-router.post('/register', async (req: Request, res: Response) => {
-  try {
-    await registerUser(req, res); // Use the registerUser function from the controller
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during user registration.' });
+// Example middleware to check if user is authenticated
+export const getUserProfile = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const user = req.user;  // `req.user` is of type `UserPayload`
+  
+  if (!user) {
+    return res.status(401).json({ message: 'Unauthorized, no user found' });
   }
-});
 
-// Login Route
-router.post('/login', async (req: Request, res: Response) => {
-  try {
-    await loginUser(req, res); // Use the loginUser function from the controller
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during login.' });
-  }
-});
-
-export default router;
+  // Safe to access user properties like user.id, user.email
+  res.json({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    tier: user.tier,
+  });
+};
