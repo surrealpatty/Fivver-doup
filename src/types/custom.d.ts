@@ -1,9 +1,11 @@
-import User from '../models/user'; // Ensure correct import from user model
+// src/types/custom.d.ts
+
+import { UserPayload } from './index';  // Ensure correct import of UserPayload
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User; // Add the `user` property to Request
+      user?: UserPayload;  // Use the consistent UserPayload type
     }
   }
 }
