@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { registerUser, loginUser } from '../controllers/authController';  // Import controller functions
-import { UserPayload } from '../types';  // Correct relative path
+import { UserPayload, AuthRequest } from '../types';  // Adjust if necessary
 
 const router = Router();
 
