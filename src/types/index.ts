@@ -1,11 +1,7 @@
 // src/types/index.ts
 export interface UserPayload {
   id: string;
-  email?: string;
+  email?: string;  // Make email optional
   username?: string;
-  tier?: string;
-}
-
-export interface AuthRequest {
-  user: UserPayload;
+  tier?: string;   // Optional field for tier
 }
