@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ES6",  // Ensure the target is set to ES6 or higher
+    "module": "commonjs",  // CommonJS module system
+    "experimentalDecorators": true,  // Enable experimental decorators
+    "emitDecoratorMetadata": true,  // Emit design-time type metadata for decorators
+    "moduleResolution": "node",  // Node-style module resolution
+    "esModuleInterop": true,  // Ensure compatibility with ES6 module imports
     "baseUrl": "./src",  // Base URL set to 'src' (root of source code)
     "paths": {
       "@models/*": ["models/*"],   // Resolves to src/models/*
@@ -8,9 +14,7 @@
       "@/*": ["*"]                 // Resolves to src/*
     },
     "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Root directory for source files
-    "moduleResolution": "node",  // Ensure module resolution is set to 'node' for better compatibility
-    "esModuleInterop": true  // Ensure compatibility with ES6 module imports
+    "rootDir": "./src"  // Root directory for source files
   },
   "include": [
     "src/**/*.ts",  // Include all TypeScript files in the src folder
