@@ -35,34 +35,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jwt and JwtPayload
+var secretKey = 'your-secret-key'; // Replace with your actual secret key
 var authenticateJWT = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var token, decoded, error_1;
+    var token;
     var _a;
     return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 4, , 5]);
-                token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
-                if (!token) return [3 /*break*/, 2];
-                return [4 /*yield*/, someJWTVerificationFunction(token)];
-            case 1:
-                decoded = _b.sent();
-                // Attach the decoded user information to the request object
-                req.user = decoded; // Add the decoded user info to `req.user` for later use in routes
-                next(); // Continue to the next middleware or route handler
-                return [3 /*break*/, 3];
-            case 2:
+        try {
+            token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+            if (token) {
+                jsonwebtoken_1.default.verify(token, secretKey, function (err, decoded) {
+                    if (err) {
+                        return res.status(403).json({ message: 'Token is not valid' });
+                    }
+                    // Type the decoded value as UserPayload
+                    req.user = decoded; // Ensure it matches UserPayload structure
+                    next(); // Proceed to the next middleware or route handler
+                });
+            }
+            else {
                 res.status(401).json({ message: 'Unauthorized, no token provided' });
-                _b.label = 3;
-            case 3: return [3 /*break*/, 5];
-            case 4:
-                error_1 = _b.sent();
-                next(error_1); // Pass the error to the next error handler
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+            }
         }
+        catch (error) {
+            next(error); // Pass any error to the next error handler
+        }
+        return [2 /*return*/];
     });
 }); };
 exports.authenticateJWT = authenticateJWT;
