@@ -1,20 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var jsonwebtoken_1 = require("jsonwebtoken");
 // Middleware to authenticate JWT and attach user info to the request
-const authenticateJWT = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+var authenticateJWT = function (req, res, next) {
+    var _a;
+    var token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1]; // Extract token from Authorization header
     // If no token is provided, return a 403 response
     if (!token) {
         res.status(403).json({ message: 'No token provided.' });
         return; // Ensure that the middleware stops execution
     }
     // Verify the token using the secret key (this is a synchronous check)
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, function (err, decoded) {
         if (err) {
             res.status(403).json({ message: 'Invalid token.' });
             return; // Ensure that the middleware stops execution
@@ -30,4 +28,3 @@ const authenticateJWT = (req, res, next) => {
     });
 };
 exports.authenticateJWT = authenticateJWT;
-//# sourceMappingURL=authenticateJWT.js.map

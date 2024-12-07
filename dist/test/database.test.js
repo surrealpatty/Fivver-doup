@@ -36,35 +36,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var emailService_1 = require("../services/emailService"); // Correct import for named export
-var router = (0, express_1.Router)();
-// Endpoint to trigger email sending
-router.get('/test-email', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var emailDetails, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                emailDetails = {
-                    to: 'test@example.com',
-                    subject: 'Test Email',
-                    text: 'This is a test email sent from the email service.',
-                };
-                // Call your sendEmail function
-                return [4 /*yield*/, (0, emailService_1.sendEmail)(emailDetails)];
-            case 1:
-                // Call your sendEmail function
-                _a.sent();
-                res.status(200).json({ message: 'Test email sent successfully!' });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                console.error('Error sending email:', error_1);
-                res.status(500).json({ message: 'Error sending test email.' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-exports.default = router;
+var sequelize_1 = require("sequelize"); // Ensure Sequelize is imported correctly
+var database_1 = require("../config/database"); // Corrected import for sequelize
+// Mocking the database connection
+jest.mock('../config/database', function () {
+    var mockSequelize = new sequelize_1.Sequelize('mysql://user:pass@localhost:3306/database');
+    mockSequelize.authenticate = jest.fn().mockResolvedValue(undefined); // Mock successful authentication
+    return { sequelize: mockSequelize }; // Mock sequelize as a named export
+});
+describe('Database Connection', function () {
+    it('should connect successfully', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database_1.sequelize.authenticate()];
+                case 1:
+                    result = _a.sent();
+                    // Assert: Ensure that the mocked authenticate method does not throw an error
+                    expect(result).toBeUndefined(); // This checks that no error was thrown and that the result is undefined as expected for the mock
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

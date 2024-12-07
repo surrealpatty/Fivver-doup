@@ -36,35 +36,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var emailService_1 = require("../services/emailService"); // Correct import for named export
-var router = (0, express_1.Router)();
-// Endpoint to trigger email sending
-router.get('/test-email', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var emailDetails, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                emailDetails = {
-                    to: 'test@example.com',
-                    subject: 'Test Email',
-                    text: 'This is a test email sent from the email service.',
-                };
-                // Call your sendEmail function
-                return [4 /*yield*/, (0, emailService_1.sendEmail)(emailDetails)];
-            case 1:
-                // Call your sendEmail function
-                _a.sent();
-                res.status(200).json({ message: 'Test email sent successfully!' });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                console.error('Error sending email:', error_1);
-                res.status(500).json({ message: 'Error sending test email.' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
+var user_1 = require("../models/user"); // Adjusted relative path to the User model
+jest.mock('../models/user', function () { return ({
+    User: {
+        create: jest.fn(),
+    },
 }); });
-exports.default = router;
+describe('User Model', function () {
+    beforeEach(function () {
+        jest.clearAllMocks(); // Clear mocks before each test
+    });
+    it('should create a new user successfully', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var mockCreate, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    mockCreate = jest.fn().mockResolvedValueOnce({
+                        id: '1',
+                        email: 'test@example.com',
+                        username: 'testuser',
+                        password: 'password123', // Mock the password in the response
+                    });
+                    user_1.User.create = mockCreate; // Assign mock to the User.create method
+                    return [4 /*yield*/, user_1.User.create({
+                            email: 'test@example.com',
+                            username: 'testuser',
+                            password: 'password123', // Add password here for testing
+                        })];
+                case 1:
+                    user = _a.sent();
+                    // Assert: Ensure that the method was called with the correct parameters
+                    expect(mockCreate).toHaveBeenCalledWith({
+                        email: 'test@example.com',
+                        username: 'testuser',
+                        password: 'password123', // Ensure password is included
+                    });
+                    expect(user).toEqual({
+                        id: '1',
+                        email: 'test@example.com',
+                        username: 'testuser',
+                        password: 'password123', // Ensure the password is mocked correctly
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

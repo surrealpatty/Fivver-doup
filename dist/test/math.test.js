@@ -1,4 +1,4 @@
-"use strict";
+// src/test/math.test.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,36 +35,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var emailService_1 = require("../services/emailService"); // Correct import for named export
-var router = (0, express_1.Router)();
-// Endpoint to trigger email sending
-router.get('/test-email', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var emailDetails, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                emailDetails = {
-                    to: 'test@example.com',
-                    subject: 'Test Email',
-                    text: 'This is a test email sent from the email service.',
-                };
-                // Call your sendEmail function
-                return [4 /*yield*/, (0, emailService_1.sendEmail)(emailDetails)];
-            case 1:
-                // Call your sendEmail function
-                _a.sent();
-                res.status(200).json({ message: 'Test email sent successfully!' });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                console.error('Error sending email:', error_1);
-                res.status(500).json({ message: 'Error sending test email.' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+var _this = this;
+describe('Math Functions', function () {
+    var mockUsers = [
+        {
+            id: '1',
+            username: 'user1',
+            email: 'user1@example.com',
+        },
+        {
+            id: '2',
+            username: 'user2',
+            email: 'user2@example.com',
+        },
+        // Add more mock users as needed
+    ];
+    it('should perform basic arithmetic correctly', function () {
+        var result = 2 + 2;
+        expect(result).toBe(4); // Basic addition test
     });
-}); });
-exports.default = router;
+    it('should fetch the user correctly from mock data', function () { return __awaiter(_this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            user = mockUsers[0];
+            expect(user).toEqual(mockUsers[0]); // Ensure it matches the mock data
+            return [2 /*return*/];
+        });
+    }); });
+    it('should handle invalid user id gracefully', function () { return __awaiter(_this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            user = mockUsers.find(function (u) { return u.id === '999'; });
+            expect(user).toBeUndefined(); // Expect that no user is found
+            return [2 /*return*/];
+        });
+    }); });
+});

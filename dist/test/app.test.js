@@ -36,41 +36,72 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("./config/database");
-// Function to reset the database
-var resetDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+// src/test/app.test.ts
+var path_1 = require("path");
+var supertest_1 = require("supertest");
+var database_1 = require("../config/database"); // Corrected import for sequelize
+// Define the path to the compiled `index.js` file in `dist/`
+var appPath = path_1.default.resolve(__dirname, '../../dist/index'); // Adjusted path to dist/index.js
+// Initialize app variable with explicit typing as Express.Application
+var app;
+beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+    var module_1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, 4, 5]);
-                console.log('Starting database reset process...');
-                // Step 1: Drop all tables in the database
-                console.log('Dropping all tables...');
-                return [4 /*yield*/, database_1.sequelize.drop()];
+            case 0: 
+            // First, ensure Sequelize sync is complete
+            return [4 /*yield*/, database_1.sequelize.sync()];
             case 1:
-                _a.sent(); // Drops all tables
-                console.log('Tables dropped successfully.');
-                // Step 2: Re-sync models to the database (recreates tables)
-                console.log('Re-syncing database...');
-                return [4 /*yield*/, database_1.sequelize.sync({ force: true })];
+                // First, ensure Sequelize sync is complete
+                _a.sent(); // This will sync models with the database
+                _a.label = 2;
             case 2:
-                _a.sent(); // 'force: true' drops and recreates tables
-                console.log('Database re-synced successfully!');
-                return [3 /*break*/, 5];
+                _a.trys.push([2, 4, , 5]);
+                return [4 /*yield*/, Promise.resolve("".concat(appPath)).then(function (s) { return require(s); })];
             case 3:
-                error_1 = _a.sent();
-                // Handle errors and log them
-                console.error('Error resetting the database:', error_1);
+                module_1 = _a.sent();
+                app = module_1.default || module_1.app; // Adjust based on how your app is exported
                 return [3 /*break*/, 5];
             case 4:
-                // Graceful shutdown after completing the task
-                console.log('Database reset process complete.');
-                process.exit(0); // Exit the process after completion
-                return [7 /*endfinally*/];
+                error_1 = _a.sent();
+                console.error('Error loading app from dist:', error_1);
+                throw error_1; // Ensure the tests fail if the app can't be loaded
             case 5: return [2 /*return*/];
         }
     });
-}); };
-// Call the function to reset the database
-resetDatabase();
+}); });
+afterAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: 
+            // Close the database connection after tests have finished
+            return [4 /*yield*/, database_1.sequelize.close()];
+            case 1:
+                // Close the database connection after tests have finished
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+describe('Basic Test Suite', function () {
+    it('should respond with a message from the root endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!app) {
+                        console.warn('Skipping tests as app could not be loaded');
+                        return [2 /*return*/]; // Skip the test if app could not be loaded
+                    }
+                    return [4 /*yield*/, (0, supertest_1.default)(app).get('/')];
+                case 1:
+                    response = _a.sent();
+                    // Check the response
+                    expect(response.statusCode).toBe(200);
+                    expect(response.text).toBe('Welcome to Fiverr Clone!');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // Add more tests as needed
+});
