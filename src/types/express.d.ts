@@ -1,9 +1,9 @@
-import { UserPayload } from './index';
+import { UserPayload } from './index';  // Import UserPayload
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;  // Ensure this matches your custom `UserPayload` interface
+      user?: UserPayload;  // Add the 'user' property to the Request interface
     }
   }
 }

@@ -1,12 +1,12 @@
+// Define the UserPayload interface
 export interface UserPayload {
   id: string;
   email: string;
-  username: string;
-  tier?: string;
+  username: string;  // Make sure 'username' is required if it's expected
+  tier?: string;     // Optional tier property
 }
 
-// Define AuthRequest if it's expected or remove references to it
-export interface AuthRequest {
-  user: UserPayload;
-  // You can include other properties as necessary, like `token`
+// Define the AuthRequest interface if it's necessary
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // This will extend Request to include 'user'
 }
