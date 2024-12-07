@@ -1,8 +1,9 @@
+// src/routes/profile.ts
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
-import { UserPayload } from '../types';  // Correct relative path
-import Service from '@models/services'; // Ensure alias for services model is working correctly
+import { AuthRequest } from '@types';  // Ensure alias for AuthRequest
+import { authenticateJWT } from '../middlewares/authMiddleware';  // JWT middleware
+import { UserPayload } from '@types';  // Ensure alias for UserPayload
+import Service from '@models/services';  // Ensure alias for services model
 
 const router = Router();
 
@@ -11,21 +12,20 @@ router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, 
   try {
     const user = req.user;  // req.user comes from the authenticateJWT middleware
 
-    // Check if the user exists
     if (!user) {
       res.status(403).json({ message: 'User not authenticated' });
       return;
     }
 
-    // Fetch the services associated with the user from the database
+    // Fetch services for the user
     const services = await Service.findAll({ where: { userId: user.id } });
 
-    // Respond with the user data and the user's services
+    // Return the user data and associated services
     res.status(200).json({ user, services });
   } catch (error) {
     console.error('Error fetching profile:', error);
-    next(error);  // Pass the error to the next error handler
+    next(error);  // Pass error to the next error handler
   }
 });
 
-export default router;  // Correct default export for the router
+export default router;

@@ -9,4 +9,4 @@ declare global {
   }
 }
 
-export {};  // Ensures this file is treated as a module, necessary for augmenting the Express namespace
+export {};  // Ensures this file is treated as a module
