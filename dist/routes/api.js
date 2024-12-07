@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var authMiddleware_1 = require("../middlewares/authMiddleware"); // Import authenticateJWT middleware
+var authMiddleware_1 = require("../middlewares/authMiddleware"); // Corrected import for authenticateJWT
 var router = (0, express_1.Router)();
 // POST route to create a new review
 router.post('/', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {

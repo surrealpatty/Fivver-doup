@@ -1,4 +1,11 @@
+// In src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken'; // Import jwt and JwtPayload
+
+// Assuming UserPayload is defined as follows:
+import { UserPayload } from '../types'; // Adjust the import path if needed
+
+const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
 export const authenticateJWT = async (
   req: Request, 
@@ -6,21 +13,22 @@ export const authenticateJWT = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Replace this with your actual authentication logic (e.g., verifying a JWT token)
-    const token = req.headers.authorization?.split(' ')[1]; // Assuming the token is in the Authorization header
-    
-    if (token) {
-      // Example token validation logic:
-      // Verify the JWT token (you can use a library like jsonwebtoken for this)
-      const decoded = await someJWTVerificationFunction(token);
+    const token = req.headers.authorization?.split(' ')[1]; // Get token from header
 
-      // Attach the decoded user information to the request object
-      req.user = decoded; // Add the decoded user info to `req.user` for later use in routes
-      next(); // Continue to the next middleware or route handler
+    if (token) {
+      jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+          return res.status(403).json({ message: 'Token is not valid' });
+        }
+
+        // Type the decoded value as UserPayload
+        req.user = decoded as UserPayload; // Ensure it matches UserPayload structure
+        next(); // Proceed to the next middleware or route handler
+      });
     } else {
       res.status(401).json({ message: 'Unauthorized, no token provided' });
     }
   } catch (error) {
-    next(error); // Pass the error to the next error handler
+    next(error); // Pass any error to the next error handler
   }
 };

@@ -1,4 +1,5 @@
 "use strict";
+// src/routes/reviewRoutes.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -43,11 +44,8 @@ var router = (0, express_1.Router)();
 router.post('/', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         try {
-            // Ensure req.user is authenticated and has a tier
             if (req.user && req.user.tier) {
                 // Logic to create a review (e.g., saving it in the database)
-                // Example: Save review to DB
-                // const review = await Review.create({ userId: req.user.id, content: req.body.content, serviceId: req.body.serviceId });
                 res.status(201).json({ message: 'Review created successfully.' });
             }
             else {
@@ -65,12 +63,9 @@ router.get('/:serviceId', authMiddleware_1.authenticateJWT, function (req, res, 
     var serviceId;
     return __generator(this, function (_a) {
         try {
-            // Ensure req.user is authenticated
             if (req.user) {
                 serviceId = req.params.serviceId;
-                // Logic to fetch reviews for the given serviceId (e.g., querying the database)
-                // Example: Fetch reviews for the service
-                // const reviews = await Review.findAll({ where: { serviceId: serviceId } });
+                // Logic to fetch reviews for the service
                 res.status(200).json({ message: 'Reviews fetched successfully.' });
             }
             else {
