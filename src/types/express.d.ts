@@ -4,7 +4,7 @@ import { UserPayload } from './index';
 declare global {
   namespace Express {
     interface Request {
-      user?: Partial<UserPayload>;  // Make properties optional for user
+      user?: UserPayload;  // Ensure user is typed correctly
     }
   }
 }

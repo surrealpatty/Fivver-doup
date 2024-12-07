@@ -1,6 +1,7 @@
 // src/types/index.ts
 export interface UserPayload {
   id: string;
-  email: string;  // Make email required
-  username: string;  // Make username required
+  email: string;
+  username: string;
+  tier?: string;  // Add tier, making it optional or required based on your use case
 }

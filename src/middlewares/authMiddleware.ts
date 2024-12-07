@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken'; // Iport jwt for token verification
-import { UserPayload } from '../types';  // Adjust based on file location
+import { UserPayload } from '../types';  // Adjust if necessary
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
