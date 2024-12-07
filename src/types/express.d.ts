@@ -5,7 +5,7 @@ import { UserPayload } from './index';  // Correctly import the UserPayload inte
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;  // Add 'user' property to the Request interface
+      user?: UserPayload;  // Ensure 'user' property is consistent across all declarations
     }
   }
 }

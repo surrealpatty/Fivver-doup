@@ -1,29 +1,26 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { AuthRequest } from '@types';
 
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // Ensure the type is correctly exported
-}
+export const authenticateJWT = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // Replace this with your actual authentication logic (e.g., verifying a JWT token)
+    const token = req.headers.authorization?.split(' ')[1]; // Assuming the token is in the Authorization header
+    
+    if (token) {
+      // Example token validation logic:
+      // Verify the JWT token (you can use a library like jsonwebtoken for this)
+      const decoded = await someJWTVerificationFunction(token);
 
-// Middleware to authenticate JWT and attach the decoded user to the request object
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Token is expected as "Bearer <token>"
-
-  // If no token is provided, respond with a 401 Unauthorized error
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });  // Returning Response here is fine
-  }
-
-  // Verify the token and decode it
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token is invalid' });  // Returning Response here is fine
+      // Attach the decoded user information to the request object
+      req.user = decoded; // Add the decoded user info to `req.user` for later use in routes
+      next(); // Continue to the next middleware or route handler
+    } else {
+      res.status(401).json({ message: 'Unauthorized, no token provided' });
     }
-
-    // Attach the decoded user payload to the request object (req.user)
-    req.user = decoded as AuthRequest['user'];  // Cast decoded object to AuthRequest['user'] type
-    next();  // Proceed to the next middleware or route handler
-  });
+  } catch (error) {
+    next(error); // Pass the error to the next error handler
+  }
 };
