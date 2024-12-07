@@ -36,8 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/service.ts
 var express_1 = require("express");
-var authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
+var authMiddleware_1 = require("../middlewares/authMiddleware"); // JWT middleware
 var serviceController_1 = require("../controllers/serviceController"); // Import the controller function
 var router = (0, express_1.Router)();
 // PUT route for updating a service by ID

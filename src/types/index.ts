@@ -1,8 +1,9 @@
 // src/types/index.ts
+
 export interface UserPayload {
   id: string;
-  email?: string;
-  username?: string;
-  role?: string;
-  tier?: string; // Add any additional properties needed
+  email?: string;  // Optional
+  username?: string;  // Optional
+  role?: string;  // Optional, if you're using roles
+  tier?: string;  // Optional, if you're using user tiers
 }
