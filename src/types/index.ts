@@ -2,11 +2,10 @@
 export interface UserPayload {
   id: string;
   email: string;
-  username: string;  // Make sure 'username' is required if it's expected
-  tier?: string;     // Optional tier property
+  username?: string;  // Optional username field
+  tier?: string;      // Optional tier field, if needed
 }
-
-// Define the AuthRequest interface if it's necessary
+// Define the AuthRequest interface if necessary for custom request handling
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // This will extend Request to include 'user'
+  user?: UserPayload;  // This extends the Express Request object to include 'user'
 }
