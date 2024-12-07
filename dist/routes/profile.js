@@ -35,10 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
-var services_1 = require("@models/services"); // Ensure alias for services model is working correctly
+var services_1 = __importDefault(require("@models/services")); // Ensure alias for services model is working correctly
 var router = (0, express_1.Router)();
 // GET route for retrieving user profile and associated services
 router.get('/profile', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {

@@ -35,13 +35,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.registerUser = void 0;
-var bcryptjs_1 = require("bcryptjs"); // Import bcrypt for password hashing
-var jsonwebtoken_1 = require("jsonwebtoken"); // Import jwt for generating tokens
+var bcryptjs_1 = __importDefault(require("bcryptjs")); // Import bcrypt for password hashing
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jwt for generating tokens
 var user_1 = require("../models/user"); // Ensure correct import path for your User model
-var nodemailer_1 = require("nodemailer"); // Import nodemailer for sending emails
-var dotenv_1 = require("dotenv"); // Import dotenv to load environment variables
+var nodemailer_1 = __importDefault(require("nodemailer")); // Import nodemailer for sending emails
+var dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
 // Load environment variables
 dotenv_1.default.config();
 // Set up the transporter with Gmail or another mail service

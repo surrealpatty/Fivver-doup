@@ -35,8 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var nodemailer_1 = require("nodemailer");
+var nodemailer_1 = __importDefault(require("nodemailer"));
 // Create a transporter using the Gmail service and your credentials from the environment variables
 var transporter = nodemailer_1.default.createTransport({
     service: 'gmail',

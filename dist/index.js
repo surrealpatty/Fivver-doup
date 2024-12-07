@@ -1,12 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
-var express_1 = require("express");
-var cors_1 = require("cors");
+var express_1 = __importDefault(require("express"));
+var cors_1 = __importDefault(require("cors"));
 var database_1 = require("./config/database"); // Named import for sequelize
-var user_1 = require("./routes/user"); // Import user routes
-var profile_1 = require("./routes/profile"); // Default import for profile router
-var dotenv_1 = require("dotenv"); // For loading environment variables
+var user_1 = __importDefault(require("./routes/user")); // Import user routes
+var profile_1 = __importDefault(require("./routes/profile")); // Default import for profile router
+var dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app instance

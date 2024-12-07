@@ -35,9 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateService = void 0;
-var services_1 = require("@models/services"); // Ensure correct path to Service model
+var services_1 = __importDefault(require("@models/services")); // Ensure correct path to Service model
 // Function to update an existing service
 var updateService = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, _a, name, description, price, service, error_1;

@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkAuth = exports.authenticateToken = void 0;
-var jsonwebtoken_1 = require("jsonwebtoken");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Ensure JWT_SECRET is available in the environment variables
 var jwtSecret = process.env.JWT_SECRET; // Assert type as string
 if (!jwtSecret) {

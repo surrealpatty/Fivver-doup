@@ -88,10 +88,13 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 var sequelize_typescript_1 = require("sequelize-typescript");
-var bcryptjs_1 = require("bcryptjs");
+var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var User = function () {
     var _classDecorators = [(0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true })];
     var _classDescriptor;

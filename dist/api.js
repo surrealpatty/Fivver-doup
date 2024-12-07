@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-var jsonwebtoken_1 = require("jsonwebtoken");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate the token
 var authenticateToken = function (req, res, next) {
     // Updated return type here

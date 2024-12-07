@@ -35,10 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var database_1 = require("../config/database"); // Import sequelize instance
 var user_1 = require("../models/user"); // Use named import for User model
-var services_1 = require("../models/services"); // Import Service and ServiceCreationAttributes
+var services_1 = __importDefault(require("../models/services")); // Import Service and ServiceCreationAttributes
 // Function to test user and service models
 var testModels = function () { return __awaiter(void 0, void 0, void 0, function () {
     var testUser, testServiceData, testService, error_1;

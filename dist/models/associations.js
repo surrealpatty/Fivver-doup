@@ -1,9 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Review = exports.Order = exports.Service = exports.User = void 0;
 var user_1 = require("./user"); // Import the User model
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_1.User; } });
-var services_1 = require("./services"); // Import the Service model (fixing the import to match the model path)
+var services_1 = __importDefault(require("./services")); // Import the Service model (fixing the import to match the model path)
 exports.Service = services_1.default;
 var order_1 = require("./order"); // Import the Order model
 Object.defineProperty(exports, "Order", { enumerable: true, get: function () { return order_1.Order; } });

@@ -35,10 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = require("supertest");
+var supertest_1 = __importDefault(require("supertest"));
 var index_1 = require("../index"); // Import the app instance
-var jsonwebtoken_1 = require("jsonwebtoken"); // For generating tokens
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For generating tokens
 // Helper function to generate JWT token with a role
 var generateToken = function (userId, role) {
     return jsonwebtoken_1.default.sign({ id: userId, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });

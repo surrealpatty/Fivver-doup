@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
-var jsonwebtoken_1 = require("jsonwebtoken");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate JWT and attach the decoded user to the request object
 var authenticateJWT = function (req, res, next) {
     var _a;

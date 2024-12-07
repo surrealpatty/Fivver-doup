@@ -35,11 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = require("supertest");
+var supertest_1 = __importDefault(require("supertest"));
 var database_1 = require("../config/database"); // Corrected import for sequelizes
 var user_1 = require("../models/user");
-var services_1 = require("../models/services");
+var services_1 = __importDefault(require("../models/services"));
 var order_1 = require("../models/order");
 var index_1 = require("../../src/index"); // Import app from src/index directly
 // Mock the methods of the models

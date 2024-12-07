@@ -37,33 +37,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import path
+var authMiddleware_1 = require("../middlewares/authMiddleware"); // Import authenticateJWT middleware
 var router = (0, express_1.Router)();
-// Explicitly type the route handler as RequestHandler
-router.post('/services', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+// POST route to create a new review
+router.post('/', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         try {
-            // Your service creation logic here
-            res.status(200).json({ message: 'Service created successfully' });
+            // Ensure req.user is authenticated and has a tier
+            if (req.user && req.user.tier) {
+                // Logic to create a review (e.g., saving it in the database)
+                res.status(201).json({ message: 'Review created successfully.' });
+            }
+            else {
+                res.status(400).json({ message: 'User tier is missing.' });
+            }
         }
-        catch (error) {
-            next(error); // Pass errors to the next error-handling middleware
+        catch (err) {
+            next(err); // Pass errors to the error handler
         }
         return [2 /*return*/];
     });
 }); });
-// Define the /profile route with correct typing
-router.get('/profile', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+// GET route to fetch reviews for a specific service
+router.get('/:serviceId', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var serviceId;
     return __generator(this, function (_a) {
         try {
-            if (!req.user) {
-                res.status(401).send('Unauthorized');
-                return [2 /*return*/]; // Return to stop execution
+            if (req.user) {
+                serviceId = req.params.serviceId;
+                // Logic to fetch reviews for the service
+                res.status(200).json({ message: 'Reviews fetched successfully.' });
             }
-            res.status(200).json({ profile: req.user }); // Safely access req.user
+            else {
+                res.status(400).json({ message: 'User not authenticated.' });
+            }
         }
-        catch (error) {
-            next(error); // Pass errors to the next error-handling middleware
+        catch (err) {
+            next(err); // Pass errors to the error handler
         }
         return [2 /*return*/];
     });

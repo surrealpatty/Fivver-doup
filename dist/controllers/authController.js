@@ -35,10 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.registerUser = void 0;
-var bcryptjs_1 = require("bcryptjs"); // Ensure consistent import
-var jsonwebtoken_1 = require("jsonwebtoken");
+var bcryptjs_1 = __importDefault(require("bcryptjs")); // Ensure consistent import
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var user_1 = require("../models/user");
 // User Registration
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
