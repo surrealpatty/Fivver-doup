@@ -4,8 +4,8 @@
     "paths": {
       "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
       "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
-      "@/*": ["*"],                // Maps '@' to the root of 'src' for other modules
-      "@config/*": ["config/*"]    // Maps '@config' to 'src/config'
+      "@/*": ["*"],               // Maps '@' to the root of 'src' for other modules
+      "@config/*": ["config/*"]   // Maps '@config' to 'src/config'
     },
     "outDir": "./dist",  // Output directory for compiled files
     "rootDir": "./src",  // Ensure your source code is under the 'src' directory
