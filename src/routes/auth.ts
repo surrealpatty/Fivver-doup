@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { registerUser, loginUser } from '../controllers/authController';  // Import controller functions
-import { UserPayload, AuthRequest } from '../types';  // Adjust if necessary
 
 const router = Router();
 
