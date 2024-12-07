@@ -1,7 +1,7 @@
-// Define the UserPayload interface for user-related data passed with the request (e.g., JWT)
+// src/types/user.ts
 export interface UserPayload {
-  id: string;       // The user's ID (required)
-  email: string;    // The user's email (required)
-  username: string; // The user's username (required)
-  tier?: string;    // Optional tier if applicable
+  id: string;
+  email?: string;
+  username?: string;
+  tier?: string;
 }

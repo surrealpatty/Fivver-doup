@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/index.d.ts"],"sourcesContent":["import { Express } from 'express-serve-static-core';\r\n\r\ndeclare const app: Express;\r\nexport { app };\r\n"],"names":["app"],"mappings":";;;;+BAGSA;;;eAAAA"}
