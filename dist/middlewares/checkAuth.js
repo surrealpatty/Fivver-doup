@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkAuth = void 0;
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // You can use jsonwebtoken for verifying JWT tokens
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // JWT for verifying tokens
 // Secret key for JWT verification, you should store it in an environment variable for security
 var SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 // Middleware to check if the user is authenticated
