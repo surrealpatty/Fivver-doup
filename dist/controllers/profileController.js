@@ -2,7 +2,7 @@
 // src/controllers/profileController.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserProfile = void 0;
-var getUserProfile = function (userId) {
+const getUserProfile = (userId) => {
     // Example implementation for fetching user profile data
     // Replace this with your actual logic, e.g., database query, etc.
     return {
