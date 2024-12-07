@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken'; // Import jwt for token verification
-import { UserPayload } from '@types';  // Correct relative import based on tsconfig paths
+import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 

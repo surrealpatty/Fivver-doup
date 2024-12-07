@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '@types';  // Make sure this alias is correctly set in tsconfig.json
+import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
 import { updateService } from '../controllers/serviceController'; // Import the controller function
 

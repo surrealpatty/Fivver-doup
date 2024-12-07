@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",  // Ensure that this points to the 'src' directory for module resolution
+    "baseUrl": "./src",  // Ensure this points to the 'src' directory for module resolution
     "paths": {
       "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
       "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
@@ -9,7 +9,7 @@
     },
     "outDir": "./dist",  // Output directory for compiled files
     "rootDir": "./src",  // Source code directory (should be 'src')
-    "moduleResolution": "node",  // Node.js module resolution
+    "moduleResolution": "node",  // Use Node.js module resolution
     "esModuleInterop": true,     // Enables default imports for CommonJS modules
     "experimentalDecorators": true,  // Enable experimental decorators
     "emitDecoratorMetadata": true     // Emit metadata for decorators

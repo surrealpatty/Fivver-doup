@@ -1,7 +1,7 @@
 // src/routes/reviewRoutes.ts
 
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Correct import for AuthRequest
+import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
 
 const router = Router();
