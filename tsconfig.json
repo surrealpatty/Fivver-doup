@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",  // Base URL for module resolution
+    "baseUrl": "./src",  // Ensure that this points to the 'src' directory for module resolution
     "paths": {
       "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
       "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
-      "@/*": ["*"],                // Generic mapping for other modules in 'src'
-      "@config/*": ["config/*"]    // Maps '@config' to 'src/config' directory
+      "@/*": ["*"],                // Maps '@' to the root of 'src' for other modules
+      "@config/*": ["config/*"]    // Maps '@config' to 'src/config'
     },
     "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Ensure your source code is under the 'src' directory
-    "moduleResolution": "node",  // Use Node.js module resolution
+    "rootDir": "./src",  // Source code directory (should be 'src')
+    "moduleResolution": "node",  // Node.js module resolution
     "esModuleInterop": true,     // Enables default imports for CommonJS modules
     "experimentalDecorators": true,  // Enable experimental decorators
     "emitDecoratorMetadata": true     // Emit metadata for decorators
   },
   "include": [
     "src/**/*.ts",    // Include all TypeScript files inside 'src'
-    "src/types/**/*.ts", // Include TypeScript files from the 'types' directory
-    "src/test/**/*.ts"   // Include TypeScript files from the 'test' directory
+    "src/types/**/*.ts", // Include TypeScript files from 'types' directory
+    "src/test/**/*.ts"   // Include TypeScript files from 'test' directory
   ],
   "exclude": [
     "node_modules",      // Exclude node_modules
