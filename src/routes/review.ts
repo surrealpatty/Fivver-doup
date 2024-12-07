@@ -1,7 +1,5 @@
-// src/routes/reviewRoutes.ts
-
-import { Router, Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types';  // Assuming `types` folder is at the same level
+import { Router, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types';  // Correct import for AuthRequest
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
 
 const router = Router();
