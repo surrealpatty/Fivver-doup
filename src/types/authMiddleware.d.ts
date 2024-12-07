@@ -1,16 +1,8 @@
-// src/types/authMiddleware.ts
-import { Request } from 'express';
-import { AuthRequest } from '../types/authMiddleware';  // Correct import
-
-// Define the structure of the user data attached to the request
-export interface UserPayload {
-  id: string;  // Required: ID of the user
-  email?: string;  // Optional: email can be omitted
-  username?: string;  // Optional: username can be omitted
-  tier?: string;  // Optional: tier property to define user tier (e.g., 'free' or 'paid')
-}
+// src/types/authMiddleware.d.ts
+import { Request } from 'express';  // Import Request from Express
+import { UserPayload } from './index';  // Import UserPayload from src/types/index.ts
 
 // Extend the Request interface to include the 'user' data
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // The 'user' object is optional and should match the UserPayload structure
+  user?: UserPayload;  // Optional user property with the correct type
 }

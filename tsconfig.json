@@ -4,12 +4,13 @@
     "paths": {
       "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
       "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
-      "@/*": ["*"]                // Generic mapping for other modules in 'src'
+      "@/*": ["*"],                // Generic mapping for other modules in 'src'
+      "@config/*": ["config/*"]    // Maps '@config' to 'src/config' directory
     },
-    "outDir": "./dist",
+    "outDir": "./dist",  // Output directory for compiled files
     "rootDir": "./src",  // Ensure your source code is under the 'src' directory
-    "moduleResolution": "node",
-    "esModuleInterop": true,
+    "moduleResolution": "node",  // Use Node.js module resolution
+    "esModuleInterop": true,     // Enables default imports for CommonJS modules
     "experimentalDecorators": true,  // Enable experimental decorators
     "emitDecoratorMetadata": true     // Emit metadata for decorators
   },
