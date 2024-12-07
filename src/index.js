@@ -9,7 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Named import for sequelize
 const user_1 = require("./routes/user"); // Named import
 const profile_1 = __importDefault(require("./routes/profile")); // Default import for profile router
-const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
+const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables 
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app instance
@@ -47,8 +47,8 @@ database_1.sequelize.authenticate()
 });
 // Global error handler middleware
 app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: 'Something went wrong!' });
+    console.error(err); // Log the error
+    res.status(500).json({ message: 'Something went wrong!' }); // Send generic error response
 });
 // Start the server on dynamic port (use process.env.PORT or 3000)
 const server = app.listen(port, () => {
