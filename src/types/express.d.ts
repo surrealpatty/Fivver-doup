@@ -1,5 +1,5 @@
 // src/types/express.d.ts
-import { UserPayload } from './index';  // Correct path if necessary
+import { UserPayload } from './index';  // Adjust path if necessary
 
 declare global {
   namespace Express {
