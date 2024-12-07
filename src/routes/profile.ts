@@ -2,7 +2,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '@types';  // Ensure alias for AuthRequest
 import { authenticateJWT } from '../middlewares/authMiddleware';  // JWT middleware
-import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
+import { UserPayload } from '../types';  // Assuming `types` folder is at the same level
 import Service from '@models/services';  // Ensure alias for services model
 
 const router = Router();

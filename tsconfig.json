@@ -8,7 +8,7 @@
       "@config/*": ["config/*"]    // Maps '@config' to 'src/config'
     },
     "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Source code directory (should be 'src')
+    "rootDir": "./src",  // Ensure your source code is under the 'src' directory
     "moduleResolution": "node",  // Use Node.js module resolution
     "esModuleInterop": true,     // Enables default imports for CommonJS modules
     "experimentalDecorators": true,  // Enable experimental decorators

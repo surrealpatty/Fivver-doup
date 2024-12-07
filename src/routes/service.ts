@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
+import { UserPayload } from '../types';  // Assuming `types` folder is at the same level
 import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
 import { updateService } from '../controllers/serviceController'; // Import the controller function
 

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { registerUser, loginUser } from '../controllers/authController';  // Import controller functions
-import { UserPayload } from '@types';  // Ensure this resolves to 'src/types/index.ts'
+import { UserPayload } from '../types';  // Assuming `types` folder is at the same level
 
 const router = Router();
 
