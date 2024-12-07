@@ -1,6 +1,6 @@
-// src/types/index.ts
 export interface UserPayload {
-  id: string;       // Required
-  email?: string;   // Optional, matching Express's expected type
-  username?: string; // Optional
+  id: string;
+  email: string;
+  username?: string;
+  tier?: string; // Optional, add tier if it's part of your logic
 }
