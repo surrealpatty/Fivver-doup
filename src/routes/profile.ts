@@ -1,7 +1,7 @@
 // src/routes/profile.ts
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateJWT } from '../middlewares/authMiddleware';  // JWT middleware
-import { UserPayload, AuthRequest } from '../types';  // Adjust if necessary
+import { UserPayload } from '../types';  // Adjust if necessary
 import Service from '@models/services';  // Ensure alias for services model
 
 const router = Router();

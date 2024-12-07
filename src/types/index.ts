@@ -1,11 +1,8 @@
-// Define the UserPayload interface
+// src/types/index.ts
+
 export interface UserPayload {
   id: string;
-  email: string;
-  username?: string;  // Optional username field
-  tier?: string;      // Optional tier field, if needed
-}
-// Define the AuthRequest interface if necessary for custom request handling
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // This extends the Express Request object to include 'user'
+  email?: string;
+  username?: string;
+  role?: string;  // Add the role field here if it's part of UserPayload
 }
