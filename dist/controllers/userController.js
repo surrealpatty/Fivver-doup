@@ -39,23 +39,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.registerUser = void 0;
-var bcryptjs_1 = __importDefault(require("bcryptjs")); // Import bcrypt for password hashing
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jwt for generating tokens
-var user_1 = require("../models/user"); // Ensure correct import path for your User model
-var nodemailer_1 = __importDefault(require("nodemailer")); // Import nodemailer for sending emails
-var dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
-// Load environment variables
+exports.registerUser = void 0;
+var bcryptjs_1 = __importDefault(require("bcryptjs"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var user_1 = require("../models/user");
+var nodemailer_1 = __importDefault(require("nodemailer"));
+var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// Set up the transporter with Gmail or another mail service
+// Setup for nodemailer transporter
 var transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.GMAIL_USER, // Ensure GMAIL_USER is set in your environment variables
-        pass: process.env.GMAIL_PASS, // Ensure GMAIL_PASS is set in your environment variables
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
     },
 });
-// Controller function to handle user registration
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, username, existingUser, hashedPassword, newUser, verificationToken, verificationLink, mailOptions, error_1;
     return __generator(this, function (_b) {
@@ -65,7 +63,6 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 6, , 7]);
-                // Validate required fields
                 if (!email || !password || !username) {
                     return [2 /*return*/, res.status(400).json({ message: 'All fields are required' })];
                 }
@@ -82,68 +79,31 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                         username: username,
                         email: email,
                         password: hashedPassword,
-                        isVerified: false, // Set to false until the user verifies their email
+                        isVerified: false, // User not verified until email confirmation
                     })];
             case 4:
                 newUser = _b.sent();
-                verificationToken = jsonwebtoken_1.default.sign({ id: newUser.id }, process.env.JWT_SECRET, // Ensure JWT_SECRET is set in your environment variables
-                { expiresIn: '1d' } // Token expires in 1 day
+                verificationToken = jsonwebtoken_1.default.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1d' } // Token expires in 1 day
                 );
                 verificationLink = "".concat(process.env.BASE_URL, "/verify?token=").concat(verificationToken);
                 mailOptions = {
-                    from: process.env.GMAIL_USER, // Use the email from your environment variables
+                    from: process.env.GMAIL_USER,
                     to: email,
                     subject: 'Please verify your email address',
                     html: "<p>Click <a href=\"".concat(verificationLink, "\">here</a> to verify your email address.</p>"),
                 };
-                // Send the verification email asynchronously
+                // Send the email
                 return [4 /*yield*/, transporter.sendMail(mailOptions)];
             case 5:
-                // Send the verification email asynchronously
+                // Send the email
                 _b.sent();
-                // Return response indicating success
                 return [2 /*return*/, res.status(201).json({ message: 'Registration successful, please check your email for verification.' })];
             case 6:
                 error_1 = _b.sent();
-                console.error(error_1);
+                console.error('Error during registration:', error_1);
                 return [2 /*return*/, res.status(500).json({ message: 'Server error during registration.' })];
             case 7: return [2 /*return*/];
         }
     });
 }); };
 exports.registerUser = registerUser;
-// Controller function to handle user login
-var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, user, isPasswordValid, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 3, , 4]);
-                _a = req.body, email = _a.email, password = _a.password;
-                // Validate required fields
-                if (!email || !password) {
-                    return [2 /*return*/, res.status(400).json({ message: 'Email and password are required' })];
-                }
-                return [4 /*yield*/, user_1.User.findOne({ where: { email: email } })];
-            case 1:
-                user = _b.sent();
-                if (!user) {
-                    return [2 /*return*/, res.status(404).json({ message: 'User not found' })];
-                }
-                return [4 /*yield*/, bcryptjs_1.default.compare(password, user.password)];
-            case 2:
-                isPasswordValid = _b.sent();
-                if (!isPasswordValid) {
-                    return [2 /*return*/, res.status(401).json({ message: 'Invalid credentials' })];
-                }
-                // Return login success response
-                return [2 /*return*/, res.status(200).json({ message: 'Login successful', userId: user.id })];
-            case 3:
-                error_2 = _b.sent();
-                console.error(error_2);
-                return [2 /*return*/, res.status(500).json({ message: 'Internal server error' })];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-exports.login = login;

@@ -1,5 +1,4 @@
 "use strict";
-// src/routes/auth.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,8 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var authController_1 = require("../controllers/authController"); // Correctly import registerUser
+var authController_1 = require("../controllers/authController"); // Import controller functions
 var router = (0, express_1.Router)();
+// Registration Route
 router.post('/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var error_1;
     return __generator(this, function (_a) {
@@ -48,11 +48,32 @@ router.post('/register', function (req, res) { return __awaiter(void 0, void 0, 
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, (0, authController_1.registerUser)(req, res)];
             case 1:
-                _a.sent();
+                _a.sent(); // Call the registerUser function from the controller
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
+                console.error('Registration error:', error_1); // Log error for debugging
                 res.status(500).json({ message: 'Server error during user registration.' });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+// Login Route
+router.post('/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, authController_1.loginUser)(req, res)];
+            case 1:
+                _a.sent(); // Call the loginUser function from the controller
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.error('Login error:', error_2); // Log error for debugging
+                res.status(500).json({ message: 'Server error during login.' });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
