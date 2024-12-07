@@ -3,5 +3,5 @@ export interface UserPayload {
   id: string;
   email: string;
   username: string;
-  tier?: string;  // Add tier, making it optional or required based on your use case
+  tier?: string;  // Make tier optional or required based on your logic
 }
