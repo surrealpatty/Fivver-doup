@@ -1,10 +1,10 @@
 // src/types/express.d.ts
-import { UserPayload } from './index';  // Import UserPayload from your custom types
+import { UserPayload } from './index';  // Ensure correct import
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;  // Ensure user matches the correct type
+      user?: UserPayload;  // Ensure consistent declaration of `user`
     }
   }
 }
