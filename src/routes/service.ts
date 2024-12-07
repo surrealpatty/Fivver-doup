@@ -1,12 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { UserPayload, AuthRequest } from '../types';  // Adjust if necessary
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
+// src/routes/service.ts
+import { Router, Response, NextFunction } from 'express';
+import { authenticateJWT } from '../middlewares/authMiddleware'; // JWT middleware
 import { updateService } from '../controllers/serviceController'; // Import the controller function
 
 const router = Router();
 
 // PUT route for updating a service by ID
-router.put('/services/:id', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+router.put('/services/:id', authenticateJWT, async (req, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Call the updateService controller function and wait for it to complete
     await updateService(req, res); // The controller function will handle the request and response

@@ -1,5 +1,5 @@
 // src/types/express.d.ts
-import { UserPayload } from './index';  // Make sure this imports the correct UserPayload type
+import { UserPayload } from './index';  // Make sure to import the UserPayload type
 
 declare global {
   namespace Express {
