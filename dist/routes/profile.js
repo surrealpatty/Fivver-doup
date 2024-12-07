@@ -39,9 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/profile.ts
 var express_1 = require("express");
-var authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateJWT
-var services_1 = __importDefault(require("@models/services")); // Ensure alias for services model is working correctly
+var authMiddleware_1 = require("../middlewares/authMiddleware"); // JWT middleware
+var services_1 = __importDefault(require("@models/services")); // Ensure alias for services model
 var router = (0, express_1.Router)();
 // GET route for retrieving user profile and associated services
 router.get('/profile', authMiddleware_1.authenticateJWT, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -51,7 +52,6 @@ router.get('/profile', authMiddleware_1.authenticateJWT, function (req, res, nex
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 user = req.user;
-                // Check if the user exists
                 if (!user) {
                     res.status(403).json({ message: 'User not authenticated' });
                     return [2 /*return*/];
@@ -59,16 +59,16 @@ router.get('/profile', authMiddleware_1.authenticateJWT, function (req, res, nex
                 return [4 /*yield*/, services_1.default.findAll({ where: { userId: user.id } })];
             case 1:
                 services = _a.sent();
-                // Respond with the user data and the user's services
+                // Return the user data and associated services
                 res.status(200).json({ user: user, services: services });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
                 console.error('Error fetching profile:', error_1);
-                next(error_1); // Pass the error to the next error handler
+                next(error_1); // Pass error to the next error handler
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
-exports.default = router; // Correct default export for the router
+exports.default = router;
