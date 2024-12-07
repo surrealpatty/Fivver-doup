@@ -5,8 +5,8 @@ exports.checkRole = void 0;
  * Middleware to enforce role-based access control.
  * @param requiredRole - The role required to access the route.
  */
-const checkRole = (requiredRole) => {
-    return (req, res, next) => {
+var checkRole = function (requiredRole) {
+    return function (req, res, next) {
         // Ensure `req.user` exists and contains a role
         if (!req.user) {
             res.status(401).json({ message: 'User not authenticated.' });

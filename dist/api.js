@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate the token
-const authenticateToken = (req, res, next) => {
+var authenticateToken = function (req, res, next) {
     // Updated return type here
     try {
         // Extract the token from the Authorization header
-        const authorizationHeader = req.headers['authorization'];
+        var authorizationHeader = req.headers['authorization'];
         // Check if the header exists and starts with "Bearer"
         if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
             return res
@@ -18,7 +18,7 @@ const authenticateToken = (req, res, next) => {
                 .json({ message: 'Authorization token is missing or invalid' });
         }
         // Extract the token after "Bearer"
-        const token = authorizationHeader.split(' ')[1];
+        var token = authorizationHeader.split(' ')[1];
         // Check if the token is present
         if (!token) {
             return res
@@ -26,13 +26,13 @@ const authenticateToken = (req, res, next) => {
                 .json({ message: 'Authorization token is missing' });
         }
         // Ensure the JWT_SECRET is configured in the environment variables
-        const jwtSecret = process.env.JWT_SECRET;
+        var jwtSecret = process.env.JWT_SECRET;
         if (!jwtSecret) {
             console.error('JWT_SECRET is not configured in the environment variables');
             return res.status(500).json({ message: 'Internal server error' });
         }
         // Verify the token and decode the payload
-        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
+        var decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
         // Attach the user data from the decoded token to the request object
         req.user = decoded;
         // Proceed to the next middleware or route handler

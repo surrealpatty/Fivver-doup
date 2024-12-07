@@ -4,15 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Review = exports.Order = exports.Service = exports.User = void 0;
-const user_1 = require("./user"); // Import the User model
+var user_1 = require("./user"); // Import the User model
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_1.User; } });
-const services_1 = __importDefault(require("./services")); // Import the Service model (fixing the import to match the model path)
+var services_1 = __importDefault(require("./services")); // Import the Service model (fixing the import to match the model path)
 exports.Service = services_1.default;
-const order_1 = require("./order"); // Import the Order model
+var order_1 = require("./order"); // Import the Order model
 Object.defineProperty(exports, "Order", { enumerable: true, get: function () { return order_1.Order; } });
-const review_1 = require("./review"); // Import the Review model
+var review_1 = require("./review"); // Import the Review model
 Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return review_1.Review; } });
-const database_1 = require("@config/database"); // Use the alias '@config/database'
+var database_1 = require("@config/database"); // Use the alias '@config/database'
 // Define associations after registering models
 // User can have many services (a user can post many services)
 user_1.User.hasMany(services_1.default, { foreignKey: 'userId' }); // Foreign key will be userId in Service
@@ -27,6 +27,6 @@ review_1.Review.belongsTo(services_1.default, { foreignKey: 'serviceId' }); // A
 order_1.Order.belongsTo(user_1.User, { foreignKey: 'userId' }); // An order belongs to one user
 order_1.Order.belongsTo(services_1.default, { foreignKey: 'serviceId' }); // An order belongs to one service
 // Optionally, sync models to the database
-database_1.sequelize.sync({ force: false }).then(() => {
+database_1.sequelize.sync({ force: false }).then(function () {
     console.log('Model associations are successfully set up.');
 });

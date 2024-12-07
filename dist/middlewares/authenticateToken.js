@@ -4,24 +4,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate the token
-const authenticateToken = (req, res, next) => {
+var authenticateToken = function (req, res, next) {
     try {
         // Extract the token from the Authorization header
-        const authorizationHeader = req.headers['authorization'];
+        var authorizationHeader = req.headers['authorization'];
         // Check if the header exists and starts with "Bearer"
         if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
             res.status(401).json({ message: 'Authorization token is missing or invalid' });
             return; // Return here to stop further processing
         }
-        const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
+        var token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
         // Check if the token is present
         if (!token) {
             res.status(401).json({ message: 'Authorization token is missing' });
             return; // Return here to stop further processing
         }
-        const jwtSecret = process.env.JWT_SECRET;
+        var jwtSecret = process.env.JWT_SECRET;
         // Ensure the JWT_SECRET is configured in the environment variables
         if (!jwtSecret) {
             console.error('JWT_SECRET is not configured in the environment variables');
@@ -29,7 +29,7 @@ const authenticateToken = (req, res, next) => {
             return; // Return here to stop further processing
         }
         // Verify the token and decode the payload
-        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
+        var decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
         // Attach the user data from the decoded token to the request object
         req.user = decoded;
         // Proceed to the next middleware or route handler
