@@ -1,6 +1,6 @@
 // src/types/global.d.ts
 
-import { UserPayload } from '@types';  // Correctly import UserPayload from the correct path
+import { UserPayload } from './index';
 
 // Extend the Express namespace to include the custom `user` property in the Request object
 declare global {
