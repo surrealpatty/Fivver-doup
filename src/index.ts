@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Named import for sequelize
 import { userRouter } from './routes/user';  // Named import
 import profileRouter from './routes/profile'; // Default import for profile router
-import dotenv from 'dotenv'; // For loading environment variables
+import dotenv from 'dotenv'; // For loading environment variables 
 
 // Load environment variables from .env file
 dotenv.config();
@@ -50,9 +50,9 @@ sequelize.authenticate()
   });
 
 // Global error handler middleware
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: 'Something went wrong!' });
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);  // Log the error
+  res.status(500).json({ message: 'Something went wrong!' });  // Send generic error response
 });
 
 // Start the server on dynamic port (use process.env.PORT or 3000)
