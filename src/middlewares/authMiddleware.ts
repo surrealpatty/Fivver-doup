@@ -3,6 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '@types';
 
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Ensure the type is correctly exported
+}
+
 // Middleware to authenticate JWT and attach the decoded user to the request object
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
   const token = req.headers['authorization']?.split(' ')[1];  // Token is expected as "Bearer <token>"

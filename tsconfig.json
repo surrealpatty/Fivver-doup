@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src", // Base URL should be set to 'src' (or the root of your source code)
+    "baseUrl": "./src",  // Base URL set to 'src' (root of source code)
     "paths": {
-      "@models/*": ["models/*"],
-      "@config/*": ["config/*"],
-      "@types/*": ["types/*"],
-      "@/*": ["*"]
+      "@models/*": ["models/*"],   // Resolves to src/models/*
+      "@config/*": ["config/*"],   // Resolves to src/config/*
+      "@types/*": ["types/*"],     // Resolves to src/types/*
+      "@/*": ["*"]                 // Resolves to src/*
     },
     "outDir": "./dist",  // Output directory for compiled files
     "rootDir": "./src",  // Root directory for source files
-    // other settings...
+    "moduleResolution": "node",  // Ensure module resolution is set to 'node' for better compatibility
+    "esModuleInterop": true  // Ensure compatibility with ES6 module imports
   },
   "include": [
     "src/**/*.ts",  // Include all TypeScript files in the src folder
@@ -17,7 +18,7 @@
     "src/test/**/*.ts"  // Include test files
   ],
   "exclude": [
-    "node_modules",
+    "node_modules",  // Exclude node_modules
     "dist"  // Exclude dist folder
   ]
 }

@@ -1,29 +1,37 @@
-import { Router, Response, NextFunction } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware';  // Correct import path
-import { AuthRequest } from '@types';  // Ensure this alias is correctly set in tsconfig.json
+import { Router, Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '@types'; // Import AuthRequest with UserPayload correctly defined
+import { authenticateJWT } from '../middlewares/authMiddleware'; // Import authenticateJWT middleware
+import { UserPayload } from '../types'; // Import UserPayload if necessary
 
 const router = Router();
 
-// Explicitly type the route handler as RequestHandler
-router.post('/services', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+// POST route to create a new review
+router.post('/', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // Your service creation logic here
-    res.status(200).json({ message: 'Service created successfully' });
-  } catch (error) {
-    next(error);  // Pass errors to the next error-handling middleware
+    // Ensure req.user is authenticated and has a tier
+    if (req.user && req.user.tier) {
+      // Logic to create a review (e.g., saving it in the database)
+      res.status(201).json({ message: 'Review created successfully.' });
+    } else {
+      res.status(400).json({ message: 'User tier is missing.' });
+    }
+  } catch (err) {
+    next(err); // Pass errors to the error handler
   }
 });
 
-// Define the /profile route with correct typing
-router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+// GET route to fetch reviews for a specific service
+router.get('/:serviceId', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).send('Unauthorized');
-      return;  // Return to stop execution
+    if (req.user) {
+      const serviceId = req.params.serviceId;
+      // Logic to fetch reviews for the service
+      res.status(200).json({ message: 'Reviews fetched successfully.' });
+    } else {
+      res.status(400).json({ message: 'User not authenticated.' });
     }
-    res.status(200).json({ profile: req.user });  // Safely access req.user
-  } catch (error) {
-    next(error);  // Pass errors to the next error-handling middleware
+  } catch (err) {
+    next(err); // Pass errors to the error handler
   }
 });
 
