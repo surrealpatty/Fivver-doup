@@ -1,3 +1,4 @@
+// src/index.ts (Express Backend)
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Named import for sequelize
