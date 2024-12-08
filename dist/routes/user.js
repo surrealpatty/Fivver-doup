@@ -4,18 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRouter = void 0;
-// src/routes/user.ts
-const express_1 = require("express");
+const express_1 = require("express"); // Importing necessary types
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user"); // Import User model
-const userRouter = (0, express_1.Router)();
+const userRouter = (0, express_1.Router)(); // Initialize the express router
 exports.userRouter = userRouter;
 // User Login Route
 userRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body; // Destructure email and password from the request body
     try {
-        // Find the user in the database
+        // Find the user in the database using Sequelize model
         const user = await user_1.User.findOne({ where: { email } });
         // If user not found
         if (!user) {
@@ -30,7 +29,7 @@ userRouter.post('/login', async (req, res) => {
         const token = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_SECRET || 'your_secret', {
             expiresIn: '1h',
         });
-        // Send token in response
+        // Send the token in response
         res.json({ token });
     }
     catch (error) {

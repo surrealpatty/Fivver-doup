@@ -1,12 +1,12 @@
-import { Router, Request, Response } from 'express';  // Importing necessary types
+import { Router, Request, Response, NextFunction } from 'express';  // Import necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Import User model
+import { User } from '@models/user';  // Import User model using alias
 
-const userRouter = Router();  // Initialize the express router
+const userRouter: Router = Router();  // Initialize express router
 
 // User Login Route
-userRouter.post('/login', async (req: Request, res: Response) => {  // Explicitly typing req and res
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {  // Explicitly typing req, res, next, and return type
   const { email, password } = req.body;  // Destructure email and password from the request body
 
   try {
@@ -30,10 +30,10 @@ userRouter.post('/login', async (req: Request, res: Response) => {  // Explicitl
     });
 
     // Send the token in response
-    res.json({ token });
+    return res.json({ token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    next(error);  // Pass error to error handling middleware
   }
 });
 

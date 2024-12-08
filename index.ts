@@ -1,12 +1,11 @@
-import express from 'express';
-import  sequelize  from './src/config/database'; // Correct path to sequelize instance
+import express, { Application } from 'express';
+import { sequelize } from './src/config/database'; // Correct path to sequelize instance
 import { User } from './src/models/user'; // Correct path to the User model
-import userRouter from './src/routes/user'; // Correct path to userRouter
+import { userRouter } from './src/routes/user'; // Correctly import userRouter using named import
 import cors from 'cors';
 
-
 // Create Express app instance
-const app = express();
+const app: Application = express();
 
 // Set up the server port
 const port = process.env.PORT || 3000;
@@ -18,6 +17,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Welcome to Fiverr Clone!');
 });
+
+// Use CORS middleware if needed (to allow cross-origin requests)
+app.use(cors());
 
 // Database connection check
 sequelize
@@ -38,8 +40,8 @@ User.findAll() // Fetch users as a test
     console.error('Error fetching users:', error);
   });
 
-// Use the userRouter for routes starting with /api/users
-app.use('/api/users', userRouter); // Register the user routes under /api/users
+// Register the userRouter for routes starting with /api/users
+app.use('/api/users', userRouter);
 
 // Start the server
 app.listen(port, () => {
