@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize } from '@config/database';  // Using alias for database config
-import { userRouter } from '@routes/user';  // Correct import for userRouter
+import { sequelize } from '@config/database';  // Use the path alias for the database config
+import { userRouter } from '@routes/user';  // Correctly import userRouter
 
 dotenv.config();
 
@@ -13,8 +13,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// Register userRouter for /api/users routes
-app.use('/api/users', userRouter);  // Correct usage of the router
+// Mount the userRouter at /api/users
+app.use('/api/users', userRouter);  // Correct use of app.use() with router
 
 // Sync Sequelize models
 sequelize.sync({ alter: true })

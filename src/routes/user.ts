@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { User } from '@models/user';  // Using alias to import the User model
+import { User } from '@models/user';  // Adjust if necessary for your project structure
 
 const userRouter: Router = Router();  // Ensure it's Router, not Application
 
@@ -16,7 +16,7 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 
     // Handle password validation and token generation logic here
-    return res.json({ message: 'Login successful' });  // Modify as needed for your logic
+    return res.json({ message: 'Login successful' });
 
   } catch (error) {
     console.error(error);
@@ -24,4 +24,4 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
   }
 });
 
-export { userRouter };
+export { userRouter };  // Make sure you export it correctly as a named export
