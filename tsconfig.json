@@ -1,31 +1,42 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",  // Ensure this points to the 'src' directory for module resolution
+    "baseUrl": "./src",  // Base directory for module resolution
     "paths": {
       "@models/*": ["models/*"],  // Maps '@models' to 'src/models'
       "@types/*": ["types/*"],    // Maps '@types' to 'src/types'
-      "@/*": ["*"],                // Maps '@' to the root of 'src' for other modules
-      "@config/*": ["config/*"]    // Maps '@config' to 'src/config'
+      "@/*": ["*"],               // Maps '@' to the root of 'src'
+      "@config/*": ["config/*"]   // Maps '@config' to 'src/config'
     },
     "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Ensure your source code is under the 'src' directory
+    "rootDir": "./src",  // Specifies root directory of input files
     "moduleResolution": "node",  // Use Node.js module resolution
-    "esModuleInterop": true,     // Enables default imports for CommonJS modules
+    "esModuleInterop": true,     // Enable default imports for CommonJS modules
     "experimentalDecorators": true,  // Enable experimental decorators
-    "emitDecoratorMetadata": true     // Emit metadata for decorators
+    "emitDecoratorMetadata": true,  // Emit metadata for decorators
+    "typeRoots": ["./node_modules/@types", "./src/types"], // Include custom types
+    "types": [],  // Do not include all types by default, manually specify
+    "strict": true,  // Enable all strict type-checking options
+    "skipLibCheck": true,  // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in module imports
+    "resolveJsonModule": true,  // Allow importing JSON files
+    "allowSyntheticDefaultImports": true,  // Support default imports in non-ESM
+    "noImplicitAny": true,  // Disallow variables with an `any` type
+    "target": "ES2020",  // Target ECMAScript version
+    "module": "commonjs",  // Module system to use
+    "lib": ["ES2020", "DOM"]  // Include libraries for ES2020 and DOM
   },
   "include": [
     "src/**/*.ts",    // Include all TypeScript files inside 'src'
-    "src/types/**/*.ts", // Include TypeScript files from 'types' directory
-    "src/test/**/*.ts"   // Include TypeScript files from 'test' directory
+    "src/types/**/*.ts", // Include TypeScript files in 'types' directory
+    "src/test/**/*.ts"   // Include TypeScript files in 'test' directory
   ],
   "exclude": [
-    "node_modules",      // Exclude node_modules
-    "dist",              // Exclude dist directory (output folder)
-    "index.ts",          // Exclude root index.ts
-    "jest.config.ts",    // Exclude Jest config
-    "jest.setup.ts",     // Exclude Jest setup
-    "fivver-frontend",   // Exclude frontend folder
-    "fivver-frontend/**/*.vue" // Exclude all Vue files in the frontend directory
+    "node_modules",       // Exclude node_modules
+    "dist",               // Exclude output directory
+    "index.ts",           // Exclude root index.ts
+    "jest.config.ts",     // Exclude Jest config file
+    "jest.setup.ts",      // Exclude Jest setup file
+    "fivver-frontend",    // Exclude frontend folder
+    "fivver-frontend/**/*.vue" // Exclude all Vue files in frontend directory
   ]
 }

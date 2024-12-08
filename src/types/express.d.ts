@@ -1,14 +1,14 @@
-import { UserPayload } from './index';  // Correct import path
+// src/types/express.d.ts
+import { UserPayload } from './index'; // Import the custom UserPayload type
 
 declare global {
   namespace Express {
-    // Extend Express.Request to include the custom 'user' property with type UserPayload
     interface Request {
       user?: {
-        id: string;
+        id: string; // Matches the custom UserPayload
         email?: string;
         username?: string;
-        tier?: string; // Ensure consistency with your UserPayload
+        tier?: string;
       };
     }
   }
