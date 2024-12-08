@@ -1,52 +1,64 @@
-import express, { Application } from 'express';
-import { sequelize } from './src/config/database'; // Correct path to sequelize instance
-import { User } from './src/models/user'; // Correct path to the User model
-import { userRouter } from './src/routes/user'; // Correctly import userRouter using named import
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import { sequelize } from './config/database'; // Named import for sequelize
+import { userRouter } from './routes/user';  // Named import for userRouter
+import profileRouter from './routes/profile'; // Default import for profileRouter
+import dotenv from 'dotenv'; // For loading environment variables
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Create Express app instance
-const app: Application = express();
+const app = express();
 
-// Set up the server port
+// Set up the server port, defaulting to process.env.PORT or 3000
 const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Example route
-app.get('/', (req, res) => {
+// Enable CORS for cross-origin requests (if needed)
+app.use(cors());
+
+// Example route to test the server
+app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
-// Use CORS middleware if needed (to allow cross-origin requests)
-app.use(cors());
+// Synchronize Sequelize models with the database
+sequelize.sync({ alter: true }) // Using 'alter' to avoid data loss while updating models
+  .then(() => {
+    console.log('Models are synchronized with the database.');
+  })
+  .catch((error: Error) => {
+    console.error('Error syncing models:', error);
+  });
 
-// Database connection check
-sequelize
-  .authenticate()
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', userRouter); // Register user routes under /api/users
+
+// Register profile routes under /api/profile
+app.use('/api/profile', profileRouter); // Register profile routes under /api/profile
+
+// Test database connection
+sequelize.authenticate()
   .then(() => {
     console.log('Database connection established.');
   })
-  .catch((error: Error) => {
+  .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
 
-// Example of using the User model (this could be moved to a service or controller later)
-User.findAll() // Fetch users as a test
-  .then((users) => {
-    console.log('Users:', users);
-  })
-  .catch((error: Error) => {
-    console.error('Error fetching users:', error);
-  });
+// Global error handler middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);  // Log the error
+  res.status(500).json({ message: 'Something went wrong!' });  // Send a generic error response
+});
 
-// Register the userRouter for routes starting with /api/users
-app.use('/api/users', userRouter);
-
-// Start the server
-app.listen(port, () => {
+// Start the server on the specified port
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Export app for use in testing or elsewhere (if necessary)
-export { app };  // Optional: Exporting app in case it's needed for tests or elsewhere
+// Export app and server for use in tests or other parts of the application
+export { app, server };

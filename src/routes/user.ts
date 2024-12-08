@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';  // Import necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '@models/user';  // Import User model using alias
+import { User } from '../models/user';  // Adjust path if necessary (remove '@models' if not configured)
 
 const userRouter: Router = Router();  // Initialize express router
 
 // User Login Route
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response> => {  // Explicitly typing req, res, next, and return type
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   const { email, password } = req.body;  // Destructure email and password from the request body
 
   try {
@@ -37,4 +37,5 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
   }
 });
 
+// Export userRouter for use in other parts of the app
 export { userRouter };

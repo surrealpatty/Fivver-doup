@@ -2,40 +2,40 @@
   "compilerOptions": {
     "baseUrl": "./src",  // Set base directory for module resolution
     "paths": {
-      "@models/*": ["models/*"],         // Maps @models to the models directory
-      "@types/*": ["types/*"],           // Maps @types to the types directory
-      "@config/*": ["config/*"],         // Maps @config to the config directory
-      "@/*": ["*"]                       // Allows usage of @/ to reference any file in src
+      "@models/*": ["src/models/*"],        // Correct the alias to map @models to src/models
+      "@types/*": ["src/types/*"],          // Map @types to src/types
+      "@config/*": ["src/config/*"],        // Map @config to src/config
+      "@/*": ["src/*"]                      // Allow usage of @/ to reference any file in src
     },
-    "outDir": "./dist",                  // Output directory for compiled files
-    "rootDir": "./src",                  // Root directory of source files
-    "moduleResolution": "node",          // Resolve modules as Node.js does
-    "esModuleInterop": true,             // Enable interoperability between CommonJS and ES modules
-    "target": "ES2020",                  // Set the JavaScript version for the output
-    "module": "commonjs",                // Use CommonJS for modules (needed for Node.js)
-    "strict": true,                      // Enable strict type checking options
-    "skipLibCheck": true,                // Skip type checking of declaration files for faster compilation
+    "outDir": "./dist",                     // Output directory for compiled files
+    "rootDir": "./src",                     // Root directory of source files
+    "moduleResolution": "node",             // Resolve modules as Node.js does
+    "esModuleInterop": true,                // Enable interoperability between CommonJS and ES modules
+    "target": "ES2020",                     // Set the JavaScript version for the output
+    "module": "commonjs",                   // Use CommonJS for modules (needed for Node.js)
+    "strict": true,                         // Enable strict type checking options
+    "skipLibCheck": true,                   // Skip type checking of declaration files for faster compilation
     "forceConsistentCasingInFileNames": true,  // Ensure consistent casing in file names
-    "resolveJsonModule": true,           // Allow importing of JSON files as modules
-    "allowSyntheticDefaultImports": true, // Allow default imports from modules without a default export
-    "experimentalDecorators": true,      // Enable experimental support for decorators
-    "emitDecoratorMetadata": true,       // Emit metadata for decorators (useful for TypeORM, etc.)
+    "resolveJsonModule": true,              // Allow importing of JSON files as modules
+    "allowSyntheticDefaultImports": true,   // Allow default imports from modules without a default export
+    "experimentalDecorators": true,         // Enable experimental support for decorators
+    "emitDecoratorMetadata": true,          // Emit metadata for decorators (useful for TypeORM, etc.)
     "typeRoots": [
-      "./node_modules/@types",           // Include node_modules for type definitions
-      "./src/types"                      // Include src/types for custom type definitions
+      "./node_modules/@types",              // Include node_modules for type definitions
+      "./src/types"                         // Include src/types for custom type definitions
     ],
-    "lib": ["ES2020"],                   // Include libraries like ES2020 for full JS support
-    "skipDefaultLibCheck": true          // Skip checking the default library
+    "lib": ["ES2020"],                      // Include libraries like ES2020 for full JS support
+    "skipDefaultLibCheck": true             // Skip checking the default library
   },
   "include": [
-    "src/**/*.ts",                       // Include all TypeScript files in the src folder
-    "src/types/**/*.ts"                  // Include custom types in the src/types folder
+    "src/**/*.ts",                          // Include all TypeScript files in the src folder
+    "src/types/**/*.ts"                     // Include custom types in the src/types folder
   ],
   "exclude": [
-    "node_modules",                      // Exclude node_modules from compilation
-    "dist",                              // Exclude dist folder where compiled files are stored
-    "fivver-frontend",                   // Exclude frontend code from compilation
-    "jest.config.ts",                    // Exclude Jest configuration files
-    "jest.setup.ts"                      // Exclude Jest setup files
+    "node_modules",                         // Exclude node_modules from compilation
+    "dist",                                 // Exclude dist folder where compiled files are stored
+    "fivver-frontend",                      // Exclude frontend code from compilation
+    "jest.config.ts",                       // Exclude Jest configuration files
+    "jest.setup.ts"                         // Exclude Jest setup files
   ]
 }
