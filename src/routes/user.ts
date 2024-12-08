@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { User } from '@models/user';  // Ensure correct import path for your User model
+import { User } from '@models/user';  // Ensure the correct import path for your User model
 
-const userRouter: Router = Router();  // Correctly using Router
+const userRouter: Router = Router();  // Correctly using Router()
 
 // Example login route
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
