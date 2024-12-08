@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';  // Import necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from 'models/user';  // Ensure correct import path based on your tsconfig
+import { User } from '../models/user';  // Ensure correct import path based on your tsconfig
 
 const userRouter: Router = Router();  // Initialize express router
 
 // User Login Route
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;  // Destructure email and password from the request body
 
   try {
