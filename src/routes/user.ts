@@ -4,7 +4,7 @@ import { User } from '@models/user';  // Ensure the correct import path for your
 const userRouter: Router = Router();  // Correctly using Router()
 
 // Example login route
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+
   const { email, password } = req.body;
 
   try {
