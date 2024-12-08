@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRouter = void 0;
 const express_1 = require("express");
-const user_1 = require("@models/user"); // Using alias to import the User model
+const user_1 = require("@models/user"); // Adjust if necessary for your project structure
 const userRouter = (0, express_1.Router)(); // Ensure it's Router, not Application
 exports.userRouter = userRouter;
 // Example login route
@@ -15,7 +15,7 @@ userRouter.post('/login', async (req, res, next) => {
             return res.status(400).json({ message: 'User not found' });
         }
         // Handle password validation and token generation logic here
-        return res.json({ message: 'Login successful' }); // Modify as needed for your logic
+        return res.json({ message: 'Login successful' });
     }
     catch (error) {
         console.error(error);
