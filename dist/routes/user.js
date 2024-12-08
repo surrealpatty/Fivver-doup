@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRouter = void 0;
-const express_1 = require("express"); // Importing necessary types
+const express_1 = require("express"); // Import necessary types
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user"); // Import User model
-const userRouter = (0, express_1.Router)(); // Initialize the express router
+const user_1 = require("@models/user"); // Import User model using alias
+const userRouter = (0, express_1.Router)(); // Initialize express router
 exports.userRouter = userRouter;
 // User Login Route
-userRouter.post('/login', async (req, res) => {
+userRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body; // Destructure email and password from the request body
     try {
         // Find the user in the database using Sequelize model
@@ -30,10 +30,10 @@ userRouter.post('/login', async (req, res) => {
             expiresIn: '1h',
         });
         // Send the token in response
-        res.json({ token });
+        return res.json({ token });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error); // Pass error to error handling middleware
     }
 });
