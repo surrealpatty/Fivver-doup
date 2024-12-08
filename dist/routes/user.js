@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRouter = void 0;
 const express_1 = require("express");
-const user_1 = require("../models/user"); // Assuming User model is correctly imported
-const userRouter = (0, express_1.Router)();
+const user_1 = require("../models/user"); // Correct import for User model
+const userRouter = (0, express_1.Router)(); // Correct instantiation of Router
 exports.userRouter = userRouter;
 // Example login route
 userRouter.post('/login', async (req, res, next) => {
@@ -14,8 +14,8 @@ userRouter.post('/login', async (req, res, next) => {
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         }
-        // Handle password validation, token generation, etc.
-        return res.json({ message: 'Login successful' }); // Adjust response based on your logic
+        // Handle password validation and token generation logic here
+        return res.json({ message: 'Login successful' }); // Modify as needed for your logic
     }
     catch (error) {
         console.error(error);
