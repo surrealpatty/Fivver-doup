@@ -3,7 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@models/*": ["models/*"],
-      "@types/*": ["types/*"],
+      "@types/*": ["types/*"],   // Correctly maps @types to the types folder
       "@config/*": ["config/*"],
       "@/*": ["*"]
     },
@@ -22,7 +22,7 @@
     "emitDecoratorMetadata": true,
     "typeRoots": [
       "./node_modules/@types",
-      "./src/types"
+      "./src/types"  // Ensure TypeScript looks in src/types for custom type definitions
     ]
   },
   "include": [
