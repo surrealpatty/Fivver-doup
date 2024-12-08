@@ -1,10 +1,9 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { User } from '@models/user';  // Ensure the correct import path for your User model
+import { Router } from 'express';
+import { User } from '@models/user'; // Adjust the path to your model
 
-const userRouter: Router = Router();  // Correctly using Router()
+const userRouter = Router();
 
-// Example login route
-
+userRouter.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -15,13 +14,13 @@ const userRouter: Router = Router();  // Correctly using Router()
       return res.status(400).json({ message: 'User not found' });
     }
 
-    // Handle password validation and token generation logic here
+    // Add password validation and token logic here
     return res.json({ message: 'Login successful' });
 
   } catch (error) {
     console.error(error);
-    next(error);  // Pass the error to the global error handler
+    next(error); // Pass error to the global error handler
   }
 });
 
-export { userRouter };  // Export the userRouter correctly
+export { userRouter };

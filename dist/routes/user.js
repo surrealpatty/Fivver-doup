@@ -6,19 +6,18 @@ const user_1 = require("@models/user"); // Ensure the correct import path for yo
 const userRouter = (0, express_1.Router)(); // Correctly using Router()
 exports.userRouter = userRouter;
 // Example login route
-userRouter.post('/login', async (req, res, next) => {
-    const { email, password } = req.body;
-    try {
-        // Find user by email
-        const user = await user_1.User.findOne({ where: { email } });
-        if (!user) {
-            return res.status(400).json({ message: 'User not found' });
-        }
-        // Handle password validation and token generation logic here
-        return res.json({ message: 'Login successful' });
+const { email, password } = req.body;
+try {
+    // Find user by email
+    const user = await user_1.User.findOne({ where: { email } });
+    if (!user) {
+        return res.status(400).json({ message: 'User not found' });
     }
-    catch (error) {
-        console.error(error);
-        next(error); // Pass the error to the global error handler
-    }
-});
+    // Handle password validation and token generation logic here
+    return res.json({ message: 'Login successful' });
+}
+catch (error) {
+    console.error(error);
+    next(error); // Pass the error to the global error handler
+}
+;
