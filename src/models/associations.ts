@@ -1,10 +1,10 @@
-import { User } from './user';       // Import the User model
-import  Service  from './services'; // Import the Service model (fixing the import to match the model path)
-import { Order } from './order';     // Import the Order model
-import { Review } from './review';   // Import the Review model
-import { sequelize } from '@config/database';  // Use the alias '@config/database'
+import { User } from './user';         // Import the User model
+import Service from './services';     // Import the Service model (ensure this matches the export in services.ts)
+import { Order } from './order';      // Import the Order model
+import { Review } from './review';    // Import the Review model
+import { sequelize } from '@config/database';  // Import the Sequelize instance using the alias
 
-// Define associations after registering models
+// Define associations
 
 // User can have many services (a user can post many services)
 User.hasMany(Service, { foreignKey: 'userId' });  // Foreign key will be userId in Service
@@ -22,10 +22,15 @@ Review.belongsTo(Service, { foreignKey: 'serviceId' }); // A review belongs to o
 Order.belongsTo(User, { foreignKey: 'userId' }); // An order belongs to one user
 Order.belongsTo(Service, { foreignKey: 'serviceId' }); // An order belongs to one service
 
-// Optionally, sync models to the database
-sequelize.sync({ force: false }).then(() => {
-  console.log('Model associations are successfully set up.');
-});
+// Sync models with the database
+(async () => {
+  try {
+    await sequelize.sync({ force: false }); // Use { force: false } to avoid overwriting existing data
+    console.log('Model associations are successfully set up.');
+  } catch (error) {
+    console.error('Error setting up model associations:', error);
+  }
+})();
 
 // Export the models with their associations
 export { User, Service, Order, Review };
