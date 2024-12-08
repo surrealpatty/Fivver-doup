@@ -1,12 +1,19 @@
-import express, { Request, Response } from 'express';
+import { createRouter, createWebHistory } from 'vue-router';
+import EditService from '../components/EditService.vue'; // Make sure this points to the correct component
 
-// Create a router instance for handling service-related routes
-const serviceRouter = express.Router();
+const routes = [
+  // Other routes...
+  {
+    path: '/services/:id/edit',
+    name: 'EditService',
+    component: EditService,
+    props: true,  // This allows you to pass the `id` parameter to the component
+  },
+];
 
-// Define your service-related routes here
-serviceRouter.get('/', (req: Request, res: Response) => {
-  res.send('Service routes');
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 });
 
-// Export the router as the default export
-export default serviceRouter;
+export default router;
