@@ -1,13 +1,20 @@
 <template>
   <div id="app">
     <h1>Welcome to Fivver Doup!</h1>
+    <ExampleComponent /> <!-- Using the ExampleComponent -->
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+import ExampleComponent from './components/ExampleComponent.vue'; // Import ExampleComponent
+
+export default defineComponent({
   name: 'App',
-};
+  components: {
+    ExampleComponent, // Register ExampleComponent in the components section
+  },
+});
 </script>
 
 <style scoped>

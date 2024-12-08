@@ -6,9 +6,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'Home',
+  name: 'HomePage',
   data() {
     return {
       // Reactive data property for the welcome message
