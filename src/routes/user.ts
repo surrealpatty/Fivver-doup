@@ -1,17 +1,16 @@
-// src/routes/user.ts
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';  // Importing necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user';  // Import User model
 
-const userRouter = Router();
+const userRouter = Router();  // Initialize the express router
 
 // User Login Route
-userRouter.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+userRouter.post('/login', async (req: Request, res: Response) => {  // Explicitly typing req and res
+  const { email, password } = req.body;  // Destructure email and password from the request body
 
   try {
-    // Find the user in the database
+    // Find the user in the database using Sequelize model
     const user = await User.findOne({ where: { email } });
 
     // If user not found
@@ -30,7 +29,7 @@ userRouter.post('/login', async (req, res) => {
       expiresIn: '1h',
     });
 
-    // Send token in response
+    // Send the token in response
     res.json({ token });
   } catch (error) {
     console.error(error);
