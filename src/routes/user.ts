@@ -1,26 +1,28 @@
-import { Router } from 'express';
-import { User } from '@models/user'; // Adjust the path to your model
+import { Router, Request, Response, NextFunction } from 'express';
+import { User } from '@models/user'; // Adjust the path as necessary
 
-const userRouter = Router();
+const userRouter: Router = Router();
 
-userRouter.post('/login', async (req, res, next) => {
-  const { email, password } = req.body;
+userRouter.post(
+  '/login',
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { email, password } = req.body;
 
-  try {
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
+      // Find user by email
+      const user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+      if (!user) {
+        res.status(400).json({ message: 'User not found' });
+        return;
+      }
+
+      // Add password validation and token logic here
+      res.json({ message: 'Login successful' });
+    } catch (error) {
+      next(error); // Pass error to Express's error handler
     }
-
-    // Add password validation and token logic here
-    return res.json({ message: 'Login successful' });
-
-  } catch (error) {
-    console.error(error);
-    next(error); // Pass error to the global error handler
   }
-});
+);
 
 export { userRouter };
