@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRouter = void 0;
 const express_1 = require("express");
-const user_1 = require("@models/user"); // Adjust if necessary for your project structure
-const userRouter = (0, express_1.Router)(); // Ensure it's Router, not Application
+const user_1 = require("@models/user"); // Ensure correct import path for your User model
+const userRouter = (0, express_1.Router)(); // Correctly using Router
 exports.userRouter = userRouter;
 // Example login route
 userRouter.post('/login', async (req, res, next) => {
