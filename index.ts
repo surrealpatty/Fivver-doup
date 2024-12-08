@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';  // For loading environment variables
 import { sequelize } from './config/database'; // Named import for sequelize (corrected path)
 import { userRouter } from './routes/user';  // Named import for userRouter (corrected path)
 import profileRouter from './routes/profile'; // Default import for profileRouter (corrected path)
-import dotenv from 'dotenv'; // For loading environment variables
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,8 +25,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
-// Synchronize Sequelize models with the database
-sequelize.sync({ alter: true }) // Using 'alter' to avoid data loss while updating models
+// Synchronize Sequelize models with the database (for development)
+sequelize.sync({ alter: true }) // 'alter' can be used in development to auto-update the schema
   .then(() => {
     console.log('Models are synchronized with the database.');
   })
@@ -45,7 +45,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Database connection established.');
   })
-  .catch((error) => {
+  .catch((error: Error) => {
     console.error('Unable to connect to the database:', error);
   });
 

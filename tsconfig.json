@@ -27,10 +27,12 @@
     "outDir": "./dist",                       // Output directory for compiled files
     "rootDir": "./src",                       // Root directory of source files
     "lib": ["ES2020"],                        // Include libraries like ES2020 for full JS support
+    "allowJs": true                           // Allow JS files in TypeScript project
   },
   "include": [
     "src/**/*.ts",                            // Include all TypeScript files in the src folder
-    "src/types/**/*.ts"                       // Include custom types in the src/types folder
+    "src/types/**/*.ts",                      // Include custom types in the src/types folder
+    "src/**/*.js"                             // Include JavaScript files if needed
   ],
   "exclude": [
     "node_modules",                           // Exclude node_modules from compilation
