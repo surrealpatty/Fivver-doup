@@ -7,11 +7,11 @@ exports.userRouter = void 0;
 const express_1 = require("express"); // Import necessary types
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user"); // Ensure correct import path based on your tsconfig
-const userRouter = (0, express_1.Router)(); // Initialize express router
-exports.userRouter = userRouter;
+const user_1 = require("@models/user"); // Correct import path based on your tsconfig
+// Declare the userRouter as a Router instance
+exports.userRouter = (0, express_1.Router)();
 // User Login Route
-userRouter.post('/login', async (req, res, next) => {
+exports.userRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body; // Destructure email and password from the request body
     try {
         // Find the user in the database using Sequelize model
@@ -37,3 +37,4 @@ userRouter.post('/login', async (req, res, next) => {
         next(error); // Pass error to error handling middleware
     }
 });
+// Other user-related routes can be added here

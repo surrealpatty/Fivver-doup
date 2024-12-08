@@ -1,2 +1,2 @@
 "use strict";
-// src/types.d.ts
+// src/types.ts
