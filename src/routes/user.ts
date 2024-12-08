@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { User } from '../models/user';  // Assuming User model is correctly imported
+import { User } from '../models/user';  // Correct import for User model
 
-const userRouter: Router = Router();
+const userRouter: Router = Router();  // Correct instantiation of Router
 
 // Example login route
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -10,18 +10,19 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
   try {
     // Find user by email
     const user = await User.findOne({ where: { email } });
-    
+
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
-    
-    // Handle password validation, token generation, etc.
 
-    return res.json({ message: 'Login successful' });  // Adjust response based on your logic
+    // Handle password validation and token generation logic here
+
+    return res.json({ message: 'Login successful' });  // Modify as needed for your logic
+
   } catch (error) {
     console.error(error);
     next(error);  // Pass the error to the global error handler
   }
 });
 
-export { userRouter };
+export { userRouter };  // Correctly export the router
