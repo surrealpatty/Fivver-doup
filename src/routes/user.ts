@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';  // Import necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Adjust path if necessary (remove '@models' if not configured)
+import { User } from 'models/user';  // Ensure correct import path based on your tsconfig
 
 const userRouter: Router = Router();  // Initialize express router
 
