@@ -1,13 +1,14 @@
-import { Router, Request, Response, NextFunction } from 'express';  // Import necessary types
+import { Router, Request, Response, NextFunction } from 'express'; // Import necessary types
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Ensure correct import path based on your tsconfig
+import { User } from '@models/user'; // Correct import path based on your tsconfig
 
-const userRouter: Router = Router();  // Initialize express router
+// Declare the userRouter as a Router instance
+export const userRouter: Router = Router();
 
 // User Login Route
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;  // Destructure email and password from the request body
+  const { email, password } = req.body; // Destructure email and password from the request body
 
   try {
     // Find the user in the database using Sequelize model
@@ -33,9 +34,9 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     return res.json({ token });
   } catch (error) {
     console.error(error);
-    next(error);  // Pass error to error handling middleware
+    next(error); // Pass error to error handling middleware
   }
 });
 
-// Export userRouter for use in other parts of the app
-export { userRouter };
+// Other user-related routes can be added here
+

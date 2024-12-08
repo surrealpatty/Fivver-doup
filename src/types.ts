@@ -1,20 +1,19 @@
-// src/types.d.ts
+// src/types.ts
 
-// Declare the module for './config/database'
-declare module './config/database' {
-  // Adjusting the type for sequelize export, replace 'any' with more specific type if known
+// Declare the module for '@config/database'
+declare module '@config/database' {
   export const sequelize: import('sequelize').Sequelize;  // Importing Sequelize type from the Sequelize package
 }
 
-// Declare the module for './routes/user'
-declare module './routes/user' {
+// Declare the module for '@routes/user'
+declare module '@routes/user' {
   import { Router } from 'express';
   export const userRouter: Router;  // Named export for userRouter
 }
 
-// Declare the module for './routes/profile'
-declare module './routes/profile' {
+// Declare the module for '@routes/profile'
+declare module '@routes/profile' {
   import { Router } from 'express';
   const profileRouter: Router;  // Default export for profileRouter
-  export default profileRouter;  // Use 'default' if it’s a default export in profileRouter
+  export default profileRouter;  // Use 'default' if it's a default export in profileRouter
 }
