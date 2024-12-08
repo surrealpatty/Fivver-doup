@@ -1,78 +1,39 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",  // Base directory for module resolution
+    "baseUrl": "./src",
     "paths": {
-      "@models/*": ["models/*"],  // Alias '@models' to 'src/models'
-      "@types/*": ["types/*"],    // Alias '@types' to 'src/types'
-      "@config/*": ["config/*"],  // Alias '@config' to 'src/config' (added for database config resolution)
-      "@/*": ["*"]                // Alias '@' to the root of 'src'
+      "@models/*": ["models/*"],
+      "@types/*": ["types/*"],
+      "@config/*": ["config/*"],
+      "@/*": ["*"]
     },
-    "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Root directory of the source files
-    "moduleResolution": "node",  // Node.js-style module resolution
-    "esModuleInterop": true,     // Compatibility with CommonJS modules
-    "target": "ES2020",          // Compile to ECMAScript 2020
-    "module": "commonjs",        // Use CommonJS module system
-    "strict": true,              // Enable strict type-checking
-    "skipLibCheck": true,        // Skip type-checking declaration files
-    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in imports
-    "resolveJsonModule": true,   // Allow importing JSON files
-    "allowSyntheticDefaultImports": true,  // Enable default imports for non-ESM modules
-    "experimentalDecorators": true,  // Enable decorators support
-    "emitDecoratorMetadata": true,  // Emit metadata for decorators
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "module": "commonjs",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "typeRoots": [
-      "./node_modules/@types",  // Default type definitions from node_modules
-      "./src/types"             // Custom type definitions from src/types
+      "./node_modules/@types",
+      "./src/types"
     ]
   },
   "include": [
-    "src/**/*.ts",       // Include all TypeScript files in the 'src' folder
-    "src/types/**/*.ts"  // Include type definitions in the 'src/types' folder
+    "src/**/*.ts",
+    "src/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",     // Exclude dependencies
-    "dist",             // Exclude the dist folder
-    "fivver-frontend",  // Optional: Exclude frontend folder
-    "jest.config.ts",   // Exclude Jest config file if present
-    "jest.setup.ts"     // Exclude Jest setup file if present
-  ]
-}
-{
-  "compilerOptions": {
-    "baseUrl": "./src",  // Base directory for module resolution
-    "paths": {
-      "@models/*": ["models/*"],  // Alias '@models' to 'src/models'
-      "@types/*": ["types/*"],    // Alias '@types' to 'src/types'
-      "@config/*": ["config/*"],  // Alias '@config' to 'src/config'
-      "@/*": ["*"]                // Alias '@' to the root of 'src'
-    },
-    "outDir": "./dist",  // Output directory for compiled files
-    "rootDir": "./src",  // Root directory of the source files
-    "moduleResolution": "node",  // Node.js-style module resolution
-    "esModuleInterop": true,     // Compatibility with CommonJS modules
-    "target": "ES2020",          // Compile to ECMAScript 2020
-    "module": "commonjs",        // Use CommonJS module system
-    "strict": true,              // Enable strict type-checking
-    "skipLibCheck": true,        // Skip type-checking declaration files
-    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in imports
-    "resolveJsonModule": true,   // Allow importing JSON files
-    "allowSyntheticDefaultImports": true,  // Enable default imports for non-ESM modules
-    "experimentalDecorators": true,  // Enable decorators support
-    "emitDecoratorMetadata": true,  // Emit metadata for decorators
-    "typeRoots": [
-      "./node_modules/@types",  // Default type definitions from node_modules
-      "./src/types"             // Custom type definitions from src/types
-    ]
-  },
-  "include": [
-    "src/**/*.ts",       // Include all TypeScript files in the 'src' folder
-    "src/types/**/*.ts"  // Include type definitions in the 'src/types' folder
-  ],
-  "exclude": [
-    "node_modules",     // Exclude dependencies
-    "dist",             // Exclude the dist folder
-    "fivver-frontend",  // Optional: Exclude frontend folder
-    "jest.config.ts",   // Exclude Jest config file if present
-    "jest.setup.ts"     // Exclude Jest setup file if present
+    "node_modules",
+    "dist",
+    "fivver-frontend",
+    "jest.config.ts",
+    "jest.setup.ts"
   ]
 }

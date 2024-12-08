@@ -1,7 +1,7 @@
 // src/middlewares/roleMiddleware.ts
 
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types';  // This should be correct
+import { UserPayload } from '@types';
 
 // Extend the Request interface locally
 interface AuthRequest extends Request {
