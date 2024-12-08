@@ -12,7 +12,7 @@ const order_1 = require("./order"); // Import the Order model
 Object.defineProperty(exports, "Order", { enumerable: true, get: function () { return order_1.Order; } });
 const review_1 = require("./review"); // Import the Review model
 Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return review_1.Review; } });
-const database_1 = require("@config/database"); // Import the Sequelize instance using the alias
+const database_1 = require("config/database"); // Import the Sequelize instance using the alias
 // Define associations
 // User can have many services (a user can post many services)
 user_1.User.hasMany(services_1.default, { foreignKey: 'userId' }); // Foreign key will be userId in Service
