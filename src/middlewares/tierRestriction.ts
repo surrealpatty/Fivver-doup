@@ -1,8 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request } from 'express';
 
-export const checkPaidTier = (req: Request, res: Response, next: NextFunction) => {
-  if (req.user.tier !== 'paid') {
-    return res.status(403).json({ message: 'Access restricted to paid tier users.' });
-  }
-  next();
-};
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    username: string;
+    tier: 'free' | 'paid';  // Ensure tier is correctly typed
+  };
+}
