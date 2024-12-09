@@ -6,12 +6,13 @@ interface UserPayload extends JwtPayload {
   id: string;
   email: string;
   username: string;
+  tier: 'free' | 'paid'; // If the 'tier' is part of your UserPayload
 }
 
-// Extend the Request interface to include the `user` property
+// Augment the Request interface to include the `user` property
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: UserPayload;
+    user?: UserPayload; // Ensure this is consistent across your files
   }
 }
 
