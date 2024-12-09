@@ -23,7 +23,8 @@
       "@routes/*": ["src/routes/*"],  // Alias @routes to src/routes
       "@config/*": ["src/config/*"],
       "@types/*": ["src/types/*"],
-      "@src/*": ["src/*"]  // General alias for src
+      "@src/*": ["src/*"],  // General alias for src
+      "@middlewares/*": ["src/middlewares/*"]  // Add this line to fix @middlewares alias
     },
     "outDir": "./dist",  // Output compiled files to the dist folder
     "rootDir": "./src",  // Root directory of source files
