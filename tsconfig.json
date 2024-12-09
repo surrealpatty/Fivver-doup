@@ -1,47 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ES2020",  // Target modern JavaScript features
-    "module": "commonjs",  // Use CommonJS modules for Node.js compatibility
-    "moduleResolution": "node",  // Resolve modules like Node.js
-    "esModuleInterop": true,  // Enable interoperability between CommonJS and ES modules
-    "skipLibCheck": true,  // Skip type checking of declaration files for faster compilation
-    "strict": true,  // Enable strict type checking
-    "skipDefaultLibCheck": true,  // Skip checking the default library
-    "forceConsistentCasingInFileNames": true,  // Ensure consistent casing in file names
-    "resolveJsonModule": true,  // Allow importing of JSON files as modules
-    "allowSyntheticDefaultImports": true,  // Allow default imports from modules without a default export
-    "experimentalDecorators": true,  // Enable experimental support for decorators
-    "emitDecoratorMetadata": true,  // Emit metadata for decorators (useful for TypeORM, etc.)
+    "target": "ES2020",                          // Target modern JavaScript features
+    "module": "commonjs",                        // Use CommonJS modules for Node.js compatibility
+    "moduleResolution": "node",                  // Resolve modules like Node.js
+    "esModuleInterop": true,                     // Enable interoperability between CommonJS and ES modules
+    "skipLibCheck": true,                        // Skip type checking of declaration files for faster compilation
+    "strict": true,                              // Enable strict type checking
+    "skipDefaultLibCheck": true,                 // Skip checking the default library
+    "forceConsistentCasingInFileNames": true,    // Ensure consistent casing in file names
+    "resolveJsonModule": true,                   // Allow importing of JSON files as modules
+    "allowSyntheticDefaultImports": true,        // Allow default imports from modules without a default export
+    "experimentalDecorators": true,              // Enable experimental support for decorators
+    "emitDecoratorMetadata": true,               // Emit metadata for decorators (useful for TypeORM, etc.)
     "typeRoots": [
-      "./node_modules/@types",  // Include node_modules for type definitions
-      "./src/types"  // Include src/types for custom type definitions
+      "./node_modules/@types",                   // Include node_modules for type definitions
+      "./src/types"                              // Include src/types for custom type definitions
     ],
-    "baseUrl": "./",  // Set base directory for module resolution
+    "baseUrl": "./",                             // Set base directory for module resolution
     "paths": {
-      "@models/*": ["src/models/*"],
-      "@controllers/*": ["src/controllers/*"],  // Alias @controllers to src/controllers
-      "@routes/*": ["src/routes/*"],  // Alias @routes to src/routes
-      "@config/*": ["src/config/*"],
-      "@types/*": ["src/types/*"],
-      "@src/*": ["src/*"],  // General alias for src
-      "@middlewares/*": ["src/middlewares/*"]  // Add this line to fix @middlewares alias
+      "@models/*": ["src/models/*"],             // Alias @models to src/models
+      "@controllers/*": ["src/controllers/*"],   // Alias @controllers to src/controllers
+      "@routes/*": ["src/routes/*"],              // Alias @routes to src/routes
+      "@config/*": ["src/config/*"],              // Alias @config to src/config
+      "@types/*": ["src/types/*"],                // Alias @types to src/types
+      "@src/*": ["src/*"],                        // General alias for src
+      "@middlewares/*": ["src/middlewares/*"]     // Alias @middlewares to src/middlewares
     },
-    "outDir": "./dist",  // Output compiled files to the dist folder
-    "rootDir": "./src",  // Root directory of source files
-    "lib": ["ES2020"],  // Include libraries like ES2020 for full JS support
-    "allowJs": true  // Allow JS files in TypeScript project
+    "outDir": "./dist",                          // Output compiled files to the dist folder
+    "rootDir": "./src",                          // Root directory of source files
+    "lib": ["ES2020"],                           // Include libraries like ES2020 for full JS support
+    "allowJs": true                              // Allow JS files in TypeScript project
   },
   "include": [
-    "src/**/*.ts",  // Include all TypeScript files in the src folder
-    "src/test/**/*.ts",  // Include test files in the src/test folder
-    "src/**/*.js",  // Include JavaScript files if needed
-    "src/types/**/*.d.ts"  // Ensure that TypeScript types are included
+    "src/**/*.ts",                              // Include all TypeScript files in the src folder
+    "src/test/**/*.ts",                         // Include test files in the src/test folder
+    "src/**/*.js",                              // Include JavaScript files if needed
+    "src/types/**/*.d.ts"                       // Ensure that TypeScript types are included
   ],
   "exclude": [
-    "node_modules",  // Exclude node_modules from compilation
-    "dist",  // Exclude dist folder
-    "fivver-frontend",  // Exclude frontend code
-    "jest.config.ts",  // Exclude Jest config file
-    "jest.setup.ts"  // Exclude Jest setup file
+    "node_modules",                             // Exclude node_modules from compilation
+    "dist",                                     // Exclude dist folder
+    "fivver-frontend",                          // Exclude frontend code
+    "jest.config.ts",                           // Exclude Jest config file
+    "jest.setup.ts"                             // Exclude Jest setup file
   ]
 }

@@ -1,41 +1,82 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = require("../models/user"); // Adjusted relative path to the User model
+const supertest_1 = __importDefault(require("supertest"));
+const index_1 = require("../index"); // Ensure you're importing your Express app
+// Mocking the User model to mock the create function for testing
+const user_1 = require("../models/user");
 jest.mock('../models/user', () => ({
     User: {
         create: jest.fn(),
     },
 }));
-describe('User Model', () => {
+describe('POST /register', () => {
     beforeEach(() => {
-        jest.clearAllMocks(); // Clear mocks before each test
+        jest.clearAllMocks(); // Clear mocks before each test to avoid conflicts
     });
-    it('should create a new user successfully', async () => {
-        // Arrange: Mock the User.create method if you want to mock it
-        const mockCreate = jest.fn().mockResolvedValueOnce({
+    it('should register a new user successfully', async () => {
+        // Mock the User.create method
+        user_1.User.create.mockResolvedValueOnce({
             id: '1',
-            email: 'test@example.com',
-            username: 'testuser',
-            password: 'password123', // Mock the password in the response
+            email: 'newuser@example.com',
+            username: 'newuser',
+            password: 'password123',
         });
-        user_1.User.create = mockCreate; // Assign mock to the User.create method
-        // Act: Call the method you want to test
-        const user = await user_1.User.create({
-            email: 'test@example.com',
-            username: 'testuser',
-            password: 'password123', // Add password here for testing
+        // Send request to the /register route
+        const res = await (0, supertest_1.default)(index_1.app)
+            .post('/register')
+            .send({
+            email: 'newuser@example.com',
+            username: 'newuser',
+            password: 'password123',
         });
-        // Assert: Ensure that the method was called with the correct parameters
-        expect(mockCreate).toHaveBeenCalledWith({
-            email: 'test@example.com',
-            username: 'testuser',
-            password: 'password123', // Ensure password is included
-        });
-        expect(user).toEqual({
+        // Assertions
+        expect(res.status).toBe(201); // Expect HTTP 201 (Created)
+        expect(res.body.message).toBe('User registered successfully'); // Response message
+        expect(res.body.user).toEqual({
             id: '1',
-            email: 'test@example.com',
-            username: 'testuser',
-            password: 'password123', // Ensure the password is mocked correctly
+            email: 'newuser@example.com',
+            username: 'newuser',
+            password: 'password123', // Ensure the mocked password is correct
         });
+    });
+    it('should return an error if email or username is already in use', async () => {
+        // Mock the User.create method to simulate an existing user
+        user_1.User.create.mockRejectedValueOnce(new Error('User already exists'));
+        const res = await (0, supertest_1.default)(index_1.app)
+            .post('/register')
+            .send({
+            email: 'existinguser@example.com',
+            username: 'existinguser',
+            password: 'password123',
+        });
+        // Assertions
+        expect(res.status).toBe(400); // Expect HTTP 400 (Bad Request)
+        expect(res.body.message).toBe('Email or Username already in use');
+    });
+    it('should return a validation error for invalid email', async () => {
+        const res = await (0, supertest_1.default)(index_1.app)
+            .post('/register')
+            .send({
+            email: 'invalid-email',
+            username: 'newuser',
+            password: 'password123',
+        });
+        // Assertions
+        expect(res.status).toBe(400); // Expect HTTP 400 (Bad Request)
+        expect(res.body.errors[0].msg).toBe('Invalid email address'); // Validation error message
+    });
+    it('should return a validation error for missing username', async () => {
+        const res = await (0, supertest_1.default)(index_1.app)
+            .post('/register')
+            .send({
+            email: 'newuser@example.com',
+            password: 'password123',
+        });
+        // Assertions
+        expect(res.status).toBe(400); // Expect HTTP 400 (Bad Request)
+        expect(res.body.errors[0].msg).toBe('Username must be between 3 and 20 characters'); // Username error
     });
 });
