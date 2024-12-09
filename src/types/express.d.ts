@@ -1,12 +1,11 @@
-import { UserPayload } from '../models/User'; // Adjust path if needed
-import { Request } from 'express';
+import { UserPayload } from '@types'; // Adjust import to your correct path
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // Declare the 'user' property with the UserPayload type
+      user?: UserPayload; // Add the `user` property to the Request interface
     }
   }
 }
 
-export {}; // This ensures the file is treated as a module
+export {}; // To make this file a module
