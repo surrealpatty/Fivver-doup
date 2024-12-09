@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import Sequelize from sequelize-typescript
+const path_1 = __importDefault(require("path")); // Import path module for resolving directories
 // Initialize Sequelize instance with sequelize-typescript
 exports.sequelize = new sequelize_typescript_1.Sequelize({
     dialect: 'mysql', // Specify the database dialect
@@ -9,8 +13,8 @@ exports.sequelize = new sequelize_typescript_1.Sequelize({
     username: 'root', // MySQL username
     password: 'password', // MySQL password
     database: 'fivver_doup', // Database name
-    logging: false, // Disable logging for production (optional)
-    models: [__dirname + '/../models'], // Automatically load all models in the 'models' directory
+    logging: true, // Enable logging in development
+    models: [path_1.default.join(__dirname, '..', 'models')], // Dynamically load all models in the 'models' directory
 });
 // Optional: Test the connection
 (async () => {
@@ -22,3 +26,4 @@ exports.sequelize = new sequelize_typescript_1.Sequelize({
         console.error('Unable to connect to the database:', error); // Catch connection errors
     }
 })();
+exports.default = exports.sequelize;

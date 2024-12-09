@@ -14,12 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
+const database_1 = require("../config/database"); // Import the initialized Sequelize instance
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 let User = class User extends sequelize_typescript_1.Model {
+    // Password hashing method
     static async hashPassword(password) {
         const salt = await bcryptjs_1.default.genSalt(10);
         return bcryptjs_1.default.hash(password, salt);
     }
+    // Password validation method
     static async validatePassword(storedPassword, inputPassword) {
         return bcryptjs_1.default.compare(inputPassword, storedPassword);
     }
@@ -65,4 +68,6 @@ __decorate([
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true })
 ], User);
+// Ensure that the model is registered with Sequelize
+database_1.sequelize.addModels([User]); // This adds the User model to Sequelize's model registry
 exports.default = User;

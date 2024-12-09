@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Ensure this is a named import if you're using named exports
+const sequelize_1 = require("sequelize"); // Import Sequelize types
+const database_1 = require("../config/database"); // Import the initialized Sequelize instance
 // Define the Service model class
 class Service extends sequelize_1.Model {
 }
@@ -15,26 +15,28 @@ Service.init({
     },
     userId: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false, // 'userId' cannot be null
     },
     title: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
+        allowNull: false, // 'title' cannot be null
     },
     description: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
+        allowNull: false, // 'description' cannot be null
     },
     price: {
         type: sequelize_1.DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: false, // 'price' cannot be null
     },
     name: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Ensure the name field is not null
+        allowNull: false, // 'name' cannot be null
     },
 }, {
-    sequelize: database_1.sequelize, // Make sure sequelize instance is passed here
+    sequelize: database_1.sequelize, // Pass the Sequelize instance
     modelName: 'Service',
+    tableName: 'services', // Ensure the table name matches
+    timestamps: true, // Enable automatic timestamps (createdAt, updatedAt)
 });
 exports.default = Service;
