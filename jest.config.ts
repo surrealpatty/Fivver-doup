@@ -3,9 +3,11 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',  // Use ts-jest for TypeScript support
   testEnvironment: 'node',  // Running tests in a Node environment
+  
+  // Module alias mappings for path resolution
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // For root-relative imports
-    '^dist/(.*)$': '<rootDir>/dist/$1',  // For imports from dist
+    '^@/(.*)$': '<rootDir>/src/$1',  // Root-relative imports
+    '^dist/(.*)$': '<rootDir>/dist/$1',  // Imports from dist
     '^@models/(.*)$': '<rootDir>/src/models/$1',  // For model imports
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',  // For controller imports
     '^@routes/(.*)$': '<rootDir>/src/routes/$1',  // For route imports
@@ -13,18 +15,37 @@ const config: Config = {
     '^@types/(.*)$': '<rootDir>/src/types/$1',  // For type imports
     '^@src/(.*)$': '<rootDir>/src/$1',  // For src-related imports
   },
-  moduleDirectories: ['node_modules', 'src'],  // Ensure Jest finds modules in 'src'
+
+  // Ensure Jest finds modules in the 'src' directory
+  moduleDirectories: ['node_modules', 'src'], 
+
+  // Transform .ts files using ts-jest and .js files using babel-jest
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],  // Use ts-jest to handle .ts files
-    '^.+\\.js$': 'babel-jest',  // Use babel-jest to handle .js files
+    '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],  // Use ts-jest for .ts files
+    '^.+\\.js$': 'babel-jest',  // Use babel-jest for .js files
   },
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],  // Set up any necessary configurations after environment setup
-  roots: ['<rootDir>/src/test'],  // Root folder for Jest to look for tests
-  collectCoverage: true,  // Enable code coverage collection
-  coverageDirectory: '<rootDir>/coverage',  // Directory to output coverage reports
-  verbose: true,  // Display detailed test results
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],  // Recognize these file extensions
-  extensionsToTreatAsEsm: ['.ts'],  // Treat .ts files as ESM
+
+  // Setup script after environment is configured (if any)
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],  
+
+  // Define the root folder for Jest to look for tests
+  roots: ['<rootDir>/src/test'],  
+
+  // Enable code coverage collection
+  collectCoverage: true,  
+  coverageDirectory: '<rootDir>/coverage',  // Directory to store coverage reports
+
+  // Enable verbose output for test results
+  verbose: true,  
+
+  // File extensions to be recognized by Jest
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],  
+
+  // Treat .ts files as ES modules
+  extensionsToTreatAsEsm: ['.ts'],  
+
+  // Match test files based on their extension
+  testMatch: ['<rootDir>/src/**/*.test.ts'], 
 };
 
 export default config;

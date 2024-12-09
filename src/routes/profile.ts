@@ -1,29 +1,35 @@
 // src/routes/profile.ts
-import { Router, Response, NextFunction } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware';  // JWT middleware
-import Service from 'models/services';  // Ensure alias for services model
+import { Router, Request, Response, NextFunction } from 'express';
+import { authenticateJWT } from '../middlewares/authMiddleware'; // JWT middleware
+import { User } from '../models/user'; // User model
+import  Service  from '../models/services'; // Service model
 
-const router = Router();
+const profileRouter = Router();
 
 // GET route for retrieving user profile and associated services
-router.get('/profile', authenticateJWT, async (req, res: Response, next: NextFunction): Promise<void> => {
+profileRouter.get('/', authenticateJWT, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = req.user;  // req.user comes from the authenticateJWT middleware
+    const user = req.user; // The authenticated user added by authenticateJWT middleware
 
-    if (!user) {
-      res.status(403).json({ message: 'User not authenticated' });
-      return;
+    if (!user || !user.id) {
+      return res.status(403).json({ message: 'User not authenticated' });
     }
 
-    // Fetch services for the user
-    const services = await Service.findAll({ where: { userId: user.id } });
+    // Find the user and include their services
+    const userProfile = await User.findByPk(user.id, {
+      include: [Service], // Eagerly load services associated with the user
+    });
 
-    // Return the user data and associated services
-    res.status(200).json({ user, services });
+    if (!userProfile) {
+      return res.status(404).json({ message: 'User profile not found' });
+    }
+
+    // Respond with user details and associated services
+    res.status(200).json({ user: userProfile });
   } catch (error) {
     console.error('Error fetching profile:', error);
-    next(error);  // Pass error to the next error handler
+    next(error); // Pass errors to the error-handling middleware
   }
 });
 
-export default router;
+export default profileRouter;
