@@ -1,4 +1,3 @@
-// src/controllers/userController.ts
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -34,12 +33,14 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user
+    // Create the new user with default values for role and tier, and include isVerified
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
-      isVerified: false, // User not verified until email confirmation
+      role: 'free', // Default role
+      tier: 'free', // Default tier
+      isVerified: false, // Default to not verified
     });
 
     // Generate the JWT verification token

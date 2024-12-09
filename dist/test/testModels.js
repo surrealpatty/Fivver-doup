@@ -13,11 +13,13 @@ describe('Service Model Tests', () => {
     });
     it('should create a new service', async () => {
         // Create a user with all required fields (password and role)
+        // Add tier when creating the test user
         const user = await user_1.User.create({
             username: 'testUser',
             email: 'test@example.com',
-            password: 'testPassword123',
+            password: 'password123',
             role: 'free', // Ensure role is provided
+            tier: 'free', // Add tier
         });
         // Prepare the service data with the correct type
         const serviceData = {

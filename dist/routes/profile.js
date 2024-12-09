@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const services_1 = __importDefault(require("@models/services")); // Ensure correct import for Service model
-const user_1 = __importDefault(require("@models/user")); // Assuming there is a User model for user details
+const user_1 = require("@models/user"); // Assuming there is a User model for user details
 const authenticateToken_1 = __importDefault(require("@middlewares/authenticateToken")); // Correct path for authenticateToken
 const router = express_1.default.Router();
 // Profile route to get the user's info and their services
@@ -17,7 +17,7 @@ router.get('/profile', authenticateToken_1.default, async (req, res) => {
     }
     try {
         // Fetch the user information and their services
-        const user = await user_1.default.findOne({ where: { id: userId } });
+        const user = await user_1.User.findOne({ where: { id: userId } });
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -48,7 +48,7 @@ router.put('/profile', authenticateToken_1.default, async (req, res) => {
     const { username, email } = req.body; // You can add other fields as needed
     try {
         // Find the user by ID and update their details
-        const user = await user_1.default.findOne({ where: { id: userId } });
+        const user = await user_1.User.findOne({ where: { id: userId } });
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
