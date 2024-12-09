@@ -1,37 +1,49 @@
 <template>
-  <div>
-    <h1>{{ message }}</h1>
+  <div class="edit-service">
+    <h1>Edit Service</h1>
+    <form @submit.prevent="saveService">
+      <label for="title">Title:</label>
+      <input v-model="service.title" id="title" type="text" />
+      
+      <label for="description">Description:</label>
+      <textarea v-model="service.description" id="description"></textarea>
+      
+      <label for="price">Price:</label>
+      <input v-model="service.price" id="price" type="number" />
+      
+      <button type="submit">Save Changes</button>
+    </form>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import axios from 'axios';
-
-export default defineComponent({
-  name: 'ExampleComponent',
-  setup() {
-    const message = ref('');
-
-    // Fetch data from the backend on component mount
-    onMounted(async () => {
-      try {
-        // Adjusted URL to ensure it's accessible from the frontend
-        const response = await axios.get('http://localhost:3000/api/users');
-        
-        // Assuming the backend returns an object with a 'message' property
-        message.value = response.data.message || 'No message received';
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        message.value = 'Failed to fetch data';  // Display an error message
-      }
-    });
-
-    return { message };
+<script>
+export default {
+  data() {
+    return {
+      service: {},
+    };
   },
-});
+  mounted() {
+    this.fetchService();
+  },
+  methods: {
+    async fetchService() {
+      const response = await fetch(`/services/${this.$route.params.id}`);
+      const data = await response.json();
+      this.service = data;
+    },
+    async saveService() {
+      const response = await fetch(`/services/${this.$route.params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(this.service),
+      });
+      const data = await response.json();
+      alert('Service updated');
+    },
+  },
+};
 </script>
-
-<style scoped>
-/* Optional CSS styling for your component */
-</style>

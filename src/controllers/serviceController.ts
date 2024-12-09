@@ -1,46 +1,41 @@
-// src/controllers/serviceController.ts
-import { Request, Response } from 'express';
-import Service from '../models/services';  // Import the Service model
+import { Request, Response, NextFunction } from 'express';
+import Service from '@models/services';  // Assuming your Service model is here
 
-export const updateService = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;  // Extract the ID of the service to update
-  const { name, description, price } = req.body;  // Extract data from the request body
+export const updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { id } = req.params;  // Get the service ID from the route parameter
+  const { title, description, price } = req.body;  // Get new data from the request body
 
   try {
+    // Ensure req.user is defined before accessing req.user.id
+    if (!req.user || typeof req.user.id !== 'number') {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
     // Find the service by ID
     const service = await Service.findByPk(id);
 
     if (!service) {
-      // If service doesn't exist, return a 404 response
-      res.status(404).json({ message: 'Service not found' });
-      return;  // After sending a response, return to avoid further code execution
+      return res.status(404).json({ message: 'Service not found' });
     }
 
-    // Check if the incoming data is valid
-    if (name) service.name = name;
-    if (description) service.description = description;
-    if (price) {
-      // Ensure price is a valid number
-      if (isNaN(price)) {
-        res.status(400).json({ message: 'Invalid price value' });
-        return;
-      }
-      service.price = price;
+    // Ensure that req.user.id is of the same type as service.userId
+    if (service.userId !== req.user.id) {
+      return res.status(403).json({ message: 'You are not authorized to edit this service' });
     }
 
-    // Save the updated service in the database
+    // Update the service with new values
+    service.title = title || service.title;
+    service.description = description || service.description;
+    service.price = price || service.price;
+
+    // Save the updated service
     await service.save();
 
-    // Respond with success message and updated service
+    // Send the response with the updated service
     res.status(200).json({ message: 'Service updated successfully', service });
-  } catch (error: unknown) {
-    // Handle any errors that occur
-    if (error instanceof Error) {
-      // Return the error message if the error is an instance of Error
-      res.status(500).json({ message: 'Error updating service', error: error.message });
-    } else {
-      // For unknown errors, return a generic message
-      res.status(500).json({ message: 'Unknown error occurred' });
-    }
+
+  } catch (error) {
+    console.error('Error updating service:', error);
+    next(error);  // Pass error to the global error handler
   }
 };
