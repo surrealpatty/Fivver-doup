@@ -1,61 +1,57 @@
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, Unique, IsEmail, Length, Default } from 'sequelize-typescript';
-import { sequelize } from '../config/database';  // Import the initialized Sequelize instance
-import bcrypt from 'bcryptjs';
+import { sequelize } from '../config/database'; // Named import for sequelize
+import { DataTypes, Model, Optional } from 'sequelize';
 
-export interface UserCreationAttributes {
+// Define the attributes interface for the User model
+export interface UserAttributes {
+  id: string;
   email: string;
   username: string;
   password: string;
-  role?: string; 
-  tier?: string; 
-  isVerified?: boolean; 
 }
 
-@Table({ tableName: 'users', timestamps: true })
-export class User extends Model<User, UserCreationAttributes> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER)
-  declare id: number;
+// Define the creation attributes interface (where 'id' is optional)
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-  @Unique
-  @IsEmail
-  @Column(DataType.STRING)
-  email!: string;
-
-  @Unique
-  @Length({ min: 3, max: 20 })
-  @Column(DataType.STRING)
-  username!: string;
-
-  @Column(DataType.STRING)
-  password!: string;
-
-  @Default('user')
-  @Column(DataType.STRING)
-  role!: string;
-
-  @Default('free')
-  @Column(DataType.STRING)
-  tier!: string;
-
-  @Default(false)
-  @Column(DataType.BOOLEAN)
-  isVerified!: boolean;
-
-  // Password hashing method
-  static async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return bcrypt.hash(password, salt);
-  }
-
-  // Password validation method
-  static async validatePassword(storedPassword: string, inputPassword: string): Promise<boolean> {
-    return bcrypt.compare(inputPassword, storedPassword);
-  }
+// Define the User model class
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: string;
+  public email!: string;
+  public username!: string;
+  public password!: string;
 }
 
-// Ensure that the model is registered with Sequelize
-sequelize.addModels([User]); // This adds the User model to Sequelize's model registry
+// Initialize the User model
+User.init(
+  {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,  // The sequelize instance from config/database.ts
+    modelName: 'User',
+  }
+);
 
-export default User;
+// If you're using Sequelize's `addModels()` method (which is only available in Sequelize v6+),
+// Ensure this line is correctly added in the right context
+sequelize.models.User = User; // Manually add the User model to sequelize instance
+
+export { User };
