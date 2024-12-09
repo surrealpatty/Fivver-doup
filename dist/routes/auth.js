@@ -1,26 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authController_1 = require("../controllers/authController"); // Import controller functions
+const user_1 = require("../models/user"); // Corrected the casing to match the file name
+const sequelize_1 = require("sequelize");
+const express_validator_1 = require("express-validator");
+const sequelize_2 = require("sequelize"); // Import Sequelize 'Op' for the OR condition
 const router = (0, express_1.Router)();
-// Registration Route
-router.post('/register', async (req, res) => {
+// Route for user registration
+router.post('/register', 
+// Validation middleware for email, username, and password
+(0, express_validator_1.body)('email').isEmail().withMessage('Invalid email address'), (0, express_validator_1.body)('username')
+    .isLength({ min: 3, max: 20 })
+    .withMessage('Username must be between 3 and 20 characters'), (0, express_validator_1.body)('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'), 
+// Handle user registration logic
+async (req, res) => {
+    // Check for validation errors
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+        return; // Ensure we stop further processing
+    }
+    const { email, username, password } = req.body;
     try {
-        await (0, authController_1.registerUser)(req, res); // Call the registerUser function from the controller
+        // Check if user already exists by email or username
+        const existingUser = await user_1.User.findOne({
+            where: { [sequelize_2.Op.or]: [{ email }, { username }] }, // Use Sequelize's 'Op' to check both fields
+        });
+        if (existingUser) {
+            res.status(400).json({ message: 'Email or Username already in use' });
+            return; // Ensure we stop further processing if the user already exists
+        }
+        // Hash password before saving
+        const hashedPassword = await user_1.User.hashPassword(password);
+        // Create a new user
+        const newUser = await user_1.User.create({
+            email,
+            username,
+            password: hashedPassword,
+        });
+        res.status(201).json({
+            message: 'User registered successfully',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                username: newUser.username,
+                role: newUser.role,
+                tier: newUser.tier,
+            },
+        });
     }
     catch (error) {
-        console.error('Registration error:', error); // Log error for debugging
-        res.status(500).json({ message: 'Server error during user registration.' });
-    }
-});
-// Login Route
-router.post('/login', async (req, res) => {
-    try {
-        await (0, authController_1.loginUser)(req, res); // Call the loginUser function from the controller
-    }
-    catch (error) {
-        console.error('Login error:', error); // Log error for debugging
-        res.status(500).json({ message: 'Server error during login.' });
+        if (error instanceof sequelize_1.ValidationError) {
+            res.status(400).json({ errors: error.errors });
+        }
+        else {
+            res.status(500).json({ message: 'Server error' });
+        }
     }
 });
 exports.default = router;

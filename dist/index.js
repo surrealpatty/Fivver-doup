@@ -4,13 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
-// src/index.ts (Express Backend)
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Named import for sequelize
-const user_1 = require("./routes/user"); // Named import
+const user_1 = __importDefault(require("./routes/user")); // Named import for userRouter
 const profile_1 = __importDefault(require("./routes/profile")); // Default import for profile router
-const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables 
+const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app instance
@@ -35,7 +34,7 @@ database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data lo
     console.error('Error syncing models:', error);
 });
 // Use the userRouter for routes starting with /api/users
-app.use('/api/users', user_1.userRouter); // Register the user routes under /api/users
+app.use('/api/users', user_1.default); // Register the user routes under /api/users
 // Register the profile route under /api/profile
 app.use('/api/profile', profile_1.default); // Register profile route
 // Test database connection
