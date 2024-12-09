@@ -61,8 +61,8 @@ router.put(
         return;
       }
 
-      // Ensure the logged-in user owns the service
-      if (service.userId !== Number(userId)) {
+      // Ensure the logged-in user owns the service (convert userId to string for comparison)
+      if (service.userId !== String(userId)) {  // Convert userId to string for comparison
         res.status(403).json({ message: 'You are not authorized to update this service' });
         return;
       }
@@ -103,8 +103,8 @@ router.delete(
         return;
       }
 
-      // Ensure the logged-in user owns the service
-      if (service.userId !== Number(userId)) {
+      // Ensure the logged-in user owns the service (convert userId to string for comparison)
+      if (service.userId !== String(userId)) {  // Convert userId to string for comparison
         res.status(403).json({ message: 'You are not authorized to delete this service' });
         return;
       }
