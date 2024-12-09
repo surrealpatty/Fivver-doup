@@ -1,5 +1,7 @@
+// src/models/user.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
+import bcrypt from 'bcryptjs';  // Import bcrypt to hash the password
 
 // Define the interface for the attributes used to create a User (without the primary key)
 export interface UserCreationAttributes extends Optional<Omit<UserAttributes, 'id'>, 'isVerified'> {
@@ -29,7 +31,13 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public password!: string;
   public role!: string;
   public tier!: string;
-  public isVerified!: boolean;  // Add isVerified to the model
+  public isVerified!: boolean;
+
+  // Define a static method to hash the password
+  static async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  }
 }
 
 User.init(
@@ -71,4 +79,5 @@ User.init(
   }
 );
 
-export { User, UserAttributes, UserCreationAttributes };
+// Only export the User class, avoiding export conflicts
+export { User };
