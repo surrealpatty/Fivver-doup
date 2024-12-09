@@ -1,65 +1,59 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfile = exports.getProfile = void 0;
-const user_1 = require("@models/user"); // Assuming you have a User model
-// Get the user's profile information
+const user_1 = require("@models/user"); // Ensure correct import for User model
+// GET /profile - Get user profile
 const getProfile = async (req, res) => {
+    const userId = req.user?.id; // Extract user id from the token
     try {
-        // Extract the user ID from the JWT (authenticated user)
-        const userId = req.user?.id; // Assuming `req.user` was set by your JWT middleware
-        // If no userId exists, return a 401 Unauthorized error
-        if (!userId) {
-            res.status(401).json({ message: 'User not authenticated.' });
-            return; // Early return to avoid further execution
-        }
-        // Fetch the user profile from the database
-        const user = await user_1.User.findByPk(userId); // Fetch user by primary key (ID)
-        // If the user is not found, return a 404 Not Found error
+        // Find the user by their ID
+        const user = await user_1.User.findByPk(userId);
         if (!user) {
-            res.status(404).json({ message: 'User not found.' });
-            return; // Early return to avoid further execution
+            res.status(404).json({ message: 'User not found' });
+            return;
         }
-        // Return the user profile data
-        res.status(200).json(user); // Return the user object
+        res.status(200).json({
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            role: user.role,
+            tier: user.tier,
+        });
     }
     catch (err) {
-        // Catch any other errors and return a 500 Internal Server Error
         console.error(err);
-        res.status(500).json({ message: 'An error occurred while fetching profile.' });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 exports.getProfile = getProfile;
-// Update the user's profile information
+// PUT /profile - Update user profile
 const updateProfile = async (req, res) => {
+    const userId = req.user?.id; // Extract user id from the token
+    const { email, username } = req.body;
     try {
-        // Extract the user ID from the JWT (authenticated user)
-        const userId = req.user?.id; // Assuming `req.user` was set by your JWT middleware
-        // If no userId exists, return a 401 Unauthorized error
-        if (!userId) {
-            res.status(401).json({ message: 'User not authenticated.' });
-            return; // Early return to avoid further execution
-        }
-        // Destructure the new profile data from the request body
-        const { email, username } = req.body;
-        // Fetch the user from the database using the user ID
+        // Find the user and update their details
         const user = await user_1.User.findByPk(userId);
-        // If the user is not found, return a 404 Not Found error
         if (!user) {
-            res.status(404).json({ message: 'User not found.' });
-            return; // Early return to avoid further execution
+            res.status(404).json({ message: 'User not found' });
+            return;
         }
-        // Update the user's profile fields
-        user.email = email || user.email; // If email is provided, update; otherwise, keep the existing one
-        user.username = username || user.username; // If username is provided, update; otherwise, keep the existing one
-        // Save the updated user profile to the database
+        user.email = email || user.email; // If email is provided, update it, else keep current value
+        user.username = username || user.username; // Same for username
         await user.save();
-        // Respond with the updated user profile
-        res.status(200).json({ message: 'Profile updated successfully.', user });
+        res.status(200).json({
+            message: 'Profile updated successfully',
+            user: {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                role: user.role,
+                tier: user.tier,
+            },
+        });
     }
     catch (err) {
-        // Catch any other errors and return a 500 Internal Server Error
         console.error(err);
-        res.status(500).json({ message: 'An error occurred while updating profile.' });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 exports.updateProfile = updateProfile;

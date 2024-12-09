@@ -1,8 +1,26 @@
-// src/models/services.ts
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Assuming sequelize is properly initialized
 
-class Service extends Model {
+// Define the interface for the attributes used to create a Service (without the primary key)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  userId: number;
+}
+
+// Define the interface for the attributes of a Service (including the primary key)
+export interface ServiceAttributes {
+  id: number;
+  userId: number;
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+}
+
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   id!: number;
   userId!: number;
   name!: string;

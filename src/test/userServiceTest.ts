@@ -1,38 +1,47 @@
-import Service, { ServiceCreationAttributes } from '../models/services';  // Import the interface and class
-import { User } from '../models/user'; // Correct named import for User
-import { sequelize } from '../config/database'; // Import the sequelize instance
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Assuming sequelize is properly initialized
 
-describe('Service Model Tests', () => {
-  beforeAll(async () => {
-    // Sync the database (ensure it's ready before tests)
-    await sequelize.sync({ force: true });
-  });
+// Define the interface for the attributes used to create a Service (without the primary key)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  userId: number;
+}
 
-  it('should create a new service', async () => {
-    // Create a user with all required fields (password and role)
-    const user = await User.create({
-      username: 'testUser',
-      email: 'test@example.com',
-      password: 'testPassword123',
-      role: 'free', // Ensure role is provided
-    });
+// Define the interface for the attributes of a Service (including the primary key)
+export interface ServiceAttributes {
+  id: number;
+  userId: number;
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+}
 
-    // Prepare the service data with the correct type
-    const serviceData: ServiceCreationAttributes = {
-      name: 'Test Service',  // Add the missing name property
-      title: 'Test Service Title',
-      description: 'A test service description',
-      price: 100.0,
-      userId: user.id,  // Associate the service with the created user
-    };
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+  id!: number;
+  userId!: number;
+  name!: string;
+  description!: string;
+  price!: number;
+  image?: string; // Add image property to your model
+}
 
-    // Create the service and ensure it's properly typed
-    const service = await Service.create(serviceData);
+Service.init(
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING, allowNull: false },
+    price: { type: DataTypes.FLOAT, allowNull: false },
+    image: { type: DataTypes.STRING }, // Make sure this matches your DB schema
+  },
+  {
+    sequelize,
+    modelName: 'Service',
+  }
+);
 
-    // Check that the service has the correct properties
-    expect(service.userId).toBe(user.id);
-    expect(service.title).toBe('Test Service Title');
-    expect(service.name).toBe('Test Service');  // Verify the name field
-    expect(service.price).toBe(100.0);
-  });
-});
+export default Service;

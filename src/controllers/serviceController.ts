@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import Service from '@models/services'; // Correct import for default export
-import { Service as ServiceType } from '@models/services'; // Optional: define Service type if necessary
+import Service, { ServiceAttributes } from '@models/services'; // Import Service and ServiceAttributes
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -23,7 +22,7 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
     }
 
     // Prepare updated data (handle image upload if available)
-    const updatedData: Partial<ServiceType> = {
+    const updatedData: Partial<ServiceAttributes> = {  // Use ServiceAttributes for type
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,

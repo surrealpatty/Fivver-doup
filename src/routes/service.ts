@@ -17,7 +17,8 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
   if (file.mimetype.startsWith('image/')) {
     cb(null, true); // Accept image files
   } else {
-    cb(new Error('Invalid file type. Only images are allowed.'), false); // Reject non-image files
+    // Correct the instantiation of the Error object
+    cb(new Error('Invalid file type. Only images are allowed.') as any, false); // This is valid
   }
 };
 
