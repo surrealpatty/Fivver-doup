@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/profile.ts
 const express_1 = require("express");
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // JWT middleware
-const services_1 = __importDefault(require("models/services")); // Ensure alias for services model
+const services_1 = __importDefault(require("@models/services")); // Use alias correctly
 const router = (0, express_1.Router)();
 // GET route for retrieving user profile and associated services
 router.get('/profile', authMiddleware_1.authenticateJWT, async (req, res, next) => {
