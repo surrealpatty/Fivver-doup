@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { User } from '../models/User';
+import { User } from '@models/user'; // New lowercase import
 import { ValidationError } from 'sequelize';
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition

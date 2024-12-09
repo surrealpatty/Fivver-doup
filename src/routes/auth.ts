@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { User } from '../models/User'; // Corrected the casing to match the file name
+import { User } from '../models/user'; // Corrected the casing to match the file name
 import { ValidationError } from 'sequelize';
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
