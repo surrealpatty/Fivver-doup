@@ -7,17 +7,20 @@ export interface UserAttributes {
   email: string;
   username: string;
   password: string;
+  role: string;  // Add role
+  tier: string;  // Add tier
 }
 
 // Define the creation attributes interface (where 'id' is optional)
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Define the User model class
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
   public username!: string;
   public password!: string;
+  public role!: string;  // Define role
+  public tier!: string;  // Define tier
 }
 
 // Initialize the User model
@@ -43,6 +46,16 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'free',  // You can set a default role
+    },
+    tier: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'free',  // You can set a default tier
+    }
   },
   {
     sequelize,  // The sequelize instance from config/database.ts
@@ -50,8 +63,6 @@ User.init(
   }
 );
 
-// If you're using Sequelize's `addModels()` method (which is only available in Sequelize v6+),
-// Ensure this line is correctly added in the right context
-sequelize.models.User = User; // Manually add the User model to sequelize instance
+sequelize.models.User = User; // Add the User model to sequelize instance
 
 export { User };
