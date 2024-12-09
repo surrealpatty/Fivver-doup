@@ -8,8 +8,12 @@ const router = express.Router();
 
 // Multer setup for image uploads
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'), // Set upload directory
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname), // Set unique file name
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Set upload directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // Set unique file name
+  },
 });
 
 // Define file type and size validation
@@ -17,8 +21,8 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
   if (file.mimetype.startsWith('image/')) {
     cb(null, true); // Accept image files
   } else {
-    // Correct the instantiation of the Error object
-    cb(new Error('Invalid file type. Only images are allowed.') as any, false); // This is valid
+    // Reject non-image files
+    cb(new Error('Invalid file type. Only images are allowed.') as any, false);
   }
 };
 
