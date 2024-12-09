@@ -1,44 +1,89 @@
-import { User } from '../models/user';  // Adjusted relative path to the User model
+import request from 'supertest';
+import { app } from '../index';  // Ensure you're importing your Express app
+
+// Mocking the User model to mock the create function for testing
+import { User } from '../models/user'; 
 jest.mock('../models/user', () => ({
   User: {
     create: jest.fn(),
   },
 }));
 
-describe('User Model', () => {
+describe('POST /register', () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear mocks before each test
+    jest.clearAllMocks(); // Clear mocks before each test to avoid conflicts
   });
 
-  it('should create a new user successfully', async () => {
-    // Arrange: Mock the User.create method if you want to mock it
-    const mockCreate = jest.fn().mockResolvedValueOnce({
+  it('should register a new user successfully', async () => {
+    // Mock the User.create method
+    (User.create as jest.Mock).mockResolvedValueOnce({
       id: '1',
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'password123',  // Mock the password in the response
-    });
-    
-    (User.create as jest.Mock) = mockCreate;  // Assign mock to the User.create method
-
-    // Act: Call the method you want to test
-    const user = await User.create({
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'password123',  // Add password here for testing
+      email: 'newuser@example.com',
+      username: 'newuser',
+      password: 'password123',
     });
 
-    // Assert: Ensure that the method was called with the correct parameters
-    expect(mockCreate).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'password123',  // Ensure password is included
-    });
-    expect(user).toEqual({
+    // Send request to the /register route
+    const res = await request(app)
+      .post('/register')
+      .send({
+        email: 'newuser@example.com',
+        username: 'newuser',
+        password: 'password123',
+      });
+
+    // Assertions
+    expect(res.status).toBe(201);  // Expect HTTP 201 (Created)
+    expect(res.body.message).toBe('User registered successfully');  // Response message
+    expect(res.body.user).toEqual({
       id: '1',
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'password123',  // Ensure the password is mocked correctly
+      email: 'newuser@example.com',
+      username: 'newuser',
+      password: 'password123',  // Ensure the mocked password is correct
     });
+  });
+
+  it('should return an error if email or username is already in use', async () => {
+    // Mock the User.create method to simulate an existing user
+    (User.create as jest.Mock).mockRejectedValueOnce(new Error('User already exists'));
+
+    const res = await request(app)
+      .post('/register')
+      .send({
+        email: 'existinguser@example.com',
+        username: 'existinguser',
+        password: 'password123',
+      });
+
+    // Assertions
+    expect(res.status).toBe(400);  // Expect HTTP 400 (Bad Request)
+    expect(res.body.message).toBe('Email or Username already in use');
+  });
+
+  it('should return a validation error for invalid email', async () => {
+    const res = await request(app)
+      .post('/register')
+      .send({
+        email: 'invalid-email',
+        username: 'newuser',
+        password: 'password123',
+      });
+
+    // Assertions
+    expect(res.status).toBe(400);  // Expect HTTP 400 (Bad Request)
+    expect(res.body.errors[0].msg).toBe('Invalid email address');  // Validation error message
+  });
+
+  it('should return a validation error for missing username', async () => {
+    const res = await request(app)
+      .post('/register')
+      .send({
+        email: 'newuser@example.com',
+        password: 'password123',
+      });
+
+    // Assertions
+    expect(res.status).toBe(400);  // Expect HTTP 400 (Bad Request)
+    expect(res.body.errors[0].msg).toBe('Username must be between 3 and 20 characters');  // Username error
   });
 });

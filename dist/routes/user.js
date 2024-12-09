@@ -1,10 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_1 = require("@models/user"); // New lowercase import
+const user_1 = require("@models/user"); // Ensure correct import for User model
 const sequelize_1 = require("sequelize");
 const express_validator_1 = require("express-validator");
 const sequelize_2 = require("sequelize"); // Import Sequelize 'Op' for the OR condition
+const authenticateToken_1 = __importDefault(require("@middlewares/authenticateToken")); // Ensure correct path to middleware
 const router = (0, express_1.Router)();
 // Route for user registration
 router.post('/register', 
@@ -39,6 +43,8 @@ async (req, res) => {
             email,
             username,
             password: hashedPassword,
+            role: 'free', // Default to free tier if needed
+            tier: 'free', // Default tier (can be updated later if paid)
         });
         res.status(201).json({
             message: 'User registered successfully',
@@ -58,6 +64,26 @@ async (req, res) => {
         else {
             res.status(500).json({ message: 'Server error' });
         }
+    }
+});
+// Route for accessing premium content (tier-based restrictions)
+router.get('/premium-content', authenticateToken_1.default, async (req, res) => {
+    const userId = req.user?.id;
+    try {
+        const user = await user_1.User.findByPk(userId);
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        if (user.tier !== 'paid') {
+            res.status(403).json({ message: 'Access restricted to paid users only' });
+            return;
+        }
+        res.status(200).json({ message: 'Welcome to premium content' });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 exports.default = router;

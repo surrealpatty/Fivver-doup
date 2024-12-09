@@ -11,8 +11,12 @@ const authenticateToken_1 = __importDefault(require("@middlewares/authenticateTo
 const router = express_1.default.Router();
 // Multer setup for image uploads
 const storage = multer_1.default.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'), // Set upload directory
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname), // Set unique file name
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Set upload directory
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname); // Set unique file name
+    },
 });
 // Define file type and size validation
 const fileFilter = (req, file, cb) => {
@@ -20,8 +24,8 @@ const fileFilter = (req, file, cb) => {
         cb(null, true); // Accept image files
     }
     else {
-        // Correct the instantiation of the Error object
-        cb(new Error('Invalid file type. Only images are allowed.'), false); // This is valid
+        // Reject non-image files
+        cb(new Error('Invalid file type. Only images are allowed.'), false);
     }
 };
 const upload = (0, multer_1.default)({
