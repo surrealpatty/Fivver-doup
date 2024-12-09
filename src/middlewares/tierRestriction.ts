@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import { UserPayload } from '@types/index';  // Import the UserPayload interface
 
 // Define AuthRequest interface that extends the Express Request type
 interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    username: string;
-    tier: 'free' | 'paid';  // Correct type for tier (should be 'free' | 'paid')
-  };
+  user?: UserPayload;  // Ensure that user is typed correctly as UserPayload
 }
 
 // Middleware function to check the user's tier
