@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/services.ts
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Assuming sequelize is properly initialized
 class Service extends sequelize_1.Model {

@@ -20,7 +20,8 @@ const fileFilter = (req, file, cb) => {
         cb(null, true); // Accept image files
     }
     else {
-        cb(new Error('Invalid file type. Only images are allowed.'), false); // Reject non-image files
+        // Correct the instantiation of the Error object
+        cb(new Error('Invalid file type. Only images are allowed.'), false); // This is valid
     }
 };
 const upload = (0, multer_1.default)({

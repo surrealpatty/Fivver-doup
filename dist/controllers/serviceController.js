@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateService = void 0;
-const services_1 = __importDefault(require("@models/services")); // Correct import for default export
+const services_1 = __importDefault(require("@models/services")); // Import Service and ServiceAttributes
 const updateService = async (req, res) => {
     try {
         const { serviceId } = req.params;

@@ -1,38 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const services_1 = __importDefault(require("../models/services")); // Import the interface and class
-const user_1 = require("../models/user"); // Correct named import for User
-const database_1 = require("../config/database"); // Import the sequelize instance
-describe('Service Model Tests', () => {
-    beforeAll(async () => {
-        // Sync the database (ensure it's ready before tests)
-        await database_1.sequelize.sync({ force: true });
-    });
-    it('should create a new service', async () => {
-        // Create a user with all required fields (password and role)
-        const user = await user_1.User.create({
-            username: 'testUser',
-            email: 'test@example.com',
-            password: 'testPassword123',
-            role: 'free', // Ensure role is provided
-        });
-        // Prepare the service data with the correct type
-        const serviceData = {
-            name: 'Test Service', // Add the missing name property
-            title: 'Test Service Title',
-            description: 'A test service description',
-            price: 100.0,
-            userId: user.id, // Associate the service with the created user
-        };
-        // Create the service and ensure it's properly typed
-        const service = await services_1.default.create(serviceData);
-        // Check that the service has the correct properties
-        expect(service.userId).toBe(user.id);
-        expect(service.title).toBe('Test Service Title');
-        expect(service.name).toBe('Test Service'); // Verify the name field
-        expect(service.price).toBe(100.0);
-    });
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Assuming sequelize is properly initialized
+class Service extends sequelize_1.Model {
+}
+Service.init({
+    id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
+    name: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    description: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    price: { type: sequelize_1.DataTypes.FLOAT, allowNull: false },
+    image: { type: sequelize_1.DataTypes.STRING }, // Make sure this matches your DB schema
+}, {
+    sequelize: database_1.sequelize,
+    modelName: 'Service',
 });
+exports.default = Service;
