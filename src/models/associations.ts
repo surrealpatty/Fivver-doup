@@ -2,7 +2,7 @@ import { User } from './user';         // Import the User model
 import Service from './services';     // Import the Service model (ensure this matches the export in services.ts)
 import { Order } from './order';      // Import the Order model
 import { Review } from './review';    // Import the Review model
-import { sequelize } from 'config/database';  // Import the Sequelize instance using the alias
+import { sequelize } from '@config/database';  // Use the correct alias
 
 // Define associations
 

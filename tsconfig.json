@@ -18,10 +18,10 @@
     ],
     "baseUrl": "./",  // Set base directory for module resolution
     "paths": {
-      "@models/*": ["src/models/*"],  // Alias @models to src/models
+      "@models/*": ["src/models/*"],
       "@controllers/*": ["src/controllers/*"],  // Alias @controllers to src/controllers
       "@routes/*": ["src/routes/*"],  // Alias @routes to src/routes
-      "@config/*": ["src/config/*"],  // Alias @config to src/config
+      "@config/*": ["src/config/*"],
       "@types/*": ["src/types/*"],  // Alias @types to src/types
       "@src/*": ["src/*"]  // General alias for src
     },
