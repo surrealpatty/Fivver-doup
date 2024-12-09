@@ -43,11 +43,13 @@ router.post(
       // Hash password before saving
       const hashedPassword = await User.hashPassword(password);
 
-      // Create a new user
+      // Create a new user, add role and tier
       const newUser = await User.create({
         email,
         username,
         password: hashedPassword,
+        role: 'free',  // Default role
+        tier: 'free',  // Default tier
       });
 
       res.status(201).json({

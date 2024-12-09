@@ -1,4 +1,5 @@
-import  Service, { ServiceCreationAttributes } from '../models/services'; // Import the interface and class
+// src/test/testModels.ts
+import Service, { ServiceCreationAttributes } from '../models/services'; // Import the interface and class
 import { User } from '../models/user'; // Correct named import for User
 import { sequelize } from '../config/database'; // Import the sequelize instance
 
@@ -10,15 +11,13 @@ describe('Service Model Tests', () => {
 
   it('should create a new service', async () => {
     // Create a user with all required fields (password and role)
-   // Add tier when creating the test user
-const user = await User.create({
-  username: 'testUser',
-  email: 'test@example.com',
-  password: 'password123',
-  role: 'free',  // Ensure role is provided
-  tier: 'free',  // Add tier
-});
-
+    const user = await User.create({
+      username: 'testUser',
+      email: 'test@example.com',
+      password: 'password123',
+      role: 'free',  // Ensure role is provided
+      tier: 'free',  // Add tier
+    });
 
     // Prepare the service data with the correct type
     const serviceData: ServiceCreationAttributes = {

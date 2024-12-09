@@ -31,12 +31,14 @@ const registerUser = async (req, res) => {
         }
         // Hash the password
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-        // Create the new user
+        // Create the new user with default values for role and tier, and include isVerified
         const newUser = await user_1.User.create({
             username,
             email,
             password: hashedPassword,
-            isVerified: false, // User not verified until email confirmation
+            role: 'free', // Default role
+            tier: 'free', // Default tier
+            isVerified: false, // Default to not verified
         });
         // Generate the JWT verification token
         const verificationToken = jsonwebtoken_1.default.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1d' } // Token expires in 1 day
