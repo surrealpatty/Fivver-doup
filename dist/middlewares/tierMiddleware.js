@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkPaidTier = void 0;
-// Middleware function to check the user's tier
 const checkPaidTier = (req, res, next) => {
-    // Ensure that req.user is defined before accessing its properties
-    if (!req.user || req.user.tier !== 'paid') {
-        return res.status(403).json({ message: 'Access restricted to paid tier users.' });
+    const user = req.user; // Assuming user is set by the authenticateJWT middleware
+    if (!user || user.tier !== 'paid') {
+        // Send a 403 response if the user does not have a paid tier
+        res.status(403).json({ message: 'User does not have a paid tier.' });
+        return; // Explicitly return here to stop execution
     }
-    next();
+    // If the user has a paid tier, move to the next middleware/handler
+    next(); // Proceed to the next middleware
 };
 exports.checkPaidTier = checkPaidTier;
