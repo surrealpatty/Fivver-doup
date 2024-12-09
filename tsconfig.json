@@ -35,7 +35,7 @@
     "src/**/*.ts",                              // Include all TypeScript files in the src folder
     "src/test/**/*.ts",                         // Include test files in the src/test folder
     "src/**/*.js",                              // Include JavaScript files if needed
-    "src/types/**/*.d.ts"                       // Ensure that TypeScript types are included
+    "src/types/**/*.d.ts"                       // Ensure TypeScript picks up custom type declaration files
   ],
   "exclude": [
     "node_modules",                             // Exclude node_modules from compilation
