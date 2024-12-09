@@ -34,11 +34,13 @@ async (req, res) => {
         }
         // Hash password before saving
         const hashedPassword = await user_1.User.hashPassword(password);
-        // Create a new user
+        // Create a new user, add role and tier
         const newUser = await user_1.User.create({
             email,
             username,
             password: hashedPassword,
+            role: 'free', // Default role
+            tier: 'free', // Default tier
         });
         res.status(201).json({
             message: 'User registered successfully',
