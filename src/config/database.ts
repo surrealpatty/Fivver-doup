@@ -1,14 +1,15 @@
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
+import path from 'path';  // Import path module for resolving directories
 
 // Initialize Sequelize instance with sequelize-typescript
 export const sequelize = new Sequelize({
-  dialect: 'mysql',             // Specify the database dialect
-  host: 'localhost',            // Database host (e.g., localhost)
-  username: 'root',             // MySQL username
-  password: 'password',         // MySQL password
-  database: 'fivver_doup',      // Database name
-  logging: false,               // Disable logging for production (optional)
-  models: [__dirname + '/../models'],  // Automatically load all models in the 'models' directory
+  dialect: 'mysql',                          // Specify the database dialect
+  host: 'localhost',                         // Database host (e.g., localhost)
+  username: 'root',                          // MySQL username
+  password: 'password',                      // MySQL password
+  database: 'fivver_doup',                   // Database name
+  logging: true,                             // Enable logging in development
+  models: [path.join(__dirname, '..', 'models')],  // Dynamically load all models in the 'models' directory
 });
 
 // Optional: Test the connection
@@ -20,3 +21,5 @@ export const sequelize = new Sequelize({
     console.error('Unable to connect to the database:', error);  // Catch connection errors
   }
 })();
+
+export default sequelize;
