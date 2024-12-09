@@ -3,44 +3,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../config/database"); // Import sequelize instance
-const user_1 = require("../models/user"); // Use named import for User model
-const services_1 = __importDefault(require("../models/services")); // Import Service and ServiceCreationAttributes
-// Function to test user and service models
-const testModels = async () => {
-    try {
-        // Synchronize models with the database
+const services_1 = __importDefault(require("../models/services")); // Import the interface and class
+const user_1 = require("../models/user"); // Correct named import for User
+const database_1 = require("../config/database"); // Import the sequelize instance
+describe('Service Model Tests', () => {
+    beforeAll(async () => {
+        // Sync the database (ensure it's ready before tests)
         await database_1.sequelize.sync({ force: true });
-        console.log('Database synced successfully.');
-        // Create a test user
-        const testUser = await user_1.User.create({
-            username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-            role: 'free',
+    });
+    it('should create a new service', async () => {
+        // Create a user with all required fields (password and role)
+        const user = await user_1.User.create({
+            username: 'testUser',
+            email: 'test@example.com',
+            password: 'testPassword123',
+            role: 'free', // Ensure role is provided
         });
-        console.log('Test User created:', testUser.toJSON());
-        // Create a test service associated with the user
-        const testServiceData = {
-            name: 'Test Service', // Add the missing name property
-            title: 'Test Service Title',
-            description: 'A description of the test service.',
-            price: 99.99,
-            userId: testUser.id, // Associate with the user
+        // Prepare the service data with the correct type
+        const serviceData = {
+            name: 'Test Service', // Corrected to 'name' instead of 'title'
+            description: 'A test service description',
+            price: 100.0,
+            userId: user.id, // Associate the service with the created user
         };
-        // Create the test service using the ServiceCreationAttributes type
-        const testService = await services_1.default.create(testServiceData);
-        console.log('Test Service created:', testService.toJSON());
-    }
-    catch (error) {
-        console.error('Error testing models:', error);
-    }
-    finally {
-        // Close the database connection
-        await database_1.sequelize.close();
-    }
-};
-// Export the function using ES module syntax
-exports.default = testModels;
-// Call the function to test models
-testModels();
+        // Create the service and ensure it's properly typed
+        const service = await services_1.default.create(serviceData);
+        // Check that the service has the correct properties
+        expect(service.userId).toBe(user.id);
+        expect(service.name).toBe('Test Service'); // Ensure 'name' is correctly used
+        expect(service.price).toBe(100.0);
+    });
+});
