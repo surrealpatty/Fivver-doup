@@ -8,19 +8,22 @@ export const updateService = async (req: Request, res: Response, next: NextFunct
   try {
     // Ensure req.user is defined before accessing req.user.id
     if (!req.user || typeof req.user.id !== 'number') {
-      return res.status(401).json({ message: 'User not authenticated' });
+      res.status(401).json({ message: 'User not authenticated' }); // No need to return here
+      return;  // Just end the function, don't return the Response object
     }
 
     // Find the service by ID
     const service = await Service.findByPk(id);
 
     if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+      res.status(404).json({ message: 'Service not found' }); // No need to return here
+      return;  // Just end the function, don't return the Response object
     }
 
     // Ensure that req.user.id is of the same type as service.userId
     if (service.userId !== req.user.id) {
-      return res.status(403).json({ message: 'You are not authorized to edit this service' });
+      res.status(403).json({ message: 'You are not authorized to edit this service' }); // No need to return here
+      return;  // Just end the function, don't return the Response object
     }
 
     // Update the service with new values
