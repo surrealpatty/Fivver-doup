@@ -16,8 +16,8 @@ const updateService = async (req, res) => {
             return;
         }
         // Ensure the logged-in user owns the service
-        // Convert userId to number for comparison
-        if (service.userId !== Number(userId)) {
+        // Convert userId to string for comparison
+        if (service.userId !== String(userId)) {
             res.status(403).json({ message: 'You can only update your own services' });
             return;
         }

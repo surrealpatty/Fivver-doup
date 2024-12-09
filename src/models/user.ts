@@ -1,36 +1,37 @@
-import { sequelize } from '../config/database'; // Named import for sequelize
 import { DataTypes, Model, Optional } from 'sequelize';
-import bcrypt from 'bcryptjs';
+import { sequelize } from '../config/database';
 
-// Define the attributes interface for the User model
+// Define the interface for the attributes used to create a User (without the primary key)
+export interface UserCreationAttributes extends Optional<Omit<UserAttributes, 'id'>, 'isVerified'> {
+  email: string;
+  username: string;
+  password: string;
+  role: string;
+  tier: string;
+  isVerified?: boolean;  // Optional during creation
+}
+
+// Define the interface for the attributes of a User (including the primary key)
 export interface UserAttributes {
   id: string;
   email: string;
   username: string;
   password: string;
-  role: string;  // Add role
-  tier: string;  // Add tier
+  role: string;
+  tier: string;
+  isVerified: boolean;  // Make isVerified non-optional
 }
-
-// Define the creation attributes interface (where 'id' is optional)
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
   public username!: string;
   public password!: string;
-  public role!: string;  // Define role
-  public tier!: string;  // Define tier
-
-  // Define the hashPassword method for the User model
-  public static async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return bcrypt.hash(password, salt);
-  }
+  public role!: string;
+  public tier!: string;
+  public isVerified!: boolean;  // Add isVerified to the model
 }
 
-// Initialize the User model
 User.init(
   {
     id: {
@@ -42,12 +43,10 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -56,20 +55,20 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'free',  // You can set a default role
     },
     tier: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'free',  // You can set a default tier
-    }
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,  // Default value for isVerified
+    },
   },
   {
-    sequelize,  // The sequelize instance from config/database.ts
+    sequelize,
     modelName: 'User',
   }
 );
 
-sequelize.models.User = User; // Add the User model to sequelize instance
-
-export { User };
+export { User, UserAttributes, UserCreationAttributes };
