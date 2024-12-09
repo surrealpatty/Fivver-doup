@@ -56,8 +56,8 @@ upload.single('image'), // Handle image upload
             res.status(404).json({ message: 'Service not found' });
             return;
         }
-        // Ensure the logged-in user owns the service
-        if (service.userId !== Number(userId)) {
+        // Ensure the logged-in user owns the service (convert userId to string for comparison)
+        if (service.userId !== String(userId)) { // Convert userId to string for comparison
             res.status(403).json({ message: 'You are not authorized to update this service' });
             return;
         }
@@ -89,8 +89,8 @@ async (req, res, next) => {
             res.status(404).json({ message: 'Service not found' });
             return;
         }
-        // Ensure the logged-in user owns the service
-        if (service.userId !== Number(userId)) {
+        // Ensure the logged-in user owns the service (convert userId to string for comparison)
+        if (service.userId !== String(userId)) { // Convert userId to string for comparison
             res.status(403).json({ message: 'You are not authorized to delete this service' });
             return;
         }
