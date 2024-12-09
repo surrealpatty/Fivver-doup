@@ -1,65 +1,14 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { User } from '@models/user';  // Ensure this import is correct
-import authenticateToken from '@middlewares/authenticateToken';  // Use the authenticateToken middleware
+// src/routes/profile.ts
+import express from 'express';
+import  authenticateToken from '../middlewares/authenticateToken'; // Ensure correct path to authenticateToken middleware
+import { getProfile, updateProfile } from '../controllers/profileController'; // Ensure correct path to profileController
 
-const router = Router();
+const router = express.Router();
 
-// Get user profile route
-router.get('/profile', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const userId = req.user?.id;  // Extract user id from the token
+// GET /profile route to view profile
+router.get('/profile', authenticateToken, getProfile);
 
-  try {
-    // Find the user by their ID
-    const user = await User.findByPk(userId);
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    res.status(200).json({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      tier: user.tier,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// Update user profile route
-router.put('/profile', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const userId = req.user?.id;  // Extract user id from the token
-  const { email, username } = req.body;
-
-  try {
-    // Find the user and update their details
-    const user = await User.findByPk(userId);
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    user.email = email || user.email;
-    user.username = username || user.username;
-    await user.save();
-
-    res.status(200).json({
-      message: 'Profile updated successfully',
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role,
-        tier: user.tier,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+// PUT /profile route to update profile
+router.put('/profile', authenticateToken, updateProfile);
 
 export default router;

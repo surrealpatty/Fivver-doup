@@ -1,44 +1,49 @@
-import { Request, Response, NextFunction } from 'express';
-import Service from '@models/services';  // Assuming your Service model is here
+import { Request, Response } from 'express';
+import Service from '@models/services'; // Correct import for default export
+import { Service as ServiceType } from '@models/services'; // Optional: define Service type if necessary
 
-export const updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;  // Get the service ID from the route parameter
-  const { title, description, price } = req.body;  // Get new data from the request body
-
+export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Ensure req.user is defined before accessing req.user.id
-    if (!req.user || typeof req.user.id !== 'number') {
-      res.status(401).json({ message: 'User not authenticated' }); // No need to return here
-      return;  // Just end the function, don't return the Response object
-    }
+    const { serviceId } = req.params;
+    const userId = req.user?.id; // Ensure user is set after authentication middleware
 
-    // Find the service by ID
-    const service = await Service.findByPk(id);
+    // Find the service by primary key
+    const service = await Service.findByPk(serviceId);
 
     if (!service) {
-      res.status(404).json({ message: 'Service not found' }); // No need to return here
-      return;  // Just end the function, don't return the Response object
+      res.status(404).json({ message: 'Service not found' });
+      return;
     }
 
-    // Ensure that req.user.id is of the same type as service.userId
-    if (service.userId !== req.user.id) {
-      res.status(403).json({ message: 'You are not authorized to edit this service' }); // No need to return here
-      return;  // Just end the function, don't return the Response object
+    // Ensure the logged-in user owns the service
+    // Convert userId to number for comparison
+    if (service.userId !== Number(userId)) {
+      res.status(403).json({ message: 'You can only update your own services' });
+      return;
     }
 
-    // Update the service with new values
-    service.title = title || service.title;
-    service.description = description || service.description;
-    service.price = price || service.price;
+    // Prepare updated data (handle image upload if available)
+    const updatedData: Partial<ServiceType> = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+    };
 
-    // Save the updated service
-    await service.save();
+    // Add image path if a new image was uploaded
+    if (req.file) {
+      updatedData.image = req.file.path; // Add image path to the update
+    }
 
-    // Send the response with the updated service
-    res.status(200).json({ message: 'Service updated successfully', service });
+    // Update the service with new data
+    const updatedService = await service.update(updatedData);
 
-  } catch (error) {
-    console.error('Error updating service:', error);
-    next(error);  // Pass error to the global error handler
+    // Respond with the updated service
+    res.status(200).json({
+      message: 'Service updated successfully',
+      service: updatedService,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error updating service' });
   }
 };

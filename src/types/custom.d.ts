@@ -1,8 +1,9 @@
-// src/types/custom.d.ts
-import { UserPayload } from './index';  // Import UserPayload
+import { Request } from 'express';
 
-declare module 'express' {
-  interface Request {
-    user?: UserPayload;  // Ensure consistent declaration of the user property
+declare global {
+  namespace Express {
+    interface Request {
+      file?: Express.Multer.File;
+    }
   }
 }
