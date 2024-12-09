@@ -1,11 +1,14 @@
-import { UserPayload } from '@types'; // Adjust import to your correct path
+// src/types/express.d.ts
+
+import { UserPayload } from '@types'; // Adjust the import path if needed
+import { Request } from 'express';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // Add the `user` property to the Request interface
+      user?: UserPayload; // Define the user property with the appropriate type
     }
   }
 }
 
-export {}; // To make this file a module
+export {}; // To make this a module
