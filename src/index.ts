@@ -1,10 +1,9 @@
-// src/index.ts (Express Backend)
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Named import for sequelize
-import { userRouter } from './routes/user';  // Named import
+import  userRouter  from './routes/user';  // Named import for userRouter
 import profileRouter from './routes/profile'; // Default import for profile router
-import dotenv from 'dotenv'; // For loading environment variables 
+import dotenv from 'dotenv'; // For loading environment variables
 
 // Load environment variables from .env file
 dotenv.config();
@@ -22,7 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 // Example route to test the server
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
