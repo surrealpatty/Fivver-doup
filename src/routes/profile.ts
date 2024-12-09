@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import Service from '@models/services';  // Ensure correct import for Service model
-import User from '@models/user';  // Assuming there is a User model for user details
+import { User }from '@models/user';  // Assuming there is a User model for user details
 import authenticateToken from '@middlewares/authenticateToken';  // Correct path for authenticateToken
 
 const router = express.Router();

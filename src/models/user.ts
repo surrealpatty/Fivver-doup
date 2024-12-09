@@ -1,5 +1,6 @@
 import { sequelize } from '../config/database'; // Named import for sequelize
 import { DataTypes, Model, Optional } from 'sequelize';
+import bcrypt from 'bcryptjs';
 
 // Define the attributes interface for the User model
 export interface UserAttributes {
@@ -21,6 +22,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public password!: string;
   public role!: string;  // Define role
   public tier!: string;  // Define tier
+
+  // Define the hashPassword method for the User model
+  public static async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  }
 }
 
 // Initialize the User model
