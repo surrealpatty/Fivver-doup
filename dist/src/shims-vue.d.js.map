@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/shims-vue.d.ts"],"sourcesContent":["// src/shims-vue.d.ts\r\ndeclare module \"*.vue\" {\r\n  import { DefineComponent } from 'vue';\r\n  const component: DefineComponent<{}, {}, any>;\r\n  export default component;\r\n}\r\n"],"names":[],"mappings":"AAAA,qBAAqB"}
