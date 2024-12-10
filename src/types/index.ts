@@ -13,6 +13,7 @@ export interface AuthRequest extends Request {
 export interface UserPayload {
   id: string;
   email: string;
-  username?: string;
+  username: string;
   tier: "free" | "paid";
+  role?: string; // Make `role` optional if it's not always present
 }
