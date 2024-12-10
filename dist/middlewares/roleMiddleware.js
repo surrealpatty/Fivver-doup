@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkRole = void 0;
+// Middleware to check the role of the user
 const checkRole = (requiredRole) => {
     return (req, res, next) => {
-        const user = req.user;
+        const user = req.user; // `user` can be undefined
         if (!user || !user.role) {
             return res.status(403).json({ message: 'User role is missing or not authorized' });
         }
