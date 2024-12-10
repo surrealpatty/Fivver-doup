@@ -1,17 +1,6 @@
+// src/middlewares/tierRestriction.ts
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../types'; // Correct import path
-import { UserPayload } from 'src/types/index'; // Correct path for your types
-
-
-// Define AuthRequest interface that extends the Express Request type
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    username: string;
-    tier: 'free' | 'paid';  // Correct type for tier (should be 'free' | 'paid')
-  };
-}
 
 // Middleware function to check the user's tier
 export const checkPaidTier = (req: AuthRequest, res: Response, next: NextFunction) => {

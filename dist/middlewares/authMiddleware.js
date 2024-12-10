@@ -1,5 +1,4 @@
 "use strict";
-// src/middlewares/authMiddleware.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,15 +14,15 @@ const authenticateToken = (req, res, next) => {
     try {
         // Verify the token and assign the decoded payload to UserPayload type
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        // Check if the decoded token contains necessary information
-        if (!decoded.email || !decoded.username) {
+        // Check if the decoded token contains the necessary information
+        if (!decoded.id || !decoded.tier) {
             console.warn('User payload is missing required information');
-            return res.status(400).json({ message: 'User payload is missing email or username' });
+            return res.status(400).json({ message: 'User payload is missing required information' });
         }
         // Attach the decoded user information to the request object for further use
         req.user = decoded;
         // Proceed to the next middleware or route handler
-        next(); // Don't return Response, just call next() to move to the next middleware
+        next(); // Proceed to the next middleware without returning the Response
     }
     catch (error) {
         return res.status(401).json({ message: 'Invalid or expired token' });
