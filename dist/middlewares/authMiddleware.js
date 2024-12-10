@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use your actual secret key
-const authenticateToken = (req, res, next) => {
+const authenticateToken = (req, // Use AuthRequest here
+res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
         return res.status(401).json({ message: 'Authorization token is missing' }); // Return a response if no token
