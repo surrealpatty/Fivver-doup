@@ -1,6 +1,7 @@
+// src/types/authMiddleware.ts
 import { Request } from 'express';
-import { UserPayload } from './index';  // Import the correct path to UserPayload
+import { UserPayload } from './index';  // Import UserPayload interface
 
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Attach UserPayload type to the `user` property
+  user?: UserPayload;  // Ensure `user` is typed as UserPayload, which includes the `tier` property
 }
