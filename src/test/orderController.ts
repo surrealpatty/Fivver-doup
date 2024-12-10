@@ -1,36 +1,41 @@
-import { Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
-import { UserPayload } from '../types/index';  // Correctly import UserPayload
+// src/test/orderController.ts
 
-// Mock the req and res objects
+import { Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authMiddleware'; // Correct import for authenticateToken
+import { UserPayload } from '../types'; // Correct import for UserPayload
+
+// Mock request and response functions
 const mockRequest = (userPayload: UserPayload) => ({
-  headers: { authorization: 'Bearer valid-token' },
-  user: userPayload, // Mock user payload
+  headers: { authorization: 'Bearer valid-token' }, // Mock authorization header
+  user: userPayload, // Attach mock user payload to the request
 } as Request);
 
 const mockResponse = () => {
-  const res: any = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
+  const res: any = {};  // Create a mock response object
+  res.status = jest.fn().mockReturnValue(res); // Mock status method
+  res.json = jest.fn().mockReturnValue(res);   // Mock json method
   return res;
 };
 
-describe('authenticateToken middleware', () => {
-  it('should authenticate and attach user to req', () => {
-    const userPayload: UserPayload = { 
-      id: '1', 
-      email: 'user@example.com', 
-      tier: 'free'  // Ensure 'tier' is included in the object
-    }; // Closing the 'userPayload' object and the 'it' block here
+describe('Order Controller Tests', () => {
+  it('should authenticate the user correctly', () => {
+    // Create a userPayload that satisfies the UserPayload interface
+    const userPayload: UserPayload = {
+      id: 'userId',
+      email: 'user@example.com',
+      username: 'user123', // Ensure the username is included
+      tier: 'free',
+    };
 
-    const req = mockRequest(userPayload);
-    const res = mockResponse();
-    const next = jest.fn();
+    // Mock request, response, and next function
+    const req = mockRequest(userPayload); // Create a mock request
+    const res = mockResponse();           // Create a mock response
+    const next = jest.fn();               // Create a mock next function
 
     authenticateToken(req, res, next); // Call the middleware
 
-    // Assert that user data is attached to req.user
-    expect(req.user).toEqual(userPayload); 
+    // Check that user data is attached to req.user
+    expect(req.user).toEqual(userPayload);
     expect(next).toHaveBeenCalled(); // Ensure next is called
   });
 
@@ -43,7 +48,7 @@ describe('authenticateToken middleware', () => {
 
     authenticateToken(req, res, next); // Call the middleware
 
-    expect(res.status).toHaveBeenCalledWith(401); // Status 401
+    expect(res.status).toHaveBeenCalledWith(401); // Expect 401 response
     expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
     expect(next).not.toHaveBeenCalled(); // Ensure next is not called
   });
