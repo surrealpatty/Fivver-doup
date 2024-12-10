@@ -1,8 +1,9 @@
-// src/models/user.ts
+// src/types/index.ts
 
 export interface UserPayload {
-  id: string;          // Assuming the user has a unique ID
-  email?: string;      // Optional email field
-  username?: string;   // Optional username field
-  tier: "free" | "paid";  // Tier of the user
+  id: string;
+  email: string;         // Make email required
+  username: string;      // Make username required
+  role: string;          // Make role required
+  tier: "free" | "paid"; // Make tier required
 }
