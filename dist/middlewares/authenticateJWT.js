@@ -13,20 +13,19 @@ const authenticateToken = (req, res, next) => {
     if (!token) {
         return res.status(401).json({ message: 'Authorization token is missing' });
     }
-    // Define the options for JWT verification with `complete: true`
+    // Define the options for JWT verification without `complete: true`
     const options = {
         algorithms: ['HS256'], // Specify the algorithm type correctly
-        complete: true, // Request full JWT (header + payload + signature)
     };
     try {
-        // Verify the token with `complete: true`
+        // Verify the token and get the decoded payload
         jsonwebtoken_1.default.verify(token, SECRET_KEY, options, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ message: 'Invalid or expired token' });
             }
-            // Now `decoded` is a `Jwt` object, so we access `decoded.payload` for the payload
-            if (decoded && decoded.payload) {
-                req.user = decoded.payload;
+            // Since `decoded` can be `string | JwtPayload`, we assert that it's `JwtPayload`
+            if (typeof decoded === 'object' && decoded !== null) {
+                req.user = decoded; // We assume `decoded` is a valid JwtPayload
             }
             else {
                 return res.status(401).json({ message: 'Invalid token structure' });

@@ -17,12 +17,17 @@ interface CreateOrderRequest {
 
 // Extend the Request interface to include the user property of type UserPayload
 interface OrderRequest extends Request {
-  user?: UserPayload;  // Make sure the `user` property is available and optional
+  user?: UserPayload;  // Ensure the user property is available and optional
 }
 
 // Define the handler types
 const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest> = async (req: OrderRequest, res: Response) => {
   try {
+    // Ensure that the user is available and has the necessary 'tier' property
+    if (!req.user || !req.user.tier) {
+      return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+    }
+    // Call createOrder controller
     await createOrder(req, res);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
@@ -32,6 +37,6 @@ const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest> = async (re
 // Route to create an order
 router.post('/', createOrderHandler);
 
-// Other routes follow the same pattern...
+// Other routes can follow the same pattern...
 
 export default router;
