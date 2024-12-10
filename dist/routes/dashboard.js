@@ -1,18 +1,22 @@
 "use strict";
-// src/routes/dashboard.ts
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/dashboard.ts
 const express_1 = require("express");
-const dashboardController_1 = require("../controllers/dashboardController");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import
 const router = (0, express_1.Router)();
-// GET /dashboard route to fetch user dashboard data
-router.get('/dashboard', authenticateToken, async (req, res, next) => {
+// GET route for the dashboard
+router.get('/dashboard', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
-        // Call the controller function to fetch the dashboard data
-        await (0, dashboardController_1.getDashboardData)(req, res);
+        if (req.user) {
+            // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
+            res.status(200).json({ message: 'Dashboard data fetched successfully.' });
+        }
+        else {
+            res.status(400).json({ message: 'User not authenticated.' });
+        }
     }
     catch (err) {
-        console.error(err);
-        next(err);
+        next(err); // Pass errors to the error handler
     }
 });
 exports.default = router;
