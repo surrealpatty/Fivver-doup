@@ -1,22 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index'; // Update the relative path
+import { UserPayload } from '../types/index'; // Correct the relative path for UserPayload
 
-const jwtSecret = process.env.JWT_SECRET as string; // Assert type as string
+const jwtSecret = process.env.JWT_SECRET as string; // Type assertion for jwtSecret
 
 if (!jwtSecret) {
   console.error('JWT_SECRET is not set. Authentication will fail.');
 }
 
 interface AuthRequest extends Request {
-  user?: UserPayload; // Attach UserPayload to the request's user property
+  user?: UserPayload; // user can be undefined, so it's optional
 }
 
+// Middleware to authenticate JWT tokens
 export const authenticateToken = (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => {  // Change return type to Response or void
+): Response<any, Record<string, any>> | void => {  // Corrected return type to allow Response or void
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;

@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const services_1 = __importDefault(require("@models/services")); // Ensure correct import for Service model
 const user_1 = require("@models/user"); // Assuming there is a User model for user details
-const authenticateToken_1 = __importDefault(require("@middlewares/authenticateToken")); // Correct path for authenticateToken
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct named import
 const router = express_1.default.Router();
 // Profile route to get the user's info and their services
-router.get('/profile', authenticateToken_1.default, async (req, res) => {
+router.get('/profile', authenticateToken_1.authenticateToken, async (req, res) => {
     const userId = req.user?.id; // Get user ID from the authenticated token
     if (!userId) {
         res.status(400).json({ message: 'User ID not found in token' });
@@ -39,7 +39,7 @@ router.get('/profile', authenticateToken_1.default, async (req, res) => {
     }
 });
 // Profile update route to allow users to update their profile information
-router.put('/profile', authenticateToken_1.default, async (req, res) => {
+router.put('/profile', authenticateToken_1.authenticateToken, async (req, res) => {
     const userId = req.user?.id; // Get user ID from the authenticated token
     if (!userId) {
         res.status(400).json({ message: 'User ID not found in token' });
