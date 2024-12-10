@@ -17,7 +17,7 @@ next // The next middleware function
         return res.status(401).json({ message: 'Authorization token is missing' });
     }
     try {
-        // Verify the token
+        // Verify the token and decode it to UserPayload type
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         // Attach user data to the request object
         req.user = decoded;

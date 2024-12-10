@@ -6,7 +6,7 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: 'free' | 'paid'; // Ensure 'tier' is part of the UserPayload interface
+  tier: string;  // Ensure that 'tier' is part of the UserPayload interface
   role?: string; // Add role property if necessary
 }
 
