@@ -1,4 +1,3 @@
-// src/routes/service.ts
 import express, { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct

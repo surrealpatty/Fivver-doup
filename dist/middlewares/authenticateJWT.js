@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
-// src/middlewares/authenticateJWT.ts
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate JWT and attach user info to the request
 const authenticateJWT = (req, res, next) => {
