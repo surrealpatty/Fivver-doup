@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types';  // Correct import path
-import { JwtPayload } from 'jsonwebtoken';  // Import JwtPayload for type safety
 
 // Middleware to authenticate JWT and attach user info to the request
 export const authenticateJWT = (
@@ -18,20 +17,23 @@ export const authenticateJWT = (
   }
 
   // Verify the token using the secret key (this is a synchronous check)
-  jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET!, (err: any, decoded: JwtPayload | undefined) => {
     if (err) {
       res.status(403).json({ message: 'Invalid token.' });
       return;  // Ensure that the middleware stops execution
     }
 
-    // Attach the user object to the request, ensuring 'tier' and 'role' are included
-    req.user = {
-      id: (decoded as JwtPayload).id,  // Explicit cast to JwtPayload
-      email: (decoded as JwtPayload).email,
-      username: (decoded as JwtPayload).username,
-      tier: (decoded as JwtPayload).tier,  // Include 'tier' from the JWT payload
-      role: (decoded as JwtPayload).role,  // Include 'role' from the JWT payload
-    };
+    // Ensure that decoded is not undefined
+    if (decoded) {
+      // Attach the user object to the request, ensuring 'tier' and 'role' are included
+      req.user = {
+        id: decoded.id,  // Explicitly access properties from decoded JwtPayload
+        email: decoded.email,
+        username: decoded.username,
+        tier: decoded.tier,  // Include 'tier' from the JWT payload
+        role: decoded.role,  // Include 'role' from the JWT payload
+      };
+    }
 
     next();  // Proceed to the next middleware or route handler
   });
