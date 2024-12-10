@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '@types';  // Correctly import UserPayload from the types directory
+import { UserPayload } from '../types/index'; // Update the relative path
 
 const jwtSecret = process.env.JWT_SECRET as string; // Assert type as string
 

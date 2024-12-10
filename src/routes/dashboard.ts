@@ -1,6 +1,6 @@
 // src/routes/dashboard.ts
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Default import
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct named import
 import { getDashboardData } from '../controllers/dashboardController';  // Named import
 
 const router = Router();
