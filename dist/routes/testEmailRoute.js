@@ -4,7 +4,7 @@ const express_1 = require("express");
 const emailService_1 = require("../services/emailService"); // Correct import for named export
 const router = (0, express_1.Router)();
 // Endpoint to trigger email sending
-router.get('/test-email', async (req, res) => {
+router.get('/test-email', async (req, res, next) => {
     try {
         // Example email details (replace with actual test data)
         const emailDetails = {
@@ -14,11 +14,13 @@ router.get('/test-email', async (req, res) => {
         };
         // Call your sendEmail function
         await (0, emailService_1.sendEmail)(emailDetails);
-        return res.status(200).json({ message: 'Test email sent successfully!' });
+        // Send a success response
+        res.status(200).json({ message: 'Test email sent successfully!' });
     }
     catch (error) {
         console.error('Error sending email:', error);
-        return res.status(500).json({ message: 'Error sending test email.' });
+        // Pass the error to the next middleware (e.g., error handling middleware)
+        next(error);
     }
 });
 exports.default = router;
