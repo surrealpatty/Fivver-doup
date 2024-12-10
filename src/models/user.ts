@@ -5,11 +5,12 @@ import bcrypt from 'bcryptjs';  // Import bcrypt to hash the password
 
 // Define the interface for the attributes used to create a User (without the primary key)
 export interface UserCreationAttributes extends Optional<Omit<UserAttributes, 'id'>, 'isVerified'> {
+  id: string;
   email: string;
   username: string;
   password: string;
   role: string;
-  tier: string;
+  tier: "free" | "paid";
   isVerified?: boolean;  // Optional during creation
 }
 

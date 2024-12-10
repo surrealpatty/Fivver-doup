@@ -1,7 +1,7 @@
 // src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types'; // Correct path to AuthRequest
+import { AuthRequest } from '../types'; // Ensure this path is correct
 import { UserPayload } from '../types';  // Correct path for UserPayload
 
 // Secret key for JWT verification, you should store it in an environment variable for security
