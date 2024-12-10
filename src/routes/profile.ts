@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';  // Import necessary types
-import  Service  from '../models/services';
+import Service from '../models/services';
 import { User } from '@models/user';  // Assuming there is a User model for user details
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
 import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
@@ -31,6 +31,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,  // Include relevant user details
+        tier: user.tier,    // Include the tier field
       },
       services,  // Include user's services
     });
@@ -71,6 +72,7 @@ router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,  // Return updated user info
+        tier: user.tier,    // Return the updated tier
       },
     });
   } catch (err) {
