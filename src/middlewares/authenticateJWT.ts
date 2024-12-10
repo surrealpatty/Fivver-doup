@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types';  // Correct import path
 
@@ -7,7 +7,7 @@ export const authenticateJWT = (
   req: AuthRequest, 
   res: Response, 
   next: NextFunction
-): void => {  // Return type is void, as it's standard for middleware
+): void => {
   const token = req.headers['authorization']?.split(' ')[1];  // Extract token from Authorization header
 
   // If no token is provided, return a 403 response
@@ -16,8 +16,11 @@ export const authenticateJWT = (
     return;  // Ensure that the middleware stops execution
   }
 
-  // Verify the token using the secret key (this is a synchronous check)
-  jwt.verify(token, process.env.JWT_SECRET!, (err: any, decoded: JwtPayload | undefined) => {
+  // Corrected jwt.verify usage, with options passed correctly
+  const secretKey = process.env.JWT_SECRET!;
+  const options = { algorithms: ['HS256'] }; // Optional, based on your algorithm
+
+  jwt.verify(token, secretKey, options, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       res.status(403).json({ message: 'Invalid token.' });
       return;  // Ensure that the middleware stops execution
