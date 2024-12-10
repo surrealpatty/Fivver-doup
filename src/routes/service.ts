@@ -1,9 +1,10 @@
+// src/routes/service.ts
 import express, { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct
 import { body, validationResult } from 'express-validator';
-import { authenticateToken } from '@middlewares/authenticateToken';  // Correct import for authenticateToken
-import { AuthRequest } from '@middlewares/authenticateToken';  // Correct type import for AuthRequest
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken
+import { AuthRequest } from '../types';  // Correct type import for AuthRequest
 
 const router = express.Router();
 
@@ -36,7 +37,7 @@ const upload = multer({
 // Update service route (with image upload)
 router.put(
   '/update/:serviceId',
-  authenticateJWT,  // Protect route
+  authenticateToken,  // Protect route
   upload.single('image'),  // Handle image upload
   [
     body('name').isLength({ min: 3 }).withMessage('Service name is required'),
@@ -91,7 +92,7 @@ router.put(
 // Delete service route
 router.delete(
   '/delete/:serviceId',
-  authenticateJWT,  // Protect route
+  authenticateToken,  // Protect route
   async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Use AuthRequest for req typing
     const { serviceId } = req.params;
     const userId = req.user?.id;  // Extract user id from the token

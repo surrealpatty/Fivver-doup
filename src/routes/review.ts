@@ -1,11 +1,11 @@
-// src/routes/review.ts
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
 
 const router = Router();
 
 // POST route to create a new review
-router.post('/', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (req.user && req.user.tier) {
       // Logic to create a review (e.g., saving it in the database)
@@ -19,7 +19,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response, next: Ne
 });
 
 // GET route to fetch reviews for a specific service
-router.get('/:serviceId', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.get('/:serviceId', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (req.user) {
       const serviceId = req.params.serviceId;
