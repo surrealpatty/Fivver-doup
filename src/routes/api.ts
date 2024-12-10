@@ -4,13 +4,11 @@ import { authenticateToken } from '../middlewares/authMiddleware';  // Correct i
 const router = Router();
 
 // Example POST route for API (adjust according to actual logic)
-router.post('/', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // Your route logic here
-    res.status(201).json({ message: 'Resource created successfully.' });
+      // Your route logic here
+      res.status(200).send('Success');
   } catch (error) {
-    next(error);  // Pass errors to the error handler
+      next(error);
   }
 });
-
-export default router;

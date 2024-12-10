@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction } from 'express';  // Import n
 import Service from '@models/services';  // Ensure correct import for Service model
 import { User } from '@models/user';  // Assuming there is a User model for user details
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
-import { AuthRequest } from '../types';  // Correctly import AuthRequest
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
 
 const router = express.Router();
 

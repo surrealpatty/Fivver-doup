@@ -6,7 +6,7 @@ import { ValidationError } from 'sequelize'; // Import ValidationError for handl
 import { body, validationResult } from 'express-validator'; // Express validation middleware
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
 import { authenticateToken } from '@middlewares/authenticateToken';  // Correct import for authenticateToken
-
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
 const router = Router();
 
 // Route for user registration

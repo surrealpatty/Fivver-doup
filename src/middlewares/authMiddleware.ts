@@ -1,6 +1,5 @@
 // src/middlewares/authMiddleware.ts
-
-import { AuthRequest } from '../types';  // Correctly importing AuthRequest
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct import of UserPayload

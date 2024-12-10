@@ -4,7 +4,8 @@ import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct
 import { body, validationResult } from 'express-validator';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken
-import { AuthRequest } from '../types';  // Correct type import for AuthRequest
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { UserPayload } from 'src/types/index'; // Correct path for your types
 
 const router = express.Router();
 

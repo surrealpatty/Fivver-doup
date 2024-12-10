@@ -1,7 +1,7 @@
-import { AuthRequest } from '../types';
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { UserPayload } from 'src/types/index'; // Correct path for your types
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types';  // Importing the UserPayload type for decoded token
 
 const secretKey = process.env.JWT_SECRET || 'your-secret-key';  // Fallback to a default secret key if not set in env
 

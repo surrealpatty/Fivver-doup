@@ -6,3 +6,8 @@ import { Request } from 'express';
 export interface AuthRequest extends Request {
   user?: any;  // Adding a user property to store the authenticated user info
 }
+export interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+}
