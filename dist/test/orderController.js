@@ -1,60 +1,36 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+// src/test/orderController.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = exports.authenticateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Ensure JWT_SECRET is available in the environment variables
-const jwtSecret = process.env.JWT_SECRET; // Assert type as string
-if (!jwtSecret) {
-    console.error('JWT_SECRET is not set. Authentication will fail.');
-}
-/**
- * Middleware to authenticate the token provided in the Authorization header.
- * If the token is valid, the decoded payload is attached to `req.user`.
- */
-const authenticateToken = (req, res, next) => {
-    try {
-        // Extract token from the Authorization header
-        const authHeader = req.headers['authorization'];
-        const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
-        if (!token) {
-            res.status(401).json({ message: 'Access denied, no token provided.' });
-            return;
-        }
-        // Verify the token
-        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
-        // Attach the decoded payload to req.user
-        req.user = decoded;
-        // Proceed to the next middleware or route handler
-        next();
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error('Authentication error:', error.message);
-            res.status(403).json({ message: 'Invalid or expired token.' });
-            return;
-        }
-        // Fallback for cases when the error is not of type `Error`
-        console.error('Unexpected error during authentication:', error);
-        res.status(500).json({ message: 'Internal server error.' });
-    }
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import
+// Mock the req and res objects
+const mockRequest = (userPayload) => ({
+    headers: { authorization: 'Bearer valid-token' },
+    user: userPayload, // Mock user payload
+});
+const mockResponse = () => {
+    const res = {};
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockReturnValue(res);
+    return res;
 };
-exports.authenticateToken = authenticateToken;
-/**
- * Middleware to check if the user is authenticated.
- * It uses `authenticateToken` and adds additional checks if needed.
- */
-const checkAuth = (req, res, next) => {
-    (0, exports.authenticateToken)(req, res, () => {
-        // Add any additional checks if needed
-        if (req.user) {
-            next(); // If authenticated, proceed to the next route handler
-        }
-        else {
-            res.status(401).json({ message: 'Authentication failed.' });
-        }
+describe('authenticateToken middleware', () => {
+    it('should authenticate and attach user to req', () => {
+        const userPayload = { id: '1', email: 'user@example.com' };
+        const req = mockRequest(userPayload); // Mock request with user data
+        const res = mockResponse();
+        const next = jest.fn();
+        (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
+        expect(req.user).toEqual(userPayload); // Assert that user is attached to req
+        expect(next).toHaveBeenCalled(); // Assert that the next function was called
     });
-};
-exports.checkAuth = checkAuth;
+    it('should return 401 if no token is provided', () => {
+        const req = mockRequest({}); // No user payload
+        const res = mockResponse();
+        const next = jest.fn();
+        req.headers['authorization'] = ''; // Empty token
+        (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
+        expect(res.status).toHaveBeenCalledWith(401); // Status 401
+        expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
+        expect(next).not.toHaveBeenCalled(); // Ensure next is not called
+    });
+});
