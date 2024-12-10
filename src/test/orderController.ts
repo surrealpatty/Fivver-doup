@@ -1,5 +1,3 @@
-// src/test/orderController.ts
-
 import { Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
 import { UserPayload } from '../types/index';  // Correctly import UserPayload
@@ -23,8 +21,18 @@ describe('authenticateToken middleware', () => {
       id: '1', 
       email: 'user@example.com', 
       tier: 'free'  // Ensure 'tier' is included in the object
-    
-  };
+    }; // Closing the 'userPayload' object and the 'it' block here
+
+    const req = mockRequest(userPayload);
+    const res = mockResponse();
+    const next = jest.fn();
+
+    authenticateToken(req, res, next); // Call the middleware
+
+    // Assert that user data is attached to req.user
+    expect(req.user).toEqual(userPayload); 
+    expect(next).toHaveBeenCalled(); // Ensure next is called
+  });
 
   it('should return 401 if no token is provided', () => {
     const req = mockRequest({} as UserPayload); // No user payload

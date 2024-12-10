@@ -20,15 +20,15 @@ describe('authenticateToken middleware', () => {
             email: 'user@example.com',
             tier: 'free' // Ensure 'tier' is included in the object
         };
-    });
-    it('should return 401 if no token is provided', () => {
-        const req = mockRequest({}); // No user payload
-        const res = mockResponse();
-        const next = jest.fn();
-        req.headers['authorization'] = ''; // Empty token
-        (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
-        expect(res.status).toHaveBeenCalledWith(401); // Status 401
-        expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
-        expect(next).not.toHaveBeenCalled(); // Ensure next is not called
+        it('should return 401 if no token is provided', () => {
+            const req = mockRequest({}); // No user payload
+            const res = mockResponse();
+            const next = jest.fn();
+            req.headers['authorization'] = ''; // Empty token
+            (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
+            expect(res.status).toHaveBeenCalledWith(401); // Status 401
+            expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
+            expect(next).not.toHaveBeenCalled(); // Ensure next is not called
+        });
     });
 });
