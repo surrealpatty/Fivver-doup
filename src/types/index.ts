@@ -10,5 +10,5 @@ export interface UserPayload {
 }
 
 export interface AuthRequest extends Request {
-  user?: UserPayload;
+  user?: UserPayload;  // Assuming 'UserPayload' is already defined in the same file or imported
 }
