@@ -13,8 +13,7 @@
     "experimentalDecorators": true,              // Enable experimental support for decorators
     "emitDecoratorMetadata": true,               // Emit metadata for decorators (useful for TypeORM, etc.)
     "typeRoots": [
-      "./node_modules/@types",                   // Default location for type definitions
-      "./src/types"                              // Include src/types for custom type definitions
+      "./node_modules/@types"                    // Only the default type roots, including node_modules
     ],
     "baseUrl": "./",                             // Set base directory for module resolution
     "paths": {
@@ -22,8 +21,6 @@
       "@controllers/*": ["src/controllers/*"],   // Alias @controllers to src/controllers
       "@routes/*": ["src/routes/*"],              // Alias @routes to src/routes
       "@config/*": ["src/config/*"],              // Alias @config to src/config
-      "@types/*": ["src/types/*"],                // Alias @types to src/types
-      "@src/*": ["src/*"],                        // General alias for src
       "@middlewares/*": ["src/middlewares/*"]     // Alias @middlewares to src/middlewares
     },
     "outDir": "./dist",                          // Output compiled files to the dist folder

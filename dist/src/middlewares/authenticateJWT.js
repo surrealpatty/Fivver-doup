@@ -31,14 +31,17 @@ const authenticateJWT = (req, res, next)=>{
             });
             return; // Ensure that the middleware stops execution
         }
-        // Attach the user object to the request, ensuring 'tier' and 'role' are included
-        req.user = {
-            id: decoded.id,
-            email: decoded.email,
-            username: decoded.username,
-            tier: decoded.tier,
-            role: decoded.role
-        };
+        // Ensure that decoded is not undefined
+        if (decoded) {
+            // Attach the user object to the request, ensuring 'tier' and 'role' are included
+            req.user = {
+                id: decoded.id,
+                email: decoded.email,
+                username: decoded.username,
+                tier: decoded.tier,
+                role: decoded.role
+            };
+        }
         next(); // Proceed to the next middleware or route handler
     });
 };

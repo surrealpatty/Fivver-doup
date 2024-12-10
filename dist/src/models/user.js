@@ -1,3 +1,4 @@
+// src/models/user.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12,28 +13,28 @@ const _sequelize = require("sequelize");
 const _database = require("../config/database");
 class User extends _sequelize.Model {
     id;
-    email;
     username;
+    email;
     password;
     role;
     tier;
     isVerified;
 }
+// Initialize the User model with the sequelize instance
 User.init({
     id: {
-        type: _sequelize.DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true
+        type: _sequelize.DataTypes.UUID,
+        defaultValue: _sequelize.DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    username: {
+        type: _sequelize.DataTypes.STRING,
+        allowNull: false
     },
     email: {
         type: _sequelize.DataTypes.STRING,
         allowNull: false,
         unique: true
-    },
-    username: {
-        type: _sequelize.DataTypes.STRING,
-        allowNull: false
     },
     password: {
         type: _sequelize.DataTypes.STRING,
@@ -41,13 +42,11 @@ User.init({
     },
     role: {
         type: _sequelize.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'free'
+        allowNull: false
     },
     tier: {
         type: _sequelize.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'free'
+        allowNull: false
     },
     isVerified: {
         type: _sequelize.DataTypes.BOOLEAN,
@@ -56,9 +55,7 @@ User.init({
     }
 }, {
     sequelize: _database.sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true
+    modelName: 'User'
 });
 
 //# sourceMappingURL=user.js.map

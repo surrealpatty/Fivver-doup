@@ -1,8 +1,10 @@
+// src/routes/orderRoutes.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, "default", {
+Object.defineProperty(exports, // Other routes follow the same pattern...
+"default", {
     enumerable: true,
     get: function() {
         return _default;
@@ -16,8 +18,8 @@ function _interop_require_default(obj) {
     };
 }
 const router = _express.default.Router();
-// Route to create an order
-router.post('/', async (req, res)=>{
+// Define the handler types
+const createOrderHandler = async (req, res)=>{
     try {
         await (0, _orderController.createOrder)(req, res);
     } catch (err) {
@@ -25,47 +27,9 @@ router.post('/', async (req, res)=>{
             error: 'Internal server error'
         });
     }
-});
-// Route to get all orders
-router.get('/', async (req, res)=>{
-    try {
-        await (0, _orderController.getAllOrders)(req, res);
-    } catch (err) {
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
-// Route to get an order by its ID
-router.get('/:id', async (req, res)=>{
-    try {
-        await (0, _orderController.getOrderById)(req, res);
-    } catch (err) {
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
-// Route to update an order by its ID
-router.put('/:id', async (req, res)=>{
-    try {
-        await (0, _orderController.updateOrder)(req, res);
-    } catch (err) {
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
-// Route to delete an order by its ID
-router.delete('/:id', async (req, res)=>{
-    try {
-        await (0, _orderController.deleteOrder)(req, res);
-    } catch (err) {
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
+};
+// Route to create an order
+router.post('/', createOrderHandler);
 const _default = router;
 
 //# sourceMappingURL=orderRoutes.js.map

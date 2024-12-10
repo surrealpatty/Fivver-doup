@@ -12,7 +12,7 @@ const _express = require("express");
 const _emailService = require("../services/emailService");
 const router = (0, _express.Router)();
 // Endpoint to trigger email sending
-router.get('/test-email', async (req, res)=>{
+router.get('/test-email', async (_req, res)=>{
     try {
         // Example email details (replace with actual test data)
         const emailDetails = {
