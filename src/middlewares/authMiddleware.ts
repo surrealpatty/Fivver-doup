@@ -1,36 +1,41 @@
-// src/middlewares/authMiddleware.ts
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
-import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Correct import of UserPayload
+// src/routes/api.ts
 
-const secretKey = process.env.JWT_SECRET || 'your-secret-key'; // Use environment variable or fallback to default
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';  // JWT for verifying tokens
+import { UserPayload } from '../types/index'; // Correct path for your types
 
-// Middleware to authenticate token
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
-  const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
+// Secret key for JWT verification, you should store it in an environment variable for security
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
+
+// Middleware to check if the user is authenticated
+export const checkAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
-    return res.status(403).json({ message: 'Access denied, token not provided' });  // Return Response if no token
+    res.status(401).json({ message: 'Authorization token is missing' });
+    return; // Ensure function returns when response is sent
   }
 
   try {
-    // Verify the token, assuming the decoded value matches UserPayload or undefined
-    const decoded = jwt.verify(token, secretKey) as UserPayload | undefined;
+    // Verify the token
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
-    // Assign decoded to req.user with type UserPayload or undefined
-    req.user = decoded; // This will correctly handle undefined or a valid UserPayload
+    // If email is optional, we should check if it exists
+    if (decoded.email === undefined) {
+      console.warn('User payload is missing email');
+    }
 
-    next(); // Proceed to the next middleware or route handler
+    // Attach user information to the request object for further use in the route
+    req.user = decoded;
+
+    // Proceed to the next middleware or route handler
+    next();
   } catch (error) {
-    return res.status(400).json({ message: 'Invalid token' }); // Return Response if token is invalid
+    res.status(401).json({ message: 'Invalid or expired token' });
+    return; // Ensure function returns when response is sent
   }
-};
-
-// Middleware to check if the user is authenticated
-export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
-  if (!req.user) {
-    return res.status(403).json({ message: 'User not authenticated' });  // Return Response if user is not authenticated
-  }
-  next(); // Proceed to the next middleware or route handler if user is authenticated
 };

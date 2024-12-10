@@ -1,7 +1,9 @@
-import { Request } from 'express';
-import { UserPayload } from 'src/types/index'; // Assuming you have a UserPayload type
+// src/types/authMiddleware.ts
 
-// Define the AuthRequest type, extending the Request type to include user
+import { Request } from 'express';
+import { UserPayload } from './index'; // Correct path to UserPayload type
+
+// Interface extending the express Request type, adding the optional 'user' property
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // user is optional, as it can be undefined if not authenticated
+  user?: UserPayload;  // 'user' can be 'UserPayload' or 'undefined'
 }
