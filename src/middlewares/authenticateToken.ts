@@ -1,4 +1,4 @@
-import { AuthRequest } from '../types';  // Correctly importing AuthRequest type
+import { AuthRequest } from '../types';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types';  // Importing the UserPayload type for decoded token
