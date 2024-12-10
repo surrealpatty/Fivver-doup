@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
-import { UserPayload } from 'src/types/index'; // Correct path for your types
+import { UserPayload } from 'src/types/index';  // Correct path for your types
 
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
@@ -23,8 +22,13 @@ export const checkAuth = (
     // Verify the token
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
+    // Ensure the email is optional as expected
+    if (decoded.email === undefined) {
+      console.warn('User payload is missing email');
+    }
+
     // Attach user information to the request object for further use in the route
-    req.user = decoded;
+    (req as any).user = decoded;  // Type assertion to ensure `req.user` has the correct type
 
     // Proceed to the next middleware or route handler
     next();

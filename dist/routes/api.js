@@ -1,5 +1,4 @@
 "use strict";
-// src/routes/api.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,7 +8,8 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // JWT for veri
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 // Middleware to check if the user is authenticated
-const checkAuth = (req, res, next) => {
+const checkAuth = (req, // Use AuthRequest instead of Request
+res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
         res.status(401).json({ message: 'Authorization token is missing' });
@@ -23,7 +23,7 @@ const checkAuth = (req, res, next) => {
             console.warn('User payload is missing email');
         }
         // Attach user information to the request object for further use in the route
-        req.user = decoded;
+        req.user = decoded; // TypeScript will now know req.user is of type AuthRequest
         // Proceed to the next middleware or route handler
         next();
     }
