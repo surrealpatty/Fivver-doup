@@ -10,6 +10,7 @@ const database_1 = require("./config/database"); // Named import for sequelize
 const user_1 = __importDefault(require("./routes/user")); // Named import for userRouter
 const profile_1 = __importDefault(require("./routes/profile")); // Default import for profile router
 const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
+require("./types/express"); // Ensure this import is present to load the augmentation
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Create Express app instance

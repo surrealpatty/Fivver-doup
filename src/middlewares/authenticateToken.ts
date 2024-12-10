@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '@types';  // Ensure correct path to UserPayload
+import { UserPayload } from '@types';  // Ensure path is correct based on tsconfig settings
 
 // Define the middleware function
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
@@ -9,7 +9,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
 
   // Check if token exists
   if (!token) {
-    return res.status(403).json({ message: 'Access denied, no token provided' });
+    return res.status(403).json({ message: 'Access denied, no token provided' });  // Send response and return immediately
   }
 
   // Retrieve JWT secret from environment variables
@@ -17,23 +17,23 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
 
   if (!jwtSecret) {
     console.error('JWT_SECRET is not configured in the environment variables');
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });  // Send response and return immediately
   }
 
   // Verify token asynchronously
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
-      return res.status(403).json({ message: 'Token is invalid' });
+      return res.status(403).json({ message: 'Token is invalid' });  // Send response and return immediately
     }
 
     // Ensure decoded object matches the expected UserPayload structure
     const user = decoded as UserPayload;
 
     // Attach the decoded user data to the request object
-    req.user = user; // Here we assume the type augmentation is set up correctly
+    req.user = user;  // Attach user data to the request object
 
     // Proceed to the next middleware or route handler
-    next();
+    next();  // No response here, we just pass control to the next middleware
   });
 };
 
