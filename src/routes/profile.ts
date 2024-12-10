@@ -1,83 +1,76 @@
-import express, { Request, Response, NextFunction } from 'express';  // Import necessary types
-import Service from '../models/services';
-import { User } from '@models/user';  // Assuming there is a User model for user details
+import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest
+import Service from '../models/services';
+import { User } from '@models/user';
 
 const router = express.Router();
 
-// Profile route to get the user's info and their services
-router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   const userId = req.user?.id;  // Get user ID from the authenticated token
 
   if (!userId) {
-    res.status(400).json({ message: 'User ID not found in token' });
-    return;
+    return res.status(400).json({ message: 'User ID not found in token' });
   }
 
   try {
     // Fetch the user information and their services
     const user = await User.findOne({ where: { id: userId } });
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const services = await Service.findAll({ where: { userId } });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'User profile retrieved successfully',
       user: {
         id: user.id,
         username: user.username,
-        email: user.email,  // Include relevant user details
-        tier: user.tier,    // Include the tier field
+        email: user.email,
+        tier: req.user?.tier,  // Make sure to return 'tier' as well
       },
-      services,  // Include user's services
+      services,
     });
   } catch (err) {
     console.error(err);
-    next(err);  // Pass error to the next middleware (error handler)
+    next(err);
   }
 });
 
 // Profile update route to allow users to update their profile information
-router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Changed to authenticateToken
-  const userId = req.user?.id; // Get user ID from the authenticated token
+router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
+  const userId = req.user?.id;
 
   if (!userId) {
-    res.status(400).json({ message: 'User ID not found in token' });
-    return;
+    return res.status(400).json({ message: 'User ID not found in token' });
   }
 
-  const { username, email } = req.body;  // You can add other fields as needed
+  const { username, email } = req.body;
 
   try {
-    // Find the user by ID and update their details
     const user = await User.findOne({ where: { id: userId } });
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update user details
     if (username) user.username = username;
     if (email) user.email = email;
 
     await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'User profile updated successfully',
       user: {
         id: user.id,
         username: user.username,
-        email: user.email,  // Return updated user info
-        tier: user.tier,    // Return the updated tier
+        email: user.email,
+        tier: req.user?.tier,  // Include the updated 'tier' information
       },
     });
   } catch (err) {
     console.error(err);
-    next(err);  // Pass error to the next middleware (error handler)
+    next(err);
   }
 });
 

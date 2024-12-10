@@ -29,6 +29,7 @@ router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, n
                 id: user.id,
                 username: user.username,
                 email: user.email, // Include relevant user details
+                tier: user.tier, // Include the tier field
             },
             services, // Include user's services
         });
@@ -65,6 +66,7 @@ router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, n
                 id: user.id,
                 username: user.username,
                 email: user.email, // Return updated user info
+                tier: user.tier, // Return the updated tier
             },
         });
     }
