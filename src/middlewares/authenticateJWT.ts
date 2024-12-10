@@ -1,38 +1,41 @@
-// src/middlewares/authenticateJWT.ts
+import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Correct import path
+import { UserPayload } from '../types';
 
-export const authenticateJWT = (
-  req: AuthRequest, 
-  res: Response, 
+// Secret key for JWT verification, should be in environment variables for security
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+// Middleware to authenticate token and attach user data to the request
+export const authenticateToken = (
+  req: Request,
+  res: Response,
   next: NextFunction
-): void => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Extract token
+): Response<any, Record<string, any>> | void => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
 
   if (!token) {
-    res.status(403).json({ message: 'No token provided.' });
-    return;
+    return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  // Verify the token with the correct options
-  const options = { algorithms: ['HS256'] };  // Specify the algorithm correctly
-  jwt.verify(token, process.env.JWT_SECRET!, options, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
-    if (err) {
-      res.status(403).json({ message: 'Invalid token.' });
-      return;
-    }
+  // Define the options for JWT verification
+  const options: jwt.VerifyOptions = {
+    algorithms: ['HS256'], // Specify the algorithm type correctly
+  };
 
-    if (decoded) {
-      req.user = {
-        id: decoded.id,
-        email: decoded.email,
-        username: decoded.username,
-        tier: decoded.tier,
-        role: decoded.role,
-      };
-    }
+  try {
+    // Verify the token
+    jwt.verify(token, SECRET_KEY, options, (err: VerifyErrors | null, decoded: jwt.JwtPayload | undefined) => {
+      if (err) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
+      }
 
-    next();
-  });
+      // Attach user data to the request object
+      req.user = decoded as UserPayload;
+
+      // Proceed to the next middleware or route handler
+      next();
+    });
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
 };

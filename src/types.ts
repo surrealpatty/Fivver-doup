@@ -11,7 +11,8 @@ export interface AuthRequest extends Request {
 }
 export interface UserPayload {
     id: string;
-    email?: string;  // Optional email field
-    username?: string;  // Optional username field
-    tier: 'free' | 'paid';  // Enum-like field for user tier
+    email?: string;
+    username?: string;
+    tier: 'free' | 'paid';
+    role?: string; // Add role property if necessary
   }
