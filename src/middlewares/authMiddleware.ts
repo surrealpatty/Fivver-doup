@@ -1,4 +1,3 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct import for UserPayload
@@ -19,7 +18,7 @@ export const authenticateToken = (
   }
 
   try {
-    // Verify the token
+    // Verify the token and decode it to UserPayload type
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
     // Attach user data to the request object
