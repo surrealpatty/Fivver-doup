@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
 const services_1 = __importDefault(require("@models/services")); // Ensure this import is correct
 const express_validator_1 = require("express-validator");
-const authenticateToken_1 = require("@middlewares/authenticateToken"); // Correct import
 const router = express_1.default.Router();
 // Multer setup for image uploads
 const storage = multer_1.default.diskStorage({
@@ -34,7 +33,7 @@ const upload = (0, multer_1.default)({
     limits: { fileSize: 5 * 1024 * 1024 }, // Set file size limit (e.g., 5MB)
 });
 // Update service route (with image upload)
-router.put('/update/:serviceId', authenticateToken_1.authenticateJWT, // Protect route
+router.put('/update/:serviceId', authenticateJWT, // Protect route
 upload.single('image'), // Handle image upload
 [
     (0, express_validator_1.body)('name').isLength({ min: 3 }).withMessage('Service name is required'),
@@ -78,7 +77,7 @@ upload.single('image'), // Handle image upload
     }
 });
 // Delete service route
-router.delete('/delete/:serviceId', authenticateToken_1.authenticateJWT, // Protect route
+router.delete('/delete/:serviceId', authenticateJWT, // Protect route
 async (req, res, next) => {
     const { serviceId } = req.params;
     const userId = req.user?.id; // Extract user id from the token
