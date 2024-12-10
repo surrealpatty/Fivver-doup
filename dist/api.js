@@ -21,6 +21,7 @@ const authenticateToken = (req, res, next) => {
             console.error('JWT_SECRET is not configured in the environment variables');
             return res.status(500).json({ message: 'Internal server error' });
         }
+        // Decode the JWT and cast it to the UserPayload type
         const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
         req.user = decoded;
         next();
