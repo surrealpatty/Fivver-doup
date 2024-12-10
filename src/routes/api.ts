@@ -5,7 +5,7 @@ import { authenticateToken } from '../middlewares/authMiddleware';  // Correct i
 const router = Router();
 
 // POST route to create a new review
-router.post('/', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Ensure req.user is authenticated and has a tier
     if (req.user && req.user.tier) {
@@ -20,7 +20,7 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res: Response, next: 
 });
 
 // GET route to fetch reviews for a specific service
-router.get('/:serviceId', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+router.get('/:serviceId', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (req.user) {
       const serviceId = req.params.serviceId;

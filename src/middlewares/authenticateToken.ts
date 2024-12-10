@@ -6,7 +6,7 @@ const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
 // Define the AuthRequest interface to extend Express' Request
 export interface AuthRequest extends Request {
-  user?: UserPayload; // user is optional, UserPayload or undefined
+  user?: UserPayload; // Make user optional (UserPayload or undefined)
 }
 
 // Middleware to authenticate JWT token
@@ -16,9 +16,11 @@ export const authenticateJWT = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]; // Get token from the authorization header
+    // Get token from the authorization header (assuming "Bearer token")
+    const token = req.headers.authorization?.split(' ')[1];
 
     if (token) {
+      // Verify token
       jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
           return res.status(403).json({ message: 'Token is not valid' });

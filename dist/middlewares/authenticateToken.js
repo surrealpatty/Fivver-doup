@@ -10,8 +10,10 @@ const secretKey = 'your-secret-key'; // Replace with your actual secret key
 const authenticateJWT = async (req, // Use AuthRequest type here
 res, next) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Get token from the authorization header
+        // Get token from the authorization header (assuming "Bearer token")
+        const token = req.headers.authorization?.split(' ')[1];
         if (token) {
+            // Verify token
             jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
                 if (err) {
                     return res.status(403).json({ message: 'Token is not valid' });
