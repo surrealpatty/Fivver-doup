@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index'; // Update the relative path to your types
+import { UserPayload } from '../types'; // Correct import for UserPayload
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
 // Define the AuthRequest interface to extend Express' Request
 export interface AuthRequest extends Request {
-  user?: UserPayload; // Optional user property of type UserPayload
+  user?: UserPayload; // user is of type UserPayload or undefined
 }
 
 // Middleware to authenticate JWT token
 export const authenticateJWT = async (
   req: AuthRequest, // Use AuthRequest type here
-  res: Response, 
+  res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {

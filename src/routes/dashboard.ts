@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'; // Importing necessary types
-import { authenticateJWT } from '@middlewares/authenticateToken';  // Corrected import for authenticateJWT
+import { authenticateJWT } from '../middlewares/authenticateToken';  // Correct import
 import { getDashboardData } from '../controllers/dashboardController';  // Named import for controller
-import { AuthRequest } from '@middlewares/authenticateToken';  // Import the correct AuthRequest type
+import { AuthRequest } from '../middlewares/authenticateToken';  // Correct import for AuthRequest type
 
 const router = Router();
 

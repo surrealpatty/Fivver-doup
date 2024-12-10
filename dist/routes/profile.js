@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+const express_1 = __importDefault(require("express")); // Import necessary types
 const services_1 = __importDefault(require("@models/services")); // Ensure correct import for Service model
 const user_1 = require("@models/user"); // Assuming there is a User model for user details
-const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct named import
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Corrected import for authenticateJWT
 const router = express_1.default.Router();
 // Profile route to get the user's info and their services
-router.get('/profile', authenticateToken_1.authenticateToken, async (req, res) => {
+router.get('/profile', authenticateToken_1.authenticateJWT, async (req, res, next) => {
     const userId = req.user?.id; // Get user ID from the authenticated token
     if (!userId) {
         res.status(400).json({ message: 'User ID not found in token' });
@@ -35,11 +35,11 @@ router.get('/profile', authenticateToken_1.authenticateToken, async (req, res) =
     }
     catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error retrieving user profile' });
+        next(err); // Pass error to the next middleware (error handler)
     }
 });
 // Profile update route to allow users to update their profile information
-router.put('/profile', authenticateToken_1.authenticateToken, async (req, res) => {
+router.put('/profile', authenticateToken_1.authenticateJWT, async (req, res, next) => {
     const userId = req.user?.id; // Get user ID from the authenticated token
     if (!userId) {
         res.status(400).json({ message: 'User ID not found in token' });
@@ -70,7 +70,7 @@ router.put('/profile', authenticateToken_1.authenticateToken, async (req, res) =
     }
     catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error updating user profile' });
+        next(err); // Pass error to the next middleware (error handler)
     }
 });
 exports.default = router;

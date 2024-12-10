@@ -2,7 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct
 import { body, validationResult } from 'express-validator';
-import { authenticateToken } from '@middlewares/authenticateToken'; // Use named import
+import { authenticateJWT } from '@middlewares/authenticateToken';  // Correct import
+import { AuthRequest } from '@middlewares/authenticateToken';  // Correct type import for AuthRequest
+
 const router = express.Router();
 
 // Multer setup for image uploads
@@ -34,14 +36,14 @@ const upload = multer({
 // Update service route (with image upload)
 router.put(
   '/update/:serviceId',
-  authenticateToken,  // Protect route
+  authenticateJWT,  // Protect route
   upload.single('image'),  // Handle image upload
   [
     body('name').isLength({ min: 3 }).withMessage('Service name is required'),
     body('description').isLength({ min: 5 }).withMessage('Description is required'),
     body('price').isNumeric().withMessage('Price must be a valid number'),
   ],
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Use AuthRequest for req typing
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() });  // Return validation errors
@@ -89,8 +91,8 @@ router.put(
 // Delete service route
 router.delete(
   '/delete/:serviceId',
-  authenticateToken,  // Protect route
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  authenticateJWT,  // Protect route
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Use AuthRequest for req typing
     const { serviceId } = req.params;
     const userId = req.user?.id;  // Extract user id from the token
 
