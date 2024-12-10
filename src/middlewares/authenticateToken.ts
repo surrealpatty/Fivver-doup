@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types';  // Adjust relative path
+import { UserPayload } from '../types'; // Adjust the path to match your project structure
 
+// Define the middleware function
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
   // Get the token from the Authorization header (expects format: "Bearer <token>")
   const token = req.headers['authorization']?.split(' ')[1];
