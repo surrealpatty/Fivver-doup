@@ -10,13 +10,14 @@ describe('Service Model Tests', () => {
   });
 
   it('should create a new service', async () => {
-    // Create a user with all required fields (password and role)
+    // Create a user with all required fields (password, role, and isVerified)
     const user = await User.create({
       username: 'testUser',
       email: 'test@example.com',
       password: 'password123',
       role: 'free',  // Ensure role is provided
       tier: 'free',  // Add tier
+      isVerified: true,  // Add isVerified (to satisfy the required field)
     });
 
     // Prepare the service data with the correct type
@@ -24,14 +25,14 @@ describe('Service Model Tests', () => {
       name: 'Test Service',  // Corrected to 'name' instead of 'title'
       description: 'A test service description',
       price: 100.0,
-      userId: user.id,  // Associate the service with the created user
+      userId: String(user.id),  // Convert userId to string (to match the expected type)
     };
 
     // Create the service and ensure it's properly typed
     const service = await Service.create(serviceData);
 
     // Check that the service has the correct properties
-    expect(service.userId).toBe(user.id);
+    expect(service.userId).toBe(String(user.id));  // Ensure userId is a string
     expect(service.name).toBe('Test Service');  // Ensure 'name' is correctly used
     expect(service.price).toBe(100.0);
   });
