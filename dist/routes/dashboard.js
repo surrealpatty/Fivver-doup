@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/dashboard.ts
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct path
 const router = (0, express_1.Router)();
 // GET route for the dashboard
 router.get('/dashboard', authMiddleware_1.authenticateToken, async (req, res, next) => {
