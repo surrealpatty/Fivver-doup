@@ -1,53 +1,72 @@
-// src/routes/user.ts
-import { Router, Request, Response } from 'express';  // Import necessary types
-import { User } from '@models/user';  // Correct import for User model
-import { ValidationError } from 'sequelize'; // Import ValidationError for handling Sequelize errors
-import { body, validationResult } from 'express-validator'; // Express validation middleware
-import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
-import { authenticateToken } from '@middlewares/authenticateToken';  // Correct import for authenticateToken
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { User } from '../models/user';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
-const router = Router();
+dotenv.config();
 
-router.post(
-  '/register',
-  // Validation middleware for email, username, and password
-  body('email').isEmail().withMessage('Invalid email address'),
-  body('username')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('Username must be between 3 and 20 characters'),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
+// Nodemailer setup for email verification
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
-  // Handle user registration logic
-  async (req: Request, res: Response): Promise<void> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
-      return;
+export const registerUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, password, username } = req.body;
+
+  try {
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const { email, username, password } = req.body;
+    // Check if the user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
 
-    try {
-      // Check if user already exists by email or username
-      const existingUser = await User.findOne({
-        where: { [Op.or]: [{ email }, { username }] },  // Check both email and username
-      });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      if (existingUser) {
-        res.status(400).json({ message: 'Email or Username already in use' });
-        return;
-      }
+    // Create the new user object with default values
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role: 'free',  // Default role
+      tier: 'free',  // Default tier
+      isVerified: false,  // Default to not verified
+    });
 
-      // Hash password before saving
-      const hashedPassword = await bcrypt.hash(password, 10);
+    // Generate a JWT verification token
+    const verificationToken = jwt.sign(
+      { id: newUser.id },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1d' } // Token expires in 1 day
+    );
 
-      // Create a new user
-      const newUser = await User.create({
-        email,
-        username,
-        password: hashedPassword,
-        role: 'free',  // Default to free tier if needed
-        tier: 'free',  // Default tier (can be updated
+    // Create the verification URL
+    const verificationLink = `${process.env.BASE_URL}/verify?token=${verificationToken}`;
+
+    // Email options for sending verification email
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Please verify your email address',
+      html: `<p>Click <a href="${verificationLink}">here</a> to verify your email address.</p>`,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+
+    return res.status(201).json({ message: 'Registration successful, please check your email for verification.' });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return res.status(500).json({ message: 'Server error during registration.' });
+  }
+};

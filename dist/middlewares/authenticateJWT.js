@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = void 0;
+// src/middlewares/authenticateJWT.ts
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate JWT and attach user info to the request
 const authenticateJWT = (req, res, next) => {
@@ -19,12 +20,13 @@ const authenticateJWT = (req, res, next) => {
             res.status(403).json({ message: 'Invalid token.' });
             return; // Ensure that the middleware stops execution
         }
-        // Attach the user object to the request, ensuring 'tier' is included
+        // Attach the user object to the request, ensuring 'tier' and 'role' are included
         req.user = {
             id: decoded.id, // Explicit cast to JwtPayload
             email: decoded.email,
             username: decoded.username,
             tier: decoded.tier, // Include 'tier' from the JWT payload
+            role: decoded.role, // Include 'role' from the JWT payload
         };
         next(); // Proceed to the next middleware or route handler
     });

@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
-const user_1 = require("@models/user"); // Import User model
-const registerUser = async (req, res) => {
-    const { email, username, password, role, tier } = req.body;
+// src/routes/auth.ts
+const express_1 = require("express");
+const user_1 = require("@models/user"); // Correct import for User model
+const router = (0, express_1.Router)();
+router.post('/register', async (req, res) => {
+    const { email, username, password, role = 'free', tier = 'free' } = req.body; // Default role and tier
     try {
         // Hash password before saving user
-        const hashedPassword = await user_1.User.hashPassword(password);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const user = await user_1.User.create({
             email,
             username,
@@ -20,5 +22,5 @@ const registerUser = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error creating user' });
     }
-};
-exports.registerUser = registerUser;
+});
+exports.default = router;
