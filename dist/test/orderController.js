@@ -1,5 +1,4 @@
 "use strict";
-// src/test/orderController.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import
 // Mock the req and res objects
@@ -19,16 +18,23 @@ describe('authenticateToken middleware', () => {
             id: '1',
             email: 'user@example.com',
             tier: 'free' // Ensure 'tier' is included in the object
-        };
-        it('should return 401 if no token is provided', () => {
-            const req = mockRequest({}); // No user payload
-            const res = mockResponse();
-            const next = jest.fn();
-            req.headers['authorization'] = ''; // Empty token
-            (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
-            expect(res.status).toHaveBeenCalledWith(401); // Status 401
-            expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
-            expect(next).not.toHaveBeenCalled(); // Ensure next is not called
-        });
+        }; // Closing the 'userPayload' object and the 'it' block here
+        const req = mockRequest(userPayload);
+        const res = mockResponse();
+        const next = jest.fn();
+        (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
+        // Assert that user data is attached to req.user
+        expect(req.user).toEqual(userPayload);
+        expect(next).toHaveBeenCalled(); // Ensure next is called
+    });
+    it('should return 401 if no token is provided', () => {
+        const req = mockRequest({}); // No user payload
+        const res = mockResponse();
+        const next = jest.fn();
+        req.headers['authorization'] = ''; // Empty token
+        (0, authenticateToken_1.authenticateToken)(req, res, next); // Call the middleware
+        expect(res.status).toHaveBeenCalledWith(401); // Status 401
+        expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
+        expect(next).not.toHaveBeenCalled(); // Ensure next is not called
     });
 });

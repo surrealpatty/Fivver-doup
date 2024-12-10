@@ -1,13 +1,11 @@
-// src/routes/api.ts
+// src/middlewares/authMiddleware.ts
 
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';  // JWT for verifying tokens
+import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types/index'; // Correct path for your types
 
-// Secret key for JWT verification, you should store it in an environment variable for security
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use your actual secret key
 
-// Middleware to check if the user is authenticated
 export const checkAuth = (
   req: Request,
   res: Response,
@@ -17,25 +15,26 @@ export const checkAuth = (
 
   if (!token) {
     res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Ensure function returns when response is sent
+    return;
   }
 
   try {
     // Verify the token
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
-    // If email is optional, we should check if it exists
-    if (decoded.email === undefined) {
+    // If email is undefined, it's now an error due to it being required
+    if (!decoded.email) {
       console.warn('User payload is missing email');
+      res.status(400).json({ message: 'User payload is missing email' });
+      return;
     }
 
-    // Attach user information to the request object for further use in the route
+    // Attach user information to the request object for further use
     req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     res.status(401).json({ message: 'Invalid or expired token' });
-    return; // Ensure function returns when response is sent
   }
 };

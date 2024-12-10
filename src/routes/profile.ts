@@ -1,4 +1,5 @@
 // src/routes/profile.ts
+
 import express, { Request, Response, NextFunction } from 'express';  // Import necessary types
 import Service from '@models/services';  // Ensure correct import for Service model
 import { User } from '@models/user';  // Assuming there is a User model for user details
@@ -42,7 +43,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
 });
 
 // Profile update route to allow users to update their profile information
-router.put('/profile', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {  // Changed to authenticateToken
+router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {  // Changed to authenticateToken
   const userId = req.user?.id; // Get user ID from the authenticated token
 
   if (!userId) {
