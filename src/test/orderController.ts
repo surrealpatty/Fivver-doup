@@ -24,7 +24,7 @@ describe('authenticateToken middleware', () => {
       email: 'user@example.com', 
       tier: 'free'  // Ensure 'tier' is included in the object
     
-  });
+  };
 
   it('should return 401 if no token is provided', () => {
     const req = mockRequest({} as UserPayload); // No user payload
