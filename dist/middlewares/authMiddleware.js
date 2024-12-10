@@ -11,7 +11,7 @@ const secretKey = process.env.JWT_SECRET || 'your-secret-key'; // Use environmen
 const authenticateToken = (req, res, next) => {
     const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
     if (!token) {
-        return res.status(403).json({ message: 'Access denied, token not provided' });
+        return res.status(403).json({ message: 'Access denied, token not provided' }); // Return Response
     }
     try {
         // Verify the token, assuming the decoded value matches UserPayload or undefined
@@ -21,7 +21,7 @@ const authenticateToken = (req, res, next) => {
         next(); // Proceed to the next middleware or route handler
     }
     catch (error) {
-        res.status(400).json({ message: 'Invalid token' }); // Send response, no need to return from here
+        return res.status(400).json({ message: 'Invalid token' }); // Return Response
     }
 };
 exports.authenticateToken = authenticateToken;
@@ -29,7 +29,7 @@ exports.authenticateToken = authenticateToken;
 const checkAuth = (req, res, next) => {
     // Ensure req.user is defined
     if (!req.user) {
-        return res.status(403).json({ message: 'User not authenticated' });
+        return res.status(403).json({ message: 'User not authenticated' }); // Return Response
     }
     // Proceed to the next middleware or route handler
     next();

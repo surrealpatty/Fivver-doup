@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct
 import { body, validationResult } from 'express-validator';
-import { authenticateJWT } from '@middlewares/authenticateToken';  // Correct import
+import { authenticateToken } from '@middlewares/authenticateToken';  // Correct import for authenticateToken
 import { AuthRequest } from '@middlewares/authenticateToken';  // Correct type import for AuthRequest
 
 const router = express.Router();

@@ -5,7 +5,7 @@ import { User } from '@models/user';  // Correct import for User model
 import { ValidationError } from 'sequelize'; // Import ValidationError for handling Sequelize errors
 import { body, validationResult } from 'express-validator'; // Express validation middleware
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
-import { authenticateJWT } from '@middlewares/authenticateToken';  // Correct import for authenticateJWT middleware
+import { authenticateToken } from '@middlewares/authenticateToken';  // Correct import for authenticateToken
 
 const router = Router();
 
