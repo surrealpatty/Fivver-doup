@@ -4,8 +4,8 @@ import { UserPayload } from 'src/types/index'; // Correct path for your types
 
 
 // Extend the Request interface locally
-interface AuthRequest extends Request {
-  user?: UserPayload;  // Mark user as optional
+interface CustomAuthRequest extends Request {
+  user?: UserPayload;
 }
 
 const checkRole = (requiredRole: string) => {

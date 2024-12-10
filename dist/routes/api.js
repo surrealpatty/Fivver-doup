@@ -7,10 +7,9 @@ const router = (0, express_1.Router)();
 router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
         // Your route logic here
-        res.status(201).json({ message: 'Resource created successfully.' });
+        res.status(200).send('Success');
     }
     catch (error) {
-        next(error); // Pass errors to the error handler
+        next(error);
     }
 });
-exports.default = router;
