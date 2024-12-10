@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types/index'; // Correctly import UserPayload from the types directory
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
 
 // Ensure JWT_SECRET is available in the environment variables
 const jwtSecret = process.env.JWT_SECRET as string; // Assert type as string
@@ -11,7 +12,7 @@ if (!jwtSecret) {
 
 // Extend the Request interface to include user
 interface AuthRequest extends Request {
-  user?: UserPayload;  // user is optional and can be of type UserPayload
+  user?: UserPayload;
 }
 
 /**

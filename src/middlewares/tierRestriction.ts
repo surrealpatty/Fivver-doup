@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { AuthRequest } from '../types'; // Adjust import as needed
 import { UserPayload } from 'src/types/index'; // Correct path for your types
 
 

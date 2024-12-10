@@ -10,6 +10,7 @@ router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
         res.status(200).send('Success');
     }
     catch (error) {
-        next(error);
+        next(error); // Pass error to Express error handling middleware
     }
 });
+exports.default = router;

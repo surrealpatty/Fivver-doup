@@ -4,7 +4,7 @@ import { UserPayload } from 'src/types/index';  // Ensure correct path
 
 // Extend the Request interface locally to include user
 interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // user is optional, typed as UserPayload
+  user?: UserPayload;
 }
 
 // Middleware to check the role of the user

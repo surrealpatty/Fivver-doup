@@ -76,7 +76,7 @@ router.post(
 );
 
 // Route for accessing premium content (tier-based restrictions)
-router.get('/premium-content', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
+router.get('/premium-content', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user?.id;  // Ensure the user is retrieved from the token
 
   try {
