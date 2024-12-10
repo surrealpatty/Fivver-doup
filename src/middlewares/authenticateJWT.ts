@@ -1,7 +1,7 @@
 // src/middlewares/authenticateJWT.ts
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types';  // Import AuthRequest for type safety
+import { AuthRequest } from '../types';  // Correct import path
 import { JwtPayload } from 'jsonwebtoken';  // Import JwtPayload for type safety
 
 // Middleware to authenticate JWT and attach user info to the request

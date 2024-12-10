@@ -1,6 +1,6 @@
 // src/middlewares/tierRestriction.ts
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types'; // Ensure correct import path
+import { AuthRequest } from '../types';  // Correct import path
 
 // Middleware function to check the user's tier
 export const checkPaidTier = (req: AuthRequest, res: Response, next: NextFunction) => {
