@@ -1,4 +1,5 @@
 "use strict";
+// src/middlewares/authenticateToken.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -10,7 +11,7 @@ const secretKey = 'your-secret-key'; // Replace with your actual secret key
 const authenticateJWT = async (req, // Use AuthRequest type here
 res, next) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Get token from header
+        const token = req.headers.authorization?.split(' ')[1]; // Get token from the authorization header
         if (token) {
             jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
                 if (err) {

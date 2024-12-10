@@ -1,6 +1,6 @@
 // src/routes/review.ts
 import { Router, Response, NextFunction } from 'express';
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Correct import for authenticateJWT
+import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import
 
 const router = Router();
 

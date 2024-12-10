@@ -1,4 +1,5 @@
 "use strict";
+// src/routes/dashboard.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express"); // Importing necessary types
 const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import

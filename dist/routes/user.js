@@ -1,10 +1,12 @@
 "use strict";
+// src/routes/user.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const user_1 = require("@models/user"); // Ensure correct import for User model
-const sequelize_1 = require("sequelize");
-const express_validator_1 = require("express-validator");
+const express_1 = require("express"); // Import necessary types
+const user_1 = require("@models/user"); // Correct import for User model
+const sequelize_1 = require("sequelize"); // Import ValidationError for handling Sequelize errors
+const express_validator_1 = require("express-validator"); // Express validation middleware
 const sequelize_2 = require("sequelize"); // Import Sequelize 'Op' for the OR condition
+const authenticateToken_1 = require("@middlewares/authenticateToken"); // Correct import for authenticateJWT middleware
 const router = (0, express_1.Router)();
 // Route for user registration
 router.post('/register', 
@@ -20,7 +22,7 @@ async (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         res.status(400).json({ errors: errors.array() });
-        return; // Ensure we stop further processing
+        return; // Ensure we stop further processing if validation fails
     }
     const { email, username, password } = req.body;
     try {
@@ -63,14 +65,15 @@ async (req, res) => {
     }
 });
 // Route for accessing premium content (tier-based restrictions)
-router.get('/premium-content', authenticateToken, async (req, res) => {
-    const userId = req.user?.id;
+router.get('/premium-content', authenticateToken_1.authenticateJWT, async (req, res) => {
+    const userId = req.user?.id; // Ensure the user is retrieved from the token
     try {
         const user = await user_1.User.findByPk(userId);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
         }
+        // Check if the user is on the 'paid' tier
         if (user.tier !== 'paid') {
             res.status(403).json({ message: 'Access restricted to paid users only' });
             return;

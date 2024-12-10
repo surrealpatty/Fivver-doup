@@ -1,5 +1,3 @@
-// src/middlewares/authenticateToken.ts
-
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Ensure correct import of UserPayload
