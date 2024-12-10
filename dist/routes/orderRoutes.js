@@ -10,6 +10,11 @@ const router = express_1.default.Router();
 // Define the handler types
 const createOrderHandler = async (req, res) => {
     try {
+        // Ensure that the user is available and has the necessary 'tier' property
+        if (!req.user || !req.user.tier) {
+            return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+        }
+        // Call createOrder controller
         await (0, orderController_1.createOrder)(req, res);
     }
     catch (err) {
@@ -18,6 +23,6 @@ const createOrderHandler = async (req, res) => {
 };
 // Route to create an order
 router.post('/', createOrderHandler);
-// Other routes follow the same pattern...
+// Other routes can follow the same pattern...
 exports.default = router;
 //# sourceMappingURL=orderRoutes.js.map
