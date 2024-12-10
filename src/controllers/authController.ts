@@ -21,13 +21,14 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
+    // Create a new user with default 'isVerified' set to false
     const user = await User.create({
       email,
       username,
       password: hashedPassword,
       role: 'free', // Default role
       tier: 'free', // Default tier
+      isVerified: false, // Default value for isVerified
     });
 
     return res.status(201).json({

@@ -10,7 +10,8 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace w
 // Middleware to check if the user is authenticated
 const checkAuth = (req, // Use AuthRequest instead of Request
 res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
+    // Use req.get() to safely access the authorization header
+    const token = req.get('authorization')?.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
         res.status(401).json({ message: 'Authorization token is missing' });
         return; // Ensure function returns when response is sent
