@@ -1,3 +1,4 @@
+// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct import for UserPayload
@@ -10,7 +11,7 @@ export const authenticateToken = (
   req: Request,  // The request type
   res: Response,  // The response type
   next: NextFunction // The next middleware function
-): void => {
+): Response<any, Record<string, any>> | void => { // Adjusted return type to allow both responses and void
   const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
 
   if (!token) {
