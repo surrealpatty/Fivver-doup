@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// Define the middleware function
 const authenticateToken = (req, res, next) => {
     // Get the token from the Authorization header (expects format: "Bearer <token>")
     const token = req.headers['authorization']?.split(' ')[1];

@@ -1,38 +1,33 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Adjust the path to match your project structure
+import { UserPayload } from '../types/index';  // Correctly import UserPayload from the types directory
+
 
 // Define the middleware function
 const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
-  // Get the token from the Authorization header (expects format: "Bearer <token>")
-  const token = req.headers['authorization']?.split(' ')[1];
+  const token = req.headers['authorization']?.split(' ')[1];  // Extract the token
 
-  // Check if token exists
   if (!token) {
-    return res.status(403).json({ message: 'Access denied, no token provided' });
+    return res.status(403).json({ message: 'Access denied, no token provided' }); // Send response directly
   }
 
-  // Retrieve JWT secret from environment variables
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
-    console.error('JWT_SECRET is not configured in the environment variables');
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error('JWT_SECRET is not configured');
+    return res.status(500).json({ message: 'Internal server error' }); // Send response directly
   }
 
-  // Verify token asynchronously
+  // Verify token
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       return res.status(403).json({ message: 'Token is invalid' });
     }
 
-    // Ensure decoded object matches the expected UserPayload structure
-    const user = decoded as UserPayload;
+    const user = decoded as UserPayload;  // Ensure the decoded token matches the UserPayload
 
-    // Attach the decoded user data to the request object
-    req.user = user;
+    req.user = user;  // Attach user to request object
 
-    // Proceed to the next middleware or route handler
     next();  // Pass control to the next middleware
   });
 };

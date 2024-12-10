@@ -11,7 +11,7 @@ if (!jwtSecret) {
 
 // Extend the Request interface to include user
 interface AuthRequest extends Request {
-  user?: UserPayload; // Ensure TypeScript knows that req.user is of type UserPayload
+  user?: UserPayload;  // user is optional and can be of type UserPayload
 }
 
 /**
