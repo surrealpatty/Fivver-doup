@@ -19,14 +19,17 @@ const authenticateJWT = (req, res, next) => {
             res.status(403).json({ message: 'Invalid token.' });
             return; // Ensure that the middleware stops execution
         }
-        // Attach the user object to the request, ensuring 'tier' and 'role' are included
-        req.user = {
-            id: decoded.id, // Explicit cast to JwtPayload
-            email: decoded.email,
-            username: decoded.username,
-            tier: decoded.tier, // Include 'tier' from the JWT payload
-            role: decoded.role, // Include 'role' from the JWT payload
-        };
+        // Ensure that decoded is not undefined
+        if (decoded) {
+            // Attach the user object to the request, ensuring 'tier' and 'role' are included
+            req.user = {
+                id: decoded.id, // Explicitly access properties from decoded JwtPayload
+                email: decoded.email,
+                username: decoded.username,
+                tier: decoded.tier, // Include 'tier' from the JWT payload
+                role: decoded.role, // Include 'role' from the JWT payload
+            };
+        }
         next(); // Proceed to the next middleware or route handler
     });
 };
