@@ -1,9 +1,9 @@
 "use strict";
+// src/routes/profile.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/profile.ts
 const express_1 = __importDefault(require("express")); // Import necessary types
 const services_1 = __importDefault(require("@models/services")); // Ensure correct import for Service model
 const user_1 = require("@models/user"); // Assuming there is a User model for user details
