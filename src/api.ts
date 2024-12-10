@@ -1,20 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-// Define the expected structure of the decoded JWT payload
-interface UserPayload extends JwtPayload {
-  id: string;
-  email: string;
-  username: string;
-  tier: "free" | "paid";  // Changed 'string' to '"free" | "paid"'
-}
-
-// Augment the Request interface to include the `user` property
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: UserPayload;
-  }
-}
+// Import the UserPayload type from src/types/index.ts
+import { UserPayload } from './types';
 
 // Middleware to authenticate the token
 export const authenticateToken = (
@@ -41,6 +29,7 @@ export const authenticateToken = (
       return res.status(500).json({ message: 'Internal server error' });
     }
 
+    // Decode the JWT and cast it to the UserPayload type
     const decoded = jwt.verify(token, jwtSecret) as UserPayload;
 
     req.user = decoded;
