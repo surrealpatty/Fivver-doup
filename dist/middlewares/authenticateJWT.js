@@ -3,33 +3,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateJWT = void 0;
-// src/middlewares/authenticateJWT.ts
+exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const authenticateJWT = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token
+// Secret key for JWT verification, should be in environment variables for security
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+// Middleware to authenticate token and attach user data to the request
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
     if (!token) {
-        res.status(403).json({ message: 'No token provided.' });
-        return;
+        return res.status(401).json({ message: 'Authorization token is missing' });
     }
-    // Verify the token with the correct options
-    const options = { algorithms: ['HS256'] }; // Specify the algorithm correctly
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, options, (err, decoded) => {
-        if (err) {
-            res.status(403).json({ message: 'Invalid token.' });
-            return;
-        }
-        if (decoded) {
-            req.user = {
-                id: decoded.id,
-                email: decoded.email,
-                username: decoded.username,
-                tier: decoded.tier,
-                role: decoded.role,
-            };
-        }
-        next();
-    });
+    // Define the options for JWT verification
+    const options = {
+        algorithms: ['HS256'], // Specify the algorithm type correctly
+    };
+    try {
+        // Verify the token
+        jsonwebtoken_1.default.verify(token, SECRET_KEY, options, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ message: 'Invalid or expired token' });
+            }
+            // Attach user data to the request object
+            req.user = decoded;
+            // Proceed to the next middleware or route handler
+            next();
+        });
+    }
+    catch (error) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
+    }
 };
-exports.authenticateJWT = authenticateJWT;
+exports.authenticateToken = authenticateToken;
 //# sourceMappingURL=authenticateJWT.js.map

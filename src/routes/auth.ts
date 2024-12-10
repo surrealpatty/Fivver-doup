@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs'; // Assuming bcrypt is used for password hashing
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user';  // Correct path to the User model
-import { authenticateJWT } from '../middlewares/authenticateJWT';  // Correct path
+import { authenticateToken } from '../middlewares/authenticateJWT';  // Correct the name to 'authenticateToken'
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env
