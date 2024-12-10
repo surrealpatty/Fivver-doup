@@ -1,19 +1,17 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types';  // Correct import for AuthRequest
-import { UserPayload } from '../types';  // Correct import for UserPayload
+import { UserPayload } from '../types'; // Correct import for UserPayload
 
-// Secret key for JWT verification, you should store it in an environment variable for security
+// Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 
-// Middleware to check if the user is authenticated
-export const checkAuth = (
-  req: AuthRequest,  // Use the correct type here
-  res: Response,
-  next: NextFunction
+// Middleware to authenticate token and attach user data to the request
+export const authenticateToken = (
+  req: Request,  // The request type
+  res: Response,  // The response type
+  next: NextFunction // The next middleware function
 ): void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
 
   if (!token) {
     return res.status(401).json({ message: 'Authorization token is missing' });
@@ -23,7 +21,7 @@ export const checkAuth = (
     // Verify the token
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
-    // Attach user information to the request object for further use in the route
+    // Attach user data to the request object
     req.user = decoded;
 
     // Proceed to the next middleware or route handler

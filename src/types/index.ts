@@ -7,7 +7,7 @@ export interface UserPayload {
   email?: string;  // Email and username should be optional to match Express's declaration
   username?: string;
   role: string;     // Role added to the UserPayload
-  tier: 'free' | 'paid';  // Restrict tier to either 'free' or 'paid'
+  tier?: string;
 }
 
 // Extend the Express Request interface to include the 'user' property
