@@ -29,7 +29,7 @@
     "outDir": "./dist",                          // Output compiled files to the dist folder
     "rootDir": "./src",                          // Root directory of source files
     "lib": ["ES2020", "ESNext"],                 // Include libraries like ES2020 and ESNext for full JS support
-    "allowJs": true                              // Allow JS files in TypeScript project
+    "allowJs": true,                             // Allow JS files in TypeScript project
   },
   "include": [
     "src/**/*.ts",                              // Include all TypeScript files in the src folder

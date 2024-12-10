@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const database_1 = require("./config/database"); // Named import for sequelize
+const database_1 = require("./config/database"); // Correct import for sequelize
 const user_1 = __importDefault(require("./routes/user")); // Default import for userRouter
-const profile_1 = __importDefault(require("./routes/profile")); // Default import for profile router
+const profile_1 = __importDefault(require("./routes/profile")); // Default import for profileRouter
+const auth_1 = __importDefault(require("./routes/auth")); // Default import for authRouter
 const dotenv_1 = __importDefault(require("dotenv")); // For loading environment variables
 require("./types/express"); // Ensure this import is present to load the augmentation
 // Load environment variables from .env file
@@ -23,7 +24,7 @@ app.use(express_1.default.json());
 // Enable CORS (if needed for handling cross-origin requests)
 app.use((0, cors_1.default)());
 // Example route to test the server
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
 // Synchronize models with the database
@@ -38,6 +39,8 @@ database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data lo
 app.use('/api/users', user_1.default); // Register the user routes under /api/users
 // Register the profile route under /api/profile
 app.use('/api/profile', profile_1.default); // Register profile route
+// Register the auth route under /api/auth
+app.use('/api/auth', auth_1.default); // Register auth route for user registration/login
 // Test database connection
 database_1.sequelize.authenticate()
     .then(() => {
@@ -47,7 +50,7 @@ database_1.sequelize.authenticate()
     console.error('Unable to connect to the database:', error);
 });
 // Global error handler middleware
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
     console.error(err); // Log the error
     res.status(500).json({ message: 'Something went wrong!' }); // Send generic error response
 });

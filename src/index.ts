@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import { sequelize } from './config/database'; // Named import for sequelize
+import { sequelize } from './config/database'; // Correct import for sequelize
 import userRouter from './routes/user'; // Default import for userRouter
-import profileRouter from './routes/profile'; // Default import for profile router
+import profileRouter from './routes/profile'; // Default import for profileRouter
+import authRouter from './routes/auth'; // Default import for authRouter
 import dotenv from 'dotenv'; // For loading environment variables
 import './types/express';  // Ensure this import is present to load the augmentation
 
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(cors());
 
 // Example route to test the server
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
@@ -41,6 +42,9 @@ app.use('/api/users', userRouter); // Register the user routes under /api/users
 // Register the profile route under /api/profile
 app.use('/api/profile', profileRouter); // Register profile route
 
+// Register the auth route under /api/auth
+app.use('/api/auth', authRouter); // Register auth route for user registration/login
+
 // Test database connection
 sequelize.authenticate()
   .then(() => {
@@ -51,7 +55,7 @@ sequelize.authenticate()
   });
 
 // Global error handler middleware
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);  // Log the error
   res.status(500).json({ message: 'Something went wrong!' });  // Send generic error response
 });
