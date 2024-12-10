@@ -5,7 +5,7 @@ const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct im
 const mockRequest = (userPayload) => ({
     headers: { authorization: 'Bearer valid-token' },
     user: userPayload, // Attach userPayload to the request
-});
+}); // Cast the mock to `unknown` first, then `Request`
 const mockResponse = () => {
     const res = {}; // Create a mock response object
     res.status = jest.fn().mockReturnValue(res); // Mock status method
