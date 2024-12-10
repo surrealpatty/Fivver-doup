@@ -6,40 +6,27 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "skipDefaultLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "baseUrl": "./",
+    "baseUrl": "./src",    // Ensure this is inside the `src` folder
     "paths": {
-      "@models/*": ["src/models/*"],
-      "@controllers/*": ["src/controllers/*"],
-      "@routes/*": ["src/routes/*"],
-      "@config/*": ["src/config/*"],
-      "@middlewares/*": ["src/middlewares/*"]
+      "@models/*": ["models/*"],
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"],
+      "@config/*": ["config/*"],
+      "@middlewares/*": ["middlewares/*"]
     },
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "lib": ["ES2020", "ESNext"],
+    "outDir": "./dist",     // Outputs compiled files in the `dist` folder
+    "rootDir": "./src",     // Set root directory for source files
+    "lib": ["ES2020"],
     "allowJs": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/test/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "fivver-frontend",
-    "jest.config.ts",
-    "jest.setup.ts"
+    "dist"
   ]
 }

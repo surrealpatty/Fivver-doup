@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../src/types/express.d.ts"],"sourcesContent":["// src/types/express.d.ts\r\nimport { UserPayload } from '@types';\r\n\r\ndeclare global {\r\n  namespace Express {\r\n    interface Request {\r\n      user?: UserPayload;  // Add user property to Request\r\n    }\r\n  }\r\n}\r\n"],"names":[],"mappings":"AAAA,yBAAyB"}

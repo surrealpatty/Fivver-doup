@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../src/routes/service.d.ts"],"sourcesContent":["declare const router: import('express-serve-static-core').Router;\r\nexport default router;\r\n"],"names":["router"],"mappings":";;;;+BACA;;;eAAA;;;MAAA,WAAeA"}
