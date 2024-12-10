@@ -1,7 +1,7 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from './index';  // Import the UserPayload interface
-import { Request } from 'express';
+import { UserPayload } from '../types'; // Correct import for UserPayload
+
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 
@@ -30,6 +30,3 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // Make sure req.user is typed as UserPayload
-}

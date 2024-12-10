@@ -1,8 +1,9 @@
 // src/middlewares/tierMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest to ensure proper typing
 
-export const checkPaidTier = (req: Request, res: Response, next: NextFunction): void => {
-  const user = req.user; // Assuming user is set by the authenticateJWT middleware
+export const checkPaidTier = (req: AuthRequest, res: Response, next: NextFunction): void => {
+  const user = req.user; // Now `user` is of type `UserPayload`
 
   if (!user || user.tier !== 'paid') {
     // Send a 403 response if the user does not have a paid tier
