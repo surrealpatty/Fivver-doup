@@ -4,7 +4,7 @@ exports.checkRole = void 0;
 // Middleware to check the role of the user
 const checkRole = (requiredRole) => {
     return (req, res, next) => {
-        const user = req.user; // `user` can be undefined
+        const user = req.user; // Now `user` should always exist and have the `role`
         if (!user || !user.role) {
             return res.status(403).json({ message: 'User role is missing or not authorized' });
         }

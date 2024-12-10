@@ -1,4 +1,3 @@
-// src/controllers/userController.ts
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -8,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Setup for nodemailer transporter
+// Nodemailer setup for email verification
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -34,17 +33,17 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user with default values for role and tier, and include isVerified
+    // Create the new user object with default values
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
-      role: 'free', // Default role
-      tier: 'free', // Default tier
-      isVerified: false, // Default to not verified
+      role: 'free',  // Default role
+      tier: 'free',  // Default tier
+      isVerified: false,  // Default to not verified
     });
 
-    // Generate the JWT verification token
+    // Generate a JWT verification token
     const verificationToken = jwt.sign(
       { id: newUser.id },
       process.env.JWT_SECRET as string,

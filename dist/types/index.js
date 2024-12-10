@@ -1,3 +1,3 @@
 "use strict";
-// src/models/user.ts
+// src/types/index.ts
 Object.defineProperty(exports, "__esModule", { value: true });

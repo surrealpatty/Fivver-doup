@@ -2,8 +2,12 @@
 
 export interface UserPayload {
   id: string;
-  email: string;         // Make email required
-  username: string;      // Make username required
-  role: string;          // Make role required
-  tier: "free" | "paid"; // Make tier required
+  email: string;
+  username: string;
+  role: string;  // Add 'role' here to fix the issue
+  tier: string;
+}
+
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Make sure 'user' includes 'role'
 }

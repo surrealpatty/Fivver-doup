@@ -1,13 +1,15 @@
 // src/routes/auth.ts
-import { Request, Response } from 'express';
-import { User } from '@models/user';  // Import User model
+import { Router, Request, Response } from 'express';
+import { User } from '@models/user';  // Correct import for User model
 
-export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, username, password, role, tier } = req.body;
+const router = Router();
+
+router.post('/register', async (req: Request, res: Response): Promise<void> => {
+  const { email, username, password, role = 'free', tier = 'free' } = req.body; // Default role and tier
 
   try {
     // Hash password before saving user
-    const hashedPassword = await User.hashPassword(password);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       email,
@@ -22,4 +24,6 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     console.error(error);
     res.status(500).json({ message: 'Error creating user' });
   }
-};
+});
+
+export default router;
