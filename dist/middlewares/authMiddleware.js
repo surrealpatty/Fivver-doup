@@ -20,7 +20,7 @@ const authenticateToken = (req, res, next) => {
             return res.status(400).json({ message: 'User payload is missing required information' });
         }
         // Attach the decoded user information to the request object for further use
-        req.user = decoded;
+        req.user = decoded; // Cast to AuthRequest to ensure 'user' is properly added
         // Proceed to the next middleware or route handler
         next(); // Proceed to the next middleware without returning the Response
     }

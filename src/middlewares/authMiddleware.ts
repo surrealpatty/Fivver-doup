@@ -2,14 +2,15 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct path to UserPayload
+import { AuthRequest } from '../types'; // Correct path to AuthRequest
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use your actual secret key
 
 export const authenticateToken = (
-  req: Request,
+  req: AuthRequest, // Use AuthRequest here
   res: Response,
   next: NextFunction
-): void => {
+): Response<any, Record<string, any>> | void => { // Return type updated
   const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
