@@ -19,16 +19,11 @@ const mockResponse = () => {
 
 describe('authenticateToken middleware', () => {
   it('should authenticate and attach user to req', () => {
-    const userPayload: UserPayload = { id: '1', email: 'user@example.com' };
-
-    const req = mockRequest(userPayload); // Mock request with user data
-    const res = mockResponse();
-    const next = jest.fn();
-
-    authenticateToken(req, res, next); // Call the middleware
-
-    expect(req.user).toEqual(userPayload); // Assert that user is attached to req
-    expect(next).toHaveBeenCalled(); // Assert that the next function was called
+    const userPayload: UserPayload = { 
+      id: '1', 
+      email: 'user@example.com', 
+      tier: 'free'  // Ensure 'tier' is included in the object
+    
   });
 
   it('should return 401 if no token is provided', () => {

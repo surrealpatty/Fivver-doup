@@ -1,74 +1,29 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middlewares/authenticateToken.ts
+
+import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index'; // Correctly import UserPayload
+import { UserPayload } from '../types'; // Correct import of UserPayload
 
-// Ensure JWT_SECRET is available in the environment variables
-const jwtSecret = process.env.JWT_SECRET as string; // Assert type as string
+const secretKey = process.env.JWT_SECRET || 'your-secret-key'; // Use environment variable or fallback to default
 
-if (!jwtSecret) {
-  console.error('JWT_SECRET is not set. Authentication will fail.');
-}
+// Middleware to authenticate token
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
+  const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
 
-// Extend the Request interface to include user
-interface AuthRequest extends Request {
-  user?: UserPayload; // Ensure user can be UserPayload or undefined
-}
-
-/**
- * Middleware to authenticate the token provided in the Authorization header.
- * If the token is valid, the decoded payload is attached to `req.user`.
- */
-export const authenticateToken = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  try {
-    // Extract token from the Authorization header
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
-
-    if (!token) {
-      res.status(401).json({ message: 'Access denied, no token provided.' });
-      return;
-    }
-
-    // Verify the token
-    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
-
-    // Attach the decoded payload to req.user
-    req.user = decoded;
-
-    // Proceed to the next middleware or route handler
-    next();
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Authentication error:', error.message);
-      res.status(403).json({ message: 'Invalid or expired token.' });
-      return;
-    }
-
-    // Fallback for cases when the error is not of type `Error`
-    console.error('Unexpected error during authentication:', error);
-    res.status(500).json({ message: 'Internal server error.' });
+  if (!token) {
+    return res.status(403).json({ message: 'Access denied, token not provided' });  // Return Response if no token
   }
-};
 
-/**
- * Middleware to check if the user is authenticated.
- * It uses `authenticateToken` and adds additional checks if needed.
- */
-export const checkAuth = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  authenticateToken(req, res, () => {
-    // Add any additional checks if needed
-    if (req.user) {
-      next(); // If authenticated, proceed to the next route handler
-    } else {
-      res.status(401).json({ message: 'Authentication failed.' });
-    }
-  });
+  try {
+    // Verify the token, assuming the decoded value matches UserPayload or undefined
+    const decoded = jwt.verify(token, secretKey) as UserPayload | undefined;
+
+    // Assign decoded to req.user with type UserPayload or undefined
+    req.user = decoded; // This will correctly handle undefined or a valid UserPayload
+
+    next(); // Proceed to the next middleware or route handler
+  } catch (error) {
+    return res.status(400).json({ message: 'Invalid token' }); // Return Response if token is invalid
+  }
 };
