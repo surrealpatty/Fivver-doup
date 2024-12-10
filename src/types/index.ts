@@ -1,19 +1,8 @@
-import { Request } from 'express';
-import { UserPayload } from '../models/user'; 
-
+// src/models/user.ts
 
 export interface UserPayload {
-  id: string;
-  email: string;  // email is required
-  username?: string;  // username is optional
-  tier: "free" | "paid";  // 'tier' is required
-  role?: string;  // Optional if needed
-}
-
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // `user` can be optional if not guaranteed to be set
-}
-
-export interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Required user field, must include 'tier'
+  id: string;          // Assuming the user has a unique ID
+  email?: string;      // Optional email field
+  username?: string;   // Optional username field
+  tier: "free" | "paid";  // Tier of the user
 }
