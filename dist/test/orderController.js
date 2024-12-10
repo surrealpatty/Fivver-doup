@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateToken
 // Mock request and response functions
 const mockRequest = (userPayload) => ({
-    headers: { authorization: 'Bearer valid-token' }, // Mock authorization header
-    user: userPayload, // Attach mock user payload to the request
+    headers: { authorization: 'Bearer valid-token' },
+    user: userPayload, // Attach userPayload to the request
 });
 const mockResponse = () => {
     const res = {}; // Create a mock response object

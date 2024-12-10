@@ -1,7 +1,8 @@
 // src/types.ts
+import { Request } from 'express';
 
-// Declare the UserPayload interface, which can be imported across the project
-export interface UserPayload {
+export interface AuthRequest extends Request {
+    user?: any;  // Define the type for the `user` property
   id: string;
   email?: string;  // Optional email field
   username?: string;  // Optional username field
