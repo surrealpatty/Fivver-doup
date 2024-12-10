@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express"); // Importing necessary types
-const authenticateToken_1 = require("@middlewares/authenticateToken"); // Corrected import for authenticateJWT
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import
 const dashboardController_1 = require("../controllers/dashboardController"); // Named import for controller
 const router = (0, express_1.Router)();
 // GET /dashboard route to fetch user dashboard data

@@ -5,7 +5,6 @@ const user_1 = require("@models/user"); // Ensure correct import for User model
 const sequelize_1 = require("sequelize");
 const express_validator_1 = require("express-validator");
 const sequelize_2 = require("sequelize"); // Import Sequelize 'Op' for the OR condition
-const authenticateToken_1 = require("@middlewares/authenticateToken"); // Use named import
 const router = (0, express_1.Router)();
 // Route for user registration
 router.post('/register', 
@@ -64,7 +63,7 @@ async (req, res) => {
     }
 });
 // Route for accessing premium content (tier-based restrictions)
-router.get('/premium-content', authenticateToken_1.authenticateToken, async (req, res) => {
+router.get('/premium-content', authenticateToken, async (req, res) => {
     const userId = req.user?.id;
     try {
         const user = await user_1.User.findByPk(userId);

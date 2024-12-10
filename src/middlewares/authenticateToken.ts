@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Correct import for UserPayload
+import { UserPayload } from '../types'; // Make sure types.ts exports UserPayload
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 

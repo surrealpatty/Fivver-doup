@@ -1,19 +1,19 @@
 // src/types.ts
 
-// Declare the module for '@config/database'
-declare module '@config/database' {
-  export const sequelize: import('sequelize').Sequelize;  // Importing Sequelize type from the Sequelize package
+// Declare the UserPayload interface, which can be imported across the project
+export interface UserPayload {
+  id: string;
+  email?: string;  // Optional email field
+  username?: string;  // Optional username field
+  tier: 'free' | 'paid';  // Enum-like field for user tier
+  [key: string]: any;  // Allow for additional properties if necessary
 }
 
-// Declare the module for '@routes/user'
-declare module '@routes/user' {
-  import { Router } from 'express';
-  export const userRouter: Router;  // Named export for userRouter
-}
-
-// Declare the module for '@routes/profile'
-declare module '@routes/profile' {
-  import { Router } from 'express';
-  const profileRouter: Router;  // Default export for profileRouter
-  export default profileRouter;  // Use 'default' if it's a default export in profileRouter
+// Example of adding a custom type for a service:
+export interface ServicePayload {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  userId: string;
 }
