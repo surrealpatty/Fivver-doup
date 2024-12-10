@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/test/user.test.ts
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Ensure you're importing your Express app
+const index_1 = require("../index"); // Correct import for the app instance
 // Mocking the User model to mock the create function for testing
 const user_1 = require("../models/user");
 jest.mock('../models/user', () => ({
