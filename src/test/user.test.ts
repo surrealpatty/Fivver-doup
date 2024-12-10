@@ -1,5 +1,6 @@
+// src/test/user.test.ts
 import request from 'supertest';
-import { app } from '../index';  // Ensure you're importing your Express app
+import { app } from '../index';  // Correct import for the app instance
 
 // Mocking the User model to mock the create function for testing
 import { User } from '../models/user'; 
