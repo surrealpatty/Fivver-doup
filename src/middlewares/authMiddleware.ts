@@ -1,7 +1,11 @@
-import { AuthRequest } from '../types';  // Corrected import for AuthRequest (named export)
+// src/middlewares/authMiddleware.ts
+
+import { AuthRequest } from '../types';  // Correct import for AuthRequest (named export)
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct import of UserPayload
+
+const secretKey = process.env.JWT_SECRET || 'your-secret-key'; // Use environment variable or fallback to default
 
 // Middleware to authenticate token
 export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -13,7 +17,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 
   try {
     // Verify the token, assuming the decoded value matches UserPayload or undefined
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as UserPayload | undefined;
+    const decoded = jwt.verify(token, secretKey) as UserPayload | undefined;
 
     // Assign decoded to req.user with type UserPayload or undefined
     req.user = decoded; // This will correctly handle undefined or a valid UserPayload
