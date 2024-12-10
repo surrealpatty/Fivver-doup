@@ -8,7 +8,6 @@ const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs")); // Assuming bcrypt is used for password hashing
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user"); // Correct path to the User model
-const authenticateJWT_1 = require("../middlewares/authenticateJWT"); // Correct path
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config(); // Load environment variables from .env
 const router = (0, express_1.Router)();
@@ -44,7 +43,7 @@ router.post('/login', async (req, res) => {
     }
 });
 // Protected Route Example: Access profile with JWT
-router.get('/profile', authenticateJWT_1.authenticateJWT, (req, res) => {
+router.get('/profile', authenticateJWT, (req, res) => {
     // Access user info from the request
     const user = req.user;
     if (!user) {

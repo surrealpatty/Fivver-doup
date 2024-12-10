@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors, Jwt } from 'jsonwebtoken';
 import { UserPayload } from '../types';
 
 // Secret key for JWT verification, should be in environment variables for security
@@ -17,20 +17,25 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  // Define the options for JWT verification
+  // Define the options for JWT verification with `complete: true`
   const options: jwt.VerifyOptions = {
     algorithms: ['HS256'], // Specify the algorithm type correctly
+    complete: true,         // Request full JWT (header + payload + signature)
   };
 
   try {
-    // Verify the token
-    jwt.verify(token, SECRET_KEY, options, (err: VerifyErrors | null, decoded: jwt.JwtPayload | undefined) => {
+    // Verify the token with `complete: true`
+    jwt.verify(token, SECRET_KEY, options, (err: VerifyErrors | null, decoded: Jwt | undefined) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired token' });
       }
 
-      // Attach user data to the request object
-      req.user = decoded as UserPayload;
+      // Now `decoded` is a `Jwt` object, so we access `decoded.payload` for the payload
+      if (decoded && decoded.payload) {
+        req.user = decoded.payload as UserPayload;
+      } else {
+        return res.status(401).json({ message: 'Invalid token structure' });
+      }
 
       // Proceed to the next middleware or route handler
       next();
