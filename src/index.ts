@@ -1,4 +1,3 @@
-// src/index.ts
 import express, { Request, Response, NextFunction } from 'express';  // Import NextFunction
 import cors from 'cors';
 import { sequelize } from './config/database'; // Correct import for sequelize

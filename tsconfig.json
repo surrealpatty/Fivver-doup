@@ -30,6 +30,9 @@
     "rootDir": "./src",                          // Root directory of source files
     "lib": ["ES2020", "ESNext"],                 // Include libraries like ES2020 and ESNext for full JS support
     "allowJs": true,                             // Allow JS files in TypeScript project
+    "declaration": true,                         // Generates .d.ts declaration files
+    "declarationMap": true,                      // Generates source maps for .d.ts files
+    "sourceMap": true                            // Generate source maps for debugging
   },
   "include": [
     "src/**/*.ts",                              // Include all TypeScript files in the src folder

@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "clean-build": "rimraf dist && tsc",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "dev":"nodemon --exec ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node src/index.ts",
     "build": "swc src --out-dir dist --config-file .swcrc && cmd /c move dist\\src\\index.js dist\\index.js && npx tsc",
     "build:watch": "swc src -d dist --watch",
     "pretest": "npm run build",

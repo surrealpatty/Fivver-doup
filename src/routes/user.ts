@@ -1,10 +1,10 @@
-import express, { Router } from 'express';
+import express, { Request, Response } from 'express';
 
-const userRouter = Router();
+const userRouter = express.Router();
 
-// Define your routes here, e.g.:
-userRouter.get('/', (req, res) => {
-  res.send('User route');
+// Example route handler
+userRouter.get('/', (_req: Request, res: Response): Response => {
+  return res.json({ message: 'User routes are working!' });
 });
 
-export default userRouter;  // Default export
+export default userRouter;

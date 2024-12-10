@@ -4,7 +4,7 @@ import { sendEmail } from '../services/emailService';  // Correct import for nam
 const router = Router();
 
 // Endpoint to trigger email sending
-router.get('/test-email', async (req: Request, res: Response) => {
+router.get('/test-email', async (_req: Request, res: Response) => {
   try {
     // Example email details (replace with actual test data)
     const emailDetails = {
