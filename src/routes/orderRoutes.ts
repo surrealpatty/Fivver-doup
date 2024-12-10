@@ -2,8 +2,8 @@
 
 import express, { Request, Response, RequestHandler } from 'express';
 import { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder } from '../controllers/orderController';
-// Directly import UserPayload from the correct path
-import { UserPayload } from '../types';  // Change from '@types/index' to '../types'
+// Correct the import path to point to the correct `types` directory
+import { UserPayload } from '../types';  // Import from the correct relative path
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ interface CreateOrderRequest {
 
 // Extend the Request interface to include the user property of type UserPayload
 interface OrderRequest extends Request {
-  user?: UserPayload;  // Ensure the user property is optionally available
+  user?: UserPayload;  // Make sure the `user` property is available and optional
 }
 
 // Define the handler types
