@@ -1,11 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '@middlewares/authenticateToken';  // Named import for middleware
+import { Router, Request, Response, NextFunction } from 'express'; // Importing necessary types
+import { authenticateJWT } from '@middlewares/authenticateToken';  // Corrected import for authenticateJWT
 import { getDashboardData } from '../controllers/dashboardController';  // Named import for controller
+import { AuthRequest } from '@middlewares/authenticateToken';  // Import the correct AuthRequest type
 
 const router = Router();
 
 // GET /dashboard route to fetch user dashboard data
-router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
+router.get('/dashboard', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Call the controller function to fetch the dashboard data
     await getDashboardData(req, res);

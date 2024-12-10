@@ -3,31 +3,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = void 0;
+exports.authenticateJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const jwtSecret = process.env.JWT_SECRET; // Type assertion for jwtSecret
-if (!jwtSecret) {
-    console.error('JWT_SECRET is not set. Authentication will fail.');
-}
-// Middleware to authenticate JWT tokens
-const authenticateToken = (req, res, next) => {
+const secretKey = 'your-secret-key'; // Replace with your actual secret key
+// Middleware to authenticate JWT token
+const authenticateJWT = async (req, // Use AuthRequest type here
+res, next) => {
     try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
-        if (!token) {
-            return res.status(401).json({ message: 'Access denied, no token provided.' });
+        const token = req.headers.authorization?.split(' ')[1]; // Get token from header
+        if (token) {
+            jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
+                if (err) {
+                    return res.status(403).json({ message: 'Token is not valid' });
+                }
+                // Type the decoded value as UserPayload
+                req.user = decoded; // Ensure it matches UserPayload structure
+                next(); // Proceed to the next middleware or route handler
+            });
         }
-        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
-        req.user = decoded; // Attach the decoded token to req.user
-        next();
+        else {
+            res.status(401).json({ message: 'Unauthorized, no token provided' });
+        }
     }
     catch (error) {
-        if (error instanceof Error) {
-            console.error('Authentication error:', error.message);
-            return res.status(403).json({ message: 'Invalid or expired token.' });
-        }
-        console.error('Unexpected error during authentication:', error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        next(error); // Pass any error to the next error handler
     }
 };
-exports.authenticateToken = authenticateToken;
+exports.authenticateJWT = authenticateJWT;

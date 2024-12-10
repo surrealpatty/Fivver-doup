@@ -2,8 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import Service from '@models/services';  // Ensure this import is correct
 import { body, validationResult } from 'express-validator';
-import authenticateToken from '@middlewares/authenticateToken';  // Ensure this import is correct
-
+import { authenticateToken } from '@middlewares/authenticateToken'; // Use named import
 const router = express.Router();
 
 // Multer setup for image uploads

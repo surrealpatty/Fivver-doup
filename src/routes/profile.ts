@@ -1,12 +1,13 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';  // Import necessary types
 import Service from '@models/services';  // Ensure correct import for Service model
-import { User }from '@models/user';  // Assuming there is a User model for user details
-import { authenticateToken } from '../middlewares/authenticateToken'; // Correct named import
+import { User } from '@models/user';  // Assuming there is a User model for user details
+import { authenticateJWT } from '../middlewares/authenticateToken';  // Corrected import for authenticateJWT
+import { AuthRequest } from '../middlewares/authenticateToken';  // Import AuthRequest type
 
 const router = express.Router();
 
 // Profile route to get the user's info and their services
-router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.user?.id; // Get user ID from the authenticated token
 
   if (!userId) {
@@ -35,12 +36,12 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error retrieving user profile' });
+    next(err);  // Pass error to the next middleware (error handler)
   }
 });
 
 // Profile update route to allow users to update their profile information
-router.put('/profile', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+router.put('/profile', authenticateJWT, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.user?.id; // Get user ID from the authenticated token
 
   if (!userId) {
@@ -74,7 +75,7 @@ router.put('/profile', authenticateToken, async (req: Request, res: Response): P
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error updating user profile' });
+    next(err);  // Pass error to the next middleware (error handler)
   }
 });
 
