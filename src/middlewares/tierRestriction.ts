@@ -1,5 +1,6 @@
+// src/middlewares/tierRestriction.ts
 import { NextFunction, Request, Response } from 'express';
-import { AuthRequest } from '../types';
+import { AuthRequest } from '../types'; // Ensure the correct type is imported
 
 export const tierMiddleware = (
   req: AuthRequest,
@@ -8,9 +9,12 @@ export const tierMiddleware = (
 ): void => {
   const user = req.user;
 
+  // Check if the user exists and if their tier is 'paid'
   if (!user || user.tier !== 'paid') {
-    return res.status(403).json({ message: 'Access restricted to paid users only.' });
+    res.status(403).json({ message: 'Access restricted to paid users only.' });
+    return; // Make sure the function exits after sending the response
   }
 
-  next(); // Allow access if the user is paid
+  // Proceed to the next middleware if the user is paid
+  next();
 };
