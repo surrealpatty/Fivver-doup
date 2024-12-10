@@ -20,3 +20,4 @@ const createOrderHandler = async (req, res) => {
 router.post('/', createOrderHandler);
 // Other routes follow the same pattern...
 exports.default = router;
+//# sourceMappingURL=orderRoutes.js.map

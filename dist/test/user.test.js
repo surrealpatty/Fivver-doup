@@ -81,3 +81,4 @@ describe('POST /register', () => {
         expect(res.body.errors[0].msg).toBe('Username must be between 3 and 20 characters'); // Username error
     });
 });
+//# sourceMappingURL=user.test.js.map

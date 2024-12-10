@@ -36,3 +36,4 @@ Service.init({
     modelName: 'Service',
 });
 exports.default = Service;
+//# sourceMappingURL=services.js.map

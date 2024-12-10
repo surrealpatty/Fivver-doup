@@ -37,3 +37,4 @@ const config = {
 };
 // Export the configuration
 exports.default = config;
+//# sourceMappingURL=config.js.map

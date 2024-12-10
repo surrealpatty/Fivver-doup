@@ -16,3 +16,4 @@ describe('Database Connection', () => {
         expect(result).toBeUndefined(); // This checks that no error was thrown and that the result is undefined as expected for the mock
     });
 });
+//# sourceMappingURL=database.test.js.map

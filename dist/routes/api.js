@@ -34,3 +34,4 @@ res, next) => {
     }
 };
 exports.checkAuth = checkAuth;
+//# sourceMappingURL=api.js.map

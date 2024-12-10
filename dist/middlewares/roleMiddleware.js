@@ -15,3 +15,4 @@ const checkRole = (requiredRole) => {
     };
 };
 exports.checkRole = checkRole;
+//# sourceMappingURL=roleMiddleware.js.map

@@ -35,3 +35,4 @@ router.get('/:serviceId', authMiddleware_1.authenticateToken, async (req, res, n
     }
 });
 exports.default = router;
+//# sourceMappingURL=review.js.map

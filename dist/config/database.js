@@ -11,3 +11,4 @@ const sequelize = new sequelize_1.Sequelize({
     logging: false, // Optional: disables SQL query logging
 });
 exports.sequelize = sequelize;
+//# sourceMappingURL=database.js.map

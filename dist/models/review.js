@@ -28,3 +28,4 @@ __decorate([
 exports.Review = Review = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'reviews' })
 ], Review);
+//# sourceMappingURL=review.js.map

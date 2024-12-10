@@ -4,7 +4,7 @@ const express_1 = require("express");
 const emailService_1 = require("../services/emailService"); // Correct import for named export
 const router = (0, express_1.Router)();
 // Endpoint to trigger email sending
-router.get('/test-email', async (req, res) => {
+router.get('/test-email', async (_req, res) => {
     try {
         // Example email details (replace with actual test data)
         const emailDetails = {
@@ -22,3 +22,4 @@ router.get('/test-email', async (req, res) => {
     }
 });
 exports.default = router;
+//# sourceMappingURL=testEmailRoute.js.map

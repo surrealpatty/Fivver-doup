@@ -29,3 +29,4 @@ next // The next middleware function
     }
 };
 exports.authenticateToken = authenticateToken;
+//# sourceMappingURL=authMiddleware.js.map

@@ -36,3 +36,4 @@ exports.Order = Order = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'orders', timestamps: false }) // Set timestamps to false if you're not using createdAt and updatedAt
 ], Order);
 exports.default = Order;
+//# sourceMappingURL=order.js.map

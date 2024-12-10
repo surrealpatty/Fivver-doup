@@ -18,3 +18,4 @@ router.get('/fetch-data', async (req, res) => {
     }
 });
 exports.default = router;
+//# sourceMappingURL=dataRoute.js.map

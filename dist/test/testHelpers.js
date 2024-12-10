@@ -19,3 +19,4 @@ const createMockUserToken = (userId) => {
     return token;
 };
 exports.createMockUserToken = createMockUserToken;
+//# sourceMappingURL=testHelpers.js.map

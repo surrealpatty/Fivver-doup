@@ -45,3 +45,4 @@ const updateService = async (req, res) => {
     }
 };
 exports.updateService = updateService;
+//# sourceMappingURL=serviceController.js.map

@@ -62,3 +62,4 @@ const registerUser = async (req, res) => {
     }
 };
 exports.registerUser = registerUser;
+//# sourceMappingURL=userController.js.map

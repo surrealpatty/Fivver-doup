@@ -32,3 +32,4 @@ const checkAuth = (req, res, next) => {
     }
 };
 exports.checkAuth = checkAuth;
+//# sourceMappingURL=checkAuth.js.map

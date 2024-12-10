@@ -23,3 +23,4 @@ async function fetchData(url) {
         throw error; // Optionally rethrow the error if you want to propagate it
     }
 }
+//# sourceMappingURL=externalApi.js.map

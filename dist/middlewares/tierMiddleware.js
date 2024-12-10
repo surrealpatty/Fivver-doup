@@ -12,3 +12,4 @@ const checkPaidTier = (req, res, next) => {
     next(); // Proceed to the next middleware
 };
 exports.checkPaidTier = checkPaidTier;
+//# sourceMappingURL=tierMiddleware.js.map

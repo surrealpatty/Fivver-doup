@@ -20,3 +20,4 @@ router.get('/dashboard', authMiddleware_1.authenticateToken, async (req, res, ne
     }
 });
 exports.default = router;
+//# sourceMappingURL=dashboard.js.map

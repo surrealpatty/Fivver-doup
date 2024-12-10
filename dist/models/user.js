@@ -44,3 +44,4 @@ User.init({
     sequelize: database_1.sequelize,
     modelName: 'User',
 });
+//# sourceMappingURL=user.js.map

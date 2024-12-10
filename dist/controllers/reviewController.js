@@ -62,3 +62,4 @@ const deleteReview = async (req, res) => {
     res.status(200).json({ message: 'Review deleted successfully' });
 };
 exports.deleteReview = deleteReview;
+//# sourceMappingURL=reviewController.js.map

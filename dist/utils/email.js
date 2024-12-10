@@ -28,3 +28,4 @@ const sendEmail = async (to, subject, text) => {
     }
 };
 exports.default = sendEmail;
+//# sourceMappingURL=email.js.map

@@ -10,3 +10,4 @@ const checkPaidTier = (req, res, next) => {
     next();
 };
 exports.checkPaidTier = checkPaidTier;
+//# sourceMappingURL=tierRestriction.js.map

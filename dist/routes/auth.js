@@ -53,3 +53,4 @@ router.get('/profile', authenticateJWT, (req, res) => {
 });
 // Export router to use in the main app
 exports.default = router;
+//# sourceMappingURL=auth.js.map

@@ -34,3 +34,4 @@ const authenticateJWT = (req, res, next) => {
     });
 };
 exports.authenticateJWT = authenticateJWT;
+//# sourceMappingURL=authenticateJWT.js.map

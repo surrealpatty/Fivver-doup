@@ -27,3 +27,4 @@ const router = (0, vue_router_1.createRouter)({
     routes,
 });
 exports.default = router;
+//# sourceMappingURL=index.js.map

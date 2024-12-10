@@ -74,3 +74,4 @@ router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, n
     }
 });
 exports.default = router;
+//# sourceMappingURL=profile.js.map

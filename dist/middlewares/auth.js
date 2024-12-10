@@ -51,3 +51,4 @@ res, next) => {
     next();
 };
 exports.authenticateJWT = authenticateJWT;
+//# sourceMappingURL=auth.js.map

@@ -26,3 +26,4 @@ const resetDatabase = async () => {
 };
 // Call the function to reset the database
 resetDatabase();
+//# sourceMappingURL=resetDatabase.js.map

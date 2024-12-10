@@ -51,3 +51,4 @@ describe('PUT /services/:id', () => {
         expect(response.body.message).toBe('Invalid price value');
     });
 });
+//# sourceMappingURL=service.test.js.map

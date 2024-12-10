@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
-// src/index.ts
 const express_1 = __importDefault(require("express")); // Import NextFunction
 const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Correct import for sequelize
@@ -58,3 +57,4 @@ const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 exports.server = server;
+//# sourceMappingURL=index.js.map

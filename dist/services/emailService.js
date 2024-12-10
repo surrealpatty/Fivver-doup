@@ -34,3 +34,4 @@ const sendEmail = async (emailDetails) => {
     }
 };
 exports.sendEmail = sendEmail;
+//# sourceMappingURL=emailService.js.map

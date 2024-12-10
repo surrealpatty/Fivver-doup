@@ -5,3 +5,4 @@ const types_1 = require("sequelize/types"); // Correct import for Optional from 
 class BaseModel extends types_1.Model {
 }
 exports.default = BaseModel;
+//# sourceMappingURL=BaseModel.js.map

@@ -36,3 +36,4 @@ order_1.Order.belongsTo(services_1.default, { foreignKey: 'serviceId' }); // An 
         console.error('Error setting up model associations:', error);
     }
 })();
+//# sourceMappingURL=associations.js.map
