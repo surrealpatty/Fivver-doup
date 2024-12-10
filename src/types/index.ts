@@ -1,16 +1,20 @@
-// src/types/index.ts
-import { Request } from 'express';
+import { Request } from 'express';  // Import Request interface from Express
 
-// Define UserPayload interface for the JWT payload
+// src/types/index.ts
+
 export interface UserPayload {
   id: string;
-  email?: string;  // Make email optional (string | undefined)
-  username?: string;  // username is optional
-  tier: 'free' | 'paid';  // tier is required
-  role?: string;  // role is optional
+  email: string;
+  username?: string;
+  tier: "free" | "paid";  // Ensure 'tier' is included
+  role?: string;  // Optionally include role if needed
 }
 
-// Define AuthRequest interface that extends Express' Request, adding a user object
+
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // user is optional and can be undefined
+  user?: UserPayload;  // Optional user field, which can include 'tier'
+}
+
+export interface CustomAuthRequest extends Request {
+  user: UserPayload;  // Required user field, must include 'tier'
 }
