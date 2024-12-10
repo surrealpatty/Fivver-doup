@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware'; // Correct path
+import { authenticateToken } from '../middlewares/authMiddleware';  // Correct path
 import { AuthRequest } from '../types/authMiddleware'; // Correctly typed AuthRequest if needed
 import { UserPayload } from '../types/index'; // Correct path for your types
 

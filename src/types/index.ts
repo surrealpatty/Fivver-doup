@@ -1,18 +1,17 @@
-import { Request } from 'express';  // Import Request interface from Express
+import { Request } from 'express';
+import { UserPayload } from '../models/user'; 
 
-// src/types/index.ts
 
 export interface UserPayload {
   id: string;
-  email: string;
-  username?: string;
-  tier: "free" | "paid";  // Ensure 'tier' is included
-  role?: string;  // Optionally include role if needed
+  email: string;  // email is required
+  username?: string;  // username is optional
+  tier: "free" | "paid";  // 'tier' is required
+  role?: string;  // Optional if needed
 }
 
-
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Optional user field, which can include 'tier'
+  user?: UserPayload;  // `user` can be optional if not guaranteed to be set
 }
 
 export interface CustomAuthRequest extends Request {
