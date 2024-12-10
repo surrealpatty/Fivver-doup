@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { sendEmail } from '../services/emailService';  // Correct import for named export
+import { Router, Request, Response, NextFunction } from 'express';
+import { sendEmail } from '../services/emailService'; // Correct import for named export
 
 const router = Router();
 
 // Endpoint to trigger email sending
-router.get('/test-email', async (req: Request, res: Response): Promise<Response> => {
+router.get('/test-email', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Example email details (replace with actual test data)
     const emailDetails = {
@@ -16,10 +16,12 @@ router.get('/test-email', async (req: Request, res: Response): Promise<Response>
     // Call your sendEmail function
     await sendEmail(emailDetails);
 
-    return res.status(200).json({ message: 'Test email sent successfully!' });
+    // Send a success response
+    res.status(200).json({ message: 'Test email sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);
-    return res.status(500).json({ message: 'Error sending test email.' });
+    // Pass the error to the next middleware (e.g., error handling middleware)
+    next(error);
   }
 });
 

@@ -1,33 +1,23 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import { sequelize } from '@config/database';  // Correct path alias for database config
-import userRouter from '@routes/user';  // Correct path alias for userRouter
+// src/types/index.ts
+import { Request } from 'express';
 
-dotenv.config();
+// Define the UserPayload interface
+export interface UserPayload {
+  id: string;
+  email?: string;  // Email is optional, matching the user model
+  username?: string;  // Username is optional
+  role: string;  // Role added to the UserPayload, which is required
+  tier?: string;  // Tier added, optional field for paid/free user
+}
 
-const app = express();
-const port = process.env.PORT || 3000;
+// Extend the Express Request interface to include the 'user' property
+declare module 'express' {
+  export interface Request {
+    user?: UserPayload;  // Add user property of type UserPayload to Request
+  }
+}
 
-// Middleware setup
-app.use(express.json());  // For parsing JSON requests
-app.use(cors());  // For handling Cross-Origin Resource Sharing
-
-// Mount the userRouter at /api/users
-app.use('/api/users', userRouter);  // Correct use of app.use() with router
-
-// Sync Sequelize models
-sequelize.sync({ alter: true })
-  .then(() => {
-    console.log('Models are synchronized with the database.');
-  })
-  .catch((error: Error) => {
-    console.error('Error syncing models:', error);
-  });
-
-// Start the server
-const server = app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
-export { app, server };
+// Optionally, you can define a custom AuthRequest type that extends the Request type
+export interface AuthRequest extends Request {
+  user: UserPayload;  // Ensure user is required here, instead of optional
+}
