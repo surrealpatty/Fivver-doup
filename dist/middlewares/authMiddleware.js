@@ -12,8 +12,7 @@ const checkAuth = (req, // Use the correct type here
 res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
-        res.status(401).json({ message: 'Authorization token is missing' });
-        return; // Ensure function returns when response is sent
+        return res.status(401).json({ message: 'Authorization token is missing' });
     }
     try {
         // Verify the token
@@ -24,8 +23,7 @@ res, next) => {
         next();
     }
     catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token' });
-        return; // Ensure function returns when response is sent
+        return res.status(401).json({ message: 'Invalid or expired token' });
     }
 };
 exports.checkAuth = checkAuth;

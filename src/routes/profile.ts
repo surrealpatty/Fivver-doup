@@ -1,5 +1,3 @@
-// src/routes/profile.ts
-
 import express, { Request, Response, NextFunction } from 'express';  // Import necessary types
 import Service from '@models/services';  // Ensure correct import for Service model
 import { User } from '@models/user';  // Assuming there is a User model for user details
@@ -10,7 +8,7 @@ const router = express.Router();
 
 // Profile route to get the user's info and their services
 router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-  const userId = req.user?.id; // Get user ID from the authenticated token
+  const userId = req.user?.id;  // Get user ID from the authenticated token
 
   if (!userId) {
     res.status(400).json({ message: 'User ID not found in token' });

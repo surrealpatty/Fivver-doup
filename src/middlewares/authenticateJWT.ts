@@ -1,4 +1,3 @@
-// src/middlewares/authenticateJWT.ts
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types';  // Correct import path

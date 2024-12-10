@@ -27,6 +27,12 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
 User.init(
   {
+    id: {  // Add the id field to the model definition
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,  // Ensure id is auto-incremented
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
