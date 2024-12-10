@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/authMiddleware';  // Correct relative path
-import { authenticateJWT } from '../middlewares/authMiddleware'; // Corrected import for authenticateJWT
+import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import
 
 const router = Router();
 

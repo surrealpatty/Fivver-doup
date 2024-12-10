@@ -1,5 +1,4 @@
 "use strict";
-// src/middlewares/roleMiddleware.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkRole = void 0;
 const checkRole = (requiredRole) => {
