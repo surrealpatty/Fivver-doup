@@ -10,6 +10,11 @@ dotenv.config(); // Load environment variables from .env
 
 const router = Router();
 
+// Define a custom AuthRequest interface to include user
+interface AuthRequest extends Request {
+  user?: { id: string; email?: string; username?: string; role?: string; tier?: string };
+}
+
 // Login Route (for generating JWT)
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -47,7 +52,7 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 // Protected Route Example: Access profile with JWT
-router.get('/profile', authenticateJWT, (req: AuthRequest, res: Response) => {
+router.get('/profile', authenticateToken, (req: AuthRequest, res: Response) => {
   // Access user info from the request
   const user = req.user;
   if (!user) {
