@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { sequelize } from '@config/database';  // Path alias for database config
-import userRouter from '@routes/user';  // Path alias for userRouter
+import { sequelize } from '@config/database';  // Correct path alias for database config
+import userRouter from '@routes/user';  // Correct path alias for userRouter
 
 dotenv.config();
 

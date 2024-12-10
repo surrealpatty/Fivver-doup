@@ -1,32 +1,45 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "baseUrl": "./src",    // Ensure this is inside the `src` folder
+    "target": "ES2020",                          // Target modern JavaScript features
+    "module": "commonjs",                        // Use CommonJS modules for Node.js compatibility
+    "moduleResolution": "node",                  // Resolve modules like Node.js
+    "esModuleInterop": true,                     // Enable interoperability between CommonJS and ES modules
+    "skipLibCheck": true,                        // Skip type checking of declaration files for faster compilation
+    "strict": true,                              // Enable strict type checking
+    "skipDefaultLibCheck": true,                 // Skip checking the default library
+    "forceConsistentCasingInFileNames": true,    // Ensure consistent casing in file names
+    "resolveJsonModule": true,                   // Allow importing of JSON files as modules
+    "allowSyntheticDefaultImports": true,        // Allow default imports from modules without a default export
+    "experimentalDecorators": true,              // Enable experimental support for decorators
+    "emitDecoratorMetadata": true,               // Emit metadata for decorators (useful for TypeORM, etc.)
+    "typeRoots": [
+      "./node_modules/@types"                    // Only the default type roots, including node_modules
+    ],
+    "baseUrl": "./",                             // Set base directory for module resolution
     "paths": {
-      "@models/*": ["models/*"],
-      "@controllers/*": ["controllers/*"],
-      "@routes/*": ["routes/*"],
-      "@config/*": ["config/*"],
-      "@middlewares/*": ["middlewares/*"]
+      "@models/*": ["src/models/*"],             // Alias for models directory
+      "@controllers/*": ["src/controllers/*"],   // Alias for controllers directory
+      "@routes/*": ["src/routes/*"],              // Alias for routes directory
+      "@config/*": ["src/config/*"],              // Alias for config directory
+      "@middlewares/*": ["src/middlewares/*"]     // Alias for middlewares directory
     },
-    "outDir": "./dist",     // Outputs compiled files in the `dist` folder
-    "rootDir": "./src",     // Set root directory for source files
-    "lib": ["ES2020"],
-    "allowJs": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "outDir": "./dist",                          // Output compiled files to the dist folder
+    "rootDir": "./src",                          // Root directory of source files
+    "lib": ["ES2020", "ESNext"],                 // Include libraries like ES2020 and ESNext for full JS support
+    "allowJs": true,                             // Allow JS files in TypeScript project
+    "declaration": true,                         // Generates .d.ts declaration files
+    "declarationMap": true,                      // Generates source maps for .d.ts files
+    "sourceMap": true                            // Generate source maps for debugging
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",                              // Include all TypeScript files in the src folder
+    "src/test/**/*.ts"                          // Include test files in the src/test folder
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules",                             // Exclude node_modules from compilation
+    "dist",                                     // Exclude dist folder
+    "fivver-frontend",                          // Exclude frontend code
+    "jest.config.ts",                           // Exclude Jest config file
+    "jest.setup.ts"                             // Exclude Jest setup file
   ]
 }
