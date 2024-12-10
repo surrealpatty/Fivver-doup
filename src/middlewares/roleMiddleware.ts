@@ -1,16 +1,16 @@
+// src/middlewares/roleMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest if needed
-import { UserPayload } from 'src/types/index'; // Correct path for your types
+import { UserPayload } from 'src/types/index';  // Ensure correct path
 
-
-// Extend the Request interface locally
+// Extend the Request interface locally to include user
 interface CustomAuthRequest extends Request {
-  user?: UserPayload;
+  user?: UserPayload;  // user is optional, typed as UserPayload
 }
 
+// Middleware to check the role of the user
 const checkRole = (requiredRole: string) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
-    const user = req.user;
+  return (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+    const user = req.user;  // `user` can be undefined
 
     if (!user || !user.role) {
       return res.status(403).json({ message: 'User role is missing or not authorized' });

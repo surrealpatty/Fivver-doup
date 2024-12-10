@@ -10,6 +10,7 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
+  role?: string;  // Add role as optional, or required based on your needs
   tier: "free" | "paid";  // Add this line
 }
 
