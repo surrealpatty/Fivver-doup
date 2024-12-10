@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const jwtSecret = process.env.JWT_SECRET; // Assert type as string
+const jwtSecret = process.env.JWT_SECRET; // Type assertion for jwtSecret
 if (!jwtSecret) {
     console.error('JWT_SECRET is not set. Authentication will fail.');
 }
+// Middleware to authenticate JWT tokens
 const authenticateToken = (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];

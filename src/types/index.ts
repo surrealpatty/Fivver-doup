@@ -1,7 +1,8 @@
+// src/types/index.ts
 export interface UserPayload {
-  id: string;
-  email: string | undefined;  // Email can be either string or undefined
-  username: string;
-  tier: 'free' | 'paid';      // Ensures tier is either 'free' or 'paid'
-  [key: string]: any;         // Optional: Allow additional properties in the future
+  id: string;         // User ID, should be a string
+  email?: string;     // Email can be a string or undefined (optional field)
+  username?: string;  // Username can be a string or undefined (optional field)
+  tier: 'free' | 'paid';  // Tier can only be 'free' or 'paid'
+  [key: string]: any; // Optional: Allow additional properties for future expansion
 }
