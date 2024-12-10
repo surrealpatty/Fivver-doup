@@ -1,12 +1,13 @@
-// src/middlewares/tierRestriction.ts
-import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types';  // Correct import path
+// src/middlewares/tierMiddleware.ts
+import { AuthRequest } from '../types'; // Ensure correct import of AuthRequest
 
-// Middleware function to check the user's tier
-export const checkPaidTier = (req: AuthRequest, res: Response, next: NextFunction) => {
-  // Ensure that req.user is defined before accessing its properties
-  if (!req.user || req.user.tier !== 'paid') {
-    return res.status(403).json({ message: 'Access restricted to paid tier users.' });
+export const tierMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const user = req.user; // User should be of type UserPayload
+
+  if (!user || user.tier !== 'paid') {
+    res.status(403).json({ message: 'Access restricted to paid users only.' });
+    return;
   }
-  next();
+
+  next();  // Allow access if the user is paid
 };

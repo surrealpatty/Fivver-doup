@@ -1,12 +1,12 @@
 // src/test/orderController.ts
 import { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware'; // Correct import for authenticateToken
-import { UserPayload } from '../types'; // Correct import for UserPayload
+import { UserPayload } from '../types';  // Correct import path
 
 // Mock request and response functions
 const mockRequest = (userPayload: UserPayload) => ({
-  headers: { authorization: 'Bearer valid-token' }, // Mock authorization header
-  user: userPayload, // Attach mock user payload to the request
+  headers: { authorization: 'Bearer valid-token' },
+  user: userPayload, // Attach userPayload to the request
 } as Request);
 
 const mockResponse = () => {

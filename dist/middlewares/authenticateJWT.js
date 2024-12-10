@@ -13,8 +13,10 @@ const authenticateJWT = (req, res, next) => {
         res.status(403).json({ message: 'No token provided.' });
         return; // Ensure that the middleware stops execution
     }
-    // Verify the token using the secret key (this is a synchronous check)
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    // Corrected jwt.verify usage, with options passed correctly
+    const secretKey = process.env.JWT_SECRET;
+    const options = { algorithms: ['HS256'] }; // Optional, based on your algorithm
+    jsonwebtoken_1.default.verify(token, secretKey, options, (err, decoded) => {
         if (err) {
             res.status(403).json({ message: 'Invalid token.' });
             return; // Ensure that the middleware stops execution

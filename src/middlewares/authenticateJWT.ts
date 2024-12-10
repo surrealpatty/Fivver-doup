@@ -1,43 +1,38 @@
+// src/middlewares/authenticateJWT.ts
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types';  // Correct import path
+import { AuthRequest } from '../types'; // Correct import path
 
-// Middleware to authenticate JWT and attach user info to the request
 export const authenticateJWT = (
   req: AuthRequest, 
   res: Response, 
   next: NextFunction
 ): void => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Extract token from Authorization header
+  const token = req.headers['authorization']?.split(' ')[1];  // Extract token
 
-  // If no token is provided, return a 403 response
   if (!token) {
     res.status(403).json({ message: 'No token provided.' });
-    return;  // Ensure that the middleware stops execution
+    return;
   }
 
-  // Corrected jwt.verify usage, with options passed correctly
-  const secretKey = process.env.JWT_SECRET!;
-  const options = { algorithms: ['HS256'] }; // Optional, based on your algorithm
-
-  jwt.verify(token, secretKey, options, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
+  // Verify the token with the correct options
+  const options = { algorithms: ['HS256'] };  // Specify the algorithm correctly
+  jwt.verify(token, process.env.JWT_SECRET!, options, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
     if (err) {
       res.status(403).json({ message: 'Invalid token.' });
-      return;  // Ensure that the middleware stops execution
+      return;
     }
 
-    // Ensure that decoded is not undefined
     if (decoded) {
-      // Attach the user object to the request, ensuring 'tier' and 'role' are included
       req.user = {
-        id: decoded.id,  // Explicitly access properties from decoded JwtPayload
+        id: decoded.id,
         email: decoded.email,
         username: decoded.username,
-        tier: decoded.tier,  // Include 'tier' from the JWT payload
-        role: decoded.role,  // Include 'role' from the JWT payload
+        tier: decoded.tier,
+        role: decoded.role,
       };
     }
 
-    next();  // Proceed to the next middleware or route handler
+    next();
   });
 };
