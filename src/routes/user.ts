@@ -3,7 +3,7 @@ import { User } from '@models/user';  // Ensure correct import for User model
 import { ValidationError } from 'sequelize';
 import { body, validationResult } from 'express-validator';
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
-import authenticateToken from '@middlewares/authenticateToken';  // Ensure correct path to middleware
+import { authenticateToken } from '@middlewares/authenticateToken'; // Use named import
 
 const router = Router();
 

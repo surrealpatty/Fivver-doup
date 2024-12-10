@@ -6,7 +6,7 @@ import { authenticateToken } from '../middlewares/authenticateToken'; // Correct
 const router = express.Router();
 
 // Profile route to get the user's info and their services
-router.get('/profile', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user?.id; // Get user ID from the authenticated token
 
   if (!userId) {

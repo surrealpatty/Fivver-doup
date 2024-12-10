@@ -5,7 +5,7 @@ import { getDashboardData } from '../controllers/dashboardController';  // Named
 const router = Router();
 
 // GET /dashboard route to fetch user dashboard data
-router.get('/dashboard', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     // Call the controller function to fetch the dashboard data
     await getDashboardData(req, res);
