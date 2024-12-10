@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import
 const router = (0, express_1.Router)();
 // POST route to create a new review
-router.post('/', authenticateJWT, async (req, res, next) => {
+router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
         // Ensure req.user is authenticated and has a tier
         if (req.user && req.user.tier) {
@@ -19,7 +20,7 @@ router.post('/', authenticateJWT, async (req, res, next) => {
     }
 });
 // GET route to fetch reviews for a specific service
-router.get('/:serviceId', authenticateJWT, async (req, res, next) => {
+router.get('/:serviceId', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
         if (req.user) {
             const serviceId = req.params.serviceId;
