@@ -1,6 +1,6 @@
 // src/middlewares/authMiddleware.ts
 
-import { AuthRequest } from '../types';  // Correct import for AuthRequest (named export)
+import { AuthRequest } from '../types';  // Correct import for AuthRequest
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Correct import of UserPayload
@@ -12,7 +12,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
   const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
 
   if (!token) {
-    return res.status(403).json({ message: 'Access denied, token not provided' });
+    return res.status(403).json({ message: 'Access denied, token not provided' });  // Return Response
   }
 
   try {
@@ -24,7 +24,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    res.status(400).json({ message: 'Invalid token' }); // Send response, no need to return from here
+    return res.status(400).json({ message: 'Invalid token' }); // Return Response
   }
 };
 
@@ -32,7 +32,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction): void => {
   // Ensure req.user is defined
   if (!req.user) {
-    return res.status(403).json({ message: 'User not authenticated' });
+    return res.status(403).json({ message: 'User not authenticated' });  // Return Response
   }
 
   // Proceed to the next middleware or route handler

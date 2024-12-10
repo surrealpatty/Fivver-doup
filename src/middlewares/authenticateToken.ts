@@ -1,39 +1,38 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middlewares/authenticateToken.ts
+
+import { AuthRequest, UserPayload } from '../types';  // Correct import for AuthRequest and UserPayload
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Ensure correct import of UserPayload
 
-const secretKey = 'your-secret-key'; // Replace with your actual secret key
+const secretKey = process.env.JWT_SECRET || 'your-secret-key'; // Use environment variable or fallback to default
 
-// Define the AuthRequest interface to extend Express' Request
-export interface AuthRequest extends Request {
-  user?: UserPayload; // Make user optional (UserPayload or undefined)
-}
+// Middleware to authenticate token
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
+  const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
 
-// Middleware to authenticate JWT token
-export const authenticateJWT = async (
-  req: AuthRequest, // Use AuthRequest type here
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    // Get token from the authorization header (assuming "Bearer token")
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (token) {
-      // Verify token
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          return res.status(403).json({ message: 'Token is not valid' });
-        }
-
-        // Type the decoded value as UserPayload
-        req.user = decoded as UserPayload; // Ensure it matches UserPayload structure
-        next(); // Proceed to the next middleware or route handler
-      });
-    } else {
-      res.status(401).json({ message: 'Unauthorized, no token provided' });
-    }
-  } catch (error) {
-    next(error); // Pass any error to the next error handler
+  if (!token) {
+    return res.status(403).json({ message: 'Access denied, token not provided' });
   }
+
+  try {
+    // Verify the token, assuming the decoded value matches UserPayload or undefined
+    const decoded = jwt.verify(token, secretKey) as UserPayload | undefined;
+
+    // Assign decoded to req.user with type UserPayload or undefined
+    req.user = decoded; // This will correctly handle undefined or a valid UserPayload
+
+    next(); // Proceed to the next middleware or route handler
+  } catch (error) {
+    return res.status(400).json({ message: 'Invalid token' }); // Return the response on error
+  }
+};
+
+// Middleware to check if the user is authenticated
+export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
+  // Ensure req.user is defined
+  if (!req.user) {
+    return res.status(403).json({ message: 'User not authenticated' });
+  }
+
+  next(); // Proceed to the next middleware or route handler
 };
