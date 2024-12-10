@@ -1,4 +1,3 @@
-// src/routes/api.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
 import { AuthRequest } from '../types/index'; // Import the correct path for AuthRequest
@@ -13,7 +12,8 @@ export const checkAuth = (
   res: Response,
   next: NextFunction
 ): void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
+  // Use req.get() to safely access the authorization header
+  const token = req.get('authorization')?.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
     res.status(401).json({ message: 'Authorization token is missing' });
