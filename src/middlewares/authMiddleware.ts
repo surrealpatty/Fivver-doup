@@ -1,31 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middlewares/authMiddleware.ts
+
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from './authenticateToken'; // Ensure correct import of AuthRequest
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index'; // Update the relative path
+import { UserPayload } from '../types'; // Ensure correct import of UserPayload
 
-const secretKey = 'your-secret-key'; // Replace with your actual secret key
+// Middleware to authenticate token
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
+  const token = req.header('Authorization'); // Retrieve token from the 'Authorization' header
 
-export const authenticateJWT = async (
-  req: Request, 
-  res: Response, 
-  next: NextFunction
-): Promise<void> => {
+  if (!token) {
+    return res.status(403).json({ message: 'Access denied, token not provided' });
+  }
+
   try {
-    const token = req.headers.authorization?.split(' ')[1]; // Get token from header
+    // Verify the token, assuming the decoded value matches UserPayload or undefined
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as UserPayload | undefined;
 
-    if (token) {
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          return res.status(403).json({ message: 'Token is not valid' });
-        }
+    // Assign decoded to req.user with type UserPayload or undefined
+    req.user = decoded; // This will correctly handle undefined or a valid UserPayload
 
-        // Type the decoded value as UserPayload
-        req.user = decoded as UserPayload; // Ensure it matches UserPayload structure
-        next(); // Proceed to the next middleware or route handler
-      });
-    } else {
-      res.status(401).json({ message: 'Unauthorized, no token provided' });
-    }
+    next(); // Call the next middleware or route handler
   } catch (error) {
-    next(error); // Pass any error to the next error handler
+    res.status(400).json({ message: 'Invalid token' });
   }
 };

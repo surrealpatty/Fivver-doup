@@ -1,9 +1,11 @@
-import { Router, Request, Response } from 'express';
-import { User } from '@models/user';  // Ensure correct import for User model
-import { ValidationError } from 'sequelize';
-import { body, validationResult } from 'express-validator';
+// src/routes/user.ts
+
+import { Router, Request, Response } from 'express'; // Import necessary types
+import { User } from '@models/user';  // Correct import for User model
+import { ValidationError } from 'sequelize'; // Import ValidationError for handling Sequelize errors
+import { body, validationResult } from 'express-validator'; // Express validation middleware
 import { Op } from 'sequelize';  // Import Sequelize 'Op' for the OR condition
-import { authenticateJWT } from '@middlewares/authenticateToken';  // Correct import
+import { authenticateJWT } from '@middlewares/authenticateToken';  // Correct import for authenticateJWT middleware
 
 const router = Router();
 
@@ -25,7 +27,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() });
-      return; // Ensure we stop further processing
+      return; // Ensure we stop further processing if validation fails
     }
 
     const { email, username, password } = req.body;
@@ -74,8 +76,8 @@ router.post(
 );
 
 // Route for accessing premium content (tier-based restrictions)
-router.get('/premium-content', authenticateToken, async (req: Request, res: Response): Promise<void> => {
-  const userId = req.user?.id;
+router.get('/premium-content', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
+  const userId = req.user?.id;  // Ensure the user is retrieved from the token
 
   try {
     const user = await User.findByPk(userId);
@@ -84,6 +86,7 @@ router.get('/premium-content', authenticateToken, async (req: Request, res: Resp
       return;
     }
 
+    // Check if the user is on the 'paid' tier
     if (user.tier !== 'paid') {
       res.status(403).json({ message: 'Access restricted to paid users only' });
       return;

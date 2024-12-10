@@ -8,12 +8,3 @@ export interface UserPayload {
   tier: 'free' | 'paid';  // Enum-like field for user tier
   [key: string]: any;  // Allow for additional properties if necessary
 }
-
-// Example of adding a custom type for a service:
-export interface ServicePayload {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  userId: string;
-}

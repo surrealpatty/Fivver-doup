@@ -1,12 +1,14 @@
+// src/middlewares/authenticateToken.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Make sure types.ts exports UserPayload
+import { UserPayload } from '../types'; // Ensure correct import of UserPayload
 
 const secretKey = 'your-secret-key'; // Replace with your actual secret key
 
 // Define the AuthRequest interface to extend Express' Request
 export interface AuthRequest extends Request {
-  user?: UserPayload; // user is of type UserPayload or undefined
+  user?: UserPayload; // user is optional, UserPayload or undefined
 }
 
 // Middleware to authenticate JWT token
@@ -16,7 +18,7 @@ export const authenticateJWT = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]; // Get token from header
+    const token = req.headers.authorization?.split(' ')[1]; // Get token from the authorization header
 
     if (token) {
       jwt.verify(token, secretKey, (err, decoded) => {
