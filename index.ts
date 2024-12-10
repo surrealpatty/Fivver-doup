@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
+import express from 'express';
 import dotenv from 'dotenv';
-import { sequelize } from '@config/database';  // Use the path alias for the database config
-import { userRouter } from '@routes/user';  // Correctly import userRouter
+import cors from 'cors';
+import { sequelize } from '@config/database';  // Path alias for database config
+import userRouter from '@routes/user';  // Path alias for userRouter
 
 dotenv.config();
 
@@ -10,8 +10,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware setup
-app.use(express.json());
-app.use(cors());
+app.use(express.json());  // For parsing JSON requests
+app.use(cors());  // For handling Cross-Origin Resource Sharing
 
 // Mount the userRouter at /api/users
 app.use('/api/users', userRouter);  // Correct use of app.use() with router
