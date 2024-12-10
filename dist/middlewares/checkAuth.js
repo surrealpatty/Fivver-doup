@@ -17,8 +17,12 @@ const checkAuth = (req, res, next) => {
     try {
         // Verify the token
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
+        // Ensure the email is optional as expected
+        if (decoded.email === undefined) {
+            console.warn('User payload is missing email');
+        }
         // Attach user information to the request object for further use in the route
-        req.user = decoded;
+        req.user = decoded; // Type assertion to ensure `req.user` has the correct type
         // Proceed to the next middleware or route handler
         next();
     }
