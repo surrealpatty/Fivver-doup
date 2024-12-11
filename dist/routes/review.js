@@ -16,6 +16,8 @@ router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
     }
     catch (err) {
         next(err); // Pass errors to the error handler
+        // Explicit return in case of an error, although next(err) would terminate the request processing
+        return res.status(500).json({ message: 'Server error' });
     }
 });
 // GET route to fetch reviews for a specific service
@@ -32,6 +34,8 @@ router.get('/:serviceId', authMiddleware_1.authenticateToken, async (req, res, n
     }
     catch (err) {
         next(err); // Pass errors to the error handler
+        // Explicit return in case of an error, although next(err) would terminate the request processing
+        return res.status(500).json({ message: 'Server error' });
     }
 });
 exports.default = router;

@@ -1,5 +1,4 @@
 "use strict";
-// src/middleware/authenticateToken.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,25 +11,23 @@ const authenticateToken = (req, // Ensure req is typed as AuthRequest
 res, next) => {
     const authorizationHeader = req.headers['authorization'];
     if (!authorizationHeader) {
-        // Send a response and do not return anything
-        res.status(401).json({ message: 'Authorization token is missing or invalid' });
-        return; // Ensure no further code execution
+        res.status(401).json({ message: 'Authorization token is missing or invalid' }); // Send response without returning
+        return; // Stop further execution
     }
     const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
-        // Send a response and do not return anything
-        res.status(401).json({ message: 'Authorization token is missing' });
-        return; // Ensure no further code execution
+        res.status(401).json({ message: 'Authorization token is missing' }); // Send response without returning
+        return; // Stop further execution
     }
     try {
         // Verify the token and set user payload
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        req.user = decoded; // TypeScript now knows req.user is of type UserPayload
+        req.user = decoded; // Explicitly set req.user as UserPayload
         next(); // Proceed to the next middleware or route handler
     }
     catch (error) {
-        // Send a response and do not return anything
-        res.status(401).json({ message: 'Invalid or expired token' });
+        res.status(401).json({ message: 'Invalid or expired token' }); // Send response without returning
+        return; // Stop further execution
     }
 };
 exports.authenticateToken = authenticateToken;
@@ -38,9 +35,8 @@ exports.authenticateToken = authenticateToken;
 const ensureUser = (req, // Ensure req is typed as AuthRequest
 res, next) => {
     if (!req.user) {
-        // Send a response and do not return anything
-        res.status(401).json({ message: 'Unauthorized: User not authenticated' });
-        return; // Ensure no further code execution
+        res.status(401).json({ message: 'Unauthorized: User not authenticated' }); // Send response without returning
+        return; // Stop further execution
     }
     next(); // Proceed to the next middleware or route handler
 };
