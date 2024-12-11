@@ -1,5 +1,4 @@
 "use strict";
-// src/types/index.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isUser = isUser;
 // Type guard function to check if req.user is a UserPayload

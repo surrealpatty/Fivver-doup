@@ -7,12 +7,13 @@ export interface UserPayload {
   email?: string;
   username?: string;
   tier?: 'free' | 'paid';  // Add the 'tier' property with possible values
+  user?: UserPayload;
 }
 
 // Extend Express's Request interface to include the user property and get method
 export interface AuthRequest extends Request {
-  user: UserPayload;  // Ensure 'user' is always defined
-  get(name: string): string | undefined;  // Include 'get' method to match Express's signature
+  user?: UserPayload;  // Make 'user' optional in case authentication fails
+  get(name: string): string | string[] | undefined;  // Ensure 'get' matches Express' signature
 }
 
 // Type guard function to check if req.user is a UserPayload
