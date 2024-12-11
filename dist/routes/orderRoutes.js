@@ -6,15 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
 const authenticateToken_1 = require("../middlewares/authenticateToken");
-const types_1 = require("../types"); // Correct import for isUserPayload
-const orderController_1 = require("../controllers/orderController");
+const types_1 = require("../types"); // Assuming isUserPayload is correctly imported
+const orderController_1 = require("../controllers/orderController"); // Ensure createOrder is correctly imported
 const router = express_1.default.Router();
 // Define the handler for creating an order
 const createOrderHandler = async (req, res, next) => {
     if ((0, types_1.isUserPayload)(req.user)) { // Use the type guard to ensure user is valid
         try {
-            // Proceed with order creation logic
-            await (0, orderController_1.createOrder)(req, res);
+            // Proceed with order creation logic, passing the correct request body
+            const orderData = {
+                userId: req.user.id, // Assuming req.user contains `id` and `tier`
+                serviceId: req.body.serviceId,
+                orderDetails: req.body.orderDetails,
+                status: 'pending', // Set default status or customize as needed
+            };
+            await (0, orderController_1.createOrder)(orderData, res); // Pass orderData to createOrder
         }
         catch (err) {
             next(err); // Pass errors to the next middleware
