@@ -1,7 +1,6 @@
 // src/routes/orderRoutes.ts
-
 import express, { Request, Response, RequestHandler } from 'express';
-import { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder } from '../controllers/orderController';
+import { createOrder } from '../controllers/orderController';
 import { UserPayload } from '../types';  // Correct import path to your types
 
 const router = express.Router();
@@ -20,7 +19,7 @@ interface OrderRequest extends Request {
 }
 
 // Define the handler types
-const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest> = async (req: OrderRequest, res: Response) => {
+const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest, {}> = async (req: OrderRequest, res: Response) => {
   try {
     // Ensure that the user is available and has the necessary 'tier' property
     if (!req.user || !req.user.tier) {
@@ -37,6 +36,6 @@ const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest> = async (re
 // Route to create an order
 router.post('/', createOrderHandler);
 
-// Other routes can follow the same pattern...
+// Other routes (getAllOrders, getOrderById, updateOrder, deleteOrder) can follow the same pattern
 
 export default router;
