@@ -1,26 +1,26 @@
-import express, { Request, Response, NextFunction } from 'express';
+// src/routes/service.ts
+import express, { Response, NextFunction } from 'express';
 import Service from '../models/services';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest
+import { AuthRequest } from '../types/authMiddleware';
 
 const router = express.Router();
 
-// Service route to get the user's services
 router.get('/services', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-  const userId = req.user?.id;  // Get user ID from the authenticated token
-
-  if (!userId) {
-    res.status(400).json({ message: 'User ID not found in token' });
-    return;
+  if (!req.user) {
+    res.status(401).json({ message: 'User not authenticated' });
+    return; // Explicitly return after sending the response
   }
 
+  const userId = req.user.id;  // Now it's safe to access `req.user.id`
+  const userTier = req.user.tier;  // Now it's safe to access `req.user.tier`
+
   try {
-    // Fetch the services for the authenticated user
     const services = await Service.findAll({ where: { userId } });
 
     res.status(200).json({
       message: 'User services retrieved successfully',
-      services,  // Return the user's services
+      services,
     });
   } catch (err) {
     console.error(err);

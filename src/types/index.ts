@@ -6,8 +6,8 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: 'free' | 'paid';  // Ensure 'tier' is defined
-  role?: string; // Add role property if necessary
+  tier: string;  // `tier` is now required
+  role?: string; // Optional, if you want to include roles
 }
 
 // Define the AuthRequest interface by extending the Express Request interface
