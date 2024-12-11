@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isUser = void 0;
+// Type guard function to ensure req.user is typed as UserPayload
+const isUser = (user) => {
+    return user && typeof user.id === 'string' && typeof user.tier === 'string'; // Adjust the condition based on your user model
+};
 exports.isUser = isUser;
-// Define the type guard to check if the user is present
-function isUser(req) {
-    return req.user !== undefined; // Explicitly check for undefined
-}
 //# sourceMappingURL=index.js.map

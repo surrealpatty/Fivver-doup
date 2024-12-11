@@ -1,5 +1,4 @@
 "use strict";
-// src/routes/orderRoutes.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,11 +11,11 @@ const router = express_1.default.Router();
 // Route to create an order
 router.post('/', authenticateToken_1.default, async (req, res, next) => {
     // Use the isUser guard to check if the user is authenticated
-    if (!(0, types_1.isUser)(req)) {
+    if (!(0, types_1.isUser)(req.user)) {
         return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
     }
     try {
-        // Now TypeScript knows req.user is defined
+        // Now TypeScript knows req.user is defined as UserPayload
         const { tier } = req.user; // Safe to access since isUser ensures user is defined
         if (!tier) {
             // Handle case where the user doesn't have a tier
