@@ -1,8 +1,9 @@
-// src/middlewares/authenticateToken.ts
+// src/middleware/authenticateToken.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types';  // Import your custom type for AuthRequest
-import { UserPayload } from '../types';  // Import your custom type for UserPayload
+import { AuthRequest } from '../types';  // Correctly importing AuthRequest from src/types
+import { UserPayload } from '../types';  // Import UserPayload from the types file
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
@@ -39,6 +40,21 @@ export const authenticateToken = (
     // Send a response and do not return anything
     res.status(401).json({ message: 'Invalid or expired token' });
   }
+};
+
+// Middleware to ensure the user is present in the request
+export const ensureUser = (
+  req: AuthRequest,  // Ensure req is typed as AuthRequest
+  res: Response,
+  next: NextFunction
+): void => {
+  if (!req.user) {
+    // Send a response and do not return anything
+    res.status(401).json({ message: 'Unauthorized: User not authenticated' });
+    return;  // Ensure no further code execution
+  }
+
+  next();  // Proceed to the next middleware or route handler
 };
 
 export default authenticateToken;
