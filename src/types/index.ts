@@ -1,3 +1,4 @@
+// src/types/index.ts
 import { Request } from 'express';
 import { UserPayload } from './user';  // Adjust the import path if necessary
 

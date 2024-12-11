@@ -1,7 +1,8 @@
+// src/routes/service.ts
 import express, { Response, NextFunction } from 'express';
-import Service from '../models/services';
 import { authenticateToken } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types';  // Import AuthRequest
+import { AuthRequest } from '../types';  // Correct import for AuthRequest
+import Service from '../models/services';
 
 const router = express.Router();
 

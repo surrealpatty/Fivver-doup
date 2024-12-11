@@ -1,15 +1,16 @@
+// src/routes/orderRoutes.ts
 import express, { Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken
-import { AuthRequest, isUser } from '../types';  // Correct import for isUser type guard
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken
+import { AuthRequest, isUser } from '../types';  // Correct import for AuthRequest and isUser type guard
 import { createOrder } from '../controllers/orderController';
 
 const router = express.Router();
 
 // Route to create an order
 router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  // Use the isUser guard to check if the user is authenticated
-  if (!isUser(req.user)) {
-    return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+  // Ensure that req.user is defined and is of the correct type
+  if (!req.user || !isUser(req.user)) {
+    return res.status(400).json({ message: 'User not authenticated or invalid user data' });
   }
 
   try {
@@ -18,7 +19,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next
 
     if (!tier) {
       // Handle case where the user doesn't have a tier
-      return res.status(401).json({ error: 'User does not have a valid tier' });
+      return res.status(400).json({ error: 'User does not have a valid tier' });
     }
 
     // Proceed with order creation logic
