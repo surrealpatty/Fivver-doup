@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/profile.ts
 const express_1 = __importDefault(require("express"));
-const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import for authenticateToken
+const authMiddleware_1 = require("../middlewares/authMiddleware");
 const services_1 = __importDefault(require("../models/services")); // Correct import for the Service model
 const user_1 = require("../models/user"); // Correct import for the User model
 const router = express_1.default.Router();
 // GET profile route
-router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
+router.get('/profile', authMiddleware_1.authenticateToken, async (req, res, next) => {
     // Ensure that req.user exists and contains both 'id' and 'tier'
     if (!req.user || !req.user.id || !req.user.tier) {
         return res.status(401).json({ message: 'User not authenticated or missing tier information' });
@@ -40,7 +40,7 @@ router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, n
     }
 });
 // PUT profile route
-router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
+router.put('/profile', authMiddleware_1.authenticateToken, async (req, res, next) => {
     // Ensure that req.user exists and contains both 'id' and 'tier'
     if (!req.user || !req.user.id || !req.user.tier) {
         return res.status(401).json({ message: 'User not authenticated or missing tier information' });
