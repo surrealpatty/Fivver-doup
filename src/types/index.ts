@@ -1,4 +1,3 @@
-// src/types/index.ts
 import { Request } from 'express';
 import { UserPayload } from './user';  // Assuming UserPayload is in 'user.ts'
 
@@ -19,3 +18,6 @@ export interface CreateOrderRequest {
   orderDetails: string;
   status: string;
 }
+
+// Export UserPayload for use in other files
+export { UserPayload } from './user';  // Exporting UserPayload from 'user.ts'
