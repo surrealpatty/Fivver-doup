@@ -1,7 +1,7 @@
 // src/routes/orderRoutes.ts
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { isUserPayload, OrderRequest, CreateOrderRequest } from '../types';  // Correct imports
+import { isUserPayload } from '../types';  // Correct import
 import { createOrder } from '../controllers/orderController';  // Ensure createOrder is correctly imported
 
 const router = express.Router();
