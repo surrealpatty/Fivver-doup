@@ -1,12 +1,5 @@
-// src/types/index.ts
 import { Request } from 'express';
-import { UserPayload } from './user';  // Assuming UserPayload is defined in 'user.ts'
-
-export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-}
+import { UserPayload } from './user';  // Import UserPayload from 'user.ts'
 
 export interface AuthRequest extends Request {
   user?: UserPayload;  // User can be undefined

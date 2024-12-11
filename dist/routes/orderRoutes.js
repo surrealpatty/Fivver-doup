@@ -11,13 +11,13 @@ const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
 // Route to create an order
 router.post('/', authenticateToken_1.default, async (req, res, next) => {
+    // Use the isUser guard to check if the user is authenticated
     if (!(0, types_1.isUser)(req)) {
-        // Handle the case where user is not authenticated
         return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
     }
     try {
-        // Now that TypeScript knows req.user is defined, you can safely use it
-        const { tier } = req.user; // Destructure to get tier, you can check additional properties too
+        // Now TypeScript knows req.user is defined
+        const { tier } = req.user; // Safe to access since isUser ensures user is defined
         if (!tier) {
             // Handle case where the user doesn't have a tier
             return res.status(401).json({ error: 'User does not have a valid tier' });
@@ -28,7 +28,6 @@ router.post('/', authenticateToken_1.default, async (req, res, next) => {
         return res.status(201).json({ message: 'Order created successfully' });
     }
     catch (err) {
-        // Log the error and send a generic internal server error
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
     }
