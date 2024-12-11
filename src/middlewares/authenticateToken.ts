@@ -1,23 +1,44 @@
 // src/middlewares/authenticateToken.ts
-import { NextFunction, Response } from 'express';
-import { AuthRequest } from '../types'; // Import AuthRequest type
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthRequest } from '../types';  // Import your custom type for AuthRequest
+import { UserPayload } from '../types';  // Import your custom type for UserPayload
 
-const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void | Response => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Assuming Bearer token
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' });
+// Middleware to check if the user is authenticated
+export const authenticateToken = (
+  req: AuthRequest,  // Ensure req is typed as AuthRequest
+  res: Response,
+  next: NextFunction
+): void => {
+  const authorizationHeader = req.headers['authorization'] as string | undefined;
+
+  if (!authorizationHeader) {
+    // Send a response and do not return anything
+    res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    return;  // Ensure no further code execution
   }
 
-  jwt.verify(token, process.env.JWT_SECRET!, (err: any, user: any) => {
-    if (err) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
+  const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
-    req.user = user || undefined;  // Assign user or undefined if invalid
-    next();
-  });
+  if (!token) {
+    // Send a response and do not return anything
+    res.status(401).json({ message: 'Authorization token is missing' });
+    return;  // Ensure no further code execution
+  }
+
+  try {
+    // Verify the token and set user payload
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
+
+    req.user = decoded;  // TypeScript now knows req.user is of type UserPayload
+
+    next();  // Proceed to the next middleware or route handler
+  } catch (error) {
+    // Send a response and do not return anything
+    res.status(401).json({ message: 'Invalid or expired token' });
+  }
 };
 
 export default authenticateToken;
