@@ -18,6 +18,7 @@
     ],
     "baseUrl": "./",                             // Set the base directory for module resolution
     "paths": {
+      "@types/*": ["src/types/*"],               // Alias for types directory
       "@models/*": ["src/models/*"],             // Alias for models directory
       "@controllers/*": ["src/controllers/*"],   // Alias for controllers directory
       "@routes/*": ["src/routes/*"],              // Alias for routes directory
