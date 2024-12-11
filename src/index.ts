@@ -1,5 +1,3 @@
-// src/index.ts
-
 // Import necessary modules
 import express, { Request, Response, NextFunction } from 'express';  // Import Express and types
 import cors from 'cors';                                           // Import CORS middleware
@@ -27,15 +25,6 @@ app.get('/', (_req: Request, res: Response) => {
   res.send('Welcome to Fiverr Clone!');
 });
 
-// Synchronize models with the database
-sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
-  .then(() => {
-    console.log('Models are synchronized with the database.');
-  })
-  .catch((error: Error) => {
-    console.error('Error syncing models:', error);
-  });
-
 // Use the userRouter for routes starting with /api/users
 app.use('/api/users', userRouter); // Register the user routes under /api/users
 
@@ -44,6 +33,15 @@ app.use('/api/profile', profileRouter); // Register profile route
 
 // Register the auth route under /api/auth
 app.use('/api/auth', authRouter); // Register auth route for user registration/login
+
+// Synchronize models with the database
+sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
+  .then(() => {
+    console.log('Models are synchronized with the database.');
+  })
+  .catch((error: Error) => {
+    console.error('Error syncing models:', error);
+  });
 
 // Test database connection
 sequelize.authenticate()

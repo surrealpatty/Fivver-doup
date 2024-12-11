@@ -1,14 +1,15 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { registerUser } from '../controllers/userController';
 
 const userRouter = Router();
 
-// Correct route handler signature
-userRouter.get('/', (req: Request, res: Response, next: NextFunction): void => {
+// Define the /register POST route
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // Add your route logic here
-    res.status(200).json({ message: 'User routes are working!' });
+    // Call the registerUser controller to handle the registration logic
+    await registerUser(req, res);
   } catch (error) {
-    // Handle any errors by passing them to the next middleware
+    // If an error occurs, pass it to the next middleware
     next(error);
   }
 });
