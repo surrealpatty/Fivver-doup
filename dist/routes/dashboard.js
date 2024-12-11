@@ -2,22 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/dashboard.ts
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authenticateToken_1 = require("../middleware/authenticateToken");
 const router = (0, express_1.Router)();
-// GET route for the dashboard
-router.get('/dashboard', authMiddleware_1.authenticateToken, async (req, res, next) => {
-    try {
-        // Ensure req.user is properly typed and available
-        if (!req.user) {
-            // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
-            res.status(200).json({ message: 'Dashboard data fetched successfully.' });
-        }
-        else {
-            res.status(400).json({ message: 'User not authenticated.' });
-        }
+// Update the route handler to handle 'user' being possibly undefined
+router.get('/dashboard', authenticateToken_1.authenticateToken, async (req, res, next) => {
+    const user = req.user; // The user property could be undefined
+    if (!user) {
+        // Handle the case where the user is not authenticated
+        res.status(401).json({ message: 'User not authenticated' });
+        return;
     }
-    catch (err) {
-        next(err); // Pass errors to the error handler
+    try {
+        // Proceed with logic assuming 'user' is defined
+        res.status(200).json({ message: 'Welcome to your dashboard!', user });
+    }
+    catch (error) {
+        next(error);
     }
 });
 exports.default = router;

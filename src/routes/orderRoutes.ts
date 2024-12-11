@@ -1,6 +1,6 @@
 // src/routes/orderRoutes.ts
 import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
+import { authenticateToken } from '../middleware/authMiddleware';
 import { CreateOrderRequest, AuthRequest } from '../types';  // Correct imports for types
 import { createOrder } from '../controllers/orderController';
 
