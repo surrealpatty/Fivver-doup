@@ -1,37 +1,20 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuth = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // JWT for verifying tokens
-// Secret key for JWT verification, you should store it in an environment variable for security
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
-// Middleware to check if the user is authenticated
-const checkAuth = (req, // Use AuthRequest instead of Request
-res, next) => {
-    // Use req.get() to safely access the authorization header
-    const token = req.get('authorization')?.split(' ')[1]; // Assuming token is passed as "Bearer token"
-    if (!token) {
-        res.status(401).json({ message: 'Authorization token is missing' });
-        return; // Ensure function returns when response is sent
+// src/routes/api.ts
+const express_1 = require("express");
+const checkAuth_1 = require("../middlewares/checkAuth"); // Assuming checkAuth is in the middlewares folder
+const router = (0, express_1.Router)();
+// Example route that requires authentication
+router.get('/some-endpoint', checkAuth_1.checkAuth, (req, res) => {
+    // Now req.user should be available and correctly typed
+    if (req.user) {
+        // Respond with the user information
+        res.status(200).json({ message: 'Authenticated', user: req.user });
     }
-    try {
-        // Verify the token
-        const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        // Handle the case where email is optional and may be undefined
-        if (decoded.email === undefined) {
-            console.warn('User payload is missing email');
-        }
-        // Attach user information to the request object for further use in the route
-        req.user = decoded; // TypeScript will now know req.user is of type AuthRequest
-        // Proceed to the next middleware or route handler
-        next();
+    else {
+        // In case req.user is not available (which should not happen if the middleware works correctly)
+        res.status(401).json({ message: 'Unauthorized' });
     }
-    catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token' });
-        return; // Ensure function returns when response is sent
-    }
-};
-exports.checkAuth = checkAuth;
+});
+exports.default = router;
 //# sourceMappingURL=api.js.map
