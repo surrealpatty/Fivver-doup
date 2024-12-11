@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/service.ts
 const express_1 = __importDefault(require("express"));
 const services_1 = __importDefault(require("../models/services"));
-const authMiddleware_1 = require("../middlewares/authMiddleware");
+const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = express_1.default.Router();
 router.get('/services', authMiddleware_1.authenticateToken, async (req, res, next) => {
     if (!req.user) {
