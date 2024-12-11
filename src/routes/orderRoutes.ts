@@ -1,41 +1,40 @@
 // src/routes/orderRoutes.ts
-import express, { Request, Response, RequestHandler } from 'express';
-import { createOrder } from '../controllers/orderController';
-import { UserPayload } from '../types';  // Correct import path to your types
+import express, { Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';
+import { isUserPayload, OrderRequest, CreateOrderRequest } from '../types';  // Correct imports
+import { createOrder } from '../controllers/orderController';  // Ensure createOrder is correctly imported
 
 const router = express.Router();
 
-// Define the request body type for createOrder
-interface CreateOrderRequest {
-  userId: number;
-  serviceId: number;
-  orderDetails: string;
-  status: string;
-}
-
-// Extend the Request interface to include the user property of type UserPayload
-interface OrderRequest extends Request {
-  user?: UserPayload;  // Ensure the user property is available and optional
-}
-
-// Define the handler types
-const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest, {}> = async (req: OrderRequest, res: Response) => {
-  try {
-    // Ensure that the user is available and has the necessary 'tier' property
-    if (!req.user || !req.user.tier) {
-      return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+// Define the handler for creating an order
+const createOrderHandler = async (req: OrderRequest, res: Response, next: NextFunction) => {
+  if (isUserPayload(req.user)) {  // Use the type guard to ensure user is valid
+    try {
+      // Proceed with order creation logic
+      await createOrder(req, res);
+    } catch (err) {
+      next(err);  // Pass errors to the next middleware
     }
-
-    // Proceed with order creation logic
-    await createOrder(req, res);
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
+  } else {
+    res.status(400).json({ message: 'Invalid user data or missing tier information' });
   }
 };
 
 // Route to create an order
-router.post('/', createOrderHandler);
+router.post('/', authenticateToken, createOrderHandler);
 
-// Other routes (getAllOrders, getOrderById, updateOrder, deleteOrder) can follow the same pattern
+// Example for a getAllOrders route:
+router.get('/', authenticateToken, async (req: OrderRequest, res: Response) => {
+  if (isUserPayload(req.user)) {  // Ensure user is valid before proceeding
+    try {
+      // Your logic to fetch all orders
+      res.status(200).json({ message: 'Fetched orders successfully' });
+    } catch (err) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid user data or missing tier information' });
+  }
+});
 
 export default router;
