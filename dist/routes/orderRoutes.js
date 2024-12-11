@@ -1,9 +1,9 @@
 "use strict";
-// src/routes/orderRoutes.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
@@ -23,6 +23,6 @@ const createOrderHandler = async (req, res) => {
 };
 // Route to create an order
 router.post('/', createOrderHandler);
-// Other routes can follow the same pattern...
+// Other routes (getAllOrders, getOrderById, updateOrder, deleteOrder) can follow the same pattern
 exports.default = router;
 //# sourceMappingURL=orderRoutes.js.map
