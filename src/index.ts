@@ -1,12 +1,16 @@
-import './types/express';  // Ensure this import is first to load the augmentation
+// src/index.ts
 
+// Ensure custom type augmentation is loaded first
+import './types/express';  // This should be before importing other modules
+
+// Import necessary modules
 import express, { Request, Response, NextFunction } from 'express';  // Import Express and types
 import cors from 'cors';                                           // Import CORS middleware
-import { sequelize } from './config/database';                    // Correct import for sequelize
-import userRouter from './routes/user';                            // Import userRouter
-import profileRouter from './routes/profile';                      // Import profileRouter
-import authRouter from './routes/auth';                            // Import authRouter
-import dotenv from 'dotenv';                                       // Import dotenv for environment variables
+import { sequelize } from './config/database';                     // Correct import for sequelize
+import userRouter from './routes/user';                             // Import userRouter
+import profileRouter from './routes/profile';                       // Import profileRouter
+import authRouter from './routes/auth';                             // Import authRouter
+import dotenv from 'dotenv';                                        // Import dotenv for environment variables
 
 dotenv.config();  // Load environment variables from .env
 
