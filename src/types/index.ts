@@ -1,10 +1,11 @@
-// src/types/index.ts
+import { Request } from 'express';
 
-export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
-  return req.user !== undefined; // Explicitly check for undefined
-}
+// Remove the import of UserPayload since it’s already declared below
+// export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
+//   return req.user !== undefined; // Explicitly check for undefined
+// }
 
-// Ensure AuthRequest and UserPayload are also exported
+// Define the UserPayload interface (no need to import it)
 export interface UserPayload {
   id: string;
   email?: string;
@@ -12,7 +13,12 @@ export interface UserPayload {
   tier?: string;
 }
 
+// Define the AuthRequest interface extending Express' Request
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // user can be undefined if not authenticated
+  user?: UserPayload;  // Optionally add user property to the request object
 }
 
+// Define the type guard to check if the user is present
+export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
+  return req.user !== undefined; // Explicitly check for undefined
+}
