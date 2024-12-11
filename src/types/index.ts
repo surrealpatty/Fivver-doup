@@ -4,14 +4,13 @@ import { UserPayload } from './user';  // Assuming UserPayload is defined in 'us
 
 // Extend the Request interface to include the `user` property, which is optional and of type `UserPayload`
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Allow 'user' to be undefined
+  user?: UserPayload;  // 'user' is optional, so it can be undefined
 }
 
-// Type guard to check if a user is of type UserPayload
-export function isUserPayload(user: any): user is UserPayload {
-  return user && typeof user.id === 'string' && typeof user.tier === 'string';
+// Helper type guard to check if user exists
+export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
+  return !!req.user;
 }
-
 // Define the request body type for creating an order
 export interface CreateOrderRequest {
   userId: number;

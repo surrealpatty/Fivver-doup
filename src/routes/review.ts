@@ -1,6 +1,6 @@
 // src/routes/review.ts
 import { Router } from 'express';
-import { authenticateToken } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware';
 import { AuthRequest } from '../types'; // Correct import for AuthRequest type
 import { Response, NextFunction } from 'express';
 

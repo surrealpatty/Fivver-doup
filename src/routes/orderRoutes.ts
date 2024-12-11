@@ -1,17 +1,25 @@
 // src/routes/orderRoutes.ts
 import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middleware/authMiddleware';
-import { CreateOrderRequest, AuthRequest } from '../types';  // Correct imports for types
+import authenticateToken from '../middlewares/authenticateToken';
+import { AuthRequest, isUser } from '../types';  // Import the type guard
 import { createOrder } from '../controllers/orderController';
 
 const router = express.Router();
 
 // Route to create an order
 router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+  if (!isUser(req)) {
+    // Handle the case where user is not authenticated
+    return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+  }
+
   try {
-    // Ensure that the user is available and has the necessary 'tier' property
-    if (!req.user || !req.user.tier) {
-      return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+    // Now that TypeScript knows req.user is defined, you can safely use it
+    const { tier } = req.user;  // Destructure to get tier, you can check additional properties too
+
+    if (!tier) {
+      // Handle case where the user doesn't have a tier
+      return res.status(401).json({ error: 'User does not have a valid tier' });
     }
 
     // Proceed with order creation logic
