@@ -13,8 +13,8 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
   }
 
   try {
-    // Pass the user ID from req.user to getProfile function
-    const userProfile = await getProfile(req.user.id, res); // Assuming getProfile takes user id and res
+    // Pass the entire req and res to getProfile function
+    const userProfile = await getProfile(req, res); // Now passing the entire req and res
     return res.status(200).json(userProfile);
   } catch (err) {
     console.error(err);
@@ -30,8 +30,8 @@ router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response
   }
 
   try {
-    // Pass the user ID and request body to updateProfile
-    const updatedProfile = await updateProfile(req.user.id, req.body, res); // Assuming updateProfile takes user id, body, and res
+    // Pass the entire req and res to updateProfile function
+    const updatedProfile = await updateProfile(req, res); // Now passing the entire req and res
     return res.status(200).json(updatedProfile);
   } catch (err) {
     console.error(err);
