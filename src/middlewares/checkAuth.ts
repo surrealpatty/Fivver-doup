@@ -1,7 +1,8 @@
+// src/middlewares/checkAuth.ts
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { AuthRequest } from '../types/index';  // Import the correct path for AuthRequest
-import { UserPayload } from '../types/index';  // Import the correct path for UserPayload
+import { AuthRequest } from '../types/index'; // Import the correct path for AuthRequest
+import { UserPayload } from '../types/index'; // Import the correct path for UserPayload
 
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
@@ -11,17 +12,9 @@ export const checkAuth = (
   req: AuthRequest,  // Use AuthRequest instead of Request
   res: Response,
   next: NextFunction
-): void => {  // Return type is explicitly 'void' for middleware
-  // Access the 'authorization' header directly from req.headers
-  const authorizationHeader = req.headers.get('authorization') || undefined;
-
-  if (!authorizationHeader) {
-    res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return;  // Explicitly return to avoid further execution
-  }
-
-  // Extract the token from the "Bearer <token>" format
-  const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
+): void => {
+  // Use req.get() to safely access the authorization header
+  const token = req.get('authorization')?.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
     res.status(401).json({ message: 'Authorization token is missing' });
