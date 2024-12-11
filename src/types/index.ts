@@ -1,9 +1,10 @@
 // src/types/index.ts
-
+import { Request } from 'express';  // Import Request from express
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
+  tier?: string;  // Add tier field
 }
 
 export interface AuthRequest extends Request {
