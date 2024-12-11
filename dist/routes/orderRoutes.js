@@ -16,13 +16,14 @@ const createOrderHandler = async (req, res) => {
         }
         // Proceed with order creation logic
         await (0, orderController_1.createOrder)(req, res);
+        // If order creation is successful, send a success response
+        return res.status(201).json({ message: 'Order created successfully' });
     }
     catch (err) {
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 // Route to create an order
 router.post('/', createOrderHandler);
-// Other routes (getAllOrders, getOrderById, updateOrder, deleteOrder) can follow the same pattern
 exports.default = router;
 //# sourceMappingURL=orderRoutes.js.map

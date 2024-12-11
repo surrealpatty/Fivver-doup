@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateToken
+const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
 // Mock request and response functions
 const mockRequest = (userPayload) => ({
     headers: { authorization: 'Bearer valid-token' },
@@ -25,7 +28,7 @@ describe('Order Controller Tests', () => {
         const req = mockRequest(userPayload); // Create a mock request
         const res = mockResponse(); // Create a mock response
         const next = jest.fn(); // Create a mock next function
-        (0, authMiddleware_1.authenticateToken)(req, res, next); // Call the middleware
+        (0, authMiddleware_1.default)(req, res, next); // Call the middleware
         // Check that user data is attached to req.user
         expect(req.user).toEqual(userPayload);
         expect(next).toHaveBeenCalled(); // Ensure next is called
@@ -35,7 +38,7 @@ describe('Order Controller Tests', () => {
         const res = mockResponse();
         const next = jest.fn();
         req.headers['authorization'] = ''; // Empty token
-        (0, authMiddleware_1.authenticateToken)(req, res, next); // Call the middleware
+        (0, authMiddleware_1.default)(req, res, next); // Call the middleware
         expect(res.status).toHaveBeenCalledWith(401); // Expect 401 response
         expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
         expect(next).not.toHaveBeenCalled(); // Ensure next is not called
