@@ -5,12 +5,12 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier?: string;
+  tier?: string;  // Add tier to UserPayload
 }
 
 // Define the AuthRequest interface extending the Express Request type
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // user is optional, added to the request object
+  user?: UserPayload;  // user is optional
 }
 
 // Helper type guard to check if user exists

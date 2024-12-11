@@ -1,5 +1,5 @@
 import express, { Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Make sure it's correctly typed
+import authenticateToken from '../middlewares/authenticateToken';  // Correctly typed authenticateToken
 import { AuthRequest, isUser } from '../types';  // Correct import for isUser type guard
 import { createOrder } from '../controllers/orderController';
 

@@ -3,10 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
-const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken"));
-const types_1 = require("../types"); // Import the type guard
+const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken")); // Make sure it's correctly typed
+const types_1 = require("../types"); // Correct import for isUser type guard
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
 // Route to create an order
