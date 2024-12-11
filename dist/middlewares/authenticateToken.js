@@ -3,40 +3,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Define the authenticateToken middleware
 const authenticateToken = (req, res, next) => {
-    // Retrieve the token from the Authorization header
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    // If no token is provided, return a 401 Unauthorized response
     if (!token) {
-        res.status(401).json({ message: 'Access Denied: No token provided' });
-        return; // Return to stop further code execution
+        // Return response but do not return anything from the middleware.
+        return res.status(401).send('Access Denied');
     }
     try {
-        // Decode the token using jwt and cast the decoded token to UserPayload
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_KEY);
-        // Ensure that decoded contains the expected properties
-        if (!decoded.tier) {
-            res.status(401).json({ message: 'Access Denied: Missing tier information' });
-            return; // Return to stop further code execution
-        }
-        // Attach the decoded user information to req.user
-        req.user = {
-            id: decoded.id,
-            email: decoded.email || '', // Fallback to empty string if email is missing
-            username: decoded.username || '', // Fallback to empty string if username is missing
-            tier: decoded.tier, // tier is now guaranteed to exist
-            role: decoded.role || '', // Optional: Include role if necessary
-        };
-        // Proceed to the next middleware or route handler
-        next();
+        // Verify token and decode it
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // Set user to the decoded JWT payload
+        // Call next middleware or route handler
+        return next();
     }
-    catch (err) {
-        // If token verification fails, return a 401 Unauthorized response
-        res.status(401).json({ message: 'Access Denied: Invalid token' });
+    catch (error) {
+        // Invalid token response without returning a value
+        return res.status(400).send('Invalid Token');
     }
 };
-exports.authenticateToken = authenticateToken;
+exports.default = authenticateToken;
 //# sourceMappingURL=authenticateToken.js.map

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/profile.ts
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middleware/authMiddleware");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
 const services_1 = __importDefault(require("../models/services")); // Correct import for the Service model
 const user_1 = require("../models/user"); // Correct import for the User model
 const router = express_1.default.Router();

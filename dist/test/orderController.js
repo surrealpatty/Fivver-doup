@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const orderController_1 = require("../controllers/orderController"); // Correct import for the order controller
 const order_1 = require("../models/order"); // Correct import for the Order model
-const authenticateToken_1 = require("../middleware/authenticateToken"); // Correct named import
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct named import
 // Mock Order model methods
 jest.mock('../models/order');
 describe('Order Controller', () => {

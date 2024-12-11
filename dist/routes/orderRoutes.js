@@ -5,15 +5,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middleware/authMiddleware");
+const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken"));
+const types_1 = require("../types"); // Import the type guard
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
 // Route to create an order
-router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
+router.post('/', authenticateToken_1.default, async (req, res, next) => {
+    if (!(0, types_1.isUser)(req)) {
+        // Handle the case where user is not authenticated
+        return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+    }
     try {
-        // Ensure that the user is available and has the necessary 'tier' property
-        if (!req.user || !req.user.tier) {
-            return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
+        // Now that TypeScript knows req.user is defined, you can safely use it
+        const { tier } = req.user; // Destructure to get tier, you can check additional properties too
+        if (!tier) {
+            // Handle case where the user doesn't have a tier
+            return res.status(401).json({ error: 'User does not have a valid tier' });
         }
         // Proceed with order creation logic
         await (0, orderController_1.createOrder)(req, res);

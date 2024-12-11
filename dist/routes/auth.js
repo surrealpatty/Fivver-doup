@@ -8,7 +8,7 @@ const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs")); // Assuming bcrypt is used for password hashing
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user"); // Correct path to the User model
-const authenticateJWT_1 = require("../middleware/authenticateJWT"); // Correct the name to 'authenticateToken'
+const authenticateJWT_1 = require("../middlewares/authenticateJWT"); // Correct the name to 'authenticateToken'
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config(); // Load environment variables from .env
 const router = (0, express_1.Router)();
