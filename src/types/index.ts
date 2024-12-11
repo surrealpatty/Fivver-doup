@@ -4,7 +4,7 @@ import { UserPayload } from './user';  // Assuming UserPayload is defined in 'us
 
 // Extend the Request interface to include the `user` property, which is optional and of type `UserPayload`
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // 'user' is optional, so it can be undefined
+  user?: UserPayload; // Marking user as optional
 }
 
 // Helper type guard to check if user exists
