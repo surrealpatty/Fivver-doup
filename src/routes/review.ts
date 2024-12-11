@@ -18,6 +18,8 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next
     return res.status(201).json({ message: 'Review created successfully.' });
   } catch (err) {
     next(err); // Pass errors to the error handler
+    // Explicit return in case of an error, although next(err) would terminate the request processing
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -37,6 +39,8 @@ router.get('/:serviceId', authenticateToken, async (req: AuthRequest, res: Respo
     return res.status(200).json({ message: `Reviews for service ${serviceId} fetched successfully.` });
   } catch (err) {
     next(err); // Pass errors to the error handler
+    // Explicit return in case of an error, although next(err) would terminate the request processing
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
