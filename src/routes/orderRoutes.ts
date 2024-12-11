@@ -1,13 +1,13 @@
 // src/routes/orderRoutes.ts
-import express, { Response } from 'express';
+import express, { Response, NextFunction } from 'express';
+import  authenticateToken  from '../middlewares/authMiddleware';  // Correct import for authenticateToken middleware
+import { CreateOrderRequest, AuthRequest } from '../types';  // Correct imports for types
 import { createOrder } from '../controllers/orderController';
-import { CreateOrderRequest } from '../types';
-import { AuthRequest } from '../types';  // Correct import of AuthRequest type
 
 const router = express.Router();
 
-// Define the handler types
-const createOrderHandler = async (req: AuthRequest, res: Response): Promise<Response> => {
+// Route to create an order
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure that the user is available and has the necessary 'tier' property
     if (!req.user || !req.user.tier) {
@@ -20,11 +20,10 @@ const createOrderHandler = async (req: AuthRequest, res: Response): Promise<Resp
     // If order creation is successful, send a success response
     return res.status(201).json({ message: 'Order created successfully' });
   } catch (err) {
+    // Log the error and send a generic internal server error
+    console.error(err);
     return res.status(500).json({ error: 'Internal server error' });
   }
-};
-
-// Route to create an order
-router.post('/', createOrderHandler);
+});
 
 export default router;

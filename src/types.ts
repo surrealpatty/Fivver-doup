@@ -6,12 +6,12 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: 'free' | 'paid';
+  tier: 'free' | 'paid';  // Ensure tier is always present
   role?: string;
 }
 
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // This extends the Request type and adds the user property
+  user: UserPayload;  // This ensures the 'user' object always has 'tier'
 }
 
 export interface CreateOrderRequest {
