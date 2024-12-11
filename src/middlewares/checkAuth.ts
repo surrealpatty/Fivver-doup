@@ -11,19 +11,21 @@ export const checkAuth = (
   req: AuthRequest,  // Use AuthRequest instead of Request
   res: Response,
   next: NextFunction
-): void => {
+): void => {  // Return type is explicitly 'void' for middleware
   // Access the 'authorization' header directly from req.headers
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
   if (!authorizationHeader) {
-    return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    return;  // Explicitly return to avoid further execution
   }
 
   // Extract the token from the "Bearer <token>" format
   const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
 
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token is missing' });
+    res.status(401).json({ message: 'Authorization token is missing' });
+    return;  // Explicitly return to avoid further execution
   }
 
   try {
@@ -41,7 +43,8 @@ export const checkAuth = (
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
-    // Do not return a value from this block; just send a response and exit the function
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    // Handle invalid token case and return response directly
+    res.status(401).json({ message: 'Invalid or expired token' });
+    return;  // Explicitly return to avoid further execution
   }
 };

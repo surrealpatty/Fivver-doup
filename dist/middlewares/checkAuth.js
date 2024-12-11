@@ -8,27 +8,33 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // JWT for veri
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 // Middleware to check if the user is authenticated
-const checkAuth = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Assuming token is passed as "Bearer token"
+const checkAuth = (req, // Use AuthRequest instead of Request
+res, next) => {
+    // Access the 'authorization' header directly from req.headers
+    const authorizationHeader = req.headers['authorization'];
+    if (!authorizationHeader) {
+        return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    }
+    // Extract the token from the "Bearer <token>" format
+    const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
-        res.status(401).json({ message: 'Authorization token is missing' });
-        return; // Ensure function returns when response is sent
+        return res.status(401).json({ message: 'Authorization token is missing' });
     }
     try {
         // Verify the token
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        // Ensure the email is optional as expected
+        // Handle the case where email is optional and may be undefined
         if (decoded.email === undefined) {
             console.warn('User payload is missing email');
         }
         // Attach user information to the request object for further use in the route
-        req.user = decoded; // Type assertion to ensure `req.user` has the correct type
+        req.user = decoded; // TypeScript will now know req.user is of type AuthRequest
         // Proceed to the next middleware or route handler
         next();
     }
     catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token' });
-        return; // Ensure function returns when response is sent
+        // Do not return a value from this block; just send a response and exit the function
+        return res.status(401).json({ message: 'Invalid or expired token' });
     }
 };
 exports.checkAuth = checkAuth;
