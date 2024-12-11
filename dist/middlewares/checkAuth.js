@@ -11,7 +11,7 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace w
 const checkAuth = (req, // Use AuthRequest instead of Request
 res, next) => {
     // Access the 'authorization' header directly from req.headers
-    const authorizationHeader = req.headers['authorization'];
+    const authorizationHeader = req.headers.get('authorization') || undefined;
     if (!authorizationHeader) {
         res.status(401).json({ message: 'Authorization token is missing or invalid' });
         return; // Explicitly return to avoid further execution
