@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/review.ts
 const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateToken
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct middleware import
 const router = (0, express_1.Router)();
 // POST route to create a new review
 router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
@@ -12,11 +13,11 @@ router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
         }
         // Logic to create a review (e.g., saving it in the database)
         // Replace this with actual review creation logic
+        // Example: await Review.create({ userId: req.user.id, review: req.body.review, serviceId: req.body.serviceId });
         return res.status(201).json({ message: 'Review created successfully.' });
     }
     catch (err) {
         next(err); // Pass errors to the error handler
-        // Explicit return in case of an error, although next(err) would terminate the request processing
         return res.status(500).json({ message: 'Server error' });
     }
 });
@@ -29,12 +30,11 @@ router.get('/:serviceId', authMiddleware_1.authenticateToken, async (req, res, n
         }
         const serviceId = req.params.serviceId;
         // Logic to fetch reviews for the service (e.g., querying the database)
-        // Replace this with actual review fetching logic
+        // Example: const reviews = await Review.findAll({ where: { serviceId: serviceId } });
         return res.status(200).json({ message: `Reviews for service ${serviceId} fetched successfully.` });
     }
     catch (err) {
         next(err); // Pass errors to the error handler
-        // Explicit return in case of an error, although next(err) would terminate the request processing
         return res.status(500).json({ message: 'Server error' });
     }
 });

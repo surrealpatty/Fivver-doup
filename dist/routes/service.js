@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = require("../middlewares/authMiddleware");
-const services_1 = __importDefault(require("../models/services"));
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct middleware import
+const services_1 = __importDefault(require("../models/services")); // Import the Service model
 const router = express_1.default.Router();
 // GET route to fetch services for a user
 router.get('/services', authMiddleware_1.authenticateToken, async (req, res, next) => {

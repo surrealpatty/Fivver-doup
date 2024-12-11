@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfile = exports.getProfile = void 0;
-const user_1 = require("@models/user"); // Ensure correct import for User model
+const user_1 = require("../models/user"); // Ensure correct import for User model
 // GET /profile - Get user profile
 const getProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
@@ -14,6 +14,7 @@ const getProfile = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+        // Return the user profile details
         return res.status(200).json({
             id: user.id,
             email: user.email,
@@ -42,9 +43,14 @@ const updateProfile = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         // Update user properties
-        user.email = email || user.email;
-        user.username = username || user.username;
+        if (email) {
+            user.email = email;
+        }
+        if (username) {
+            user.username = username;
+        }
         await user.save();
+        // Return updated user profile
         return res.status(200).json({
             message: 'Profile updated successfully',
             user: {
