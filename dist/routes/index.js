@@ -7,13 +7,21 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_2 = require("express");
 const cors_1 = __importDefault(require("cors"));
-const database_1 = require("./config/database"); // Import the sequelize instance for DB connection
+const database_1 = require("../config/database"); // Fix the import path for sequelize
 dotenv_1.default.config(); // Load environment variables
 const app = (0, express_1.default)();
 // Middleware setup
 app.use((0, cors_1.default)()); // CORS middleware to handle cross-origin requests
 app.use(express_1.default.json()); // To parse incoming JSON payloads
 // Use the router for the app
+const passwordReset_1 = __importDefault(require("./passwordReset")); // Import the password reset routes (if applicable)
+const profile_1 = __importDefault(require("./profile")); // Import other route files
+const router = (0, express_2.Router)();
+// Include the password reset routes or other routes here
+router.use('/password-reset', passwordReset_1.default); // Add password reset routes to the main router
+// Other routes, like profile, services, etc.
+router.use('/profile', profile_1.default); // Add profile routes
+// More route imports can go here, and ensure they are added to the main router
 app.use('/api', router); // Prefix the routes with "/api"
 // Test DB connection and start server
 database_1.sequelize
@@ -27,19 +35,4 @@ database_1.sequelize
     .catch((error) => {
     console.error('Error connecting to the database:', error);
 });
-aimport;
-{
-    express_2.Router;
-}
-from;
-'express';
-const passwordReset_1 = __importDefault(require("./passwordReset")); // Import the password reset routes (if applicable)
-const router = (0, express_2.Router)();
-// Include the password reset routes or other routes here
-router.use('/password-reset', passwordReset_1.default); // Add password reset routes to the main router
-// Other routes, like profile, services, etc.
-const profile_1 = __importDefault(require("./profile")); // Import other route files
-router.use('/profile', profile_1.default); // Add profile routes
-// More route imports can go here, and ensure they are added to the main router
-exports.default = router;
 //# sourceMappingURL=index.js.map

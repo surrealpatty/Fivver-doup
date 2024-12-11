@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import router from './routes';  // Ensure this path points to the correct router file (usually 'src/routes')
+import { router } from './routes';  // Ensure the routes file exports router correctly
 import cors from 'cors';
 import { sequelize } from './config/database';  // Ensure this path points to the correct database file (usually 'src/config/database')
 
