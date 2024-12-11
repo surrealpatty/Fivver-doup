@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct import for authenticateToken
 import { AuthRequest } from '../types/authMiddleware'; // Correctly typed AuthRequest
-import { UserPayload } from '../types/index'; // Correct path for your types
+import { UserPayload } from '../types'; // Correct path for your types
 
 const router = Router();
 

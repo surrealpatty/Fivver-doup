@@ -9,6 +9,7 @@ const authenticateToken_1 = require("../middlewares/authenticateToken"); // Corr
 const services_1 = __importDefault(require("../models/services"));
 const user_1 = require("@models/user");
 const router = express_1.default.Router();
+// GET profile route
 router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
     // Ensure that req.user exists and contains both 'id' and 'tier'
     if (!req.user || !req.user.id || !req.user.tier) {
@@ -38,7 +39,7 @@ router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, n
         next(err);
     }
 });
-// Profile update route to allow users to update their profile information
+// PUT profile route
 router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
     // Ensure that req.user exists and contains both 'id' and 'tier'
     if (!req.user || !req.user.id || !req.user.tier) {

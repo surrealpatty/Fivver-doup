@@ -2,8 +2,7 @@
 
 import express, { Request, Response, RequestHandler } from 'express';
 import { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder } from '../controllers/orderController';
-// Correct the import path to point to the correct `types` directory
-import { UserPayload } from '../types';  // Import from the correct relative path
+import { UserPayload } from '../types';  // Correct import path to your types
 
 const router = express.Router();
 
