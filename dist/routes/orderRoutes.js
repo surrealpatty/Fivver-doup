@@ -14,7 +14,7 @@ const createOrderHandler = async (req, res) => {
         if (!req.user || !req.user.tier) {
             return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
         }
-        // Call createOrder controller
+        // Call createOrder controller with the request and response
         await (0, orderController_1.createOrder)(req, res);
     }
     catch (err) {
