@@ -1,6 +1,6 @@
 // src/controllers/profileController.ts
 import { Request, Response } from 'express';
-import { User } from '@models/user';  // Ensure correct import for User model
+import { User } from '../models/user';  // Ensure correct import for User model
 import { UserPayload } from '../types';  // Import UserPayload interface to type req.user
 
 // Extend Request to include user with proper typing
@@ -22,6 +22,7 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<Respo
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Return the user profile details
     return res.status(200).json({
       id: user.id,
       email: user.email,
@@ -52,10 +53,15 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<Re
     }
 
     // Update user properties
-    user.email = email || user.email;
-    user.username = username || user.username;
+    if (email) {
+      user.email = email;
+    }
+    if (username) {
+      user.username = username;
+    }
     await user.save();
 
+    // Return updated user profile
     return res.status(200).json({
       message: 'Profile updated successfully',
       user: {

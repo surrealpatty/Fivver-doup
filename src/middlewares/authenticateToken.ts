@@ -1,22 +1,22 @@
-// src/middlewares/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types';  // Import the AuthRequest interface
+import { AuthRequest } from '../types';  // Import your custom AuthRequest type
 import { UserPayload } from '../types';  // Import UserPayload for typing
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
 // Middleware to authenticate the user using a JWT token
 export const authenticateToken = (
-  req: AuthRequest,  
+  req: AuthRequest,  // Ensure req is typed as AuthRequest
   res: Response,
   next: NextFunction
 ): void => {  
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
   if (!authorizationHeader) {
+    // Send response without returning, allowing middleware flow
     res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return;
+    return;  // Return early to avoid further execution
   }
 
   const token = authorizationHeader.split(' ')[1]; // Token is expected in "Bearer token" format
@@ -32,7 +32,7 @@ export const authenticateToken = (
 
     req.user = decoded; // Set req.user to the decoded payload (UserPayload)
 
-    next();
+    next();  // Proceed to the next middleware or route handler
   } catch (error) {
     res.status(401).json({ message: 'Invalid or expired token' });
   }

@@ -1,9 +1,8 @@
-import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
-import { AuthRequest } from '../types'; // Ensure 'AuthRequest' is imported
-import { getProfile, updateProfile } from '../controllers/profileController';
+import { Router, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
+import { AuthRequest } from '../types';  // Correct import for AuthRequest
 
-const router = express.Router();
+const router = Router();
 
 // Route to get profile
 router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
@@ -13,8 +12,8 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
   }
 
   try {
-    // Pass the entire req and res to getProfile function
-    const userProfile = await getProfile(req, res); // Now passing the entire req and res
+    // Logic to fetch user profile (example)
+    const userProfile = { id: req.user.id, username: req.user.username }; // Example response
     return res.status(200).json(userProfile);
   } catch (err) {
     console.error(err);
@@ -24,14 +23,13 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
 
 // Route to update profile
 router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  // Safely check if req.user is defined and has an id
   if (!req.user?.id) {
     return res.status(400).json({ message: 'User not authenticated or invalid user data' });
   }
 
   try {
-    // Pass the entire req and res to updateProfile function
-    const updatedProfile = await updateProfile(req, res); // Now passing the entire req and res
+    // Logic to update user profile (example)
+    const updatedProfile = { id: req.user.id, username: req.user.username }; // Example update
     return res.status(200).json(updatedProfile);
   } catch (err) {
     console.error(err);

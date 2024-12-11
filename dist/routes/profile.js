@@ -14,8 +14,8 @@ router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, n
         return res.status(400).json({ message: 'User not authenticated or invalid user data' });
     }
     try {
-        // Pass the user ID from req.user to getProfile function
-        const userProfile = await (0, profileController_1.getProfile)(req.user.id, res); // Assuming getProfile takes user id and res
+        // Pass the entire req and res to getProfile function
+        const userProfile = await (0, profileController_1.getProfile)(req, res); // Now passing the entire req and res
         return res.status(200).json(userProfile);
     }
     catch (err) {
@@ -30,8 +30,8 @@ router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, n
         return res.status(400).json({ message: 'User not authenticated or invalid user data' });
     }
     try {
-        // Pass the user ID and request body to updateProfile
-        const updatedProfile = await (0, profileController_1.updateProfile)(req.user.id, req.body, res); // Assuming updateProfile takes user id, body, and res
+        // Pass the entire req and res to updateProfile function
+        const updatedProfile = await (0, profileController_1.updateProfile)(req, res); // Now passing the entire req and res
         return res.status(200).json(updatedProfile);
     }
     catch (err) {

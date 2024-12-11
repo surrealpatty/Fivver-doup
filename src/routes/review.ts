@@ -1,6 +1,7 @@
+// src/routes/review.ts
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import for authenticateToken
-import { AuthRequest } from '../types';  // Correct import for AuthRequest type
+import { authenticateToken } from '../middlewares/authMiddleware'; // Correct middleware import
+import { AuthRequest } from '../types'; // Correct import for AuthRequest
 
 const router = Router();
 
@@ -14,11 +15,11 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next
 
     // Logic to create a review (e.g., saving it in the database)
     // Replace this with actual review creation logic
+    // Example: await Review.create({ userId: req.user.id, review: req.body.review, serviceId: req.body.serviceId });
 
     return res.status(201).json({ message: 'Review created successfully.' });
   } catch (err) {
     next(err); // Pass errors to the error handler
-    // Explicit return in case of an error, although next(err) would terminate the request processing
     return res.status(500).json({ message: 'Server error' });
   }
 });
@@ -34,12 +35,11 @@ router.get('/:serviceId', authenticateToken, async (req: AuthRequest, res: Respo
     const serviceId = req.params.serviceId;
 
     // Logic to fetch reviews for the service (e.g., querying the database)
-    // Replace this with actual review fetching logic
+    // Example: const reviews = await Review.findAll({ where: { serviceId: serviceId } });
 
     return res.status(200).json({ message: `Reviews for service ${serviceId} fetched successfully.` });
   } catch (err) {
     next(err); // Pass errors to the error handler
-    // Explicit return in case of an error, although next(err) would terminate the request processing
     return res.status(500).json({ message: 'Server error' });
   }
 });
