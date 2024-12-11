@@ -1,51 +1,40 @@
-import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { AuthRequest } from '../types/index'; // Import the correct path for AuthRequest
-import { UserPayload } from '../types/index'; // Import the correct path for UserPayload
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { AuthRequest } from '../types';  // Import the AuthRequest interface
+import { UserPayload } from '../types';  // Import UserPayload for typing
 
-// Secret key for JWT verification, you should store it in an environment variable for security
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
-// Middleware to check if the user is authenticated
-export const checkAuth = (
-  req: AuthRequest,  // Use AuthRequest instead of Request
+// Middleware to authenticate the user using a JWT token
+export const authenticateToken = (
+  req: AuthRequest,  // Ensure req is typed as AuthRequest
   res: Response,
   next: NextFunction
-): void => {
-  // Get the authorization header
-  const authHeader = req.get('authorization');
+): void => {  // Return type is void because middleware doesn't return anything directly
+  const authorizationHeader = req.headers['authorization'] as string | undefined;
 
-  // Ensure the authorization header is a string before calling split()
-  if (typeof authHeader !== 'string') {
+  if (!authorizationHeader) {
     res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return;  // Explicitly return to avoid further execution
+    return;  // Terminate the function after sending the response
   }
 
-  // Extract the token from the authorization header (e.g., "Bearer token")
-  const token = authHeader.split(' ')[1]; // Now safe to call split on a string
+  // Extract the token from the Authorization header
+  const token = authorizationHeader.split(' ')[1]; // Token is expected in "Bearer token" format
 
   if (!token) {
     res.status(401).json({ message: 'Authorization token is missing' });
-    return;  // Explicitly return to avoid further execution
+    return;  // Terminate the function after sending the response
   }
 
   try {
-    // Verify the token
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
+    // Decode the token and ensure it's a valid UserPayload
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;  // Assert type as UserPayload
 
-    // Handle the case where email is optional and may be undefined
-    if (decoded.email === undefined) {
-      console.warn('User payload is missing email');
-    }
+    req.user = decoded; // Set req.user to the decoded payload (UserPayload)
 
-    // Attach user information to the request object for further use in the route
-    req.user = decoded;  // TypeScript will now know req.user is of type AuthRequest
-
-    // Proceed to the next middleware or route handler
-    next();
+    next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    // Handle invalid token case and return response directly
     res.status(401).json({ message: 'Invalid or expired token' });
-    return;  // Explicitly return to avoid further execution
+    return;  // Terminate the function after sending the response
   }
 };
