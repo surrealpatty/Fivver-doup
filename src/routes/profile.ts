@@ -1,7 +1,7 @@
 // src/routes/profile.ts
 import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Correct import for authenticateToken
-import { AuthRequest } from '../types';
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken
+import { AuthRequest } from '../types';  // Correct import for AuthRequest type
 import Service from '../models/services';  // Correct import for the Service model
 import { User } from '../models/user';  // Correct import for the User model
 
