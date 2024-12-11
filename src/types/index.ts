@@ -1,16 +1,18 @@
 // src/types/index.ts
+import { Request } from 'express';
 
-// Define UserPayload interface
+// Define the UserPayload interface
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier?: 'free' | 'paid';  // Add the 'tier' property to the interface with possible values
+  tier?: 'free' | 'paid';  // Add the 'tier' property with possible values
 }
 
-// Define the AuthRequest interface extending Request to include a user property
+// Extend Express's Request interface to include the user property and get method
 export interface AuthRequest extends Request {
-  user: UserPayload;  // Ensure `user` is always present
+  user: UserPayload;  // Ensure 'user' is always defined
+  get(name: string): string | undefined;  // Include 'get' method to match Express's signature
 }
 
 // Type guard function to check if req.user is a UserPayload
