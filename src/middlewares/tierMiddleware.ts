@@ -1,4 +1,3 @@
-// src/middlewares/tierMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/authMiddleware'; // Import AuthRequest to ensure proper typing
 

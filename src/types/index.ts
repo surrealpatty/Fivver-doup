@@ -1,23 +1,19 @@
-import { Request } from 'express';
-import { useRouter } from 'vue-router';  // Correct import for Vue Router in Vue 3
+// src/types/index.ts
 
-// Extend Express Request to include custom properties
-export interface AuthRequest extends Request {
-  user: UserPayload;  // Ensure 'user' is always defined, or handle undefined case in middleware
-  get(name: string): string | undefined;  // Correct 'get' method signature to return string | undefined (align with Express)
-}
-
-// User data structure for payload
+// Define UserPayload interface
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
+  tier?: 'free' | 'paid';  // Add the 'tier' property to the interface with possible values
 }
 
-// Types for Vue components if necessary (for routing purposes)
-declare module 'vue' {
-  // Ensure Vue 3 correctly types the $router property
-  interface ComponentCustomProperties {
-    $router: ReturnType<typeof useRouter>;  // Correctly type the $router property in Vue components
-  }
+// Define the AuthRequest interface extending Request to include a user property
+export interface AuthRequest extends Request {
+  user: UserPayload;  // Ensure `user` is always present
+}
+
+// Type guard function to check if req.user is a UserPayload
+export function isUser(user: any): user is UserPayload {
+  return user && typeof user.id === 'string' && typeof user.tier === 'string';  // Check that 'id' and 'tier' exist
 }
