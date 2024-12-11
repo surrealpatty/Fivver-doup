@@ -1,7 +1,7 @@
 // src/index.ts
 
 // Ensure custom type augmentation is loaded first
-import './types/express';  // This should be before importing other modules
+import './types/express';  // Ensure this import is first to load the augmentation
 
 // Import necessary modules
 import express, { Request, Response, NextFunction } from 'express';  // Import Express and types
