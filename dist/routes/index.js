@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const express_2 = require("express");
 const cors_1 = __importDefault(require("cors"));
 const database_1 = require("./config/database"); // Import the sequelize instance for DB connection
 dotenv_1.default.config(); // Load environment variables
@@ -28,12 +29,12 @@ database_1.sequelize
 });
 aimport;
 {
-    Router;
+    express_2.Router;
 }
 from;
 'express';
 const passwordReset_1 = __importDefault(require("./passwordReset")); // Import the password reset routes (if applicable)
-const router = Router();
+const router = (0, express_2.Router)();
 // Include the password reset routes or other routes here
 router.use('/password-reset', passwordReset_1.default); // Add password reset routes to the main router
 // Other routes, like profile, services, etc.
