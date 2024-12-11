@@ -1,5 +1,3 @@
-// src/routes/orderRoutes.ts
-
 import express, { Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken
 import { AuthRequest, isUser } from '../types';  // Correct import for isUser type guard
@@ -10,12 +8,12 @@ const router = express.Router();
 // Route to create an order
 router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   // Use the isUser guard to check if the user is authenticated
-  if (!isUser(req)) {
+  if (!isUser(req.user)) {
     return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
   }
 
   try {
-    // Now TypeScript knows req.user is defined
+    // Now TypeScript knows req.user is defined as UserPayload
     const { tier } = req.user;  // Safe to access since isUser ensures user is defined
 
     if (!tier) {

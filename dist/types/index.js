@@ -1,5 +1,4 @@
 "use strict";
-// src/types/index.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isUser = isUser;
 // Define the type guard to check if the user is present

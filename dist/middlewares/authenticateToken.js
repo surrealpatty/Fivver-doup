@@ -1,9 +1,10 @@
 "use strict";
+// src/middleware/authenticateToken.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = void 0;
+exports.ensureUser = exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 // Middleware to check if the user is authenticated
@@ -33,5 +34,16 @@ res, next) => {
     }
 };
 exports.authenticateToken = authenticateToken;
+// Middleware to ensure the user is present in the request
+const ensureUser = (req, // Ensure req is typed as AuthRequest
+res, next) => {
+    if (!req.user) {
+        // Send a response and do not return anything
+        res.status(401).json({ message: 'Unauthorized: User not authenticated' });
+        return; // Ensure no further code execution
+    }
+    next(); // Proceed to the next middleware or route handler
+};
+exports.ensureUser = ensureUser;
 exports.default = exports.authenticateToken;
 //# sourceMappingURL=authenticateToken.js.map
