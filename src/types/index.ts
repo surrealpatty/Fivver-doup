@@ -1,10 +1,10 @@
 // src/types/index.ts
-import { UserPayload } from './user';  // Assuming UserPayload is in 'user.ts'
-import { Request } from 'express';
+import { Request } from 'express';  // Import Request from express
+import { UserPayload } from './user';  // Assuming UserPayload is defined in 'user.ts'
 
-// Extend the Request interface to include the user property of type UserPayload
+// Extend the Request interface to include the `user` property, which is optional and of type `UserPayload`
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Ensure `user` is of type UserPayload, including 'tier'
+  user?: UserPayload;  // `user` is optional and will be of type `UserPayload`
 }
 
 // Type guard to check if a user is of type UserPayload
@@ -12,7 +12,7 @@ export function isUserPayload(user: any): user is UserPayload {
   return user && typeof user.id === 'string' && typeof user.tier === 'string';
 }
 
-// Define the request body type for creating an order (for order creation)
+// Define the request body type for creating an order
 export interface CreateOrderRequest {
   userId: number;
   serviceId: number;
@@ -20,5 +20,5 @@ export interface CreateOrderRequest {
   status: string;
 }
 
-// Export UserPayload for use in other files
+// Export the `UserPayload` interface to be used in other files
 export { UserPayload } from './user';  // Exporting UserPayload from 'user.ts'

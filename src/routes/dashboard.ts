@@ -1,12 +1,14 @@
 // src/routes/dashboard.ts
-import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authMiddleware';
+import { Router, Response, NextFunction } from 'express';
+import  authenticateToken  from '../middlewares/authMiddleware';  // Corrected import path for authenticateToken
+import { AuthRequest } from '../types';  // Import the correct AuthRequest type
 
 const router = Router();
 
 // GET route for the dashboard
-router.get('/dashboard', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
+    // Ensure req.user is properly typed and available
     if (req.user) {
       // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
       res.status(200).json({ message: 'Dashboard data fetched successfully.' });

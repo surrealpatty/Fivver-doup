@@ -3,6 +3,6 @@ export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: 'free' | 'paid';  // 'tier' is required now
+  tier: string;  // Ensure tier is part of UserPayload
   role?: string;  // Optional, if you want to include roles in the future
 }

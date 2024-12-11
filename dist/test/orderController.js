@@ -1,47 +1,77 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
-// Mock request and response functions
-const mockRequest = (userPayload) => ({
-    headers: { authorization: 'Bearer valid-token' },
-    user: userPayload, // Attach userPayload to the request
-}); // Cast the mock to `unknown` first, then `Request`
-const mockResponse = () => {
-    const res = {}; // Create a mock response object
-    res.status = jest.fn().mockReturnValue(res); // Mock status method
-    res.json = jest.fn().mockReturnValue(res); // Mock json method
-    return res;
-};
-describe('Order Controller Tests', () => {
-    it('should authenticate the user correctly', () => {
-        // Create a userPayload that satisfies the UserPayload interface
-        const userPayload = {
-            id: 'userId',
-            email: 'user@example.com',
-            username: 'user123', // Ensure the username is included
-            tier: 'free',
+const orderController_1 = require("../controllers/orderController"); // Correct import for the order controller
+const order_1 = require("../models/order"); // Correct import for the Order model
+// Mock Order model methods
+jest.mock('../models/order');
+describe('Order Controller', () => {
+    let req;
+    let res;
+    let next;
+    beforeEach(() => {
+        req = {
+            user: {
+                id: '123',
+                tier: 'free', // Mock user with 'tier'
+            },
+            body: {
+                userId: 123,
+                serviceId: 1,
+                orderDetails: 'Test order',
+                status: 'pending',
+            },
         };
-        // Mock request, response, and next function
-        const req = mockRequest(userPayload); // Create a mock request
-        const res = mockResponse(); // Create a mock response
-        const next = jest.fn(); // Create a mock next function
-        (0, authMiddleware_1.default)(req, res, next); // Call the middleware
-        // Check that user data is attached to req.user
-        expect(req.user).toEqual(userPayload);
-        expect(next).toHaveBeenCalled(); // Ensure next is called
+        res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis(),
+        };
+        next = jest.fn();
     });
-    it('should return 401 if no token is provided', () => {
-        const req = mockRequest({}); // No user payload
-        const res = mockResponse();
-        const next = jest.fn();
-        req.headers['authorization'] = ''; // Empty token
-        (0, authMiddleware_1.default)(req, res, next); // Call the middleware
-        expect(res.status).toHaveBeenCalledWith(401); // Expect 401 response
-        expect(res.json).toHaveBeenCalledWith({ message: 'Access denied, no token provided.' });
-        expect(next).not.toHaveBeenCalled(); // Ensure next is not called
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+    test('createOrder should return 201 when order is successfully created', async () => {
+        // Mock Order.create to resolve with the order object
+        const mockOrder = {
+            userId: 123,
+            serviceId: 1,
+            orderDetails: 'Test order',
+            status: 'pending',
+        };
+        order_1.Order.create.mockResolvedValue(mockOrder);
+        // Call the createOrder controller
+        await (0, orderController_1.createOrder)(req, res);
+        // Verify the response status and JSON output
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.json).toHaveBeenCalledWith(mockOrder);
+    });
+    test('createOrder should return 500 when there is an error creating the order', async () => {
+        // Mock Order.create to reject with an error
+        order_1.Order.create.mockRejectedValue(new Error('Database error'));
+        // Call the createOrder controller
+        await (0, orderController_1.createOrder)(req, res);
+        // Verify the response status and error message
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ message: 'Error creating order', error: expect.any(Error) });
+    });
+    test('authenticateToken should call next if user is authenticated', async () => {
+        // Mock req.user as an authenticated user
+        req.user = { id: '123', tier: 'free' };
+        // Call authenticateToken middleware
+        const middleware = authenticateToken;
+        await middleware(req, res, next);
+        // Check that the next function was called
+        expect(next).toHaveBeenCalled();
+    });
+    test('authenticateToken should return 401 if no user is authenticated', async () => {
+        // Mock req.user as undefined (no user authenticated)
+        req.user = undefined;
+        // Call authenticateToken middleware
+        const middleware = authenticateToken;
+        await middleware(req, res, next);
+        // Verify that the response status is 401
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({ error: 'User is not authenticated or missing tier information' });
     });
 });
 //# sourceMappingURL=orderController.js.map

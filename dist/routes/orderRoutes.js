@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware")); // Correct import for authenticateToken middleware
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
-// Define the handler types
-const createOrderHandler = async (req, res) => {
+// Route to create an order
+router.post('/', authMiddleware_1.default, async (req, res, next) => {
     try {
         // Ensure that the user is available and has the necessary 'tier' property
         if (!req.user || !req.user.tier) {
@@ -20,10 +21,10 @@ const createOrderHandler = async (req, res) => {
         return res.status(201).json({ message: 'Order created successfully' });
     }
     catch (err) {
+        // Log the error and send a generic internal server error
+        console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
     }
-};
-// Route to create an order
-router.post('/', createOrderHandler);
+});
 exports.default = router;
 //# sourceMappingURL=orderRoutes.js.map
