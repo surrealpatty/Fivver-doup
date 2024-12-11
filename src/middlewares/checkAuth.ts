@@ -1,4 +1,3 @@
-// src/middlewares/checkAuth.ts
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
 import { AuthRequest } from '../types/index'; // Import the correct path for AuthRequest
@@ -13,8 +12,17 @@ export const checkAuth = (
   res: Response,
   next: NextFunction
 ): void => {
-  // Use req.get() to safely access the authorization header
-  const token = req.get('authorization')?.split(' ')[1]; // Assuming token is passed as "Bearer token"
+  // Get the authorization header
+  const authHeader = req.get('authorization');
+
+  // Ensure the authorization header is a string before calling split()
+  if (typeof authHeader !== 'string') {
+    res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    return;  // Explicitly return to avoid further execution
+  }
+
+  // Extract the token from the authorization header (e.g., "Bearer token")
+  const token = authHeader.split(' ')[1]; // Now safe to call split on a string
 
   if (!token) {
     res.status(401).json({ message: 'Authorization token is missing' });

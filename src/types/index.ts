@@ -8,10 +8,10 @@ export interface UserPayload {
   tier?: 'free' | 'paid';
 }
 
-// Extend Express's Request interface to include the user property and get method
-export interface AuthRequest extends Request {
+// Extend Express's Request interface to include the user property
+export interface AuthRequest extends Omit<Request, 'get'> {
   user?: UserPayload;  // Make 'user' optional in case authentication fails
-  get(name: string): string | string[] | undefined;  // Correct method signature
+  get(name: string): string | string[] | undefined;  // Keep the get signature compatible with Express
 }
 
 // Type guard function to check if req.user is a UserPayload
