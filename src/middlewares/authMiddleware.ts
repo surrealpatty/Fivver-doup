@@ -1,32 +1,36 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middleware/authMiddleware.ts
+
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Correct import for UserPayload
+import { AuthRequest } from '../types';  // Correct import for AuthRequest type
+import { UserPayload } from '../types';  // Correct import for UserPayload type
 
-// Secret key for JWT verification, should be in environment variables for security
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
-
-// Middleware to authenticate token and attach user data to the request
-export const authenticateToken = (
-  req: Request,  // The request type
-  res: Response,  // The response type
-  next: NextFunction // The next middleware function
-): Response<any, Record<string, any>> | void => { // Adjusted return type to allow both responses and void
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
+const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token is missing' });
+    return res.status(401).json({ message: 'Access Denied: No token provided' });  // Returning response, no need for `next()` here
   }
 
   try {
-    // Verify the token and decode it to UserPayload type
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as UserPayload;
 
-    // Attach user data to the request object
-    req.user = decoded;
+    if (!decoded.tier) {
+      return res.status(401).json({ message: 'Access Denied: Missing tier information' });  // Returning response
+    }
 
-    // Proceed to the next middleware or route handler
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    req.user = {
+      id: decoded.id,
+      email: decoded.email || '',
+      username: decoded.username || '',
+      tier: decoded.tier,
+      role: decoded.role || '',
+    };
+
+    next();  // Continue to next middleware/route handler
+  } catch (err) {
+    return res.status(401).json({ message: 'Access Denied: Invalid token' });  // Returning response
   }
 };
+
+export default authenticateToken;
