@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid package
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -35,8 +36,12 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Generate a new UUID for the user
+    const userId = uuidv4();
+
     // Create the new user
     const newUser = await User.create({
+      id: userId, // Manually set the generated ID
       username,
       email,
       password: hashedPassword,

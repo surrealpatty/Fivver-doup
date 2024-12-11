@@ -1,20 +1,21 @@
-// src/models/user.ts
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database'; // Ensure you're importing sequelize from the correct path
 
+// Define the UserAttributes interface with nullable resetToken and resetTokenExpiration
 interface UserAttributes {
-  id: string; // Required for fetched or updated users
+  id: string;
   username: string;
   email: string;
   password: string;
   role: string;
   tier: string;
   isVerified: boolean;
+  resetToken: string | null; // Allow null for resetToken
+  resetTokenExpiration: number | null; // Allow null for resetTokenExpiration
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}  // Mark 'id' as optional for creation
-
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+// Define the User model
+class User extends Model<UserAttributes> implements UserAttributes {
   public id!: string;
   public username!: string;
   public email!: string;
@@ -22,16 +23,15 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public role!: string;
   public tier!: string;
   public isVerified!: boolean;
-
-  // other fields and methods can go here
+  public resetToken!: string | null; // Allow null for resetToken
+  public resetTokenExpiration!: number | null; // Allow null for resetTokenExpiration
 }
 
-// Initialize the User model with the sequelize instance
+// Initialize the User model
 User.init(
   {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     username: {
@@ -60,10 +60,20 @@ User.init(
       allowNull: false,
       defaultValue: false,
     },
+    resetToken: {
+      type: DataTypes.STRING,
+      allowNull: true, // Allow null values for resetToken
+    },
+    resetTokenExpiration: {
+      type: DataTypes.BIGINT, // Use BIGINT for expiration time
+      allowNull: true, // Allow null values for resetTokenExpiration
+    },
   },
   {
-    sequelize,
+    sequelize, // Use the sequelize instance
     modelName: 'User',
+    tableName: 'users',
   }
 );
 
+export { User };

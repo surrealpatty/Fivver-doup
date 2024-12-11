@@ -1,30 +1,45 @@
-// src/router/index.ts
-import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../views/HomePage.vue';  // Make sure this path is correct
-import UserProfile from '../views/UserProfile.vue';  // Make sure this path is correct
-import EditService from '../components/EditService.vue';  // Make sure this path is correct
-import { Request } from 'express';
-const routes = [
-  // Home page route
-  { path: '/', component: HomePage },
+import express from 'express';
+import dotenv from 'dotenv';
+import router from './router';  // Import the main router that includes your routes
+import cors from 'cors';
+import { sequelize } from './config/database';  // Import the sequelize instance for DB connection
 
-  // User profile route
-  { path: '/profile', component: UserProfile },
+dotenv.config();  // Load environment variables
 
-  // Edit service route, expects a service id as a parameter
-  {
-    path: '/services/:id/edit',
-    name: 'EditService',
-    component: EditService,
-    props: true,  // This will pass the `id` parameter as a prop to EditService component
-  },
-];
+const app = express();
 
+// Middleware setup
+app.use(cors());  // CORS middleware to handle cross-origin requests
+app.use(express.json());  // To parse incoming JSON payloads
 
-// Create the router instance with history mode and routes
-const router = createRouter({
-  history: createWebHistory(),  // This uses HTML5 history mode
-  routes,
-});
+// Use the router for the app
+app.use('/api', router);  // Prefix the routes with "/api"
+
+// Test DB connection and start server
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connected successfully!');
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server is running on port ${process.env.PORT || 5000}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to the database:', error);
+  });
+aimport { Router } from 'express';
+import passwordResetRoutes from './passwordReset';  // Import the password reset routes (if applicable)
+
+const router = Router();
+
+// Include the password reset routes or other routes here
+router.use('/password-reset', passwordResetRoutes);  // Add password reset routes to the main router
+
+// Other routes, like profile, services, etc.
+import profileRoutes from './profile';  // Import other route files
+
+router.use('/profile', profileRoutes);  // Add profile routes
+
+// More route imports can go here, and ensure they are added to the main router
 
 export default router;
