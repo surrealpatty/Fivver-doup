@@ -8,6 +8,7 @@ import { User } from '@models/user';
 
 const router = express.Router();
 
+// GET profile route
 router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   // Ensure that req.user exists and contains both 'id' and 'tier'
   if (!req.user || !req.user.id || !req.user.tier) {
@@ -41,7 +42,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
   }
 });
 
-// Profile update route to allow users to update their profile information
+// PUT profile route
 router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   // Ensure that req.user exists and contains both 'id' and 'tier'
   if (!req.user || !req.user.id || !req.user.tier) {

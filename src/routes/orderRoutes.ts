@@ -28,7 +28,7 @@ const createOrderHandler: RequestHandler<{}, {}, CreateOrderRequest> = async (re
       return res.status(401).json({ error: 'User is not authenticated or missing tier information' });
     }
 
-    // Call createOrder controller with the request and response
+    // Proceed with order creation logic
     await createOrder(req, res);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });

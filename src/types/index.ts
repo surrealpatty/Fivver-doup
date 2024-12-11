@@ -1,12 +1,11 @@
 // src/types/index.ts
 import { Request } from 'express';
 
-// src/types/index.ts
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: string;  // `tier` is now required
+  tier: string; // Ensure 'tier' is part of the UserPayload
   role?: string; // Optional, if you want to include roles
 }
 
