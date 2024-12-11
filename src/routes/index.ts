@@ -1,21 +1,30 @@
+// src/router/index.ts
+import { createRouter, createWebHistory } from 'vue-router';
+import HomePage from '../views/HomePage.vue';  // Make sure this path is correct
+import UserProfile from '../views/UserProfile.vue';  // Make sure this path is correct
+import EditService from '../components/EditService.vue';  // Make sure this path is correct
 import { Request } from 'express';
+const routes = [
+  // Home page route
+  { path: '/', component: HomePage },
 
-// Extend Express Request to include custom properties
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // The authenticated user
-  get(name: string): string | undefined;  // Explicitly define the 'get' method for headers
-}
+  // User profile route
+  { path: '/profile', component: UserProfile },
 
-// User data structure for payload
-export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-}
+  // Edit service route, expects a service id as a parameter
+  {
+    path: '/services/:id/edit',
+    name: 'EditService',
+    component: EditService,
+    props: true,  // This will pass the `id` parameter as a prop to EditService component
+  },
+];
 
-// Types for Vue components if necessary (for routing purposes)
-declare module 'vue' {
-  export interface ComponentCustomProperties {
-    $router: VueRouter; // If you need to access the router instance in components
-  }
-}
+
+// Create the router instance with history mode and routes
+const router = createRouter({
+  history: createWebHistory(),  // This uses HTML5 history mode
+  routes,
+});
+
+export default router;
