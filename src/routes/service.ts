@@ -1,20 +1,22 @@
 // src/routes/service.ts
+
 import express, { Response, NextFunction } from 'express';
 import Service from '../models/services';
 import { authenticateToken } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types';  // Ensure you're importing AuthRequest
-import { Request } from 'express';
+import { AuthRequest, isUser } from '../types';  // Import isUser function and AuthRequest
 
 const router = express.Router();
 
 router.get('/services', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.user) {
+  // Use the type guard to ensure req.user is defined
+  if (!isUser(req)) {
     res.status(401).json({ message: 'User not authenticated' });
-    return; // Explicitly return after sending the response
+    return;
   }
 
-  const userId = req.user.id;  // Now it's safe to access `req.user.id`
-  const userTier = req.user.tier;  // Now it's safe to access `req.user.tier`
+  // Now `req.user` is properly typed and we can safely access its properties
+  const userId = req.user.id;  // Access `id` safely
+  const userTier = req.user.tier;  // Access `tier` safely
 
   try {
     const services = await Service.findAll({ where: { userId } });

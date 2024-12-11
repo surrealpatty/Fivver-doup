@@ -1,27 +1,18 @@
-import { Request } from 'express';
+// src/types/index.ts
 
-// Define the UserPayload interface
+export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
+  return req.user !== undefined; // Explicitly check for undefined
+}
+
+// Ensure AuthRequest and UserPayload are also exported
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier?: string;  // Add tier to UserPayload
+  tier?: string;
 }
 
-// Define the AuthRequest interface extending the Express Request type
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // user is optional
+  user?: UserPayload;  // user can be undefined if not authenticated
 }
 
-// Helper type guard to check if user exists
-export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
-  return !!req.user;
-}
-
-// Define the request body type for creating an order
-export interface CreateOrderRequest {
-  userId: number;
-  serviceId: number;
-  orderDetails: string;
-  status: string;
-}
