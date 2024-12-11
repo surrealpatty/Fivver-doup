@@ -1,8 +1,16 @@
 import { Request } from 'express';
-import { UserPayload } from './user';  // Import UserPayload from 'user.ts'
 
+// Define the UserPayload interface
+export interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+  tier?: string;
+}
+
+// Define the AuthRequest interface extending the Express Request type
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // User can be undefined
+  user?: UserPayload;  // user is optional, added to the request object
 }
 
 // Helper type guard to check if user exists
