@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const orderController_1 = require("../controllers/orderController"); // Correct import for the order controller
 const order_1 = require("../models/order"); // Correct import for the Order model
-const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware")); // Correct import for the authenticateToken middleware
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct named import
 // Mock Order model methods
 jest.mock('../models/order');
 describe('Order Controller', () => {
@@ -62,7 +59,7 @@ describe('Order Controller', () => {
         // Mock req.user as an authenticated user
         req.user = { id: '123', tier: 'free' };
         // Call authenticateToken middleware
-        await (0, authMiddleware_1.default)(req, res, next);
+        await (0, authenticateToken_1.authenticateToken)(req, res, next);
         // Check that the next function was called
         expect(next).toHaveBeenCalled();
     });
@@ -70,7 +67,7 @@ describe('Order Controller', () => {
         // Mock req.user as undefined (no user authenticated)
         req.user = undefined;
         // Call authenticateToken middleware
-        await (0, authMiddleware_1.default)(req, res, next);
+        await (0, authenticateToken_1.authenticateToken)(req, res, next);
         // Verify that the response status is 401
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({ error: 'User is not authenticated or missing tier information' });

@@ -9,7 +9,7 @@ const router = Router();
 router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Ensure req.user is properly typed and available
-    if (req.user) {
+    if (!req.user) {
       // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
       res.status(200).json({ message: 'Dashboard data fetched successfully.' });
     } else {
