@@ -1,22 +1,25 @@
 // src/routes/dashboard.ts
-import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
-import { AuthRequest } from '../types';  // Import the correct AuthRequest type
+import { Router, Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middleware/authenticateToken';
+import { AuthRequest } from '../types';  // Import AuthRequest interface
 
 const router = Router();
 
-// GET route for the dashboard
+// Update the route handler to handle 'user' being possibly undefined
 router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+  const user = req.user;  // The user property could be undefined
+
+  if (!user) {
+    // Handle the case where the user is not authenticated
+    res.status(401).json({ message: 'User not authenticated' });
+    return;
+  }
+
   try {
-    // Ensure req.user is properly typed and available
-    if (!req.user) {
-      // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
-      res.status(200).json({ message: 'Dashboard data fetched successfully.' });
-    } else {
-      res.status(400).json({ message: 'User not authenticated.' });
-    }
-  } catch (err) {
-    next(err); // Pass errors to the error handler
+    // Proceed with logic assuming 'user' is defined
+    res.status(200).json({ message: 'Welcome to your dashboard!', user });
+  } catch (error) {
+    next(error);
   }
 });
 

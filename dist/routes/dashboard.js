@@ -8,7 +8,7 @@ const router = (0, express_1.Router)();
 router.get('/dashboard', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
         // Ensure req.user is properly typed and available
-        if (req.user) {
+        if (!req.user) {
             // Logic to fetch dashboard data (e.g., user services, ratings, etc.)
             res.status(200).json({ message: 'Dashboard data fetched successfully.' });
         }
