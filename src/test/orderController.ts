@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware'; // Correct import for authenticateToken
+import authenticateToken from '../middlewares/authMiddleware';
 import { UserPayload } from '../types';  // Correct import path
 
 // Mock request and response functions

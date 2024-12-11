@@ -1,7 +1,8 @@
 // src/routes/review.ts
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken'; // Correct import for authenticateToken
-import { AuthRequest } from '../types/authMiddleware'; // Correctly typed AuthRequest
+import { AuthRequest } from '../types';
+
 import { UserPayload } from '../types'; // Correct path for your types
 
 const router = Router();

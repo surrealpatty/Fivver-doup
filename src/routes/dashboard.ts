@@ -1,6 +1,6 @@
 // src/routes/dashboard.ts
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';  // Correct path
+import authenticateToken from '../middlewares/authMiddleware';
 
 const router = Router();
 
