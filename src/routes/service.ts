@@ -1,4 +1,3 @@
-// src/routes/service.ts
 import express, { Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware';
 import { AuthRequest } from '../types';  // Correct import for AuthRequest
@@ -25,9 +24,17 @@ router.get('/services', authenticateToken, async (req: AuthRequest, res: Respons
       message: 'User services retrieved successfully',
       services,
     });
-  } catch (err) {
+  } catch (err: unknown) {  // Explicitly type the error as 'unknown'
     console.error(err);
-    next(err);  // Pass the error to the error handler
+
+    // Type guard to check if 'err' is an instance of Error
+    if (err instanceof Error) {
+      // If the error is an instance of Error, safely access the message property
+      return res.status(500).json({ message: 'Internal server error', error: err.message });
+    } else {
+      // If 'err' is not an instance of Error, return a generic error message
+      return res.status(500).json({ message: 'Internal server error', error: 'Unknown error occurred' });
+    }
   }
 });
 

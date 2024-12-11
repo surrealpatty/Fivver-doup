@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                          // Target modern JavaScript features
-    "module": "commonjs",                        // Use CommonJS modules for Node.js compatibility
+    "target": "ES2020",                          // Use modern JS features
+    "module": "commonjs",                        // CommonJS modules for Node.js
     "moduleResolution": "node",                  // Resolve modules like Node.js
     "esModuleInterop": true,                     // Enable interoperability between CommonJS and ES modules
     "skipLibCheck": true,                        // Skip type checking of declaration files for faster compilation
     "strict": true,                              // Enable strict type checking
-    "skipDefaultLibCheck": true,                 // Skip checking the default library
+    "skipDefaultLibCheck": true,                 // Skip default library checking (for faster compilation)
     "forceConsistentCasingInFileNames": true,    // Ensure consistent casing in file names
-    "resolveJsonModule": true,                   // Allow importing of JSON files as modules
+    "resolveJsonModule": true,                   // Allow importing JSON files as modules
     "allowSyntheticDefaultImports": true,        // Allow default imports from modules without a default export
-    "experimentalDecorators": true,              // Enable experimental support for decorators
-    "emitDecoratorMetadata": true,               // Emit metadata for decorators (useful for TypeORM, etc.)
+    "experimentalDecorators": true,              // Enable experimental support for decorators (useful for TypeORM, etc.)
+    "emitDecoratorMetadata": true,               // Emit metadata for decorators
     "typeRoots": [
-      "./node_modules/@types"                    // Only the default type roots, including node_modules
+      "./node_modules/@types"                    // Default type roots
     ],
-    "baseUrl": "./",                             // Set base directory for module resolution
+    "baseUrl": "./",                             // Set the base directory for module resolution
     "paths": {
       "@models/*": ["src/models/*"],             // Alias for models directory
       "@controllers/*": ["src/controllers/*"],   // Alias for controllers directory
@@ -25,10 +25,10 @@
     },
     "outDir": "./dist",                          // Output compiled files to the dist folder
     "rootDir": "./src",                          // Root directory of source files
-    "lib": ["ES2020", "ESNext"],                 // Include libraries like ES2020 and ESNext for full JS support
+    "lib": ["ES2020", "ESNext"],                 // Include ES2020 and ESNext libraries
     "allowJs": true,                             // Allow JS files in TypeScript project
-    "declaration": true,                         // Generates .d.ts declaration files
-    "declarationMap": true,                      // Generates source maps for .d.ts files
+    "declaration": true,                         // Generate .d.ts declaration files
+    "declarationMap": true,                      // Generate source maps for declaration files
     "sourceMap": true                            // Generate source maps for debugging
   },
   "include": [
@@ -38,7 +38,7 @@
   "exclude": [
     "node_modules",                             // Exclude node_modules from compilation
     "dist",                                     // Exclude dist folder
-    "fivver-frontend",                          // Exclude frontend code
+    "fivver-frontend",                          // Exclude frontend code (if separate)
     "jest.config.ts",                           // Exclude Jest config file
     "jest.setup.ts"                             // Exclude Jest setup file
   ]

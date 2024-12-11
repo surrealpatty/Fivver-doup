@@ -3,7 +3,7 @@ import { AuthRequest } from '../types';  // Correct import for AuthRequest type
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { sequelize } from '../config/database';  // Correct import for sequelize
-import authenticateToken from '../middlewares/authenticateToken';  // Corrected import
+import { authenticateToken } from '../middlewares/authenticateToken';  // Corrected import
 
 
 // Mock Order model methods
