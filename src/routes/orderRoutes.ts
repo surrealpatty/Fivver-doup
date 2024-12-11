@@ -1,18 +1,25 @@
 // src/routes/orderRoutes.ts
-import express, { Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { isUserPayload } from '../types';  // Correct import for isUserPayload
-import { createOrder } from '../controllers/orderController';
-import { OrderRequest } from '../types/orderRequest';  // Import OrderRequest from orderRequest.ts
+import { isUserPayload } from '../types';  // Assuming isUserPayload is correctly imported
+import { createOrder } from '../controllers/orderController';  // Ensure createOrder is correctly imported
+import { AuthRequest, CreateOrderRequest } from '../types';  // Ensure correct imports
 
 const router = express.Router();
 
 // Define the handler for creating an order
-const createOrderHandler = async (req: OrderRequest, res: Response, next: NextFunction) => {
+const createOrderHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (isUserPayload(req.user)) {  // Use the type guard to ensure user is valid
     try {
-      // Proceed with order creation logic
-      await createOrder(req, res);
+      // Proceed with order creation logic, passing the correct request body
+      const orderData: CreateOrderRequest = {
+        userId: req.user.id,   // Assuming req.user contains `id` and `tier`
+        serviceId: req.body.serviceId,
+        orderDetails: req.body.orderDetails,
+        status: 'pending', // Set default status or customize as needed
+      };
+      
+      await createOrder(orderData, res);  // Pass orderData to createOrder
     } catch (err) {
       next(err);  // Pass errors to the next middleware
     }
@@ -25,7 +32,7 @@ const createOrderHandler = async (req: OrderRequest, res: Response, next: NextFu
 router.post('/', authenticateToken, createOrderHandler);
 
 // Example for a getAllOrders route:
-router.get('/', authenticateToken, async (req: OrderRequest, res: Response) => {
+router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   if (isUserPayload(req.user)) {  // Ensure user is valid before proceeding
     try {
       // Your logic to fetch all orders

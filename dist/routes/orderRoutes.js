@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
 const authenticateToken_1 = require("../middlewares/authenticateToken");
-const types_1 = require("../types"); // Correct import
-const orderController_1 = require("../controllers/orderController"); // Ensure createOrder is correctly imported
+const types_1 = require("../types"); // Correct import for isUserPayload
+const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
 // Define the handler for creating an order
 const createOrderHandler = async (req, res, next) => {

@@ -1,5 +1,6 @@
-import { Request } from 'express';
+// src/types/index.ts
 import { UserPayload } from './user';  // Assuming UserPayload is in 'user.ts'
+import { Request } from 'express';
 
 // Extend the Request interface to include the user property of type UserPayload
 export interface AuthRequest extends Request {

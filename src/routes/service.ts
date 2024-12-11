@@ -3,6 +3,7 @@ import express, { Response, NextFunction } from 'express';
 import Service from '../models/services';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { AuthRequest } from '../types/authMiddleware'; // Correctly typed AuthRequest
+import { Request } from 'express';
 
 const router = express.Router();
 
