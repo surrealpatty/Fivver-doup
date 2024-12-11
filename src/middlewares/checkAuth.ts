@@ -13,7 +13,7 @@ export const checkAuth = (
   next: NextFunction
 ): void => {  // Return type is explicitly 'void' for middleware
   // Access the 'authorization' header directly from req.headers
-  const authorizationHeader = req.headers['authorization'] as string | undefined;
+  const authorizationHeader = req.headers.get('authorization') || undefined;
 
   if (!authorizationHeader) {
     res.status(401).json({ message: 'Authorization token is missing or invalid' });

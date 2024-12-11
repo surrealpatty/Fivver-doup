@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/service.ts
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const services_1 = __importDefault(require("../models/services"));
@@ -25,9 +24,17 @@ router.get('/services', authMiddleware_1.authenticateToken, async (req, res, nex
             services,
         });
     }
-    catch (err) {
+    catch (err) { // Explicitly type the error as 'unknown'
         console.error(err);
-        next(err); // Pass the error to the error handler
+        // Type guard to check if 'err' is an instance of Error
+        if (err instanceof Error) {
+            // If the error is an instance of Error, safely access the message property
+            return res.status(500).json({ message: 'Internal server error', error: err.message });
+        }
+        else {
+            // If 'err' is not an instance of Error, return a generic error message
+            return res.status(500).json({ message: 'Internal server error', error: 'Unknown error occurred' });
+        }
     }
 });
 exports.default = router;

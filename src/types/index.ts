@@ -10,7 +10,7 @@ export interface UserPayload {
 
 // Define the AuthRequest interface extending Request to include a user property
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Make 'user' optional to handle undefined cases
+  user: UserPayload;  // Ensure `user` is always present
 }
 
 // Type guard function to check if req.user is a UserPayload
