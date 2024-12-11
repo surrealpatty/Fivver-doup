@@ -1,18 +1,19 @@
-import express, { Request, Response, NextFunction } from 'express';  // Import NextFunction
-import cors from 'cors';
-import { sequelize } from './config/database'; // Correct import for sequelize
-import userRouter from './routes/user'; // Default import for userRouter
-import profileRouter from './routes/profile'; // Default import for profileRouter
-import authRouter from './routes/auth'; // Default import for authRouter
-import dotenv from 'dotenv'; // For loading environment variables
-import './types/express';  // Ensure this import is present to load the augmentation
+import './types/express';  // Ensure this import is first to load the augmentation
 
-dotenv.config(); // Load environment variables from .env
+import express, { Request, Response, NextFunction } from 'express';  // Import Express and types
+import cors from 'cors';                                           // Import CORS middleware
+import { sequelize } from './config/database';                    // Correct import for sequelize
+import userRouter from './routes/user';                            // Import userRouter
+import profileRouter from './routes/profile';                      // Import profileRouter
+import authRouter from './routes/auth';                            // Import authRouter
+import dotenv from 'dotenv';                                       // Import dotenv for environment variables
 
-const app = express();
+dotenv.config();  // Load environment variables from .env
+
+const app = express();  // Initialize Express app
 
 // Set up the server port, defaulting to process.env.PORT or 3000
-const port = process.env.PORT || 3000; // Default port is 3000, can be overridden for testing
+const port = process.env.PORT || 3000;  // Default port is 3000, can be overridden for testing
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -64,4 +65,4 @@ const server = app.listen(port, () => {
 });
 
 // Export app and server for use in tests or other parts of the application
-export { app, server }; // Export both app and server instance for testing or server shutdown
+export { app, server };  // Export both app and server instance for testing or server shutdown
