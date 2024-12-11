@@ -1,27 +1,29 @@
-import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';  // Correct import for authenticateToken
-import { AuthRequest } from '../types';  // Correct import for AuthRequest type
-import Service from '../models/services';  // Correct import for the Service model
-import { User } from '../models/user';  // Correct import for the User model
+// src/routes/profile.ts
+import { Router, Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../types';  // Import the AuthRequest interface
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
+import Service from '../models/services';  // Import the Service model
+import { User } from '../models/user';  // Import the User model
 
-const router = express.Router();
+const router = Router();
 
 // GET profile route
 router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  // Ensure that req.user exists and contains both 'id' and 'tier'
+  // Check if user is undefined or missing necessary properties (id and tier)
   if (!req.user || !req.user.id || !req.user.tier) {
     return res.status(401).json({ message: 'User not authenticated or missing tier information' });
   }
 
-  const userId = req.user.id;  // Get user ID from the authenticated token
+  const userId = req.user.id;  // Extract user ID from the authenticated token
 
   try {
-    // Fetch the user information and their services
+    // Fetch the user information from the database
     const user = await User.findOne({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Fetch the services associated with the user
     const services = await Service.findAll({ where: { userId } });
 
     return res.status(200).json({
@@ -30,7 +32,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,
-        tier: req.user.tier,  // Ensure tier is returned from the authenticated user
+        tier: req.user.tier,  // Include tier information from the authenticated user
       },
       services,
     });
@@ -42,12 +44,12 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
 
 // PUT profile route
 router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  // Ensure that req.user exists and contains both 'id' and 'tier'
+  // Check if user is undefined or missing necessary properties (id and tier)
   if (!req.user || !req.user.id || !req.user.tier) {
     return res.status(401).json({ message: 'User not authenticated or missing tier information' });
   }
 
-  const userId = req.user.id;  // Get user ID from the authenticated token
+  const userId = req.user.id;  // Extract user ID from the authenticated token
   const { username, email } = req.body;  // Extract updated profile details from request body
 
   try {
@@ -61,7 +63,7 @@ router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response
     if (username) user.username = username;
     if (email) user.email = email;
 
-    // Save the updated user
+    // Save the updated user to the database
     await user.save();
 
     return res.status(200).json({
@@ -70,7 +72,7 @@ router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,
-        tier: req.user.tier,  // Include the updated 'tier' information
+        tier: req.user.tier,  // Include the updated 'tier' information from the authenticated user
       },
     });
   } catch (err) {
