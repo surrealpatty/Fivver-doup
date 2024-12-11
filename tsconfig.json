@@ -13,7 +13,8 @@
     "experimentalDecorators": true,              // Enable experimental support for decorators (useful for TypeORM, etc.)
     "emitDecoratorMetadata": true,               // Emit metadata for decorators
     "typeRoots": [
-      "./node_modules/@types"                    // Default type roots
+      "./node_modules/@types",                   // Default type roots
+      "./src/types"                               // Include local types if you have custom types
     ],
     "baseUrl": "./",                             // Set the base directory for module resolution
     "paths": {
