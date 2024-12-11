@@ -1,5 +1,4 @@
 "use strict";
-// src/index.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,6 +25,12 @@ app.use((0, cors_1.default)());
 app.get('/', (_req, res) => {
     res.send('Welcome to Fiverr Clone!');
 });
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', user_1.default); // Register the user routes under /api/users
+// Register the profile route under /api/profile
+app.use('/api/profile', profile_1.default); // Register profile route
+// Register the auth route under /api/auth
+app.use('/api/auth', auth_1.default); // Register auth route for user registration/login
 // Synchronize models with the database
 database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data loss
     .then(() => {
@@ -34,12 +39,6 @@ database_1.sequelize.sync({ alter: true }) // Using 'alter' to ensure no data lo
     .catch((error) => {
     console.error('Error syncing models:', error);
 });
-// Use the userRouter for routes starting with /api/users
-app.use('/api/users', user_1.default); // Register the user routes under /api/users
-// Register the profile route under /api/profile
-app.use('/api/profile', profile_1.default); // Register profile route
-// Register the auth route under /api/auth
-app.use('/api/auth', auth_1.default); // Register auth route for user registration/login
 // Test database connection
 database_1.sequelize.authenticate()
     .then(() => {

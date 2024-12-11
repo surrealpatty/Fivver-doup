@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const userController_1 = require("../controllers/userController");
 const userRouter = (0, express_1.Router)();
-// Correct route handler signature
-userRouter.get('/', (req, res, next) => {
+// Define the /register POST route
+userRouter.post('/register', async (req, res, next) => {
     try {
-        // Add your route logic here
-        res.status(200).json({ message: 'User routes are working!' });
+        // Call the registerUser controller to handle the registration logic
+        await (0, userController_1.registerUser)(req, res);
     }
     catch (error) {
-        // Handle any errors by passing them to the next middleware
+        // If an error occurs, pass it to the next middleware
         next(error);
     }
 });
