@@ -1,3 +1,5 @@
+// src/routes/profile.ts
+
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import
 import { AuthRequest } from '../types/authMiddleware';  // Correctly typed AuthRequest
@@ -7,11 +9,12 @@ import { User } from '@models/user';
 const router = express.Router();
 
 router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const userId = req.user?.id;  // Get user ID from the authenticated token
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID not found in token' });
+  // Ensure that req.user exists and contains both 'id' and 'tier'
+  if (!req.user || !req.user.id || !req.user.tier) {
+    return res.status(401).json({ message: 'User not authenticated or missing tier information' });
   }
+
+  const userId = req.user.id;  // Get user ID from the authenticated token
 
   try {
     // Fetch the user information and their services
@@ -28,7 +31,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,
-        tier: req.user?.tier,  // Make sure to return 'tier' as well
+        tier: req.user.tier,  // Make sure to return 'tier' as well
       },
       services,
     });
@@ -40,12 +43,12 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
 
 // Profile update route to allow users to update their profile information
 router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID not found in token' });
+  // Ensure that req.user exists and contains both 'id' and 'tier'
+  if (!req.user || !req.user.id || !req.user.tier) {
+    return res.status(401).json({ message: 'User not authenticated or missing tier information' });
   }
 
+  const userId = req.user.id;
   const { username, email } = req.body;
 
   try {
@@ -65,7 +68,7 @@ router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response
         id: user.id,
         username: user.username,
         email: user.email,
-        tier: req.user?.tier,  // Include the updated 'tier' information
+        tier: req.user.tier,  // Include the updated 'tier' information
       },
     });
   } catch (err) {
