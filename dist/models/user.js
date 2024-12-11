@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-// src/models/user.ts
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
+const database_1 = require("../config/database"); // Ensure you're importing sequelize from the correct path
+// Define the User model
 class User extends sequelize_1.Model {
 }
 exports.User = User;
-// Initialize the User model with the sequelize instance
+// Initialize the User model
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
-        defaultValue: sequelize_1.DataTypes.UUIDV4,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
     },
     username: {
@@ -40,8 +39,17 @@ User.init({
         allowNull: false,
         defaultValue: false,
     },
+    resetToken: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true, // Allow null values for resetToken
+    },
+    resetTokenExpiration: {
+        type: sequelize_1.DataTypes.BIGINT, // Use BIGINT for expiration time
+        allowNull: true, // Allow null values for resetTokenExpiration
+    },
 }, {
-    sequelize: database_1.sequelize,
+    sequelize: database_1.sequelize, // Use the sequelize instance
     modelName: 'User',
+    tableName: 'users',
 });
 //# sourceMappingURL=user.js.map

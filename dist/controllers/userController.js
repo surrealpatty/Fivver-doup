@@ -9,6 +9,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const uuid_1 = require("uuid"); // Import uuid package
 dotenv_1.default.config(); // Load environment variables from .env file
 // Nodemailer setup for email verification
 const transporter = nodemailer_1.default.createTransport({
@@ -33,8 +34,11 @@ const registerUser = async (req, res) => {
         }
         // Hash the password
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
+        // Generate a new UUID for the user
+        const userId = (0, uuid_1.v4)();
         // Create the new user
         const newUser = await user_1.User.create({
+            id: userId, // Manually set the generated ID
             username,
             email,
             password: hashedPassword,

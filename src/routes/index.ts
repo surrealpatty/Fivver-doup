@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import router from './router';  // Import the main router that includes your routes
+import { Router } from 'express';
 import cors from 'cors';
 import { sequelize } from './config/database';  // Import the sequelize instance for DB connection
 
