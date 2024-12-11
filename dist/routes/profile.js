@@ -3,76 +3,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express")); // Import necessary types
-const services_1 = __importDefault(require("../models/services"));
-const user_1 = require("@models/user"); // Assuming there is a User model for user details
+const express_1 = __importDefault(require("express"));
 const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import
+const services_1 = __importDefault(require("../models/services"));
+const user_1 = require("@models/user");
 const router = express_1.default.Router();
-// Profile route to get the user's info and their services
 router.get('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
     const userId = req.user?.id; // Get user ID from the authenticated token
     if (!userId) {
-        res.status(400).json({ message: 'User ID not found in token' });
-        return;
+        return res.status(400).json({ message: 'User ID not found in token' });
     }
     try {
         // Fetch the user information and their services
         const user = await user_1.User.findOne({ where: { id: userId } });
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
-            return;
+            return res.status(404).json({ message: 'User not found' });
         }
         const services = await services_1.default.findAll({ where: { userId } });
-        res.status(200).json({
+        return res.status(200).json({
             message: 'User profile retrieved successfully',
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email, // Include relevant user details
-                tier: user.tier, // Include the tier field
+                email: user.email,
+                tier: req.user?.tier, // Make sure to return 'tier' as well
             },
-            services, // Include user's services
+            services,
         });
     }
     catch (err) {
         console.error(err);
-        next(err); // Pass error to the next middleware (error handler)
+        next(err);
     }
 });
 // Profile update route to allow users to update their profile information
 router.put('/profile', authenticateToken_1.authenticateToken, async (req, res, next) => {
-    const userId = req.user?.id; // Get user ID from the authenticated token
+    const userId = req.user?.id;
     if (!userId) {
-        res.status(400).json({ message: 'User ID not found in token' });
-        return;
+        return res.status(400).json({ message: 'User ID not found in token' });
     }
-    const { username, email } = req.body; // You can add other fields as needed
+    const { username, email } = req.body;
     try {
-        // Find the user by ID and update their details
         const user = await user_1.User.findOne({ where: { id: userId } });
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
-            return;
+            return res.status(404).json({ message: 'User not found' });
         }
-        // Update user details
         if (username)
             user.username = username;
         if (email)
             user.email = email;
         await user.save();
-        res.status(200).json({
+        return res.status(200).json({
             message: 'User profile updated successfully',
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email, // Return updated user info
-                tier: user.tier, // Return the updated tier
+                email: user.email,
+                tier: req.user?.tier, // Include the updated 'tier' information
             },
         });
     }
     catch (err) {
         console.error(err);
-        next(err); // Pass error to the next middleware (error handler)
+        next(err);
     }
 });
 exports.default = router;

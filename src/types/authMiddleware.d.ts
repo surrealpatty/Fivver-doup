@@ -1,7 +1,6 @@
 import { Request } from 'express';
-import { UserPayload } from './index';  // Assuming UserPayload is the correct type for user
+import { UserPayload } from './index';  // Import UserPayload type
 
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Ensure 'tier' is included in the UserPayload
+  user?: UserPayload;  // Ensure 'user' has the required fields, including 'tier'
 }
-
