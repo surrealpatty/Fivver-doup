@@ -1,28 +1,30 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { AuthRequest, UserPayload } from '../types';  // Import the AuthRequest and UserPayload types
+// src/middlewares/authenticateToken.ts
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../types';  // Import AuthRequest type
+import jwt from 'jsonwebtoken';  // Assuming you're using JWT for token authentication
 
+// Middleware to authenticate the token and add the user to the request
 const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const token = req.headers['authorization']?.split(' ')[1];  // Assuming a Bearer token
 
   if (!token) {
-    // Send the 401 response and exit early without returning anything from the middleware
-    res.status(401).send('Access Denied');
-    return;  // Prevent further code execution
+    // If no token, return Unauthorized
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  try {
-    // Verify token and decode it
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = decoded as UserPayload;  // Set user to the decoded JWT payload
+  // Verify the token with JWT
+  jwt.verify(token, process.env.JWT_SECRET!, (err: any, user: any) => {
+    if (err) {
+      // If token verification fails, return Forbidden
+      return res.status(403).json({ message: 'Forbidden' });
+    }
 
-    // Proceed to the next middleware or route handler
-    next();  
-  } catch (error) {
-    // Invalid token response without returning a value
-    res.status(400).send('Invalid Token');
-    return;  // Prevent further code execution
-  }
+    // Assign the user to the request object (could be undefined if invalid)
+    req.user = user || undefined;
+    
+    // Pass to the next middleware
+    next();
+  });
 };
 
 export default authenticateToken;

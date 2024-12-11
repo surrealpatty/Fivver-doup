@@ -1,26 +1,28 @@
-// src/routes/dashboard.ts
-import { Router, Request, Response, NextFunction } from 'express';
-import  authenticateToken  from '../middlewares/authenticateToken';
-import { AuthRequest } from '../types';  // Import AuthRequest interface
+// src/types/index.ts
 
-const router = Router();
+import { Request } from 'express';  // Import Request from express
+import  UserPayload  from './user';  // Assuming UserPayload is defined in 'user.ts'
 
-// Update the route handler to handle 'user' being possibly undefined
-router.get('/dashboard', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-  const user = req.user;  // The user property could be undefined
+export interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+}
 
-  if (!user) {
-    // Handle the case where the user is not authenticated
-    res.status(401).json({ message: 'User not authenticated' });
-    return;
-  }
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // User can be undefined
+}
 
-  try {
-    // Proceed with logic assuming 'user' is defined
-    res.status(200).json({ message: 'Welcome to your dashboard!', user });
-  } catch (error) {
-    next(error);
-  }
-});
+// Helper type guard to check if user exists
+export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
+  return !!req.user;
+}
 
-export default router;
+// Define the request body type for creating an order
+export interface CreateOrderRequest {
+  userId: number;
+  serviceId: number;
+  orderDetails: string;
+  status: string;
+}
+
