@@ -35,7 +35,8 @@
   },
   "include": [
     "src/**/*.ts",                              // Include all TypeScript files in the src folder
-    "src/test/**/*.ts"                          // Include test files in the src/test folder
+    "src/test/**/*.ts",                         // Include test files in the src/test folder
+    "src/types/**/*.d.ts"                       // Include all .d.ts files in the types folder
   ],
   "exclude": [
     "node_modules",                             // Exclude node_modules from compilation
