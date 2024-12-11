@@ -13,12 +13,14 @@ res, next) => {
     // Access the 'authorization' header directly from req.headers
     const authorizationHeader = req.headers['authorization'];
     if (!authorizationHeader) {
-        return res.status(401).json({ message: 'Authorization token is missing or invalid' });
+        res.status(401).json({ message: 'Authorization token is missing or invalid' });
+        return; // Explicitly return to avoid further execution
     }
     // Extract the token from the "Bearer <token>" format
     const token = authorizationHeader.split(' ')[1]; // Assuming token is passed as "Bearer token"
     if (!token) {
-        return res.status(401).json({ message: 'Authorization token is missing' });
+        res.status(401).json({ message: 'Authorization token is missing' });
+        return; // Explicitly return to avoid further execution
     }
     try {
         // Verify the token
@@ -33,8 +35,9 @@ res, next) => {
         next();
     }
     catch (error) {
-        // Do not return a value from this block; just send a response and exit the function
-        return res.status(401).json({ message: 'Invalid or expired token' });
+        // Handle invalid token case and return response directly
+        res.status(401).json({ message: 'Invalid or expired token' });
+        return; // Explicitly return to avoid further execution
     }
 };
 exports.checkAuth = checkAuth;
