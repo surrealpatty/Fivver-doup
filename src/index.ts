@@ -1,8 +1,5 @@
 // src/index.ts
 
-// Ensure custom type augmentation is loaded first
-import './types/express.d.ts';
-
 // Import necessary modules
 import express, { Request, Response, NextFunction } from 'express';  // Import Express and types
 import cors from 'cors';                                           // Import CORS middleware

@@ -5,8 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
-// Ensure custom type augmentation is loaded first
-require("./types/express.d.ts");
 // Import necessary modules
 const express_1 = __importDefault(require("express")); // Import Express and types
 const cors_1 = __importDefault(require("cors")); // Import CORS middleware
