@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/orderRoutes.ts
 const express_1 = __importDefault(require("express"));
-const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware")); // Correct import for authenticateToken middleware
+const authMiddleware_1 = require("../middlewares/authMiddleware"); // Correct import for authenticateToken middleware
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
 // Route to create an order
-router.post('/', authMiddleware_1.default, async (req, res, next) => {
+router.post('/', authMiddleware_1.authenticateToken, async (req, res, next) => {
     try {
         // Ensure that the user is available and has the necessary 'tier' property
         if (!req.user || !req.user.tier) {
