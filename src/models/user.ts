@@ -59,10 +59,9 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true, // resetTokenExpiration can be null initially
     },
-    createdAt: {
+    created_at: {
       type: DataTypes.DATE,
-      allowNull: false, // createdAt cannot be null
-      defaultValue: DataTypes.NOW, // Set default to current timestamp
+      allowNull: true,  // Allow NULL
     },
     updatedAt: {
       type: DataTypes.DATE,
