@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
+const database_1 = require("../config/database"); // Import the sequelize instance
 class User extends sequelize_1.Model {
 }
 exports.User = User;
@@ -11,6 +11,7 @@ User.init({
         type: sequelize_1.DataTypes.UUID,
         defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate UUID for the ID
         primaryKey: true, // Set the ID as the primary key
+        allowNull: false, // Ensure the ID is not null
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
@@ -50,5 +51,8 @@ User.init({
 }, {
     sequelize: database_1.sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
+    tableName: 'users', // Explicitly specify the table name (optional)
+    timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
+    underscored: true, // Use snake_case column names
 });
 //# sourceMappingURL=user.js.map

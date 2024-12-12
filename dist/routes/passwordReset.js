@@ -34,7 +34,7 @@ router.post('/reset-password/request', async (req, res) => {
         const resetTokenExpiration = new Date(Date.now() + 3600000); // 1 hour expiration
         // Store the token and expiration in the database
         user.resetToken = resetToken;
-        user.resetTokenExpiration = resetTokenExpiration; // Ensure it's a Date object
+        user.resetTokenExpiration = resetTokenExpiration;
         await user.save();
         // Send the password reset email with the reset token
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
@@ -48,7 +48,7 @@ router.post('/reset-password/request', async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error while processing password reset request' });
     }
 });
 // Handle Password Reset
@@ -77,7 +77,7 @@ router.post('/reset-password/:token', async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error while resetting password' });
     }
 });
 exports.default = router;
