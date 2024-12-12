@@ -11,6 +11,8 @@ class User extends Model {
   public isVerified!: boolean; // Flag for account verification
   public resetToken!: string | null; // Reset token for password reset functionality
   public resetTokenExpiration!: Date | null; // Expiration date for the reset token
+  public createdAt!: Date; // createdAt field
+  public updatedAt!: Date; // updatedAt field
 }
 
 User.init(
@@ -56,6 +58,16 @@ User.init(
     resetTokenExpiration: {
       type: DataTypes.DATE,
       allowNull: true, // resetTokenExpiration can be null initially
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false, // createdAt cannot be null
+      defaultValue: DataTypes.NOW, // Set default to current timestamp
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false, // updatedAt cannot be null
+      defaultValue: DataTypes.NOW, // Set default to current timestamp
     },
   },
   {
