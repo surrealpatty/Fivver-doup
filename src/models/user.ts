@@ -1,5 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Import the sequelize instance
+import { v4 as uuidv4 } from 'uuid'; // Import uuid package for manual UUID generation check
+
+console.log("Generated UUID:", uuidv4()); // Verify UUID generation outside of Sequelize
 
 class User extends Model {
   public id!: string; // UUID field for the user ID

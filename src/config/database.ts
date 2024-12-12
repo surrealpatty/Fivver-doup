@@ -13,4 +13,13 @@ const sequelize = new Sequelize({
   logging: false, // Optional: disables SQL query logging
 });
 
+// Sync database models with the schema
+sequelize.sync({ alter: true }) // This will automatically update your schema based on your models
+  .then(() => {
+    console.log('Database synced');
+  })
+  .catch((err) => {
+    console.error('Error syncing database:', err);
+  });
+
 export { sequelize };
