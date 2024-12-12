@@ -1,19 +1,7 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Import the sequelize instance
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database'); // Import the sequelize instance
 
-class User extends Model {
-  public id!: string; // UUID field for the user ID
-  public email!: string; // Email field
-  public password!: string; // Password field
-  public username!: string; // Username field
-  public tier!: string; // User tier (e.g., free or paid)
-  public role!: string; // Role (e.g., user, admin)
-  public isVerified!: boolean; // Flag for account verification
-  public resetToken!: string | null; // Reset token for password reset functionality
-  public resetTokenExpiration!: Date | null; // Expiration date for the reset token
-  public createdAt!: Date; // createdAt field
-  public updatedAt!: Date; // updatedAt field
-}
+class User extends Model {}
 
 User.init(
   {
@@ -59,7 +47,7 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true, // resetTokenExpiration can be null initially
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,  // Allow NULL
     },
@@ -78,4 +66,4 @@ User.init(
   }
 );
 
-export { User };
+module.exports = { User };
