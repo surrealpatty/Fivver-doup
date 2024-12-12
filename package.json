@@ -5,8 +5,7 @@
   "author": "Patty",
   "main": "dist/index.js",
   "directories": {
-    "doc": "docs",
-    "test": "src/test"
+    "doc": "docs"
   },
   "scripts": {
     "format": "prettier --write .",
@@ -154,11 +153,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "_moduleAliases": {
-    "@config": "src/config",
-    "@models": "src/models",
-    "@services": "src/services"
   },
   "types": "dist/index.d.ts"
 }
