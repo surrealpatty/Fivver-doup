@@ -1,68 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Import the sequelize instance
+const database_1 = require("../config/database"); // Assuming sequelize is exported from this path
 class User extends sequelize_1.Model {
 }
-exports.User = User;
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID, // Use UUID type for the ID
-        defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate UUID for the ID
-        primaryKey: true, // Set the ID as the primary key
-        allowNull: false, // Ensure the ID is not null
-    },
-    email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        unique: true, // Ensure email is unique
-    },
-    password: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Password cannot be null
+        type: sequelize_1.DataTypes.STRING(36),
+        primaryKey: true,
+        defaultValue: database_1.sequelize.literal('UUID()'),
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Username cannot be null
+        allowNull: false,
     },
-    tier: {
+    email: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Tier (free/paid) cannot be null
+        unique: true,
+        allowNull: false,
     },
-    role: {
+    password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'user', // Default role is 'user'
-    },
-    isVerified: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false, // Default value for isVerified
-        field: 'is_verified', // Map to the snake_case column in the database
-    },
-    resetToken: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // resetToken can be null initially
-    },
-    resetTokenExpiration: {
-        type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // resetTokenExpiration can be null initially
     },
     created_at: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Allow NULL
+        defaultValue: database_1.sequelize.fn('NOW'), // Using `sequelize.fn` to set the current timestamp
     },
-    updatedAt: {
+    updated_at: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: false, // updatedAt cannot be null
-        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
+        defaultValue: database_1.sequelize.fn('NOW'), // Default to current timestamp
     },
 }, {
-    sequelize: database_1.sequelize, // The sequelize instance
-    modelName: 'User', // Model name is 'User'
-    tableName: 'Users', // Table name in the database
-    timestamps: true, // Automatically add createdAt and updatedAt fields
-    underscored: true, // Use snake_case column names in the database
+    tableName: 'Users',
+    sequelize: database_1.sequelize, // passing the sequelize instance
+    timestamps: true, // Enable automatic management of `created_at` and `updated_at`
+    updatedAt: 'updated_at', // Specify that the `updated_at` field should be used for auto-updates
+    createdAt: 'created_at', // Specify the `created_at` field
 });
+exports.default = User;
 //# sourceMappingURL=user.js.map
