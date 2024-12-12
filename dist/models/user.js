@@ -3,14 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Import the sequelize instance
-const uuid_1 = require("uuid"); // Import uuid package for manual UUID generation check
-console.log("Generated UUID:", (0, uuid_1.v4)()); // Verify UUID generation outside of Sequelize
 class User extends sequelize_1.Model {
 }
 exports.User = User;
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
+        type: sequelize_1.DataTypes.CHAR(36), // Use CHAR(36) for UUID
         defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate UUID for the ID
         primaryKey: true, // Set the ID as the primary key
         allowNull: false, // Ensure the ID is not null
@@ -53,7 +51,7 @@ User.init({
 }, {
     sequelize: database_1.sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
-    tableName: 'users', // Explicitly specify the table name (optional)
+    tableName: 'Users', // Table name in the database
     timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
     underscored: true, // Use snake_case column names
 });
