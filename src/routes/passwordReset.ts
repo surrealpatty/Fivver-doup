@@ -36,7 +36,7 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
 
     // Store the token and expiration in the database
     user.resetToken = resetToken;
-    user.resetTokenExpiration = resetTokenExpiration;  // Ensure it's a Date object
+    user.resetTokenExpiration = resetTokenExpiration;
     await user.save();
 
     // Send the password reset email with the reset token
@@ -52,7 +52,7 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Password reset link sent to your email.' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error while processing password reset request' });
   }
 });
 
@@ -86,7 +86,7 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Password successfully reset' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error while resetting password' });
   }
 });
 

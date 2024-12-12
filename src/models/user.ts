@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from '../config/database'; // Import the sequelize instance
 
 class User extends Model {
   public id!: string; // UUID field for the user ID
@@ -16,9 +16,10 @@ class User extends Model {
 User.init(
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID, 
       defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the ID
       primaryKey: true, // Set the ID as the primary key
+      allowNull: false, // Ensure the ID is not null
     },
     email: {
       type: DataTypes.STRING,
@@ -59,6 +60,9 @@ User.init(
   {
     sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
+    tableName: 'users', // Explicitly specify the table name (optional)
+    timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
+    underscored: true, // Use snake_case column names
   }
 );
 
