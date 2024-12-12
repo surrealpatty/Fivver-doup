@@ -1,46 +1,22 @@
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure the sequelize instance is imported
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database';  // Adjust the path if necessary
 
-// Define the UserAttributes interface
-interface UserAttributes {
-  id: string;
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  tier: string;
-  isVerified: boolean;
-  resetToken: string | null;
-  resetTokenExpiration: number | null;
-}
-
-// Define the UserCreationAttributes interface (for creating new users)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-// Define the User model
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User extends Model {
   public id!: string;
-  public username!: string;
   public email!: string;
   public password!: string;
-  public role!: string;
+  public username!: string;
   public tier!: string;
+  public role!: string;
   public isVerified!: boolean;
-  public resetToken!: string | null;
-  public resetTokenExpiration!: number | null;
 }
 
-// Initialize the User model with the correct types
 User.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4, // Automatically generate a UUID
       primaryKey: true,
-      allowNull: false,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
@@ -51,34 +27,29 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    role: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     tier: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'free',  // Default tier is 'free'
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'user', // Default value for role
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false,  // Default value for isVerified is false
-    },
-    resetToken: {
-      type: DataTypes.STRING,
-      allowNull: true,  // Allow null values for resetToken
-    },
-    resetTokenExpiration: {
-      type: DataTypes.BIGINT,
-      allowNull: true,  // Allow null values for resetTokenExpiration
+      defaultValue: false, // Default value for isVerified
     },
   },
   {
-    sequelize,  // Use the sequelize instance
+    sequelize,
     modelName: 'User',
-    tableName: 'users',
   }
 );
 
-export { User };
+export { User };  // Ensure this is at the end of the file
