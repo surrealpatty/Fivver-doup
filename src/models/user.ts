@@ -1,7 +1,7 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure you're importing sequelize from the correct path
+import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Ensure the sequelize instance is imported
 
-// Define the UserAttributes interface with nullable resetToken and resetTokenExpiration
+// Define the UserAttributes interface
 interface UserAttributes {
   id: string;
   username: string;
@@ -10,12 +10,15 @@ interface UserAttributes {
   role: string;
   tier: string;
   isVerified: boolean;
-  resetToken: string | null; // Allow null for resetToken
-  resetTokenExpiration: number | null; // Allow null for resetTokenExpiration
+  resetToken: string | null;
+  resetTokenExpiration: number | null;
 }
 
+// Define the UserCreationAttributes interface (for creating new users)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
 // Define the User model
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public username!: string;
   public email!: string;
@@ -23,16 +26,17 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public role!: string;
   public tier!: string;
   public isVerified!: boolean;
-  public resetToken!: string | null; // Allow null for resetToken
-  public resetTokenExpiration!: number | null; // Allow null for resetTokenExpiration
+  public resetToken!: string | null;
+  public resetTokenExpiration!: number | null;
 }
 
-// Initialize the User model
+// Initialize the User model with the correct types
 User.init(
   {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
+      allowNull: false,
     },
     username: {
       type: DataTypes.STRING,
@@ -54,23 +58,24 @@ User.init(
     tier: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 'free',  // Default tier is 'free'
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: false,  // Default value for isVerified is false
     },
     resetToken: {
       type: DataTypes.STRING,
-      allowNull: true, // Allow null values for resetToken
+      allowNull: true,  // Allow null values for resetToken
     },
     resetTokenExpiration: {
-      type: DataTypes.BIGINT, // Use BIGINT for expiration time
-      allowNull: true, // Allow null values for resetTokenExpiration
+      type: DataTypes.BIGINT,
+      allowNull: true,  // Allow null values for resetTokenExpiration
     },
   },
   {
-    sequelize, // Use the sequelize instance
+    sequelize,  // Use the sequelize instance
     modelName: 'User',
     tableName: 'users',
   }
