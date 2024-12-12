@@ -49,10 +49,9 @@ User.init({
         type: sequelize_1.DataTypes.DATE,
         allowNull: true, // resetTokenExpiration can be null initially
     },
-    createdAt: {
+    created_at: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: false, // createdAt cannot be null
-        defaultValue: sequelize_1.DataTypes.NOW, // Set default to current timestamp
+        allowNull: true, // Allow NULL
     },
     updatedAt: {
         type: sequelize_1.DataTypes.DATE,

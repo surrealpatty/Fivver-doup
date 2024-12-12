@@ -1,81 +1,64 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Import the sequelize instance
+import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Assuming sequelize is exported from this path
 
-class User extends Model {
-  public id!: string; // UUID field for the user ID
-  public email!: string; // Email field
-  public password!: string; // Password field
-  public username!: string; // Username field
-  public tier!: string; // User tier (e.g., free or paid)
-  public role!: string; // Role (e.g., user, admin)
-  public isVerified!: boolean; // Flag for account verification
-  public resetToken!: string | null; // Reset token for password reset functionality
-  public resetTokenExpiration!: Date | null; // Expiration date for the reset token
-  public createdAt!: Date; // createdAt field
-  public updatedAt!: Date; // updatedAt field
+// Define the shape of the User model
+interface UserAttributes {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+// Optional type for creating a new user (without `id` field)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: string;
+  public username!: string;
+  public email!: string;
+  public password!: string;
+  public created_at!: Date;
+  public updated_at!: Date;
 }
 
 User.init(
   {
     id: {
-      type: DataTypes.UUID, // Use UUID type for the ID
-      defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the ID
-      primaryKey: true, // Set the ID as the primary key
-      allowNull: false, // Ensure the ID is not null
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true, // Ensure email is unique
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false, // Password cannot be null
+      type: DataTypes.STRING(36),
+      primaryKey: true,
+      defaultValue: sequelize.literal('UUID()'),
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false, // Username cannot be null
+      allowNull: false,
     },
-    tier: {
+    email: {
       type: DataTypes.STRING,
-      allowNull: false, // Tier (free/paid) cannot be null
+      unique: true,
+      allowNull: false,
     },
-    role: {
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user', // Default role is 'user'
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false, // Default value for isVerified
-      field: 'is_verified', // Map to the snake_case column in the database
-    },
-    resetToken: {
-      type: DataTypes.STRING,
-      allowNull: true, // resetToken can be null initially
-    },
-    resetTokenExpiration: {
-      type: DataTypes.DATE,
-      allowNull: true, // resetTokenExpiration can be null initially
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: true,  // Allow NULL
+      defaultValue: sequelize.fn('NOW'),  // Using `sequelize.fn` to set the current timestamp
     },
-    updatedAt: {
+    updated_at: {
       type: DataTypes.DATE,
-      allowNull: false, // updatedAt cannot be null
-      defaultValue: DataTypes.NOW, // Set default to current timestamp
+      defaultValue: sequelize.fn('NOW'),  // Default to current timestamp
     },
   },
   {
-    sequelize, // The sequelize instance
-    modelName: 'User', // Model name is 'User'
-    tableName: 'Users', // Table name in the database
-    timestamps: true, // Automatically add createdAt and updatedAt fields
-    underscored: true, // Use snake_case column names in the database
+    tableName: 'Users',
+    sequelize, // passing the sequelize instance
+    timestamps: true, // Enable automatic management of `created_at` and `updated_at`
+    updatedAt: 'updated_at',  // Specify that the `updated_at` field should be used for auto-updates
+    createdAt: 'created_at',  // Specify the `created_at` field
   }
 );
 
-export { User };
+export default User;
