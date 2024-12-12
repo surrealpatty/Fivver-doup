@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Import the app instance
+const index_1 = __importDefault(require("../index")); // Import the app instance
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For generating tokens
 // Helper function to generate JWT token with a role
 const generateToken = (userId, role) => {
@@ -15,7 +15,7 @@ describe('Role-based Access', () => {
     const freeToken = generateToken('2', 'Free'); // Generate token for free user
     // Test case for allowing paid users to access premium services
     it('should allow paid users to access premium services', async () => {
-        const response = await (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .get('/services/premium')
             .set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
         expect(response.status).toBe(200);
@@ -23,7 +23,7 @@ describe('Role-based Access', () => {
     });
     // Test case for denying free users from accessing premium services
     it('should deny free users from accessing premium services', async () => {
-        const response = await (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .get('/services/premium')
             .set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
         expect(response.status).toBe(403); // Forbidden
@@ -38,7 +38,7 @@ describe('Basic Test Suite', () => {
     });
     // Test to check if the root endpoint is responding correctly
     it('should respond with a message from the root endpoint', async () => {
-        const response = await (0, supertest_1.default)(index_1.app).get('/'); // Send a GET request to the root endpoint
+        const response = await (0, supertest_1.default)(index_1.default).get('/'); // Send a GET request to the root endpoint
         expect(response.statusCode).toBe(200); // Expect a status code of 200 (OK)
         expect(response.text).toBe('Fiverr backend is running'); // Expect the correct response message
     });
