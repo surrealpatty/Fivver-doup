@@ -1,30 +1,31 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import router from './routes'; // Import the exported router
+import router from './routes';
 import cors from 'cors';
 import { sequelize } from './config/database';
 
-dotenv.config();  // Load environment variables
+dotenv.config();
 
 const app = express();
 
 // Middleware setup
-app.use(cors());  // CORS middleware to handle cross-origin requests
-app.use(express.json());  // To parse incoming JSON payloads
+app.use(cors());
+app.use(express.json());
 
 // Use the router for the app
-app.use('/api', router);  // Prefix the routes with "/api"
+app.use('/api', router);
 
 // Test DB connection and start server
 sequelize
   .authenticate()
   .then(() => {
     console.log('Database connected successfully!');
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 5000}`);
+    app.listen(3001, () => { // Change the port number here
+      console.log('Server is running on port 3001');
     });
   })
-  .catch((error: Error) => {  // Type the error parameter as `Error`
+  .catch((error: Error) => {
     console.error('Error connecting to the database:', error);
   });
-  export default app;
+
+export default app;
