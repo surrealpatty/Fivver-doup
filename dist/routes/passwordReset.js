@@ -31,10 +31,10 @@ router.post('/reset-password/request', async (req, res) => {
         }
         // Generate a password reset token
         const resetToken = crypto_1.default.randomBytes(20).toString('hex'); // Generate a token
-        const resetTokenExpiration = Date.now() + 3600000; // 1 hour expiration
+        const resetTokenExpiration = new Date(Date.now() + 3600000); // 1 hour expiration
         // Store the token and expiration in the database
         user.resetToken = resetToken;
-        user.resetTokenExpiration = resetTokenExpiration;
+        user.resetTokenExpiration = resetTokenExpiration; // Ensure it's a Date object
         await user.save();
         // Send the password reset email with the reset token
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
@@ -60,7 +60,7 @@ router.post('/reset-password/:token', async (req, res) => {
         const user = await user_1.User.findOne({
             where: {
                 resetToken: token,
-                resetTokenExpiration: { [sequelize_1.Op.gte]: Date.now() }, // Check if token is expired
+                resetTokenExpiration: { [sequelize_1.Op.gte]: new Date() }, // Check if token is expired
             },
         });
         if (!user) {
