@@ -35,4 +35,5 @@ database_1.sequelize
     .catch((error) => {
     console.error('Error connecting to the database:', error);
 });
+exports.default = router;
 //# sourceMappingURL=index.js.map
