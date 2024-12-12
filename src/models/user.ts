@@ -2,63 +2,63 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
 
 class User extends Model {
-  public id!: string;
-  public email!: string;
-  public password!: string;
-  public username!: string;
-  public tier!: string;
-  public role!: string;
-  public isVerified!: boolean;
-  public resetToken!: string | null;  // Add this property
-  public resetTokenExpiration!: Date | null;  // Add this property
+  public id!: string; // UUID field for the user ID
+  public email!: string; // Email field
+  public password!: string; // Password field
+  public username!: string; // Username field
+  public tier!: string; // User tier (e.g., free or paid)
+  public role!: string; // Role (e.g., user, admin)
+  public isVerified!: boolean; // Flag for account verification
+  public resetToken!: string | null; // Reset token for password reset functionality
+  public resetTokenExpiration!: Date | null; // Expiration date for the reset token
 }
 
 User.init(
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4, // Automatically generate a UUID
-      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the ID
+      primaryKey: true, // Set the ID as the primary key
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensure email is unique
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Password cannot be null
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Username cannot be null
     },
     tier: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Tier (free/paid) cannot be null
     },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user', // Default value for role
+      defaultValue: 'user', // Default role is 'user'
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false, // Default value for isVerified
     },
-    resetToken: {  // Add resetToken field
+    resetToken: {
       type: DataTypes.STRING,
-      allowNull: true,  // Can be null initially
+      allowNull: true, // resetToken can be null initially
     },
-    resetTokenExpiration: {  // Add resetTokenExpiration field
+    resetTokenExpiration: {
       type: DataTypes.DATE,
-      allowNull: true,  // Can be null initially
+      allowNull: true, // resetTokenExpiration can be null initially
     }
   },
   {
-    sequelize,
-    modelName: 'User',
+    sequelize, // The sequelize instance
+    modelName: 'User', // Model name is 'User'
   }
 );
 
