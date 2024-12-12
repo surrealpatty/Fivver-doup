@@ -2,7 +2,7 @@
 import Service, { ServiceCreationAttributes } from '../models/services'; // Import the interface and class
 import { User } from '../models/user'; // Correct named import for User
 import { sequelize } from '../config/database'; // Import the sequelize instance
-
+import { v4 as uuidv4 } from 'uuid';
 describe('Service Model Tests', () => {
   beforeAll(async () => {
     // Sync the database (ensure it's ready before tests)
@@ -15,11 +15,11 @@ describe('Service Model Tests', () => {
       username: 'testUser',
       email: 'test@example.com',
       password: 'password123',
-      role: 'free',  // Ensure role is provided
-      tier: 'free',  // Add tier
-      isVerified: true,  // Add isVerified (to satisfy the required field)
-    });
-
+      role: 'free',
+      tier: 'free',
+      isVerified: true,
+      id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
+  });
     // Prepare the service data with the correct type
     const serviceData: ServiceCreationAttributes = {
       name: 'Test Service',  // Corrected to 'name' instead of 'title'
