@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Adjust the path if necessary
+const database_1 = require("../config/database");
 class User extends sequelize_1.Model {
 }
 exports.User = User;
@@ -39,6 +39,14 @@ User.init({
         allowNull: false,
         defaultValue: false, // Default value for isVerified
     },
+    resetToken: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true, // Can be null initially
+    },
+    resetTokenExpiration: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true, // Can be null initially
+    }
 }, {
     sequelize: database_1.sequelize,
     modelName: 'User',
