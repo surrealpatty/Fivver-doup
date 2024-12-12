@@ -1,42 +1,52 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { Router } from 'express';
-import cors from 'cors';
-import { sequelize } from '../config/database';  // Fix the import path for sequelize
-
-dotenv.config();  // Load environment variables
-
-const app = express();
-
-// Middleware setup
-app.use(cors());  // CORS middleware to handle cross-origin requests
-app.use(express.json());  // To parse incoming JSON payloads
-
-// Use the router for the app
-import passwordResetRoutes from './passwordReset';  // Import the password reset routes (if applicable)
-import profileRoutes from './profile';  // Import other route files
+import { Router, Request, Response } from 'express';
+import { User } from '../models/user';  // Ensure you're importing the User model
+import passwordResetRoutes from './passwordReset';  // Import the password reset routes
+import profileRoutes from './profile';  // Import profile routes
 
 const router = Router();
 
-// Include the password reset routes or other routes here
-router.use('/password-reset', passwordResetRoutes);  // Add password reset routes to the main router
+// Register route
+router.post('/register', async (req: Request, res: Response) => {
+  const { email, password, username, tier } = req.body;
 
-// Other routes, like profile, services, etc.
+  // Check if the required fields are provided
+  if (!email || !password || !username || !tier) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // You can add default values or pass additional values for 'role' and 'isVerified' if needed
+    const newUser = await User.create({
+      email,
+      password,
+      username,
+      tier,
+      role: 'user', // Default role, you can change as needed
+      isVerified: false, // Default value for isVerified
+    });
+
+    return res.status(201).json({
+      message: 'User registered successfully',
+      user: {
+        email: newUser.email,
+        username: newUser.username,
+        tier: newUser.tier
+      }
+    });
+  } catch (error: unknown) {
+    // Fix the 'unknown' type error by typing it as 'Error'
+    if (error instanceof Error) {
+      console.error(error.message);  // Access the message property of Error
+      return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+    // Handle unexpected error types
+    return res.status(500).json({ message: 'Server error', error: 'Unknown error' });
+  }
+});
+
+// Include other routes (e.g., password reset, profile)
+router.use('/password-reset', passwordResetRoutes);  // Add password reset routes
 router.use('/profile', profileRoutes);  // Add profile routes
 
-// More route imports can go here, and ensure they are added to the main router
-app.use('/api', router);  // Prefix the routes with "/api"
-
-// Test DB connection and start server
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Database connected successfully!');
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 5000}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error connecting to the database:', error);
-  });
-  export default router;
+// Export the router to be used in the main application
+export default router;
