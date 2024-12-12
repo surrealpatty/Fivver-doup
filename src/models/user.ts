@@ -1,8 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Import the sequelize instance
-import { v4 as uuidv4 } from 'uuid'; // Import uuid package for manual UUID generation check
-
-console.log("Generated UUID:", uuidv4()); // Verify UUID generation outside of Sequelize
 
 class User extends Model {
   public id!: string; // UUID field for the user ID
@@ -19,7 +16,7 @@ class User extends Model {
 User.init(
   {
     id: {
-      type: DataTypes.UUID, 
+      type: DataTypes.CHAR(36),  // Use CHAR(36) for UUID
       defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the ID
       primaryKey: true, // Set the ID as the primary key
       allowNull: false, // Ensure the ID is not null
@@ -63,7 +60,7 @@ User.init(
   {
     sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
-    tableName: 'users', // Explicitly specify the table name (optional)
+    tableName: 'Users', // Table name in the database
     timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
     underscored: true, // Use snake_case column names
   }

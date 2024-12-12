@@ -17,4 +17,12 @@ const sequelize = new sequelize_1.Sequelize({
     logging: false, // Optional: disables SQL query logging
 });
 exports.sequelize = sequelize;
+// Sync database models with the schema
+sequelize.sync({ alter: true }) // This will automatically update your schema based on your models
+    .then(() => {
+    console.log('Database synced');
+})
+    .catch((err) => {
+    console.error('Error syncing database:', err);
+});
 //# sourceMappingURL=database.js.map

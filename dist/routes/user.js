@@ -39,5 +39,26 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Server error', error: err });
     }
 });
+// Manually Create a User (for debugging)
+router.get('/create-user', async (req, res) => {
+    try {
+        const newUser = await user_1.User.create({
+            email: 'test@example.com',
+            username: 'testuser',
+            password: 'password123', // You can hash it if needed
+            tier: 'free',
+            role: 'user',
+            isVerified: false,
+            resetToken: null,
+            resetTokenExpiration: null,
+        });
+        console.log('User created:', newUser);
+        res.status(201).json({ message: 'Test user created successfully', user: newUser });
+    }
+    catch (err) {
+        console.error('Error creating user:', err);
+        res.status(500).json({ message: 'Error creating user', error: err });
+    }
+});
 exports.default = router; // Use ES module syntax for export
 //# sourceMappingURL=user.js.map
