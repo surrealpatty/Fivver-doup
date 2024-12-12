@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Adjust the path if necessary
+import { sequelize } from '../config/database';
 
 class User extends Model {
   public id!: string;
@@ -9,6 +9,8 @@ class User extends Model {
   public tier!: string;
   public role!: string;
   public isVerified!: boolean;
+  public resetToken!: string | null;  // Add this property
+  public resetTokenExpiration!: Date | null;  // Add this property
 }
 
 User.init(
@@ -45,6 +47,14 @@ User.init(
       allowNull: false,
       defaultValue: false, // Default value for isVerified
     },
+    resetToken: {  // Add resetToken field
+      type: DataTypes.STRING,
+      allowNull: true,  // Can be null initially
+    },
+    resetTokenExpiration: {  // Add resetTokenExpiration field
+      type: DataTypes.DATE,
+      allowNull: true,  // Can be null initially
+    }
   },
   {
     sequelize,
@@ -52,4 +62,4 @@ User.init(
   }
 );
 
-export { User };  // Ensure this is at the end of the file
+export { User };

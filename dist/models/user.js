@@ -2,21 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Ensure the sequelize instance is imported
-// Define the User model
+const database_1 = require("../config/database"); // Adjust the path if necessary
 class User extends sequelize_1.Model {
 }
 exports.User = User;
-// Initialize the User model with the correct types
 User.init({
     id: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate a UUID
         primaryKey: true,
-        allowNull: false,
-    },
-    username: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
@@ -27,31 +21,26 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    role: {
+    username: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
     tier: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'free', // Default tier is 'free'
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'user', // Default value for role
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false, // Default value for isVerified is false
-    },
-    resetToken: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Allow null values for resetToken
-    },
-    resetTokenExpiration: {
-        type: sequelize_1.DataTypes.BIGINT,
-        allowNull: true, // Allow null values for resetTokenExpiration
+        defaultValue: false, // Default value for isVerified
     },
 }, {
-    sequelize: database_1.sequelize, // Use the sequelize instance
+    sequelize: database_1.sequelize,
     modelName: 'User',
-    tableName: 'users',
 });
 //# sourceMappingURL=user.js.map
