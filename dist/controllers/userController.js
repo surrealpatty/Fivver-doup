@@ -62,7 +62,10 @@ const registerUser = async (req, res) => {
         // Send the verification email
         await transporter.sendMail(mailOptions);
         // Respond with success message
-        return res.status(201).json({ message: 'Registration successful. Please check your email for verification.' });
+        return res.status(201).json({
+            message: 'Registration successful. Please check your email for verification.',
+            user: { id: newUser.id, email: newUser.email, username: newUser.username },
+        });
     }
     catch (error) {
         console.error('Error during registration:', error);

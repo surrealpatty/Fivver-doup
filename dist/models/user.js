@@ -8,7 +8,7 @@ class User extends sequelize_1.Model {
 exports.User = User;
 User.init({
     id: {
-        type: sequelize_1.DataTypes.CHAR(36), // Use CHAR(36) for UUID
+        type: sequelize_1.DataTypes.UUID, // Use UUID type for the ID
         defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate UUID for the ID
         primaryKey: true, // Set the ID as the primary key
         allowNull: false, // Ensure the ID is not null
@@ -52,7 +52,7 @@ User.init({
     sequelize: database_1.sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
     tableName: 'Users', // Table name in the database
-    timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
-    underscored: true, // Use snake_case column names
+    timestamps: true, // Automatically add createdAt and updatedAt fields
+    underscored: true, // Use snake_case column names in the database
 });
 //# sourceMappingURL=user.js.map
