@@ -20,7 +20,7 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Database connected successfully!');
-    app.listen(3001, () => { // Change the port number here
+    app.listen(3001, () => {
       console.log('Server is running on port 3001');
     });
   })
