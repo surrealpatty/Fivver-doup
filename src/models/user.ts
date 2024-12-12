@@ -16,7 +16,7 @@ class User extends Model {
 User.init(
   {
     id: {
-      type: DataTypes.CHAR(36),  // Use CHAR(36) for UUID
+      type: DataTypes.UUID, // Use UUID type for the ID
       defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the ID
       primaryKey: true, // Set the ID as the primary key
       allowNull: false, // Ensure the ID is not null
@@ -61,8 +61,8 @@ User.init(
     sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
     tableName: 'Users', // Table name in the database
-    timestamps: true, // Automatically add timestamps (createdAt, updatedAt)
-    underscored: true, // Use snake_case column names
+    timestamps: true, // Automatically add createdAt and updatedAt fields
+    underscored: true, // Use snake_case column names in the database
   }
 );
 

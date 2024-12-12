@@ -1,38 +1,40 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import router from './routes';  // Import your routes
 import cors from 'cors';
-import { sequelize } from './config/database';
+import userRoutes from './routes/user'; // Import user routes
+import { sequelize } from './config/database'; // Import sequelize for database connection
 
-dotenv.config();  // Load environment variables
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
 // Middleware setup
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Enable CORS
+app.use(express.json()); // Parse JSON bodies in requests
 
-// Use the router for the app
-app.use('/api', router);  // Prefix routes with /api
+// Routes setup
+app.use('/api/user', userRoutes); // Use the user routes for paths starting with /api/user
 
-// Test DB connection and sync schema
+// Test the database connection and sync the schema
 sequelize
   .authenticate()
   .then(() => {
     console.log('Database connected successfully!');
 
-    // Sync models with the database schema, altering it if necessary
-    return sequelize.sync({ alter: true });  // You can use { force: true } in development to drop and recreate tables
+    // Sync models with the database schema
+    return sequelize.sync({ alter: true }); // Use { force: true } cautiously in development
   })
   .then(() => {
     console.log('Database schema synced successfully!');
+    
     // Start the server after syncing the database schema
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is running on http://localhost:${process.env.PORT || 5000}`);
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   })
   .catch((error: Error) => {
     console.error('Error connecting to the database or syncing schema:', error);
   });
 
-export default app;
+export default app; // Export the app for testing or other use

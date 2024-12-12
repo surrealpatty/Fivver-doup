@@ -45,9 +45,9 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       username,
       email,
       password: hashedPassword,
-      role: 'free',  // Default role
-      tier: 'free',  // Default tier
-      isVerified: false,  // Default to not verified
+      role: 'free', // Default role
+      tier: 'free', // Default tier
+      isVerified: false, // Default to not verified
     });
 
     // Generate a JWT verification token
@@ -72,7 +72,10 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     await transporter.sendMail(mailOptions);
 
     // Respond with success message
-    return res.status(201).json({ message: 'Registration successful. Please check your email for verification.' });
+    return res.status(201).json({ 
+      message: 'Registration successful. Please check your email for verification.',
+      user: { id: newUser.id, email: newUser.email, username: newUser.username },
+    });
   } catch (error) {
     console.error('Error during registration:', error);
     return res.status(500).json({ message: 'Server error during registration.' });
