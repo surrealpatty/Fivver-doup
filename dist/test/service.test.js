@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/test/service.test.ts
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Ensure this points to your Express app file
+const index_1 = __importDefault(require("../index")); // Ensure this points to your Express app file
 const testHelpers_1 = require("./testHelpers"); // Assuming this is your helper function for generating tokens
 describe('PUT /services/:id', () => {
     // Mock user token for authentication
@@ -14,7 +14,7 @@ describe('PUT /services/:id', () => {
     // Test case: Service should be updated successfully
     it('should update a service successfully', async () => {
         // Assuming you have a service with ID 1 in your database for this test
-        const response = await (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .put('/services/1')
             .set('Authorization', `Bearer ${token}`) // Mock authentication token
             .send({ name: 'Updated Service Title', description: 'Updated description', price: 150 });
@@ -30,7 +30,7 @@ describe('PUT /services/:id', () => {
     // Test case: Service not found (404 error)
     it('should return 404 if the service is not found', async () => {
         // Test with an ID that doesn't exist in the database (e.g., ID 9999)
-        const response = await (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .put('/services/9999') // Assuming service with ID 9999 does not exist
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Non-existent service' });
@@ -41,7 +41,7 @@ describe('PUT /services/:id', () => {
     });
     // Test case: Invalid data (e.g., price is not a number)
     it('should return 400 if the price is invalid', async () => {
-        const response = await (0, supertest_1.default)(index_1.app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .put('/services/1')
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Invalid Service Title', description: 'Description with invalid price', price: 'invalid' });

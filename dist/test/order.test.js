@@ -8,7 +8,7 @@ const database_1 = require("../config/database"); // Corrected import for sequel
 const user_1 = require("../models/user");
 const services_1 = __importDefault(require("../models/services"));
 const order_1 = require("../models/order");
-const index_1 = require("../../src/index"); // Import app from src/index directly
+const index_1 = __importDefault(require("../../src/index")); // Import app from src/index directly
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),
@@ -55,7 +55,7 @@ describe('Order Controller Tests', () => {
             status: 'Pending',
         });
         // Make the API request to create the order
-        const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
+        const response = await (0, supertest_1.default)(index_1.default).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: mockService.id,
             orderDetails: 'Test order details',
@@ -76,7 +76,7 @@ describe('Order Controller Tests', () => {
         user_1.User.findByPk.mockResolvedValueOnce(null); // No user found
         services_1.default.findByPk.mockResolvedValueOnce(mockService);
         // Make the API request to create the order
-        const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
+        const response = await (0, supertest_1.default)(index_1.default).post('/api/orders').send({
             userId: 999, // Non-existing user
             serviceId: mockService.id,
             orderDetails: 'Test order details',
@@ -91,7 +91,7 @@ describe('Order Controller Tests', () => {
         user_1.User.findByPk.mockResolvedValueOnce(mockUser);
         services_1.default.findByPk.mockResolvedValueOnce(null); // No service found
         // Make the API request to create the order
-        const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
+        const response = await (0, supertest_1.default)(index_1.default).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: 999, // Non-existing service
             orderDetails: 'Test order details',
