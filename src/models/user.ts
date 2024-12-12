@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 import { sequelize } from '../config/database'; // Import the sequelize instance
 
 class User extends Model {
@@ -12,7 +12,7 @@ class User extends Model {
   public resetToken!: string | null; // Reset token for password reset functionality
   public resetTokenExpiration!: Date | null; // Expiration date for the reset token
   public createdAt!: Date; // createdAt field
-  public updatedAt!: Date; // updatedAt field
+  public updatedAt!: Date | null; // updatedAt field (allow null)
 }
 
 User.init(
@@ -59,14 +59,15 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true, // resetTokenExpiration can be null initially
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
-      allowNull: true,  // Allow NULL
+      allowNull: false,  // createdAt cannot be null
+      defaultValue: DataTypes.NOW, // Set default to current timestamp
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false, // updatedAt cannot be null
-      defaultValue: DataTypes.NOW, // Set default to current timestamp
+      allowNull: true, // Allow NULL for updatedAt
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Set default to current timestamp
     },
   },
   {
