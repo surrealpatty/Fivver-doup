@@ -7,6 +7,8 @@ exports.loginUser = exports.registerUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
+// Import the library to generate unique IDs (assuming you're using uuid)
+const uuid_1 = require("uuid");
 const registerUser = async (req, res) => {
     const { email, username, password } = req.body;
     try {
@@ -22,12 +24,13 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         // Create a new user with default 'isVerified' set to false
         const user = await user_1.User.create({
+            id: (0, uuid_1.v4)(), // Generate a unique ID
             email,
             username,
-            password: hashedPassword,
-            role: 'free', // Default role
-            tier: 'free', // Default tier
-            isVerified: false, // Default value for isVerified
+            password: hashedPassword, // Use hashedPassword
+            role: '', // Set role to an empty string by default (if not defined)
+            tier: '', // Set tier to an empty string by default (if not defined)
+            isVerified: false,
         });
         return res.status(201).json({
             message: 'User created successfully',
