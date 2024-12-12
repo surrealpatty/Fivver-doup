@@ -20,8 +20,11 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Database connected successfully!');
-    app.listen(3001, () => {
-      console.log('Server is running on port 3001');
+
+    // Use the PORT environment variable or default to 4000
+    const port = process.env.PORT || 4000;  // Changed port here
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
   })
   .catch((error: Error) => {
