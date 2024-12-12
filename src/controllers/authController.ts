@@ -1,8 +1,10 @@
-// src/controllers/authController.ts
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
+
+// Import the library to generate unique IDs (assuming you're using uuid)
+import { v4 as uuidv4 } from 'uuid';
 
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
@@ -23,12 +25,13 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 
     // Create a new user with default 'isVerified' set to false
     const user = await User.create({
+      id: uuidv4(), // Generate a unique ID
       email,
       username,
-      password: hashedPassword,
-      role: 'free', // Default role
-      tier: 'free', // Default tier
-      isVerified: false, // Default value for isVerified
+      password: hashedPassword, // Use hashedPassword
+      role: '', // Set role to an empty string by default (if not defined)
+      tier: '',  // Set tier to an empty string by default (if not defined)
+      isVerified: false,
     });
 
     return res.status(201).json({
