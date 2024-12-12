@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import router from './routes'; // Import the exported router
 import cors from 'cors';
 import { sequelize } from './config/database';
+
 dotenv.config();  // Load environment variables
 
 const app = express();
@@ -26,3 +27,4 @@ sequelize
   .catch((error: Error) => {  // Type the error parameter as `Error`
     console.error('Error connecting to the database:', error);
   });
+  export default app;
