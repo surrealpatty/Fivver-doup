@@ -5,7 +5,7 @@ import { sequelize } from '../config/database';  // Corrected import for sequeli
 import { User } from '../models/user';
 import Service from '../models/services';
 import { Order } from '../models/order';
-import { app } from '../../src/index';  // Import app from src/index directly
+import  app  from '../../src/index';  // Import app from src/index directly
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({

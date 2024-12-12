@@ -1,6 +1,6 @@
 // src/test/service.test.ts
 import request from 'supertest';
-import { app } from '../index';  // Ensure this points to your Express app file
+import  app  from '../index';  // Ensure this points to your Express app file
 import { createMockUserToken } from './testHelpers';  // Assuming this is your helper function for generating tokens
 
 describe('PUT /services/:id', () => {
