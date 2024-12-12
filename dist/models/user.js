@@ -39,6 +39,7 @@ User.init({
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false, // Default value for isVerified
+        field: 'is_verified', // Map to the snake_case column in the database
     },
     resetToken: {
         type: sequelize_1.DataTypes.STRING,
@@ -47,7 +48,7 @@ User.init({
     resetTokenExpiration: {
         type: sequelize_1.DataTypes.DATE,
         allowNull: true, // resetTokenExpiration can be null initially
-    }
+    },
 }, {
     sequelize: database_1.sequelize, // The sequelize instance
     modelName: 'User', // Model name is 'User'
