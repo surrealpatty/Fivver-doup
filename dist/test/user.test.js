@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/test/user.test.ts
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Correct import for the app instance
+const index_1 = __importDefault(require("../index"));
 // Mocking the User model to mock the create function for testing
 const user_1 = require("../models/user");
 jest.mock('../models/user', () => ({
@@ -26,7 +26,7 @@ describe('POST /register', () => {
             password: 'password123',
         });
         // Send request to the /register route
-        const res = await (0, supertest_1.default)(index_1.app)
+        const res = await (0, supertest_1.default)(index_1.default)
             .post('/register')
             .send({
             email: 'newuser@example.com',
@@ -46,7 +46,7 @@ describe('POST /register', () => {
     it('should return an error if email or username is already in use', async () => {
         // Mock the User.create method to simulate an existing user
         user_1.User.create.mockRejectedValueOnce(new Error('User already exists'));
-        const res = await (0, supertest_1.default)(index_1.app)
+        const res = await (0, supertest_1.default)(index_1.default)
             .post('/register')
             .send({
             email: 'existinguser@example.com',
@@ -58,7 +58,7 @@ describe('POST /register', () => {
         expect(res.body.message).toBe('Email or Username already in use');
     });
     it('should return a validation error for invalid email', async () => {
-        const res = await (0, supertest_1.default)(index_1.app)
+        const res = await (0, supertest_1.default)(index_1.default)
             .post('/register')
             .send({
             email: 'invalid-email',
@@ -70,7 +70,7 @@ describe('POST /register', () => {
         expect(res.body.errors[0].msg).toBe('Invalid email address'); // Validation error message
     });
     it('should return a validation error for missing username', async () => {
-        const res = await (0, supertest_1.default)(index_1.app)
+        const res = await (0, supertest_1.default)(index_1.default)
             .post('/register')
             .send({
             email: 'newuser@example.com',
