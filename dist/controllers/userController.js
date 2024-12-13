@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.verifyEmail = exports.registerUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
@@ -73,4 +73,35 @@ const registerUser = async (req, res) => {
     }
 };
 exports.registerUser = registerUser;
+// Email Verification Function
+const verifyEmail = async (req, res) => {
+    const { token } = req.query; // Retrieve the token from the query params
+    if (!token) {
+        return res.status(400).json({ message: 'Verification token is required' });
+    }
+    try {
+        // Verify the token using JWT
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        if (!decoded || typeof decoded === 'string') {
+            return res.status(400).json({ message: 'Invalid verification token' });
+        }
+        // Find the user by ID from the decoded token
+        const user = await user_1.User.findOne({ where: { id: decoded.id } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.isVerified) {
+            return res.status(400).json({ message: 'User is already verified' });
+        }
+        // Mark the user as verified
+        user.isVerified = true;
+        await user.save();
+        return res.status(200).json({ message: 'Email verified successfully' });
+    }
+    catch (error) {
+        console.error('Error verifying email:', error);
+        return res.status(500).json({ message: 'Error verifying email' });
+    }
+};
+exports.verifyEmail = verifyEmail;
 //# sourceMappingURL=userController.js.map
