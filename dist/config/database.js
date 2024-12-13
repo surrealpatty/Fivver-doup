@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
-const user_1 = require("@models/user"); // Correct named import
-const service_1 = require("./models/service"); // Correct relative path
+const user_1 = require("models/user"); // Correct named import
+const service_1 = require("models/service"); // Correct relative path
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Initialize Sequelize instance with the database configuration
