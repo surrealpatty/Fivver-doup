@@ -7,7 +7,9 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const uuid_1 = require("uuid"); // Import uuidv4 from the 'uuid' library
 const user_1 = require("../models/user");
-const router = Router();
+const express_1 = require("express"); // Import Router from Express
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const router = (0, express_1.Router)();
 // POST /api/users/register - User Registration Route
 router.post('/register', async (req, res) => {
     const { email, password, username, tier } = req.body;
@@ -40,7 +42,7 @@ router.post('/register', async (req, res) => {
         // Generate the verification link
         const verificationLink = `${process.env.BASE_URL}/verify?token=${verificationToken}`;
         // Setup nodemailer transporter (Ensure you have configured your email settings)
-        const transporter = nodemailer.createTransport({
+        const transporter = nodemailer_1.default.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.GMAIL_USER, // Your Gmail address
