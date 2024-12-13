@@ -81,3 +81,41 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     return res.status(500).json({ message: 'Server error during registration.' });
   }
 };
+
+// Email Verification Function
+export const verifyEmail = async (req: Request, res: Response): Promise<Response> => {
+  const { token } = req.query; // Retrieve the token from the query params
+
+  if (!token) {
+    return res.status(400).json({ message: 'Verification token is required' });
+  }
+
+  try {
+    // Verify the token using JWT
+    const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string);
+
+    if (!decoded || typeof decoded === 'string') {
+      return res.status(400).json({ message: 'Invalid verification token' });
+    }
+
+    // Find the user by ID from the decoded token
+    const user = await User.findOne({ where: { id: decoded.id } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: 'User is already verified' });
+    }
+
+    // Mark the user as verified
+    user.isVerified = true;
+    await user.save();
+
+    return res.status(200).json({ message: 'Email verified successfully' });
+  } catch (error) {
+    console.error('Error verifying email:', error);
+    return res.status(500).json({ message: 'Error verifying email' });
+  }
+};
