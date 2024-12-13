@@ -41,13 +41,12 @@ User.init(
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: uuidv4(), // Generate a new UUID for each user
+      defaultValue: () => uuidv4(), // Use a function to generate a new UUID for each user
       primaryKey: true,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false, // Ensure emails are required
-      // Removed unique: true here, as it's handled in the indexes array
     },
     username: {
       type: DataTypes.STRING,
@@ -84,7 +83,7 @@ User.init(
     timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
     indexes: [
       {
-        unique: true, // Only one index should be defined here for `email`
+        unique: true, // Ensure that email is unique
         fields: ['email'],
       },
     ],

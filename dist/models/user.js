@@ -16,8 +16,8 @@ User.init({
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        unique: true, // Ensure emails are unique (one unique index only)
+        allowNull: false, // Ensure emails are required
+        // Removed unique: true here, as it's handled in the indexes array
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
