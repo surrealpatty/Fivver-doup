@@ -8,7 +8,7 @@ export interface ServiceAttributes {
   name: string;
   description: string;
   price: number;
-  userId: number;  // userId as number (based on your model definition)
+  userId: string;  // Change to string to match user.id (UUID)
   image?: string;
 }
 
@@ -18,7 +18,7 @@ class Service extends Model<ServiceAttributes> implements ServiceAttributes {
   public name!: string;
   public description!: string;
   public price!: number;
-  public userId!: number;
+  public userId!: string;  // Change to string to match user.id (UUID)
   public image?: string;
 }
 
@@ -43,7 +43,7 @@ Service.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,  // Change to STRING to match userId as string (UUID)
       allowNull: false,
     },
     image: {

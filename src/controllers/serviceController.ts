@@ -1,6 +1,6 @@
 // src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import { Service, ServiceAttributes } from '@models/services'; // Correct named import for Service and ServiceAttributes
+import Service, { ServiceAttributes } from '@models/services';  // Corrected
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -16,8 +16,8 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
     }
 
     // Ensure the logged-in user owns the service
-    // Convert userId to string for comparison
-    if (service.userId !== String(userId)) {
+    // Convert both userId and service.userId to string for comparison
+    if (String(service.userId) !== String(userId)) {
       res.status(403).json({ message: 'You can only update your own services' });
       return;
     }

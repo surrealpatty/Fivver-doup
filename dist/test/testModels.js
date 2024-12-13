@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/test/testModels.ts
-const services_1 = __importDefault(require("../models/services")); // Import the interface and class
+const services_1 = __importDefault(require("../models/services")); // Import Service and ServiceAttributes
 const user_1 = require("../models/user"); // Correct named import for User
 const database_1 = require("../config/database"); // Import the sequelize instance
 const uuid_1 = require("uuid");
@@ -29,12 +28,12 @@ describe('Service Model Tests', () => {
             name: 'Test Service', // Corrected to 'name' instead of 'title'
             description: 'A test service description',
             price: 100.0,
-            userId: String(user.id), // Convert userId to string (to match the expected type)
+            userId: user.id, // Pass user.id as a number, no need to convert to string
         };
         // Create the service and ensure it's properly typed
         const service = await services_1.default.create(serviceData);
         // Check that the service has the correct properties
-        expect(service.userId).toBe(String(user.id)); // Ensure userId is a string
+        expect(service.userId).toBe(user.id); // Ensure userId is a number
         expect(service.name).toBe('Test Service'); // Ensure 'name' is correctly used
         expect(service.price).toBe(100.0);
     });

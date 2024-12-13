@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateService = void 0;
-const services_1 = require("@models/services"); // Correct alias import for named export
+const services_1 = require("@models/services"); // Correct named import for Service and ServiceAttributes
 const updateService = async (req, res) => {
     try {
         const { serviceId } = req.params;

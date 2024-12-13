@@ -1,3 +1,4 @@
+// src/test/testModels.ts
 import Service, { ServiceAttributes } from '../models/services'; // Import Service and ServiceAttributes
 import { User } from '../models/user'; // Correct named import for User
 import { sequelize } from '../config/database'; // Import the sequelize instance
@@ -21,19 +22,19 @@ describe('Service Model Tests', () => {
       id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
     });
 
-    // Prepare the service data with the correct type
-    const serviceData: ServiceAttributes = { // Use ServiceAttributes
-      name: 'Test Service',  // Corrected to 'name' instead of 'title'
+    // Prepare the service data, using Optional to allow 'id' to be omitted
+    const serviceData: Optional<ServiceAttributes, 'id'> = {  // Use Optional to allow 'id' to be omitted
+      name: 'Test Service',
       description: 'A test service description',
       price: 100.0,
-      userId: user.id,  // Pass user.id as a number, no need to convert to string
+      userId: user.id,  // user.id is a string (UUID)
     };
 
     // Create the service and ensure it's properly typed
     const service = await Service.create(serviceData);
 
     // Check that the service has the correct properties
-    expect(service.userId).toBe(user.id);  // Ensure userId is a number
+    expect(service.userId).toBe(user.id);  // Ensure userId is a string
     expect(service.name).toBe('Test Service');  // Ensure 'name' is correctly used
     expect(service.price).toBe(100.0);
   });
