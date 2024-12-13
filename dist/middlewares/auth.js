@@ -5,9 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("../config/config")); // Importing config for JWT_SECRET and JWT_EXPIRATION
-const JWT_SECRET = config_1.default.JWT_SECRET;
-const JWT_EXPIRATION = config_1.default.JWT_EXPIRATION || '1h';
+const config_1 = __importDefault(require("../config/config")); // Importing the config object
 // The `verifyToken` middleware to check JWT in headers
 const verifyToken = (req, // Use the custom AuthRequest type
 res, next) => {
@@ -15,7 +13,8 @@ res, next) => {
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
     }
-    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
+    // Define explicit types for 'err' and 'decoded'
+    jsonwebtoken_1.default.verify(token, config_1.default.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res
                 .status(401)
@@ -36,8 +35,8 @@ res, next) => {
 exports.verifyToken = verifyToken;
 // Generate a token for the user
 const generateToken = (userId) => {
-    return jsonwebtoken_1.default.sign({ id: userId }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRATION,
+    return jsonwebtoken_1.default.sign({ id: userId }, config_1.default.JWT_SECRET, {
+        expiresIn: config_1.default.JWT_EXPIRATION,
     });
 };
 exports.generateToken = generateToken;

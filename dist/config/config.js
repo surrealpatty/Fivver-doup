@@ -35,6 +35,5 @@ const config = {
     JWT_SECRET, // Use as-is since it's required and a string
     JWT_EXPIRATION, // Use as-is since it's already a string
 };
-// Export the configuration
 exports.default = config;
 //# sourceMappingURL=config.js.map
