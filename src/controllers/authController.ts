@@ -2,9 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
-
-// Import the library to generate unique IDs (assuming you're using uuid)
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; 
 
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
@@ -23,14 +21,14 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with default 'isVerified' set to false
+    // Create a new user 
     const user = await User.create({
-      id: uuidv4(), // Generate a unique ID
+      id: uuidv4(), // Use UUID for ID
       email,
       username,
-      password: hashedPassword, // Use hashedPassword
-      role: '', // Set role to an empty string by default (if not defined)
-      tier: '',  // Set tier to an empty string by default (if not defined)
+      password: hashedPassword,
+      role: '', 
+      tier: '', 
       isVerified: false,
     });
 
@@ -67,7 +65,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // Generate JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your-default-secret', // Default secret if not set
+      process.env.JWT_SECRET || 'your-default-secret', 
       { expiresIn: '1h' }
     );
 
