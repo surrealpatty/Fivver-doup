@@ -61,7 +61,7 @@ User.init(
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false,  // createdAt cannot be null
+      allowNull: false, // createdAt cannot be null
       defaultValue: DataTypes.NOW, // Set default to current timestamp
     },
     updatedAt: {
