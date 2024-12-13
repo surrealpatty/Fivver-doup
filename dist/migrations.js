@@ -1,13 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.addColumn('users', 'isVerified', {
-            type: Sequelize.BOOLEAN,
-            defaultValue: false,
-        });
+        // Your migration logic here
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.removeColumn('users', 'isVerified');
-    },
+        // Your rollback logic here
+    }
 };
 //# sourceMappingURL=migrations.js.map
