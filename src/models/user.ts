@@ -1,7 +1,8 @@
 import { DataTypes, Sequelize } from 'sequelize';
 import { sequelize } from '../config/database'; // Import the sequelize instance
 
-const User = sequelize.define('User', {
+// Define the User model using named export
+export const User = sequelize.define('User', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -59,4 +60,3 @@ const User = sequelize.define('User', {
   underscored: true, // Use snake_case column names in the database
 });
 
-export default User;

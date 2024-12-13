@@ -1,16 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Import the sequelize instance
-class User extends sequelize_1.Model {
-}
-exports.User = User;
-User.init({
+const User = database_1.sequelize.define('User', {
     id: {
-        type: sequelize_1.DataTypes.UUID, // Use UUID type for the ID
-        defaultValue: sequelize_1.DataTypes.UUIDV4, // Automatically generate UUID for the ID
-        primaryKey: true, // Set the ID as the primary key
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
+        primaryKey: true,
         allowNull: false, // Ensure the ID is not null
     },
     email: {
@@ -35,11 +31,10 @@ User.init({
         allowNull: false,
         defaultValue: 'user', // Default role is 'user'
     },
-    isVerified: {
+    is_verified: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false, // Default value for isVerified
-        field: 'is_verified', // Map to the snake_case column in the database
+        defaultValue: false, // Default value for is_verified
     },
     resetToken: {
         type: sequelize_1.DataTypes.STRING,
@@ -60,10 +55,9 @@ User.init({
         defaultValue: sequelize_1.Sequelize.literal('CURRENT_TIMESTAMP'), // Set default to current timestamp
     },
 }, {
-    sequelize: database_1.sequelize, // The sequelize instance
-    modelName: 'User', // Model name is 'User'
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
     tableName: 'Users', // Table name in the database
-    timestamps: true, // Automatically add createdAt and updatedAt fields
     underscored: true, // Use snake_case column names in the database
 });
+exports.default = User;
 //# sourceMappingURL=user.js.map

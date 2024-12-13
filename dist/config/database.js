@@ -6,32 +6,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
+const user_1 = __importDefault(require("@models/user")); // Using alias
+const service_1 = __importDefault(require("@models/service")); // Using alias
 // Load environment variables from .env file
 dotenv_1.default.config();
+// Initialize Sequelize instance with the database configuration
 const sequelize = new sequelize_1.Sequelize({
     dialect: 'mysql',
-    host: process.env.DB_HOST || 'localhost', // Use DB_HOST from env or fallback to localhost
-    username: process.env.DB_USER || '', // Use DB_USER from env, fallback to empty string
-    password: process.env.DB_PASSWORD || '', // Use DB_PASSWORD from env, fallback to empty string
-    database: process.env.DB_NAME || '', // Use DB_NAME from env, fallback to empty string
-    logging: false, // Optional: disables SQL query logging
+    host: process.env.DB_HOST || 'localhost',
+    username: process.env.DB_USER || '',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || '',
+    logging: false,
     define: {
-        timestamps: true, // Automatically add `created_at` and `updated_at`
-        freezeTableName: true, // Prevent Sequelize from pluralizing table names
+        timestamps: true,
+        freezeTableName: true,
     },
     dialectOptions: {
         supportBigNumbers: true,
         bigNumberStrings: true,
-        allowInvalidDates: true, // Allow invalid dates during synchronization
-    }
+        allowInvalidDates: true,
+    },
 });
 exports.sequelize = sequelize;
 // Sync database models with the schema
-sequelize.sync({ alter: true }) // This will automatically update your schema based on your models
+sequelize.sync({ alter: true })
     .then(() => {
     console.log('Database synced');
 })
     .catch((err) => {
     console.error('Error syncing database:', err);
 });
+// Ensure that associations between models (like User and Service) are established here
+user_1.default.hasMany(service_1.default, { foreignKey: 'userId' });
+service_1.default.belongsTo(user_1.default, { foreignKey: 'userId' });
 //# sourceMappingURL=database.js.map
