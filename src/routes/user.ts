@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Ensure this path is correct
-import nodemailer from 'nodemailer';
+import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 from the 'uuid' library
+import { User } from '../models/user';
+
 
 const router = Router();
 
@@ -27,12 +28,13 @@ router.post('/register', async (req: Request, res: Response) => {
 
     // Create the new user
     const newUser = await User.create({
+      id: uuidv4(), // Add the 'id' property
       email,
-      password: hashedPassword,
       username,
-      tier: tier || 'free', // Default tier is 'free'
-      role: 'user',
-      isVerified: false, // User is not verified by default
+      password: hashedPassword,
+      role: '',
+      tier: '',
+      isVerified: false, 
     });
 
     // Generate a JWT token for email verification

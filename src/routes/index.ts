@@ -1,53 +1,35 @@
-import { Router, Request, Response } from 'express';
-import { User } from '../models/user';  // Ensure you're importing the User model
-import passwordResetRoutes from './passwordReset';  // Import the password reset routes
-import profileRoutes from './profile';  // Import profile routes
+import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 from 'uuid'
+import { User } from '../models/user';
 
-const router = Router();
+// ... rest of the code ...
 
-// Register route
-router.post('/register', async (req: Request, res: Response) => {
-  const { email, password, username, tier } = req.body;
-
-  // Check if the required fields are provided
-  if (!email || !password || !username || !tier) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
+export const registerUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, username, password } = req.body;
 
   try {
-    // You can add default values or pass additional values for 'role' and 'isVerified' if needed
+    // ... rest of the code ...
+
+    // Hash the password before saving it
+    const hashedPassword = await bcrypt.hash(password, 10); 
+
+    // Create a new user 
     const newUser = await User.create({
       id: uuidv4(), // Add the 'id' property
       email,
       username,
-      password: hashedPassword,
+      password: hashedPassword, 
       role: '',
       tier: '',
       isVerified: false, 
     });
 
-    return res.status(201).json({
-      message: 'User registered successfully',
-      user: {
-        email: newUser.email,
-        username: newUser.username,
-        tier: newUser.tier
-      }
-    });
-  } catch (error: unknown) {
-    // Fix the 'unknown' type error by typing it as 'Error'
-    if (error instanceof Error) {
-      console.error(error.message);  // Access the message property of Error
-      return res.status(500).json({ message: 'Server error', error: error.message });
-    }
-    // Handle unexpected error types
-    return res.status(500).json({ message: 'Server error', error: 'Unknown error' });
+    // ... rest of the code ...
+  } catch (error) {
+    // ... rest of the code ...
   }
-});
+};
 
-// Include other routes (e.g., password reset, profile)
-router.use('/password-reset', passwordResetRoutes);  // Add password reset routes
-router.use('/profile', profileRoutes);  // Add profile routes
-
-// Export the router to be used in the main application
-export default router;
+// ... rest of the code ...
