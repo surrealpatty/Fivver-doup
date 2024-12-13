@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Adjust import path as necessary
+const database_1 = require("../config/database");
 class User extends sequelize_1.Model {
 }
 User.init({
@@ -46,9 +46,9 @@ User.init({
     sequelize: database_1.sequelize,
     modelName: 'User',
     tableName: 'users',
-    timestamps: true, // Enable automatic management of createdAt and updatedAt
-    createdAt: true, // Let Sequelize handle createdAt field automatically
-    updatedAt: true, // Let Sequelize handle updatedAt field automatically
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
 });
-exports.default = User;
+exports.default = User; // This is the default export
 //# sourceMappingURL=user.js.map
