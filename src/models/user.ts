@@ -84,7 +84,7 @@ User.init(
     indexes: [
       {
         unique: true, // Ensure that email is unique
-        fields: ['email'],
+        fields: ['email'], // Index on the email column
       },
     ],
   }
