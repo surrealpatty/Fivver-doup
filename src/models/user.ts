@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Adjust import path as necessary
+import { sequelize } from '../config/database';
 
 class User extends Model {
-  // User model properties here (id, email, username, etc.)
+  // User model properties
 }
 
 User.init(
@@ -49,10 +49,10 @@ User.init(
     sequelize,
     modelName: 'User',
     tableName: 'users',
-    timestamps: true, // Enable automatic management of createdAt and updatedAt
-    createdAt: true,  // Let Sequelize handle createdAt field automatically
-    updatedAt: true,  // Let Sequelize handle updatedAt field automatically
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
   }
 );
 
-export default User;
+export default User;  // This is the default export

@@ -1,52 +1,54 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
-const uuid_1 = require("uuid");
+const database_1 = require("../config/database"); // Adjust import path as necessary
 class User extends sequelize_1.Model {
 }
-exports.User = User;
-// Initialize the User model with Sequelize
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
-        defaultValue: (0, uuid_1.v4)(), // Generate a new UUID for each user
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
+        allowNull: false,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensure emails are unique
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Make username required
+        allowNull: false,
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Make password required
+        allowNull: false,
     },
     role: {
         type: sequelize_1.DataTypes.STRING,
-        defaultValue: 'user', // Default to 'user' role
+        allowNull: false,
     },
     tier: {
         type: sequelize_1.DataTypes.STRING,
-        defaultValue: 'free', // Default to 'free' tier
+        allowNull: false,
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false, // Default to false
+        defaultValue: false,
     },
     resetToken: {
-        type: sequelize_1.DataTypes.STRING, // Allow for a reset token (if needed)
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
     },
     resetTokenExpiration: {
-        type: sequelize_1.DataTypes.DATE, // Allow for a reset token expiration date
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
     },
 }, {
-    sequelize: database_1.sequelize, // The Sequelize instance
-    tableName: 'users', // Table name in the database
+    sequelize: database_1.sequelize,
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true, // Enable automatic management of createdAt and updatedAt
+    createdAt: true, // Let Sequelize handle createdAt field automatically
+    updatedAt: true, // Let Sequelize handle updatedAt field automatically
 });
+exports.default = User;
 //# sourceMappingURL=user.js.map
