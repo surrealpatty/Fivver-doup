@@ -41,12 +41,15 @@ User.init({
     },
     resetToken: {
         type: sequelize_1.DataTypes.STRING, // Allow for a reset token (if needed)
+        allowNull: true,
     },
     resetTokenExpiration: {
         type: sequelize_1.DataTypes.DATE, // Allow for a reset token expiration date
+        allowNull: true,
     },
 }, {
     sequelize: database_1.sequelize, // The Sequelize instance
     tableName: 'users', // Table name in the database
+    timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
 });
 //# sourceMappingURL=user.js.map
