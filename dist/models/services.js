@@ -1,42 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/services.ts
 const sequelize_1 = require("sequelize");
-const database_1 = require("@config/database"); // Ensure the sequelize import is correct
-// Define the Service model class
+const database_1 = require("../config/database"); // Import the sequelize instance
 class Service extends sequelize_1.Model {
 }
-// Initialize the Service model
 Service.init({
     id: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING, // Using string type to align with UUID format
         primaryKey: true,
-        autoIncrement: true,
+        allowNull: false,
+        defaultValue: sequelize_1.DataTypes.UUIDV4, // Use UUIDv4 for auto-generated ids
+    },
+    userId: {
+        type: sequelize_1.DataTypes.STRING, // Ensure userId type is a string to match the User model's id type
+        allowNull: false,
+        references: {
+            model: 'Users', // Foreign key reference to the Users table
+            key: 'id', // Linking to the 'id' column of the Users table
+        },
     },
     name: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
+        allowNull: false, // Ensure the service name is required
     },
     description: {
-        type: sequelize_1.DataTypes.TEXT,
-        allowNull: false,
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false, // Ensure the service description is required
     },
     price: {
         type: sequelize_1.DataTypes.FLOAT,
-        allowNull: false,
-    },
-    userId: {
-        type: sequelize_1.DataTypes.STRING, // Change to STRING to match userId as string (UUID)
-        allowNull: false,
+        allowNull: false, // Ensure the service price is required
     },
     image: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
+        type: sequelize_1.DataTypes.STRING, // Optional field for the service image
+        allowNull: true, // Allow image to be null (if not provided)
     },
 }, {
-    sequelize: database_1.sequelize, // Sequelize instance
-    tableName: 'services',
+    sequelize: database_1.sequelize, // The sequelize instance
+    modelName: 'Service', // Model name 'Service'
+    tableName: 'Services', // Table name in the database
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+    underscored: true, // Use snake_case column names in the database
 });
-// Export the model and interface
-exports.default = Service; // Default export
+exports.default = Service;
 //# sourceMappingURL=services.js.map

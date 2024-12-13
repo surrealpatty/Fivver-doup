@@ -1,42 +1,58 @@
-// src/test/testModels.ts
-import Service, { ServiceAttributes } from '../models/services'; // Import Service and ServiceAttributes
-import { User } from '../models/user'; // Correct named import for User
-import { sequelize } from '../config/database'; // Import the sequelize instance
-import { v4 as uuidv4 } from 'uuid';
+// src/models/user.ts
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database';
 
-describe('Service Model Tests', () => {
-  beforeAll(async () => {
-    // Sync the database (ensure it's ready before tests)
-    await sequelize.sync({ force: true });
-  });
+export interface UserAttributes {
+  id: number;
+  email: string;
+  username: string;
+  password: string;  // Add password property
+  resetToken?: string;  // Add resetToken property
+  resetTokenExpiration?: Date;  // Add resetTokenExpiration property
+}
 
-  it('should create a new service', async () => {
-    // Create a user with all required fields (password, role, and isVerified)
-    const user = await User.create({
-      username: 'testUser',
-      email: 'test@example.com',
-      password: 'password123',
-      role: 'free',
-      tier: 'free',
-      isVerified: true,
-      id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
-    });
+class User extends Model<UserAttributes> implements UserAttributes {
+  public id!: number;
+  public email!: string;
+  public username!: string;
+  public password!: string;  // Define password
+  public resetToken?: string;  // Define resetToken
+  public resetTokenExpiration?: Date;  // Define resetTokenExpiration
+}
 
-    // Prepare the service data, omitting 'id'
-    const serviceData: Omit<ServiceAttributes, 'id'> = {  // Omit 'id' from the type
-      name: 'Test Service',
-      description: 'A test service description',
-      price: 100.0,
-      userId: user.id,  // user.id is a string (UUID)
-      image: undefined, // Use undefined instead of null
-    };
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    resetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,  // Allow null for the reset token
+    },
+    resetTokenExpiration: {
+      type: DataTypes.DATE,
+      allowNull: true,  // Allow null for the reset token expiration
+    },
+  },
+  {
+    sequelize,
+    modelName: 'User',
+  }
+);
 
-    // Create the service and ensure it's properly typed
-    const service = await Service.create(serviceData);
-
-    // Check that the service has the correct properties
-    expect(service.userId).toBe(user.id);  // Ensure userId is a string
-    expect(service.name).toBe('Test Service');  // Ensure 'name' is correctly used
-    expect(service.price).toBe(100.0);
-  });
-});
+export { User };

@@ -24,12 +24,13 @@ describe('Service Model Tests', () => {
             isVerified: true,
             id: (0, uuid_1.v4)(), // Generate a unique ID (assuming you're using uuid)
         });
-        // Prepare the service data, using Optional to allow 'id' to be omitted
+        // Prepare the service data, using undefined for the 'image' field
         const serviceData = {
             name: 'Test Service',
             description: 'A test service description',
             price: 100.0,
             userId: user.id, // user.id is a string (UUID)
+            image: undefined, // Use undefined instead of null
         };
         // Create the service and ensure it's properly typed
         const service = await services_1.default.create(serviceData);
