@@ -1,7 +1,9 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import { User } from '../models/user';  // Correct relative path
-import Service from '@models/services';  // Default import
+// New import using relative path
+import  Service  from '../models/services';
+
 
 // Load environment variables from .env file
 dotenv.config();
