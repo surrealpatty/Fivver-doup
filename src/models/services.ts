@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Import the sequelize instance
+import { sequelize } from '../config/database';  // Correctly import the sequelize instance
 
 // Define the attributes for the Service model
 export interface ServiceAttributes {
