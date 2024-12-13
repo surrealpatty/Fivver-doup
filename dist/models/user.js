@@ -17,7 +17,7 @@ User.init({
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Automatically create a unique constraint without an index
+        unique: true, // This automatically adds a unique constraint on the email column
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
@@ -51,5 +51,6 @@ User.init({
     sequelize: database_1.sequelize,
     tableName: 'users',
     timestamps: true,
+    // No need to define indexes manually unless you need a custom index
 });
 //# sourceMappingURL=user.js.map
