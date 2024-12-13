@@ -1,16 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateService = void 0;
-const services_1 = __importDefault(require("@models/services")); // Correct alias import
+const services_1 = require("@models/services"); // Correct alias import for named export
 const updateService = async (req, res) => {
     try {
         const { serviceId } = req.params;
         const userId = req.user?.id; // Ensure user is set after authentication middleware
         // Find the service by primary key
-        const service = await services_1.default.findByPk(serviceId);
+        const service = await services_1.Service.findByPk(serviceId);
         if (!service) {
             res.status(404).json({ message: 'Service not found' });
             return;
