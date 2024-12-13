@@ -4,8 +4,8 @@ import { User } from '../models/user'; // Ensure the User model path is correct
 
 const router: Router = Router();
 
-// POST /api/users/register - User Registration Route
-router.post('/register', async (req: Request, res: Response) => {
+// POST /api/users - User Registration Route (Changed from /register to /)
+router.post('/', async (req: Request, res: Response) => {
   const { email, password, username, tier } = req.body; // Extract user input
 
   try {
@@ -45,35 +45,6 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error registering user:', error); // Log error to the console
-    return res.status(500).json({ message: 'Server error', error });
-  }
-});
-
-// GET /api/users/create-user - Debugging Route (Manually Create User)
-router.get('/create-user', async (req: Request, res: Response) => {
-  try {
-    // Manually create a test user
-    const newUser = await User.create({
-      email: 'test@example.com',
-      username: 'testuser',
-      password: await bcrypt.hash('password123', 10), // Hash the password
-      tier: 'free',
-      role: 'user',
-      isVerified: false,
-    });
-
-    console.log('Test user created:', newUser); // Debug log
-    return res.status(201).json({
-      message: 'Test user created successfully',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        tier: newUser.tier,
-      },
-    });
-  } catch (error) {
-    console.error('Error creating test user:', error); // Log error to the console
     return res.status(500).json({ message: 'Server error', error });
   }
 });

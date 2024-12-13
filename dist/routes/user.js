@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express"); // Import types from 'express'
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const user_1 = require("../models/user"); // Ensure the User model is correctly imported
+const bcryptjs_1 = __importDefault(require("bcryptjs")); // For password hashing
+const user_1 = require("../models/user"); // Ensure the User model path is correct
 const router = (0, express_1.Router)();
 // POST /api/users/register - User Registration Route
 router.post('/register', async (req, res) => {
-    const { email, password, username, tier } = req.body;
+    const { email, password, username, tier } = req.body; // Extract user input
     try {
         // 1. Validate required fields
         if (!email || !password || !username) {
@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Error registering user:', error);
+        console.error('Error registering user:', error); // Log error to the console
         return res.status(500).json({ message: 'Server error', error });
     }
 });
@@ -59,7 +59,7 @@ router.get('/create-user', async (req, res) => {
             role: 'user',
             isVerified: false,
         });
-        console.log('Test user created:', newUser);
+        console.log('Test user created:', newUser); // Debug log
         return res.status(201).json({
             message: 'Test user created successfully',
             user: {
@@ -71,10 +71,10 @@ router.get('/create-user', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Error creating test user:', error);
+        console.error('Error creating test user:', error); // Log error to the console
         return res.status(500).json({ message: 'Server error', error });
     }
 });
-// Export the router
+// Export the router for use in the app
 exports.default = router;
 //# sourceMappingURL=user.js.map
