@@ -46,7 +46,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Automatically create a unique constraint without an index
+      unique: true, // This automatically adds a unique constraint on the email column
     },
     username: {
       type: DataTypes.STRING,
@@ -81,6 +81,7 @@ User.init(
     sequelize,
     tableName: 'users',
     timestamps: true,
+    // No need to define indexes manually unless you need a custom index
   }
 );
 

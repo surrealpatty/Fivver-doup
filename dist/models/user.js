@@ -7,54 +7,49 @@ const uuid_1 = require("uuid");
 class User extends sequelize_1.Model {
 }
 exports.User = User;
-// Initialize the User model with Sequelize
+// Initialize the User model
 User.init({
     id: {
         type: sequelize_1.DataTypes.UUID,
-        defaultValue: () => (0, uuid_1.v4)(), // Use a function to generate a new UUID for each user
+        defaultValue: () => (0, uuid_1.v4)(),
         primaryKey: true,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Ensure emails are required
+        allowNull: false,
+        unique: true, // Automatically create a unique constraint without an index
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Make username required
+        allowNull: false,
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false, // Make password required
+        allowNull: false,
     },
     role: {
         type: sequelize_1.DataTypes.STRING,
-        defaultValue: 'user', // Default to 'user' role
+        defaultValue: 'user',
     },
     tier: {
         type: sequelize_1.DataTypes.STRING,
-        defaultValue: 'free', // Default to 'free' tier
+        defaultValue: 'free',
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false, // Default to false
+        defaultValue: false,
     },
     resetToken: {
-        type: sequelize_1.DataTypes.STRING, // Allow for a reset token (if needed)
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true,
     },
     resetTokenExpiration: {
-        type: sequelize_1.DataTypes.DATE, // Allow for a reset token expiration date
+        type: sequelize_1.DataTypes.DATE,
         allowNull: true,
     },
 }, {
-    sequelize: database_1.sequelize, // The Sequelize instance
-    tableName: 'users', // Table name in the database
-    timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
-    indexes: [
-        {
-            unique: true, // Ensure that email is unique
-            fields: ['email'], // Index on the email column
-        },
-    ],
+    sequelize: database_1.sequelize,
+    tableName: 'users',
+    timestamps: true,
 });
 //# sourceMappingURL=user.js.map
