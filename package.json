@@ -49,6 +49,7 @@
     "lodash.merge": "^4.6.2",
     "marked": "^15.0.3",
     "micromatch": "^4.0.8",
+    "module-alias": "^2.2.3",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.5",
     "nodemailer": "^6.9.16",
@@ -145,6 +146,14 @@
           ]
         }
       ],
+      "_moduleAliases": {
+  "@models": "dist/models",
+  "@controllers": "dist/controllers",
+  "@routes": "dist/routes",
+  "@config": "dist/config",
+  "@middlewares": "dist/middlewares"
+},
+
       "vue/multi-word-component-names": "off",
       "@typescript-eslint/no-unused-vars": "warn"
     }
