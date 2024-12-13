@@ -22,12 +22,13 @@ describe('Service Model Tests', () => {
       id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
     });
 
-    // Prepare the service data, using Optional to allow 'id' to be omitted
-    const serviceData: Optional<ServiceAttributes, 'id'> = {  // Use Optional to allow 'id' to be omitted
+    // Prepare the service data, using undefined for the 'image' field
+    const serviceData: ServiceAttributes = {
       name: 'Test Service',
       description: 'A test service description',
       price: 100.0,
       userId: user.id,  // user.id is a string (UUID)
+      image: undefined, // Use undefined instead of null
     };
 
     // Create the service and ensure it's properly typed

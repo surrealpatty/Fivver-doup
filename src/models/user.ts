@@ -1,31 +1,42 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from 'config/database';
+// src/test/testModels.ts
+import Service, { ServiceAttributes } from '../models/services'; // Import Service and ServiceAttributes
+import { User } from '../models/user'; // Correct named import for User
+import { sequelize } from '../config/database'; // Import the sequelize instance
+import { v4 as uuidv4 } from 'uuid';
 
-export class User extends Model {
-  public id!: string;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public isVerified!: boolean;
-  public role!: string;
-  public tier!: number;
-  public resetToken?: string; // Add resetToken field
-  public resetTokenExpiration?: Date; // Add resetTokenExpiration field
+describe('Service Model Tests', () => {
+  beforeAll(async () => {
+    // Sync the database (ensure it's ready before tests)
+    await sequelize.sync({ force: true });
+  });
 
-  // Add any additional methods if needed
-}
+  it('should create a new service', async () => {
+    // Create a user with all required fields (password, role, and isVerified)
+    const user = await User.create({
+      username: 'testUser',
+      email: 'test@example.com',
+      password: 'password123',
+      role: 'free',
+      tier: 'free',
+      isVerified: true,
+      id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
+    });
 
-User.init(
-  {
-    id: { type: DataTypes.STRING, primaryKey: true },
-    email: { type: DataTypes.STRING },
-    username: { type: DataTypes.STRING },
-    password: { type: DataTypes.STRING },
-    isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
-    role: { type: DataTypes.STRING },
-    tier: { type: DataTypes.INTEGER, defaultValue: 1 },
-    resetToken: { type: DataTypes.STRING, allowNull: true }, // Add resetToken field
-    resetTokenExpiration: { type: DataTypes.DATE, allowNull: true }, // Add resetTokenExpiration field
-  },
-  { sequelize, modelName: 'User' }
-);
+    // Prepare the service data, omitting 'id'
+    const serviceData: Omit<ServiceAttributes, 'id'> = {  // Omit 'id' from the type
+      name: 'Test Service',
+      description: 'A test service description',
+      price: 100.0,
+      userId: user.id,  // user.id is a string (UUID)
+      image: undefined, // Use undefined instead of null
+    };
+
+    // Create the service and ensure it's properly typed
+    const service = await Service.create(serviceData);
+
+    // Check that the service has the correct properties
+    expect(service.userId).toBe(user.id);  // Ensure userId is a string
+    expect(service.name).toBe('Test Service');  // Ensure 'name' is correctly used
+    expect(service.price).toBe(100.0);
+  });
+});

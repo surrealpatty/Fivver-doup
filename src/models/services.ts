@@ -1,61 +1,74 @@
-// src/models/services.ts
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '@config/database'; // Ensure the sequelize import is correct
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';  // Import the sequelize instance
 
-// Define the ServiceAttributes interface
-export interface ServiceAttributes {
-  id: number;  // id as number (based on your model definition)
+// Define the interface for the attributes used to create a Service (without the primary key)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {
   name: string;
   description: string;
   price: number;
-  userId: string;  // Change to string to match user.id (UUID)
+  image?: string;
+  userId: string;  // Ensure userId type matches the User model
+}
+
+// Define the interface for the attributes of a Service (including the primary key)
+export interface ServiceAttributes {
+  id: string;  // Ensure id is a string to align with the User model's id type
+  userId: string;  // Ensure userId is a string to match the User model's id
+  name: string;
+  description: string;
+  price: number;
   image?: string;
 }
 
-// Define the Service model class
-class Service extends Model<ServiceAttributes> implements ServiceAttributes {
-  public id!: number;
+class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
+  public id!: string;  // Ensuring id is a string
+  public userId!: string;  // Ensuring userId is a string
   public name!: string;
   public description!: string;
   public price!: number;
-  public userId!: string;  // Change to string to match user.id (UUID)
-  public image?: string;
+  public image?: string;  // Optional image field
 }
 
-// Initialize the Service model
 Service.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,  // Using string type to align with UUID format
       primaryKey: true,
-      autoIncrement: true,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,  // Use UUIDv4 for auto-generated ids
+    },
+    userId: {
+      type: DataTypes.STRING,  // Ensure userId type is a string to match the User model's id type
+      allowNull: false,
+      references: {
+        model: 'Users',  // Foreign key reference to the Users table
+        key: 'id',  // Linking to the 'id' column of the Users table
+      },
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false,  // Ensure the service name is required
     },
     description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,  // Ensure the service description is required
     },
     price: {
       type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.STRING,  // Change to STRING to match userId as string (UUID)
-      allowNull: false,
+      allowNull: false,  // Ensure the service price is required
     },
     image: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      type: DataTypes.STRING,  // Optional field for the service image
+      allowNull: true,  // Allow image to be null (if not provided)
     },
   },
   {
-    sequelize, // Sequelize instance
-    tableName: 'services',
+    sequelize,  // The sequelize instance
+    modelName: 'Service',  // Model name 'Service'
+    tableName: 'Services',  // Table name in the database
+    timestamps: true,  // Automatically adds `createdAt` and `updatedAt` fields
+    underscored: true,  // Use snake_case column names in the database
   }
 );
 
-// Export the model and interface
-export default Service;  // Default export
+export default Service;

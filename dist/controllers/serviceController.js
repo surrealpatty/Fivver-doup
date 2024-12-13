@@ -1,20 +1,23 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateService = void 0;
-const services_1 = require("@models/services"); // Correct named import for Service and ServiceAttributes
+const services_1 = __importDefault(require("@models/services")); // Corrected
 const updateService = async (req, res) => {
     try {
         const { serviceId } = req.params;
         const userId = req.user?.id; // Ensure user is set after authentication middleware
         // Find the service by primary key
-        const service = await services_1.Service.findByPk(serviceId);
+        const service = await services_1.default.findByPk(serviceId);
         if (!service) {
             res.status(404).json({ message: 'Service not found' });
             return;
         }
         // Ensure the logged-in user owns the service
-        // Convert userId to string for comparison
-        if (service.userId !== String(userId)) {
+        // Convert both userId and service.userId to string for comparison
+        if (String(service.userId) !== String(userId)) {
             res.status(403).json({ message: 'You can only update your own services' });
             return;
         }

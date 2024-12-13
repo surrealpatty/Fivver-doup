@@ -26,7 +26,7 @@ Service.init({
         allowNull: false,
     },
     userId: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING, // Change to STRING to match userId as string (UUID)
         allowNull: false,
     },
     image: {
