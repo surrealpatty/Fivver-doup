@@ -2,14 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
+const database_1 = require("../config/database"); // Adjust the import path to your sequelize config
 class User extends sequelize_1.Model {
 }
 exports.User = User;
 User.init({
     id: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
@@ -26,26 +27,18 @@ User.init({
     },
     role: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Adjust as needed (optional, required, etc.)
+        defaultValue: 'user',
     },
     tier: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Adjust as needed (optional, required, etc.)
-    },
-    resetToken: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-    },
-    resetTokenExpiration: {
-        type: sequelize_1.DataTypes.DATE,
-        allowNull: true,
+        defaultValue: 'free',
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false, // Set a default value (optional)
+        defaultValue: false,
     },
 }, {
     sequelize: database_1.sequelize,
-    modelName: 'User',
+    tableName: 'users',
 });
 //# sourceMappingURL=user.js.map

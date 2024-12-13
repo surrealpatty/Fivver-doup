@@ -4,40 +4,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authenticateToken_1 = require("../middlewares/authenticateToken");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const user_1 = require("../models/user");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_1 = require("../models/user"); // Import User model
 const router = (0, express_1.Router)();
-// Profile Management Route: Update profile
-router.put('/profile', authenticateToken_1.authenticateToken, async (req, res) => {
-    const { email, username, password, newPassword } = req.body;
+// User Registration (Signup) Route
+router.post('/signup', async (req, res) => {
+    const { email, username, password } = req.body;
+    // Validate input
+    if (!email || !username || !password) {
+        return res.status(400).json({ message: 'Email, username, and password are required.' });
+    }
     try {
-        // Ensure the user is authenticated and their ID is available
-        const user = await user_1.User.findByPk(req.user?.id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found.' });
+        // Check if user already exists
+        const existingUser = await user_1.User.findOne({
+            where: { email },
+        });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email is already in use.' });
         }
-        // Update email or username if provided
-        if (email)
-            user.email = email;
-        if (username)
-            user.username = username;
-        // Handle password update if newPassword is provided
-        if (newPassword) {
-            // Compare the current password with the existing hashed password
-            const isMatch = await bcryptjs_1.default.compare(password, user.password);
-            if (!isMatch) {
-                return res.status(400).json({ message: 'Invalid current password.' });
-            }
-            // Hash and update the new password
-            user.password = await bcryptjs_1.default.hash(newPassword, 10);
-        }
-        // Save the updated user data
-        await user.save();
-        res.status(200).json({ message: 'Profile updated successfully', user });
+        // Hash the password using bcrypt
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10); // Salt rounds = 10
+        // Create the new user in the database (id is handled automatically)
+        const user = await user_1.User.create({
+            email,
+            username,
+            password: hashedPassword,
+            role: 'user', // Default role (can be modified)
+            tier: 'free', // Default tier (can be modified)
+            isVerified: false, // Assuming user isn't verified initially
+        });
+        // Generate JWT token
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+        { expiresIn: '1h' } // Expiry time of the token
+        );
+        // Send back response with token
+        res.status(201).json({
+            message: 'User registered successfully',
+            token, // Send the generated token
+        });
     }
     catch (error) {
-        console.error(error);
+        console.error('Error during user registration:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
