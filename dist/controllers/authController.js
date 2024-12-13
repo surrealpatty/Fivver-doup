@@ -7,7 +7,6 @@ exports.loginUser = exports.registerUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
-// Import the library to generate unique IDs (assuming you're using uuid)
 const uuid_1 = require("uuid");
 const registerUser = async (req, res) => {
     const { email, username, password } = req.body;
@@ -22,14 +21,14 @@ const registerUser = async (req, res) => {
         }
         // Hash the password before saving it
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-        // Create a new user with default 'isVerified' set to false
+        // Create a new user 
         const user = await user_1.User.create({
-            id: (0, uuid_1.v4)(), // Generate a unique ID
+            id: (0, uuid_1.v4)(), // Use UUID for ID
             email,
             username,
-            password: hashedPassword, // Use hashedPassword
-            role: '', // Set role to an empty string by default (if not defined)
-            tier: '', // Set tier to an empty string by default (if not defined)
+            password: hashedPassword,
+            role: '',
+            tier: '',
             isVerified: false,
         });
         return res.status(201).json({
@@ -60,8 +59,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
         // Generate JWT token
-        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your-default-secret', // Default secret if not set
-        { expiresIn: '1h' });
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your-default-secret', { expiresIn: '1h' });
         return res.status(200).json({
             message: 'Login successful',
             token,

@@ -7,9 +7,10 @@ export interface UserAttributes {
   username: string;
   password: string;
   role: string;
-  tier: string; 
+  tier: string;
   resetToken?: string;
   resetTokenExpiration?: Date;
+  isVerified: boolean;
 }
 
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -18,9 +19,10 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: string; // Added the tier property
+  public tier!: string;
   public resetToken?: string;
   public resetTokenExpiration?: Date;
+  public isVerified!: boolean;
 }
 
 User.init(
@@ -57,6 +59,10 @@ User.init(
     resetTokenExpiration: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false, // Set a default value (optional)
     },
   },
   {
