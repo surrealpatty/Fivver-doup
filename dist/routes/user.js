@@ -7,8 +7,8 @@ const express_1 = require("express"); // Import types from 'express'
 const bcryptjs_1 = __importDefault(require("bcryptjs")); // For password hashing
 const user_1 = require("../models/user"); // Ensure the User model path is correct
 const router = (0, express_1.Router)();
-// POST /api/users/register - User Registration Route
-router.post('/register', async (req, res) => {
+// POST /api/users - User Registration Route (Changed from /register to /)
+router.post('/', async (req, res) => {
     const { email, password, username, tier } = req.body; // Extract user input
     try {
         // 1. Validate required fields
@@ -44,34 +44,6 @@ router.post('/register', async (req, res) => {
     }
     catch (error) {
         console.error('Error registering user:', error); // Log error to the console
-        return res.status(500).json({ message: 'Server error', error });
-    }
-});
-// GET /api/users/create-user - Debugging Route (Manually Create User)
-router.get('/create-user', async (req, res) => {
-    try {
-        // Manually create a test user
-        const newUser = await user_1.User.create({
-            email: 'test@example.com',
-            username: 'testuser',
-            password: await bcryptjs_1.default.hash('password123', 10), // Hash the password
-            tier: 'free',
-            role: 'user',
-            isVerified: false,
-        });
-        console.log('Test user created:', newUser); // Debug log
-        return res.status(201).json({
-            message: 'Test user created successfully',
-            user: {
-                id: newUser.id,
-                email: newUser.email,
-                username: newUser.username,
-                tier: newUser.tier,
-            },
-        });
-    }
-    catch (error) {
-        console.error('Error creating test user:', error); // Log error to the console
         return res.status(500).json({ message: 'Server error', error });
     }
 });
