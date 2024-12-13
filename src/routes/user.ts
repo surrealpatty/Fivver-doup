@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express'; // Import types from 'express'
-import bcrypt from 'bcryptjs';
-import { User } from '../models/user'; // Ensure the User model is correctly imported
+import bcrypt from 'bcryptjs'; // For password hashing
+import { User } from '../models/user'; // Ensure the User model path is correct
 
 const router: Router = Router();
 
 // POST /api/users/register - User Registration Route
 router.post('/register', async (req: Request, res: Response) => {
-  const { email, password, username, tier } = req.body;
+  const { email, password, username, tier } = req.body; // Extract user input
 
   try {
     // 1. Validate required fields
@@ -44,7 +44,7 @@ router.post('/register', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error registering user:', error); // Log error to the console
     return res.status(500).json({ message: 'Server error', error });
   }
 });
@@ -62,7 +62,7 @@ router.get('/create-user', async (req: Request, res: Response) => {
       isVerified: false,
     });
 
-    console.log('Test user created:', newUser);
+    console.log('Test user created:', newUser); // Debug log
     return res.status(201).json({
       message: 'Test user created successfully',
       user: {
@@ -73,10 +73,10 @@ router.get('/create-user', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Error creating test user:', error);
+    console.error('Error creating test user:', error); // Log error to the console
     return res.status(500).json({ message: 'Server error', error });
   }
 });
 
-// Export the router
+// Export the router for use in the app
 export default router;
