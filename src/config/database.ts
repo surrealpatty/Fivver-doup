@@ -19,7 +19,6 @@ const sequelize = new Sequelize({
   dialectOptions: {
     supportBigNumbers: true,                      // Support big numbers in MySQL
     bigNumberStrings: true,                       // Ensure that big numbers are returned as strings
-    allowInvalidDates: true,                      // Allow invalid dates
   },
 });
 

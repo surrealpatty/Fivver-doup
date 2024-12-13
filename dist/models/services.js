@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Import the sequelize instance
+const database_1 = require("../config/database"); // Correctly import the sequelize instance
 // Define the Service model class
 class Service extends sequelize_1.Model {
 }
