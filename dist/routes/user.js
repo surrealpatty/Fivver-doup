@@ -5,60 +5,76 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express"); // Import types from 'express'
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const user_1 = require("../models/user"); // Ensure the User model is imported
+const user_1 = require("../models/user"); // Ensure the User model is correctly imported
 const router = (0, express_1.Router)();
-// Registration Route
+// POST /api/users/register - User Registration Route
 router.post('/register', async (req, res) => {
-    const { email, password, username, tier } = req.body; // Get user data from request body
+    const { email, password, username, tier } = req.body;
     try {
-        // 1. Input validation (email, password, and username are required)
+        // 1. Validate required fields
         if (!email || !password || !username) {
             return res.status(400).json({ message: 'Email, password, and username are required' });
         }
-        // 2. Check if the email is already in use
+        // 2. Check if the email already exists
         const existingUser = await user_1.User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already in use' });
+            return res.status(400).json({ message: 'Email is already in use' });
         }
-        // 3. Hash the password before saving to the database
+        // 3. Hash the password
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-        // 4. Create new user (with default 'free' tier if not provided)
+        // 4. Create a new user
         const newUser = await user_1.User.create({
             email,
             password: hashedPassword,
             username,
-            tier: tier || 'free', // Default to 'free' if tier is not provided
-            role: 'user', // Set default role to 'user'
-            isVerified: false, // Default to 'false' if isVerified is not provided
+            tier: tier || 'free', // Default tier is 'free'
+            role: 'user', // Default role is 'user'
+            isVerified: false, // Default to false
         });
-        // 5. Send success response
-        res.status(201).json({ message: 'User registered successfully', user: newUser });
+        // 5. Return success response
+        return res.status(201).json({
+            message: 'User registered successfully',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                username: newUser.username,
+                tier: newUser.tier,
+            },
+        });
     }
-    catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error', error: err });
+    catch (error) {
+        console.error('Error registering user:', error);
+        return res.status(500).json({ message: 'Server error', error });
     }
 });
-// Manually Create a User (for debugging)
+// GET /api/users/create-user - Debugging Route (Manually Create User)
 router.get('/create-user', async (req, res) => {
     try {
+        // Manually create a test user
         const newUser = await user_1.User.create({
             email: 'test@example.com',
             username: 'testuser',
-            password: 'password123', // You can hash it if needed
+            password: await bcryptjs_1.default.hash('password123', 10), // Hash the password
             tier: 'free',
             role: 'user',
             isVerified: false,
-            resetToken: null,
-            resetTokenExpiration: null,
         });
-        console.log('User created:', newUser);
-        res.status(201).json({ message: 'Test user created successfully', user: newUser });
+        console.log('Test user created:', newUser);
+        return res.status(201).json({
+            message: 'Test user created successfully',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                username: newUser.username,
+                tier: newUser.tier,
+            },
+        });
     }
-    catch (err) {
-        console.error('Error creating user:', err);
-        res.status(500).json({ message: 'Error creating user', error: err });
+    catch (error) {
+        console.error('Error creating test user:', error);
+        return res.status(500).json({ message: 'Server error', error });
     }
 });
-exports.default = router; // Use ES module syntax for export
+// Export the router
+exports.default = router;
 //# sourceMappingURL=user.js.map
