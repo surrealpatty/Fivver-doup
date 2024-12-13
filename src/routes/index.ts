@@ -17,12 +17,13 @@ router.post('/register', async (req: Request, res: Response) => {
   try {
     // You can add default values or pass additional values for 'role' and 'isVerified' if needed
     const newUser = await User.create({
+      id: uuidv4(), // Add the 'id' property
       email,
-      password,
       username,
-      tier,
-      role: 'user', // Default role, you can change as needed
-      isVerified: false, // Default value for isVerified
+      password: hashedPassword,
+      role: '',
+      tier: '',
+      isVerified: false, 
     });
 
     return res.status(201).json({

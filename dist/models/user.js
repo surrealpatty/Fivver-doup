@@ -40,6 +40,10 @@ User.init({
         type: sequelize_1.DataTypes.DATE,
         allowNull: true,
     },
+    isVerified: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false, // Set a default value (optional)
+    },
 }, {
     sequelize: database_1.sequelize,
     modelName: 'User',
