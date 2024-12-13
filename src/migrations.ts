@@ -1,13 +1,11 @@
-export = {
-    up: async (queryInterface, Sequelize) => {
-      await queryInterface.addColumn('users', 'isVerified', {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      });
-    },
-  
-    down: async (queryInterface, Sequelize) => {
-      await queryInterface.removeColumn('users', 'isVerified');
-    },
-  };
-  
+import { QueryInterface, Sequelize } from 'sequelize'; // Import types
+
+module.exports = {
+  up: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
+    // Your migration logic here
+  },
+
+  down: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
+    // Your rollback logic here
+  }
+};
