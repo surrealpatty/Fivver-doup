@@ -2,33 +2,51 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Adjust the path if necessary
+const database_1 = require("../config/database");
+const uuid_1 = require("uuid");
 class User extends sequelize_1.Model {
 }
 exports.User = User;
+// Initialize the User model with Sequelize
 User.init({
-    username: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+    id: {
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: (0, uuid_1.v4)(), // Generate a new UUID for each user
+        primaryKey: true,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true, // Ensure emails are unique
     },
-    createdAt: {
-        type: sequelize_1.DataTypes.DATE,
-        defaultValue: sequelize_1.DataTypes.NOW, // Automatically sets the current time when a record is created
-        allowNull: false
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false, // Make username required
     },
-    updatedAt: {
-        type: sequelize_1.DataTypes.DATE,
-        defaultValue: sequelize_1.DataTypes.NOW, // Automatically updates the time when the record is updated
-        allowNull: false
-    }
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false, // Make password required
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        defaultValue: 'user', // Default to 'user' role
+    },
+    tier: {
+        type: sequelize_1.DataTypes.STRING,
+        defaultValue: 'free', // Default to 'free' tier
+    },
+    isVerified: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false, // Default to false
+    },
+    resetToken: {
+        type: sequelize_1.DataTypes.STRING, // Allow for a reset token (if needed)
+    },
+    resetTokenExpiration: {
+        type: sequelize_1.DataTypes.DATE, // Allow for a reset token expiration date
+    },
 }, {
-    sequelize: database_1.sequelize, // Pass the Sequelize instance here
-    modelName: 'User',
-    tableName: 'users', // Adjust the table name if necessary
-    timestamps: true, // Sequelize will manage createdAt and updatedAt
+    sequelize: database_1.sequelize, // The Sequelize instance
+    tableName: 'users', // Table name in the database
 });
 //# sourceMappingURL=user.js.map
