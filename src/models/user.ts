@@ -47,7 +47,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Ensure emails are unique
+      unique: true, // Ensure emails are unique (one unique index only)
     },
     username: {
       type: DataTypes.STRING,
@@ -82,6 +82,12 @@ User.init(
     sequelize, // The Sequelize instance
     tableName: 'users', // Table name in the database
     timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
+    indexes: [
+      {
+        unique: true, // Only one index should be defined here for `email`
+        fields: ['email'],
+      },
+    ],
   }
 );
 
