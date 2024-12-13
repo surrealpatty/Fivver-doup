@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
-const user_1 = __importDefault(require("@models/user")); // Correct import using the alias
-const service_1 = __importDefault(require("@models/service")); // Correct import using the alias
+const user_1 = require("@models/user"); // Correct named import
+const service_1 = require("@models/service"); // Correct named import
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Initialize Sequelize instance with the database configuration
@@ -38,6 +38,6 @@ sequelize.sync({ alter: true })
     console.error('Error syncing database:', err);
 });
 // Ensure that associations between models (like User and Service) are established here
-user_1.default.hasMany(service_1.default, { foreignKey: 'userId' });
-service_1.default.belongsTo(user_1.default, { foreignKey: 'userId' });
+user_1.User.hasMany(service_1.Service, { foreignKey: 'userId' });
+service_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' });
 //# sourceMappingURL=database.js.map
