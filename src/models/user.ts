@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Define the UserAttributes interface to specify the attributes of the User model
 interface UserAttributes {
-  id: string;  // UUID type for id
+  id: string; // UUID type for id
   email: string;
   username: string;
   password: string;
@@ -13,10 +13,12 @@ interface UserAttributes {
   isVerified: boolean;
   resetToken?: string;
   resetTokenExpiration?: Date;
+  createdAt?: Date; // Optional since Sequelize handles it
+  updatedAt?: Date; // Optional since Sequelize handles it
 }
 
 // Define the UserCreationAttributes interface that omits the 'id' for creation
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'resetToken' | 'resetTokenExpiration'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
@@ -45,15 +47,15 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // Ensure emails are unique
+      unique: true, // Ensure emails are unique
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,  // Make username required
+      allowNull: false, // Make username required
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,  // Make password required
+      allowNull: false, // Make password required
     },
     role: {
       type: DataTypes.STRING,
@@ -69,14 +71,17 @@ User.init(
     },
     resetToken: {
       type: DataTypes.STRING, // Allow for a reset token (if needed)
+      allowNull: true,
     },
     resetTokenExpiration: {
       type: DataTypes.DATE, // Allow for a reset token expiration date
+      allowNull: true,
     },
   },
   {
-    sequelize,  // The Sequelize instance
-    tableName: 'users',  // Table name in the database
+    sequelize, // The Sequelize instance
+    tableName: 'users', // Table name in the database
+    timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
   }
 );
 

@@ -1,123 +1,83 @@
-import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
+import { Router, Request, Response } from 'express';
+import { User } from '../models/user'; // Assuming you have the User model
+import { sendPasswordResetEmail } from '../utils/email'; // Importing email utility to send password reset email
+import bcrypt from 'bcryptjs'; 
 import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 from the 'uuid' library
-import { User } from '../models/user';
-import { Router } from 'express'; // Import Router from Express
-import nodemailer from 'nodemailer';
 const router = Router();
 
-// POST /api/users/register - User Registration Route
-router.post('/register', async (req: Request, res: Response) => {
-  const { email, password, username, tier } = req.body;
+// POST /api/users/request-password-reset - Request Password Reset Route
+router.post('/request-password-reset', async (req: Request, res: Response) => {
+  const { email } = req.body;
 
   try {
     // Validate required fields
-    if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Email, password, and username are required' });
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
     }
 
-    // Check if the user already exists
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email is already in use' });
+    // Check if the user exists
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create the new user
-    const newUser = await User.create({
-      id: uuidv4(), // Add the 'id' property
-      email,
-      username,
-      password: hashedPassword,
-      role: '',
-      tier: '',
-      isVerified: false, 
-    });
-
-    // Generate a JWT token for email verification
-    const verificationToken = jwt.sign(
-      { id: newUser.id },
-      process.env.JWT_SECRET as string, // Ensure you have a JWT_SECRET in your .env file
-      { expiresIn: '1d' } // The token expires in 1 day
+    // Generate a reset token
+    const resetToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET as string, // Ensure JWT_SECRET is defined in .env
+      { expiresIn: '1h' } // Token expires in 1 hour
     );
 
-    // Generate the verification link
-    const verificationLink = `${process.env.BASE_URL}/verify?token=${verificationToken}`;
+    // Generate the reset link
+    const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
 
-    // Setup nodemailer transporter (Ensure you have configured your email settings)
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER, // Your Gmail address
-        pass: process.env.GMAIL_PASS, // Your Gmail password or App Password
-      },
-    });
+    // Send password reset email
+    await sendPasswordResetEmail(email, resetToken);
 
-    // Send the verification email
-    const mailOptions = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: 'Please verify your email address',
-      html: `<p>Click <a href="${verificationLink}">here</a> to verify your email address.</p>`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    // Respond to the client with success
-    return res.status(201).json({
-      message: 'User registered successfully. Please check your email to verify your account.',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        tier: newUser.tier,
-      },
+    return res.status(200).json({
+      message: 'Password reset email sent. Please check your inbox.',
     });
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error requesting password reset:', error);
     return res.status(500).json({ message: 'Server error', error });
   }
 });
 
-// GET /api/users/verify - Email Verification Route
-router.get('/verify', async (req: Request, res: Response) => {
-  const { token } = req.query;
-
-  // Check if the token is provided
-  if (!token) {
-    return res.status(400).json({ message: 'Verification token is required' });
-  }
+// POST /api/users/reset-password - Reset Password Route
+router.post('/reset-password', async (req: Request, res: Response) => {
+  const { token, newPassword } = req.body;
 
   try {
-    // Verify the token using JWT
-    const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string);
+    // Validate required fields
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: 'Token and new password are required' });
+    }
+
+    // Verify the reset token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 
     if (!decoded || typeof decoded === 'string') {
-      return res.status(400).json({ message: 'Invalid verification token' });
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
     }
 
     // Find the user associated with the token
-    const user = await User.findOne({ where: { id: decoded.id } });
+    const user = await User.findOne({ where: { id: (decoded as { id: string }).id } });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (user.isVerified) {
-      return res.status(400).json({ message: 'User is already verified' });
-    }
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Mark the user as verified
-    user.isVerified = true;
+    // Update the user's password
+    user.password = hashedPassword;
     await user.save();
 
-    return res.status(200).json({ message: 'Email verified successfully' });
+    return res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
-    console.error('Error verifying email:', error);
-    return res.status(500).json({ message: 'Error verifying email' });
+    console.error('Error resetting password:', error);
+    return res.status(500).json({ message: 'Server error', error });
   }
 });
 
