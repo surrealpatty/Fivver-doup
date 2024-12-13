@@ -63,5 +63,4 @@ const config = {
   JWT_EXPIRATION, // Use as-is since it's already a string
 };
 
-// Export the configuration
 export default config;

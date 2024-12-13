@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Importing config for JWT_SECRET and JWT_EXPIRATION
-
-const JWT_SECRET: string = config.JWT_SECRET;
-const JWT_EXPIRATION: string = config.JWT_EXPIRATION || '1h';
+import config from '../config/config'; // Importing the config object
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
@@ -28,7 +25,8 @@ export const verifyToken = (
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+  // Define explicit types for 'err' and 'decoded'
+  jwt.verify(token, config.JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
     if (err) {
       return res
         .status(401)
@@ -51,8 +49,8 @@ export const verifyToken = (
 
 // Generate a token for the user
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRATION,
+  return jwt.sign({ id: userId }, config.JWT_SECRET, {
+    expiresIn: config.JWT_EXPIRATION,
   });
 };
 
