@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-import User from '@models/user';  // Correct import using the alias
-import Service from '@models/service';  // Correct import using the alias
+import { User } from '@models/user';  // Correct named import
+import { Service } from '@models/service';  // Correct named import
+
 
 
 // Load environment variables from .env file
