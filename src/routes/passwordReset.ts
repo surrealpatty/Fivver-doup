@@ -81,7 +81,7 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
     user.password = hashedPassword;
     user.resetToken = null as string | null;  // Cast null to string | null
     user.resetTokenExpiration = null as Date | null;  // Cast null to Date | null
-
+    
 
     await user.save();
 
