@@ -1,44 +1,56 @@
 import { Router, Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user';
-import { AuthRequest } from '../types';  // Import the custom AuthRequest type
+import jwt from 'jsonwebtoken';
+import { User } from '../models/user';  // Import User model
+import { AuthRequest } from '../types';  // Optional: Custom request type for auth
 
 const router = Router();
 
-// Profile Management Route: Update profile
-router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response) => {
-  const { email, username, password, newPassword } = req.body;
+// User Registration (Signup) Route
+router.post('/signup', async (req: Request, res: Response) => {
+  const { email, username, password } = req.body;
+
+  // Validate input
+  if (!email || !username || !password) {
+    return res.status(400).json({ message: 'Email, username, and password are required.' });
+  }
 
   try {
-    // Ensure the user is authenticated and their ID is available
-    const user = await User.findByPk(req.user?.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      where: { email },
+    });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email is already in use.' });
     }
 
-    // Update email or username if provided
-    if (email) user.email = email;
-    if (username) user.username = username;
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
-    // Handle password update if newPassword is provided
-    if (newPassword) {
-      // Compare the current password with the existing hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid current password.' });
-      }
+    // Create the new user in the database (id is handled automatically)
+    const user = await User.create({
+      email,
+      username,
+      password: hashedPassword,
+      role: 'user', // Default role (can be modified)
+      tier: 'free', // Default tier (can be modified)
+      isVerified: false, // Assuming user isn't verified initially
+    });
 
-      // Hash and update the new password
-      user.password = await bcrypt.hash(newPassword, 10);
-    }
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, username: user.username },
+      process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+      { expiresIn: '1h' } // Expiry time of the token
+    );
 
-    // Save the updated user data
-    await user.save();
-
-    res.status(200).json({ message: 'Profile updated successfully', user });
+    // Send back response with token
+    res.status(201).json({
+      message: 'User registered successfully',
+      token,  // Send the generated token
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Error during user registration:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

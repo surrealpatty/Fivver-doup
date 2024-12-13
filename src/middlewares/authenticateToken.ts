@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../types';  // Import your custom AuthRequest type
 import { UserPayload } from '../types';  // Import UserPayload for typing
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';  // Replace with environment variable or config
+// Secret key for JWT, fallback to a default if not set in environment variables
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';  // Use environment variable or config
 
 // Middleware to authenticate the user using a JWT token
 export const authenticateToken = (
@@ -15,18 +16,18 @@ export const authenticateToken = (
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
   if (!authorizationHeader) {
-    // Send response without returning
+    // Send response if the Authorization token is missing
     res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return;  // Exit early, avoiding further execution
+    return;  // Exit the middleware without returning any value
   }
 
   // Token is expected in "Bearer <token>" format
   const token = authorizationHeader.split(' ')[1];
 
   if (!token) {
-    // Send response without returning
+    // Send response if the token part is missing
     res.status(401).json({ message: 'Authorization token is missing' });
-    return;  // Exit early, avoiding further execution
+    return;  // Exit the middleware without returning any value
   }
 
   try {

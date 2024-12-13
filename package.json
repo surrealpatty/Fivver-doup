@@ -147,13 +147,12 @@
         }
       ],
       "_moduleAliases": {
-  "@models": "dist/models",
-  "@controllers": "dist/controllers",
-  "@routes": "dist/routes",
-  "@config": "dist/config",
-  "@middlewares": "dist/middlewares"
-},
-
+        "@models": "dist/models",
+        "@controllers": "dist/controllers",
+        "@routes": "dist/routes",
+        "@config": "dist/config",
+        "@middlewares": "dist/middlewares"
+      },
       "vue/multi-word-component-names": "off",
       "@typescript-eslint/no-unused-vars": "warn"
     }
