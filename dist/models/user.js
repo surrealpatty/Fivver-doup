@@ -17,7 +17,7 @@ User.init({
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensure emails are unique
+        unique: true, // Ensure emails are unique (one unique index only)
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
@@ -51,5 +51,11 @@ User.init({
     sequelize: database_1.sequelize, // The Sequelize instance
     tableName: 'users', // Table name in the database
     timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
+    indexes: [
+        {
+            unique: true, // Only one index should be defined here for `email`
+            fields: ['email'],
+        },
+    ],
 });
 //# sourceMappingURL=user.js.map
