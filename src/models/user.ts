@@ -46,7 +46,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // This automatically adds a unique constraint on the email column
+      // Removed unique: true to avoid duplicate index
     },
     username: {
       type: DataTypes.STRING,
