@@ -3,8 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 from the 'uuid' library
 import { User } from '../models/user';
-
-
+import { Router } from 'express'; // Import Router from Express
+import nodemailer from 'nodemailer';
 const router = Router();
 
 // POST /api/users/register - User Registration Route

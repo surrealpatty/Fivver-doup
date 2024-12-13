@@ -3,12 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user"); // Ensure this path is correct
-const nodemailer_1 = __importDefault(require("nodemailer"));
-const router = (0, express_1.Router)();
+const uuid_1 = require("uuid"); // Import uuidv4 from the 'uuid' library
+const user_1 = require("../models/user");
+const router = Router();
 // POST /api/users/register - User Registration Route
 router.post('/register', async (req, res) => {
     const { email, password, username, tier } = req.body;
@@ -26,12 +25,13 @@ router.post('/register', async (req, res) => {
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         // Create the new user
         const newUser = await user_1.User.create({
+            id: (0, uuid_1.v4)(), // Add the 'id' property
             email,
-            password: hashedPassword,
             username,
-            tier: tier || 'free', // Default tier is 'free'
-            role: 'user',
-            isVerified: false, // User is not verified by default
+            password: hashedPassword,
+            role: '',
+            tier: '',
+            isVerified: false,
         });
         // Generate a JWT token for email verification
         const verificationToken = jsonwebtoken_1.default.sign({ id: newUser.id }, process.env.JWT_SECRET, // Ensure you have a JWT_SECRET in your .env file
@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
         // Generate the verification link
         const verificationLink = `${process.env.BASE_URL}/verify?token=${verificationToken}`;
         // Setup nodemailer transporter (Ensure you have configured your email settings)
-        const transporter = nodemailer_1.default.createTransport({
+        const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.GMAIL_USER, // Your Gmail address
