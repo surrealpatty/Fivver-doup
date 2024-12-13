@@ -1,5 +1,6 @@
+// src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import { Service, ServiceAttributes } from '@models/services'; // Correct alias import for named export
+import { Service, ServiceAttributes } from '@models/services'; // Correct named import for Service and ServiceAttributes
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
