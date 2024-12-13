@@ -1,31 +1,35 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from 'config/database';
+import { sequelize } from '../config/database';
 
 export class User extends Model {
-  public id!: string;
+  public id!: number;
   public email!: string;
-  public username!: string;
   public password!: string;
-  public isVerified!: boolean;
-  public role!: string;
-  public tier!: number;
-  public resetToken?: string; // Add resetToken field
-  public resetTokenExpiration?: Date; // Add resetTokenExpiration field
-
-  // Add any additional methods if needed
+  public resetToken!: string | null | undefined;  // Allow string, null, or undefined
+  public resetTokenExpiration!: Date | null | undefined;  // Allow Date, null, or undefined
 }
 
 User.init(
   {
-    id: { type: DataTypes.STRING, primaryKey: true },
-    email: { type: DataTypes.STRING },
-    username: { type: DataTypes.STRING },
-    password: { type: DataTypes.STRING },
-    isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
-    role: { type: DataTypes.STRING },
-    tier: { type: DataTypes.INTEGER, defaultValue: 1 },
-    resetToken: { type: DataTypes.STRING, allowNull: true }, // Add resetToken field
-    resetTokenExpiration: { type: DataTypes.DATE, allowNull: true }, // Add resetTokenExpiration field
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    resetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,  // Allow null
+    },
+    resetTokenExpiration: {
+      type: DataTypes.DATE,
+      allowNull: true,  // Allow null
+    },
   },
-  { sequelize, modelName: 'User' }
+  {
+    sequelize,
+    modelName: 'User',
+  }
 );
