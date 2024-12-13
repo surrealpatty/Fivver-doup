@@ -1,7 +1,7 @@
-// src/models/services.ts
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from '../config/database';  // Import the sequelize instance
 
+// Define the attributes for the Service model
 export interface ServiceAttributes {
   id: number;
   name: string;
@@ -11,10 +11,12 @@ export interface ServiceAttributes {
   image?: string | null;  // Allow 'null' for the image field
 }
 
+// Define the creation attributes for the Service model (excluding 'id')
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {
   // 'id' is optional during creation since it's auto-generated
 }
 
+// Define the Service model class
 class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   public id!: number;
   public name!: string;
@@ -23,9 +25,10 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
   public userId!: string;
   public image?: string | null;  // Allow 'null' for image field
 
-  // Other model methods...
+  // Add other model methods if necessary
 }
 
+// Initialize the Service model with the sequelize instance
 Service.init(
   {
     id: {
@@ -35,19 +38,19 @@ Service.init(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false,  // Name must be provided
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false,  // Description must be provided
     },
     price: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false,  // Price must be provided
     },
     userId: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false,  // User ID must be provided
     },
     image: {
       type: DataTypes.STRING,
@@ -55,9 +58,13 @@ Service.init(
     },
   },
   {
-    sequelize,
-    modelName: 'Service',
+    sequelize,  // Pass the sequelize instance here
+    modelName: 'Service',  // Model name to be used in database
+    tableName: 'services',  // Optionally specify table name (default is the plural form of model name)
+    timestamps: true,  // Enable timestamps (createdAt, updatedAt)
+    freezeTableName: true,  // Prevent Sequelize from pluralizing the table name
   }
 );
 
+// Export the Service model
 export default Service;

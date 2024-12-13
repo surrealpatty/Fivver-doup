@@ -7,7 +7,8 @@ exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = require("../models/user"); // Correct relative path
-const services_1 = __importDefault(require("@models/services")); // Default import
+// New import using relative path
+const services_1 = __importDefault(require("../models/services"));
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Initialize Sequelize instance with the database configuration
