@@ -15,10 +15,10 @@
       "./node_modules/@types",                   // Default type roots
       "./src/types"                              // Include custom types
     ],
-    "baseUrl": "./",                             // Set the base directory for module resolution
+    "baseUrl": "./",  // Make sure the baseUrl is set to the root directory of your project
     "paths": {
       "@types/*": ["src/types/*"],               // Alias for types directory
-      "@models/*": ["src/models/*"],             // Alias for models directory
+      "@models/*": ["src/models/*"] ,             // Alias for models directory
       "@controllers/*": ["src/controllers/*"],   // Alias for controllers directory
       "@routes/*": ["src/routes/*"],             // Alias for routes directory
       "@config/*": ["src/config/*"],             // Alias for config directory
