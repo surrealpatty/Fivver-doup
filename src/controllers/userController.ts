@@ -72,7 +72,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     await transporter.sendMail(mailOptions);
 
     // Respond with success message
-    return res.status(201).json({ 
+    return res.status(201).json({
       message: 'Registration successful. Please check your email for verification.',
       user: { id: newUser.id, email: newUser.email, username: newUser.username },
     });
