@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Define the UserAttributes interface to specify the attributes of the User model
 interface UserAttributes {
-  id: string; // UUID type for id
+  id: string;
   email: string;
   username: string;
   password: string;
@@ -13,11 +13,11 @@ interface UserAttributes {
   isVerified: boolean;
   resetToken?: string;
   resetTokenExpiration?: Date;
-  createdAt?: Date; // Optional since Sequelize handles it
-  updatedAt?: Date; // Optional since Sequelize handles it
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Define the UserCreationAttributes interface that omits the 'id' for creation
+// Define the UserCreationAttributes interface
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'resetToken' | 'resetTokenExpiration'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -31,62 +31,56 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public resetToken?: string;
   public resetTokenExpiration?: Date;
 
-  // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-// Initialize the User model with Sequelize
+// Initialize the User model
 User.init(
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: () => uuidv4(), // Use a function to generate a new UUID for each user
+      defaultValue: () => uuidv4(),
       primaryKey: true,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false, // Ensure emails are required
+      allowNull: false,
+      unique: true, // Automatically create a unique constraint without an index
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false, // Make username required
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false, // Make password required
+      allowNull: false,
     },
     role: {
       type: DataTypes.STRING,
-      defaultValue: 'user', // Default to 'user' role
+      defaultValue: 'user',
     },
     tier: {
       type: DataTypes.STRING,
-      defaultValue: 'free', // Default to 'free' tier
+      defaultValue: 'free',
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false, // Default to false
+      defaultValue: false,
     },
     resetToken: {
-      type: DataTypes.STRING, // Allow for a reset token (if needed)
+      type: DataTypes.STRING,
       allowNull: true,
     },
     resetTokenExpiration: {
-      type: DataTypes.DATE, // Allow for a reset token expiration date
+      type: DataTypes.DATE,
       allowNull: true,
     },
   },
   {
-    sequelize, // The Sequelize instance
-    tableName: 'users', // Table name in the database
-    timestamps: true, // Enable automatic management of 'createdAt' and 'updatedAt'
-    indexes: [
-      {
-        unique: true, // Ensure that email is unique
-        fields: ['email'], // Index on the email column
-      },
-    ],
+    sequelize,
+    tableName: 'users',
+    timestamps: true,
   }
 );
 
