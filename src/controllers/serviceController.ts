@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Service, { ServiceAttributes } from '@models/services'; // Correct alias import
+import { Service, ServiceAttributes } from '@models/services'; // Correct alias import for named export
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
