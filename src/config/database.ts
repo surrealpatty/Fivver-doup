@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import { User } from 'models/user';  // Correct named import
-import { Service } from '@models/service';  // Correct alias import
+import { Service } from '@models/services'; // If the file is named services.ts
 
 // Load environment variables from .env file
 dotenv.config();
