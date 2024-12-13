@@ -17,7 +17,7 @@ User.init({
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // This automatically adds a unique constraint on the email column
+        // Removed unique: true to avoid duplicate index
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
