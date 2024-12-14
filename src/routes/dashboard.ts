@@ -1,28 +1,15 @@
-// src/types/index.ts
+// src/routes/dashboard.ts
 
-import { Request } from 'express';  // Import Request from express
-import { UserPayload } from '../types';
+import { Request, Response } from 'express';  // Importing Request and Response from express
+import { UserPayload } from '../types';  // Import UserPayload from src/types/index.ts
 
-export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-}
+// Handler for the dashboard route
+const dashboardHandler = (req: Request, res: Response) => {
+  // Safely cast req.user to UserPayload (since we know it's added by the authentication middleware)
+  const user = req.user as UserPayload;
 
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // User can be undefined
-}
+  // Return a JSON response with the user information
+  res.json({ user });
+};
 
-// Helper type guard to check if user exists
-export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
-  return !!req.user;
-}
-
-// Define the request body type for creating an order
-export interface CreateOrderRequest {
-  userId: number;
-  serviceId: number;
-  orderDetails: string;
-  status: string;
-}
-
+export default dashboardHandler;
