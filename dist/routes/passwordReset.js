@@ -51,7 +51,7 @@ router.post('/reset-password/request', async (req, res) => {
         res.status(500).json({ message: 'Server error while processing password reset request' });
     }
 });
-// Handle Password Reset
+// Handle Password Reset with Token
 router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;

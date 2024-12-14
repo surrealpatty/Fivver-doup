@@ -1,9 +1,9 @@
-// src/index.ts
 import express, { Application } from 'express';  // Import express and Application type
 import dotenv from 'dotenv';  // For environment variables
 import cors from 'cors';  // For Cross-Origin Resource Sharing
 import userRoutes from './routes/user';  // Correct path to user routes
 import authRoutes from './routes/auth';  // Correct path to auth routes
+import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
 import { sequelize } from './config/database';  // Correct path to database configuration
 
 dotenv.config();  // Load environment variables from the .env file
@@ -17,6 +17,7 @@ app.use(express.json());  // Parse incoming JSON requests with express's built-i
 // Route setup
 app.use('/api/users', userRoutes);  // Register user routes under /api/users
 app.use('/api/auth', authRoutes);  // Register authentication routes under /api/auth
+app.use('/api', passwordResetRoutes);  // Register password reset routes under /api (or a different prefix if needed)
 
 // Database connection and server start
 const startServer = async (): Promise<void> => {
