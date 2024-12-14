@@ -1,17 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-// src/models/user.ts
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database");
 class User extends sequelize_1.Model {
 }
 exports.User = User;
 User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true, // Marks this as the primary key
+        autoIncrement: true, // Automatically increments the value
+    },
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true, // Ensures that the email is unique
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
@@ -32,7 +36,7 @@ User.init({
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: true,
-        defaultValue: false, // Optional default value
+        defaultValue: false, // Optional default value for unverified users
     },
     resetToken: {
         type: sequelize_1.DataTypes.STRING,
