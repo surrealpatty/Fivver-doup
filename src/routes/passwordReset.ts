@@ -62,11 +62,11 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
   const { newPassword } = req.body;
 
   try {
-    // Find user by reset token
+    // Find user by reset token and check if token is expired
     const user = await User.findOne({
       where: {
         resetToken: token,
-        resetTokenExpiration: { [Op.gte]: new Date() }, // Check if token is expired
+        resetTokenExpiration: { [Op.gte]: new Date() }, // Ensure token is not expired
       },
     });
 
@@ -80,7 +80,7 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
     // Update the user's password and clear the reset token
     user.password = hashedPassword;
     user.resetToken = null as unknown as string | undefined;
-    user.resetTokenExpiration = null as unknown as Date | undefined;    
+    user.resetTokenExpiration = null as unknown as Date | undefined;
 
     await user.save();
 

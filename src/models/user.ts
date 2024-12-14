@@ -7,6 +7,11 @@ class User extends Model {
   email!: string;
   password!: string;
   username!: string;
+  role?: string; // Add the role property
+  tier?: string; // Add the tier property
+  isVerified?: boolean; // Add the isVerified property
+  resetToken?: string; // Add the resetToken property
+  resetTokenExpiration?: Date; // Add the resetTokenExpiration property
 }
 
 User.init(
@@ -23,6 +28,27 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    role: {  // Add the role field
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tier: {  // Add the tier field
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    isVerified: {  // Add the isVerified field
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false, // Optional default value
+    },
+    resetToken: {  // Add the resetToken field
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetTokenExpiration: {  // Add the resetTokenExpiration field
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
