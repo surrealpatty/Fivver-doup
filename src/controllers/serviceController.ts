@@ -1,6 +1,6 @@
 // src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import Service, { ServiceAttributes } from '@models/services';  // Corrected
+import Service, { ServiceAttributes } from 'models/services';  // Corrected
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {

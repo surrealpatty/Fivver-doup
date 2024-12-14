@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { userRoutes } from './routes/user';
+import { userRoutes } from './routes/user';  // Import userRoutes correctly
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
 import { sequelize } from './config/database';
@@ -17,7 +17,7 @@ app.use(express.json());
 // Route setup
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/password-reset', passwordResetRoutes);  // Register password reset routes under '/api/password-reset'
+app.use('/api/password-reset', passwordResetRoutes);  // Register password reset routes
 
 const startServer = async (): Promise<void> => {
   try {
