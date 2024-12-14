@@ -18,10 +18,10 @@
     "baseUrl": "./src",                          // Set base directory for module resolution
     "paths": {
       "@types/*": ["types/*"],                   // Alias for types directory
-      "@models/*": ["models/*"],                 // Corrected alias for models directory
+      "@models/*": ["src/models/*"],                 // Corrected alias for models directory
       "@controllers/*": ["controllers/*"],       // Alias for controllers directory
       "@routes/*": ["routes/*"],                 // Alias for routes directory
-      "@config/*": ["config/*"],                 // Alias for config directory
+      "@config/*": ["src/config/*"],                 // Alias for config directory
       "@middlewares/*": ["middlewares/*"]         // Alias for middlewares directory
     },
     "outDir": "./dist",                          // Output compiled files to the dist folder
