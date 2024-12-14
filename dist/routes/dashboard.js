@@ -1,9 +1,12 @@
 "use strict";
-// src/types/index.ts
+// src/routes/dashboard.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isUser = isUser;
-// Helper type guard to check if user exists
-function isUser(req) {
-    return !!req.user;
-}
+// Handler for the dashboard route
+const dashboardHandler = (req, res) => {
+    // Safely cast req.user to UserPayload (since we know it's added by the authentication middleware)
+    const user = req.user;
+    // Return a JSON response with the user information
+    res.json({ user });
+};
+exports.default = dashboardHandler;
 //# sourceMappingURL=dashboard.js.map

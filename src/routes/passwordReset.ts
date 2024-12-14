@@ -32,7 +32,7 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
     }
 
     const resetToken = crypto.randomBytes(20).toString('hex');
-    const resetTokenExpiration = new Date(Date.now() + 3600000); 
+    const resetTokenExpiration = new Date(Date.now() + 3600000); // 1 hour expiration
 
     user.resetToken = resetToken;
     user.resetTokenExpiration = resetTokenExpiration;
@@ -73,8 +73,10 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
-    user.resetToken = undefined;
-    user.resetTokenExpiration = undefined;
+
+    // Set resetToken and resetTokenExpiration to null instead of undefined
+    user.resetToken = null;
+    user.resetTokenExpiration = null;
     
     await user.save();
 
