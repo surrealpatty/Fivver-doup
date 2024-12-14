@@ -1,7 +1,7 @@
 // src/types/index.ts
 
 import { Request } from 'express';  // Import Request from express
-import { UserPayload } from './user';
+import { UserPayload } from '../types';
 
 export interface UserPayload {
   id: string;
