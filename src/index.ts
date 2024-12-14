@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './routes/user';
+import { userRoutes } from './routes/user';
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
 import { sequelize } from './config/database';
