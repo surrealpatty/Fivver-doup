@@ -1,7 +1,7 @@
 // src/routes/user.ts
 import { Router } from 'express';
 import { User } from '../models/user'; // Import User model for handling user data
-import { requestPasswordReset, resetPassword } from 'controllers/passwordResetController'; // Import controller methods for password reset
+import { requestPasswordReset, resetPassword } from '../controllers/passwordResetController'; 
 
 const router = Router();
 

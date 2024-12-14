@@ -4,7 +4,7 @@ exports.userRoutes = void 0;
 // src/routes/user.ts
 const express_1 = require("express");
 const user_1 = require("../models/user"); // Import User model for handling user data
-const passwordResetController_1 = require("controllers/passwordResetController"); // Import controller methods for password reset
+const passwordResetController_1 = require("../controllers/passwordResetController");
 const router = (0, express_1.Router)();
 // Define routes for users
 // Example route: Get all users (can be customized as needed)
