@@ -1,8 +1,9 @@
 "use strict";
+// src/types/user.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isUser = isUser;
-// Define the type guard to check if the user is present
+// Type guard function to check if user exists in the request
 function isUser(req) {
-    return req.user !== undefined; // Explicitly check for undefined
+    return req.user !== undefined; // Explicitly checks if user is set in the request
 }
 //# sourceMappingURL=user.js.map
