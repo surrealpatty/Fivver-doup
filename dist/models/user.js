@@ -8,9 +8,9 @@ class User extends sequelize_1.Model {
 exports.User = User;
 User.init({
     id: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.UUID, // Use UUID type for the id
         primaryKey: true, // Marks this as the primary key
-        autoIncrement: true, // Automatically increments the value
+        defaultValue: sequelize_1.DataTypes.UUIDV4, // Use UUIDv4 as the default value for auto-generation
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
