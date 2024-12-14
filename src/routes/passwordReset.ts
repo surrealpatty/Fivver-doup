@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto'; // For generating a secure token
-import { User } from '../models/user'; // Correct import for User model
+import { User } from '../models/user'; // Ensure correct path to the User model
 import { Op } from 'sequelize'; // Add this import for Sequelize operators
 import dotenv from 'dotenv';
 
@@ -10,7 +10,7 @@ dotenv.config();
 
 const router = Router();
 
-// Create a nodemailer transporter
+// Create a nodemailer transporter using Gmail or another service
 const transporter = nodemailer.createTransport({
   service: 'gmail', // Or another service like SendGrid, Mailgun, etc.
   auth: {
@@ -56,7 +56,7 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
   }
 });
 
-// Handle Password Reset with Token
+// Handle Password Reset with Token Route
 router.post('/reset-password/:token', async (req: Request, res: Response) => {
   const { token } = req.params;
   const { newPassword } = req.body;
@@ -79,9 +79,11 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
 
     // Update the user's password and clear the reset token
     user.password = hashedPassword;
-    user.resetToken = null as unknown as string | undefined;
-    user.resetTokenExpiration = null as unknown as Date | undefined;
 
+    // Set resetToken and resetTokenExpiration to undefined
+    user.resetToken = undefined; // Set as undefined instead of null
+    user.resetTokenExpiration = undefined; // Set as undefined instead of null
+    
     await user.save();
 
     res.status(200).json({ message: 'Password successfully reset' });
