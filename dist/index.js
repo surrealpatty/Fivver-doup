@@ -9,7 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const user_1 = require("./routes/user"); // Import userRoutes correctly
 const auth_1 = __importDefault(require("./routes/auth"));
 const passwordReset_1 = __importDefault(require("./routes/passwordReset")); // Import password reset routes
-const database_1 = require("./config/database");
+const database_1 = require("./config/database"); // Import sequelize instance
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware setup
@@ -19,21 +19,28 @@ app.use(express_1.default.json());
 app.use('/api/users', user_1.userRoutes);
 app.use('/api/auth', auth_1.default);
 app.use('/api/password-reset', passwordReset_1.default); // Register password reset routes
-const startServer = async () => {
+// Sync the database schema with Sequelize
+const syncDatabase = async () => {
     try {
+        // Authenticate the connection
         await database_1.sequelize.authenticate();
         console.log('Database connected successfully!');
+        // Sync the schema, use `force: false` to avoid dropping the table
         await database_1.sequelize.sync({ alter: true });
         console.log('Database schema synced successfully!');
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`Server running on http://localhost:${PORT}`);
-        });
     }
     catch (error) {
         console.error('Error connecting to the database or syncing schema:', error);
-        process.exit(1);
+        process.exit(1); // Exit the process if the DB connection or sync fails
     }
+};
+// Start the server after syncing
+const startServer = async () => {
+    await syncDatabase();
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
 };
 startServer();
 exports.default = app;
