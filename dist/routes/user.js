@@ -5,10 +5,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_1 = require("../models/user"); // Assuming you have the User model
-const email_1 = require("../utils/email"); // Importing email utility to send password reset email
+const email_1 = require("../utils/email"); // Utility to send reset email
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = (0, express_1.Router)();
+// POST /api/users - Create a new user
+router.post('/', async (req, res) => {
+    const { email, username, password, role, tier, isVerified } = req.body;
+    try {
+        // Check if email already exists
+        const existingUser = await user_1.User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already in use' });
+        }
+        // Hash the password
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10);
+        // Create new user
+        const newUser = await user_1.User.create({
+            email,
+            username,
+            password: hashedPassword,
+            role: role || 'user', // Default role is 'user'
+            tier: tier || 'free', // Default tier is 'free'
+            isVerified: isVerified || false, // Default isVerified is false
+        });
+        return res.status(201).json({
+            message: 'User created successfully',
+            user: newUser,
+        });
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        return res.status(500).json({ message: 'Server error', error });
+    }
+});
 // POST /api/users/request-password-reset - Request Password Reset Route
 router.post('/request-password-reset', async (req, res) => {
     const { email } = req.body;
@@ -29,7 +59,7 @@ router.post('/request-password-reset', async (req, res) => {
         // Generate the reset link
         const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
         // Send password reset email
-        await (0, email_1.sendPasswordResetEmail)(email, resetToken);
+        await (0, email_1.sendPasswordResetEmail)(email, resetLink);
         return res.status(200).json({
             message: 'Password reset email sent. Please check your inbox.',
         });
