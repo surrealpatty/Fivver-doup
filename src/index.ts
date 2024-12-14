@@ -1,9 +1,10 @@
+// src/index.ts
 import express, { Application } from 'express';  // Import express and Application type
 import dotenv from 'dotenv';  // For environment variables
 import cors from 'cors';  // For Cross-Origin Resource Sharing
-import userRoutes from './routes/user';  // Ensure correct path to user routes
-import authRoutes from './routes/auth';  // Import auth routes for login/signup
-import { sequelize } from './config/database';  // Ensure correct path to database configuration
+import userRoutes from './routes/user';  // Correct path to user routes
+import authRoutes from './routes/auth';  // Correct path to auth routes
+import { sequelize } from './config/database';  // Correct path to database configuration
 
 dotenv.config();  // Load environment variables from the .env file
 
