@@ -1,10 +1,11 @@
+// src/routes/passwordReset.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import { User } from '../models/user';
 import { Op } from 'sequelize';
 import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -21,27 +22,29 @@ const transporter = nodemailer.createTransport({
 
 // Request Password Reset Route
 router.post('/reset-password/request', async (req: Request, res: Response) => {
-  console.log('Password reset request route hit');  // Debug log
-
   const { email } = req.body;
 
   try {
+    // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Generate a password reset token securely
     const resetToken = crypto.randomBytes(20).toString('hex');
-    const resetTokenExpiration = new Date(Date.now() + 3600000); // 1 hour expiration
+    const resetTokenExpiration = new Date(Date.now() + 3600000); // Token expires in 1 hour
 
-    user.resetToken = resetToken;
-    user.resetTokenExpiration = resetTokenExpiration;
+    // Update the user's resetToken and resetTokenExpiration
+    user.passwordResetToken = resetToken;
+    user.passwordResetTokenExpiry = resetTokenExpiration;
     await user.save();
 
+    // Send the password reset email
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     const mailOptions = {
       to: email,
-      subject: 'Password Reset',
+      subject: 'Password Reset Request',
       text: `You requested a password reset. Please click the link below to reset your password:\n\n${resetUrl}`,
     };
 
@@ -60,10 +63,11 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
   const { newPassword } = req.body;
 
   try {
+    // Find the user by token and check if the token is valid (not expired)
     const user = await User.findOne({
       where: {
-        resetToken: token,
-        resetTokenExpiration: { [Op.gte]: new Date() },
+        passwordResetToken: token,
+        passwordResetTokenExpiry: { [Op.gte]: new Date() }, // Token must not be expired
       },
     });
 
@@ -71,13 +75,14 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid or expired token' });
     }
 
+    // Hash the new password before saving it
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
 
-    // Set resetToken and resetTokenExpiration to null instead of undefined
-    user.resetToken = null;
-    user.resetTokenExpiration = null;
-    
+    // Clear the resetToken and resetTokenExpiry after successful password reset
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpiry = null;
+
     await user.save();
 
     res.status(200).json({ message: 'Password successfully reset' });
