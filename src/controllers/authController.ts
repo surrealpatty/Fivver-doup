@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';
+import { User } from '../models/user';  // Correct named import for User model
 import { v4 as uuidv4 } from 'uuid'; 
 
+// User registration handler
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
 
@@ -42,6 +43,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
   }
 };
 
+// User login handler
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body;
 
@@ -65,7 +67,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // Generate JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your-default-secret', 
+      process.env.JWT_SECRET || 'your-default-secret',  // Make sure to use a real secret key in production
       { expiresIn: '1h' }
     );
 

@@ -1,12 +1,38 @@
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/database'); // Adjust the path if needed
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Make sure the path is correct
 
-// Define the User model
-class User extends Model {
-  // Static method to associate models (to be added later if needed)
-  // static associate(models) {
-  //   // Define associations here if any, e.g., User.hasMany(models.Order);
-  // }
+// Define the User attributes interface (for typing the model)
+interface UserAttributes {
+  id: string;
+  email: string;
+  username: string;
+  password: string;
+  role: string;
+  tier: string;
+  isVerified: boolean;
+  passwordResetToken?: string;
+  passwordResetTokenExpiry?: Date;
+}
+
+// Define the User creation attributes interface (for creating new instances)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+// Define the User model class
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: string;
+  public email!: string;
+  public username!: string;
+  public password!: string;
+  public role!: string;
+  public tier!: string;
+  public isVerified!: boolean;
+  public passwordResetToken?: string;
+  public passwordResetTokenExpiry?: Date;
+
+  // Static method to associate models (can be added later if needed)
+  static associate(models: any) {
+    // Define associations here if any, e.g., User.hasMany(models.Order);
+  }
 }
 
 // Initialize the Sequelize User model
@@ -59,5 +85,3 @@ User.init(
     timestamps: true, // Adjust based on your table schema (if using createdAt, updatedAt)
   }
 );
-
-module.exports = User;
