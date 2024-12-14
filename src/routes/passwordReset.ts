@@ -21,6 +21,7 @@ const transporter = nodemailer.createTransport({
 
 // Request Password Reset Route
 router.post('/reset-password/request', async (req: Request, res: Response) => {
+
   const { email } = req.body;
 
   try {

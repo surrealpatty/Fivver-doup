@@ -7,12 +7,12 @@ const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const crypto_1 = __importDefault(require("crypto")); // For generating a secure token
-const user_1 = require("../models/user"); // Correct import for User model
+const user_1 = require("../models/user"); // Ensure correct path to the User model
 const sequelize_1 = require("sequelize"); // Add this import for Sequelize operators
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const router = (0, express_1.Router)();
-// Create a nodemailer transporter
+// Create a nodemailer transporter using Gmail or another service
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail', // Or another service like SendGrid, Mailgun, etc.
     auth: {
@@ -51,7 +51,7 @@ router.post('/reset-password/request', async (req, res) => {
         res.status(500).json({ message: 'Server error while processing password reset request' });
     }
 });
-// Handle Password Reset with Token
+// Handle Password Reset with Token Route
 router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
@@ -70,8 +70,9 @@ router.post('/reset-password/:token', async (req, res) => {
         const hashedPassword = await bcryptjs_1.default.hash(newPassword, 10);
         // Update the user's password and clear the reset token
         user.password = hashedPassword;
-        user.resetToken = null;
-        user.resetTokenExpiration = null;
+        // Set resetToken and resetTokenExpiration to undefined
+        user.resetToken = undefined; // Set as undefined instead of null
+        user.resetTokenExpiration = undefined; // Set as undefined instead of null
         await user.save();
         res.status(200).json({ message: 'Password successfully reset' });
     }
