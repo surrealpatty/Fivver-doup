@@ -1,5 +1,6 @@
+// src/models/service.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';  // Adjust import path if necessary
+import { sequelize } from '../config/database';  // Correct the path if needed
 
 export class Service extends Model {
   id!: number;
@@ -38,3 +39,5 @@ Service.init(
     modelName: 'Service',
   }
 );
+
+export default Service;  // Ensure Service is exported properly
