@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/index.ts
 const express_1 = __importDefault(require("express")); // Import express and Application type
 const dotenv_1 = __importDefault(require("dotenv")); // For environment variables
 const cors_1 = __importDefault(require("cors")); // For Cross-Origin Resource Sharing
-const user_1 = __importDefault(require("./routes/user")); // Ensure correct path to user routes
-const auth_1 = __importDefault(require("./routes/auth")); // Import auth routes for login/signup
-const database_1 = require("./config/database"); // Ensure correct path to database configuration
+const user_1 = __importDefault(require("./routes/user")); // Correct path to user routes
+const auth_1 = __importDefault(require("./routes/auth")); // Correct path to auth routes
+const database_1 = require("./config/database"); // Correct path to database configuration
 dotenv_1.default.config(); // Load environment variables from the .env file
 const app = (0, express_1.default)(); // Initialize the Express application
 // Middleware setup

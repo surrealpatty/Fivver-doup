@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user"); // Ensure this is correctly imported
+const user_1 = require("../models/user"); // Ensure this path is correct
 const router = (0, express_1.Router)();
 // POST /api/users/login - Login Route
 router.post('/login', async (req, res) => {
@@ -34,12 +34,24 @@ router.post('/login', async (req, res) => {
         // Send the token as the response
         return res.status(200).json({
             message: 'Login successful',
-            token,
+            token, // The JWT token returned to the client
         });
     }
     catch (error) {
+        // Handle error properly by casting it to an Error object
         console.error('Error logging in:', error);
-        return res.status(500).json({ message: 'Server error', error });
+        // Narrow the type of error to `Error` for safe property access
+        if (error instanceof Error) {
+            return res.status(500).json({
+                message: 'Server error',
+                error: error.message || 'Unknown error occurred',
+            });
+        }
+        // If error is not an instance of Error, return a generic message
+        return res.status(500).json({
+            message: 'Server error',
+            error: 'Unknown error occurred',
+        });
     }
 });
 exports.default = router;

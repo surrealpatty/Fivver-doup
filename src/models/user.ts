@@ -1,88 +1,34 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+// src/models/user.ts
+import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
-import { v4 as uuidv4 } from 'uuid';
 
-// Define the UserAttributes interface to specify the attributes of the User model
-interface UserAttributes {
-  id: string;
-  email: string;
-  username: string;
-  password: string;
-  role: string;
-  tier: string;
-  isVerified: boolean;
-  resetToken?: string;
-  resetTokenExpiration?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+class User extends Model {
+  id!: number;
+  email!: string;
+  password!: string;
+  username!: string;
 }
 
-// Define the UserCreationAttributes interface
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'resetToken' | 'resetTokenExpiration'> {}
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public role!: string;
-  public tier!: string;
-  public isVerified!: boolean;
-  public resetToken?: string;
-  public resetTokenExpiration?: Date;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
-
-// Initialize the User model
 User.init(
   {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: () => uuidv4(),
-      primaryKey: true,
-    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // Removed unique: true to avoid duplicate index
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    role: {
+    username: {
       type: DataTypes.STRING,
-      defaultValue: 'user',
-    },
-    tier: {
-      type: DataTypes.STRING,
-      defaultValue: 'free',
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    resetToken: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    resetTokenExpiration: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
   },
   {
     sequelize,
-    tableName: 'users',
-    timestamps: true,
-    // No need to define indexes manually unless you need a custom index
+    modelName: 'User',
   }
 );
 
-export { User, UserAttributes, UserCreationAttributes };
+export { User };
