@@ -30,7 +30,7 @@ router.post('/reset-password/request', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const resetToken = crypto_1.default.randomBytes(20).toString('hex');
-        const resetTokenExpiration = new Date(Date.now() + 3600000);
+        const resetTokenExpiration = new Date(Date.now() + 3600000); // 1 hour expiration
         user.resetToken = resetToken;
         user.resetTokenExpiration = resetTokenExpiration;
         await user.save();
@@ -64,8 +64,9 @@ router.post('/reset-password/:token', async (req, res) => {
         }
         const hashedPassword = await bcryptjs_1.default.hash(newPassword, 10);
         user.password = hashedPassword;
-        user.resetToken = undefined;
-        user.resetTokenExpiration = undefined;
+        // Set resetToken and resetTokenExpiration to null instead of undefined
+        user.resetToken = null;
+        user.resetTokenExpiration = null;
         await user.save();
         res.status(200).json({ message: 'Password successfully reset' });
     }

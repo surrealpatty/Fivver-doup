@@ -1,58 +1,54 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+// src/models/user.ts
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database");
-// Define the User model class
+const database_1 = require("../config/database"); // Adjust the path as needed
 class User extends sequelize_1.Model {
 }
 exports.User = User;
-// Initialize the User model
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID, // UUID type
-        primaryKey: true, // Primary key
-        defaultValue: sequelize_1.DataTypes.UUIDV4, // Auto-generate UUIDv4
+        type: sequelize_1.DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
+        unique: true,
         allowNull: false,
-        unique: true, // Ensure email is unique
+    },
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        unique: true,
+        allowNull: false,
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    username: {
+    role: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    role: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-        defaultValue: 'free', // Default role
-    },
     tier: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-        defaultValue: 'free', // Default tier
+        allowNull: false,
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
-        allowNull: true,
-        defaultValue: false, // Default to not verified
+        defaultValue: false,
     },
-    passwordResetToken: {
+    resetToken: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Nullable
+        allowNull: true, // Allow null since this will be used only during password reset
     },
-    passwordResetTokenExpiry: {
+    resetTokenExpiration: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Nullable
+        allowNull: true, // Allow null since this will be set only during password reset
     },
 }, {
     sequelize: database_1.sequelize,
-    modelName: 'User', // Model name
-    tableName: 'users', // Table name in the database
+    modelName: 'User',
 });
 //# sourceMappingURL=user.js.map
