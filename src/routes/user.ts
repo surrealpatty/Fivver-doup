@@ -79,3 +79,4 @@ User.init(
 );
 
 export { User };
+export const userRoutes = /* Your user routes setup */;

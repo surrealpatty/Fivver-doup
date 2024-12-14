@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const user_1 = __importDefault(require("./routes/user"));
+const user_1 = require("./routes/user");
 const auth_1 = __importDefault(require("./routes/auth"));
 const passwordReset_1 = __importDefault(require("./routes/passwordReset")); // Import password reset routes
 const database_1 = require("./config/database");
@@ -16,7 +16,7 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 // Route setup
-app.use('/api/users', user_1.default);
+app.use('/api/users', user_1.userRoutes);
 app.use('/api/auth', auth_1.default);
 app.use('/api/password-reset', passwordReset_1.default); // Register password reset routes under '/api/password-reset'
 const startServer = async () => {
