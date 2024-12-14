@@ -1,52 +1,30 @@
-// src/models/user.ts
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Adjust the path as needed
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../config/database'); // Adjust the path if needed
 
-// Define the attributes for the User model
-interface UserAttributes {
-  id: string;  // id as a string, assuming it's a string in the database
-  email: string;
-  username: string;
-  password: string;
-  role: string;
-  tier: string;
-  isVerified: boolean;
-  passwordResetToken: string | null;  // Added passwordResetToken
-  passwordResetTokenExpiry: Date | null;  // Added passwordResetTokenExpiry
-}
-
-// Interface for creation attributes (excluding `id` as it auto-generates)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-// User model class
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public role!: string;
-  public tier!: string;
-  public isVerified!: boolean;
-  public passwordResetToken: string | null = null; // Default to null
-  public passwordResetTokenExpiry: Date | null = null; // Default to null
+// Define the User model
+class User extends Model {
+  // Static method to associate models (to be added later if needed)
+  // static associate(models) {
+  //   // Define associations here if any, e.g., User.hasMany(models.Order);
+  // }
 }
 
 // Initialize the Sequelize User model
 User.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING,  // id as a string (e.g., UUID)
       primaryKey: true,
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true,  // Ensures that the email column is unique
       allowNull: false,
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true,  // Ensures that the username column is unique
       allowNull: false,
     },
     password: {
@@ -75,11 +53,11 @@ User.init(
     },
   },
   {
-    sequelize, // Pass the sequelize instance
+    sequelize, // Pass the Sequelize instance
     modelName: 'User',
-    tableName: 'users',
-    timestamps: true,  // Adjust this based on your table schema
+    tableName: 'users', // Name of the table in the database
+    timestamps: true, // Adjust based on your table schema (if using createdAt, updatedAt)
   }
 );
 
-export { User };
+module.exports = User;

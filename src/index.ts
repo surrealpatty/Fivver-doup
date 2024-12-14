@@ -4,7 +4,7 @@ import cors from 'cors';
 import { userRoutes } from './routes/user';  // Import userRoutes correctly
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
-import { sequelize } from './config/database';
+import { sequelize } from './config/database';  // Import sequelize instance
 
 dotenv.config();
 
@@ -19,21 +19,30 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/password-reset', passwordResetRoutes);  // Register password reset routes
 
-const startServer = async (): Promise<void> => {
+// Sync the database schema with Sequelize
+const syncDatabase = async (): Promise<void> => {
   try {
+    // Authenticate the connection
     await sequelize.authenticate();
     console.log('Database connected successfully!');
+
+    // Sync the schema, use `force: false` to avoid dropping the table
     await sequelize.sync({ alter: true });
     console.log('Database schema synced successfully!');
-
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);
+    process.exit(1); // Exit the process if the DB connection or sync fails
   }
+};
+
+// Start the server after syncing
+const startServer = async (): Promise<void> => {
+  await syncDatabase();
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
 };
 
 startServer();
