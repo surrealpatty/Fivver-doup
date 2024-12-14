@@ -3,19 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database");
+// Define the User model class
 class User extends sequelize_1.Model {
 }
 exports.User = User;
+// Initialize the User model
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID, // Use UUID type for the id
-        primaryKey: true, // Marks this as the primary key
-        defaultValue: sequelize_1.DataTypes.UUIDV4, // Use UUIDv4 as the default value for auto-generation
+        type: sequelize_1.DataTypes.UUID, // UUID type
+        primaryKey: true, // Primary key
+        defaultValue: sequelize_1.DataTypes.UUIDV4, // Auto-generate UUIDv4
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensures that the email is unique
+        unique: true, // Ensure email is unique
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
@@ -28,26 +30,29 @@ User.init({
     role: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
+        defaultValue: 'free', // Default role
     },
     tier: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
+        defaultValue: 'free', // Default tier
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: true,
-        defaultValue: false, // Optional default value for unverified users
+        defaultValue: false, // Default to not verified
     },
     resetToken: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
+        allowNull: true, // Nullable
     },
     resetTokenExpiration: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true,
+        allowNull: true, // Nullable
     },
 }, {
     sequelize: database_1.sequelize,
-    modelName: 'User',
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in the database
 });
 //# sourceMappingURL=user.js.map
