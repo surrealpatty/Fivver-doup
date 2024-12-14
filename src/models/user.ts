@@ -1,5 +1,6 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure this import path is correct
+import { v4 as uuidv4 } from 'uuid'; // Add UUID generator for id
 
 // Define the User attributes interface (for typing the model)
 interface UserAttributes {
@@ -39,7 +40,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 User.init(
   {
     id: {
-      type: DataTypes.STRING,  // id as a string (e.g., UUID)
+      type: DataTypes.UUID,  // Use UUID for id
+      defaultValue: uuidv4,  // Automatically generate UUID for new records
       primaryKey: true,
       allowNull: false,
     },
