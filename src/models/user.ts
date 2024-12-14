@@ -88,6 +88,16 @@ User.init(
     modelName: 'User',
     tableName: 'users', // Name of the table in the database
     timestamps: true, // Automatically manage createdAt, updatedAt fields
+    indexes: [
+      {
+        unique: true,
+        fields: ['email'], // Create a unique index on the email field
+      },
+      {
+        unique: true,
+        fields: ['username'], // Create a unique index on the username field
+      },
+    ],
   }
 );
 
