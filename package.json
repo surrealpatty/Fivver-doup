@@ -22,7 +22,7 @@
     "lint": "eslint \"src/**/*.{ts,js,vue}\" --fix",
     "lint:check": "eslint \"src/**/*.{ts,js,vue}\"",
     "migrate": "npx sequelize-cli db:migrate",
-    "db:migrate": "ts-node -r tsconfig-paths/register node_modules/sequelize-cli/lib/sequelize.js db:migrate",  
+    "db:migrate": "ts-node -r tsconfig-paths/register node_modules/sequelize-cli/lib/sequelize.js db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "prepublishOnly": "npm run build",
     "prepare": "husky install",

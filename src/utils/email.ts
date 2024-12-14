@@ -4,12 +4,12 @@ import dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 
-// Create a transporter using Gmail service and credentials from environment variables
+// Create a transporter object using Gmail service and credentials from environment variables
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.GMAIL_USER,  // Sender's Gmail address from environment variables
-    pass: process.env.GMAIL_PASS,  // Sender's Gmail password or app-specific password from environment variables
+    user: process.env.GMAIL_USER, // Sender's Gmail address from environment variables
+    pass: process.env.GMAIL_PASS, // Sender's Gmail password or app-specific password from environment variables
   },
 });
 

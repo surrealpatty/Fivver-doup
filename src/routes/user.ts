@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';
-import { sendPasswordResetEmail } from '../utils/email'; // Utility to send reset email
+import { User } from '../models/user'; 
+import { sendPasswordResetEmail } from '../utils/email'; // Import the function here
 
 const router = Router();
 
