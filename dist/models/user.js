@@ -61,7 +61,7 @@ User.init({
     sequelize: database_1.sequelize, // Pass the Sequelize instance
     modelName: 'User',
     tableName: 'users', // Name of the table in the database
-    timestamps: true, // Adjust based on your table schema (if using createdAt, updatedAt)
+    timestamps: true, // Automatically manage createdAt, updatedAt fields
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map
