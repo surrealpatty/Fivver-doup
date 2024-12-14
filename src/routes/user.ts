@@ -1,82 +1,62 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { Request, Response } from 'express';
+import { User } from '../models/user';
+import { Op } from 'sequelize'; // Import Op for Sequelize operators
+import { sendResetEmail } from '../services/emailService'; // Assume you have a service to send emails
 
-interface UserAttributes {
-  id: string;
-  email: string;
-  password: string;
-  username: string;
-  role?: string;
-  tier?: string;
-  isVerified?: boolean;
-  passwordResetToken?: string | null; // Add this
-  passwordResetTokenExpiry?: Date | null; // Add this
-}
+// Request password reset
+export const requestPasswordReset = async (req: Request, res: Response) => {
+  const { email } = req.body;
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+  try {
+    // Find user by email
+    const user = await User.findOne({ where: { email } });
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public password!: string;
-  public username!: string;
-  public role?: string;
-  public tier?: string;
-  public isVerified?: boolean;
-  public passwordResetToken?: string | null; // Add this
-  public passwordResetTokenExpiry?: Date | null; // Add this
-}
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: 'free',
-    },
-    tier: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: 'free',
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: false,
-    },
-    passwordResetToken: {
-      type: DataTypes.STRING, // Add this field
-      allowNull: true,
-    },
-    passwordResetTokenExpiry: {
-      type: DataTypes.DATE, // Add this field
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
+    // Generate a password reset token (this should be unique and securely generated)
+    const token = 'someGeneratedToken'; // You can replace this with a real token generation logic
+    user.passwordResetToken = token;
+    user.passwordResetTokenExpiry = new Date(Date.now() + 3600000); // Set token expiry to 1 hour
+    await user.save();
+
+    // Send the reset email (implement the sendResetEmail function to send actual emails)
+    await sendResetEmail(email, token);
+
+    res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-);
+};
 
-export { User };
-export const userRoutes = /* Your user routes setup */;
+// Reset password
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    // Find user by the token and check if the token is not expired
+    const user = await User.findOne({
+      where: {
+        passwordResetToken: token,
+        passwordResetTokenExpiry: { [Op.gt]: new Date() }, // Token should be valid and not expired
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    // Update the password
+    user.password = newPassword;
+    user.passwordResetToken = null; // Clear the token after use
+    user.passwordResetTokenExpiry = null; // Clear the expiry date
+    await user.save();
+
+    res.status(200).json({ message: 'Password has been reset' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

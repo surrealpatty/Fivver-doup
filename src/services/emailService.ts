@@ -1,5 +1,3 @@
-// src/services/emailService.ts
-
 import nodemailer from 'nodemailer';
 
 // Create a transporter object using SMTP transport (Gmail in this case)
@@ -11,7 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Define the sendEmail function to send emails
+// Define the sendEmail function to send generic emails
 export const sendEmail = async (emailDetails: { to: string, subject: string, text: string }) => {
   try {
     // Set up email options
@@ -28,5 +26,25 @@ export const sendEmail = async (emailDetails: { to: string, subject: string, tex
   } catch (error) {
     console.error('Error sending email:', error);
     throw error; // Re-throw the error to be handled in the route or elsewhere
+  }
+};
+
+// Define the sendResetEmail function to send a password reset email
+export const sendResetEmail = async (email: string, token: string) => {
+  const resetUrl = `http://your-frontend-url/reset-password?token=${token}`; // Customize the reset URL as needed
+
+  const emailDetails = {
+    to: email,
+    subject: 'Password Reset Request',
+    text: `You requested a password reset. Please click the following link to reset your password: ${resetUrl}`,
+  };
+
+  try {
+    // Send the reset email
+    await sendEmail(emailDetails);
+    console.log('Password reset email sent');
+  } catch (error) {
+    console.error('Error sending reset email:', error);
+    throw new Error('Failed to send reset email');
   }
 };

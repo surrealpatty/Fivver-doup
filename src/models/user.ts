@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
 // Define the attributes for the User model
@@ -10,8 +10,8 @@ interface UserAttributes {
   role?: string; // Optional
   tier?: string; // Optional
   isVerified?: boolean; // Optional
-  resetToken?: string | null; // Optional
-  resetTokenExpiration?: Date | null; // Optional
+  passwordResetToken?: string | null; // Optional
+  passwordResetTokenExpiry?: Date | null; // Optional
 }
 
 // Attributes for creating a new user (id is optional because Sequelize auto-generates it)
@@ -26,8 +26,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public role?: string; // Optional
   public tier?: string; // Optional
   public isVerified?: boolean; // Optional
-  public resetToken?: string | null; // Optional
-  public resetTokenExpiration?: Date | null; // Optional
+  public passwordResetToken?: string | null; // Optional
+  public passwordResetTokenExpiry?: Date | null; // Optional
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 // Initialize the User model
@@ -66,11 +70,11 @@ User.init(
       allowNull: true,
       defaultValue: false, // Default to not verified
     },
-    resetToken: {
+    passwordResetToken: {
       type: DataTypes.STRING,
       allowNull: true, // Nullable
     },
-    resetTokenExpiration: {
+    passwordResetTokenExpiry: {
       type: DataTypes.DATE,
       allowNull: true, // Nullable
     },
