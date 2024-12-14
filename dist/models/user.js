@@ -46,11 +46,11 @@ User.init({
     },
     passwordResetToken: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Can be null initially
+        allowNull: true, // Can be null
     },
     passwordResetTokenExpiry: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Can be null initially
+        allowNull: true, // Can be null
     },
 }, {
     sequelize: database_1.sequelize, // Pass the Sequelize instance
