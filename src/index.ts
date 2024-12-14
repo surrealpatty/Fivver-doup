@@ -1,47 +1,40 @@
-import express, { Application } from 'express';  // Import express and Application type
-import dotenv from 'dotenv';  // For environment variables
-import cors from 'cors';  // For Cross-Origin Resource Sharing
-import userRoutes from './routes/user';  // Correct path to user routes
-import authRoutes from './routes/auth';  // Correct path to auth routes
+import express, { Application } from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import userRoutes from './routes/user';
+import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
-import { sequelize } from './config/database';  // Correct path to database configuration
+import { sequelize } from './config/database';
 
-dotenv.config();  // Load environment variables from the .env file
+dotenv.config();
 
-const app: Application = express();  // Initialize the Express application
+const app: Application = express();
 
-// Middleware setup
-app.use(cors());  // Enable CORS for all origins
-app.use(express.json());  // Parse incoming JSON requests with express's built-in middleware
+app.use(cors());
+app.use(express.json());
 
 // Route setup
-app.use('/api/users', userRoutes);  // Register user routes under /api/users
-app.use('/api/auth', authRoutes);  // Register authentication routes under /api/auth
-app.use('/api', passwordResetRoutes);  // Register password reset routes under /api (or a different prefix if needed)
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api', passwordResetRoutes);  // Make sure passwordResetRoutes is being used
 
-// Database connection and server start
 const startServer = async (): Promise<void> => {
   try {
-    // Authenticate the database connection
     await sequelize.authenticate();
     console.log('Database connected successfully!');
-
-    // Sync models with the database schema
-    await sequelize.sync({ alter: true });  // Use `alter` for dev, avoid in prod
+    await sequelize.sync({ alter: true });
     console.log('Database schema synced successfully!');
 
-    // Start the server after syncing the database schema
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);  // Exit the process with a failure code
+    process.exit(1);
   }
 };
 
-// Start the server
 startServer();
 
-export default app;  // Export the app for testing or other purposes
+export default app;

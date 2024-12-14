@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/index.ts
 const express_1 = __importDefault(require("express")); // Import express and Application type
 const dotenv_1 = __importDefault(require("dotenv")); // For environment variables
 const cors_1 = __importDefault(require("cors")); // For Cross-Origin Resource Sharing
 const user_1 = __importDefault(require("./routes/user")); // Correct path to user routes
 const auth_1 = __importDefault(require("./routes/auth")); // Correct path to auth routes
+const passwordReset_1 = __importDefault(require("./routes/passwordReset")); // Import password reset routes
 const database_1 = require("./config/database"); // Correct path to database configuration
 dotenv_1.default.config(); // Load environment variables from the .env file
 const app = (0, express_1.default)(); // Initialize the Express application
@@ -18,6 +18,7 @@ app.use(express_1.default.json()); // Parse incoming JSON requests with express'
 // Route setup
 app.use('/api/users', user_1.default); // Register user routes under /api/users
 app.use('/api/auth', auth_1.default); // Register authentication routes under /api/auth
+app.use('/api', passwordReset_1.default); // Register password reset routes under /api (or a different prefix if needed)
 // Database connection and server start
 const startServer = async () => {
     try {
