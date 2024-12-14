@@ -1,7 +1,6 @@
 import express, { Application } from 'express';  // Import express and Application type
 import dotenv from 'dotenv';  // For environment variables
 import cors from 'cors';  // For Cross-Origin Resource Sharing
-import bodyParser from 'body-parser';  // For parsing JSON request bodies
 import userRoutes from './routes/user';  // Ensure correct path to user routes
 import authRoutes from './routes/auth';  // Import auth routes for login/signup
 import { sequelize } from './config/database';  // Ensure correct path to database configuration
@@ -12,7 +11,7 @@ const app: Application = express();  // Initialize the Express application
 
 // Middleware setup
 app.use(cors());  // Enable CORS for all origins
-app.use(bodyParser.json());  // Parse incoming JSON requests
+app.use(express.json());  // Parse incoming JSON requests with express's built-in middleware
 
 // Route setup
 app.use('/api/users', userRoutes);  // Register user routes under /api/users

@@ -7,7 +7,7 @@ const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
-const email_1 = require("../utils/email"); // Utility to send reset email
+const email_1 = require("../utils/email"); // Import the function here
 const router = (0, express_1.Router)();
 // POST /api/users - Create a new user
 router.post('/', async (req, res) => {

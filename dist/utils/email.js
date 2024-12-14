@@ -8,7 +8,7 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
 dotenv_1.default.config();
-// Create a transporter using Gmail service and credentials from environment variables
+// Create a transporter object using Gmail service and credentials from environment variables
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
