@@ -21,6 +21,27 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    tier: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    isVerified: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false, // Optional default value
+    },
+    resetToken: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    resetTokenExpiration: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
+    },
 }, {
     sequelize: database_1.sequelize,
     modelName: 'User',

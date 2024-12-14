@@ -56,7 +56,7 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
   }
 });
 
-// Handle Password Reset
+// Handle Password Reset with Token
 router.post('/reset-password/:token', async (req: Request, res: Response) => {
   const { token } = req.params;
   const { newPassword } = req.body;

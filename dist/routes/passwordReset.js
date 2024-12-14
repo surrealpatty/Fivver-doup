@@ -56,11 +56,11 @@ router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
     try {
-        // Find user by reset token
+        // Find user by reset token and check if token is expired
         const user = await user_1.User.findOne({
             where: {
                 resetToken: token,
-                resetTokenExpiration: { [sequelize_1.Op.gte]: new Date() }, // Check if token is expired
+                resetTokenExpiration: { [sequelize_1.Op.gte]: new Date() }, // Ensure token is not expired
             },
         });
         if (!user) {
