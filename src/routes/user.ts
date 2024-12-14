@@ -1,65 +1,81 @@
-import { Router, Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { User } from '../models/user'; // Ensure this path is correct
-import { requestPasswordReset } from '../controllers/userController'; // Import password reset logic
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database';
 
-const router = Router();
+interface UserAttributes {
+  id: string;
+  email: string;
+  password: string;
+  username: string;
+  role?: string;
+  tier?: string;
+  isVerified?: boolean;
+  passwordResetToken?: string | null; // Add this
+  passwordResetTokenExpiry?: Date | null; // Add this
+}
 
-// POST /api/users/login - Login Route
-router.post('/login', async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-  try {
-    // Validate input fields
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
-    }
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: string;
+  public email!: string;
+  public password!: string;
+  public username!: string;
+  public role?: string;
+  public tier?: string;
+  public isVerified?: boolean;
+  public passwordResetToken?: string | null; // Add this
+  public passwordResetTokenExpiry?: Date | null; // Add this
+}
 
-    // Find the user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Compare the provided password with the stored hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate a JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET as string, // Ensure JWT_SECRET is defined in .env
-      { expiresIn: '1h' } // Token expires in 1 hour
-    );
-
-    // Send the token as the response
-    return res.status(200).json({
-      message: 'Login successful',
-      token, // The JWT token returned to the client
-    });
-  } catch (error) {
-    // Log the error
-    console.error('Error logging in:', error);
-
-    // Respond with a generic server error message
-    return res.status(500).json({ message: 'Server error' });
+User.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'free',
+    },
+    tier: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'free',
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
+    passwordResetToken: {
+      type: DataTypes.STRING, // Add this field
+      allowNull: true,
+    },
+    passwordResetTokenExpiry: {
+      type: DataTypes.DATE, // Add this field
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'User',
+    tableName: 'users',
   }
-});
+);
 
-// POST /api/users/reset-password/request - Password Reset Request Route
-router.post('/reset-password/request', async (req: Request, res: Response) => {
-  try {
-    // Delegate the reset password logic to the controller
-    await requestPasswordReset(req, res);
-  } catch (error) {
-    // Handle unexpected errors in the route itself
-    console.error('Error handling password reset request:', error);
-
-    return res.status(500).json({ message: 'Failed to process password reset request' });
-  }
-});
-
-export default router;
+export { User };

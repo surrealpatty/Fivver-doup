@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/user.ts
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user"); // Ensure this path is correct
+const userController_1 = require("../controllers/userController"); // Import password reset logic
 const router = (0, express_1.Router)();
 // POST /api/users/login - Login Route
 router.post('/login', async (req, res) => {
@@ -38,20 +38,22 @@ router.post('/login', async (req, res) => {
         });
     }
     catch (error) {
-        // Handle error properly by casting it to an Error object
+        // Log the error
         console.error('Error logging in:', error);
-        // Narrow the type of error to `Error` for safe property access
-        if (error instanceof Error) {
-            return res.status(500).json({
-                message: 'Server error',
-                error: error.message || 'Unknown error occurred',
-            });
-        }
-        // If error is not an instance of Error, return a generic message
-        return res.status(500).json({
-            message: 'Server error',
-            error: 'Unknown error occurred',
-        });
+        // Respond with a generic server error message
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+// POST /api/users/reset-password/request - Password Reset Request Route
+router.post('/reset-password/request', async (req, res) => {
+    try {
+        // Delegate the reset password logic to the controller
+        await (0, userController_1.requestPasswordReset)(req, res);
+    }
+    catch (error) {
+        // Handle unexpected errors in the route itself
+        console.error('Error handling password reset request:', error);
+        return res.status(500).json({ message: 'Failed to process password reset request' });
     }
 });
 exports.default = router;
