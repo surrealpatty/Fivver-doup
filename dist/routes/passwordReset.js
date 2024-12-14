@@ -80,5 +80,5 @@ router.post('/reset-password/:token', async (req, res) => {
         res.status(500).json({ message: 'Server error while resetting password' });
     }
 });
-exports.default = router;
+exports.default = router; // Ensure the router is exported correctly
 //# sourceMappingURL=passwordReset.js.map
