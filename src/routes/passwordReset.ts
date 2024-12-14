@@ -91,4 +91,4 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+export default router; // Ensure the router is exported correctly
