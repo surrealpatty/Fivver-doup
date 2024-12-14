@@ -1,17 +1,20 @@
-// src/types/user.ts 
+// src/types/user.ts
+
+// Define the UserPayload interface with required and optional fields
 export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-  tier: string;  // Ensure tier is part of UserPayload
-  role?: string;  // Optional, if you want to include roles in the future
-}
-// Define the AuthRequest interface extending Express' Request
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // User may or may not be set at first
+  id: string;          // Required user ID
+  email?: string;      // Optional email
+  username?: string;   // Optional username
+  tier: string;        // Required user tier (you've mentioned it should be part of UserPayload)
+  role?: string;       // Optional user role (for future use)
 }
 
-// Define the type guard to check if the user is present
+// Define the AuthRequest interface extending Express' Request
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // The 'user' field is optional and will be added when the user is authenticated
+}
+
+// Type guard function to check if user exists in the request
 export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
-  return req.user !== undefined; // Explicitly check for undefined
+  return req.user !== undefined; // Explicitly checks if user is set in the request
 }
