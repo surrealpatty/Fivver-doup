@@ -20,15 +20,15 @@ interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 // Define the User model class
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public role!: string;
-  public tier!: string;
-  public isVerified!: boolean;
-  public passwordResetToken?: string | null;  // Allow null
-  public passwordResetTokenExpiry?: Date | null;  // Allow null
+  public id!: string;  // UUID primary key
+  public email!: string;  // Email field (unique)
+  public username!: string;  // Username (unique)
+  public password!: string;  // Password field
+  public role!: string;  // Role (e.g., user, admin)
+  public tier!: string;  // Tier (e.g., free, paid)
+  public isVerified!: boolean;  // Verification status
+  public passwordResetToken?: string | null;  // Password reset token (optional)
+  public passwordResetTokenExpiry?: Date | null;  // Password reset token expiry (optional)
 
   // Static method to associate models (can be added later if needed)
   static associate(models: any) {
@@ -87,7 +87,7 @@ User.init(
     sequelize, // Pass the Sequelize instance
     modelName: 'User',
     tableName: 'users', // Name of the table in the database
-    timestamps: true, // Adjust based on your table schema (if using createdAt, updatedAt)
+    timestamps: true, // Automatically manage createdAt, updatedAt fields
   }
 );
 
