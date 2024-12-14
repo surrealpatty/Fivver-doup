@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Make sure the path is correct
+import { sequelize } from '../config/database'; // Ensure this import path is correct
 
 // Define the User attributes interface (for typing the model)
 interface UserAttributes {
@@ -47,6 +47,9 @@ User.init(
       type: DataTypes.STRING,
       unique: true,  // Ensures that the email column is unique
       allowNull: false,
+      validate: {
+        isEmail: true,  // Ensures email format is valid
+      },
     },
     username: {
       type: DataTypes.STRING,
@@ -67,15 +70,15 @@ User.init(
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false,  // Default to false
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true, // Can be null
+      allowNull: true,  // Can be null
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true, // Can be null
+      allowNull: true,  // Can be null
     },
   },
   {
@@ -85,3 +88,5 @@ User.init(
     timestamps: true, // Adjust based on your table schema (if using createdAt, updatedAt)
   }
 );
+
+export default User;
