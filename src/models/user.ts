@@ -10,8 +10,8 @@ interface UserAttributes {
   role: string;
   tier: string;
   isVerified: boolean;
-  passwordResetToken?: string;
-  passwordResetTokenExpiry?: Date;
+  passwordResetToken?: string | null;  // Allow null
+  passwordResetTokenExpiry?: Date | null;  // Allow null
 }
 
 // Define the User creation attributes interface (for creating new instances)
@@ -26,8 +26,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public role!: string;
   public tier!: string;
   public isVerified!: boolean;
-  public passwordResetToken?: string;
-  public passwordResetTokenExpiry?: Date;
+  public passwordResetToken?: string | null;  // Allow null
+  public passwordResetTokenExpiry?: Date | null;  // Allow null
 
   // Static method to associate models (can be added later if needed)
   static associate(models: any) {
@@ -71,11 +71,11 @@ User.init(
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true, // Can be null initially
+      allowNull: true, // Can be null
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true, // Can be null initially
+      allowNull: true, // Can be null
     },
   },
   {
