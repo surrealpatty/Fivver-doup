@@ -1,10 +1,9 @@
 "use strict";
-// src/services/emailService.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmail = void 0;
+exports.sendResetEmail = exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 // Create a transporter object using SMTP transport (Gmail in this case)
 const transporter = nodemailer_1.default.createTransport({
@@ -14,7 +13,7 @@ const transporter = nodemailer_1.default.createTransport({
         pass: process.env.EMAIL_PASSWORD, // Your email password or application-specific password from .env
     },
 });
-// Define the sendEmail function to send emails
+// Define the sendEmail function to send generic emails
 const sendEmail = async (emailDetails) => {
     try {
         // Set up email options
@@ -34,4 +33,23 @@ const sendEmail = async (emailDetails) => {
     }
 };
 exports.sendEmail = sendEmail;
+// Define the sendResetEmail function to send a password reset email
+const sendResetEmail = async (email, token) => {
+    const resetUrl = `http://your-frontend-url/reset-password?token=${token}`; // Customize the reset URL as needed
+    const emailDetails = {
+        to: email,
+        subject: 'Password Reset Request',
+        text: `You requested a password reset. Please click the following link to reset your password: ${resetUrl}`,
+    };
+    try {
+        // Send the reset email
+        await (0, exports.sendEmail)(emailDetails);
+        console.log('Password reset email sent');
+    }
+    catch (error) {
+        console.error('Error sending reset email:', error);
+        throw new Error('Failed to send reset email');
+    }
+};
+exports.sendResetEmail = sendResetEmail;
 //# sourceMappingURL=emailService.js.map

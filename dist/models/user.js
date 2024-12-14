@@ -42,11 +42,11 @@ User.init({
         allowNull: true,
         defaultValue: false, // Default to not verified
     },
-    resetToken: {
+    passwordResetToken: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true, // Nullable
     },
-    resetTokenExpiration: {
+    passwordResetTokenExpiry: {
         type: sequelize_1.DataTypes.DATE,
         allowNull: true, // Nullable
     },
