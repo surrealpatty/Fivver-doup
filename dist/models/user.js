@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database"); // Ensure this import path is correct
+const uuid_1 = require("uuid"); // Add UUID generator for id
 // Define the User model class
 class User extends sequelize_1.Model {
     // Static method to associate models (can be added later if needed)
@@ -14,7 +15,8 @@ exports.User = User;
 // Initialize the Sequelize User model
 User.init({
     id: {
-        type: sequelize_1.DataTypes.STRING, // id as a string (e.g., UUID)
+        type: sequelize_1.DataTypes.UUID, // Use UUID for id
+        defaultValue: uuid_1.v4, // Automatically generate UUID for new records
         primaryKey: true,
         allowNull: false,
     },
