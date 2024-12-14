@@ -1,9 +1,8 @@
-// src/routes/user.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Ensure this path is correct
-import { sendPasswordResetEmail } from '../utils/email';  // Import the email function if required
+import { User } from '../models/user'; // Ensure this path is correct
+import { requestPasswordReset } from '../controllers/userController'; // Import password reset logic
 
 const router = Router();
 
@@ -32,32 +31,34 @@ router.post('/login', async (req: Request, res: Response) => {
     // Generate a JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET as string,  // Ensure JWT_SECRET is defined in .env
-      { expiresIn: '1h' }  // Token expires in 1 hour
+      process.env.JWT_SECRET as string, // Ensure JWT_SECRET is defined in .env
+      { expiresIn: '1h' } // Token expires in 1 hour
     );
 
     // Send the token as the response
     return res.status(200).json({
       message: 'Login successful',
-      token,  // The JWT token returned to the client
+      token, // The JWT token returned to the client
     });
-  } catch (error: unknown) {
-    // Handle error properly by casting it to an Error object
+  } catch (error) {
+    // Log the error
     console.error('Error logging in:', error);
 
-    // Narrow the type of error to `Error` for safe property access
-    if (error instanceof Error) {
-      return res.status(500).json({
-        message: 'Server error',
-        error: error.message || 'Unknown error occurred',
-      });
-    }
+    // Respond with a generic server error message
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
 
-    // If error is not an instance of Error, return a generic message
-    return res.status(500).json({
-      message: 'Server error',
-      error: 'Unknown error occurred',
-    });
+// POST /api/users/reset-password/request - Password Reset Request Route
+router.post('/reset-password/request', async (req: Request, res: Response) => {
+  try {
+    // Delegate the reset password logic to the controller
+    await requestPasswordReset(req, res);
+  } catch (error) {
+    // Handle unexpected errors in the route itself
+    console.error('Error handling password reset request:', error);
+
+    return res.status(500).json({ message: 'Failed to process password reset request' });
   }
 });
 
