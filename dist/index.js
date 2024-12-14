@@ -12,18 +12,22 @@ const passwordReset_1 = __importDefault(require("./routes/passwordReset")); // I
 const database_1 = require("./config/database");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
+// Middleware setup
+app.use((0, cors_1.default)()); // Enable Cross-Origin Resource Sharing
+app.use(express_1.default.json()); // Parse incoming JSON requests
 // Route setup
-app.use('/api/users', user_1.default);
-app.use('/api/auth', auth_1.default);
-app.use('/api', passwordReset_1.default); // Make sure passwordResetRoutes is being used
+app.use('/api/users', user_1.default); // User-related routes
+app.use('/api/auth', auth_1.default); // Authentication-related routes
+app.use('/api/password-reset', passwordReset_1.default); // Correctly register password reset routes under /api/password-reset
 const startServer = async () => {
     try {
+        // Test database connection
         await database_1.sequelize.authenticate();
         console.log('Database connected successfully!');
+        // Sync the database schema (alter the tables if needed)
         await database_1.sequelize.sync({ alter: true });
         console.log('Database schema synced successfully!');
+        // Start the server
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
             console.log(`Server running on http://localhost:${PORT}`);
