@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure the path is correct
+import { sequelize } from '../config/database'; // Ensure this import path is correct
 
 // Define the User attributes interface (for typing the model)
 interface UserAttributes {
@@ -42,11 +42,10 @@ User.init(
       type: DataTypes.STRING,  // id as a string (e.g., UUID)
       primaryKey: true,
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4, // Set default value as UUID
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,  // Ensures that the email column is unique
+      unique: true,  // Unique constraint on the email field
       allowNull: false,
       validate: {
         isEmail: true,  // Ensures email format is valid

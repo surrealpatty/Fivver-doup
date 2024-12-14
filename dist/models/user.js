@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Ensure this import path is correct
+const database_1 = require("../config/database"); // Ensure the path is correct
 // Define the User model class
 class User extends sequelize_1.Model {
     // Static method to associate models (can be added later if needed)
@@ -17,6 +17,7 @@ User.init({
         type: sequelize_1.DataTypes.STRING, // id as a string (e.g., UUID)
         primaryKey: true,
         allowNull: false,
+        defaultValue: sequelize_1.DataTypes.UUIDV4, // Set default value as UUID
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
