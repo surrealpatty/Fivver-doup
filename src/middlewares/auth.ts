@@ -4,41 +4,41 @@ import config from '../config/config';
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
-  id: string; // Keep as string for typical JWT payloads
-  [key: string]: any; // Allow for other properties in the JWT payload
+  id: string; // User ID stored in the JWT payload
+  [key: string]: any; // Allow other optional properties in the payload
 }
 
 // Extend Express' Request interface to include userId
 interface AuthRequest extends Request {
-  userId?: string; // This is where the userId from JWT will be stored
+  userId?: string; // Store userId extracted from the JWT
 }
 
-// The `verifyToken` middleware to check JWT in headers
+// Middleware to verify the JWT
 export const verifyToken = (
-  req: AuthRequest, // Use the custom AuthRequest type
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ): Response<any> | void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Bearer token" format
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract the token from the "Bearer token" format
 
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  // Verify the token using JWT secret from config
+  // Verify the token using the secret from config
   jwt.verify(
     token,
-    config.JWT_SECRET as string, // Explicitly ensure JWT_SECRET is a string
+    config.JWT_SECRET, // JWT_SECRET is already a string in the config
     (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
       if (err) {
         return res.status(401).json({ message: 'Unauthorized', error: err.message });
       }
 
-      // Handle decoding and verifying the JWT payload
+      // Ensure decoded payload is valid and contains an ID
       if (decoded && typeof decoded === 'object' && 'id' in decoded) {
         const decodedToken = decoded as JwtPayload;
-        req.userId = String(decodedToken.id); // Explicitly cast to string for userId
-        return next(); // Continue to the next middleware or route handler
+        req.userId = String(decodedToken.id); // Store the userId in the request object
+        return next(); // Proceed to the next middleware
       } else {
         return res.status(401).json({ message: 'Invalid token' });
       }
@@ -46,24 +46,23 @@ export const verifyToken = (
   );
 };
 
-// Generate a token for the user
+// Function to generate a JWT for a user
 export const generateToken = (userId: string): string => {
   return jwt.sign(
-    { id: userId },
-    config.JWT_SECRET as string, // Explicitly ensure JWT_SECRET is a string
+    { id: userId }, // Payload containing the user ID
+    config.JWT_SECRET, // JWT_SECRET from config
     {
-      expiresIn: config.JWT_EXPIRATION as string, // Explicitly ensure JWT_EXPIRATION is a string
+      expiresIn: config.JWT_EXPIRATION, // JWT_EXPIRATION from config
     }
   );
 };
 
-// Example middleware to authenticate the user using the token
+// Middleware to authenticate the user based on the JWT
 export const authenticateJWT = (
-  req: AuthRequest, // Use the custom AuthRequest type here as well
+  req: AuthRequest,
   res: Response,
   next: NextFunction
-) => {
-  // Check if userId exists in request
+): Response<any> | void => {
   if (!req.userId) {
     return res.status(403).json({ message: 'No valid token or userId found.' });
   }

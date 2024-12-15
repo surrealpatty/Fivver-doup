@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import { v4 as uuidv4 } from 'uuid';
 
+// Define the User attributes interface
 interface UserAttributes {
   id: string;
   email: string;
@@ -14,8 +15,10 @@ interface UserAttributes {
   passwordResetTokenExpiry?: Date | null;
 }
 
+// Define creation attributes interface
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
+// Define the User model class
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
@@ -28,10 +31,11 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public passwordResetTokenExpiry?: Date | null;
 
   static associate(models: any) {
-    // Define associations if any
+    // Define associations here
   }
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
@@ -42,16 +46,16 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,  // Only define unique here
       allowNull: false,
+      unique: true, // Ensure the email is unique
       validate: {
-        isEmail: true, // Validates the email format
+        isEmail: true, // Validate the email format
       },
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,  // Only define unique here
       allowNull: false,
+      unique: true, // Ensure the username is unique
     },
     password: {
       type: DataTypes.STRING,
@@ -67,22 +71,22 @@ User.init(
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,  // Default to false if not specified
+      defaultValue: false, // Default to false
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true,  // Can be null if not in use
+      allowNull: true, // Can be null if not in use
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true,  // Can be null if not in use
+      allowNull: true, // Can be null if not in use
     },
   },
   {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',  // Ensure this matches your table name
-    timestamps: true,  // Automatically adds createdAt and updatedAt
+    sequelize, // Pass the Sequelize instance
+    modelName: 'User', // Define the model name
+    tableName: 'users', // Ensure this matches your table name
+    timestamps: true, // Automatically add createdAt and updatedAt fields
   }
 );
 
