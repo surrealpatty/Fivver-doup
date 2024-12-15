@@ -39,6 +39,6 @@ Service.init({
     timestamps: true, // Enable timestamps (createdAt, updatedAt)
     freezeTableName: true, // Prevent Sequelize from pluralizing the table name
 });
-// Export the Service model
+// Export the Service model as a default export
 exports.default = Service;
 //# sourceMappingURL=services.js.map
