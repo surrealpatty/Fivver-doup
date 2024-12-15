@@ -5,12 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-// Load environment variables from .env
-dotenv_1.default.config();
-const { JWT_SECRET = 'your-secret-key', // This should be your JWT secret key
-JWT_EXPIRATION = '1h', // Set default expiration time if not specified
- } = process.env;
+const config_1 = __importDefault(require("../config/config")); // Importing the config object
 // The `verifyToken` middleware to check JWT in headers
 const verifyToken = (req, // Use the custom AuthRequest type
 res, next) => {
@@ -18,8 +13,8 @@ res, next) => {
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
     }
-    // Verify the token using JWT secret from environment variables
-    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
+    // Verify the token using JWT secret from config
+    jsonwebtoken_1.default.verify(token, config_1.default.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Unauthorized', error: err.message });
         }
@@ -37,8 +32,8 @@ res, next) => {
 exports.verifyToken = verifyToken;
 // Generate a token for the user
 const generateToken = (userId) => {
-    return jsonwebtoken_1.default.sign({ id: userId }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRATION, // Use the expiration time from the environment variable
+    return jsonwebtoken_1.default.sign({ id: userId }, config_1.default.JWT_SECRET, {
+        expiresIn: config_1.default.JWT_EXPIRATION, // Use the expiration time from the config
     });
 };
 exports.generateToken = generateToken;
