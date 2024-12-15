@@ -1,4 +1,3 @@
-// src/models/user.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,15 +42,15 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,  // Ensure this matches the unique constraint in the table
+      unique: true,  // Ensures email is unique
       allowNull: false,
       validate: {
-        isEmail: true,
+        isEmail: true, // Validates the email format
       },
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,  // Ensure this matches the unique constraint in the table
+      unique: true,  // Ensures username is unique
       allowNull: false,
     },
     password: {
@@ -68,22 +67,25 @@ User.init(
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false,  // Default to false if not specified
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true,  // Can be null if not in use
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: true,  // Can be null if not in use
     },
   },
   {
     sequelize,
     modelName: 'User',
-    tableName: 'users',  // Ensure this matches the table name
-    timestamps: true,
+    tableName: 'users',  // Ensure this matches your table name
+    timestamps: true,  // Automatically adds createdAt and updatedAt
+    indexes: [
+      // Only necessary indexes should be added manually, but we already have unique on email and username
+    ],
   }
 );
 
