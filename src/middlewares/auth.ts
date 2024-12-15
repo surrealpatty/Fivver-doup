@@ -1,14 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
-// Load environment variables from .env
-dotenv.config();
-
-const {
-  JWT_SECRET = 'your-secret-key', // This should be your JWT secret key
-  JWT_EXPIRATION = '1h', // Set default expiration time if not specified
-} = process.env;
+import config from '../config/config'; // Importing the config object
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
@@ -33,8 +25,8 @@ export const verifyToken = (
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  // Verify the token using JWT secret from environment variables
-  jwt.verify(token, JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
+  // Verify the token using JWT secret from config
+  jwt.verify(token, config.JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
     if (err) {
       return res.status(401).json({ message: 'Unauthorized', error: err.message });
     }
@@ -52,8 +44,8 @@ export const verifyToken = (
 
 // Generate a token for the user
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRATION, // Use the expiration time from the environment variable
+  return jwt.sign({ id: userId }, config.JWT_SECRET, {
+    expiresIn: config.JWT_EXPIRATION, // Use the expiration time from the config
   });
 };
 

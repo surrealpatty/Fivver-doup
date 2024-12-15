@@ -5,27 +5,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("../config/config")); // Importing the config object
+const dotenv_1 = __importDefault(require("dotenv"));
+// Load environment variables from .env
+dotenv_1.default.config();
+const { JWT_SECRET = 'your-secret-key', // This should be your JWT secret key
+JWT_EXPIRATION = '1h', // Set default expiration time if not specified
+ } = process.env;
 // The `verifyToken` middleware to check JWT in headers
 const verifyToken = (req, // Use the custom AuthRequest type
 res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Bearer token" format
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
     }
-    // Define explicit types for 'err' and 'decoded'
-    jsonwebtoken_1.default.verify(token, config_1.default.JWT_SECRET, (err, decoded) => {
+    // Verify the token using JWT secret from environment variables
+    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res
-                .status(401)
-                .json({ message: 'Unauthorized', error: err.message });
+            return res.status(401).json({ message: 'Unauthorized', error: err.message });
         }
         // Handle decoding and verifying the JWT payload
         if (decoded && typeof decoded === 'object' && 'id' in decoded) {
             const decodedToken = decoded;
-            // Cast decodedToken.id to string (if necessary)
-            req.userId = String(decodedToken.id); // Explicitly cast to string
-            return next();
+            req.userId = String(decodedToken.id); // Explicitly cast to string for userId
+            return next(); // Continue to the next middleware or route handler
         }
         else {
             return res.status(401).json({ message: 'Invalid token' });
@@ -35,8 +37,8 @@ res, next) => {
 exports.verifyToken = verifyToken;
 // Generate a token for the user
 const generateToken = (userId) => {
-    return jsonwebtoken_1.default.sign({ id: userId }, config_1.default.JWT_SECRET, {
-        expiresIn: config_1.default.JWT_EXPIRATION,
+    return jsonwebtoken_1.default.sign({ id: userId }, JWT_SECRET, {
+        expiresIn: JWT_EXPIRATION, // Use the expiration time from the environment variable
     });
 };
 exports.generateToken = generateToken;
@@ -47,7 +49,7 @@ res, next) => {
     if (!req.userId) {
         return res.status(403).json({ message: 'No valid token or userId found.' });
     }
-    next();
+    next(); // User authenticated, proceed to the next middleware or route handler
 };
 exports.authenticateJWT = authenticateJWT;
 //# sourceMappingURL=auth.js.map
