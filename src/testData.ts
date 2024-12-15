@@ -1,5 +1,5 @@
-import { User } from './models/user'; // Adjust the import if the path is different
-import { Service } from './models/service'; // Adjust the import if the path is different
+import { User } from './models/user'; // Correct import path for the User model
+import  Service  from './models/services'; // Adjusted import for the Service model
 
 // Insert a test user
 User.create({
@@ -9,7 +9,7 @@ User.create({
   username: 'testuser',
   tier: 'free',
   role: 'user',
-  is_verified: false
+  isVerified: false  // Correct property name (camelCase)
 })
   .then((user) => {
     console.log('User created:', user);

@@ -1,66 +1,31 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Import the default export from config.ts
-
-// Define the expected JWT Payload structure
-interface JwtPayload {
-  id: string; // Keep as string for typical JWT payloads
-  [key: string]: any; // Allow for other properties in the JWT payload
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+// Load environment variables from the .env file
+dotenv_1.default.config();
+// Destructure environment variables
+const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = '', DB_NAME = 'fivver_doup', DB_PORT = '3306', NODE_ENV = 'development', JWT_SECRET = 'your-secret-key', JWT_EXPIRATION = '1h', } = process.env;
+// Ensure that DB_PORT is an integer
+const parsedDBPort = parseInt(DB_PORT, 10);
+if (isNaN(parsedDBPort)) {
+    console.error('DB_PORT must be a valid number.');
+    process.exit(1);
 }
-
-// Extend Express' Request interface to include userId
-interface AuthRequest extends Request {
-  userId?: string; // This is where the userId from JWT will be stored
-}
-
-// The `verifyToken` middleware to check JWT in headers
-export const verifyToken = (
-  req: AuthRequest,  // Use the custom AuthRequest type
-  res: Response,
-  next: NextFunction
-): Response<any> | void => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Get token from the header
-
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
-  }
-
-  // Verify the JWT token using the secret
-  jwt.verify(token, config.JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
-    if (err) {
-      return res.status(401).json({ message: 'Unauthorized', error: err.message });
-    }
-
-    // Handle decoding and verifying the JWT payload
-    if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-      const decodedToken = decoded as JwtPayload;
-
-      // Store the user ID in the request object (cast to string if needed)
-      req.userId = String(decodedToken.id);
-
-      return next();
-    } else {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
-  });
+// Config object for the application
+const config = {
+    db: {
+        host: DB_HOST,
+        user: DB_USER,
+        password: DB_PASSWORD,
+        database: DB_NAME,
+        port: parsedDBPort,
+    },
+    nodeEnv: NODE_ENV,
+    JWT_SECRET,
+    JWT_EXPIRATION,
 };
-
-// Generate a token for the user
-export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, config.JWT_SECRET, {
-    expiresIn: config.JWT_EXPIRATION,
-  });
-};
-
-// Example middleware to authenticate the user using the token
-export const authenticateJWT = (
-  req: AuthRequest,  // Use the custom AuthRequest type here as well
-  res: Response,
-  next: NextFunction
-) => {
-  // Check if userId exists in the request
-  if (!req.userId) {
-    return res.status(403).json({ message: 'No valid token or userId found.' });
-  }
-  next();
-};
+exports.default = config;
+//# sourceMappingURL=config.js.map

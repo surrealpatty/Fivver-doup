@@ -66,5 +66,5 @@ Service.init(
   }
 );
 
-// Export the Service model
+// Export the Service model as a default export
 export default Service;
