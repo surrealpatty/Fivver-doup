@@ -1,36 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+// src/models/user.ts
 const sequelize_1 = require("sequelize");
-const database_1 = require("../config/database"); // Ensure this import path is correct
-const uuid_1 = require("uuid"); // Add UUID generator for id
-// Define the User model class
+const database_1 = require("../config/database");
+const uuid_1 = require("uuid");
 class User extends sequelize_1.Model {
-    // Static method to associate models (can be added later if needed)
     static associate(models) {
-        // Define associations here if any, e.g., User.hasMany(models.Order);
+        // Define associations if any
     }
 }
 exports.User = User;
-// Initialize the Sequelize User model
 User.init({
     id: {
-        type: sequelize_1.DataTypes.UUID, // Use UUID for id
-        defaultValue: uuid_1.v4, // Automatically generate UUID for new records
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: uuid_1.v4,
         primaryKey: true,
         allowNull: false,
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true, // Unique constraint on the email field
+        unique: true, // Ensure this matches the unique constraint in the table
         allowNull: false,
         validate: {
-            isEmail: true, // Ensures email format is valid
+            isEmail: true,
         },
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true, // Ensures that the username column is unique
+        unique: true, // Ensure this matches the unique constraint in the table
         allowNull: false,
     },
     password: {
@@ -47,31 +45,21 @@ User.init({
     },
     isVerified: {
         type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false, // Default to false
+        defaultValue: false,
     },
     passwordResetToken: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true, // Can be null
+        allowNull: true,
     },
     passwordResetTokenExpiry: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // Can be null
+        allowNull: true,
     },
 }, {
-    sequelize: database_1.sequelize, // Pass the Sequelize instance
+    sequelize: database_1.sequelize,
     modelName: 'User',
-    tableName: 'users', // Name of the table in the database
-    timestamps: true, // Automatically manage createdAt, updatedAt fields
-    indexes: [
-        {
-            unique: true,
-            fields: ['email'], // Create a unique index on the email field
-        },
-        {
-            unique: true,
-            fields: ['username'], // Create a unique index on the username field
-        },
-    ],
+    tableName: 'users', // Ensure this matches the table name
+    timestamps: true,
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map
