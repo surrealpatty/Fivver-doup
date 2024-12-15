@@ -61,16 +61,6 @@ User.init({
     modelName: 'User', // Define the model name
     tableName: 'users', // Ensure this matches your table name
     timestamps: true, // Automatically add createdAt and updatedAt fields
-    indexes: [
-        {
-            unique: true,
-            fields: ['email'], // Ensure unique constraint is applied only once for email
-        },
-        {
-            unique: true,
-            fields: ['username'], // Ensure unique constraint is applied only once for username
-        },
-    ],
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map
