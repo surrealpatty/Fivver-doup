@@ -8,6 +8,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "sequelize": "NODE_ENV=development ts-node --transpileOnly node_modules/.bin/sequelize-cli",
     "format": "prettier --write .",
     "clean-build": "rimraf dist && tsc",
     "start": "node dist/index.js",
