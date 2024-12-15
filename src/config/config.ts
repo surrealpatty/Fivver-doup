@@ -13,7 +13,7 @@ const {
   NODE_ENV = 'development',
   JWT_SECRET = 'your-secret-key',
   JWT_EXPIRATION = '1h',
-}: NodeJS.ProcessEnv = process.env;
+} = process.env;
 
 // Ensure that DB_PORT is an integer
 const parsedDBPort = parseInt(DB_PORT, 10);
@@ -25,13 +25,13 @@ if (isNaN(parsedDBPort)) {
 // Config object for the application
 const config = {
   db: {
-    host: DB_HOST as string,
-    user: DB_USER as string,
-    password: DB_PASSWORD as string,
-    database: DB_NAME as string,
+    host: DB_HOST,        // These are strings, no need for explicit type casting in JS
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
     port: parsedDBPort,
   },
-  nodeEnv: NODE_ENV as string,
+  nodeEnv: NODE_ENV,
   JWT_SECRET,
   JWT_EXPIRATION,
 };
