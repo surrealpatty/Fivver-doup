@@ -27,14 +27,15 @@
     "outDir": "./dist",                              // Output compiled files to the dist folder
     "rootDir": "./src",                              // Root directory of source files
     "lib": ["ES2020", "DOM"],                        // Include ES2020 and DOM libraries
-    "allowJs": true,                                 // Allow JS files in TypeScript project
     "declaration": true,                             // Generate .d.ts declaration files
     "declarationMap": true,                          // Generate source maps for declaration files
-    "sourceMap": true                                // Generate source maps for debugging
+    "sourceMap": true,                               // Generate source maps for debugging
+    "allowJs": true,                                 // Allows JS files in TypeScript project
+    "checkJs": true                                  // Optionally checks JavaScript files for errors
   },
   "include": [
-    "src/**/*.ts",                                   // Include all TypeScript files in the src folder
-    "src/types/**/*.d.ts"                            // Include all .d.ts files in the types folder
+    "src/**/*",                                     // Include all .ts and .js files inside src
+    "src/types/**/*.d.ts"                           // Include all .d.ts files in the types folder
   ],
   "exclude": [
     "node_modules",                                  // Exclude node_modules from compilation
