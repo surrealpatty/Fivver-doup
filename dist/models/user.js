@@ -19,7 +19,7 @@ User.init({
     },
     email: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true, // Ensures email is unique (index automatically created)
+        unique: true, // Only define unique here
         allowNull: false,
         validate: {
             isEmail: true, // Validates the email format
@@ -27,7 +27,7 @@ User.init({
     },
     username: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true, // Ensures username is unique (index automatically created)
+        unique: true, // Only define unique here
         allowNull: false,
     },
     password: {
@@ -59,7 +59,6 @@ User.init({
     modelName: 'User',
     tableName: 'users', // Ensure this matches your table name
     timestamps: true, // Automatically adds createdAt and updatedAt
-    // Avoid adding unnecessary indexes; email and username are already unique
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map
