@@ -17,7 +17,7 @@ if (isNaN(parsedDBPort)) {
 // Config object for the application
 const config = {
     db: {
-        host: DB_HOST,
+        host: DB_HOST, // These are strings, no need for explicit type casting in JS
         user: DB_USER,
         password: DB_PASSWORD,
         database: DB_NAME,

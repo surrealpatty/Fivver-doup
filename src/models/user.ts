@@ -42,7 +42,7 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,  // Ensures email is unique
+      unique: true,  // Ensures email is unique (index automatically created)
       allowNull: false,
       validate: {
         isEmail: true, // Validates the email format
@@ -50,7 +50,7 @@ User.init(
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,  // Ensures username is unique
+      unique: true,  // Ensures username is unique (index automatically created)
       allowNull: false,
     },
     password: {
@@ -83,9 +83,7 @@ User.init(
     modelName: 'User',
     tableName: 'users',  // Ensure this matches your table name
     timestamps: true,  // Automatically adds createdAt and updatedAt
-    indexes: [
-      // Only necessary indexes should be added manually, but we already have unique on email and username
-    ],
+    // Avoid adding unnecessary indexes; email and username are already unique
   }
 );
 
