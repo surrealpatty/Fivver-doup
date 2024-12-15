@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Ensure config contains a valid JWT_SECRET
+import config from '../config/config'; // Ensure config is imported correctly
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
@@ -13,7 +13,7 @@ interface AuthRequest extends Request {
   userId?: string; // This is where the userId from JWT will be stored
 }
 
-// Middleware to verify JWT
+// The `verifyToken` middleware to check JWT in headers
 export const verifyToken = (
   req: AuthRequest, // Use the custom AuthRequest type
   res: Response,
@@ -26,27 +26,35 @@ export const verifyToken = (
   }
 
   // Verify the token using JWT secret from config
-  jwt.verify(token, config.JWT_SECRET as string, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
-    if (err) {
-      return res.status(401).json({ message: 'Unauthorized', error: err.message });
-    }
+  jwt.verify(
+    token,
+    config.JWT_SECRET as string, // Explicitly ensure JWT_SECRET is a string
+    (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
+      if (err) {
+        return res.status(401).json({ message: 'Unauthorized', error: err.message });
+      }
 
-    // Handle decoding and verifying the JWT payload
-    if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-      const decodedToken = decoded as JwtPayload;
-      req.userId = String(decodedToken.id); // Explicitly cast to string for userId
-      return next(); // Continue to the next middleware or route handler
-    } else {
-      return res.status(401).json({ message: 'Invalid token' });
+      // Handle decoding and verifying the JWT payload
+      if (decoded && typeof decoded === 'object' && 'id' in decoded) {
+        const decodedToken = decoded as JwtPayload;
+        req.userId = String(decodedToken.id); // Explicitly cast to string for userId
+        return next(); // Continue to the next middleware or route handler
+      } else {
+        return res.status(401).json({ message: 'Invalid token' });
+      }
     }
-  });
+  );
 };
 
 // Generate a token for the user
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, config.JWT_SECRET as string, {
-    expiresIn: config.JWT_EXPIRATION as string, // Use the expiration time from the config
-  });
+  return jwt.sign(
+    { id: userId },
+    config.JWT_SECRET as string, // Explicitly ensure JWT_SECRET is a string
+    {
+      expiresIn: config.JWT_EXPIRATION as string, // Explicitly ensure JWT_EXPIRATION is a string
+    }
+  );
 };
 
 // Example middleware to authenticate the user using the token

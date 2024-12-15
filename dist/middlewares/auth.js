@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("../config/config")); // Importing the config object
-// The `verifyToken` middleware to check JWT in headers
+const config_1 = __importDefault(require("../config/config")); // Ensure config contains a valid JWT_SECRET
+// Middleware to verify JWT
 const verifyToken = (req, // Use the custom AuthRequest type
 res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Bearer token" format
