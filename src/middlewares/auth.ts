@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Importing the config object
+import config from '../config/config'; // Ensure config contains a valid JWT_SECRET
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
@@ -13,7 +13,7 @@ interface AuthRequest extends Request {
   userId?: string; // This is where the userId from JWT will be stored
 }
 
-// The `verifyToken` middleware to check JWT in headers
+// Middleware to verify JWT
 export const verifyToken = (
   req: AuthRequest, // Use the custom AuthRequest type
   res: Response,
@@ -26,7 +26,7 @@ export const verifyToken = (
   }
 
   // Verify the token using JWT secret from config
-  jwt.verify(token, config.JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
+  jwt.verify(token, config.JWT_SECRET as string, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
     if (err) {
       return res.status(401).json({ message: 'Unauthorized', error: err.message });
     }
@@ -44,8 +44,8 @@ export const verifyToken = (
 
 // Generate a token for the user
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, config.JWT_SECRET, {
-    expiresIn: config.JWT_EXPIRATION, // Use the expiration time from the config
+  return jwt.sign({ id: userId }, config.JWT_SECRET as string, {
+    expiresIn: config.JWT_EXPIRATION as string, // Use the expiration time from the config
   });
 };
 
