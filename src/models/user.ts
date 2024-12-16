@@ -47,7 +47,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Ensure the email is unique
+      unique: false, // or remove 'unique' entirely    
       validate: {
         isEmail: true, // Validate the email format
       },
