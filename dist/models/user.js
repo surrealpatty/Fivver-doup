@@ -22,7 +22,7 @@ User.init({
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true, // Ensure the email is unique
+        unique: false, // or remove 'unique' entirely    
         validate: {
             isEmail: true, // Validate the email format
         },
