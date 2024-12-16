@@ -54,8 +54,8 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Ensure the username is unique
-    },
+      unique: true,  // This adds a unique constraint
+  },
     password: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -2,8 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database';  // Import sequelize instance
-import User from './models/user';  // Import the User model
-import { userRoutes } from './routes/user';  // Import user routes
+import { userRoutes } from './routes/user';  // Import user routes 
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset';  // Import password reset routes
 
@@ -20,7 +19,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/password-reset', passwordResetRoutes);  // Register password reset routes
 
-// Sync the database schema with Sequelize
+// Function to sync the database
 const syncDatabase = async (): Promise<void> => {
   try {
     // Authenticate the connection
@@ -38,7 +37,7 @@ const syncDatabase = async (): Promise<void> => {
 
 // Start the server after syncing
 const startServer = async (): Promise<void> => {
-  await syncDatabase();
+  await syncDatabase();  // Sync database before starting the server
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
