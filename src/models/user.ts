@@ -9,7 +9,7 @@ interface UserAttributes {
   username: string;
   password: string;
   role: string;
-  tier: string;
+  tier: number; // Changed to number
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
@@ -25,7 +25,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: string;
+  public tier!: number; // Changed to number
   public isVerified!: boolean;
   public passwordResetToken?: string | null;
   public passwordResetTokenExpiry?: Date | null;
@@ -46,7 +46,7 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,   
+      allowNull: false,
       validate: {
         isEmail: true, // Validate the email format
       },
@@ -61,15 +61,18 @@ User.init(
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true, // Change to true to make it optional
+      defaultValue: 'user', // Optional: Set a default value
     },
     tier: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.INTEGER, // Set as INTEGER to allow number values
+      allowNull: true, // Change to true to make it optional
+      defaultValue: 0, // Optional: Set a default value (0 or any other number)
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false, // Default to false
+      allowNull: true, // Change to true to make it optional
+      defaultValue: false, // Optional: Set a default value
     },
     passwordResetToken: {
       type: DataTypes.STRING,
