@@ -20,46 +20,51 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/password-reset', passwordResetRoutes); // Register password reset routes
 
-// Function to sync the database
+/**
+ * Function to sync the database
+ * Sync the schema with `alter: true` to safely update existing tables
+ */
 const syncDatabase = async (): Promise<void> => {
   try {
-    // Authenticate the connection
     await sequelize.authenticate();
     console.log('Database connected successfully!');
-
-    // Sync the schema (alter: true to update existing tables without deleting them)
-    await sequelize.sync({ alter: true }); // Use `alter: true` instead of `force: true` to safely update schema
+    await sequelize.sync({ alter: true }); // Safely update schema
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1); // Exit the process if the DB connection or sync fails
+    process.exit(1); // Exit the process on failure
   }
 };
 
-// Temporary test function to create a user
+/**
+ * Temporary test function to create a test user
+ * Only runs in the development environment
+ */
 const testCreateUser = async (): Promise<void> => {
   try {
     const newUser = await User.create({
-      username: 'testuser', // Adjust test data as needed
+      username: 'testuser',
       email: 'testuser@example.com',
       password: 'testpassword',
-      role: 'user', // Add missing properties (set appropriate values)
-      tier: 0, // Correct integer value for 'free' tier
-      isVerified: false, // Assuming isVerified is a boolean
+      role: 'user',
+      tier: 'free', // Use "free" or "paid" as required by the ENUM type
+      isVerified: false, // Not verified
     });
-    console.log('User created:', newUser);
+    console.log('Test user created:', newUser.toJSON());
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error creating test user:', error);
   }
 };
 
-// Start the server after syncing
+/**
+ * Function to start the server
+ * Sync the database first, then start listening on the specified port
+ */
 const startServer = async (): Promise<void> => {
-  await syncDatabase(); // Sync database before starting the server
+  await syncDatabase();
 
-  // Run test function only in a development environment
   if (process.env.NODE_ENV === 'development') {
-    await testCreateUser(); // Call the testCreateUser function here
+    await testCreateUser(); // Create test user only in development
   }
 
   const PORT = process.env.PORT || 3000;
@@ -68,6 +73,7 @@ const startServer = async (): Promise<void> => {
   });
 };
 
+// Start the server
 startServer();
 
 export default app;

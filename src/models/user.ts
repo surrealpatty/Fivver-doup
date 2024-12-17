@@ -1,15 +1,15 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from '../config/database';  // Make sure the sequelize instance is correctly imported
 import { v4 as uuidv4 } from 'uuid';
 
 // Define the User attributes interface
 interface UserAttributes {
-  id: string; // Ensure the id is UUID (string)
+  id: string; // UUID for the id
   email: string;
   username: string;
   password: string;
   role: string;
-  tier: number; // Ensure tier is an integer
+  tier: 'free' | 'paid'; // Change to ENUM to represent 'free' and 'paid'
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
@@ -25,13 +25,13 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: number; // Ensure this is a number
+  public tier!: 'free' | 'paid';  // Enum for tier
   public isVerified!: boolean;
   public passwordResetToken?: string | null;
   public passwordResetTokenExpiry?: Date | null;
 
   static associate(models: any) {
-    // Define associations here if necessary
+    // Define associations here if necessary (e.g., User has many Posts)
   }
 }
 
@@ -48,7 +48,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: true, // Ensure the email format is valid
+        isEmail: true, // Validate email format
       },
     },
     username: {
@@ -62,17 +62,17 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: true, // Optional role
-      defaultValue: 'user', // Default to 'user' if no role is specified
+      defaultValue: 'user', // Default to 'user'
     },
     tier: {
-      type: DataTypes.INTEGER, // Ensure 'tier' is an integer (0 or 1 for free/paid)
-      allowNull: true, // Allow null value if no tier is provided
-      defaultValue: 0, // Default to 0 ('free' tier)
+      type: DataTypes.ENUM('free', 'paid'), // Ensure 'tier' is an ENUM with 'free' and 'paid' values
+      allowNull: false,
+      defaultValue: 'free', // Default to 'free' if not provided
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: true, // Allow null if not verified
-      defaultValue: false, // Default to false if not verified
+      allowNull: false, // Must be verified or not
+      defaultValue: false, // Default to false
     },
     passwordResetToken: {
       type: DataTypes.STRING,
@@ -84,9 +84,9 @@ User.init(
     },
   },
   {
-    sequelize, // Pass the Sequelize instance
+    sequelize, // Pass the Sequelize instance here
     modelName: 'User', // Define the model name
-    tableName: 'users', // Make sure this matches your actual database table name
+    tableName: 'users', // Ensure this matches your actual database table name
     timestamps: true, // Automatically add createdAt and updatedAt fields
   }
 );
