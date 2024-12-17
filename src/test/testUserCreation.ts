@@ -8,7 +8,7 @@ describe('User creation test', () => {
       email: 'testuser@example.com',  // Ensure this email is valid
       password: 'testpassword',  // Make sure this matches your model's requirements
       role: 'user',             // Add default role value
-      tier: 0,  // Replace 'free' with the corresponding numeric value
+      tier: "free",  // Default tier should be "free"
       isVerified: false,        // Add default verification status
     });
 

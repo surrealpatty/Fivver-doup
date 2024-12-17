@@ -8,7 +8,7 @@ const testDuplicateUsername = async () => {
       email: 'user1@example.com',
       password: 'password1',
       role: 'user',  // Assuming 'user' is the default role
-      tier: 0,  // Replace 'free' with the corresponding numeric value
+      tier: "free",  // Default tier should be "free"
       isVerified: false,  // Assuming the default value for verification is false
     });
     console.log('First user created:', user1);
@@ -19,7 +19,7 @@ const testDuplicateUsername = async () => {
       email: 'user2@example.com',
       password: 'password2',
       role: 'user',  // Same role
-      tier: 0,  // Replace 'free' with the corresponding numeric value
+      tier: "free",  // Default tier should be "free"
       isVerified: false,  // Same verification status
     });
     console.log('Second user created:', user2);

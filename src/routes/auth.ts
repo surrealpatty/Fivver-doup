@@ -33,7 +33,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       username,
       password: hashedPassword,
       role: 'user', // Default role (can be modified)
-      tier: 0,  // Or assign an appropriate numeric value for the 'free' tier
+      tier: "free",  // Default tier should be "free"
       isVerified: false, // Assuming user isn't verified initially
     });
 
