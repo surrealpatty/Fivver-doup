@@ -5,19 +5,32 @@ import { UserPayload } from '../types'; // Import UserPayload for typing
 // Secret key for JWT, fallback to a default if not set in environment variables
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use environment variable or config
 
+// Extend the Request interface to include `user` property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { // Ensure this matches the structure expected in your routes
+        id: string;
+        email?: string;
+        username?: string;
+      } | undefined; // Optional user object
+    }
+  }
+}
+
 // Middleware to authenticate the user using a JWT token
 export const authenticateToken = (
   req: Request, 
   res: Response, 
   next: NextFunction
-): void => {
+): void => { // No return value from this middleware
   // Extract the Authorization header
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
   if (!authorizationHeader) {
     // Send response if Authorization token is missing
     res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Return early to ensure no further execution in this middleware
+    return; // Just return after sending the response, no need for `next()`
   }
 
   // Token is expected in "Bearer <token>" format
@@ -26,7 +39,7 @@ export const authenticateToken = (
   if (!token) {
     // Send response if token part is missing
     res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Return early to ensure no further execution in this middleware
+    return; // Just return after sending the response, no need for `next()`
   }
 
   try {

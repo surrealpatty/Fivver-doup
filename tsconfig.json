@@ -11,7 +11,9 @@
     "allowSyntheticDefaultImports": true,            // Allow default imports from modules without a default export
     "experimentalDecorators": true,                  // Enable support for decorators (useful for TypeORM, etc.)
     "emitDecoratorMetadata": true,                   // Emit metadata for decorators (if using TypeORM or similar)
-   "typeRoots": ["./node_modules/@types", "./src/types"                                 // Include custom types in src/types
+    "typeRoots": [
+      "./node_modules/@types",                       // Default types from node_modules
+      "./src/types"                                  // Include custom types in src/types
     ],
     "baseUrl": "./src",                              // Base directory for module resolution
     "paths": {

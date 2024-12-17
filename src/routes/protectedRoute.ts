@@ -12,7 +12,11 @@ router.get('/protected', authenticateToken, (req: Request, res: Response) => {
   // This route is now protected
   res.status(200).json({ 
     message: 'You have access to this protected route.',
-    user: { id: user.id, email: user.email, username: user.username } // Ensure correct user structure
+    user: { 
+      id: user.id, 
+      email: user.email, 
+      username: user.username 
+    } // Ensure correct user structure
   });
 });
 

@@ -5,7 +5,7 @@ import { UserPayload } from './index'; // Import your UserPayload type
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // Extend Request type with user property
+      user?: UserPayload; // Add user property to the Request interface
     }
   }
 }
