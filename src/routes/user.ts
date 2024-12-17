@@ -5,6 +5,7 @@ import { User } from '../models/user';  // Import the User model (ensure the pat
 import { generateToken } from '../utils/jwt';  // Import the generateToken function (ensure the path is correct)
 import { loginUser } from '../controllers/userController';  // Import the loginUser function
 import { authenticateToken } from '../middlewares/authenticateToken';  // Import the authentication middleware
+import { UserPayload } from '../types';  // Import UserPayload type for better type checking
 
 const router = Router();
 
@@ -58,9 +59,9 @@ router.post(
         user: {
           id: user.id,
           email: user.email,
-          username: user.username
+          username: user.username,
         },
-        token
+        token,
       });
     } catch (err) {
       console.error(err);
@@ -85,8 +86,7 @@ router.post(
     }
 
     // Call the loginUser controller
-    await loginUser(req, res);  // Now this will work, since loginUser is imported
-    return res;  // Ensure the return statement is here to avoid TypeScript errors
+    return loginUser(req, res);  // This already sends a response
   }
 );
 
@@ -101,7 +101,11 @@ router.get(
         return res.status(401).json({ message: 'Unauthorized, no user found in token' });
       }
 
-      const user = await User.findByPk(req.user.id);  // Assuming you have a `User` model
+      // Cast req.user to the correct type
+      const userPayload = req.user as UserPayload;
+
+      // Fetch the user from the database
+      const user = await User.findByPk(userPayload.id);  // Assuming you have a `User` model
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -111,8 +115,8 @@ router.get(
         user: {
           id: user.id,
           email: user.email,
-          username: user.username
-        }
+          username: user.username,
+        },
       });
     } catch (err) {
       console.error(err);
