@@ -1,24 +1,22 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import bodyParser from 'body-parser';  // Import body-parser
 import { sequelize } from './config/database'; // Import sequelize instance
 import userRoutes from './routes/user'; // Import user routes
-import authRoutes from './routes/auth';
-import passwordResetRoutes from './routes/passwordReset'; // Import password reset routes
-import { User } from './models/user'; // Import User model
+import protectedRoutes from './routes/protectedRoute'; // Import protected routes
 
 dotenv.config();
 
 const app: Application = express();
 
 // Middleware setup
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Enable CORS
+app.use(bodyParser.json());  // Parse JSON bodies
 
 // Route setup
-app.use('/api/users', userRoutes); // Register user routes with prefix /api/users
-app.use('/api/auth', authRoutes);   // Register auth routes with prefix /api/auth
-app.use('/api/password-reset', passwordResetRoutes); // Register password reset routes with prefix /api/password-reset
+app.use('/api/users', userRoutes);  // User routes for registration/login
+app.use('/api', protectedRoutes);  // Protected routes
 
 /**
  * Function to sync the database
@@ -26,33 +24,13 @@ app.use('/api/password-reset', passwordResetRoutes); // Register password reset 
  */
 const syncDatabase = async (): Promise<void> => {
   try {
-    await sequelize.authenticate();
+    await sequelize.authenticate();  // Authenticate the connection
     console.log('Database connected successfully!');
-    await sequelize.sync({ alter: true }); // Safely update schema
+    await sequelize.sync({ alter: true }); // Sync with alterations
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1); // Exit the process on failure
-  }
-};
-
-/**
- * Temporary test function to create a test user
- * Only runs in the development environment
- */
-const testCreateUser = async (): Promise<void> => {
-  try {
-    const newUser = await User.create({
-      username: 'testuser',
-      email: 'testuser@example.com',
-      password: 'testpassword',
-      role: 'user',
-      tier: 'free', // Use "free" or "paid" as required by the ENUM type
-      isVerified: false, // Not verified
-    });
-    console.log('Test user created:', newUser.toJSON());
-  } catch (error) {
-    console.error('Error creating test user:', error);
+    process.exit(1);  // Exit on failure
   }
 };
 
@@ -63,11 +41,7 @@ const testCreateUser = async (): Promise<void> => {
 const startServer = async (): Promise<void> => {
   await syncDatabase();
 
-  if (process.env.NODE_ENV === 'development') {
-    await testCreateUser(); // Create test user only in development
-  }
-
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
