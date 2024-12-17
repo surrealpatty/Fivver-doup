@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { registerUser } from '../controllers/userController'; // Import your registerUser controller
-import { validateRegistration } from 'middlewares/validateRegistration'; // Correct import path
+import { validateRegistration } from '../middlewares/validateRegistration';
 import { requestPasswordReset, resetPassword } from '../controllers/passwordResetController'; // Import password reset controllers
 import { User } from '../models/user'; // Import User model to interact with the database
 
