@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express';  // Properly type `Request` and `Response`
-import { body, validationResult } from 'express-validator'; // Validation libraries
-import bcrypt from 'bcryptjs';  // Correct import for bcrypt
-import { User } from '../models/user';  // Import the User model
-import { generateToken } from '../utils/jwt';  // Import the generateToken function
+import { Router, Request, Response } from 'express';  // Import the correct types
+import { body, validationResult } from 'express-validator';  // Validation libraries
+import bcrypt from 'bcryptjs';  // Import bcryptjs for password hashing
+import { User } from '../models/user';  // Import the User model (ensure the path is correct)
+import { generateToken } from '../utils/jwt';  // Import the generateToken function (ensure the path is correct)
+import { loginUser } from '../controllers/userController';  // Import the loginUser function
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post(
     body('tier').optional().isIn(['free', 'paid']).withMessage('Tier must be either free or paid'), // Optional field
     body('isVerified').optional().isBoolean().withMessage('isVerified must be a boolean value'), // Optional field
   ],
-  async (req: Request, res: Response): Promise<Response> => {  // Type the parameters and set return type as Response
+  async (req: Request, res: Response): Promise<Response> => {
     // Validate input
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -52,18 +53,39 @@ router.post(
       const token = generateToken(user);
 
       // Respond with the user data and token
-      return res.status(201).json({ 
-        user: { 
-          id: user.id, 
-          email: user.email, 
-          username: user.username 
-        }, 
-        token 
+      return res.status(201).json({
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username
+        },
+        token
       });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ message: 'Server error' });
     }
+  }
+);
+
+// User login route
+router.post(
+  '/login',
+  [
+    // Validation middleware
+    body('email').isEmail().withMessage('Please provide a valid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  ],
+  async (req: Request, res: Response): Promise<Response> => {
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Call the loginUser controller
+    await loginUser(req, res);  // Now this will work, since loginUser is imported
+    return res;  // Ensure the return statement is here to avoid TypeScript errors
   }
 );
 
