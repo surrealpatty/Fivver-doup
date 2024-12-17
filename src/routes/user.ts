@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express';  // Import the correct types
-import { body, validationResult } from 'express-validator';  // Validation libraries
-import bcrypt from 'bcryptjs';  // Import bcryptjs for password hashing
-import { User } from '../models/user';  // Import the User model (ensure the path is correct)
-import { generateToken } from '../utils/jwt';  // Import the generateToken function (ensure the path is correct)
-import { loginUser } from '../controllers/userController';  // Import the loginUser function
-import { authenticateToken } from '../middlewares/authenticateToken';  // Import the authentication middleware
-import { UserPayload } from '../types';  // Import UserPayload type for better type checking
+import { Router, Request, Response } from 'express';  // Importing necessary types
+import { body, validationResult } from 'express-validator';  // Validation middleware
+import bcrypt from 'bcryptjs';  // For password hashing
+import { User } from '../models/user';  // User model import
+import { generateToken } from '../utils/jwt';  // JWT token generation utility
+import { loginUser } from '../controllers/userController';  // Login controller
+import { authenticateToken } from '../middlewares/authenticateToken';  // Authentication middleware
+import { UserPayload } from '../types';  // Import UserPayload type for type safety
 
 const router = Router();
 
@@ -16,23 +16,23 @@ router.post(
     // Validation middleware
     body('email').isEmail().withMessage('Please provide a valid email address'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-    body('username').optional().isString().withMessage('Username must be a string'), // Optional field
-    body('role').optional().isIn(['user', 'admin']).withMessage('Role must be either user or admin'), // Optional field
-    body('tier').optional().isIn(['free', 'paid']).withMessage('Tier must be either free or paid'), // Optional field
-    body('isVerified').optional().isBoolean().withMessage('isVerified must be a boolean value'), // Optional field
+    body('username').optional().isString().withMessage('Username must be a string'),  // Optional
+    body('role').optional().isIn(['user', 'admin']).withMessage('Role must be either user or admin'),  // Optional
+    body('tier').optional().isIn(['free', 'paid']).withMessage('Tier must be either free or paid'),  // Optional
+    body('isVerified').optional().isBoolean().withMessage('isVerified must be a boolean value'),  // Optional
   ],
   async (req: Request, res: Response): Promise<Response> => {
-    // Validate input
+    // Validate input fields
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Extract the request body fields
+    // Extract data from request body
     const { email, password, username, role, tier, isVerified } = req.body;
 
     try {
-      // Check if the user already exists
+      // Check if user already exists
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         return res.status(400).json({ message: 'User already exists' });
@@ -45,16 +45,16 @@ router.post(
       const user = await User.create({
         email,
         password: hashedPassword,
-        username: username || 'default_username', // Use a default if not provided
-        role: role || 'user', // Default to 'user' if not provided
-        tier: tier || 'free', // Default to 'free' if not provided
+        username: username || 'default_username', // Default username if not provided
+        role: role || 'user', // Default role 'user'
+        tier: tier || 'free', // Default tier 'free'
         isVerified: isVerified || false, // Default to false if not provided
       });
 
       // Generate JWT token
       const token = generateToken(user);
 
-      // Respond with the user data and token
+      // Respond with user info and token
       return res.status(201).json({
         user: {
           id: user.id,
@@ -85,8 +85,8 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Call the loginUser controller
-    return loginUser(req, res);  // This already sends a response
+    // Call the login controller to handle login logic
+    return loginUser(req, res);  // loginUser handles response sending
   }
 );
 
@@ -96,16 +96,16 @@ router.get(
   authenticateToken,  // Protect this route with JWT authentication
   async (req: Request, res: Response): Promise<Response> => {
     try {
-      // The user info is now available via req.user due to the authenticateToken middleware
+      // If user is not authenticated, return 401
       if (!req.user) {
         return res.status(401).json({ message: 'Unauthorized, no user found in token' });
       }
 
-      // Cast req.user to the correct type
+      // Cast req.user to the correct type (UserPayload)
       const userPayload = req.user as UserPayload;
 
-      // Fetch the user from the database
-      const user = await User.findByPk(userPayload.id);  // Assuming you have a `User` model
+      // Find user from the database by ID (from token)
+      const user = await User.findByPk(userPayload.id);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -116,6 +116,69 @@ router.get(
           id: user.id,
           email: user.email,
           username: user.username,
+          role: user.role,
+          tier: user.tier,
+          isVerified: user.isVerified,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  }
+);
+
+// Update user profile route
+router.put(
+  '/profile',
+  authenticateToken,  // Protect this route with JWT authentication
+  [
+    body('email').optional().isEmail().withMessage('Please provide a valid email address'),
+    body('username').optional().isString().withMessage('Username must be a string'),
+    body('role').optional().isIn(['user', 'admin']).withMessage('Role must be either user or admin'),
+    body('tier').optional().isIn(['free', 'paid']).withMessage('Tier must be either free or paid'),
+    body('isVerified').optional().isBoolean().withMessage('isVerified must be a boolean value'),
+  ],
+  async (req: Request, res: Response): Promise<Response> => {
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Ensure the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const userPayload = req.user as UserPayload;
+    const { email, username, role, tier, isVerified } = req.body;
+
+    try {
+      // Find user by ID
+      const user = await User.findByPk(userPayload.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Update the user fields
+      user.email = email || user.email;
+      user.username = username || user.username;
+      user.role = role || user.role;
+      user.tier = tier || user.tier;
+      user.isVerified = isVerified !== undefined ? isVerified : user.isVerified;
+
+      await user.save();
+
+      // Respond with updated user data
+      return res.status(200).json({
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          role: user.role,
+          tier: user.tier,
+          isVerified: user.isVerified,
         },
       });
     } catch (err) {
