@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';  // Import body-parser
 import { sequelize } from './config/database'; // Import sequelize instance
 import userRoutes from './routes/user'; // Import user routes
 import protectedRoutes from './routes/protectedRoute'; // Import protected routes
+import serviceRoutes from './routes/services';  // Import service routes
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());  // Parse JSON bodies
 // Route setup
 app.use('/api/users', userRoutes);  // User routes for registration/login
 app.use('/api', protectedRoutes);  // Protected routes
+app.use('/api/services', serviceRoutes);  // Service routes
 
 /**
  * Function to sync the database

@@ -188,4 +188,50 @@ router.put(
   }
 );
 
+// Password change route
+router.post(
+  '/profile/password',
+  authenticateToken,  // Ensure the user is authenticated
+  [
+    body('oldPassword').isLength({ min: 6 }).withMessage('Old password must be at least 6 characters long'),
+    body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters long'),
+  ],
+  async (req: Request, res: Response): Promise<Response> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const { oldPassword, newPassword } = req.body;
+    const userPayload = req.user as UserPayload;
+
+    try {
+      const user = await User.findByPk(userPayload.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Compare old password with stored password
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Old password is incorrect' });
+      }
+
+      // Hash the new password and update the user
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: 'Password changed successfully' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  }
+);
+
 export default router;

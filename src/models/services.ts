@@ -49,7 +49,7 @@ Service.init(
       allowNull: false,  // Price must be provided
     },
     userId: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING,  // This should match the type of your userId field (you can change this to `INTEGER` if necessary)
       allowNull: false,  // User ID must be provided
     },
     image: {
