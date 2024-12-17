@@ -4,18 +4,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Define the User attributes interface
 interface UserAttributes {
-  id: string;
+  id: string; // Ensure the id is UUID (string)
   email: string;
   username: string;
   password: string;
   role: string;
-  tier: number;
+  tier: number; // Ensure tier is an integer
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
 }
 
-// Define creation attributes interface
+// Define creation attributes interface (id is optional for creation)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 // Define the User model class
@@ -25,7 +25,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: number;
+  public tier!: number; // Ensure this is a number
   public isVerified!: boolean;
   public passwordResetToken?: string | null;
   public passwordResetTokenExpiry?: Date | null;
@@ -48,7 +48,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: true, // Validate the email format
+        isEmail: true, // Ensure the email format is valid
       },
     },
     username: {
@@ -61,32 +61,32 @@ User.init(
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: true, // Changed to true to make it optional
-      defaultValue: 'user', // Optional: Set a default value
+      allowNull: true, // Optional role
+      defaultValue: 'user', // Default to 'user' if no role is specified
     },
     tier: {
-      type: DataTypes.INTEGER, // Set as INTEGER to allow number values
-      allowNull: true, // Change to true to make it optional
-      defaultValue: 0, // Optional: Set a default value (0 or any other number)
+      type: DataTypes.INTEGER, // Ensure 'tier' is an integer (0 or 1 for free/paid)
+      allowNull: true, // Allow null value if no tier is provided
+      defaultValue: 0, // Default to 0 ('free' tier)
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: true, // Change to true to make it optional
-      defaultValue: false, // Optional: Set a default value
+      allowNull: true, // Allow null if not verified
+      defaultValue: false, // Default to false if not verified
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true, // Can be null if not in use
+      allowNull: true, // Can be null if no reset token is used
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true, // Can be null if not in use
+      allowNull: true, // Can be null if no expiry date is set
     },
   },
   {
     sequelize, // Pass the Sequelize instance
     modelName: 'User', // Define the model name
-    tableName: 'users', // Ensure this matches your table name
+    tableName: 'users', // Make sure this matches your actual database table name
     timestamps: true, // Automatically add createdAt and updatedAt fields
   }
 );

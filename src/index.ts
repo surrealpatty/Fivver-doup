@@ -44,7 +44,7 @@ const testCreateUser = async (): Promise<void> => {
       email: 'testuser@example.com',
       password: 'testpassword',
       role: 'user', // Add missing properties (set appropriate values)
-      tier: 1, // Assuming tier is a number, adjust as needed
+      tier: 0, // Correct integer value for 'free' tier
       isVerified: false, // Assuming isVerified is a boolean
     });
     console.log('User created:', newUser);
@@ -59,7 +59,7 @@ const startServer = async (): Promise<void> => {
 
   // Run test function only in a development environment
   if (process.env.NODE_ENV === 'development') {
-    await testCreateUser();
+    await testCreateUser(); // Call the testCreateUser function here
   }
 
   const PORT = process.env.PORT || 3000;
