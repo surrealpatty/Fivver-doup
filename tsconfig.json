@@ -22,7 +22,7 @@
       "@controllers/*": ["controllers/*"],           // Alias for controllers directory
       "@routes/*": ["routes/*"],                     // Alias for routes directory
       "@config/*": ["config/*"],                     // Alias for config directory
-      "@middlewares/*": ["middlewares/*"]             // Alias for middlewares directory
+      "@middlewares/*": ["middlewares/*"]            // Alias for middlewares directory
     },
     "noEmit": true,                                  // Prevents any output files from being emitted
     "rootDir": "./src",                              // Root directory of source files
