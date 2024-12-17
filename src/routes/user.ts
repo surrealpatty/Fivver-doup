@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { User } from '../models/user'; // Import User model for handling user data
-import { registerUser } from '../controllers/userController'; // User registration controller
-import { validateRegistration } from '../middlewares/validateRegistration'; 
-import { requestPasswordReset, resetPassword } from '../controllers/passwordResetController'; // Password reset controllers
+import { registerUser } from '../controllers/userController'; // Import your registerUser controller
+import { validateRegistration } from 'middlewares/validateRegistration'; // Correct import path
+import { requestPasswordReset, resetPassword } from '../controllers/passwordResetController'; // Import password reset controllers
+import { User } from '../models/user'; // Import User model to interact with the database
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.post('/password-reset/request', requestPasswordReset);
 // Route to reset the password with a token
 router.post('/password-reset/reset', resetPassword);
 
-// Example route: Get all users
+// Example route: Get all users (for testing purposes, you can remove it later)
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll(); // Retrieve all users from the database

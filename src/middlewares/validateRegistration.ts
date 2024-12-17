@@ -1,15 +1,21 @@
+// src/middlewares/validateRegistration.ts
 import { Request, Response, NextFunction } from 'express';
 
-// Middleware to validate user registration data
-export const validateRegistration = (req: Request, res: Response, next: NextFunction) => {
-  const { email, username, password } = req.body;
+// Middleware to validate user registration input
+export const validateRegistration = (req: Request, res: Response, next: NextFunction): void | Response => {
+  const { username, email, password } = req.body;
 
-  // Validate that email, username, and password are provided
-  if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Email, username, and password are required' });
+  // Check if username, email, and password are provided
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Username, email, and password are required.' });
   }
 
-  // Additional validation logic (e.g., regex for email format) can be added here
+  // Add more validation checks if necessary (e.g., email format, password strength)
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format.' });
+  }
 
-  next(); // Proceed to the next middleware or route handler if validation passes
+  // If validation passes, proceed to the next middleware/controller
+  next();
 };

@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Import sequelize instance
-import  userRoutes  from './routes/user'; // Import user routes
+import userRoutes from './routes/user'; // Import user routes
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset'; // Import password reset routes
 import { User } from './models/user'; // Import User model
@@ -16,9 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 // Route setup
-app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/password-reset', passwordResetRoutes); // Register password reset routes
+app.use('/api/users', userRoutes); // Register user routes with prefix /api/users
+app.use('/api/auth', authRoutes);   // Register auth routes with prefix /api/auth
+app.use('/api/password-reset', passwordResetRoutes); // Register password reset routes with prefix /api/password-reset
 
 /**
  * Function to sync the database
