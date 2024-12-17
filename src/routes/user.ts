@@ -1,26 +1,32 @@
-import express, { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import { body, validationResult } from 'express-validator';
-import { User } from '../models/user';  // Make sure to have your User model set up
-import { generateToken } from '../utils/jwt';  // Import the JWT helper
+import { Router, Request, Response } from 'express';  // Properly type `Request` and `Response`
+import { body, validationResult } from 'express-validator'; // Validation libraries
+import bcrypt from 'bcryptjs';  // Correct import for bcrypt
+import { User } from '../models/user';  // Import the User model
+import { generateToken } from '../utils/jwt';  // Import the generateToken function
 
-const router = express.Router();
+const router = Router();
 
-// User registration (signup)
+// User registration route
 router.post(
   '/register',
   [
+    // Validation middleware
     body('email').isEmail().withMessage('Please provide a valid email address'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('username').optional().isString().withMessage('Username must be a string'), // Optional field
+    body('role').optional().isIn(['user', 'admin']).withMessage('Role must be either user or admin'), // Optional field
+    body('tier').optional().isIn(['free', 'paid']).withMessage('Tier must be either free or paid'), // Optional field
+    body('isVerified').optional().isBoolean().withMessage('isVerified must be a boolean value'), // Optional field
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<Response> => {  // Type the parameters and set return type as Response
     // Validate input
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, username = 'default_username', role = 'user', tier = 'free', isVerified = false } = req.body;
+    // Extract the request body fields
+    const { email, password, username, role, tier, isVerified } = req.body;
 
     try {
       // Check if the user already exists
@@ -32,24 +38,31 @@ router.post(
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create new user with required fields
+      // Create new user
       const user = await User.create({
         email,
         password: hashedPassword,
-        username,
-        role,
-        tier,
-        isVerified,
+        username: username || 'default_username', // Use a default if not provided
+        role: role || 'user', // Default to 'user' if not provided
+        tier: tier || 'free', // Default to 'free' if not provided
+        isVerified: isVerified || false, // Default to false if not provided
       });
 
       // Generate JWT token
       const token = generateToken(user);
 
       // Respond with the user data and token
-      res.status(201).json({ user: { id: user.id, email: user.email, username: user.username }, token });
+      return res.status(201).json({ 
+        user: { 
+          id: user.id, 
+          email: user.email, 
+          username: user.username 
+        }, 
+        token 
+      });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: 'Server error' });
+      return res.status(500).json({ message: 'Server error' });
     }
   }
 );
