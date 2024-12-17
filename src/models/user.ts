@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Make sure the sequelize instance is correctly imported
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { sequelize } from '../config/database'; // Ensure the sequelize instance is correctly imported
 import { v4 as uuidv4 } from 'uuid';
 
 // Define the User attributes interface
@@ -9,14 +9,16 @@ interface UserAttributes {
   username: string;
   password: string;
   role: string;
-  tier: 'free' | 'paid'; // Change to ENUM to represent 'free' and 'paid'
+  tier: 'free' | 'paid'; // Enum to represent 'free' and 'paid'
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
+  createdAt?: Date; // Optional as Sequelize will handle these
+  updatedAt?: Date;
 }
 
 // Define creation attributes interface (id is optional for creation)
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
 // Define the User model class
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -25,10 +27,12 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: 'free' | 'paid';  // Enum for tier
+  public tier!: 'free' | 'paid'; // Enum for tier
   public isVerified!: boolean;
   public passwordResetToken?: string | null;
   public passwordResetTokenExpiry?: Date | null;
+  public readonly createdAt!: Date; // Automatically handled by Sequelize
+  public readonly updatedAt!: Date; // Automatically handled by Sequelize
 
   static associate(models: any) {
     // Define associations here if necessary (e.g., User has many Posts)
@@ -81,6 +85,16 @@ User.init(
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
       allowNull: true, // Can be null if no expiry date is set
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Use CURRENT_TIMESTAMP for default value
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), // Update timestamp automatically
     },
   },
   {
