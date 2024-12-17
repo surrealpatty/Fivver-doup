@@ -7,7 +7,7 @@ User.create({
   email: 'test@example.com',
   password: 'hashedPasswordHere', // Ensure you hash passwords before inserting
   username: 'testuser',
-  tier: 'free',
+  tier: 0,  // Replace 'free' with the corresponding numeric value
   role: 'user',
   isVerified: false  // Correct property name (camelCase)
 })

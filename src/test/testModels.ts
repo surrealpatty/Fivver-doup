@@ -17,7 +17,7 @@ describe('Service Model Tests', () => {
       email: 'test@example.com',
       password: 'password123',
       role: 'free',
-      tier: 'free',
+      tier: 0,  // Replace 'free' with the corresponding numeric value
       isVerified: true,
       id: uuidv4(), // Generate a unique ID (assuming you're using uuid)
     });
