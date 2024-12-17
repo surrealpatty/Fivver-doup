@@ -29,7 +29,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       username,
       password: hashedPassword,
       role: '', 
-      tier: '', 
+      tier: 0,  // Or whatever numeric value represents the default tier
       isVerified: false,
     });
 
