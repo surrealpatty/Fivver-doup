@@ -1,53 +1,53 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database';
+import { Request, Response } from 'express';
+import { User } from '../models/user';
+import bcrypt from 'bcrypt';
 
-interface UserAttributes {
-  id: string;
-  email: string;
-  password: string;
-  passwordResetToken?: string | null;
-  passwordResetTokenExpiry?: Date | null;
-}
+// Controller for registering a user
+export const registerUser = async (req: Request, res: Response): Promise<void> => {
+    const { email, password, username, role = 'user', tier = 'free', isVerified = false } = req.body;
 
-export class User extends Model<UserAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public password!: string;
-  public passwordResetToken!: string | null;
-  public passwordResetTokenExpiry!: Date | null;
+    try {
+        // Validate input fields
+        if (!email || !password || !username) {
+            res.status(400).json({ message: 'Email, username, and password are required.' });
+            return;
+        }
 
-  // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+        // Check if user already exists
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            res.status(409).json({ message: 'Email is already in use.' });
+            return;
+        }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    passwordResetToken: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    passwordResetTokenExpiry: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'users',
-  }
-);
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create and save the new user
+        const newUser = await User.create({
+            email,
+            username,
+            password: hashedPassword,
+            role,
+            tier,
+            isVerified,
+        });
+
+        // Exclude sensitive fields like password from the response
+        res.status(201).json({
+            message: 'User registered successfully',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                username: newUser.username,
+                role: newUser.role,
+                tier: newUser.tier,
+                isVerified: newUser.isVerified,
+                createdAt: newUser.createdAt,
+            },
+        });
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).json({ message: 'Internal server error', error });
+    }
+};

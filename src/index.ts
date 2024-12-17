@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Import sequelize instance
-import { userRoutes } from './routes/user'; // Import user routes
+import  userRoutes  from './routes/user'; // Import user routes
 import authRoutes from './routes/auth';
 import passwordResetRoutes from './routes/passwordReset'; // Import password reset routes
 import { User } from './models/user'; // Import User model

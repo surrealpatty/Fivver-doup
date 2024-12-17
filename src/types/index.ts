@@ -2,7 +2,8 @@
 
 // Import Request from express
 import { Request } from 'express';
-// Import UserPayload from src/types/user.ts (ensure the path is correct)
+
+// Import the UserPayload interface (ensure the path is correct)
 import { UserPayload } from './user';
 
 // Extend the Express Request interface to include the optional 'user' field
@@ -23,5 +24,5 @@ export interface CreateOrderRequest {
   status: string;
 }
 
-// Re-export the UserPayload interface
+// Re-export the UserPayload interface for external use
 export { UserPayload };

@@ -13,7 +13,7 @@
     "emitDecoratorMetadata": true,                   // Emit metadata for decorators (if using TypeORM or similar)
     "typeRoots": [
       "./node_modules/@types",                       // Default type roots
-      "./src/types"                                  // Include custom types
+      "./src/types"                                  // Include custom types in src/types
     ],
     "baseUrl": "./src",                              // Base directory for module resolution
     "paths": {

@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Correct named import for User model
-import { v4 as uuidv4 } from 'uuid'; 
+import { User } from '../models/user';  // Correct import for User model
+import { v4 as uuidv4 } from 'uuid';  // UUID for generating unique user ID
 
 // User registration handler
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
 
   try {
+    // Input validation
     if (!email || !username || !password) {
       return res.status(400).json({ message: 'Please provide all fields' });
     }
@@ -24,13 +25,13 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 
     // Create a new user 
     const user = await User.create({
-      id: uuidv4(), // Use UUID for ID
+      id: uuidv4(), // Use UUID for unique user ID
       email,
       username,
       password: hashedPassword,
-      role: '', 
-      tier: "free",  // Default tier should be "free"
-      isVerified: false,
+      role: '',  // You can specify the default role here
+      tier: "free",  // Default tier is "free"
+      isVerified: false, // User is not verified initially
     });
 
     return res.status(201).json({
@@ -48,6 +49,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
   const { email, password } = req.body;
 
   try {
+    // Input validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Please provide email and password' });
     }
@@ -67,13 +69,20 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // Generate JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your-default-secret',  // Make sure to use a real secret key in production
+      process.env.JWT_SECRET || 'your-default-secret',  // Ensure to use a strong secret key in production
       { expiresIn: '1h' }
     );
 
     return res.status(200).json({
       message: 'Login successful',
       token,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,  // Send role and tier as part of the response
+        tier: user.tier,
+      },
     });
   } catch (error) {
     console.error('Error during login:', error);
