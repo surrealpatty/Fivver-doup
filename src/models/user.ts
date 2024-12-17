@@ -9,7 +9,7 @@ interface UserAttributes {
   username: string;
   password: string;
   role: string;
-  tier: number; // Changed to number
+  tier: number;
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
@@ -25,13 +25,13 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
   public role!: string;
-  public tier!: number; // Changed to number
+  public tier!: number;
   public isVerified!: boolean;
   public passwordResetToken?: string | null;
   public passwordResetTokenExpiry?: Date | null;
 
   static associate(models: any) {
-    // Define associations here
+    // Define associations here if necessary
   }
 }
 
@@ -61,7 +61,7 @@ User.init(
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: true, // Change to true to make it optional
+      allowNull: true, // Changed to true to make it optional
       defaultValue: 'user', // Optional: Set a default value
     },
     tier: {
