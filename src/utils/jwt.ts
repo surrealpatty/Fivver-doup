@@ -9,11 +9,11 @@ export const generateToken = (user: UserPayload): string => {
   // Create the payload with user details
   const payload: UserPayload = {
     id: user.id,
-    email: user.email, 
+    email: user.email,
     username: user.username,
   };
 
-  // Sign and return the token
+  // Sign and return the token with 1 hour expiration
   return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });  // Token expires in 1 hour
 };
 
@@ -24,6 +24,7 @@ export const verifyToken = (token: string): JwtPayload | null => {
     return jwt.verify(token, SECRET_KEY) as JwtPayload;
   } catch (err) {
     // If token is invalid or expired, return null
+    console.error('Token verification failed:', err);
     return null;
   }
 };

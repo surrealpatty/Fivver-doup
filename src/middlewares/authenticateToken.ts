@@ -23,14 +23,14 @@ export const authenticateToken = (
   req: Request, 
   res: Response, 
   next: NextFunction
-): void => { // No return value from this middleware
+): void => { // Middleware doesn't need to return anything, just call next or send a response
   // Extract the Authorization header
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
   if (!authorizationHeader) {
     // Send response if Authorization token is missing
     res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Just return after sending the response, no need for `next()`
+    return; // Ensure no further code is executed in this middleware after response is sent
   }
 
   // Token is expected in "Bearer <token>" format
@@ -39,7 +39,7 @@ export const authenticateToken = (
   if (!token) {
     // Send response if token part is missing
     res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Just return after sending the response, no need for `next()`
+    return; // Ensure no further code is executed in this middleware after response is sent
   }
 
   try {
