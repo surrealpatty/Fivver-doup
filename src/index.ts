@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';  // Import body-parser
 import { sequelize } from './config/database'; // Import sequelize instance
 import userRoutes from './routes/user'; // Import user routes
 import protectedRoutes from './routes/protectedRoute'; // Import protected routes
-import serviceRoutes from './routes/services';  // Import service routes
+import serviceRoutes from './routes/service';  // Corrected import
 
 dotenv.config();
 
