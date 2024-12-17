@@ -1,47 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                              // Use modern JavaScript features (ES2020)
-    "module": "ESNext",                               // Use ESNext modules for Vue 3
-    "moduleResolution": "node",                       // Resolve modules like Node.js
-    "esModuleInterop": true,                          // Enable interoperability between CommonJS and ES modules
-    "skipLibCheck": true,                             // Skip type checking of declaration files for faster compilation
-    "strict": true,                                   // Enable strict type checking (better type safety)
-    "forceConsistentCasingInFileNames": true,         // Ensure consistent casing in file names
-    "resolveJsonModule": true,                        // Allow importing JSON files as modules
-    "allowSyntheticDefaultImports": true,             // Allow default imports from modules without a default export
-    "experimentalDecorators": true,                   // Enable support for decorators (useful for TypeORM, etc.)
-    "emitDecoratorMetadata": true,                    // Emit metadata for decorators (if using TypeORM or similar)
+    "target": "ES2020",
+    "module": "CommonJS",                              // Reverting back to CommonJS for Node.js compatibility
+    "moduleResolution": "node",                        // Resolve modules like Node.js
+    "esModuleInterop": true,                           // Enable interoperability between CommonJS and ES modules
+    "skipLibCheck": true,                              // Skip type checking of declaration files for faster compilation
+    "strict": true,                                    // Enable strict type checking (better type safety)
+    "forceConsistentCasingInFileNames": true,          // Ensure consistent casing in file names
+    "resolveJsonModule": true,                         // Allow importing JSON files as modules
+    "allowSyntheticDefaultImports": true,              // Allow default imports from modules without a default export
+    "experimentalDecorators": true,                    // Enable support for decorators (useful for TypeORM, etc.)
+    "emitDecoratorMetadata": true,                     // Emit metadata for decorators (if using TypeORM or similar)
     "typeRoots": [
-      "./node_modules/@types",                        // Default types from node_modules
-      "./src/types"                                   // Include custom types in src/types
+      "./node_modules/@types",                         // Default types from node_modules
+      "./src/types"                                    // Include custom types in src/types
     ],
-    "baseUrl": "./src",                               // Base directory for module resolution
+    "baseUrl": "./src",                                // Base directory for module resolution
     "paths": {
-      "@types/*": ["types/*"],                        // Alias for types directory
-      "@models/*": ["models/*"],                      // Alias for models directory
-      "@controllers/*": ["controllers/*"],            // Alias for controllers directory
-      "@routes/*": ["routes/*"],                      // Alias for routes directory
-      "@config/*": ["config/*"],                      // Alias for config directory
-      "@middlewares/*": ["middlewares/*"]             // Alias for middlewares directory
+      "@types/*": ["types/*"],                         // Alias for types directory
+      "@models/*": ["models/*"],                       // Alias for models directory
+      "@controllers/*": ["controllers/*"],             // Alias for controllers directory
+      "@routes/*": ["routes/*"],                       // Alias for routes directory
+      "@config/*": ["config/*"],                       // Alias for config directory
+      "@middlewares/*": ["middlewares/*"]              // Alias for middlewares directory
     },
-    "noEmit": true,                                   // Prevents any output files from being emitted
-    "rootDir": "./src",                               // Root directory of source files
-    "lib": ["ES2020", "DOM"],                         // Include ES2020 and DOM libraries
-    "sourceMap": true,                                // Generate source maps for debugging
-    "allowJs": true,                                  // Allows JS files in TypeScript project
-    "checkJs": true,                                  // Optionally checks JavaScript files for errors
-    "jsx": "preserve",                                // Enable JSX/TSX support for Vue 3
-    "types": ["vue"]                                  // Ensure Vue 3 types are available
+    "noEmit": true,                                    // Prevents any output files from being emitted
+    "rootDir": "./src",                                // Root directory of source files
+    "lib": ["ES2020", "DOM"],                          // Include ES2020 and DOM libraries
+    "sourceMap": true,                                 // Generate source maps for debugging
+    "allowJs": true,                                   // Allows JS files in TypeScript project
+    "checkJs": true,                                   // Optionally checks JavaScript files for errors
+    "types": ["vue"],                                  // Ensure Vue 3 types are available
+    "jsx": "preserve"                                  // Keep JSX preserved for Vue components
   },
   "include": [
-    "src/**/*",                                       // Include all .ts and .js files inside src
-    "src/types/**/*.d.ts"                             // Include all .d.ts files in the types folder
+    "src/**/*",                                        // Include all .ts and .js files inside src
+    "src/types/**/*.d.ts"                              // Include all .d.ts files in the types folder
   ],
   "exclude": [
-    "node_modules",                                   // Exclude node_modules from compilation
-    "dist",                                           // Exclude dist folder
-    "fivver-frontend",                                // Exclude frontend code (if separate)
-    "*.config.ts",                                    // Exclude configuration files
-    "*.setup.ts"                                      // Exclude Jest or other setup files
+    "node_modules",                                    // Exclude node_modules from compilation
+    "dist",                                            // Exclude dist folder
+    "fivver-frontend",                                 // Exclude frontend code (if separate)
+    "*.config.ts",                                     // Exclude configuration files
+    "*.setup.ts"                                       // Exclude Jest or other setup files
   ]
 }
