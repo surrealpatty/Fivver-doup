@@ -4,7 +4,7 @@ const config: JestConfigWithTsJest = {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json', // Ensure jest uses the tsconfig.json
+      tsconfig: '<rootDir>/tsconfig.json', // Ensure Jest uses the correct tsconfig
     },
   },
   testEnvironment: 'node', // Running tests in a Node environment
