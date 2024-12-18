@@ -1,10 +1,10 @@
 import { Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';  // Add JwtPayload for better type inference
+import jwt from 'jsonwebtoken';
 import { CustomAuthRequest, UserPayload } from '../types'; // Correct import for CustomAuthRequest and UserPayload
 
 // Middleware to authenticate a token
 export const authenticateToken = (
-  req: CustomAuthRequest, // Use CustomAuthRequest for req type
+  req: CustomAuthRequest,  // Use CustomAuthRequest for req type
   res: Response,
   next: NextFunction
 ) => {
@@ -15,15 +15,14 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'No token provided' });
   }
 
-  // Verify the token
-  jwt.verify(token, process.env.JWT_SECRET!, (err, user: JwtPayload | UserPayload | undefined) => {  // Allow undefined
+  // Verify the token with the correct callback signature
+  jwt.verify(token, process.env.JWT_SECRET!, (err: jwt.JsonWebTokenError | null, decoded: UserPayload | JwtPayload | undefined) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
 
-    // Type assertion to cast user to UserPayload
-    if (user) {
-      req.user = user as UserPayload; // Ensure user matches the UserPayload structure
+    if (decoded) {
+      req.user = decoded as UserPayload; // Cast 'decoded' to 'UserPayload'
       next();
     } else {
       return res.status(401).json({ message: 'Authentication failed' });

@@ -10,9 +10,9 @@ export interface UserPayload {
   role?: 'admin' | 'user';
 }
 
-// Extend the Express Request interface to include the optional 'user' field
+// Define the CustomAuthRequest interface extending Express Request
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // The 'user' field is optional and will be added in authenticateToken middleware
+  user?: UserPayload; // This adds the 'user' field to the Request type
 }
 
 // Export other types if needed
