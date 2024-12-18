@@ -1,18 +1,18 @@
 import express from 'express';
 import Service from '../models/services'; // Correctly import the Service model
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
-import { checkRole } from '../middlewares/checkRole'; // Import checkRole middleware to verify user role
+import { checkRole } from '../middlewares/roleMiddleware'; // Import checkRole middleware to verify user role
 import { updateService } from '../controllers/serviceController'; // Import updateService from the controller
 
 const router = express.Router();
 
 // Premium service route accessible only to paid users
 router.get('/premium-service', authenticateToken, checkRole('paid'), (req, res) => {
-    res.status(200).send({ message: 'Premium service access granted.' });
+  res.status(200).send({ message: 'Premium service access granted.' });
 });
 
 // PUT route to update a service by ID
-router.put('/:id', updateService); // Use the updateService function for PUT requests
+router.put('/:id', authenticateToken, checkRole('admin'), updateService); // Use the updateService function for PUT requests
 
 // Example route to get all services
 router.get('/', async (req, res) => {

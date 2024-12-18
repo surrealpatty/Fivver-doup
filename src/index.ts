@@ -7,7 +7,8 @@ import retry from 'retry-as-promised'; // Import retry-as-promised
 import { userRoutes } from './routes/user'; // Named import for user routes
 import protectedRoutes from './routes/protectedRoute'; // Import protected routes
 import serviceRoutes from './routes/service'; // Import service routes
-import indexRoutes  from './routes/index'; // Import root endpoint route
+import  indexRoutes  from './routes/index'; // If it's a named export
+
 
 dotenv.config();
 

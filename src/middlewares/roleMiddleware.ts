@@ -13,12 +13,14 @@ export const checkRole = (requiredRole: string) => {
 
     // Check if the user and role exist
     if (!user || !user.role) {
-      return res.status(403).json({ message: 'User role is missing or not authorized' });
+      res.status(403).json({ message: 'User role is missing or not authorized' });
+      return;  // Early exit, don't proceed to next middleware
     }
 
     // Check if the user's role matches the required role
     if (user.role !== requiredRole) {
-      return res.status(403).json({ message: 'Forbidden: Insufficient role' });
+      res.status(403).json({ message: 'Forbidden: Insufficient role' });
+      return;  // Early exit, don't proceed to next middleware
     }
 
     // Proceed to the next middleware or route handler
