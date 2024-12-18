@@ -1,6 +1,6 @@
 // src/middlewares/roleMiddleware.ts
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Correct import path
+import { CustomAuthRequest, UserPayload } from '../types';  // Ensure correct import path
 
 // Middleware to check the user's role
 export const checkRole = (requiredRole: 'admin' | 'paid') => {
