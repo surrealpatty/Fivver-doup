@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import Service from '../models/services'; // Correctly import the Service model
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
 import { checkRole } from '../middlewares/roleMiddleware'; // Import checkRole middleware to verify user role
 import { updateService } from '../controllers/serviceController'; // Import updateService from the controller
-import { AuthRequest } from '../types'; // Import AuthRequest type for proper type inference
+import { CustomAuthRequest } from '../types'; // Import CustomAuthRequest type for proper type inference
 
 const router = express.Router();
 
@@ -12,16 +12,14 @@ router.get(
   '/premium-service',
   authenticateToken,
   checkRole('paid'),
-  (req: AuthRequest, res) => {
+  (req: CustomAuthRequest, res: Response) => {  // Use CustomAuthRequest for req typing
     const user = req.user; // Access `user` from req.user (type-safe)
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized access' }); // Ensure user exists
     }
-    res
-      .status(200)
-      .json({
-        message: `Welcome ${user.username}, you have access to the premium service.`,
-      });
+    res.status(200).json({
+      message: `Welcome ${user.username}, you have access to the premium service.`,
+    });
   }
 );
 
@@ -29,7 +27,7 @@ router.get(
 router.put('/:id', authenticateToken, checkRole('admin'), updateService); // Use the updateService function for PUT requests
 
 // Example route to get all services
-router.get('/', async (req, res) => {
+router.get('/', async (req: CustomAuthRequest, res: Response) => { // Use CustomAuthRequest for req typing
   try {
     const services = await Service.findAll(); // Fetch all services
     res.status(200).json(services); // Respond with status 200 and services
@@ -43,7 +41,7 @@ router.post(
   '/create',
   authenticateToken,
   checkRole('admin'),
-  async (req: AuthRequest, res) => {
+  async (req: CustomAuthRequest, res: Response) => {  // Use CustomAuthRequest for req typing
     try {
       const { title, description, price, userId } = req.body; // Expecting these in the request body
       const service = await Service.create({
