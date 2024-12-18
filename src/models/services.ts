@@ -8,8 +8,8 @@ export interface ServiceAttributes {
   title: string;
   description: string;
   price: number;
-  userId: number;
-  image?: string;  // Add image property (optional)
+  userId: string;  // Change userId type to string (for UUID)
+  image?: string;  // Optional image field
 }
 
 // Define the attributes for creation where 'id' is optional (it's auto-generated)
@@ -21,7 +21,7 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   title!: string;
   description!: string;
   price!: number;
-  userId!: number;
+  userId!: string;  // Change userId type to string (for UUID)
   image?: string;  // Define image as optional
 }
 
@@ -45,7 +45,7 @@ Service.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,  // Change to STRING to handle UUID as a string
       allowNull: false,
     },
     image: {
