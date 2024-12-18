@@ -1,46 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                             
-    "module": "ESNext",                             
-    "moduleResolution": "node",                     
-    "esModuleInterop": true,                        
-    "skipLibCheck": true,                           
-    "strict": true,                                 
-    "forceConsistentCasingInFileNames": true,       
-    "resolveJsonModule": true,                      
-    "allowSyntheticDefaultImports": true,           
-    "experimentalDecorators": true,                 
-    "emitDecoratorMetadata": true,                  
-    "typeRoots": ["./node_modules/@types", "./src/types"], 
-    "baseUrl": "./",                                
+    "target": "ESNext",  // Adjust as needed, this determines the JS version output
+    "module": "CommonJS",  // For Node.js projects
+    "strict": true,  // Enables all strict type-checking options
+    "esModuleInterop": true,  // Ensures compatibility with CommonJS and ES modules
+    "skipLibCheck": true,  // Skip type checking of declaration files for faster compilation
+    "forceConsistentCasingInFileNames": true,  // Ensures that file names are consistent across the project
+    "baseUrl": "./src",  // Set the base directory for module resolution
     "paths": {
-      "@/*": ["src/*"],                             
-      "@dist/*": ["dist/*"],                        
-      "@types/*": ["src/types/*"],                  
-      "@models/*": ["src/models/*"],                
-      "@controllers/*": ["src/controllers/*"],      
-      "@routes/*": ["src/routes/*"],                
-      "@config/*": ["src/config/*"],                // Corrected path for config alias
-      "@middlewares/*": ["src/middlewares/*"],      
-      "@shared/*": ["src/shared/*"]                 
+      "*": ["node_modules/*", "src/*"]  // Include 'src' as a valid path for module resolution
     },
-    "noEmit": true,                                 
-    "rootDir": "./src",                             
-    "lib": ["ES2020", "DOM"],                       
-    "sourceMap": true,                              
-    "allowJs": true,                                
-    "checkJs": true                                 
+    "outDir": "./dist",  // Specify the output directory for compiled files
+    "moduleResolution": "node",  // Resolve modules in a Node.js style
+    "allowJs": true,  // Allow JavaScript files to be compiled (optional)
+    "resolveJsonModule": true,  // Allow importing JSON modules
+    "noEmit": false  // Ensure TypeScript compiles files instead of just checking types
   },
   "include": [
-    "src/**/*",                                     
-    "src/types/**/*.d.ts"                           
+    "src/**/*"  // Ensure all source files in 'src' directory are included
   ],
   "exclude": [
-    "node_modules",                                 
-    "dist",                                         
-    "fivver-frontend",                              
-    "*.config.ts",                                  
-    "*.setup.ts",                                   
-    "jest.config.ts"                                
+    "node_modules"  // Exclude the 'node_modules' directory to speed up compilation
   ]
 }

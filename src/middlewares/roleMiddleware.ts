@@ -1,3 +1,4 @@
+// src/middlewares/roleMiddleware.ts
 import { Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 
