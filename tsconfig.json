@@ -9,6 +9,8 @@
     "baseUrl": "./src",  // The base directory for resolving modules
     "paths": {
       "@config/*": ["src/config/*"],  // Alias '@config' to 'src/config'
+      "@middlewares/*": ["src/middlewares/*"],  // Alias '@middlewares' to 'src/middlewares'
+      "@types/*": ["src/types/*"],  // Add alias '@types' to 'src/types'
       "*": ["node_modules/*", "src/*"]  // Resolves all files in 'src' and 'node_modules'
     },
     "outDir": "./dist",  // The directory where compiled files will be output
