@@ -1,7 +1,6 @@
-// src/middlewares/authenticateToken.ts
 import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Correct import path
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { CustomAuthRequest, UserPayload } from '../types';  // Correct the import to match your types
 
 // Middleware to authenticate a token
 export const authenticateToken = (
@@ -17,13 +16,13 @@ export const authenticateToken = (
   }
 
   // Verify the token
-  jwt.verify(token, process.env.JWT_SECRET!, (err: jwt.JsonWebTokenError | null, decoded: UserPayload | undefined) => {  // Updated to use UserPayload
+  jwt.verify(token, process.env.JWT_SECRET!, (err: jwt.JsonWebTokenError | null, decoded: JwtPayload | UserPayload | undefined) => {  // Updated to use JwtPayload | UserPayload
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
 
     if (decoded) {
-      req.user = decoded; // Assign decoded user to req.user
+      req.user = decoded as UserPayload; // Type assertion to UserPayload
       next();
     } else {
       return res.status(401).json({ message: 'Authentication failed' });
