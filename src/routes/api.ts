@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { AuthRequest } from '../types/index'; // Import the correct path for AuthRequest
-import { UserPayload } from '../types/index'; // Import the correct path for UserPayload
-import { CustomAuthRequest} from '../types/index';  // Use the alias if tsconfig paths are set correctly
-
+import { CustomAuthRequest } from '../types/index';  // Use the correct CustomAuthRequest type
+import { UserPayload } from '../types/index'; // Import UserPayload
 
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
 
 // Middleware to check if the user is authenticated
 export const checkAuth = (
-  req: AuthRequest,  // Use AuthRequest instead of Request
+  req: CustomAuthRequest,  // Use CustomAuthRequest instead of AuthRequest
   res: Response,
   next: NextFunction
 ): void => {
@@ -31,8 +29,13 @@ export const checkAuth = (
       console.warn('User payload is missing email');
     }
 
+    // Handle the case where username is optional and may be undefined
+    if (decoded.username === undefined) {
+      console.warn('User payload is missing username');
+    }
+
     // Attach user information to the request object for further use in the route
-    req.user = decoded;  // TypeScript will now know req.user is of type AuthRequest
+    req.user = decoded;  // TypeScript will now know req.user is of type CustomAuthRequest
 
     // Proceed to the next middleware or route handler
     next();
