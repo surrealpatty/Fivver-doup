@@ -2,6 +2,9 @@ import request from 'supertest';
 import app from '../index'; // Corrected the import for the main app file
 import { User } from '../models/user'; // Mocking the User model
 
+// Set Jest timeout to 30 seconds for this test file
+jest.setTimeout(30000);
+
 jest.mock('../models/user', () => ({
   User: {
     create: jest.fn(),

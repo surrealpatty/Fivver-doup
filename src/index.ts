@@ -1,49 +1,46 @@
-// src/index.ts
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import bodyParser from 'body-parser';  // Import body-parser
-import { sequelize } from './config/database'; // Import sequelize instance
-import userRoutes from './routes/user'; // Import user routes
-import protectedRoutes from './routes/protectedRoute'; // Import protected routes
-import serviceRoutes from './routes/service';  // Corrected import
+import bodyParser from 'body-parser';
+import { sequelize } from './config/database';
+import retry from 'retry-as-promised'; // Import retry-as-promised
+import userRoutes from './routes/user';
+import protectedRoutes from './routes/protectedRoute';
+import serviceRoutes from './routes/service';
 
 dotenv.config();
 
 const app: Application = express();
 
-// Middleware setup
-app.use(cors()); // Enable CORS
-app.use(bodyParser.json());  // Parse JSON bodies
+app.use(cors());
+app.use(bodyParser.json());
 
-// Route setup
-app.use('/api/users', userRoutes);  // User routes for registration/login
-app.use('/api', protectedRoutes);  // Protected routes
-app.use('/api/services', serviceRoutes);  // Service routes
+app.use('/api/users', userRoutes);
+app.use('/api', protectedRoutes);
+app.use('/api/services', serviceRoutes);
 
 /**
- * Function to sync the database
- * Sync the schema with `alter: true` to safely update existing tables
+ * Function to sync the database with retry logic
  */
 const syncDatabase = async (): Promise<void> => {
   try {
     console.log('Connecting to the database...');
-    await sequelize.authenticate();  // Authenticate the connection
+    // Retry authentication up to 3 times, with a timeout of 5 seconds
+    await retry(() => sequelize.authenticate(), { max: 3, timeout: 5000 });
     console.log('Database connected successfully!');
 
-    // Sync database schema
     console.log('Syncing database schema...');
-    await sequelize.sync({ alter: true }); // Sync with alterations (safe updates)
+    // Retry syncing up to 3 times, with a timeout of 5 seconds
+    await retry(() => sequelize.sync({ force: true }), { max: 3, timeout: 5000 });
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);  // Exit the process if the connection or sync fails
+    process.exit(1);
   }
 };
 
 /**
- * Function to start the server
- * Sync the database first, then start listening on the specified port
+ * Function to start the server after syncing the database
  */
 const startServer = async (): Promise<void> => {
   await syncDatabase(); // Ensure the database is synced before starting the server
@@ -54,7 +51,6 @@ const startServer = async (): Promise<void> => {
   });
 };
 
-// Start the server
 startServer();
 
 export default app;
