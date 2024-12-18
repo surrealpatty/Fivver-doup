@@ -1,43 +1,46 @@
-// src/test/sample.test.ts
+import Service, { ServiceAttributes } from '../models/services';
+import { User } from '../models/user';
+import { sequelize } from '../config/database';
+import { v4 as uuidv4 } from 'uuid';
 
-// Example sum function defined directly in the test file
-function sum(a: number, b: number): number {
-  return a + b;
-}
+describe('Service Model Tests', () => {
+  let user: User;  // Declare user at the top to use across tests
 
-// Jest Test Suite for the sum function
-describe('Sum Function Tests', () => {
-  // Optional setup before all tests
-  beforeAll(() => {
-    console.log('Setting up before this test suite...');
-    // Any global setup logic can go here
+  beforeAll(async () => {
+    // Sync the database (ensure it's ready before tests)
+    await sequelize.sync({ force: true });
+
+    // Create a user before tests
+    user = await User.create({
+      username: 'testUser',
+      email: 'test@example.com',
+      password: 'password123',
+      role: 'free',
+      tier: 'free',
+      isVerified: true,
+      id: uuidv4(),
+    });
   });
 
-  // Test cases
-  test('adds 1 + 2 to equal 3', () => {
-    expect(sum(1, 2)).toBe(3);
+  afterAll(async () => {
+    // Close the database connection after tests
+    await sequelize.close();
   });
 
-  test('adds -1 + 1 to equal 0', () => {
-    expect(sum(-1, 1)).toBe(0);
-  });
+  it('should create a new service', async () => {
+    const serviceData: ServiceAttributes = {
+      id: 1,
+      title: 'Test Service',
+      description: 'A test service',
+      price: 10,
+      userId: Number(user.id),  // Ensure userId is a number
+      // Remove the image property since it's not in ServiceAttributes
+    };
 
-  test('adds 0 + 0 to equal 0', () => {
-    expect(sum(0, 0)).toBe(0);
-  });
+    const service = await Service.create(serviceData);
 
-  // Additional test case
-  test('adds 100 + 200 to equal 300', () => {
-    expect(sum(100, 200)).toBe(300);
-  });
-
-  test('adds -50 + 50 to equal 0', () => {
-    expect(sum(-50, 50)).toBe(0);
-  });
-
-  // Optional cleanup after all tests
-  afterAll(() => {
-    console.log('Cleaning up after this test suite...');
-    // Any cleanup logic can go here if needed
+    expect(service.userId).toBe(Number(user.id));
+    expect(service.title).toBe('Test Service');
+    expect(service.price).toBe(10);
   });
 });

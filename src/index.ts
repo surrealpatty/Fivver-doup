@@ -1,3 +1,4 @@
+// src/index.ts
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -26,13 +27,17 @@ app.use('/api/services', serviceRoutes);  // Service routes
  */
 const syncDatabase = async (): Promise<void> => {
   try {
+    console.log('Connecting to the database...');
     await sequelize.authenticate();  // Authenticate the connection
     console.log('Database connected successfully!');
-    await sequelize.sync({ alter: true }); // Sync with alterations
+
+    // Sync database schema
+    console.log('Syncing database schema...');
+    await sequelize.sync({ alter: true }); // Sync with alterations (safe updates)
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);  // Exit on failure
+    process.exit(1);  // Exit the process if the connection or sync fails
   }
 };
 
@@ -41,7 +46,7 @@ const syncDatabase = async (): Promise<void> => {
  * Sync the database first, then start listening on the specified port
  */
 const startServer = async (): Promise<void> => {
-  await syncDatabase();
+  await syncDatabase(); // Ensure the database is synced before starting the server
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

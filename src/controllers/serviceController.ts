@@ -1,6 +1,5 @@
-// src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import Service, { ServiceAttributes } from 'models/services';  // Corrected
+import Service, { ServiceAttributes } from '../models/services';  // Correct import with curly braces
 
 export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -24,7 +23,7 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
 
     // Prepare updated data (handle image upload if available)
     const updatedData: Partial<ServiceAttributes> = {  // Use ServiceAttributes for type
-      name: req.body.name,
+      title: req.body.title,  // Correct field name is 'title', not 'name'
       description: req.body.description,
       price: req.body.price,
     };

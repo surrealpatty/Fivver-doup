@@ -1,30 +1,28 @@
-// src/models/service.ts
+// src/models/services.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/database';  // Ensure this path is correct
 
-// Define the attributes for creating a service (Optional properties)
-interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {
-  title: string;
-  description: string;
-  price: number;
-  userId: number;
-}
-
 // Define the actual attributes of the Service model (includes all fields)
-interface ServiceAttributes {
+export interface ServiceAttributes {
   id: number;
   title: string;
   description: string;
   price: number;
   userId: number;
+  image?: string;  // Add image property (optional)
 }
 
+// Define the attributes for creation where 'id' is optional (it's auto-generated)
+export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
+
+// Define the Service model
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
   id!: number;
   title!: string;
   description!: string;
   price!: number;
   userId!: number;
+  image?: string;  // Define image as optional
 }
 
 Service.init(
@@ -49,6 +47,10 @@ Service.init(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING,  // Define 'image' as a string (could be URL or file path)
+      allowNull: true,  // Allow image to be optional
     },
   },
   {
