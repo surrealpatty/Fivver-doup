@@ -1,6 +1,7 @@
+// src/models/user.ts
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure the sequelize instance is correctly imported
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; // To generate UUID for the id
 
 // Define the User attributes interface
 interface UserAttributes {
@@ -9,19 +10,19 @@ interface UserAttributes {
   username: string;
   password: string;
   role: string;
-  tier: 'free' | 'paid'; // Enum to represent 'free' and 'paid'
+  tier: 'free' | 'paid'; // Enum for tier
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
-  createdAt?: Date; // Optional as Sequelize will handle these
-  updatedAt?: Date;
+  createdAt?: Date; // Optional, Sequelize handles this
+  updatedAt?: Date; // Optional, Sequelize handles this
+  bio?: string; // Optional bio field
 }
 
-// Define creation attributes interface (id is optional for creation)
+// Define the creation attributes interface (id, createdAt, and updatedAt are optional for creation)
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-// Define the User model class
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
   public username!: string;
@@ -33,9 +34,20 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public passwordResetTokenExpiry?: Date | null;
   public readonly createdAt!: Date; // Automatically handled by Sequelize
   public readonly updatedAt!: Date; // Automatically handled by Sequelize
+  public bio?: string; // Optional field
+
+  // Method to check if the user is paid
+  get isPaid(): boolean {
+    return this.tier === 'paid'; // Based on the 'tier' field, not 'role'
+  }
+
+  // Check if the password matches (simplified for demonstration; should use hashing)
+  checkPassword(password: string): boolean {
+    return this.password === password;
+  }
 
   static associate(models: any) {
-    // Define associations here if necessary (e.g., User has many Posts)
+    // Define any associations if necessary, e.g., User.hasMany(models.Post);
   }
 }
 
@@ -44,7 +56,7 @@ User.init(
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: uuidv4,
+      defaultValue: uuidv4, // Generate a UUID by default
       primaryKey: true,
       allowNull: false,
     },
@@ -52,7 +64,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: true, // Validate email format
+        isEmail: true, // Ensure the email is valid
       },
     },
     username: {
@@ -66,30 +78,34 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: true, // Optional role
-      defaultValue: 'user', // Default to 'user'
+      defaultValue: 'user', // Default role is 'user'
     },
     tier: {
-      type: DataTypes.ENUM('free', 'paid'), // Ensure 'tier' is an ENUM with 'free' and 'paid' values
+      type: DataTypes.ENUM('free', 'paid'),
       allowNull: false,
-      defaultValue: 'free', // Default to 'free' if not provided
+      defaultValue: 'free', // Default tier is 'free'
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: false, // Must be verified or not
-      defaultValue: false, // Default to false
+      allowNull: false,
+      defaultValue: false, // Default to not verified
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-      allowNull: true, // Can be null if no reset token is used
+      allowNull: true, // Can be null if no token
     },
     passwordResetTokenExpiry: {
       type: DataTypes.DATE,
-      allowNull: true, // Can be null if no expiry date is set
+      allowNull: true, // Can be null if no expiry set
+    },
+    bio: {
+      type: DataTypes.STRING,
+      allowNull: true, // Optional bio field
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Use CURRENT_TIMESTAMP for default value
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Use the current timestamp
     },
     updatedAt: {
       type: DataTypes.DATE,
@@ -98,10 +114,10 @@ User.init(
     },
   },
   {
-    sequelize, // Pass the Sequelize instance here
-    modelName: 'User', // Define the model name
-    tableName: 'users', // Ensure this matches your actual database table name
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    sequelize, // Sequelize instance
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in the database
+    timestamps: true, // Automatically handle createdAt and updatedAt
   }
 );
 

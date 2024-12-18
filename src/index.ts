@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { sequelize } from './config/database';
 import retry from 'retry-as-promised'; // Import retry-as-promised
-import userRoutes from './routes/user';
+import { userRoutes } from './routes/user'; // Named import
 import protectedRoutes from './routes/protectedRoute';
 import serviceRoutes from './routes/service';
 
