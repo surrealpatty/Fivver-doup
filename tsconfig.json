@@ -10,7 +10,7 @@
     "paths": {
       "@config/*": ["config/*"],  // Alias '@config' to 'src/config'
       "@middlewares/*": ["middlewares/*"],  // Alias '@middlewares' to 'src/middlewares'
-      "@types/*": ["types/*"],  // Alias '@types' to 'src/types'
+      "@types/*": ["src/types/*"],
       "@models/*": ["models/*"],  // Alias '@models' to 'src/models'
       "@controllers/*": ["controllers/*"],  // Alias '@controllers' to 'src/controllers'
       "@routes/*": ["routes/*"],  // Alias '@routes' to 'src/routes'

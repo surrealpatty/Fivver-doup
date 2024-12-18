@@ -17,7 +17,7 @@ const config: JestConfigWithTsJest = {
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1', // Alias for controllers
     '^@routes/(.*)$': '<rootDir>/src/routes/$1', // Alias for routes directory
     '^@config/(.*)$': '<rootDir>/src/config/$1', // Alias for configuration files
-    '^@types/(.*)$': '<rootDir>/src/types/$1', // Alias for TypeScript types
+    '^@types/(.*)$': '<rootDir>/src/types/$1',  // Map @types to src/types
     '^@shared/(.*)$': '<rootDir>/src/shared/$1', // Alias for shared resources
   },
 
