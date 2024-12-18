@@ -121,4 +121,4 @@ User.init(
   }
 );
 
-export default User;
+export default User; // Default export of the User model

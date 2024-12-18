@@ -2,7 +2,7 @@ import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
 import { sequelize } from '../config/database';  // Corrected import for sequelizes
-import { User } from '../models/user';
+import  User  from '../models/user';
 import Service from '../models/services';
 import { Order } from '../models/order';
 import  app  from '../../src/index';  // Import app from src/index directly

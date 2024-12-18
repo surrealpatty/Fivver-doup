@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs'; // Ensure bcryptjs is installed or use bcrypt
-import { User } from '../models/user'; // Sequelize User model
+import  User  from '../models/user'; // Sequelize User model
 import { generateToken } from '../utils/jwt'; // JWT token generation helper
 
 // Controller for logging in a user

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Import User model
+import  User  from '../models/user';  // Import User model
 import { AuthRequest } from '../types';  // Optional: Custom request type for auth
 
 const router = Router();

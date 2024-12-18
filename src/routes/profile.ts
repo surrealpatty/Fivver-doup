@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { User } from '../models/user'; // Import the User model
+import  User  from '../models/user'; // Import the User model
 import { AuthRequest } from '../types'; // Import the AuthRequest type
 
 const router = Router();

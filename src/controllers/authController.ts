@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user';  // Correct import for User model
+import User from '../models/user';
 import { v4 as uuidv4 } from 'uuid';  // UUID for generating unique user ID
 
 // User registration handler
