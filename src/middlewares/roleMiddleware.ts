@@ -8,16 +8,19 @@ export const checkRole = (requiredRole: 'admin' | 'paid') => {
 
     // Ensure the user is authenticated and has the role
     if (!user) {
-      return res.status(401).json({ message: 'User not authenticated' }); // Send response if no user is found
+      res.status(401).json({ message: 'User not authenticated' }); // Send response if no user is found
+      return; // Ensure no further processing occurs after sending the response
     }
 
     // Check if the user has the required role
     if (requiredRole === 'paid' && user.tier !== 'paid') {
-      return res.status(403).json({ message: 'Forbidden: Paid tier required' }); // Send response if user doesn't meet tier
+      res.status(403).json({ message: 'Forbidden: Paid tier required' }); // Send response if user doesn't meet tier
+      return; // Ensure no further processing occurs after sending the response
     }
 
     if (requiredRole === 'admin' && user.role !== 'admin') {
-      return res.status(403).json({ message: 'Forbidden: Admin role required' }); // Send response if user isn't admin
+      res.status(403).json({ message: 'Forbidden: Admin role required' }); // Send response if user isn't admin
+      return; // Ensure no further processing occurs after sending the response
     }
 
     // Proceed to the next middleware or route handler if the user has the required role
