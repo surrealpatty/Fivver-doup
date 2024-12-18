@@ -27,7 +27,7 @@ describe('Service Model Tests', () => {
       title: 'Test Service', // Use 'title' instead of 'name'
       description: 'A test service',
       price: 10,
-      userId: Number(user.id),  // Ensure userId is a number, convert from UUID
+      userId: String(user.id),  // Convert user.id to string (UUID)
     };
 
     // Create the service and ensure it's properly typed

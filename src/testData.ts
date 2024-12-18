@@ -16,7 +16,8 @@ User.create({
 
     // Optionally, insert a test service for the created user
     return Service.create({
-      name: 'Web Development',
+      name: 'Web Development',  // Change this to:
+      title: 'Web Development',  // Correct property name
       description: 'Full-stack web development services.',
       price: 500,
       userId: user.id,  // Link the service to the created user
