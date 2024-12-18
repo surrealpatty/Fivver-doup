@@ -1,8 +1,7 @@
-// config/config.js
+// src/config/config.ts
+import dotenv from 'dotenv';
+dotenv.config();
 
-require('dotenv').config(); // Make sure dotenv is loaded to access environment variables
-
-// Destructure environment variables or set default values
 const {
   DB_HOST = 'localhost',
   DB_USER = 'root',
@@ -10,6 +9,8 @@ const {
   DB_NAME = 'fivver_doup',
   DB_PORT = '3306',  // Default MySQL port
   NODE_ENV = 'development',  // Default to 'development' if not set
+  JWT_SECRET = 'your-secret-key',  // Default JWT secret
+  JWT_EXPIRATION = '1h',  // Default expiration time for JWT
 } = process.env;
 
 // Ensure DB_PORT is a valid number
@@ -19,33 +20,29 @@ if (isNaN(parsedDBPort)) {
   process.exit(1);
 }
 
-// Export different configurations based on the environment
-module.exports = {
-  development: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    host: DB_HOST,
-    dialect: 'mysql',
-    port: parsedDBPort,
-    logging: true,  // Enable logging in development
-  },
-  test: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: `${DB_NAME}_test`,  // Separate test database
-    host: DB_HOST,
-    dialect: 'mysql',
-    port: parsedDBPort,
-    logging: false,  // Disable logging in tests
-  },
-  production: {
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: `${DB_NAME}_prod`,  // Separate production database
-    host: DB_HOST,
-    dialect: 'mysql',
-    port: parsedDBPort,
-    logging: false,  // Disable logging in production
-  },
+// Define the interface for configuration
+export interface Config {
+  DB_HOST: string;
+  DB_USER: string;
+  DB_PASSWORD: string;
+  DB_NAME: string;
+  DB_PORT: number;
+  NODE_ENV: string;
+  JWT_SECRET: string;
+  JWT_EXPIRATION: string;
+}
+
+// Configuration object
+const config: Config = {
+  DB_HOST,
+  DB_USER,
+  DB_PASSWORD,
+  DB_NAME,
+  DB_PORT: parsedDBPort,
+  NODE_ENV,
+  JWT_SECRET,
+  JWT_EXPIRATION,
 };
+
+// Export the configuration as the default export
+export default config;
