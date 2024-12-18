@@ -4,25 +4,26 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { sequelize } from './config/database';
 import retry from 'retry-as-promised'; // Import retry-as-promised
-import { userRoutes } from './routes/user'; // Named import
-import protectedRoutes from './routes/protectedRoute';
-import serviceRoutes from './routes/service';
+import { userRoutes } from './routes/user'; // Named import for user routes
+import protectedRoutes from './routes/protectedRoute'; // Import protected routes
+import serviceRoutes from './routes/service'; // Import service routes
+import indexRoutes  from './routes/index'; // Import root endpoint route
 
 dotenv.config();
 
 const app: Application = express();
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // To parse incoming JSON requests
 
 // Routes
-app.use('/api/users', userRoutes);
-app.use('/api', protectedRoutes);
-app.use('/api/services', serviceRoutes);
+app.use('/api/users', userRoutes); // Register user routes under '/api/users'
+app.use('/api', protectedRoutes); // Register protected routes under '/api'
+app.use('/api/services', serviceRoutes); // Register service routes under '/api/services'
+app.use('/', indexRoutes); // Register root endpoint route under '/'
 
-/**
- * Function to sync the database with retry logic
- */
+// Sync database and start server
 const syncDatabase = async (): Promise<void> => {
   try {
     console.log('Connecting to the database...');
@@ -36,7 +37,7 @@ const syncDatabase = async (): Promise<void> => {
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);
+    process.exit(1); // Exit process if there's an error with DB connection or syncing
   }
 };
 
@@ -46,7 +47,7 @@ const syncDatabase = async (): Promise<void> => {
 const startServer = async (): Promise<void> => {
   await syncDatabase(); // Ensure the database is synced before starting the server
 
-  const PORT = process.env.PORT || 5000; // Default to 5000 if no port is specified or if port 3000 is in use
+  const PORT = process.env.PORT || 5000; // Default to 5000 if no port is specified
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
@@ -55,7 +56,7 @@ const startServer = async (): Promise<void> => {
 // Start the server
 startServer().catch((err) => {
   console.error('Error starting server:', err);
-  process.exit(1);
+  process.exit(1); // Exit process on server startup error
 });
 
 export default app;

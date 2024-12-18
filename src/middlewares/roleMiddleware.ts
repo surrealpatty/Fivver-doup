@@ -1,27 +1,27 @@
-// src/middlewares/roleMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types';  // Correct the import path
+import { UserPayload } from '../types';  // Correct import path to the UserPayload interface
 
-// Extend the Request interface locally to include user
+// Extend the Request interface to include the `user` property
 interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Ensure `user` is required and properly typed
+  user: UserPayload;  // Ensure that `user` is present and properly typed
 }
 
-// Middleware to check the role of the user
-const checkRole = (requiredRole: string) => {
-  return (req: CustomAuthRequest, res: Response, next: NextFunction) => {
-    const user = req.user;  // Now `user` should always exist and have the `role`
+// Middleware to check the user's role
+export const checkRole = (requiredRole: string) => {
+  return (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+    const user = req.user;  // `user` will always exist due to the custom type
 
+    // Check if the user and role exist
     if (!user || !user.role) {
       return res.status(403).json({ message: 'User role is missing or not authorized' });
     }
 
+    // Check if the user's role matches the required role
     if (user.role !== requiredRole) {
       return res.status(403).json({ message: 'Forbidden: Insufficient role' });
     }
 
-    next();  // Proceed if the user has the correct role
+    // Proceed to the next middleware or route handler
+    next();  // No need to return anything here, Express handles the lifecycle
   };
 };
-
-export { checkRole };
