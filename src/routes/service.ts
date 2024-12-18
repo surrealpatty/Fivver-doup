@@ -3,7 +3,7 @@ import Service from '../models/services'; // Correctly import the Service model
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
 import { checkRole } from '../middlewares/roleMiddleware'; // Import checkRole middleware to verify user role
 import { updateService } from '../controllers/serviceController'; // Import updateService from the controller
-import { CustomAuthRequest } from '../types'; // Correct import path
+import { CustomAuthRequest } from '../types';  // Correct import path
 
 const router = express.Router();
 

@@ -8,13 +8,15 @@
     "forceConsistentCasingInFileNames": true,  // Ensures that file names are consistent across the project
     "baseUrl": "./src",  // Set the base directory for module resolution
     "paths": {
+      "@config/*": ["src/config/*"],  // Alias '@config' to 'src/config'
       "*": ["node_modules/*", "src/*"]  // Include 'src' as a valid path for module resolution
     },
     "outDir": "./dist",  // Specify the output directory for compiled files
     "moduleResolution": "node",  // Resolve modules in a Node.js style
     "allowJs": true,  // Allow JavaScript files to be compiled (optional)
     "resolveJsonModule": true,  // Allow importing JSON modules
-    "noEmit": false  // Ensure TypeScript compiles files instead of just checking types
+    "experimentalDecorators": true,  // Enable support for decorators
+    "emitDecoratorMetadata": true     // Emit metadata for decorators (required for Sequelize)
   },
   "include": [
     "src/**/*"  // Ensure all source files in 'src' directory are included
