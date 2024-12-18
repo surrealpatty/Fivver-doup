@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';  // Importing necessary types
+import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';  // Validation middleware
 import bcrypt from 'bcryptjs';  // For password hashing
 import { User } from '../models/user';  // User model import
@@ -7,7 +7,7 @@ import { loginUser } from '../controllers/userController';  // Login controller
 import { authenticateToken } from '../middlewares/authenticateToken';  // Authentication middleware
 import { UserPayload } from '../types';  // Import UserPayload type for type safety
 
-const router = Router();
+const router = express.Router();
 
 // User registration route
 router.post(

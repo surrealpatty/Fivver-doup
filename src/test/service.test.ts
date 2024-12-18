@@ -1,38 +1,56 @@
-// src/test/service.test.ts
 import request from 'supertest';
-import  app  from '../index';  // Ensure this points to your Express app file
+import app from '../index';  // Ensure this points to your Express app file
 import { createMockUserToken } from './testHelpers';  // Assuming this is your helper function for generating tokens
 
 describe('PUT /services/:id', () => {
-  // Mock user token for authentication
-  const userId = '12345';  // Example user ID
-  const token = createMockUserToken(userId);  // Generate mock token
+  let serviceId: string;
+  let token: string;  // Mock or actual token if authentication is required
+
+  // Before each test, create a service to update
+  beforeEach(async () => {
+    // Create a test service for the update test
+    const response = await request(app)
+      .post('/services/create')  // Assuming you have a POST route for creating services
+      .send({
+        title: 'Test Service',
+        description: 'Test Service Description',
+        price: 100,
+        userId: '12345',  // Example userId, make sure this exists or is mocked in the helper
+      });
+    
+    serviceId = response.body.id;  // Store the created service ID
+    token = createMockUserToken('12345');  // Generate or mock a token using a helper function
+  });
 
   // Test case: Service should be updated successfully
   it('should update a service successfully', async () => {
-    // Assuming you have a service with ID 1 in your database for this test
     const response = await request(app)
-      .put('/services/1')
+      .put(`/services/${serviceId}`)
       .set('Authorization', `Bearer ${token}`)  // Mock authentication token
-      .send({ name: 'Updated Service Title', description: 'Updated description', price: 150 });
+      .send({ 
+        title: 'Updated Test Service Title', 
+        description: 'Updated Test Service Description', 
+        price: 150 
+      });
 
     // Check that the status is 200 (OK)
     expect(response.status).toBe(200);
     // Check that the response message matches
     expect(response.body.message).toBe('Service updated successfully');
     // Check that the service fields are updated
-    expect(response.body.service.name).toBe('Updated Service Title');
-    expect(response.body.service.description).toBe('Updated description');
+    expect(response.body.service.title).toBe('Updated Test Service Title');
+    expect(response.body.service.description).toBe('Updated Test Service Description');
     expect(response.body.service.price).toBe(150);
   });
 
   // Test case: Service not found (404 error)
   it('should return 404 if the service is not found', async () => {
-    // Test with an ID that doesn't exist in the database (e.g., ID 9999)
     const response = await request(app)
       .put('/services/9999')  // Assuming service with ID 9999 does not exist
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Non-existent service' });
+      .send({ 
+        title: 'Non-existent Service' 
+      });
 
     // Check that the status is 404 (Not Found)
     expect(response.status).toBe(404);
@@ -43,9 +61,13 @@ describe('PUT /services/:id', () => {
   // Test case: Invalid data (e.g., price is not a number)
   it('should return 400 if the price is invalid', async () => {
     const response = await request(app)
-      .put('/services/1')
+      .put(`/services/${serviceId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Invalid Service Title', description: 'Description with invalid price', price: 'invalid' });
+      .send({ 
+        title: 'Invalid Service Title', 
+        description: 'Description with invalid price', 
+        price: 'invalid' 
+      });
 
     // Check that the status is 400 (Bad Request)
     expect(response.status).toBe(400);
