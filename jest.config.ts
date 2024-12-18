@@ -1,8 +1,10 @@
-module.exports = {
+import type { JestConfigWithTsJest } from 'ts-jest';
+
+const config: JestConfigWithTsJest = {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json', // Ensure jest uses the tsconfig.json
+      tsconfig: '<rootDir>/tsconfig.json', // Ensure jest uses the tsconfig.json
     },
   },
   testEnvironment: 'node', // Running tests in a Node environment
@@ -60,3 +62,5 @@ module.exports = {
   // Match test files based on their extension
   testMatch: ['<rootDir>/src/**/*.test.ts'],
 };
+
+export default config;

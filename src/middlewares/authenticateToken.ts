@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { CustomAuthRequest, UserPayload } from '@types';  // Correct import using the alias
+import { CustomAuthRequest, UserPayload } from '@types';  // Should work if paths are configured correctly
 
 // Middleware to authenticate a token
 export const authenticateToken = (
