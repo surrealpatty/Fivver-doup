@@ -1,7 +1,10 @@
-import type { Config } from 'jest';
-
-const config: Config = {
+module.exports = {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json', // Ensure jest uses the tsconfig.json
+    },
+  },
   testEnvironment: 'node', // Running tests in a Node environment
 
   // Module alias mappings for path resolution
@@ -24,14 +27,14 @@ const config: Config = {
     '^.+\\.ts$': [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig.json',
+        tsconfig: '<rootDir>/tsconfig.json', // Ensure tsconfig.json is used for TypeScript files
       },
     ], // Use ts-jest for TypeScript files
     '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
   },
 
   // Setup script after environment is configured
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Adjust if you have setup files
 
   // Define the root folder for Jest to look for tests
   roots: ['<rootDir>/src'], 
@@ -57,5 +60,3 @@ const config: Config = {
   // Match test files based on their extension
   testMatch: ['<rootDir>/src/**/*.test.ts'],
 };
-
-export default config;

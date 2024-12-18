@@ -2,7 +2,7 @@ import  User  from './user';         // Import the User model
 import Service from './services';     // Import the Service model (ensure this matches the export in services.ts)
 import { Order } from './order';      // Import the Order model
 import { Review } from './review';    // Import the Review model
-import { sequelize } from '@config/database';
+import { sequelize } from '../config/database';
 
 // User can have many services (a user can post many services)
 User.hasMany(Service, { foreignKey: 'userId' });  // Foreign key will be userId in Service

@@ -10,7 +10,8 @@
     "paths": {
       "@config/*": ["src/config/*"],  // Alias '@config' to 'src/config'
       "@middlewares/*": ["src/middlewares/*"],  // Alias '@middlewares' to 'src/middlewares'
-      "@types/*": ["src/types/*"],  // Add alias '@types' to 'src/types'
+      "@types/*": ["src/types/*"],  // Alias '@types' to 'src/types'
+      "@models/*": ["src/models/*"],  // Alias '@models' to 'src/models'
       "*": ["node_modules/*", "src/*"]  // Resolves all files in 'src' and 'node_modules'
     },
     "outDir": "./dist",  // The directory where compiled files will be output
@@ -21,7 +22,7 @@
     "emitDecoratorMetadata": true  // Emits metadata for decorators (required by Sequelize)
   },
   "include": [
-    "src/**/*"  // Includes all files in 'src' directory for type checking
+    "src/**/*"  // Includes all files in the 'src' directory for type checking
   ],
   "exclude": [
     "node_modules"  // Excludes the 'node_modules' directory from type checking
