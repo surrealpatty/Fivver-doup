@@ -6,11 +6,11 @@
     "esModuleInterop": true,  // Ensures compatibility between CommonJS and ES modules
     "skipLibCheck": true,  // Skip type checking of declaration files for faster compilation
     "forceConsistentCasingInFileNames": true,  // Ensures consistent file name casing
-    "baseUrl": "./src",  // The base directory for resolving modules (starting from src folder)
+    "baseUrl": "./src",  // The base directory for resolving modules (starting from the src folder)
     "paths": {
       "@config/*": ["config/*"],  // Alias '@config' to 'src/config'
       "@middlewares/*": ["middlewares/*"],  // Alias '@middlewares' to 'src/middlewares'
-      "@types/*": ["src/types/*"],
+      "@types/*": ["types/*"],  // Correct mapping for '@types' alias (note: "types/*" resolves to "src/types/*")
       "@models/*": ["models/*"],  // Alias '@models' to 'src/models'
       "@controllers/*": ["controllers/*"],  // Alias '@controllers' to 'src/controllers'
       "@routes/*": ["routes/*"],  // Alias '@routes' to 'src/routes'
