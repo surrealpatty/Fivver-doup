@@ -1,3 +1,4 @@
+// src/types/index.ts
 import { Request } from 'express';
 
 // Define the UserPayload interface
