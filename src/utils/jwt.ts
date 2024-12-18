@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Import the correct UserPayload type
 
 // Define the JWT secret key (ensure it's securely stored in your environment variables)
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';  // Fallback to default if not set
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback to default if not set
 
 // Generate JWT token
 export const generateToken = (user: UserPayload): string => {
@@ -14,14 +14,20 @@ export const generateToken = (user: UserPayload): string => {
   };
 
   // Sign and return the token with 1 hour expiration
-  return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });  // Token expires in 1 hour
+  return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token expires in 1 hour
 };
 
 // Verify JWT token
-export const verifyToken = (token: string): JwtPayload | null => {
+export const verifyToken = (token: string): UserPayload | null => {
   try {
-    // Verify the token and return decoded payload
-    return jwt.verify(token, SECRET_KEY) as JwtPayload;
+    // Verify the token and return the decoded payload
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    // Check if decoded payload has the expected fields for UserPayload
+    if (decoded && 'id' in decoded) {
+      return decoded as UserPayload;
+    }
+    return null;
   } catch (err) {
     // If token is invalid or expired, return null
     console.error('Token verification failed:', err);

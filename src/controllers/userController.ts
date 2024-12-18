@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';  // Ensure bcryptjs is installed or use bcrypt
-import { User } from '../models/user';  // Sequelize User model
-import { generateToken } from '../utils/jwt';  // JWT token generation helper
+import bcrypt from 'bcryptjs'; // Ensure bcryptjs is installed or use bcrypt
+import { User } from '../models/user'; // Sequelize User model
+import { generateToken } from '../utils/jwt'; // JWT token generation helper
 
 // Controller for logging in a user
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
@@ -46,5 +46,22 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // Log the error for debugging and send a generic server error response
     console.error('Error logging in user:', error);
     return res.status(500).json({ message: 'Internal server error', error });
+  }
+};
+
+// Example function to get a user by email (optional for testing)
+export const getUser = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const user = await User.findOne({ where: { email: req.body.email } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Respond with the user data
+    return res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error' });
   }
 };

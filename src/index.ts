@@ -46,12 +46,16 @@ const syncDatabase = async (): Promise<void> => {
 const startServer = async (): Promise<void> => {
   await syncDatabase(); // Ensure the database is synced before starting the server
 
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5000; // Default to 5000 if no port is specified or if port 3000 is in use
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 };
 
-startServer();
+// Start the server
+startServer().catch((err) => {
+  console.error('Error starting server:', err);
+  process.exit(1);
+});
 
 export default app;
