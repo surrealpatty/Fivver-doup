@@ -2,7 +2,7 @@
 
 import express from 'express';
 import { resetPassword } from '../controllers/passwordController';
-import { validatePasswordReset } from 'middlewares/validatePasswordReset'; // Correct path
+import { validatePasswordReset } from '@middlewares/validatePasswordReset';
 
 const router = express.Router();
 

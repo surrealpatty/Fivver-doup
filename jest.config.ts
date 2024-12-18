@@ -1,51 +1,61 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  preset: 'ts-jest',  // Use ts-jest for TypeScript support
-  testEnvironment: 'node',  // Running tests in a Node environment
-  
+  preset: 'ts-jest', // Use ts-jest for TypeScript support
+  testEnvironment: 'node', // Running tests in a Node environment
+
   // Module alias mappings for path resolution
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // Root-relative imports
-    '^dist/(.*)$': '<rootDir>/dist/$1',  // Imports from dist
-    '^@models/(.*)$': '<rootDir>/src/models/$1',  // For model imports
-    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',  // For controller imports
-    '^@routes/(.*)$': '<rootDir>/src/routes/$1',  // For route imports
-    '^@config/(.*)$': '<rootDir>/src/config/$1',  // For config imports
-    '^@types/(.*)$': '<rootDir>/src/types/$1',  // For type imports
-    '^@src/(.*)$': '<rootDir>/src/$1',  // For src-related imports
+    '^@/(.*)$': '<rootDir>/src/$1', // Alias for root-relative imports
+    '^dist/(.*)$': '<rootDir>/dist/$1', // Alias for transpiled files in dist
+    '^@models/(.*)$': '<rootDir>/src/models/$1', // Alias for models directory
+    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1', // Alias for controllers
+    '^@routes/(.*)$': '<rootDir>/src/routes/$1', // Alias for routes directory
+    '^@config/(.*)$': '<rootDir>/src/config/$1', // Alias for configuration files
+    '^@types/(.*)$': '<rootDir>/src/types/$1', // Alias for TypeScript types
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1', // Alias for shared resources
   },
 
-  // Ensure Jest finds modules in the 'src' directory
+  // Directories Jest will search for modules
   moduleDirectories: ['node_modules', 'src'], 
 
-  // Transform .ts files using ts-jest and .js files using babel-jest
+  // Transform settings for TypeScript and JavaScript
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],  // Use ts-jest for .ts files
-    '^.+\\.js$': 'babel-jest',  // Use babel-jest for .js files
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.json',
+      },
+    ], // Use ts-jest for TypeScript files
+    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
   },
 
-  // Setup script after environment is configured (if any)
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],  
+  // Setup script after environment is configured
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 
   // Define the root folder for Jest to look for tests
-  roots: ['<rootDir>/src/test'],  
+  roots: ['<rootDir>/src'], 
 
   // Enable code coverage collection
-  collectCoverage: true,  
-  coverageDirectory: '<rootDir>/coverage',  // Directory to store coverage reports
+  collectCoverage: true,
+  coverageDirectory: '<rootDir>/coverage', // Directory to store coverage reports
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.{ts,tsx}', // Collect coverage from TypeScript files
+    '!<rootDir>/src/**/*.d.ts', // Exclude declaration files
+    '!<rootDir>/src/**/index.ts', // Exclude index files
+  ],
 
   // Enable verbose output for test results
-  verbose: true,  
+  verbose: true,
 
   // File extensions to be recognized by Jest
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],  
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
 
   // Treat .ts files as ES modules
-  extensionsToTreatAsEsm: ['.ts'],  
+  extensionsToTreatAsEsm: ['.ts'],
 
   // Match test files based on their extension
-  testMatch: ['<rootDir>/src/**/*.test.ts'], 
+  testMatch: ['<rootDir>/src/**/*.test.ts'],
 };
 
 export default config;

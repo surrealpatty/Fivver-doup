@@ -1,38 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types';
+import { AuthRequest, UserPayload } from '../types'; // Import AuthRequest and UserPayload
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
-
-// Extend the Request interface to guarantee the `user` property
-interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // `user` will be defined when token is valid
-}
-
+// Middleware to authenticate a token
 export const authenticateToken = (
-  req: CustomAuthRequest,  // Use the extended `CustomAuthRequest` interface
+  req: AuthRequest,
   res: Response,
   next: NextFunction
-): void => {  // Explicitly return `void` to indicate no direct response
-  const authorizationHeader = req.headers['authorization'] as string | undefined;
-
-  if (!authorizationHeader) {
-    res.status(401).json({ message: 'Authorization token is missing' }); // Send response in case of error
-    return; // Ensure no further code runs
-  }
-
-  const token = authorizationHeader.split(' ')[1];
+) => {
+  const authHeader = req.headers['authorization']; // Get the authorization header
+  const token = authHeader && authHeader.split(' ')[1]; // Extract the token
 
   if (!token) {
-    res.status(401).json({ message: 'Authorization token is missing' }); // Send response if token is not provided
-    return; // Ensure no further code runs
+    return res.status(401).json({ message: 'No token provided' });
   }
 
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
-    req.user = decoded;  // Set the `user` property
-    next();  // Continue to next middleware/route handler
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid or expired token' });  // Send response if the token is invalid
-  }
+  jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid token' });
+    }
+
+    // Type assertion to cast user to UserPayload
+    req.user = user as UserPayload; // Ensure user matches the UserPayload structure
+    next();
+  });
 };
