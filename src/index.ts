@@ -8,8 +8,7 @@ import { userRoutes } from './routes/user'; // Named import for user routes
 import protectedRoutes from './routes/protectedRoute'; // Import protected routes
 import serviceRoutes from './routes/service'; // Import service routes
 import  indexRoutes  from './routes/index'; // If it's a named export
-import { CustomAuthRequest, UserPayload } from '@types';  // Using the alias configured in tsconfig.json
-
+import { CustomAuthRequest, UserPayload } from '../types';  // Use relative import for testing
 
 dotenv.config();
 
