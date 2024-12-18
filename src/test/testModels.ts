@@ -1,5 +1,5 @@
 import Service, { ServiceAttributes } from '../models/services'; // Import Service and ServiceAttributes
-import { User } from '../models/user'; // Correct named import for User
+import  User  from '../models/user'; // Correct named import for User
 import { sequelize } from '../config/database'; // Import the sequelize instance
 import { v4 as uuidv4 } from 'uuid';
 
