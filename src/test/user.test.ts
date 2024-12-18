@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../index';  // Ensure this points to your main Express app
-import { User } from '../models/user'; // Import the User model for mocking
+import  User  from '../models/user'; // Import the User model for mocking
 
 // Set Jest timeout to 30 seconds for this test file
 jest.setTimeout(30000);

@@ -1,4 +1,4 @@
-import { User } from '../models/user';  // Ensure the path is correct
+import  User  from '../models/user';  // Ensure the path is correct
 
 // Example test for user creation
 describe('User creation test', () => {

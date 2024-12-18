@@ -1,4 +1,4 @@
-import { User } from '../models/user'; // Adjust the path if necessary
+import  User  from '../models/user'; // Adjust the path if necessary
 
 const testDeleteUser = async (userId: number) => {
   try {
