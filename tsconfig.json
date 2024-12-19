@@ -6,9 +6,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-      "baseUrl": "./src",
-      "paths": {
-        "@types": ["types"]
+    "baseUrl": "./src",
+    "paths": {
+      "@types": ["types"]
     },
     "outDir": "./dist",
     "moduleResolution": "node",
