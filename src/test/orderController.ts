@@ -1,6 +1,6 @@
 // src/test/orderController.ts
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Adjust relative path as needed
+import { CustomAuthRequest } from '../types';  // Correct relative path
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
