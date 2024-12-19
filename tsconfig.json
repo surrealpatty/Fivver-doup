@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                   
-    "module": "CommonJS",                 
-    "strict": true,                       
-    "esModuleInterop": true,              
-    "skipLibCheck": true,                 
-    "forceConsistentCasingInFileNames": true,  
-    "baseUrl": "./src",                    // Make sure baseUrl is 'src'
+    "target": "ESNext",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",                    // Ensure baseUrl points to 'src'
     "paths": {
-      "@types": ["src/types"]             // Map '@types' to 'src/types' folder
+      "@types/*": ["types/*"]  // Map '@types' to 'src/types/*'
     },
-    "outDir": "./dist",                    
-    "moduleResolution": "node",            
-    "allowJs": true,                       
-    "resolveJsonModule": true,             
-    "experimentalDecorators": true,        
-    "emitDecoratorMetadata": true         
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*"  // Include everything inside 'src' folder
   ],
   "exclude": [
-    "node_modules"
+    "node_modules"  // Exclude node_modules folder
   ]
 }
