@@ -2,7 +2,7 @@
 
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '@types';  // Ensure correct import based on tsconfig
+import { CustomAuthRequest } from '@types'; // Use path alias
 
 // Define the interface for the decoded token payload
 interface DecodedToken {

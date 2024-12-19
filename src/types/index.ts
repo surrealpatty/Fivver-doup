@@ -1,6 +1,5 @@
 // src/types/index.ts
-
-import { Request } from 'express';
+import { Request } from 'express'; // Importing express types
 
 // Define the user payload interface
 export interface UserPayload {
@@ -11,7 +10,6 @@ export interface UserPayload {
   role?: 'admin' | 'user';  // Optional role
 }
 
-// Custom request type to include the user
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;
+  user: { id: string; email: string; username: string };
 }
