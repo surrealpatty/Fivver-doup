@@ -1,7 +1,6 @@
 // src/types/index.ts
 import { Request } from 'express';
 
-// Ensure CustomAuthRequest is exported
 export interface CustomAuthRequest extends Request {
   user: {
     id: string;
@@ -10,7 +9,7 @@ export interface CustomAuthRequest extends Request {
   };
 }
 
-// Optional UserPayload interface for passing user data
+// Optionally export other interfaces if needed
 export interface UserPayload {
   id: string;
   email?: string;
