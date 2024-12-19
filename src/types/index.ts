@@ -1,10 +1,13 @@
 // src/types/index.ts
 import { Request } from 'express';
-export interface CustomAuthRequest {
-  user: {
-      id: string;
-      tier: 'free' | 'paid';
-      role?: 'admin' | 'user';
+
+export interface CustomAuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    username: string;
+    tier: string;
+    role?: string;
   };
 }
 export interface UserPayload {

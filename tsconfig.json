@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ESNext",  // Set ECMAScript version for output code
-    "module": "CommonJS",  // CommonJS module system (for Node.js)
-    "strict": true,  // Enable strict type checking
-    "esModuleInterop": true,  // Allow default imports for CommonJS modules
-    "skipLibCheck": true,  // Skip type checking of declaration files (for faster compilation)
+    "target": "ESNext",                    // Set ECMAScript version for output code
+    "module": "CommonJS",                  // CommonJS module system (for Node.js)
+    "strict": true,                        // Enable strict type checking
+    "esModuleInterop": true,               // Allow default imports for CommonJS modules
+    "skipLibCheck": true,                  // Skip type checking of declaration files (for faster compilation)
     "forceConsistentCasingInFileNames": true,  // Ensure consistent file casing
-  "baseUrl": "./src", 
+    "baseUrl": "./src",                    // Set base directory for resolving non-relative modules
     "paths": {
-      "@types": ["src/types"],
-      "@models/*": ["src/models/*"],  // Alias for models
+      "@types": ["src/types"],             // Map '@types' to 'src/types' folder
+      "@models/*": ["src/models/*"],       // Alias for models
       "@controllers/*": ["src/controllers/*"]  // Alias for controllers
     },
-    "outDir": "./dist",  // Compiled files will go to the 'dist' folder
-    "moduleResolution": "node",  // Node.js-style module resolution
-    "allowJs": true,  // Allow JavaScript files in the project (optional)
-    "resolveJsonModule": true,  // Allow importing JSON files as modules
-    "experimentalDecorators": true,  // Enable decorators support
-    "emitDecoratorMetadata": true  // Emit metadata for decorators (used by libraries like Sequelize)
+    "outDir": "./dist",                    // Compiled files will go to the 'dist' folder
+    "moduleResolution": "node",            // Resolve modules like Node.js
+    "allowJs": true,                       // Allow JavaScript files in the project (optional)
+    "resolveJsonModule": true,             // Allow importing JSON files as modules
+    "experimentalDecorators": true,        // Enable decorators support
+    "emitDecoratorMetadata": true         // Emit metadata for decorators (used by libraries like Sequelize)
   },
   "include": [
-    "src/**/*"  // Includes all TypeScript files in the 'src' folder
+    "src/**/*"                             // Includes all TypeScript files in the 'src' folder
   ],
   "exclude": [
-    "node_modules"  // Exclude 'node_modules' from type checking
+    "node_modules"                         // Exclude 'node_modules' from type checking
   ]
 }
