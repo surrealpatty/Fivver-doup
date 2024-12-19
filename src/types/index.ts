@@ -1,17 +1,14 @@
 // src/types/index.ts
-
 import { Request } from 'express';
 
-// Define the CustomAuthRequest interface
 export interface CustomAuthRequest extends Request {
   user: {
     id: string;
-    email?: string;
-    username?: string;
     tier: 'free' | 'paid';
-    role?: 'user' | 'admin';
+    role?: 'admin' | 'user';
   };
 }
+
 
 
 // Optional UserPayload interface
