@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Ensure this is correct
+import { CustomAuthRequest } from '@types';  // Using the alias if configured in tsconfig.json
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
