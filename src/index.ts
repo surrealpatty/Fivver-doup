@@ -3,6 +3,7 @@ import express from 'express';
 import userRoutes from './routes/user';  // Import user routes
 import serviceRoutes from './routes/service';  // Import service routes
 import bodyParser from 'body-parser'; // Import body-parser to handle JSON bodies
+import  UserPayload  from './index';  // Correct relative path
 
 const app = express();
 
