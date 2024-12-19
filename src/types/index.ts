@@ -13,8 +13,9 @@ export interface CustomAuthRequest extends Request {
 
   export interface UserPayload {
     id: string;
-    email: string;  // Ensure this is consistently a string
-    username: string;
-    tier: "free" | "paid" | undefined;  // Ensure this is typed correctly
-  }
+    email?: string;
+    username?: string;
+    tier: "free" | "paid";
+    role?: "admin" | "user"; // Add role to the UserPayload interface
+}
   

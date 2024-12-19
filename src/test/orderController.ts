@@ -1,5 +1,7 @@
+// src/test/orderController.ts
+
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Correct the import for CustomAuthRequest type
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { sequelize } from '../config/database';  // Correct import for sequelize

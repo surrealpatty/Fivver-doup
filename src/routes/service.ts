@@ -1,9 +1,11 @@
+// src/routes/service.ts
+
 import express, { Response, NextFunction } from 'express';
 import Service from '../models/services'; // Correctly import the Service model
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
 import { checkRole } from '../middlewares/roleMiddleware'; // Import checkRole middleware to verify user role
 import { updateService } from '../controllers/serviceController'; // Import updateService from the controller
-import { CustomAuthRequest, UserPayload } from '../types/index';  // Ensure that the alias is correctly configured
+import { CustomAuthRequest } from '../types/index';  // Ensure that the alias is correctly configured
 
 const router = express.Router();
 
@@ -27,7 +29,7 @@ router.get(
 router.put('/:id', authenticateToken, checkRole('admin'), updateService); // Use the updateService function for PUT requests
 
 // Example route to get all services
-router.get('/', async (req: CustomAuthRequest, res: Response) => { // Use CustomAuthRequest for req typing
+router.get('/', async (req: CustomAuthRequest, res: Response) => {  // Use CustomAuthRequest for req typing
   try {
     const services = await Service.findAll(); // Fetch all services
     res.status(200).json(services); // Respond with status 200 and services

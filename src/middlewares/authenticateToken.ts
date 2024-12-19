@@ -1,8 +1,8 @@
 // src/middlewares/authenticateToken.ts
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types/auth';  // CustomAuthRequest interface to extend Express.Request
-import { UserPayload } from '../types';  // UserPayload interface
+import { CustomAuthRequest } from '../types/auth';  // Import CustomAuthRequest
+import { UserPayload } from '../types';  // Import UserPayload from a consistent location
 
 // Middleware to authenticate token
 const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
@@ -11,7 +11,7 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
 
   // If no token is found, return 401 Unauthorized response
   if (!token) {
-    return res.status(401).send('Access denied');
+    next(new Error('Access denied'));
   }
 
   // Verify the token
