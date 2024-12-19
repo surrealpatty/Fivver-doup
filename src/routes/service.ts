@@ -1,5 +1,4 @@
 // src/routes/service.ts
-
 import express, { Response, NextFunction } from 'express';
 import Service from '../models/services'; // Correctly import the Service model
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
