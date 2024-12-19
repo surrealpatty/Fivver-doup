@@ -6,11 +6,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",  // baseUrl is set to 'src'
+    "baseUrl": "./src",
     "paths": {
       "@config/*": ["src/config/*"],
       "@middlewares/*": ["src/middlewares/*"],
-      "@types/*": ["src/types/*"],  // Ensure this path is correct
+      "@types/*": ["src/types/*"],  // Correct path for @types alias
       "@models/*": ["src/models/*"],
       "@controllers/*": ["src/controllers/*"],
       "@routes/*": ["src/routes/*"],
@@ -24,6 +24,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

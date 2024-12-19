@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '@types';  // Correct alias import
+import { CustomAuthRequest } from '../types';  // Adjust the relative path as necessary
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
