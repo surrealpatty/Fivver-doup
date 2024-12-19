@@ -1,33 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ESNext",  // Adjusts the JS output version to the latest ES standard
-    "module": "CommonJS",  // For Node.js projects
-    "strict": true,  // Enables all strict type-checking options
-    "esModuleInterop": true,  // Ensures compatibility between CommonJS and ES modules
-    "skipLibCheck": true,  // Skip type checking of declaration files for faster compilation
-    "forceConsistentCasingInFileNames": true,  // Ensures consistent file name casing
-    "baseUrl": "./src",  // The base directory for resolving modules (starting from the src folder)
-   "paths": {
-  "@config/*": ["src/config/*"],
-  "@middlewares/*": ["src/middlewares/*"],
-  "@types/*": ["src/types/*"],  // Correct alias for @types
-  "@models/*": ["src/models/*"],
-  "@controllers/*": ["src/controllers/*"],
-  "@routes/*": ["src/routes/*"],
-  "@shared/*": ["src/shared/*"],
-  "*": ["node_modules/*", "src/*"]
-},
-    "outDir": "./dist",  // The directory where compiled files will be output
-    "moduleResolution": "node",  // Resolve modules like Node.js would
-    "allowJs": true,  // Allow JavaScript files in the project (optional)
-    "resolveJsonModule": true,  // Allow importing JSON files as modules
-    "experimentalDecorators": true,  // Enables support for decorators (e.g., for Sequelize)
-    "emitDecoratorMetadata": true  // Emits metadata for decorators (required by Sequelize)
+    "target": "ESNext",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",  // baseUrl is set to 'src'
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@types/*": ["src/types/*"],  // Ensure this path is correct
+      "@models/*": ["src/models/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"],
+      "@shared/*": ["src/shared/*"],
+      "*": ["node_modules/*", "src/*"]
+    },
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": [
-    "src/**/*"  // Includes all files in the 'src' directory for type checking
-  ],
-  "exclude": [
-    "node_modules"  // Excludes the 'node_modules' directory from type checking
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
