@@ -1,7 +1,7 @@
 // src/types/index.ts
 import { Request } from 'express';
 
-export interface CustomAuthRequest {
+export interface CustomAuthRequest extends Request {
   user: {
     id: string;
     tier: 'free' | 'paid';
