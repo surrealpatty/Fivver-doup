@@ -1,4 +1,3 @@
-// src/test/orderController.ts
 import { Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '@types';  // Import from the correct alias
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
@@ -16,8 +15,10 @@ describe('Order Controller', () => {
   beforeEach(() => {
     req = {
       user: {
-        id: '123',
-        tier: 'free',  // Mock user with 'tier' set to 'free'
+        id: '123',          // User ID (required)
+        email: 'test@example.com',  // Mock email (required)
+        username: 'testuser',      // Mock username (optional but required for the type)
+        tier: 'free',        // Mock user with 'tier' set to 'free'
       },
       body: {
         userId: 123,
@@ -69,7 +70,7 @@ describe('Order Controller', () => {
   });
 
   test('authenticateToken should call next if user is authenticated', async () => {
-    req.user = { id: '123', tier: 'free' };  // Mock authenticated user
+    req.user = { id: '123', email: 'test@example.com', username: 'testuser', tier: 'free' };  // Mock authenticated user
 
     // Call authenticateToken middleware
     await authenticateToken(req as CustomAuthRequest, res as Response, next);
