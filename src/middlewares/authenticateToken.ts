@@ -1,20 +1,18 @@
-// src/middlewares/authenticateToken.ts
-
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; // Adjust the path to match your project structure
+import { CustomAuthRequest } from '../types'; // Adjust the path if needed
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
   id: string;
   email: string;
   username: string;
-  tier: 'free' | 'paid'; // Ensure tier is either 'free' or 'paid'
-  role?: 'admin' | 'user'; // Optional role
+  tier: 'free' | 'paid';  // Ensure tier is either 'free' or 'paid'
+  role?: 'admin' | 'user';  // Optional role
 }
 
-// Authenticate middleware function
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+// Middleware to authenticate and attach user information from the JWT token
+export const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
   // Extract the token from the Authorization header (format: "Bearer <token>")
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -36,12 +34,10 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
       role: decoded.role === 'admin' || decoded.role === 'user' ? decoded.role : 'user',  // Default role to 'user' if invalid
     };
 
-    // Pass control to the next middleware or route handler
+    // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     // If the token is invalid or expired, return a 400 Bad Request error
     return res.status(400).json({ message: 'Invalid token. Access denied.' });
   }
 };
-
-export { authenticateToken };

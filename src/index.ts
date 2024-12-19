@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { userRoutes } from './routes/user'; // Corrected import
 import servicesRouter from './routes/service'; // Corrected import
-import { sequelize } from './src/config/database';
+import { sequelize } from 'config/database';
 
 dotenv.config(); // Load environment variables from .env file
 

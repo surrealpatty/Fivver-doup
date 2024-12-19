@@ -1,10 +1,10 @@
 import { Request } from 'express';
 
-// User payload interface
+// Define the UserPayload interface consistently
 export interface UserPayload {
   id: string;
-  email?: string;
-  username?: string;
+  email: string;  // Make email required
+  username?: string;  // Optional field, adjust as needed
   role?: string;
   tier?: string;
 }
