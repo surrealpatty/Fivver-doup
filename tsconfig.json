@@ -9,8 +9,8 @@
     "baseUrl": "./src",  // Ensure root directory is 'src'
     "paths": {
       "@types": ["src/types"],  // Alias '@types' resolves to 'src/types'
-      "@models/*": ["src/models/*"],  // Example: alias for models
-      "@controllers/*": ["src/controllers/*"]  // Example: alias for controllers
+      "@models/*": ["src/models/*"],  // Alias for models (optional, if you have this structure)
+      "@controllers/*": ["src/controllers/*"]  // Alias for controllers (optional, if you have this structure)
     },
     "outDir": "./dist",  // Compiled files will go to the 'dist' folder
     "moduleResolution": "node",  // Node.js-style module resolution
