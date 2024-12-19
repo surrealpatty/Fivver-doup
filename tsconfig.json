@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                        // Specifies the target ECMAScript version
-    "module": "CommonJS",                      // Sets module resolution to CommonJS for Node.js compatibility
-    "strict": true,                            // Enables all strict type-checking options
-    "esModuleInterop": true,                   // Ensures compatibility with CommonJS modules
-    "skipLibCheck": true,                      // Skips type checking of declaration files
-    "forceConsistentCasingInFileNames": true,  // Ensures consistent casing in file names
-    "baseUrl": "./src",                        // Base URL is the 'src' directory
+    "target": "ESNext",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",
     "paths": {
-      "@types/*": ["types/*"]                   // Maps '@types/*' to 'src/types/*' (relative path from 'src')
+      "@types/*": ["types/*"]  // Correct path mapping
     },
-    "outDir": "./dist",                        // Output directory for compiled files
-    "moduleResolution": "node",                // Resolves modules using Node.js resolution
-    "allowJs": true,                           // Allows JavaScript files to be compiled
-    "resolveJsonModule": true,                 // Allows importing JSON files as modules
-    "experimentalDecorators": true,            // Enables support for decorators
-    "emitDecoratorMetadata": true              // Emits metadata for decorators
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
-    "src/**/*"  // Includes all files in the 'src' folder for compilation
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules"  // Excludes 'node_modules' folder from compilation
+    "node_modules"
   ]
 }

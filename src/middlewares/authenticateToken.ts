@@ -2,7 +2,7 @@
 
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '@types';  // Use the path alias defined in tsconfig
+import { CustomAuthRequest } from '@types';  // Ensure correct import based on tsconfig
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
@@ -13,6 +13,7 @@ interface DecodedToken {
   role?: 'admin' | 'user';  // Optional role
 }
 
+// Authenticate middleware
 const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
   // Extract the token from the Authorization header (format: "Bearer <token>")
   const token = req.header('Authorization')?.replace('Bearer ', '');
