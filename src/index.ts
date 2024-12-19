@@ -1,20 +1,21 @@
-// src/index.ts
-import express from 'express';
-import userRoutes from './routes/user';  // Import user routes
-import serviceRoutes from './routes/service';  // Import service routes
-import bodyParser from 'body-parser'; // Import body-parser to handle JSON bodies
-import  UserPayload  from './index';  // Correct relative path
+import { Request } from 'express';
 
-const app = express();
+// Define the CustomAuthRequest interface, extending Request to include a user property
+export interface CustomAuthRequest extends Request {
+  user: {
+    id: string;
+    email?: string;  // Optional field, can be omitted
+    username?: string;  // Optional field, can be omitted
+    tier: 'free' | 'paid';  // Required field for tier
+    role?: 'user' | 'admin';  // Optional role field
+  };
+}
 
-// Middleware setup (e.g., body-parser for JSON requests)
-app.use(bodyParser.json());
-
-// Setup routes
-app.use('/users', userRoutes);  // Users route
-app.use('/services', serviceRoutes);  // Services route
-
-// Add other necessary middleware, error handling, etc.
-
-// Export the app as a default export
-export default app;
+// Optional UserPayload interface, can be used elsewhere in the codebase
+export interface UserPayload {
+  id: string;
+  email?: string;  // Optional, may not be present
+  username?: string;  // Optional, may not be present
+  tier: 'free' | 'paid';  // Required tier field
+  role?: 'user' | 'admin';  // Optional role field
+}
