@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",  // Ensure baseUrl points to 'src'
+    "target": "ESNext",                        // Specifies the target ECMAScript version
+    "module": "CommonJS",                      // Sets module resolution to CommonJS for Node.js compatibility
+    "strict": true,                            // Enables all strict type-checking options
+    "esModuleInterop": true,                   // Ensures compatibility with CommonJS modules
+    "skipLibCheck": true,                      // Skips type checking of declaration files
+    "forceConsistentCasingInFileNames": true,  // Ensures consistent casing in file names
+    "baseUrl": "./src",                        // Ensures baseUrl points to 'src'
     "paths": {
-      "types/*": ["types/*"]  // Map 'types' to 'src/types'
+      "@types/*": ["types/*"]                  // Maps '@types/*' to 'src/types/*' (relative path from 'src')
     },
-    "outDir": "./dist",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "outDir": "./dist",                        // Output directory for compiled files
+    "moduleResolution": "node",                // Resolves modules using Node.js resolution
+    "allowJs": true,                           // Allows JavaScript files to be compiled
+    "resolveJsonModule": true,                 // Allows importing JSON files as modules
+    "experimentalDecorators": true,            // Enables support for decorators
+    "emitDecoratorMetadata": true              // Emits metadata for decorators
   },
   "include": [
-    "src/**/*"  // Include everything inside 'src' folder
+    "src/**/*"  // Includes all files in 'src' folder for compilation
   ],
   "exclude": [
-    "node_modules"  // Exclude node_modules folder
+    "node_modules"  // Excludes 'node_modules' folder from compilation
   ]
 }
