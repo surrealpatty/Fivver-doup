@@ -36,5 +36,5 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// Export the router with a named export
-export { router as userRoutes };
+// Export the router as a default export
+export default router;
