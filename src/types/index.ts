@@ -10,7 +10,7 @@ export interface CustomAuthRequest extends Request {
     role?: 'admin' | 'user';
   };
 }
-// Ensure the UserPayload export is also included
+
 export interface UserPayload {
   id: string;
   email?: string;
