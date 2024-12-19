@@ -1,19 +1,20 @@
 // src/types/index.ts
 
-import { Request } from 'express';  // Importing express types
+import { Request } from 'express';  // Import the base Request type from Express
 
-// Define the CustomAuthRequest interface that extends Express's Request type
+// Extend the base Request type to include a custom `user` property
 export interface CustomAuthRequest extends Request {
-  user?: {  // Optional user property, as it will be set after authentication
+  user?: {
     id: string;
     username: string;
     email: string;
-    tier?: 'free' | 'paid';  // Optional tier property for user level
-    role?: 'admin' | 'user';  // Optional role for user (admin/user)
+    tier?: 'free' | 'paid';  // Optional, depending on user authentication
+    role?: 'admin' | 'user';  // Optional, depending on user authentication
   };
 }
 
-// Define the UserPayload interface
+// Define the UserPayload interface (this is different from `CustomAuthRequest`)
+// This can be used for data that is directly related to user authentication (e.g., during registration or login)
 export interface UserPayload {
   id: string;
   email?: string;

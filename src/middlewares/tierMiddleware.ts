@@ -1,17 +1,23 @@
 // src/middlewares/tierMiddleware.ts
-import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/authMiddleware';  // Import AuthRequest to ensure proper typing
-import { UserPayload } from '../types';  // Import UserPayload to be explicit
 
-export const checkPaidTier = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const user = req.user;  // Now `user` is properly typed as `UserPayload`
+import { CustomAuthRequest } from '@types';  // Import the correct type
+import { Response, NextFunction } from 'express';
 
-  if (!user || user.tier !== 'paid') {
-    // Send a 403 response if the user does not have a paid tier
-    res.status(403).json({ message: 'User does not have a paid tier.' });
-    return;  // Explicitly return here to stop execution
-  }
+const checkTier = (requiredTier: 'paid' | 'free') => {
+  return (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+    const user = req.user; // `user` will be populated by authenticateToken middleware
 
-  // If the user has a paid tier, move to the next middleware/handler
-  next();  // Proceed to the next middleware
+    if (!user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    // Check if the user has the required tier
+    if (user.tier !== requiredTier) {
+      return res.status(403).json({ message: `Forbidden: ${requiredTier} tier required` });
+    }
+
+    next();
+  };
 };
+
+export { checkTier };
