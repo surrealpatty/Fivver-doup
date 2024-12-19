@@ -7,16 +7,16 @@
     "skipLibCheck": true,  // Skip type checking of declaration files for faster compilation
     "forceConsistentCasingInFileNames": true,  // Ensures consistent file name casing
     "baseUrl": "./src",  // The base directory for resolving modules (starting from the src folder)
-    "paths": {
-      "@config/*": ["src/config/*"],  // Explicit path for '@config'
-      "@middlewares/*": ["src/middlewares/*"],  // Explicit path for '@middlewares'
-      "@types/*": ["src/types/*"],  // Explicit path for '@types' pointing to 'src/types/*'
-      "@models/*": ["src/models/*"],  // Explicit path for '@models'
-      "@controllers/*": ["src/controllers/*"],  // Explicit path for '@controllers'
-      "@routes/*": ["src/routes/*"],  // Explicit path for '@routes'
-      "@shared/*": ["src/shared/*"],  // Explicit path for '@shared'
-      "*": ["node_modules/*", "src/*"]  // Resolves all files in 'src' and 'node_modules'
-    },
+   "paths": {
+  "@config/*": ["src/config/*"],
+  "@middlewares/*": ["src/middlewares/*"],
+  "@types/*": ["src/types/*"],  // Correct alias for @types
+  "@models/*": ["src/models/*"],
+  "@controllers/*": ["src/controllers/*"],
+  "@routes/*": ["src/routes/*"],
+  "@shared/*": ["src/shared/*"],
+  "*": ["node_modules/*", "src/*"]
+},
     "outDir": "./dist",  // The directory where compiled files will be output
     "moduleResolution": "node",  // Resolve modules like Node.js would
     "allowJs": true,  // Allow JavaScript files in the project (optional)
