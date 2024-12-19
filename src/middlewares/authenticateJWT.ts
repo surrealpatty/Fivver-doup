@@ -31,7 +31,7 @@ export const authenticateToken = (
 
       // Since `decoded` can be `string | JwtPayload`, we assert that it's `JwtPayload`
       if (typeof decoded === 'object' && decoded !== null) {
-        req.user = decoded as JwtPayload & UserPayload; // We assume `decoded` is a valid JwtPayload
+        req.user = decoded as UserPayload;  // Assert that decoded is of type UserPayload
       } else {
         return res.status(401).json({ message: 'Invalid token structure' });
       }

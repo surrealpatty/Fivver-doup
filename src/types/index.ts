@@ -1,15 +1,13 @@
-import { JwtPayload } from 'jsonwebtoken';
+import { Request } from 'express'; // Import Express Request
 
 // Define the shape of the user payload
 export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;  // Make sure `username` is optional (string | undefined)
+    id: string;       // User ID (required)
+    email?: string;   // Email (optional)
+    username?: string; // Username (optional)
 }
 
 // Extend Express Request to include the user property
-declare module 'express-serve-static-core' {
-  interface Request {
+export interface CustomAuthRequest extends Request {
     user?: UserPayload;  // Attach the UserPayload to the Request object
-  }
 }

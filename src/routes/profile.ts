@@ -1,12 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import  User  from '../models/user'; // Import the User model
-import { AuthRequest } from '../types'; // Import the AuthRequest type
+import User from '../models/user'; // Import the User model
+import { CustomAuthRequest } from '../types'; // Import the CustomAuthRequest type
 
 const router = Router();
 
 // Route to get user profile (requires authentication)
-router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+router.get('/profile', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
     try {
         // Ensure the user ID exists on the request object
         if (!req.user?.id) {
@@ -28,7 +28,7 @@ router.get('/profile', authenticateToken, async (req: AuthRequest, res: Response
 });
 
 // Route to update user profile (requires authentication)
-router.put('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
     try {
         // Ensure the user ID exists on the request object
         if (!req.user?.id) {

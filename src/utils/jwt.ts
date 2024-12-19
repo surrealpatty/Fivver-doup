@@ -1,8 +1,8 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Import the correct UserPayload type
 
-// Define the JWT secret key (ensure it's securely stored in your environment variables)
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback to default if not set
+// Secret key for JWT generation and verification (ensure this is securely stored in environment variables)
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback to a default if not set
 
 // Generate JWT token
 export const generateToken = (user: UserPayload): string => {
@@ -27,9 +27,11 @@ export const verifyToken = (token: string): UserPayload | null => {
     if (decoded && 'id' in decoded) {
       return decoded as UserPayload;
     }
+
+    // If the decoded payload doesn't match expected structure, return null
     return null;
   } catch (err) {
-    // If token is invalid or expired, return null
+    // Log the error and return null if verification fails
     console.error('Token verification failed:', err);
     return null;
   }
