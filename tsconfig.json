@@ -10,7 +10,6 @@
     "paths": {
       "@config/*": ["src/config/*"],
       "@middlewares/*": ["src/middlewares/*"],
-      "@types/*": ["src/types/*"],  // Correct path for @types alias
       "@models/*": ["src/models/*"],
       "@controllers/*": ["src/controllers/*"],
       "@routes/*": ["src/routes/*"],
