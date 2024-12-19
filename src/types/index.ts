@@ -10,6 +10,7 @@ export interface CustomAuthRequest extends Request {
     role?: string;
   };
 }
+
 export interface UserPayload {
   id: string;
   email?: string;
