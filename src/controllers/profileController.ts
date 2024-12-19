@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import  User  from '../models/user';  // Correct import for the User model
-import { UserPayload } from '../types';  // Import UserPayload interface to type req.user
+import User from '../models/user'; // Correct import for the User model
+import { UserPayload } from '../types'; // Correctly import UserPayload from the correct file
 import bcrypt from 'bcrypt';
 
 // Extend Request to include user with proper typing

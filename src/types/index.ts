@@ -1,11 +1,10 @@
 import { JwtPayload } from 'jsonwebtoken';
 
 // Define the shape of the user payload
-export interface UserPayload extends JwtPayload {
+export interface UserPayload {
   id: string;
-  email: string;
-  username: string;
-  role: 'Free' | 'Paid'; // Assuming roles are 'Free' or 'Paid'
+  email?: string;
+  username?: string;  // Make sure `username` is optional (string | undefined)
 }
 
 // Extend Express Request to include the user property
