@@ -1,10 +1,57 @@
 import request from 'supertest';
-import app from '../index';  // Ensure this points to your Express app file
-import { createMockUserToken } from './testHelpers';  // Assuming this is your helper function for generating tokens
+import jwt from 'jsonwebtoken';
+import app from '../index'; // Ensure this points to your main Express app file
 
+// Generate JWT tokens for testing (with roles)
+const paidToken = jwt.sign({ id: '1', role: 'Paid' }, process.env.JWT_SECRET as string);
+const freeToken = jwt.sign({ id: '2', role: 'Free' }, process.env.JWT_SECRET as string);
+
+describe('Role-based Access to Premium Services', () => {
+  it('should allow paid users to access premium services', async () => {
+    const response = await request(app)
+      .get('/services/premium') // Make GET request to /services/premium
+      .set('Authorization', `Bearer ${paidToken}`); // Include the token in the header
+    
+    // Assertions
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('Premium service access granted.');
+  });
+
+  it('should deny free users from accessing premium services', async () => {
+    const response = await request(app)
+      .get('/services/premium')
+      .set('Authorization', `Bearer ${freeToken}`); // Use a free token
+
+    // Assertions
+    expect(response.status).toBe(403); // Forbidden error for free users
+    expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+  });
+
+  it('should return error if no token is provided', async () => {
+    const response = await request(app)
+      .get('/services/premium');
+
+    // Assertions
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe('Token is required');
+  });
+
+  it('should return error if token is invalid', async () => {
+    const invalidToken = 'invalidToken123';
+    const response = await request(app)
+      .get('/services/premium')
+      .set('Authorization', `Bearer ${invalidToken}`);
+
+    // Assertions
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe('Invalid or expired token');
+  });
+});
+
+// Test case for updating a service
 describe('PUT /services/:id', () => {
   let serviceId: string;
-  let token: string;  // Mock or actual token if authentication is required
+  let token: string;
 
   // Before each test, create a service to update
   beforeEach(async () => {
@@ -19,7 +66,7 @@ describe('PUT /services/:id', () => {
       });
     
     serviceId = response.body.id;  // Store the created service ID
-    token = createMockUserToken('12345');  // Generate or mock a token using a helper function
+    token = paidToken;  // You can mock a token using a helper function or generate one as needed
   });
 
   // Test case: Service should be updated successfully
@@ -33,11 +80,9 @@ describe('PUT /services/:id', () => {
         price: 150 
       });
 
-    // Check that the status is 200 (OK)
+    // Assertions
     expect(response.status).toBe(200);
-    // Check that the response message matches
     expect(response.body.message).toBe('Service updated successfully');
-    // Check that the service fields are updated
     expect(response.body.service.title).toBe('Updated Test Service Title');
     expect(response.body.service.description).toBe('Updated Test Service Description');
     expect(response.body.service.price).toBe(150);
@@ -52,9 +97,8 @@ describe('PUT /services/:id', () => {
         title: 'Non-existent Service' 
       });
 
-    // Check that the status is 404 (Not Found)
+    // Assertions
     expect(response.status).toBe(404);
-    // Check that the error message matches
     expect(response.body.message).toBe('Service not found');
   });
 
@@ -66,12 +110,11 @@ describe('PUT /services/:id', () => {
       .send({ 
         title: 'Invalid Service Title', 
         description: 'Description with invalid price', 
-        price: 'invalid' 
+        price: 'invalid' // Invalid price value
       });
 
-    // Check that the status is 400 (Bad Request)
+    // Assertions
     expect(response.status).toBe(400);
-    // Check that the error message matches
     expect(response.body.message).toBe('Invalid price value');
   });
 });
