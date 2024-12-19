@@ -12,6 +12,5 @@ export interface UserPayload {
 
 // CustomAuthRequest extends Express' Request interface to include user information
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Ensure user object always follows UserPayload structure
+  user: UserPayload;  // user is required and follows UserPayload structure
 }
-

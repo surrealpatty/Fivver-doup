@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
+import { CustomAuthRequest } from '../types';  // Ensure the correct import from 'types'
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
@@ -49,7 +49,7 @@ describe('Order Controller', () => {
     (Order.create as jest.Mock).mockResolvedValue(mockOrder);
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response, next);
+    await createOrder(req as CustomAuthRequest, res as Response);  // Pass only req and res
 
     // Verify the response status and JSON output
     expect(res.status).toHaveBeenCalledWith(201);
@@ -61,7 +61,7 @@ describe('Order Controller', () => {
     (Order.create as jest.Mock).mockRejectedValue(new Error('Database error'));
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response, next);
+    await createOrder(req as CustomAuthRequest, res as Response);  // Pass only req and res
 
     // Verify the response status and error message
     expect(res.status).toHaveBeenCalledWith(500);
