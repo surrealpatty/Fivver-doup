@@ -1,22 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",  // This is critical, it tells TypeScript to resolve imports starting from 'src'
-    "outDir": "./dist",
-    "moduleResolution": "node",
+    "target": "ESNext",  // Set target ECMAScript version
+    "module": "CommonJS",  // CommonJS module system for Node.js
+    "strict": true,  // Enables strict type checking
+    "esModuleInterop": true,  // Enables default imports for CommonJS modules
+    "skipLibCheck": true,  // Skip type checking of declaration files (for faster compilation)
+    "forceConsistentCasingInFileNames": true,  // Ensures consistent casing of file names
+    "baseUrl": "./src",  // Base directory for resolving non-relative module imports
     "paths": {
-      "@types/*": ["src/types/*"]  // Ensure this maps correctly to 'src/types/*'
-    }
+      "@types/*": ["src/types/*"],  // Resolves '@types' to 'src/types/*'
+      "@models/*": ["src/models/*"],  // Example for other aliases if needed
+      "@controllers/*": ["src/controllers/*"]
+    },
+    "outDir": "./dist",  // Directory where the compiled files will be placed
+    "moduleResolution": "node",  // Resolve modules like Node.js would
+    "allowJs": true,  // Allows JavaScript files in the project (optional)
+    "resolveJsonModule": true,  // Allows importing JSON files as modules
+    "experimentalDecorators": true,  // Enable decorators
+    "emitDecoratorMetadata": true,    // Emit metadata for decorators (required by some libraries like Sequelize)
   },
   "include": [
-    "src/**/*"  // Ensure all files inside 'src' are included for type-checking
+    "src/**/*"  // Includes all files in the 'src' directory for type checking
   ],
   "exclude": [
-    "node_modules"  // Exclude 'node_modules' from type-checking
+    "node_modules"  // Excludes the 'node_modules' directory from type checking
   ]
 }
