@@ -1,22 +1,22 @@
 // src/types/index.ts
 import { Request } from 'express';
 
-// Define the `CustomAuthRequest` interface to extend the Request interface
+// Defining CustomAuthRequest to extend the Request interface with the user property
 export interface CustomAuthRequest extends Request {
   user: {
     id: string;
-    email: string;
-    username: string;
-    tier: 'free' | 'paid';
-    role?: 'admin' | 'user';
+    email?: string;  // Optional to allow missing email in some cases
+    username?: string;  // Optional to allow missing username in some cases
+    tier: 'free' | 'paid';  // Required tier property
+    role?: 'user' | 'admin'; // Optional role property
   };
 }
 
-// Define the `UserPayload` interface (if needed)
+// Optional UserPayload interface if it's needed elsewhere
 export interface UserPayload {
   id: string;
-  email?: string;  // Optional because email may be missing in some cases
-  username?: string;
+  email?: string;  // Optional
+  username?: string;  // Optional
   tier: 'free' | 'paid';  // Required field for tier
-  role?: 'user' | 'admin'; // Optional
+  role?: 'user' | 'admin';  // Optional
 }

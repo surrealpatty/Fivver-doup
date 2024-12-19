@@ -34,8 +34,7 @@ export const checkAuth = (
       console.warn('User payload is missing username');
     }
 
-    // Attach user information to the request object for further use in the route
-    req.user = decoded;  // TypeScript will now know req.user is of type CustomAuthRequest
+    req.user = decoded as CustomAuthRequest['user']; // Use the correct type assertion
 
     // Proceed to the next middleware or route handler
     next();
