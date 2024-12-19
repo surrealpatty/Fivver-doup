@@ -6,9 +6,9 @@
     "esModuleInterop": true,                   // Ensures compatibility with CommonJS modules
     "skipLibCheck": true,                      // Skips type checking of declaration files
     "forceConsistentCasingInFileNames": true,  // Ensures consistent casing in file names
-    "baseUrl": "./src",                        // Ensures baseUrl points to 'src'
+    "baseUrl": "./src",                        // Base URL is the 'src' directory
     "paths": {
-      "@types/*": ["types/*"]                  // Maps '@types/*' to 'src/types/*' (relative path from 'src')
+      "@types/*": ["types/*"]                   // Maps '@types/*' to 'src/types/*' (relative path from 'src')
     },
     "outDir": "./dist",                        // Output directory for compiled files
     "moduleResolution": "node",                // Resolves modules using Node.js resolution
@@ -18,7 +18,7 @@
     "emitDecoratorMetadata": true              // Emits metadata for decorators
   },
   "include": [
-    "src/**/*"  // Includes all files in 'src' folder for compilation
+    "src/**/*"  // Includes all files in the 'src' folder for compilation
   ],
   "exclude": [
     "node_modules"  // Excludes 'node_modules' folder from compilation
