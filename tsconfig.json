@@ -6,11 +6,11 @@
     "esModuleInterop": true,  // Allow default imports for CommonJS modules
     "skipLibCheck": true,  // Skip type checking of declaration files (for faster compilation)
     "forceConsistentCasingInFileNames": true,  // Ensure consistent file casing
-    "baseUrl": "./src",  // Ensure root directory is 'src'
+  "baseUrl": "./src", 
     "paths": {
-      "@types": ["src/types"],  // Alias '@types' resolves to 'src/types'
-      "@models/*": ["src/models/*"],  // Alias for models (optional, if you have this structure)
-      "@controllers/*": ["src/controllers/*"]  // Alias for controllers (optional, if you have this structure)
+      "@types": ["src/types"],
+      "@models/*": ["src/models/*"],  // Alias for models
+      "@controllers/*": ["src/controllers/*"]  // Alias for controllers
     },
     "outDir": "./dist",  // Compiled files will go to the 'dist' folder
     "moduleResolution": "node",  // Node.js-style module resolution
