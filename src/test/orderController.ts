@@ -1,10 +1,7 @@
-// src/test/orderController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
-import { sequelize } from '../config/database';  // Correct import for sequelize
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
 
 // Mock Order model methods
@@ -13,7 +10,7 @@ jest.mock('../models/order');
 describe('Order Controller', () => {
   let req: Partial<CustomAuthRequest>;  // Use CustomAuthRequest type here
   let res: Partial<Response>;
-  let next: NextFunction;
+  let next: jest.MockedFunction<NextFunction>;  // Correct type for next function
 
   beforeEach(() => {
     req = {
@@ -34,7 +31,7 @@ describe('Order Controller', () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    next = jest.fn();
+    next = jest.fn();  // Mocked next function
   });
 
   afterEach(() => {
@@ -79,7 +76,7 @@ describe('Order Controller', () => {
     await authenticateToken(req as CustomAuthRequest, res as Response, next);
 
     // Check that the next function was called
-    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledTimes(1);  // Ensure that next was called without error
   });
 
   test('authenticateToken should return 401 if no user is authenticated', async () => {

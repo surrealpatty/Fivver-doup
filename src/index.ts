@@ -1,5 +1,6 @@
 // src/types/index.ts
 import { Request } from 'express';
+import  app  from '../index';  // Use named import instead of default import
 
 // UserPayload interface defines the structure of user data
 export interface UserPayload {

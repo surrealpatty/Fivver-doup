@@ -1,15 +1,21 @@
+// src/types/index.ts
 import { Request } from 'express';
 
-// UserPayload defines the structure of the user object, including the required 'tier' field
+// Define the UserPayload type
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  tier: 'free' | 'paid'; // tier is required here
-  role?: 'admin' | 'user'; // Optional role
+  tier: 'free' | 'paid';  // `tier` is required
+  role?: 'admin' | 'user';  // Optional role
 }
 
-// CustomAuthRequest extends the Express Request object to include user information
+// Extend Express' Request type to include the user property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // 'user' is optional as it may not always be set (e.g., unauthenticated users)
+  user?: UserPayload;  // `user` is optional but will be populated by the authenticateToken middleware
 }
+
+// Optional: Add a type guard to ensure `req.user` is valid
+export const isUser = (user: any): user is UserPayload => {
+  return user && typeof user.id === 'string' && (user.tier === 'free' || user.tier === 'paid');
+};
