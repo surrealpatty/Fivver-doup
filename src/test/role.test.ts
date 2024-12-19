@@ -1,7 +1,6 @@
 import request from 'supertest';
-import  app  from '../index';  // Import the app instance
+import app from '../index';  // Import the app instance
 import jwt from 'jsonwebtoken'; // For generating tokens
-import Service from '../models/services';  // Adjust path as needed
 
 // Helper function to generate JWT token with a role
 const generateToken = (userId: string, role: 'Free' | 'Paid') => {

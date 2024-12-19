@@ -1,11 +1,15 @@
 // src/types/express.d.ts
-
-import { UserPayload } from './index'; // Import your UserPayload type
+import { Request } from 'express';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // Add user property to the Request interface
+      user?: {
+        id: string;
+        email?: string;
+        username?: string;
+        role: 'Free' | 'Paid'; // Ensure this matches the role types you use
+      };
     }
   }
 }
