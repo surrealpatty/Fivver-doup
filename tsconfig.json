@@ -6,9 +6,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",                    // Ensure baseUrl points to 'src'
+    "baseUrl": "./src",  // Ensure baseUrl points to 'src'
     "paths": {
-      "@types/*": ["types/*"]  // Map '@types' to 'src/types/*'
+      "types/*": ["types/*"]  // Map 'types' to 'src/types'
     },
     "outDir": "./dist",
     "moduleResolution": "node",
