@@ -6,18 +6,18 @@
     "esModuleInterop": true,  // Enables default imports for CommonJS modules
     "skipLibCheck": true,  // Skip type checking of declaration files (for faster compilation)
     "forceConsistentCasingInFileNames": true,  // Ensures consistent casing of file names
-    "baseUrl": "./src", // or your base directory
+    "baseUrl": "./src",  // Ensures the root of your project is recognized as 'src'
     "paths": {
-      "@types": ["types"],
-      "@models/*": ["src/models/*"],  // Example for other aliases if needed
-      "@controllers/*": ["src/controllers/*"]
+      "@types": ["types"],  // Resolves '@types' to 'src/types'
+      "@models/*": ["models/*"],  // Resolves '@models' to 'src/models/*'
+      "@controllers/*": ["controllers/*"]  // Resolves '@controllers' to 'src/controllers/*'
     },
     "outDir": "./dist",  // Directory where the compiled files will be placed
     "moduleResolution": "node",  // Resolve modules like Node.js would
     "allowJs": true,  // Allows JavaScript files in the project (optional)
     "resolveJsonModule": true,  // Allows importing JSON files as modules
     "experimentalDecorators": true,  // Enable decorators
-    "emitDecoratorMetadata": true,    // Emit metadata for decorators (required by some libraries like Sequelize)
+    "emitDecoratorMetadata": true    // Emit metadata for decorators (required by some libraries like Sequelize)
   },
   "include": [
     "src/**/*"  // Includes all files in the 'src' directory for type checking
