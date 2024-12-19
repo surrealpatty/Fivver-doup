@@ -1,21 +1,12 @@
-import { Request } from 'express';
+// src/index.ts (Make sure app is exported as default)
+import express from 'express';
+import  someRoute  from './routes';
 
-// Define the CustomAuthRequest interface, extending Request to include a user property
-export interface CustomAuthRequest extends Request {
-  user: {
-    id: string;
-    email?: string;  // Optional field, can be omitted
-    username?: string;  // Optional field, can be omitted
-    tier: 'free' | 'paid';  // Required field for tier
-    role?: 'user' | 'admin';  // Optional role field
-  };
-}
+// Create the Express app
+const app = express();
 
-// Optional UserPayload interface, can be used elsewhere in the codebase
-export interface UserPayload {
-  id: string;
-  email?: string;  // Optional, may not be present
-  username?: string;  // Optional, may not be present
-  tier: 'free' | 'paid';  // Required tier field
-  role?: 'user' | 'admin';  // Optional role field
-}
+// Define your routes
+app.use('/api', someRoute);
+
+// Export app as the default export
+export default app;
