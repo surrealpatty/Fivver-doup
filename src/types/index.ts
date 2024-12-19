@@ -9,7 +9,6 @@ export interface CustomAuthRequest extends Request {
   };
 }
 
-// Optionally export other interfaces as well
 export interface UserPayload {
   id: string;
   email?: string;
