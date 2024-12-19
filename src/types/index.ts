@@ -1,8 +1,7 @@
 // src/types/index.ts
-
 import { Request } from 'express';
 
-// CustomAuthRequest interface for extending Express Request
+// Ensure CustomAuthRequest is exported
 export interface CustomAuthRequest extends Request {
   user: {
     id: string;

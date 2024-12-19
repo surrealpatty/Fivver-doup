@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",  // Set ECMAScript target version
+    "target": "ESNext",  // Set target ECMAScript version
     "module": "CommonJS",  // CommonJS module system for Node.js
     "strict": true,  // Enables strict type checking
     "esModuleInterop": true,  // Enables default imports for CommonJS modules
@@ -8,20 +8,15 @@
     "forceConsistentCasingInFileNames": true,  // Ensures consistent casing of file names
     "baseUrl": "./src",  // Base directory for resolving non-relative module imports
     "paths": {
-      "@config/*": ["src/config/*"],  // Resolves '@config' to 'src/config/*'
-      "@middlewares/*": ["src/middlewares/*"],  // Resolves '@middlewares' to 'src/middlewares/*'
-      "@models/*": ["src/models/*"],  // Resolves '@models' to 'src/models/*'
-      "@controllers/*": ["src/controllers/*"],  // Resolves '@controllers' to 'src/controllers/*'
-      "@routes/*": ["src/routes/*"],  // Resolves '@routes' to 'src/routes/*'
-      "@shared/*": ["src/shared/*"],  // Resolves '@shared' to 'src/shared/*'
       "@types/*": ["src/types/*"],  // Resolves '@types' to 'src/types/*'
-      "*": ["node_modules/*", "src/*"]  // Resolves everything else from 'node_modules' and 'src/*'
+      "@models/*": ["src/models/*"],  // Example for other aliases if needed
+      "@controllers/*": ["src/controllers/*"]
     },
-    "outDir": "./dist",  // Directory where compiled files will be placed
-    "moduleResolution": "node",  // Resolves modules like Node.js would
+    "outDir": "./dist",  // Directory where the compiled files will be placed
+    "moduleResolution": "node",  // Resolve modules like Node.js would
     "allowJs": true,  // Allows JavaScript files in the project (optional)
     "resolveJsonModule": true,  // Allows importing JSON files as modules
-    "experimentalDecorators": true,  // Allows use of decorators (required by Sequelize or other libraries)
+    "experimentalDecorators": true,  // Allows the use of decorators (for Sequelize or other libraries)
     "emitDecoratorMetadata": true  // Emits metadata for decorators (required by Sequelize)
   },
   "include": [
