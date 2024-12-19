@@ -1,6 +1,6 @@
-// src/test/orderController.ts
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Use relative path
+import { CustomAuthRequest } from './types';  // Relative path to 'types' directory
+
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for middleware
@@ -9,7 +9,7 @@ import { authenticateToken } from '../middlewares/authenticateToken';  // Correc
 jest.mock('../models/order');
 
 describe('Order Controller', () => {
-  let req: Partial<CustomAuthRequest>;  // Use CustomAuthRequest type here
+  let req: Partial<CustomAuthRequest>;  // Mocked request of type CustomAuthRequest
   let res: Partial<Response>;
   let next: jest.MockedFunction<NextFunction>;  // Correct type for next function
 
@@ -36,33 +36,32 @@ describe('Order Controller', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks();  // Clean mocks after each test
   });
 
   test('createOrder should return 201 when order is successfully created', async () => {
-    // Mock Order.create to resolve with the order object
     const mockOrder = {
       userId: 123,
       serviceId: 1,
       orderDetails: 'Test order',
       status: 'pending',
     };
-    (Order.create as jest.Mock).mockResolvedValue(mockOrder);
+
+    (Order.create as jest.Mock).mockResolvedValue(mockOrder);  // Mock Order.create to resolve with the mock order
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response);  // Pass only req and res
+    await createOrder(req as CustomAuthRequest, res as Response);  // Cast req to CustomAuthRequest
 
     // Verify the response status and JSON output
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(mockOrder);
+    expect(res.status).toHaveBeenCalledWith(201);  // Check status code 201 (created)
+    expect(res.json).toHaveBeenCalledWith(mockOrder);  // Ensure the correct order data is returned
   });
 
   test('createOrder should return 500 when there is an error creating the order', async () => {
-    // Mock Order.create to reject with an error
-    (Order.create as jest.Mock).mockRejectedValue(new Error('Database error'));
+    (Order.create as jest.Mock).mockRejectedValue(new Error('Database error'));  // Mock Order.create to reject with an error
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response);  // Pass only req and res
+    await createOrder(req as CustomAuthRequest, res as Response);
 
     // Verify the response status and error message
     expect(res.status).toHaveBeenCalledWith(500);
@@ -70,24 +69,22 @@ describe('Order Controller', () => {
   });
 
   test('authenticateToken should call next if user is authenticated', async () => {
-    // Mock req.user as an authenticated user
-    req.user = { id: '123', tier: 'free' };
+    req.user = { id: '123', tier: 'free' };  // Mock authenticated user
 
     // Call authenticateToken middleware
     await authenticateToken(req as CustomAuthRequest, res as Response, next);
 
     // Check that the next function was called
-    expect(next).toHaveBeenCalledTimes(1);  // Ensure that next was called without error
+    expect(next).toHaveBeenCalledTimes(1);  // Ensure next is called once
   });
 
   test('authenticateToken should return 401 if no user is authenticated', async () => {
-    // Mock req.user as undefined (no user authenticated)
-    req.user = undefined;
+    req.user = undefined;  // Mock unauthenticated user (no user)
 
     // Call authenticateToken middleware
     await authenticateToken(req as CustomAuthRequest, res as Response, next);
 
-    // Verify that the response status is 401
+    // Verify that the response status is 401 and error message
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'User is not authenticated or missing tier information' });
   });
