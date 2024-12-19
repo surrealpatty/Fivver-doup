@@ -1,7 +1,7 @@
 // src/middlewares/authenticateToken.ts
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Use relative path
+import { CustomAuthRequest } from '../types';  // Relative path to src/types/index.ts
 
 // Define the interface for the decoded token payload
 interface DecodedToken {

@@ -9,8 +9,8 @@ export interface UserPayload {
   tier?: string;
 }
 
-// AuthRequest extends Express' Request with an optional user field
-export interface AuthRequest extends Request {
+// CustomAuthRequest extends Express' Request with an optional user field
+export interface CustomAuthRequest extends Request {
   user?: UserPayload;  // Optional user property, as not every request might have a user attached
 }
 
