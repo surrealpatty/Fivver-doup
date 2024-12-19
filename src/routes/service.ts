@@ -18,6 +18,12 @@ router.get(
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized access' }); // Ensure user exists
     }
+
+    // Ensure `tier` exists and is of type 'free' | 'paid'
+    if (user.tier !== 'paid') {
+      return res.status(403).json({ message: 'Access restricted to paid users.' });
+    }
+
     res.status(200).json({
       message: `Welcome ${user.username}, you have access to the premium service.`,
     });
