@@ -36,4 +36,5 @@ const authenticateToken = (
   });
 };
 
+
 export default authenticateToken;
