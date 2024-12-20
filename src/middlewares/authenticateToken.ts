@@ -1,7 +1,7 @@
-// src/middlewares/authenticateToken.ts
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Use relative path
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
+import { UserPayload } from '../types';  // Import UserPayload if needed
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
@@ -13,13 +13,14 @@ interface DecodedToken {
 }
 
 // Authenticate middleware
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
   // Extract the token from the Authorization header (format: "Bearer <token>")
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   // If no token is provided, respond with a 401 Unauthorized error
   if (!token) {
-    return res.status(401).json({ message: 'Access denied, token missing.' });
+    res.status(401).json({ message: 'Access denied, token missing.' });
+    return;  // Stop execution after sending the response
   }
 
   try {
@@ -27,7 +28,7 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
 
     // Ensure that `tier` is either 'free' or 'paid', default to 'free' if invalid
-    req.user = {
+    const user: UserPayload = {
       id: decoded.id,
       email: decoded.email,
       username: decoded.username,
@@ -35,11 +36,14 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
       role: decoded.role === 'admin' || decoded.role === 'user' ? decoded.role : 'user',  // Default role to 'user' if invalid
     };
 
+    // Attach the user to the request object
+    req.user = user;
+
     // Call next() to pass control to the next middleware or route handler
     next();
   } catch (error) {
     // If the token is invalid or expired, return a 400 Bad Request error
-    return res.status(400).json({ message: 'Invalid token.' });
+    res.status(400).json({ message: 'Invalid token.' });
   }
 };
 

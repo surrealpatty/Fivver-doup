@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Route to create an order
 router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  // Ensure that req.user is defined and is of the correct type
+  // Ensure that customReq.user is defined and is of the correct type
   if (!req.user || !req.user.id || !req.user.username) {
     return res.status(400).json({ message: 'User not authenticated or invalid user data' });
   }
