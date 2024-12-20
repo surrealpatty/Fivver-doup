@@ -2,26 +2,22 @@ import { Request } from 'express';
 
 // Define UserPayload interface
 export interface UserPayload {
-  id: string;              // Required: User ID
-  email: string;           // Required: Email (string)
-  username?: string;       // Optional: Username (string or undefined)
-  tier: 'free' | 'paid';   // Required: User's subscription tier (restricted to 'free' or 'paid')
+  id: string;           // Required: User ID
+  email: string;        // Required: Email (string)
+  username?: string;    // Optional: Username (string or undefined)
+  tier: 'free' | 'paid'; // Required: User's subscription tier (restricted to 'free' or 'paid')
   role?: 'admin' | 'user'; // Optional: User's role (either 'admin' or 'user')
 }
 
-// Define OrderPayload interface
-export interface OrderPayload {
-  id: string;         // Required: Order ID
-  userId: string;     // Required: User ID associated with the order
-  serviceId: string;  // Required: ID of the service for the order
-  quantity: number;   // Required: Quantity of the service ordered
-  totalPrice: number; // Required: Total price of the order
-  status: string;     // Required: Status of the order (e.g., 'pending', 'completed')
-  item: string;       // Item description or name
-  price: number;      // Price per item
+// Define AuthRequest interface to extend Express' Request with an optional user field
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Optional user property, as not every request might have a user attached
 }
 
-// Define CustomAuthRequest interface for extending Express Request
-export interface CustomAuthRequest extends Request {
-  user?: UserPayload;      // user is optional and must match the UserPayload type
+// CustomAuthRequest extends AuthRequest for any specific customizations
+export interface CustomAuthRequest extends AuthRequest {}
+
+// Type guard to check if a user is a UserPayload
+export function isUser(user: any): user is UserPayload {
+  return user && typeof user.id === 'string';  // Ensure 'user.id' is a string
 }
