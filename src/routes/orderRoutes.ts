@@ -1,6 +1,4 @@
-// src/routes/orderRoutes.ts
-
-import express, { Response, Request } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Import custom request type for typed access to req.user
 import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
@@ -73,7 +71,7 @@ router.post(
 );
 
 // Route to get orders (example)
-router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response): Promise<Response> => {
+router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   if (!req.user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
