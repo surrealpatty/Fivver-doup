@@ -26,15 +26,15 @@ const authenticateToken = (
 
   try {
     // Attempt to verify and decode the token
-    const decoded = verifyToken(token) as DecodedToken;  // Cast the decoded token to DecodedToken
+    const decoded = verifyToken(token);  // `verifyToken` should return `UserPayload | null`
 
-    // Ensure decoded contains the user object
+    // Ensure decoded is not null and contains the user property
     if (!decoded || !decoded.user) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
     // Attach the decoded user info to the req object (user is typed as UserPayload)
-    req.user = decoded.user;  // No need for further casting, it's already typed as UserPayload
+    req.user = decoded.user;  // `decoded.user` is of type `UserPayload`
 
     // Proceed to the next middleware or route handler
     next();
