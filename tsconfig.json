@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                        // Use the latest ECMAScript target
-    "module": "CommonJS",                      // Use CommonJS module system for Node.js
-    "strict": true,                            // Enable strict mode for better type checking
-    "esModuleInterop": true,                   // Allow default imports for CommonJS modules
-    "skipLibCheck": true,                      // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true,  // Enforce consistent casing for file names
-    "baseUrl": ".",                            // Set baseUrl to the root directory
+    "target": "ESNext",                         // Use the latest ECMAScript target
+    "module": "CommonJS",                       // Use CommonJS module system for Node.js
+    "strict": true,                             // Enable strict mode for better type checking
+    "esModuleInterop": true,                    // Allow default imports for CommonJS modules
+    "skipLibCheck": true,                       // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,   // Enforce consistent casing for file names
+    "baseUrl": ".",                             // Set baseUrl to the root directory
     "paths": {
-      "@types": ["src/types"]                  // Alias to the types directory within src
+      "@types": ["src/types"]                   // Alias to the types directory within src
     },
-    "outDir": "./dist",                        // Set output directory for compiled files
-    "moduleResolution": "node",                // Resolve modules as Node.js does
-    "allowJs": true,                           // Allow JavaScript files to be included
-    "resolveJsonModule": true,                 // Allow importing JSON files
-    "experimentalDecorators": true,            // Enable experimental decorators
-    "emitDecoratorMetadata": true              // Enable metadata generation for decorators
+    "outDir": "./dist",                         // Set output directory for compiled files
+    "moduleResolution": "node",                 // Resolve modules as Node.js does
+    "allowJs": true,                            // Allow JavaScript files to be included
+    "resolveJsonModule": true,                  // Allow importing JSON files
+    "experimentalDecorators": true,             // Enable experimental decorators
+    "emitDecoratorMetadata": true               // Enable metadata generation for decorators
   },
   "include": [
-    "src/**/*"                                 // Include all TypeScript files in the src directory
+    "src/**/*"                                  // Include all TypeScript files in the src directory
   ],
   "exclude": [
-    "node_modules"                             // Exclude node_modules directory from compilation
+    "node_modules"                              // Exclude node_modules directory from compilation
   ]
 }

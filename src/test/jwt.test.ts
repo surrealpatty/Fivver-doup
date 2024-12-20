@@ -1,3 +1,5 @@
+// src/test/jwt.test.ts
+
 import { generateToken, verifyToken } from '../utils/jwt';  // Adjust the import path if necessary
 import { UserPayload } from '../types';  // Adjust the import path if necessary
 
@@ -8,9 +10,9 @@ const user: UserPayload = {
   username: 'username',
   tier: 'paid',
   role: 'user',
-  orderId: 'order123',
-  userId: 'user123',
-  serviceId: 'service123',
+  orderId: 'order123',  // Now this is valid because it's in the UserPayload interface
+  userId: 'user123',  // Now this is valid
+  serviceId: 'service123',  // Now this is valid
   amount: 50,
   status: 'active'
 };
