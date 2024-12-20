@@ -1,9 +1,19 @@
 import express, { Response, Request, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
-import { CustomAuthRequest } from '../types';  // Import custom request type for typed access to req.user
+import { CustomAuthRequest } from '/types/index';  // Import custom request type for typed access to req.user
 import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
 
 const router = express.Router();
+
+// Ensure CustomAuthRequest is compatible with the Express Request
+interface CustomAuthRequest extends Request {
+  user?: {
+    id: string;
+    email?: string;
+    username?: string;
+    tier: string;
+  };
+}
 
 // Define the order route for creating an order
 router.post(
