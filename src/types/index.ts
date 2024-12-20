@@ -7,7 +7,6 @@ export * from './OrderPayload'; // Ensure OrderPayload.ts exists with correct fi
 
 // Import necessary types from specific files
 import { Request } from 'express';
-import { UserPayload } from './UserPayload';  // Import UserPayload from UserPayload.ts
 
 // Define the Order interface if it's not already defined in the Order.ts file
 export interface Order {
