@@ -1,19 +1,9 @@
 import express, { Response, Request, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
 import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
-import { CustomAuthRequest } from '../types'; // Use relative path to `types/index.ts`
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
 const router = express.Router();
-
-// Ensure CustomAuthRequest is compatible with the Express Request
-interface CustomAuthRequest extends Request {
-  user?: {
-    id: string;
-    email?: string;
-    username?: string;
-    tier: string;
-  };
-}
 
 // Define the order route for creating an order
 router.post(
@@ -41,14 +31,14 @@ router.post(
       const newOrder: Order = {
         id: 'order-id-placeholder',  // Placeholder ID, you would generate or fetch this
         userId: id,
-        item,
+        item,                      // Correct use of the 'item' field
         quantity,
         price,
-        status: 'pending',  // Default status
+        status: 'pending',         // Default status
         serviceId: 'service-id-placeholder', // Placeholder for service ID
         amount: price * quantity,  // Amount = price * quantity
-        createdAt: new Date(),  // Placeholder for createdAt
-        updatedAt: new Date(),  // Placeholder for updatedAt
+        createdAt: new Date(),     // Placeholder for createdAt
+        updatedAt: new Date(),     // Placeholder for updatedAt
       };
 
       // Simulate saving the order (you would likely interact with the database here)
