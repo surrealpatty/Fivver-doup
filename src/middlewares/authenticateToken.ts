@@ -24,7 +24,7 @@ const authenticateToken = (
     const decoded = verifyToken(token);  // Assuming verifyToken returns a decoded object
 
     // Ensure decoded is not null and has the expected structure
-    if (!decoded || !decoded.user) {
+    if (!decoded) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
