@@ -1,5 +1,6 @@
-import { Request } from 'express';
 
+import { Request } from 'express';
+import { UserPayload } from './UserPayload';
 // Define UserPayload interface
 export interface UserPayload {
   tier: 'free' | 'paid'; // Required: User's subscription tier (restricted to 'free' or 'paid')
@@ -10,7 +11,7 @@ export interface UserPayload {
   amount: number;
   status: string;
   id: string;
-  email?: string;  // Make email optional to handle the undefined case
+  email?: string;  // Make email optional
   username?: string;
 }
 export interface OrderPayload {
@@ -34,6 +35,7 @@ export interface CustomAuthRequest extends Request {
     email?: string;
     username?: string;
     tier?: string;
+    user?: UserPayload;
   };
 }
 
