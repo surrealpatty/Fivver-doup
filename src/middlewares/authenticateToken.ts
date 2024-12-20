@@ -1,6 +1,6 @@
+// src/middlewares/authenticateToken.ts
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
 import { UserPayload } from '../types';  // Import UserPayload
 
 // Define the interface for the decoded token payload
@@ -10,6 +10,11 @@ interface DecodedToken {
   username: string;
   tier: 'free' | 'paid';  // Ensure tier is either 'free' or 'paid'
   role?: 'admin' | 'user';  // Optional role
+}
+
+// Update CustomAuthRequest to ensure user is always required
+export interface CustomAuthRequest extends Request {
+  user: UserPayload;  // Make `user` always present, no `undefined`
 }
 
 // Authenticate middleware
