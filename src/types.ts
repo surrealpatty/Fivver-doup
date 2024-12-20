@@ -1,4 +1,3 @@
-// src/types.ts
 import { Request } from 'express';
 
 // Define UserPayload interface
@@ -10,13 +9,10 @@ export interface UserPayload {
   tier?: string;       // Optional: Subscription tier (string)
 }
 
-// Define AuthRequest interface to extend Express' Request with an optional user field
-export interface AuthRequest extends Request {
-  user?: UserPayload;  // Optional user property, as not every request might have a user attached
-}
-
+// Extend the Express Request interface to include the user property
+// CustomAuthRequest will be the version of the request object that includes an optional 'user' field
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Optional user property
+  user?: UserPayload;  // Optional user field (UserPayload or undefined)
 }
 
 // Type guard to check if a user is a UserPayload

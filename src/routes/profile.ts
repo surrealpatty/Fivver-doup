@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; // Import the correct type
-import authenticateToken from '../middlewares/authenticateToken'; // Default import
+import { CustomAuthRequest } from '../types'; // Import the correct type for CustomAuthRequest
+import authenticateToken from '../middlewares/authenticateToken'; // Default import for authentication middleware
 
 const router = Router();
 
@@ -15,13 +15,14 @@ router.get(
     }
 
     // Destructure user data from the authenticated request
-    const { id, email, username } = req.user;
+    const { id, email, username, tier } = req.user; // Added 'tier' to match the UserPayload type
 
     // Return the user's profile data
     return res.status(200).json({
       id,
       email,
       username,
+      tier, // Returning tier as part of user profile
     });
   }
 );
@@ -36,7 +37,7 @@ router.put(
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    const { id, email, username } = req.user; // Destructure user data
+    const { id, email, username, tier } = req.user; // Destructure user data
 
     // Validate if the necessary fields exist
     if (!id || !email || !username) {
@@ -44,9 +45,9 @@ router.put(
     }
 
     // Optionally validate the incoming data to update the user profile
-    const { newEmail, newUsername } = req.body;  // Assuming these fields can be used for updates
+    const { newEmail, newUsername, newTier } = req.body;  // Assuming these fields can be used for updates
 
-    if (!newEmail && !newUsername) {
+    if (!newEmail && !newUsername && !newTier) {
       return res.status(400).json({ message: 'No data to update' });
     }
 
@@ -59,6 +60,7 @@ router.put(
         id,
         email: newEmail || email,  // Use newEmail if provided, else keep current email
         username: newUsername || username,  // Use newUsername if provided, else keep current username
+        tier: newTier || tier,  // Use newTier if provided, else keep current tier
       };
 
       // Return response with updated user details
@@ -66,7 +68,7 @@ router.put(
         message: 'Profile updated successfully',
         user: updatedUser,  // Return the updated user data
       });
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
     }
