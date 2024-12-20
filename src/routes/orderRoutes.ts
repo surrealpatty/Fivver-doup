@@ -1,40 +1,39 @@
 // src/routes/orderRoutes.ts
-import { Router, Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import the correct type for the request
-import { createOrder } from '../controllers/orderController';  // Import the controller function
-import { authenticateToken } from '../middlewares/authenticateToken';  // Import the authentication middleware
 
-const router = Router();
+import express, { Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
+import { OrderPayload } from '../types';  // Import OrderPayload type
 
-// POST route for creating an order
+const router = express.Router();
+
+// Define the order route
 router.post(
-  '/',
-  authenticateToken,  // Use the authentication middleware
-  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
-    // Ensure user is authenticated (check if req.user exists)
+  '/order',
+  authenticateToken,  // Ensure user is authenticated
+  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+    // Check if user is authenticated
     if (!req.user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Proceed with the order creation logic if user is authenticated
+    const { id, email, username, tier } = req.user;  // Access user properties
+
+    const { item, quantity, price }: OrderPayload = req.body;  // Extract order data
+
+    if (!item || !quantity || !price) {
+      return res.status(400).json({ message: 'Missing order data' });
+    }
+
     try {
-      const { serviceId, orderDetails, status } = req.body; // Destructure necessary fields from the body
-
-      // Ensure that req.user contains all required fields for UserPayload
-      const { id: userId, email, username, tier, role } = req.user;
-      
-      // Pass the userId along with other details to create the order
-      const order = await createOrder({
-        userId, 
-        serviceId, 
-        orderDetails, 
-        status
+      // Logic to process the order (e.g., save it to the database)
+      return res.status(201).json({
+        message: 'Order created successfully',
+        order: { id, email, username, tier, item, quantity, price },  // Return order data
       });
-
-      // Return the created order with a 201 status
-      return res.status(201).json(order);
-    } catch (error) {
-      next(error);  // Pass error to the next middleware (error handler)
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }
 );

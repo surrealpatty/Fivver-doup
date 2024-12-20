@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
-import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
-import { UserPayload } from '../types';  // Import UserPayload for the type definition
+import jwt from 'jsonwebtoken';
+import { CustomAuthRequest, UserPayload } from '../types';  // Correct import for CustomAuthRequest and UserPayload
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
@@ -24,7 +23,7 @@ export const authenticateToken = (
   // If no token is provided, respond with a 401 Unauthorized error
   if (!token) {
     res.status(401).json({ message: 'Access denied, token missing.' });
-    return;  // Make sure to return to stop further execution of the middleware
+    return;  // Ensure to return after sending a response
   }
 
   try {
@@ -48,5 +47,6 @@ export const authenticateToken = (
   } catch (error) {
     // If the token is invalid or expired, return a 400 Bad Request error
     res.status(400).json({ message: 'Invalid token.' });
+    return;  // Ensure to return after sending a response
   }
 };
