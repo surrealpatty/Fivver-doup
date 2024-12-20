@@ -17,9 +17,17 @@ export interface OrderPayload {
   quantity: number;  // Required: Quantity of the service ordered
   totalPrice: number; // Required: Total price of the order
   status: string;    // Required: Status of the order (e.g., 'pending', 'completed')
+  item: string;
+  price: number;
 }
 
 // Define CustomAuthRequest interface for extending Express Request
+
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Optional: `user` can be `UserPayload` or `undefined`
+  user?: {
+    id: string;
+    email?: string;
+    username?: string;
+    tier?: string;  // Assuming tier is a string; adjust if necessary
+  };
 }
