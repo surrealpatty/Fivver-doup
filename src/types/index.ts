@@ -3,10 +3,10 @@ import { Request } from 'express';
 // Define UserPayload interface
 export interface UserPayload {
   id: string;               // Required: User ID
-  email?: string;           // Optional: Email of the user
-  username?: string;        // Optional: Username of the user
-  tier: 'free' | 'paid';    // Required: User's subscription tier
-  role?: 'admin' | 'user';  // Optional: User's role (admin or user)
+  email?: string;            // Optional: Email (string or undefined)
+  username?: string;         // Optional: Username (string or undefined)
+  tier: 'free' | 'paid';     // Required: User's subscription tier
+  role?: 'admin' | 'user';   // Optional: User's role (admin or user)
 }
 
 // Define OrderPayload interface

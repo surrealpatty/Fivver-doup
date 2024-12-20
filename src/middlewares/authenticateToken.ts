@@ -1,36 +1,29 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
-import { UserPayload } from '../types';  // Import UserPayload type
+import { Router, Response } from 'express';
+import  authenticateToken  from '../middlewares/authenticateToken';  // Import middleware
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest for typing
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';  // Secret key for JWT verification
+const router = Router();
 
-// Middleware to authenticate the JWT token
-export const authenticateToken = (
-  req: CustomAuthRequest,  // Type the req object using CustomAuthRequest
-  res: Response,
-  next: NextFunction
-): void => {
-  // Extract the token from the Authorization header (format: "Bearer <token>")
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+// A protected route
+router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+  const user = req.user;  // `user` is typed as `UserPayload | undefined`
 
-  // If no token is provided, respond with a 401 Unauthorized error
-  if (!token) {
-    res.status(401).json({ message: 'Access denied, token missing.' });
-    return; // No need to return the response, just return to stop further code execution
+  // Handle the case where `user` is undefined (invalid or missing token)
+  if (!user) {
+    return res.status(401).json({ message: 'User data not found' });
   }
 
-  try {
-    // Verify and decode the token using the secret key from environment variables
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload; // Decode the token as UserPayload
+  // If user exists, respond with their data
+  res.status(200).json({
+    message: 'You have access to this protected route.',
+    user: {
+      id: user.id,
+      email: user.email || 'Email not provided',  // Fallback if email is undefined
+      username: user.username || 'Username not provided',  // Fallback if username is undefined
+      tier: user.tier,  // Ensure tier is present
+      role: user.role || 'user'  // Fallback if role is undefined
+    }
+  });
+});
 
-    // Attach the user object to req.user (req.user will be typed as UserPayload or undefined)
-    req.user = decoded;
-
-    // Proceed to the next middleware or route handler
-    next();
-  } catch (error) {
-    // If the token is invalid or expired, return a 400 Bad Request error
-    res.status(400).json({ message: 'Invalid token.' });
-  }
-};
+export default router;
