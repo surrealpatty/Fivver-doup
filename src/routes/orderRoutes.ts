@@ -1,10 +1,9 @@
 // src/routes/orderRoutes.ts
 
-import express, { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types/index'; // Correct import
-import authenticateToken from '../middlewares/authenticateToken'; // Correct import for default export
-import { UserPayload } from '../types'; // Correct the import to match the export
-
+import express, { Response, NextFunction } from 'express';
+import  authenticateToken  from '../middlewares/authenticateToken'; // Correct import for default export
+import { CustomAuthRequest } from '../types';  // Correct import for the custom request type
+import { OrderPayload } from '../types';  // Assuming OrderPayload is defined in your types
 
 const router = express.Router();
 
@@ -18,6 +17,7 @@ router.post(
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
+    // Destructure user details from req.user (CustomAuthRequest is ensuring user is always available here)
     const { id, email, username, tier } = req.user;  // Access user properties
 
     // Ensure the order payload matches the OrderPayload type

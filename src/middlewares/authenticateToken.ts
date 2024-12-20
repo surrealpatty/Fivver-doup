@@ -1,13 +1,13 @@
 // src/middlewares/authenticateToken.ts
 
-import { CustomAuthRequest } from '../types';  // Import the correct type for request
 import { Response, NextFunction } from 'express';
+import { CustomAuthRequest } from '../types';  // Import the correct type for request
 import { verifyToken } from '../utils/jwt';  // Assuming you have a utility to verify JWT
 import { UserPayload } from '../types';  // Import the UserPayload interface
 
 // Middleware to authenticate user token
 const authenticateToken = (
-  req: CustomAuthRequest,  // CustomAuthRequest type ensures req has user as optional
+  req: CustomAuthRequest,  // CustomAuthRequest ensures req has user as required
   res: Response, 
   next: NextFunction
 ) => {
@@ -24,11 +24,11 @@ const authenticateToken = (
     const decoded = verifyToken(token);  // Assuming verifyToken returns a decoded object
 
     // Ensure decoded is not null and has the expected structure
-    if (!decoded) {
+    if (!decoded || !decoded.user) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
-    // Attach the decoded user info to the req object (user is typed as UserPayload)
+    // Attach the decoded user info to the req object
     req.user = decoded.user as UserPayload;  // Casting decoded.user to UserPayload
 
     // Proceed to the next middleware or route handler
