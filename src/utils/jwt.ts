@@ -13,11 +13,6 @@ export const generateToken = (user: UserPayload): string => {
     username: user.username,
     tier: user.tier,  // Include all necessary fields from UserPayload
     role: user.role,  // Include role if it's part of your user model
-    orderId: user.orderId,
-    userId: user.userId,
-    serviceId: user.serviceId,
-    amount: user.amount,
-    status: user.status,
   };
 
   // Sign and return the token with 1 hour expiration

@@ -39,7 +39,7 @@ export interface OrderPayload {
 }
 
 // Define the Order interface, which represents a full order object (used after fetching from the database)
-export interface Order {
+export type Order = {
   id: string;
   serviceId: string;
   userId: string;
