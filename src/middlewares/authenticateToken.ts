@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
-import { UserPayload } from '../types/UserPayload';  // Ensure correct import of UserPayload
+import { UserPayload } from '../types';  // Ensure correct import of UserPayload
 
 const authenticateToken = (
   req: CustomAuthRequest, 
@@ -14,7 +14,7 @@ const authenticateToken = (
   // If no token is provided, return a 401 Unauthorized error
   if (!token) {
     res.status(401).json({ message: 'Token missing' });  // Send a response directly
-    return;  // Return here to stop further processing
+    return;  // Stop further execution if no token
   }
 
   // Verify the token and decode it
@@ -22,7 +22,7 @@ const authenticateToken = (
     if (err || !decoded) {
       // If the token is invalid or expired, return a 403 Forbidden error
       res.status(403).json({ message: 'Token is not valid' });  // Send a response directly
-      return;  // Return here to stop further processing
+      return;  // Stop further execution if token verification fails
     }
 
     // Ensure the decoded token is typed as UserPayload (type assertion)
