@@ -64,6 +64,7 @@ router.get(
 
     const { id, email, username } = req.user;  // Destructure the user information from the request
 
+    // Return the user's profile data
     return res.status(200).json({
       id,
       email,

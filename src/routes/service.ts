@@ -1,12 +1,16 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for middleware
-import { UserPayload } from '../types/UserPayload';  // Correct import for UserPayload
 import { CustomAuthRequest } from '../types';  // Ensure correct import for CustomAuthRequest
 
 const router = Router();  // Initialize the router
 
 // Define the route with JWT authentication middleware
-router.get('/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+  // Ensure req.user is not undefined before using it
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
   const user = req.user;  // Now TypeScript knows that req.user is of type UserPayload
 
   // Ensure user exists (TypeScript type check)
