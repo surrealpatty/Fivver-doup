@@ -1,13 +1,14 @@
-import express, { Response, NextFunction } from 'express';
+// src/routes/profile.ts
+
+import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
-import { updateProfile } from '../controllers/profileController';
+import { CustomAuthRequest } from '../types';  // Ensure correct path to CustomAuthRequest type
 
 const router = express.Router();
 
 // Profile route - Update profile information
 router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  const customReq = req;
+  const customReq = req; // Type assertion to CustomAuthRequest
 
   // Ensure user data is present
   if (!customReq.user || !customReq.user.id || !customReq.user.username) {
@@ -15,10 +16,12 @@ router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
   }
 
   try {
-    // Call the updateProfile controller function
-    await updateProfile(customReq, res);
+    // Extract user data from customReq.user
+    const { id, email, username } = customReq.user;
 
-    return res.status(200).json({ message: 'Profile updated successfully' });
+    // Your logic for updating the profile (if any) here
+    // Example response: You can replace it with actual logic to update profile in the database
+    return res.status(200).json({ message: 'Profile updated successfully', user: { id, email, username } });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal server error' });

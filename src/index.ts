@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { userRoutes } from './routes/user'; // Corrected import to use default export
+import  userRoutes  from './routes/user'; // Corrected import to use default export
 import servicesRouter from './routes/service'; // Corrected import
 import { sequelize } from './config/database'; // Ensure correct path to database config
 
