@@ -10,8 +10,8 @@ export interface UserPayload {
   amount: number;
   status: string;
   id: string;
-  email: string;  // Make sure email is required
-  username: string;
+  email?: string;  // Make email optional to handle the undefined case
+  username?: string;
 }
 export interface OrderPayload {
   id: string;
