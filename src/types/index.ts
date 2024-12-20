@@ -1,7 +1,12 @@
-// Exporting types from their respective files if they exist
-export * from './UserPayload';  // Assuming you have UserPayload.ts
-export * from './Order';        // Ensure Order is exported from Order.ts
-export * from './OrderPayload'; // Ensure OrderPayload is exported from OrderPayload.ts
+// src/types/index.ts
+
+export * from './UserPayload';  // Assuming UserPayload.ts exists
+export * from './Order';        // Ensure Order and OrderPayload are exported here
+export * from './OrderPayload'; // Ensure OrderPayload is defined and exported
+
+// Import necessary types
+import { Request } from 'express';
+import { UserPayload } from './UserPayload';  // Import UserPayload if it's defined elsewhere
 
 // Ensure that the Order type is defined here if it's not being imported
 export interface Order {
