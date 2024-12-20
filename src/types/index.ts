@@ -1,6 +1,7 @@
-// Exporting the types from their respective files if they exist
+// Exporting types from their respective files if they exist
 export * from './UserPayload';  // Assuming you have UserPayload.ts
 export * from './Order';        // Ensure Order is exported from Order.ts
+export * from './OrderPayload'; // Ensure OrderPayload is exported from OrderPayload.ts
 
 // Ensure that the Order type is defined here if it's not being imported
 export interface Order {
