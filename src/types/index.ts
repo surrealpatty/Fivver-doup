@@ -4,7 +4,7 @@ import { Request } from 'express';
 // Define the UserPayload interface
 export interface UserPayload {
   id: string;
-  email?: string;     // email can be a string or undefined
+  email: string;  
   username?: string;  // username can be a string or undefined
   tier: 'free' | 'paid';
   role?: 'admin' | 'user';
