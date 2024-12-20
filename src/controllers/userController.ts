@@ -1,67 +1,57 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs'; // Ensure bcryptjs is installed or use bcrypt
-import  User  from '../models/user'; // Sequelize User model
-import { generateToken } from '../utils/jwt'; // JWT token generation helper
+import bcrypt from 'bcryptjs';  // Ensure bcryptjs is installed or use bcrypt
+import User from '../models/user';  // Sequelize User model
+import { generateToken } from '../utils/jwt';  // JWT token generation helper
 
-// Controller for logging in a user
-export const loginUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password } = req.body;
+// Controller for registering a new user
+export const registerUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, username, password, tier = 'free' } = req.body;
 
   try {
-    // Input validation: Ensure email and password are provided
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required.' });
+    // Input validation: Ensure all required fields are provided
+    if (!email || !username || !password) {
+      return res.status(400).json({ message: 'Email, username, and password are required.' });
     }
 
-    // Find the user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+    // Check if the user already exists by email
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists with this email.' });
     }
 
-    // Compare the provided password with the hashed password stored in the database
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials.' });
-    }
+    // Hash the user's password before saving to the database
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a JWT token for the user
-    const token = generateToken(user);
+    // Default role and isVerified properties (assuming 'user' is the default role and false is default for isVerified)
+    const newUser = await User.create({
+      email,
+      username,
+      password: hashedPassword,
+      tier,  // Optional tier (defaults to 'free')
+      role: 'user',  // Default role
+      isVerified: false,  // Default verification status
+    });
 
-    // Respond with user data (excluding sensitive information like password) and the JWT token
-    return res.status(200).json({
-      message: 'Login successful',
+    // Generate a JWT token for the new user
+    const token = generateToken(newUser);
+
+    // Respond with the user data and the JWT token (excluding password)
+    return res.status(201).json({
+      message: 'User registered successfully',
       user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role,
-        tier: user.tier,
-        isVerified: user.isVerified,
-        createdAt: user.createdAt,
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+        role: newUser.role,  // Assuming role is set to 'user' by default
+        tier: newUser.tier,
+        isVerified: newUser.isVerified,
+        createdAt: newUser.createdAt,
       },
       token,
     });
   } catch (error) {
-    // Log the error for debugging and send a generic server error response
-    console.error('Error logging in user:', error);
+    // Log the error and respond with a generic server error message
+    console.error('Error registering user:', error);
     return res.status(500).json({ message: 'Internal server error', error });
-  }
-};
-
-// Example function to get a user by email (optional for testing)
-export const getUser = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const user = await User.findOne({ where: { email: req.body.email } });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Respond with the user data
-    return res.status(200).json(user);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: 'Server error' });
   }
 };

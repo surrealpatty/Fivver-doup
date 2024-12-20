@@ -1,15 +1,12 @@
-import { Router } from 'express';
-import { registerUser, loginUser } from '../controllers/userController'; // Assuming you have these controller functions
+import express, { Request, Response } from 'express';
+import { registerUser } from '../controllers/userController';  // Correctly import the registerUser function
+import { authenticateToken } from '../middlewares/authenticateToken';  // Optional: If you want to protect certain routes
 
-const router = Router();
+const router = express.Router();
 
-// User registration route
-router.post('/register', registerUser);
+// Route to register a new user
+router.post('/register', registerUser);  // Register user route
 
-// User login route
-router.post('/login', loginUser);
+// Other user-related routes (login, etc.) can be added here
 
-// Add more routes as needed
-// For example, route for getting user details, updating profile, etc.
-
-export const userRoutes = router; // Export userRoutes so it can be used elsewhere
+export default router;

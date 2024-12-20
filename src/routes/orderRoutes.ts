@@ -7,20 +7,22 @@ const router = express.Router();
 
 // Route to create an order
 router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  // Ensure that customReq.user is defined and is of the correct type
-  if (!req.user || !req.user.id || !req.user.username) {
+  const customReq = req;
+
+  // Ensure user information is valid
+  if (!customReq.user || !customReq.user.id || !customReq.user.username) {
     return res.status(400).json({ message: 'User not authenticated or invalid user data' });
   }
 
   try {
-    const { tier } = req.user;
+    const { tier } = customReq.user;
 
     if (!tier) {
       return res.status(400).json({ error: 'User does not have a valid tier' });
     }
 
     // Call the createOrder controller function
-    await createOrder(req, res);
+    await createOrder(customReq, res);
 
     return res.status(201).json({ message: 'Order created successfully' });
   } catch (err) {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
-import { UserPayload } from '../types';  // Import UserPayload if needed
+import { UserPayload } from '../types';  // Import UserPayload
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
