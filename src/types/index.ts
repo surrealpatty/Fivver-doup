@@ -4,7 +4,7 @@ import { Request } from 'express';
 // Define the UserPayload interface
 export interface UserPayload {
   id: string;
-  email: string;  
+  email: string;  // email is now required
   username?: string;  // username can be a string or undefined
   tier: 'free' | 'paid';
   role?: 'admin' | 'user';
@@ -51,7 +51,7 @@ export interface AuthRequest extends Request {
 
 // Define the CustomAuthRequest interface (user is required)
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;
+  user: UserPayload;  // user is now non-optional
 }
 
 // Type guard to check if the user is a UserPayload

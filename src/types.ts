@@ -1,3 +1,4 @@
+// src/types.ts
 import { Request } from 'express';
 
 // Define UserPayload interface
@@ -14,7 +15,7 @@ export interface AuthRequest extends Request {
   user?: UserPayload;  // Optional user property, as not every request might have a user attached
 }
 
-// CustomAuthRequest extends AuthRequest
+// CustomAuthRequest extends AuthRequest, ensuring user is optional but properly typed
 export interface CustomAuthRequest extends AuthRequest {}
 
 // Type guard to check if a user is a UserPayload

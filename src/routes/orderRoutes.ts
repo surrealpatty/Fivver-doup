@@ -1,7 +1,7 @@
 import express, { Response, Request, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
-import { CustomAuthRequest } from '/types/index';  // Import custom request type for typed access to req.user
 import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
+import { CustomAuthRequest } from '../types'; // Use relative path to `types/index.ts`
 
 const router = express.Router();
 
