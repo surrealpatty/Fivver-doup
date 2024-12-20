@@ -1,15 +1,15 @@
 // src/types/index.ts
 
-// Correct the file imports for case sensitivity issues
-export * from './UserPayload';  // Assuming UserPayload.ts exists
-export * from './Order';        // Ensure Order.ts exists with the correct case
-export * from './OrderPayload'; // Ensure OrderPayload.ts exists and is exported properly
+// Export necessary types
+export * from './UserPayload';  // Assuming UserPayload.ts exists with correct filename
+export * from './Order';        // Ensure Order.ts exists with correct filename (case-sensitive)
+export * from './OrderPayload'; // Ensure OrderPayload.ts exists with correct filename (case-sensitive)
 
-// Import necessary types
+// Import necessary types from specific files
 import { Request } from 'express';
-import { UserPayload as ImportedUserPayload } from './UserPayload';  // Import UserPayload
+import { UserPayload } from './UserPayload';  // Import UserPayload from UserPayload.ts
 
-// Ensure the Order type is defined correctly
+// Define the Order interface if it's not already defined in the Order.ts file
 export interface Order {
   id: string;         // Order ID
   userId: string;     // ID of the user who placed the order
@@ -22,10 +22,10 @@ export interface Order {
   amount: number;     // Amount of the order
 }
 
-// Assuming UserPayload is imported correctly, avoid declaring it twice
+// Ensure UserPayload interface is imported correctly from UserPayload.ts
 export interface UserPayload {
   id: string;
-  email: string;      // Make sure email is required
+  email: string;      // Ensure email is required
   username?: string;  // Optional, assuming it's not required
   tier: 'free' | 'paid';  // Define the tier (free/paid)
   role?: 'admin' | 'user'; // Optional, defining roles
@@ -36,17 +36,17 @@ export interface UserPayload {
   status: string;         // Status of the order
 }
 
-// Assuming OrderPayload is correctly defined elsewhere, but adding it here for consistency
+// OrderPayload interface should be defined in OrderPayload.ts, which should be exported here
 export interface OrderPayload {
-  id: string;       // Order ID
-  userId: string;   // ID of the user who placed the order
-  item: string;     // Item being ordered
-  quantity: number; // Quantity of the item
-  price: number;    // Price of the item
-  // Add any other fields specific to OrderPayload as needed
+  id: string;
+  userId: string;
+  item: string;
+  quantity: number;
+  price: number;
+  // Add any other fields as needed
 }
 
-// Ensure that the AuthRequest and CustomAuthRequest types are exported
+// AuthRequest and CustomAuthRequest types
 export interface AuthRequest extends Request {
   user?: UserPayload;  // Optional user field (user may not exist on every request)
 }

@@ -1,37 +1,41 @@
-// src/middleware/authenticateToken.ts
+// src/middlewares/authenticateToken.ts
 
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Import the UserPayload interface
-import { CustomAuthRequest } from '../types'; // Import the correct type for the request
+import { UserPayload } from '../types';  // Import UserPayload type
 
-// Middleware to authenticate user token
-const authenticateToken = (
-  req: CustomAuthRequest, // CustomAuthRequest ensures req has a user as required
-  res: Response, 
-  next: NextFunction
-) => {
-  // Check if token is present in the authorization header
-  const token = req.header('Authorization')?.replace('Bearer ', '');  // Get token from "Bearer <token>" format
+// Custom type for request, extending the base Express Request type
+export interface CustomAuthRequest extends Request {
+  user?: UserPayload;  // 'user' is now optional, matching your needs
+}
 
-  // If no token is provided, return 403 Forbidden response
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');  // Get token from the Authorization header
+
+  // If no token is found, return a 401 Unauthorized error
   if (!token) {
-    return res.status(403).json({ message: 'Token is missing' });
+    return res.status(401).json({ message: 'No token provided' });
   }
 
   try {
-    // Attempt to verify and decode the token using jsonwebtoken
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload; // Assuming JWT contains the UserPayload
+    // Decode the token using jwt.verify() and cast the result to UserPayload type
+    const decoded = jwt.verify(token, 'your_jwt_secret') as UserPayload;  // Ensure decoded is typed as UserPayload
 
-    // Attach the decoded user info to the req object
-    req.user = decoded;  // TypeScript knows req.user is a UserPayload
+    // Check if the decoded token has all the necessary fields to create a valid UserPayload
+    if (!decoded.email || !decoded.id) {
+      return res.status(401).json({ message: 'Invalid token structure' });
+    }
+
+    // Assign the decoded user information to req.user
+    req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
-  } catch (error) {
-    // Catch any errors during token verification (invalid or expired token)
+
+  } catch (err) {
+    console.error(err);  // Log any errors for debugging
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
-export default authenticateToken; // Default export
+export default authenticateToken;
