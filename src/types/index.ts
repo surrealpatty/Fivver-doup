@@ -1,27 +1,5 @@
-
 import { Request } from 'express';
-import { UserPayload } from './UserPayload';
-// Define UserPayload interface
-export interface UserPayload {
-  tier: 'free' | 'paid'; // Required: User's subscription tier (restricted to 'free' or 'paid')
-  role?: 'admin' | 'user'; // Optional: User's role (either 'admin' or 'user')
-  orderId: string;
-  userId: string;
-  serviceId: string;
-  amount: number;
-  status: string;
-  id: string;
-  email?: string;  // Make email optional
-  username?: string;
-}
-export interface OrderPayload {
-  id: string;
-  totalAmount: number;
-  status: string;
-  item: string;      // Example type, update based on actual requirements
-  quantity: number;  // Update the type if needed
-  price: number; 
-}
+import { UserPayload } from './UserPayload';  // Correctly import UserPayload
 
 // Define AuthRequest interface to extend Express' Request with an optional user field
 export interface AuthRequest extends Request {
@@ -29,14 +7,8 @@ export interface AuthRequest extends Request {
 }
 
 // CustomAuthRequest extends AuthRequest for any specific customizations
-export interface CustomAuthRequest extends Request {
-  user?: {
-    id: string;
-    email?: string;
-    username?: string;
-    tier?: string;
-    user?: UserPayload;
-  };
+export interface CustomAuthRequest extends AuthRequest {
+  user?: UserPayload;  // Ensure the user field matches UserPayload
 }
 
 // Type guard to check if a user is a UserPayload
