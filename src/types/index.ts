@@ -1,4 +1,4 @@
-import { Request } from 'express';
+// src/types/index.ts
 
 // Define UserPayload interface
 export interface UserPayload {
