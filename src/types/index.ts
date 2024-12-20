@@ -1,14 +1,15 @@
 // src/types/index.ts
 
+// Correct the file imports for case sensitivity issues
 export * from './UserPayload';  // Assuming UserPayload.ts exists
-export * from './Order';  // Ensure Order and OrderPayload are exported here
-export * from './OrderPayload'; // Ensure OrderPayload is defined and exported
+export * from './Order';        // Ensure Order.ts exists with the correct case
+export * from './OrderPayload'; // Ensure OrderPayload.ts exists and is exported properly
 
 // Import necessary types
 import { Request } from 'express';
-import { UserPayload } from '../types/UserPayload';  // Import UserPayload if it's defined elsewhere
+import { UserPayload as ImportedUserPayload } from './UserPayload';  // Import UserPayload
 
-// Ensure that the Order type is defined here if it's not being imported
+// Ensure the Order type is defined correctly
 export interface Order {
   id: string;         // Order ID
   userId: string;     // ID of the user who placed the order
@@ -21,7 +22,7 @@ export interface Order {
   amount: number;     // Amount of the order
 }
 
-// Ensure that UserPayload is properly defined and exported if it's not imported
+// Assuming UserPayload is imported correctly, avoid declaring it twice
 export interface UserPayload {
   id: string;
   email: string;      // Make sure email is required
@@ -35,7 +36,7 @@ export interface UserPayload {
   status: string;         // Status of the order
 }
 
-// Assuming OrderPayload is defined elsewhere, but adding it here for consistency
+// Assuming OrderPayload is correctly defined elsewhere, but adding it here for consistency
 export interface OrderPayload {
   id: string;       // Order ID
   userId: string;   // ID of the user who placed the order
