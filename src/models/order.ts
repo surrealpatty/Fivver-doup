@@ -4,7 +4,9 @@ import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'seque
 // Define the Order model, which represents the 'orders' table
 @Table({ tableName: 'orders', timestamps: false }) // Set timestamps to false if you're not using createdAt and updatedAt
 export class Order extends Model<Order> {
-  // Remove the explicit 'id' definition, letting Sequelize manage it automatically
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
 
   @Column(DataType.INTEGER)
   userId!: number;  // Foreign key to the user who made the order
@@ -17,6 +19,12 @@ export class Order extends Model<Order> {
 
   @Column(DataType.STRING)
   status!: string;  // Status of the order (e.g., pending, completed)
+
+  @Column(DataType.STRING)
+  item!: string; // Add 'item' to the order model
+
+  @Column(DataType.INTEGER)
+  quantity!: number; // Add 'quantity' to the order model
 }
 
 export default Order;

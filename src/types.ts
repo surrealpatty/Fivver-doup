@@ -15,8 +15,9 @@ export interface AuthRequest extends Request {
   user?: UserPayload;  // Optional user property, as not every request might have a user attached
 }
 
-// CustomAuthRequest extends AuthRequest, ensuring user is optional but properly typed
-export interface CustomAuthRequest extends AuthRequest {}
+export interface CustomAuthRequest extends Request {
+  user?: UserPayload;  // Optional user property
+}
 
 // Type guard to check if a user is a UserPayload
 export function isUser(user: any): user is UserPayload {
