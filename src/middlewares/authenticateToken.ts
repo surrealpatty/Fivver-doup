@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../types';  // Import UserPayload
+import { NextFunction, Response } from 'express';
+import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
+import { UserPayload } from '../types';  // Import UserPayload for the type definition
 
 // Define the interface for the decoded token payload
 interface DecodedToken {
@@ -11,13 +12,8 @@ interface DecodedToken {
   role?: 'admin' | 'user';  // Optional role
 }
 
-// Update CustomAuthRequest to ensure user can be optional
-export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Make `user` optional
-}
-
-// Authenticate middleware
-const authenticateToken = (
+// Middleware to authenticate the JWT token
+export const authenticateToken = (
   req: CustomAuthRequest, 
   res: Response, 
   next: NextFunction
@@ -28,14 +24,14 @@ const authenticateToken = (
   // If no token is provided, respond with a 401 Unauthorized error
   if (!token) {
     res.status(401).json({ message: 'Access denied, token missing.' });
-    return;  // Stop execution after sending the response
+    return;  // Make sure to return to stop further execution of the middleware
   }
 
   try {
     // Verify and decode the token using the secret key from environment variables
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
 
-    // Ensure that `tier` is either 'free' or 'paid', default to 'free' if invalid
+    // Create the user object based on the decoded token, ensuring all fields are properly typed
     const user: UserPayload = {
       id: decoded.id,
       email: decoded.email,
@@ -44,15 +40,13 @@ const authenticateToken = (
       role: decoded.role === 'admin' || decoded.role === 'user' ? decoded.role : 'user',  // Default role to 'user' if invalid
     };
 
-    // Attach the user to the request object
+    // Attach the user object to the request object
     req.user = user;
 
-    // Call next() to pass control to the next middleware or route handler
+    // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     // If the token is invalid or expired, return a 400 Bad Request error
     res.status(400).json({ message: 'Invalid token.' });
   }
 };
-
-export { authenticateToken };

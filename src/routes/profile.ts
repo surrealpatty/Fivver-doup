@@ -2,30 +2,43 @@
 
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types';  // Ensure correct path to CustomAuthRequest type
+import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
+import { UserPayload } from '../types';  // Correct path to UserPayload type
 
 const router = express.Router();
 
 // Profile route - Update profile information
-router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  const customReq = req; // Type assertion to CustomAuthRequest
+router.put(
+  '/profile',
+  authenticateToken,  // Ensure the user is authenticated with the token
+  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+    // Check if the user is authenticated and ensure that req.user is not undefined
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
 
-  // Ensure user data is present
-  if (!customReq.user || !customReq.user.id || !customReq.user.username) {
-    return res.status(400).json({ message: 'User not authenticated or invalid user data' });
+    // Now we can safely destructure since we know req.user is not undefined
+    const { id, email, username }: UserPayload = req.user;
+
+    // If any of the fields are missing, return a bad request response
+    if (!id || !email || !username) {
+      return res.status(400).json({ message: 'Invalid user data' });
+    }
+
+    try {
+      // Logic to update the user profile goes here
+      // Example: You can make database calls to update the user's information.
+
+      // Example response (replace with actual update logic)
+      return res.status(200).json({ 
+        message: 'Profile updated successfully', 
+        user: { id, email, username }  // Return the updated user data
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
-
-  try {
-    // Extract user data from customReq.user
-    const { id, email, username } = customReq.user;
-
-    // Your logic for updating the profile (if any) here
-    // Example response: You can replace it with actual logic to update profile in the database
-    return res.status(200).json({ message: 'Profile updated successfully', user: { id, email, username } });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
+);
 
 export default router;

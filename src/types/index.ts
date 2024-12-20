@@ -1,13 +1,13 @@
 import { Request } from 'express';
 
-// Define the UserPayload interface
 export interface UserPayload {
   id: string;
-  email?: string;  // email can be undefined
-  username?: string;  // username is optional
+  email: string;  // Ensure email is always a string
+  username: string;  // Ensure username is always a string
+  tier: 'free' | 'paid';  // Add tier if necessary
+  role?: 'admin' | 'user';  // Optional role
 }
 
-// Extend the Express Request interface to include the optional 'user' property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // user can be undefined
+  user: UserPayload;  // Make user always required (no undefined)
 }
