@@ -1,22 +1,29 @@
-import express, { Request, Response } from 'express';
+import express, { Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Import the middleware
-import { UserPayload } from '../types';  // Import the UserPayload type for user typing
+import { CustomAuthRequest } from '../types';  // Import the CustomAuthRequest type for user typing
 
 const router = express.Router();
 
 // A protected route
-router.get('/protected', authenticateToken, (req: Request, res: Response) => {
-  // Type the req.user as UserPayload
-  const user = req.user as UserPayload; // Ensure req.user is typed correctly
+router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+  // Now req has the correct type with `user` (UserPayload | undefined)
+  const user = req.user;  // `user` will now be typed as `UserPayload | undefined`
 
-  // This route is now protected
-  res.status(200).json({ 
+  // Handle the case where `user` may be undefined (invalid or missing token)
+  if (!user) {
+    return res.status(401).json({ message: 'User data not found' });
+  }
+
+  // If user exists, respond with their data
+  res.status(200).json({
     message: 'You have access to this protected route.',
-    user: { 
-      id: user.id, 
-      email: user.email, 
-      username: user.username 
-    } // Ensure correct user structure
+    user: {
+      id: user.id,
+      email: user.email || 'Email not provided', // Fallback if email is undefined
+      username: user.username || 'Username not provided', // Fallback if username is undefined
+      tier: user.tier,  // Ensure tier is present
+      role: user.role || 'user' // Fallback if role is undefined
+    }
   });
 });
 

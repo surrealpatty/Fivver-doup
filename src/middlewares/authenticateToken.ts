@@ -1,20 +1,14 @@
-import { NextFunction, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest, UserPayload } from '../types';  // Correct import for CustomAuthRequest and UserPayload
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
+import { UserPayload } from '../types';  // Import UserPayload type
 
-// Define the interface for the decoded token payload
-interface DecodedToken {
-  id: string;
-  email: string;
-  username: string;
-  tier: 'free' | 'paid';  // Ensure tier is either 'free' or 'paid'
-  role?: 'admin' | 'user';  // Optional role
-}
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';  // Secret key for JWT verification
 
 // Middleware to authenticate the JWT token
 export const authenticateToken = (
-  req: CustomAuthRequest, 
-  res: Response, 
+  req: CustomAuthRequest,  // Type the req object using CustomAuthRequest
+  res: Response,
   next: NextFunction
 ): void => {
   // Extract the token from the Authorization header (format: "Bearer <token>")
@@ -23,30 +17,20 @@ export const authenticateToken = (
   // If no token is provided, respond with a 401 Unauthorized error
   if (!token) {
     res.status(401).json({ message: 'Access denied, token missing.' });
-    return;  // Ensure to return after sending a response
+    return; // No need to return the response, just return to stop further code execution
   }
 
   try {
     // Verify and decode the token using the secret key from environment variables
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload; // Decode the token as UserPayload
 
-    // Create the user object based on the decoded token, ensuring all fields are properly typed
-    const user: UserPayload = {
-      id: decoded.id,
-      email: decoded.email,
-      username: decoded.username,
-      tier: decoded.tier === 'free' || decoded.tier === 'paid' ? decoded.tier : 'free',  // Default tier to 'free' if invalid
-      role: decoded.role === 'admin' || decoded.role === 'user' ? decoded.role : 'user',  // Default role to 'user' if invalid
-    };
-
-    // Attach the user object to the request object
-    req.user = user;
+    // Attach the user object to req.user (req.user will be typed as UserPayload or undefined)
+    req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     // If the token is invalid or expired, return a 400 Bad Request error
     res.status(400).json({ message: 'Invalid token.' });
-    return;  // Ensure to return after sending a response
   }
 };
