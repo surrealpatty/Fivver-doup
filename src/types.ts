@@ -1,11 +1,9 @@
-// src/types/index.ts
-
 import { Request } from 'express';
 
 // Define UserPayload interface
 export interface UserPayload {
   id: string;          // Required: User ID
-  email: string;       // Required: Email (string)
+  email: string;       // Required: Email (string) - It can never be undefined in UserPayload
   username?: string;   // Optional: Username (string or undefined)
   role?: string;       // Optional: Role (string)
   tier?: string;       // Optional: Subscription tier (string)

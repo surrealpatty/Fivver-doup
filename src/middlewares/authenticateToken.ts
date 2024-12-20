@@ -10,8 +10,8 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
 
   // If no token is provided, return a 401 Unauthorized error
   if (!token) {
-    res.status(401).json({ message: 'No token provided' });  // Sends response and ends the middleware chain
-    return;  // Stop further execution of the middleware
+    res.status(401).json({ message: 'No token provided' });  // Sends response and ends execution
+    return;  // Prevents further execution, the response has already been sent
   }
 
   try {
@@ -19,26 +19,25 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as UserPayload;
 
     // Validate that the decoded token contains necessary fields
-    if (!decoded.id || !decoded.email) {
-      res.status(401).json({ message: 'Invalid token structure' });  // Sends response and ends the middleware chain
-      return;  // Stop further execution of the middleware
+    if (!decoded.id || decoded.email === undefined) {
+      res.status(401).json({ message: 'Invalid token structure' });  // Sends response and ends execution
+      return;  // Prevents further execution
     }
 
     // Attach the decoded user data to the request object (req.user)
     req.user = {
       id: decoded.id,
-      email: decoded.email, // Ensure email is always available
+      email: decoded.email,  // email is now required in the payload
       username: decoded.username || '',  // Provide default empty string if not available
       tier: decoded.tier || '',  // Assuming 'tier' is a part of the UserPayload, add default value if not present
     };
 
     // Proceed to the next middleware or route handler
-    next();
+    next();  // Continues processing the request
   } catch (err) {
     // Log error and return a 401 Unauthorized error
     console.error(err);
-    res.status(401).json({ message: 'Invalid or expired token' });  // Sends response and ends the middleware chain
-    return;  // Stop further execution of the middleware
+    res.status(401).json({ message: 'Invalid or expired token' });  // Sends response and ends execution
   }
 };
 
