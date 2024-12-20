@@ -1,12 +1,14 @@
 // src/types/index.ts
 
+import { Request } from 'express';
+
 // Define UserPayload interface
 export interface UserPayload {
   id: string;              // Required: User ID
   email: string;           // Now required: Email (string)
   username?: string;       // Optional: Username (string or undefined)
-  tier: 'free' | 'paid';   // Required: User's subscription tier
-  role?: 'admin' | 'user'; // Optional: User's role (admin or user)
+  tier: 'free' | 'paid';   // Required: User's subscription tier (restricted to 'free' or 'paid')
+  role?: 'admin' | 'user'; // Optional: User's role (either 'admin' or 'user')
 }
 
 // Define OrderPayload interface
@@ -22,12 +24,6 @@ export interface OrderPayload {
 }
 
 // Define CustomAuthRequest interface for extending Express Request
-
 export interface CustomAuthRequest extends Request {
-  user?: {
-    id: string;
-    email?: string;
-    username?: string;
-    tier?: string;  // Assuming tier is a string; adjust if necessary
-  };
+  user?: UserPayload;  // user is optional, and must match the UserPayload type
 }

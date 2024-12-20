@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Import the correct UserPayload type
+import { UserPayload } from '../types';  // Import the correct UserPayload type
 
 // Secret key for JWT generation and verification (ensure this is securely stored in environment variables)
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback to a default if not set
@@ -11,6 +11,8 @@ export const generateToken = (user: UserPayload): string => {
     id: user.id,
     email: user.email,
     username: user.username,
+    tier: user.tier,  // Include all necessary fields from UserPayload
+    role: user.role,  // Include role if it's part of your user model
   };
 
   // Sign and return the token with 1 hour expiration
@@ -24,7 +26,8 @@ export const verifyToken = (token: string): UserPayload | null => {
     const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
 
     // Check if decoded payload has the expected fields for UserPayload
-    if (decoded && 'id' in decoded) {
+    if (decoded && 'id' in decoded && 'email' in decoded) {
+      // Assuming decoded payload matches UserPayload structure
       return decoded as UserPayload;
     }
 
