@@ -2,13 +2,14 @@ import { Request } from 'express';
 
 // Define UserPayload interface
 export interface UserPayload {
-  id: string;           // Required: User ID
   email: string;        // Required: Email (string) - cannot be undefined
   username?: string;    // Optional: Username (string or undefined)
   tier: 'free' | 'paid'; // Required: User's subscription tier (restricted to 'free' or 'paid')
   role?: 'admin' | 'user'; // Optional: User's role (either 'admin' or 'user')
   orderId: string;
+  id: string;
   userId: string;
+  serviceId: string;
   amount: number;
   status: string;
 }
@@ -19,9 +20,13 @@ export interface AuthRequest extends Request {
 }
 
 // CustomAuthRequest extends AuthRequest for any specific customizations
-export interface CustomAuthRequest extends AuthRequest {
-  // The user can still be undefined, but we have ensured that `email` is a required field in `UserPayload`
-  user?: UserPayload;
+export interface CustomAuthRequest extends Request {
+  user?: {
+    id: string;
+    email?: string;
+    username?: string;
+    tier?: string;
+  };
 }
 
 // Type guard to check if a user is a UserPayload
