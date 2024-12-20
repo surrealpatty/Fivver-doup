@@ -25,11 +25,15 @@ router.post(
     }
 
     try {
+      // Generate a unique orderId (you can replace this with a real ID generator later)
+      const orderId = `order-${Date.now()}`;
+
       // Logic to process the order (e.g., save it to the database)
       const newOrder: Order = {
+        orderId,                 // Generate or fetch a unique order ID
         id: 'order-id-placeholder',  // Placeholder ID, you would generate or fetch this
         userId: id,
-        item,                      // Correct use of the 'item' field
+        item,                      // Correct use of the 'item' field from OrderPayload
         quantity,
         price,
         status: 'pending',         // Default status
@@ -45,6 +49,7 @@ router.post(
       return res.status(201).json({
         message: 'Order created successfully',
         order: {
+          orderId: newOrder.orderId,
           id: newOrder.id,
           email: email || 'No email provided',
           username,

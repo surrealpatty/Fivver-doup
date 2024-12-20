@@ -1,14 +1,15 @@
 import { Router, Request, Response } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; // Correct import for named export
-import { UserPayload } from '../types'; // Import your custom UserPayload type
+import authenticateToken from '../middlewares/authenticateToken';  // Correct import for middleware
+import { UserPayload } from '../types/UserPayload';  // Correct import for UserPayload
+import { CustomAuthRequest } from '../types';  // Ensure correct import for CustomAuthRequest
 
-const router = Router();
+const router = Router();  // Initialize the router
 
-// Define the route with the JWT authentication middleware
-router.get('/premium', authenticateToken, (req: Request & { user?: UserPayload }, res: Response) => {
+// Define the route with JWT authentication middleware
+router.get('/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+  const user = req.user;  // Now TypeScript knows that req.user is of type UserPayload
+
   // Ensure user exists (TypeScript type check)
-  const user = req.user;
-
   if (!user) {
     return res.status(401).json({ message: 'User not authenticated.' });
   }
@@ -19,8 +20,8 @@ router.get('/premium', authenticateToken, (req: Request & { user?: UserPayload }
     return res.status(403).json({ message: 'User role not found.' });
   }
 
-  // Handle the role logic
-  if (userRole === 'Paid') {
+  // Handle the role logic (assuming 'role' is either 'admin' or 'paid')
+  if (userRole === 'paid') {  // Ensure 'paid' matches the actual value in UserPayload
     return res.status(200).json({ message: 'Premium service access granted.' });
   } else {
     return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });

@@ -1,39 +1,39 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
+import { UserPayload } from '../types/UserPayload';  // Ensure correct import of UserPayload
 
-// The authenticateToken middleware ensures that the user is authenticated by verifying the JWT token
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void | Response => {
+const authenticateToken = (
+  req: CustomAuthRequest, 
+  res: Response, 
+  next: NextFunction
+): void => {
   // Get token from the Authorization header
   const token = req.headers['authorization']?.split(' ')[1];  // Extract token from Authorization header
 
   // If no token is provided, return a 401 Unauthorized error
   if (!token) {
-    return res.status(401).json({ message: 'Token missing' });
+    res.status(401).json({ message: 'Token missing' });  // Send a response directly
+    return;  // Return here to stop further processing
   }
 
-  try {
-    // Decode the token using jwt.verify() and type the result as CustomAuthRequest['user']
-    jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
-      if (err || !decoded) {
-        // If the token is invalid or expired, return a 403 Forbidden error
-        return res.status(403).json({ message: 'Token is not valid' });
-      }
+  // Verify the token and decode it
+  jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
+    if (err || !decoded) {
+      // If the token is invalid or expired, return a 403 Forbidden error
+      res.status(403).json({ message: 'Token is not valid' });  // Send a response directly
+      return;  // Return here to stop further processing
+    }
 
-      // Ensure decoded user matches CustomAuthRequest['user']
-      const user = decoded as CustomAuthRequest['user'];  // Type assertion to match the type
+    // Ensure the decoded token is typed as UserPayload (type assertion)
+    const user = decoded as UserPayload;  // Decode and type the decoded value as UserPayload
 
-      // Attach the decoded user data to the request object (req.user)
-      req.user = user;  // TypeScript now understands that req.user is of type CustomAuthRequest['user']
+    // Attach the decoded user data to the request object (req.user)
+    req.user = user;  // TypeScript now understands that req.user is of type UserPayload
 
-      // Proceed to the next middleware or route handler
-      next();
-    });
-  } catch (err) {
-    // If an unexpected error occurs, log it and return a 401 Unauthorized error
-    console.error(err);
-    return res.status(401).json({ message: 'Invalid or expired token' });
-  }
+    // Proceed to the next middleware or route handler
+    next();  // Call next() to pass control to the next middleware or route handler
+  });
 };
 
 export default authenticateToken;
