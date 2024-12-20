@@ -1,14 +1,14 @@
-// src/types/index.ts
-
 import { Request } from 'express';
+import { UserPayload } from './user';  // Import UserPayload from './user'
 
-// Define the OrderPayload interface
+// Rename the local UserPayload interface to avoid naming conflict
 export interface OrderPayload {
-  orderId: string;     // Order ID
-  userId: string;      // ID of the user who placed the order
-  serviceId: string;   // ID of the service related to the order
-  status: string;      // Status of the order (e.g., 'pending', 'completed')
-  amount: number;      // Amount of the order
+  id: string;
+  serviceId: string;
+  userId: string;
+  price: number;
+  status: string; // Example field
+  // Add other fields as necessary
 }
 
 // Define the Order interface
@@ -21,13 +21,13 @@ export interface Order {
   amount: number;      // Amount of the order
   createdAt: Date;     // Date the order was created
   updatedAt: Date;
+  price: number; 
 }
 
-// Define the UserPayload interface
-export interface UserPayload {
+// Rename the local interface to avoid the conflict with the imported UserPayload
+export interface LocalUserPayload {
   id: string;           // User ID
   email: string;        // User email (required)
-  username?: string;    // User username (optional)
   tier: 'free' | 'paid'; // User tier (free or paid)
   role?: 'admin' | 'user'; // User role (optional)
   orderId?: string;     // Associated order ID (optional) <-- Added orderId to UserPayload
@@ -35,6 +35,7 @@ export interface UserPayload {
   serviceId?: string;   // Associated service ID (optional)
   amount?: number;      // Amount in the order (optional)
   status?: string;      // Status of the order (optional)
+  username: string; 
 }
 
 // Define the AuthRequest interface (user is optional)
