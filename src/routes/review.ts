@@ -1,4 +1,3 @@
-// src/routes/review.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authMiddleware'; // Correct middleware import
 import { AuthRequest } from '../types'; // Correct import for AuthRequest
@@ -14,7 +13,6 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response, next
     }
 
     // Logic to create a review (e.g., saving it in the database)
-    // Replace this with actual review creation logic
     // Example: await Review.create({ userId: req.user.id, review: req.body.review, serviceId: req.body.serviceId });
 
     return res.status(201).json({ message: 'Review created successfully.' });
