@@ -13,14 +13,14 @@ export interface UserPayload {
 
 // Define OrderPayload interface
 export interface OrderPayload {
-  id: string;              // Required: Order ID
-  userId: string;          // Required: User ID associated with the order
-  serviceId: string;       // Required: ID of the service for the order
-  quantity: number;        // Required: Quantity of the service ordered
-  totalPrice: number;      // Required: Total price of the order
-  status: string;          // Required: Status of the order (e.g., 'pending', 'completed')
-  item: string;            // Additional: Item description
-  price: number;           // Additional: Price per unit of the item
+  id: string;         // Required: Order ID
+  userId: string;     // Required: User ID associated with the order
+  serviceId: string;  // Required: ID of the service for the order
+  quantity: number;   // Required: Quantity of the service ordered
+  totalPrice: number; // Required: Total price of the order
+  status: string;     // Required: Status of the order (e.g., 'pending', 'completed')
+  item: string;       // Item description or name
+  price: number;      // Price per item
 }
 
 // Define CustomAuthRequest interface for extending Express Request
