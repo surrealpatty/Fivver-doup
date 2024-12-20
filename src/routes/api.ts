@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { UserPayload } from '../types/index'; // Import UserPayload
+import { UserPayload } from '../types'; // Correct the import to match the export
+
 
 // Extend the Express Request type to include the user property
 interface CustomAuthRequest extends Request {
