@@ -1,3 +1,4 @@
+// src/routes/profile.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import User from '../models/user'; // Import the User model
