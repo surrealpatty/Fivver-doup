@@ -1,6 +1,4 @@
-// src/types/index.ts
-
-import { Request } from 'express'; // Import Request from express for type extensions
+import { Request } from 'express';  // Import Request from express for type extensions
 
 // Ensure that the UserPayload interface has a non-optional email property
 export interface UserPayload {
