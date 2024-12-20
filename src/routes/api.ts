@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // JWT for verifying tokens
-import { CustomAuthRequest } from '../types/index';  // Use the correct CustomAuthRequest type
 import { UserPayload } from '../types/index'; // Import UserPayload
+
+// Extend the Express Request type to include the user property
+interface CustomAuthRequest extends Request {
+  user?: UserPayload;  // Add the user payload to the request
+}
 
 // Secret key for JWT verification, you should store it in an environment variable for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Replace with your actual secret key
