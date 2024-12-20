@@ -3,7 +3,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest} from '../types/index'; // Correct import
 import authenticateToken from '../middlewares/authenticateToken';  // Corrected import for default export
-import { OrderPayload } from '../types/index'; // Manually specify 'index.ts'
+import { OrderPayload } from '../types';  // Correct the import if necessary
 
 const router = express.Router();
 

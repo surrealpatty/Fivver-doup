@@ -2,16 +2,22 @@ import { Request } from 'express';
 
 // Define UserPayload interface
 export interface UserPayload {
-  email: string;        // Required: Email (string) - cannot be undefined
-  username?: string;    // Optional: Username (string or undefined)
   tier: 'free' | 'paid'; // Required: User's subscription tier (restricted to 'free' or 'paid')
   role?: 'admin' | 'user'; // Optional: User's role (either 'admin' or 'user')
   orderId: string;
-  id: string;
   userId: string;
   serviceId: string;
   amount: number;
   status: string;
+  id: string;
+  email: string;  // Make sure email is required
+  username: string;
+}
+export interface OrderPayload {
+  id: string;
+  totalAmount: number;
+  status: string;
+  // Add other fields as required
 }
 
 // Define AuthRequest interface to extend Express' Request with an optional user field
