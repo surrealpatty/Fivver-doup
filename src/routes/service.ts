@@ -1,17 +1,17 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct import for middleware
-import { CustomAuthRequest } from '../types';  // Ensure correct import for CustomAuthRequest
+import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
-const router = Router();  // Initialize the router
+const router = Router(); // Initialize the router
 
-// Define the route with JWT authentication middleware
+// Define the route for premium service access with JWT authentication middleware
 router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
   // Ensure req.user is not undefined before using it
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const user = req.user;  // Now TypeScript knows that req.user is of type UserPayload
+  const user = req.user; // TypeScript knows that req.user is of type UserPayload
 
   // Ensure user exists (TypeScript type check)
   if (!user) {
@@ -31,5 +31,7 @@ router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: 
     return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
   }
 });
+
+// Define other service-related routes here if needed
 
 export default router;

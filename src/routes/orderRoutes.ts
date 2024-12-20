@@ -1,79 +1,70 @@
-import express, { Response } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct path to authenticateToken middleware
-import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
-import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
+import { Router, Request, Response } from 'express';
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct import for the authentication middleware
 
-const router = express.Router();
+const router = Router();
 
-// Define the order route for creating an order
-router.post(
-  '/order',
-  authenticateToken,  // Ensure user is authenticated with the token
-  async (req: CustomAuthRequest, res: Response): Promise<Response> => {
-    // Ensure the user is authenticated
-    if (!req.user) {
-      return res.status(401).json({ message: 'User not authenticated' });
-    }
+// Example route to fetch orders
+router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response): Promise<Response> => {
+  // Ensure req.user is always defined because it's now non-optional in CustomAuthRequest
+  const user = req.user;
 
-    const { id, email = 'No email provided', username, tier } = req.user; // Fallback for email if it's missing
+  if (!user) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
 
-    // Ensure the order payload matches the OrderPayload type
-    const { item, quantity, price }: OrderPayload = req.body;
+  // You can now safely access user properties
+  const { id, email, username, tier } = user;
 
-    // Validate order fields
-    if (!item || !quantity || !price) {
-      return res.status(400).json({ message: 'Missing order data. Ensure item, quantity, and price are provided.' });
-    }
+  try {
+    // Simulate fetching orders from a database (you would normally interact with your DB here)
+    // Example: const orders = await Order.findAll({ where: { userId: id } });
 
-    try {
-      // Generate a unique orderId (you can replace this with a real ID generator later)
-      const orderId = `order-${Date.now()}`;
+    const orders = [
+      // Simulated orders data
+      {
+        orderId: 'order-123',
+        item: 'Service 1',
+        quantity: 2,
+        price: 100,
+        amount: 200,
+        status: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        orderId: 'order-456',
+        item: 'Service 2',
+        quantity: 1,
+        price: 150,
+        amount: 150,
+        status: 'completed',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
 
-      // Logic to process the order (e.g., save it to the database)
-      const newOrder: Order = {
-        orderId,                 // Generate or fetch a unique order ID
-        id: 'order-id-placeholder',  // Placeholder ID, you would generate or fetch this
-        userId: id,
-        item,                    // Correct use of the 'item' field from OrderPayload
-        quantity,
-        price,
-        status: 'pending',       // Default status
-        serviceId: 'service-id-placeholder', // Placeholder for service ID
-        amount: price * quantity, // Amount = price * quantity
-        createdAt: new Date(),   // Timestamp for when the order is created
-        updatedAt: new Date(),   // Timestamp for when the order is updated
-      };
-
-      // Simulate saving the order (you would interact with the database here)
-      // Example: await Order.create(newOrder); (use ORM like Sequelize, Prisma, etc.)
-
-      // Return response with order details
-      return res.status(201).json({
-        message: 'Order created successfully',
-        order: {
-          orderId: newOrder.orderId,
-          id: newOrder.id,
-          email,
-          username,
-          tier,
-          item: newOrder.item,
-          quantity: newOrder.quantity,
-          price: newOrder.price,
-          status: newOrder.status,
-          amount: newOrder.amount,
-        },  // Return order data in the response
-      });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error(err.message);
-        return res.status(500).json({ error: 'Internal server error', details: err.message });
-      } else {
-        console.error('Unexpected error', err);
-        return res.status(500).json({ error: 'Unexpected internal server error' });
-      }
+    // Return orders for the authenticated user
+    return res.status(200).json({
+      message: 'Orders fetched successfully',
+      user: {
+        id,
+        email,
+        username,
+        tier,
+      },
+      orders, // Returning the simulated orders data
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Internal server error', details: err.message });
+    } else {
+      console.error('Unexpected error', err);
+      return res.status(500).json({ error: 'Unexpected internal server error' });
     }
   }
-);
+});
 
 // Additional routes for order management can be added here
 

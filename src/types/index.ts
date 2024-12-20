@@ -3,10 +3,10 @@ import { Request } from 'express';
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
   id: string;             // User ID
-  email?: string;         // Email address of the user (can be optional)
-  username?: string;      // Username of the user (can be optional)
+  email: string;          // Email address of the user (no longer optional)
+  username: string;       // Username of the user (no longer optional)
   tier: 'free' | 'paid';  // Tier (either 'free' or 'paid')
-  role?: 'admin' | 'user';  // Optional role
+  role?: 'admin' | 'user'; // Optional role
 }
 
 // Define the LocalUserPayload interface (for local user details)
@@ -51,10 +51,10 @@ export interface AuthRequest extends Request {
 
 // Define the CustomAuthRequest interface (extends the Request interface with an optional user property)
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;       // 'user' is optional in CustomAuthRequest (contains user details if authenticated)
+  user: UserPayload;        // Ensure 'user' is always of type UserPayload (no longer optional)
 }
 
 // Type guard to check if the user is a UserPayload
 export function isUser(user: any): user is UserPayload {
-  return user && typeof user.id === 'string' && (user.email === undefined || typeof user.email === 'string');
+  return user && typeof user.id === 'string' && typeof user.email === 'string' && typeof user.username === 'string';
 }
