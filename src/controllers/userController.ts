@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';  // Ensure bcryptjs is installed or use bcrypt
-import User from '../models/user';  // Sequelize User model
-import { generateToken } from '../utils/jwt';  // JWT token generation helper
+import bcrypt from 'bcryptjs';
+import  User  from '../models/user'; // Importing the User model
+import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password, tier = 'free' } = req.body;
 
-  try {
-    // Input validation: Ensure all required fields are provided
-    if (!email || !username || !password) {
-      return res.status(400).json({ message: 'Email, username, and password are required.' });
-    }
+  // Input validation: Ensure required fields are provided
+  if (!email || !username || !password) {
+    return res.status(400).json({ message: 'Email, username, and password are required.' });
+  }
 
+  try {
     // Check if the user already exists by email
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -22,7 +22,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Hash the user's password before saving to the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Default role and isVerified properties (assuming 'user' is the default role and false is default for isVerified)
+    // Default role, tier, and isVerified properties (assumed defaults)
     const newUser = await User.create({
       email,
       username,
@@ -35,15 +35,15 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Generate a JWT token for the new user
     const token = generateToken(newUser);
 
-    // Respond with the user data and the JWT token (excluding password)
+    // Respond with the user data (excluding password) and the JWT token
     return res.status(201).json({
       message: 'User registered successfully',
       user: {
         id: newUser.id,
         email: newUser.email,
         username: newUser.username,
-        role: newUser.role,  // Assuming role is set to 'user' by default
-        tier: newUser.tier,
+        role: newUser.role,  // Default role is 'user'
+        tier: newUser.tier,  // The user's tier (e.g., 'free')
         isVerified: newUser.isVerified,
         createdAt: newUser.createdAt,
       },
@@ -52,6 +52,6 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
   } catch (error) {
     // Log the error and respond with a generic server error message
     console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Internal server error', error });
+    return res.status(500).json({ message: 'Internal server error during registration.' });
   }
 };

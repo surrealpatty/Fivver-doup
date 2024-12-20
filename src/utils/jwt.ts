@@ -1,8 +1,8 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';  // Import JwtPayload for type safety
-import { UserPayload } from '../types';  // Import the UserPayload type
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { UserPayload } from '../types';  // Importing the UserPayload type for type safety
 
 // Secret key for JWT generation and verification (ensure this is securely stored in environment variables)
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback to a default if not set
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback secret key for JWT
 
 // Utility function to generate JWT token
 export const generateToken = (user: UserPayload): string => {

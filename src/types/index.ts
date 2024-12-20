@@ -6,6 +6,20 @@ export interface UserPayload {
   email?: string;         // Email address of the user (can be optional)
   username?: string;      // Username of the user (can be optional)
   tier: 'free' | 'paid';  // Tier (either 'free' or 'paid')
+  role?: 'admin' | 'user';  // Optional role
+}
+
+// Define the LocalUserPayload interface (for local user details)
+export interface LocalUserPayload {
+  id: string;               // User ID
+  email: string;            // Email (required)
+  tier: 'free' | 'paid';    // Tier (e.g., 'free' or 'paid')
+  role?: 'admin' | 'user';  // Role (optional)
+  username: string;         // Username (required)
+  orderId?: string;         // Optional order ID
+  serviceId?: string;       // Optional service ID
+  amount?: number;          // Optional amount for the order
+  status?: string;          // Optional status for the order
 }
 
 // Define the OrderPayload interface (for creating orders)
@@ -30,20 +44,6 @@ export interface Order {
   updatedAt: Date;          // Last update date of the order
 }
 
-// Define the LocalUserPayload interface (for local user details)
-export interface LocalUserPayload {
-  id: string;               // User ID
-  email: string;            // Email (required)
-  tier: 'free' | 'paid';    // Tier (e.g., 'free' or 'paid')
-  role?: 'admin' | 'user';  // Role (optional)
-  orderId?: string;         // Optional order ID
-  userId?: string;          // Optional user ID
-  serviceId?: string;       // Optional service ID
-  amount?: number;          // Optional amount for the order
-  status?: string;          // Optional status for the order
-  username: string;         // Username (required)
-}
-
 // Define the AuthRequest interface (extends the basic Request interface with an optional user property)
 export interface AuthRequest extends Request {
   user?: UserPayload;       // 'user' is optional in AuthRequest (contains user details if authenticated)
@@ -56,5 +56,5 @@ export interface CustomAuthRequest extends Request {
 
 // Type guard to check if the user is a UserPayload
 export function isUser(user: any): user is UserPayload {
-  return user && typeof user.id === 'string' && typeof user.email === 'string';  // Ensure 'user.id' and 'user.email' are strings
+  return user && typeof user.id === 'string' && (user.email === undefined || typeof user.email === 'string');
 }
