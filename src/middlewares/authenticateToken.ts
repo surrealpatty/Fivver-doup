@@ -1,4 +1,3 @@
-// src/middlewares/authenticateToken.ts
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { UserPayload } from '../types';  // Import UserPayload
@@ -12,13 +11,17 @@ interface DecodedToken {
   role?: 'admin' | 'user';  // Optional role
 }
 
-// Update CustomAuthRequest to ensure user is always required
+// Update CustomAuthRequest to ensure user can be optional
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Make `user` always present, no `undefined`
+  user?: UserPayload;  // Make `user` optional
 }
 
 // Authenticate middleware
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+const authenticateToken = (
+  req: CustomAuthRequest, 
+  res: Response, 
+  next: NextFunction
+): void => {
   // Extract the token from the Authorization header (format: "Bearer <token>")
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
