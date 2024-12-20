@@ -17,7 +17,9 @@ export interface OrderPayload {
   id: string;
   totalAmount: number;
   status: string;
-  // Add other fields as required
+  item: string;      // Example type, update based on actual requirements
+  quantity: number;  // Update the type if needed
+  price: number; 
 }
 
 // Define AuthRequest interface to extend Express' Request with an optional user field

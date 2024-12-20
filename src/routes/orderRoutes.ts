@@ -1,9 +1,9 @@
 // src/routes/orderRoutes.ts
 
 import express, { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest} from '../types/index'; // Correct import
-import authenticateToken from '../middlewares/authenticateToken';  // Corrected import for default export
-import { OrderPayload } from '../types';  // Correct the import if necessary
+import { CustomAuthRequest } from '../types/index'; // Correct import
+import authenticateToken from '../middlewares/authenticateToken'; // Correct import for default export
+import { OrderPayload } from '../types/index'; // Correct the import if necessary
 
 const router = express.Router();
 
@@ -19,9 +19,10 @@ router.post(
 
     const { id, email, username, tier } = req.user;  // Access user properties
 
-    // Check if the necessary fields from the body are provided
-    const { item, quantity, price }: OrderPayload = req.body;  // Extract order data
+    // Ensure the order payload matches the OrderPayload type
+    const { item, quantity, price }: OrderPayload = req.body;
 
+    // Check if the necessary fields from the body are provided
     if (!item || !quantity || !price) {
       return res.status(400).json({ message: 'Missing order data' });
     }
