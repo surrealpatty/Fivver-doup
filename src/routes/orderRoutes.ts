@@ -1,22 +1,20 @@
-import express, { Response, Request, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
+import express, { Response, NextFunction } from 'express';
+import authenticateToken from '../middlewares/authenticateToken';  // Correct path to authenticateToken middleware
+import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
 import { OrderPayload, Order } from '../types/index';  // Correct import for OrderPayload and Order
-import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
 const router = express.Router();
 
 // Define the order route for creating an order
 router.post(
   '/order',
-  authenticateToken,  // Ensure user is authenticated
+  authenticateToken,  // Ensure user is authenticated with the token
   async (req: CustomAuthRequest, res: Response): Promise<Response> => {
-    // Check if user is authenticated
     if (!req.user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Destructure user details from req.user (CustomAuthRequest ensures user is available here)
-    const { id, email, username, tier } = req.user;  // Access user properties
+    const { id, email, username, tier } = req.user;
 
     // Ensure the order payload matches the OrderPayload type
     const { item, quantity, price }: OrderPayload = req.body;
@@ -69,32 +67,5 @@ router.post(
     }
   }
 );
-
-// Route to get orders (example)
-router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'User not authenticated' });
-  }
-
-  const { id, email, username } = req.user;  // Safely destructure user data
-
-  try {
-    // Example logic to retrieve orders from the database
-    const orders: Order[] = [];  // Replace with actual orders fetching logic
-
-    return res.status(200).json({
-      message: 'Orders retrieved successfully',
-      orders,  // Return the orders
-    });
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error(err.message);
-      return res.status(500).json({ error: 'Internal server error', details: err.message });
-    } else {
-      console.error('Unexpected error', err);
-      return res.status(500).json({ error: 'Unexpected internal server error' });
-    }
-  }
-});
 
 export default router;
