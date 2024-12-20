@@ -5,11 +5,6 @@ import { Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt';  // Assuming you have a utility to verify JWT
 import { UserPayload } from '../types';  // Import the UserPayload interface
 
-// Define the shape of the decoded token payload (assuming it has a `user` property)
-interface DecodedToken {
-  user: UserPayload;  // `user` is expected to be part of the decoded payload
-}
-
 // Middleware to authenticate user token
 const authenticateToken = (
   req: CustomAuthRequest,  // CustomAuthRequest type ensures req has user as optional
@@ -26,15 +21,15 @@ const authenticateToken = (
 
   try {
     // Attempt to verify and decode the token
-    const decoded = verifyToken(token);  // `verifyToken` should return `UserPayload | null`
+    const decoded = verifyToken(token);  // Assuming verifyToken returns a decoded object
 
-    // Ensure decoded is not null and contains the user property
-    if (!decoded || !decoded.user) {
+    // Ensure decoded is not null and has the expected structure
+    if (!decoded) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
     // Attach the decoded user info to the req object (user is typed as UserPayload)
-    req.user = decoded.user;  // `decoded.user` is of type `UserPayload`
+    req.user = decoded.user as UserPayload;  // Casting decoded.user to UserPayload
 
     // Proceed to the next middleware or route handler
     next();
