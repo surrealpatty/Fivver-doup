@@ -1,21 +1,21 @@
 import express, { Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; // Corrected import for default export
-import { CustomAuthRequest, UserPayload } from '../types';  // Correct path to CustomAuthRequest type and UserPayload
+import authenticateToken from '../middlewares/authenticateToken';  // Ensure correct import for authenticateToken middleware
+import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
 
 const router = express.Router();
 
 // Profile route - Update profile information
 router.put(
   '/profile',
-  authenticateToken,  // Ensure the user is authenticated with the token
+  authenticateToken,  // Ensure user is authenticated with the token
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-    // Check if the user is authenticated and ensure that req.user is not undefined
+    // Ensure that req.user is defined
     if (!req.user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Now we can safely destructure since we know req.user is not undefined
-    const { id, email, username }: UserPayload = req.user;  // Deconstruct user data
+    // Safely destructure from req.user
+    const { id, email, username } = req.user;  // Deconstruct user data
 
     // If any of the fields are missing, return a bad request response
     if (!id || !email || !username) {
@@ -24,11 +24,11 @@ router.put(
 
     try {
       // Logic to update the user profile goes here
-      // Example: You can make database calls to update the user's information.
+      // For example, make database calls to update the user's information.
 
       // Example response (replace with actual update logic)
-      return res.status(200).json({ 
-        message: 'Profile updated successfully', 
+      return res.status(200).json({
+        message: 'Profile updated successfully',
         user: { id, email, username }  // Return the updated user data
       });
     } catch (err) {

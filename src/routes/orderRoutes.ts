@@ -1,9 +1,7 @@
-// src/routes/orderRoutes.ts
-
 import express, { Response, NextFunction } from 'express';
-import  authenticateToken  from '../middlewares/authenticateToken'; // Correct import for default export
+import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correct import for the custom request type
-import { OrderPayload } from '../types';  // Assuming OrderPayload is defined in your types
+import { OrderPayload, Order } from '../types';  // Import Order and OrderPayload types
 
 const router = express.Router();
 
@@ -17,7 +15,7 @@ router.post(
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Destructure user details from req.user (CustomAuthRequest is ensuring user is always available here)
+    // Destructure user details from req.user (CustomAuthRequest ensures user is available here)
     const { id, email, username, tier } = req.user;  // Access user properties
 
     // Ensure the order payload matches the OrderPayload type
@@ -48,5 +46,29 @@ router.post(
     }
   }
 );
+
+// Route to get orders (example)
+router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response) => {
+  // Check if user is authenticated
+  if (!req.user) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  const { id, email, username } = req.user;  // Safely destructure user data
+
+  try {
+    // Example logic to retrieve orders from the database
+    // Here, `orders` should be typed as `Order[]` (an array of Order objects)
+    const orders: Order[] = [];  // Replace with actual orders fetching logic
+
+    return res.status(200).json({
+      message: 'Orders retrieved successfully',
+      orders,  // Return the orders
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 export default router;
