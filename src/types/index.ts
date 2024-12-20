@@ -1,51 +1,59 @@
+// Import the necessary types
 import { Request } from 'express';
-import { UserPayload } from './user';  // Import UserPayload from './user'
 
-// Rename the local UserPayload interface to avoid naming conflict
-export interface OrderPayload {
+// Define the UserPayload interface
+export interface UserPayload {
   id: string;
-  serviceId: string;
-  userId: string;
-  price: number;
-  status: string; // Example field
-  // Add other fields as necessary
+  email: string;        // Email is required
+  username?: string;    // Username is optional
+  tier: 'free' | 'paid'; // User tier (free or paid)
+  role?: 'admin' | 'user'; // Optional user role
+}
+
+// Define the OrderPayload interface
+export interface OrderPayload {
+  id: string;           // Order ID
+  serviceId: string;    // Associated service ID
+  userId: string;       // Associated user ID
+  price: number;        // Order price
+  status: string;       // Order status (e.g., 'pending', 'completed')
 }
 
 // Define the Order interface
 export interface Order {
   id: string;          // Order ID
-  orderId: string;     // Order ID (to be used in case of updates or references)
-  userId: string;      // ID of the user who placed the order
-  serviceId: string;   // Service ID related to the order
+  orderId: string;     // A unique reference ID for the order (can be used for updates or references)
+  userId: string;      // User who placed the order
+  serviceId: string;   // Service related to the order
   status: string;      // Status of the order (e.g., 'pending', 'completed')
-  amount: number;      // Amount of the order
-  createdAt: Date;     // Date the order was created
-  updatedAt: Date;
-  price: number; 
+  amount: number;      // Amount for the order
+  createdAt: Date;     // Creation date of the order
+  updatedAt: Date;     // Last update date of the order
+  price: number;       // Price of the order
 }
 
-// Rename the local interface to avoid the conflict with the imported UserPayload
+// Define the LocalUserPayload interface to avoid naming conflict
 export interface LocalUserPayload {
   id: string;           // User ID
   email: string;        // User email (required)
-  tier: 'free' | 'paid'; // User tier (free or paid)
-  role?: 'admin' | 'user'; // User role (optional)
-  orderId?: string;     // Associated order ID (optional) <-- Added orderId to UserPayload
+  tier: 'free' | 'paid'; // User tier (either 'free' or 'paid')
+  role?: 'admin' | 'user'; // Optional user role
+  orderId?: string;     // Associated order ID (optional)
   userId?: string;      // Associated user ID (optional)
   serviceId?: string;   // Associated service ID (optional)
-  amount?: number;      // Amount in the order (optional)
-  status?: string;      // Status of the order (optional)
-  username: string; 
+  amount?: number;      // Associated amount (optional)
+  status?: string;      // Order status (optional)
+  username: string;     // Username (required)
 }
 
-// Define the AuthRequest interface (user is optional)
+// Define the AuthRequest interface (optional user field)
 export interface AuthRequest extends Request {
   user?: UserPayload;   // Optional user field (user may not exist on every request)
 }
 
-// Define the CustomAuthRequest interface (user is required)
+// Define the CustomAuthRequest interface (required user field)
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;    // user is now required and must follow the UserPayload type
+  user: UserPayload;    // User is now required and must follow the UserPayload type
 }
 
 // Type guard to check if the user is a UserPayload
