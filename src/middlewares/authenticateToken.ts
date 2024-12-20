@@ -1,13 +1,13 @@
 // src/middlewares/authenticateToken.ts
 
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import the correct type for request
-import { verifyToken } from '../utils/jwt';  // Assuming you have a utility to verify JWT
-import { UserPayload } from '../types';  // Import the UserPayload interface
+import { CustomAuthRequest } from '../types'; // Import the correct type for the request
+import jwt from 'jsonwebtoken'; // Import the jsonwebtoken library for verifying the JWT
+import { UserPayload } from '../types'; // Import the UserPayload interface
 
 // Middleware to authenticate user token
 const authenticateToken = (
-  req: CustomAuthRequest,  // CustomAuthRequest ensures req has user as required
+  req: CustomAuthRequest, // CustomAuthRequest ensures req has a user as required
   res: Response, 
   next: NextFunction
 ) => {
@@ -20,16 +20,11 @@ const authenticateToken = (
   }
 
   try {
-    // Attempt to verify and decode the token
-    const decoded = verifyToken(token);  // Assuming verifyToken returns a decoded object
-
-    // Ensure decoded is not null and has the expected structure
-    if (!decoded || !decoded.user) {
-      return res.status(401).json({ message: 'Invalid or expired token' });
-    }
+    // Attempt to verify and decode the token using jsonwebtoken
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload; // Assuming JWT contains the UserPayload
 
     // Attach the decoded user info to the req object
-    req.user = decoded.user as UserPayload;  // Casting decoded.user to UserPayload
+    req.user = decoded;  // TypeScript knows req.user is a UserPayload
 
     // Proceed to the next middleware or route handler
     next();
@@ -39,4 +34,4 @@ const authenticateToken = (
   }
 };
 
-export default authenticateToken;  // Default export
+export default authenticateToken; // Default export
