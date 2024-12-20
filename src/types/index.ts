@@ -49,7 +49,7 @@ export interface AuthRequest extends Request {
   user?: UserPayload;       // 'user' is optional in AuthRequest (contains user details if authenticated)
 }
 
-// Define the CustomAuthRequest interface (extends the Request interface with an optional user property)
+// Define the CustomAuthRequest interface (extends the Request interface with a mandatory user property)
 export interface CustomAuthRequest extends Request {
   user: UserPayload;        // Ensure 'user' is always of type UserPayload (no longer optional)
 }
