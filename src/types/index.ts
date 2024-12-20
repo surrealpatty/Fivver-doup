@@ -28,7 +28,7 @@ export interface UserPayload {
   username?: string;  // Optional, assuming it's not required
   tier: 'free' | 'paid';  // Define the tier (free/paid)
   role?: 'admin' | 'user'; // Optional, defining roles
-  orderId: string;        // Associated order ID
+  orderId?: string;        // Associated order ID
   userId: string;         // Associated user ID
   serviceId: string;      // Associated service ID
   amount: number;         // Amount in the order

@@ -36,6 +36,7 @@ export interface OrderPayload {
   userId: string;
   amount: number;
   status: string;
+  orderId: string;
 }
 
 // Define the Order interface, which represents a full order object (used after fetching from the database)
