@@ -1,29 +1,33 @@
-import { Router, Response } from 'express';
-import  authenticateToken  from '../middlewares/authenticateToken';  // Import middleware
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest for typing
+import { Response, NextFunction } from 'express';  // Import Response and NextFunction from express
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest from types
 
-const router = Router();
-
-// A protected route
-router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Response) => {
-  const user = req.user;  // `user` is typed as `UserPayload | undefined`
-
-  // Handle the case where `user` is undefined (invalid or missing token)
-  if (!user) {
-    return res.status(401).json({ message: 'User data not found' });
-  }
-
-  // If user exists, respond with their data
-  res.status(200).json({
-    message: 'You have access to this protected route.',
-    user: {
-      id: user.id,
-      email: user.email || 'Email not provided',  // Fallback if email is undefined
-      username: user.username || 'Username not provided',  // Fallback if username is undefined
-      tier: user.tier,  // Ensure tier is present
-      role: user.role || 'user'  // Fallback if role is undefined
+// Middleware to authenticate user token
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+    // Check for token in the authorization header
+    if (!req.headers.authorization) {
+        return res.status(403).json({ message: 'Token is missing' });
     }
-  });
-});
 
-export default router;
+    // Token validation logic (simplified, should be more robust in production)
+    const token = req.headers.authorization.split(' ')[1];  // Assuming token is in "Bearer <token>" format
+
+    // Validate token logic here (e.g., jwt.verify(token, secret), etc.)
+    try {
+        // Simulate token verification and attaching user to the request (replace with actual logic)
+        req.user = { 
+            id: '123', 
+            email: 'user@example.com', 
+            username: 'johndoe', 
+            tier: 'free', 
+            role: 'user' 
+        };  // Example payload for simulation
+
+        // Proceed to the next middleware or route handler
+        next();  
+    } catch (error) {
+        // Handle token verification errors
+        return res.status(401).json({ message: 'Invalid or expired token' });
+    }
+};
+
+export default authenticateToken;  // Default export

@@ -3,10 +3,10 @@ import { Request } from 'express';
 // Define UserPayload interface
 export interface UserPayload {
   id: string;               // Required: User ID
-  email?: string;            // Optional: Email (string or undefined)
-  username?: string;         // Optional: Username (string or undefined)
-  tier: 'free' | 'paid';     // Required: User's subscription tier
-  role?: 'admin' | 'user';   // Optional: User's role (admin or user)
+  email?: string;           // Optional: Email (string or undefined)
+  username?: string;        // Optional: Username (string or undefined)
+  tier: 'free' | 'paid';    // Required: User's subscription tier
+  role?: 'admin' | 'user';  // Optional: User's role (admin or user)
 }
 
 // Define OrderPayload interface
@@ -21,5 +21,5 @@ export interface OrderPayload {
 
 // Define CustomAuthRequest interface for extending Express Request
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Optional: `user` is of type `UserPayload` or undefined
+  user?: UserPayload;  // Optional: `user` can be `UserPayload` or `undefined`
 }
