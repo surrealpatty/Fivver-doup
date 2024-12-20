@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { registerUser } from '../controllers/userController';  // Correctly import the registerUser function
-import { authenticateToken } from '../middlewares/authenticateToken';  // Optional: If you want to protect certain routes
+import  authenticateToken  from '../middlewares/authenticateToken';  // Optional: If you want to protect certain routes
 
 const router = express.Router();
 

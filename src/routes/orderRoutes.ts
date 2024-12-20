@@ -1,9 +1,9 @@
 // src/routes/orderRoutes.ts
 
 import express, { Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
 import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
-import { OrderPayload } from '../types';  // Import OrderPayload type
+import { OrderPayload } from '../types'; // Ensure OrderPayload exists in src/types/index.ts
+import authenticateToken from '../middlewares/authenticateToken'; // Corrected import for default export
 
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.post(
 
     const { id, email, username, tier } = req.user;  // Access user properties
 
+    // Check if the necessary fields from the body are provided
     const { item, quantity, price }: OrderPayload = req.body;  // Extract order data
 
     if (!item || !quantity || !price) {
@@ -29,7 +30,15 @@ router.post(
       // Logic to process the order (e.g., save it to the database)
       return res.status(201).json({
         message: 'Order created successfully',
-        order: { id, email, username, tier, item, quantity, price },  // Return order data
+        order: { 
+          id, 
+          email: email || 'No email provided',  // Handle missing email case
+          username, 
+          tier, 
+          item, 
+          quantity, 
+          price 
+        },  // Return order data
       });
     } catch (err) {
       console.error(err);

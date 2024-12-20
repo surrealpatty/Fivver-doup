@@ -1,9 +1,6 @@
-// src/routes/profile.ts
-
 import express, { Request, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types';  // Correct path to CustomAuthRequest type
-import { UserPayload } from '../types';  // Correct path to UserPayload type
+import authenticateToken from '../middlewares/authenticateToken'; // Corrected import for default export
+import { CustomAuthRequest, UserPayload } from '../types';  // Correct path to CustomAuthRequest type and UserPayload
 
 const router = express.Router();
 
@@ -18,7 +15,7 @@ router.put(
     }
 
     // Now we can safely destructure since we know req.user is not undefined
-    const { id, email, username }: UserPayload = req.user;
+    const { id, email, username }: UserPayload = req.user;  // Deconstruct user data
 
     // If any of the fields are missing, return a bad request response
     if (!id || !email || !username) {
