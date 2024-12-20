@@ -3,7 +3,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types';  // Import UserPayload type
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest interface
 
 // The authenticateToken middleware ensures that the user is authenticated by verifying the JWT token
 const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {

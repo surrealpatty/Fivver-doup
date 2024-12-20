@@ -10,11 +10,6 @@ const user: UserPayload = {
   username: 'username',
   tier: 'paid',
   role: 'user',
-  orderId: 'order123',  // Valid as 'orderId' is part of UserPayload
-  userId: 'user123',    // Valid as 'userId' is part of UserPayload
-  serviceId: 'service123',
-  amount: 50,
-  status: 'active'
 };
 
 // Generate and verify token

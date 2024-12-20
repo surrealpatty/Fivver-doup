@@ -3,7 +3,7 @@
 import express, { Response, Request } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Import custom request type for typed access to req.user
-import { OrderPayload, Order } from '../types';  // Import Order and OrderPayload types
+import { OrderPayload, Order } from '../types';
 
 const router = express.Router();
 

@@ -20,7 +20,7 @@ export interface Order {
   status: string;      // Status of the order (e.g., 'pending', 'completed')
   amount: number;      // Amount of the order
   createdAt: Date;     // Date the order was created
-  updatedAt: Date;     // Date the order was last updated
+  updatedAt: Date;
 }
 
 // Define the UserPayload interface

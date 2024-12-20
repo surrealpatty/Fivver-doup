@@ -12,3 +12,6 @@ export interface UserPayload {
   amount: number;         // Amount for the order
   status: string;         // Status of the order
 }
+export interface CustomAuthRequest extends Request {
+  user?: UserPayload;
+}
