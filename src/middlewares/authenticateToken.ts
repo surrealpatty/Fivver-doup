@@ -1,9 +1,9 @@
-// src/middlewares/authenticateToken.ts
+// src/middleware/authenticateToken.ts
 
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; // Import the correct type for the request
-import jwt from 'jsonwebtoken'; // Import the jsonwebtoken library for verifying the JWT
+import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types'; // Import the UserPayload interface
+import { CustomAuthRequest } from '../types'; // Import the correct type for the request
 
 // Middleware to authenticate user token
 const authenticateToken = (

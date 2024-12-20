@@ -1,4 +1,5 @@
-import { Request } from 'express';  // Import Request from express for type extensions
+import { Request } from 'express';
+import { UserPayload } from './UserPayload';  // Assume you have a UserPayload defined elsewhere
 
 // Ensure that the UserPayload interface has a non-optional email property
 export interface UserPayload {
@@ -12,6 +13,7 @@ export interface UserPayload {
   serviceId: string;
   amount: number;
   status: string;
+  
 }
 
 // OrderPayload and Order interfaces for order-related data
@@ -32,6 +34,8 @@ export interface Order {
   price: number;    // Price of the item
   status?: string;  // Optional status field (e.g., 'pending', 'completed')
   createdAt?: string;  // Optional created date
+  serviceId: string;
+  amount: number;
 }
 
 // Ensure that the AuthRequest extends the Request object correctly
