@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import  User  from '../models/user';  // Import User model
 import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
+import { CustomAuthRequest } from 'types';
 
 const router = Router();
 

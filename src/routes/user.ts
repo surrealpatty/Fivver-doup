@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest, UserPayload } from '../types';  // Import UserPayload and CustomAuthRequest
+import { CustomAuthRequest } from 'types';  // Make sure you're using the correct type
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authentication middleware
 import { registerUser } from '../controllers/userController';  // Import the registerUser function
 

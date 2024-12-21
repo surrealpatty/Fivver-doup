@@ -1,15 +1,15 @@
 // src/routes/orderRoutes.ts
 
 import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; 
 import authenticateToken from '../middlewares/authenticateToken'; 
-
+import { CustomAuthRequest } from 'types'
 const router = Router();
 
 router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
-  // Ensure user is authenticated and available
-  if (!req.user) {
-    return res.status(401).json({ message: "Unauthorized" });
+  const user = req.user;
+  // Ensure the user is defined and has the correct properties
+  if (!user) {
+    return res.status(401).json({ message: 'User not authenticated' });
   }
 
   const { id, email, username, tier } = req.user;
