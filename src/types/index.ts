@@ -46,7 +46,7 @@ export interface Order {
 
 // Define the AuthRequest interface (extends the basic Request interface with an optional user property)
 export interface AuthRequest extends Request {
-  user?: UserPayload;       // 'user' is optional in AuthRequest (contains user details if authenticated)
+  user?: UserPayload; // Adjust if needed
 }
 
 // Define the CustomAuthRequest interface (extends the Request interface with a mandatory user property)
