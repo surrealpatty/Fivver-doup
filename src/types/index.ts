@@ -1,6 +1,6 @@
 // src/types/index.ts
-import { Request } from 'express'; 
-import { UserPayload } from './user'; // Import the UserPayload interface from the correct path
+import { UserPayload } from '@user';  // Import UserPayload from user.ts
+import { AuthRequest, CustomAuthRequest } from '@typesauthRequest';  // Import AuthRequest and CustomAuthRequest from authRequest.ts
 
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
@@ -25,3 +25,6 @@ export interface CustomAuthRequest extends Request {
 export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
   return req.user !== undefined; // Explicitly checks if user is set in the request
 }
+
+// Export the interfaces if needed in other files
+export { AuthRequest, CustomAuthRequest, UserPayload };

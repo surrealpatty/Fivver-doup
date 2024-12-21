@@ -1,5 +1,7 @@
+// src/routes/orderRoutes.ts
+
 import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types/user';  // Correct import for CustomAuthRequest
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 import authenticateToken from '../middlewares/authenticateToken'; // Default import
 
 const router = Router();
@@ -18,8 +20,6 @@ router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Res
 
   try {
     // Simulate fetching orders from a database (you would normally interact with your DB here)
-    // Example: const orders = await Order.findAll({ where: { userId: id } });
-
     const orders = [
       // Simulated orders data
       {

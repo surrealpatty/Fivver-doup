@@ -8,7 +8,7 @@
     "forceConsistentCasingInFileNames": true,   // Enforce consistent casing for file names
     "baseUrl": "./src",                         // Set baseUrl to the src directory for correct resolution
     "paths": {
-      "@types/*": ["types/*"]                    // Alias for the types directory
+      "@types/*": ["types/*"]                   // Alias for the types directory (useful for shorter imports)
     },
     "outDir": "./dist",                         // Set output directory for compiled files
     "moduleResolution": "node",                 // Resolve modules as Node.js does

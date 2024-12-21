@@ -2,11 +2,11 @@ import { Request } from 'express';
 
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
-  id: string;          // Required user ID
-  email: string;       // Required email address
-  username: string;    // Required username
-  tier: 'free' | 'paid';  // Required user tier
-  role?: 'admin' | 'user'; // Optional role
+  id: string;               // User ID
+  email?: string;           // Email address of the user (optional)
+  username?: string;        // Username of the user (optional)
+  tier: 'free' | 'paid';    // Tier (either 'free' or 'paid')
+  role?: 'admin' | 'user';  // Optional role
 }
 
 // Define the AuthRequest interface (extends Express' Request with an optional user field)
