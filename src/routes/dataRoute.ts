@@ -1,7 +1,8 @@
 // src/routes/dataRoute.ts
 import express, { Request, Response } from 'express';
 import axios from 'axios';
-import { authenticateToken }from '../middlewares/authMiddleware';  // Use default import instead of named import
+import authenticateToken from '../middlewares/authMiddleware';
+
 const router = express.Router();
 
 // Define a route to fetch data from an external API

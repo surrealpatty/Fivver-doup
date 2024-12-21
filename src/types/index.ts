@@ -46,12 +46,11 @@ export interface Order {
 
 // Define the AuthRequest interface (extends the basic Request interface with an optional user property)
 export interface AuthRequest extends Request {
-  user?: UserPayload; // Adjust if needed
+  user?: UserPayload;
 }
 
-// Define the CustomAuthRequest interface (extends the Request interface with a mandatory user property)
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;        // Ensure 'user' is always of type UserPayload (no longer optional)
+  user: UserPayload; // Ensure this is always set, no undefined
 }
 
 // Type guard to check if the user is a UserPayload
