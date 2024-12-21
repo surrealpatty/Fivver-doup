@@ -2,7 +2,7 @@
 
 import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
 import { Router, Response, Request, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import the correct type
+import { CustomAuthRequest } from '../types';  // Import the correct type for CustomAuthRequest
 const router = Router();
 
 // Example route to fetch orders

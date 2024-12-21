@@ -1,24 +1,30 @@
+// src/middlewares/authenticateToken.ts
+
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken'; // Importing jwt
-import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 import { UserPayload } from '../types'; // Import UserPayload type
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest interface
 
 // Middleware to authenticate and decode JWT token
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+const authenticateToken = (
+  req: CustomAuthRequest, // Ensure req is typed as CustomAuthRequest
+  res: Response,
+  next: NextFunction
+): void => { // Ensure function returns void
   // Extract the token from the Authorization header (Bearer token)
   const token = req.headers['authorization']?.split(' ')[1]; // "Bearer <token>"
 
   // If no token is provided, return a 401 Unauthorized error
   if (!token) {
-    res.status(401).json({ message: 'Token missing' });
-    return; // Ensure that we stop further execution
+    res.status(401).json({ message: 'Token missing' }); // Send the response
+    return; // Ensure that no further code executes
   }
 
   // Verify the token using JWT secret key
   jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
     if (err) {
-      res.status(403).json({ message: 'Token is not valid' });
-      return; // Stop further execution if the token is invalid
+      res.status(403).json({ message: 'Token is not valid' }); // Send the response
+      return; // Ensure that no further code executes
     }
 
     // Check if the decoded token has the expected structure
@@ -28,16 +34,16 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
 
       // Optionally, ensure the email is defined before proceeding
       if (!req.user.email) {
-        res.status(400).json({ message: 'User email is missing' });
-        return; // Stop execution if email is missing
+        res.status(400).json({ message: 'User email is missing' }); // Send the response
+        return; // Ensure that no further code executes
       }
     } else {
-      res.status(403).json({ message: 'Invalid token structure' });
-      return; // Stop execution if token structure is invalid
+      res.status(403).json({ message: 'Invalid token structure' }); // Send the response
+      return; // Ensure that no further code executes
     }
 
     // Proceed to the next middleware or route handler (only if no response has been sent)
-    next();  // Proceed to the next middleware or route handler
+    next(); // This will only execute if a response hasn't been sent already
   });
 };
 
