@@ -1,8 +1,16 @@
 // src/middlewares/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest from types
 import { UserPayload } from '../types';  // Import UserPayload from types
+
+// Define the CustomAuthRequest interface with the email property as required
+export interface CustomAuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;  // Make email required
+    username?: string;
+  };
+}
 
 const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
   // Retrieve the token from the Authorization header
