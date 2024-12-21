@@ -1,15 +1,15 @@
-// src/types/index.ts
+import { Request } from 'express';  // Import Request from 'express'
 
-import { Request } from 'express';  // Make sure you import Request from 'express'
-
+// Define UserPayload with optional email and username
 export interface UserPayload {
     id: string;
-    email: string;  // Make sure 'email' is required if needed
-    username: string;
+    email?: string;  // Make email optional
+    username?: string;  // Make username optional
 }
 
-// Directly define and export CustomAuthRequest
+// Define and export CustomAuthRequest that extends the base Request
 export interface CustomAuthRequest extends Request {
-    user?: UserPayload;  // Ensure the user is typed correctly
+    user?: UserPayload;  // user can be undefined, hence optional
 }
 
+// No need for 'export { CustomAuthRequest }' since it's already being exported

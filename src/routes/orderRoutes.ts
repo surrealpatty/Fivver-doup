@@ -7,10 +7,9 @@ const router = Router();
 
 // Example route to fetch orders
 router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response) => {
-  // Access the user from the request
+  // Ensure that user is defined before proceeding
   const user = req.user;
 
-  // Ensure that user is defined before proceeding
   if (!user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
@@ -25,12 +24,14 @@ router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Res
       { orderId: 'order-456', item: 'Service 2', quantity: 1, price: 150, amount: 150, status: 'completed' },
     ];
 
+    // Return orders along with user info
     return res.status(200).json({
       message: 'Orders fetched successfully',
       user: { id, email, username, tier },
       orders, // Returning the simulated orders data
     });
   } catch (err: unknown) {
+    // Handling potential errors
     if (err instanceof Error) {
       return res.status(500).json({ error: 'Internal server error', details: err.message });
     } else {

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../types';  // Import the AuthRequest interface
 import { UserPayload } from '../types';  // Import UserPayload for typing
-
+import { CustomAuthRequest } from '../types';  // Corrected import
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
 // Middleware to authenticate the user using a JWT token
