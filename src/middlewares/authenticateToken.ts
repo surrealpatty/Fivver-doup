@@ -1,33 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types/index';
+import { CustomAuthRequest, UserPayload } from '../types'; // Ensure these types are correctly defined and imported
 
-export interface CustomAuthRequest extends Request {
-    user?: UserPayload;
-}
+// Middleware to authenticate and verify the token
+const authenticateToken = (
+  req: CustomAuthRequest, 
+  res: Response, 
+  next: NextFunction
+): void => {
+  // Extract the token from the Authorization header
+  const authHeader = req.header('Authorization');
+  const token = authHeader?.split(' ')[1]; // Retrieve the token part after "Bearer"
 
-export const authenticateToken = (
-    req: CustomAuthRequest,
-    res: Response,
-    next: NextFunction
-) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-        return res.status(401).json({ error: 'Access denied, no token provided.' });
-    }
+  if (!token) {
+    // Return 401 Unauthorized if the token is missing
+    res.status(401).json({ message: 'Access token is missing' });
+    return;
+  }
 
-    jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: 'Invalid token.' });
-        }
+  try {
+    // Verify the token using the secret
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as UserPayload;
 
-        // Ensure the payload matches UserPayload
-        req.user = {
-            id: (user as UserPayload).id,
-            email: (user as UserPayload).email ?? '', // Default to empty string if undefined
-            username: (user as UserPayload).username,
-        };
+    // Attach the decoded payload to req.user
+    req.user = decoded;
 
-        next();
-    });
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (error) {
+    // Return 403 Forbidden if the token is invalid or expired
+    res.status(403).json({ message: 'Invalid or expired token' });
+  }
 };
+
+export default authenticateToken;
