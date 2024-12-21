@@ -1,12 +1,13 @@
 // src/routes/orderRoutes.ts
 
-import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
-import { Router, Response, Request, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import the correct type for CustomAuthRequest
+import { Router, Response, NextFunction } from 'express';
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
+import  authenticateToken  from 'middlewares/authenticateToken'; // Correct import for authenticateToken
+
 const router = Router();
 
 // Example route to fetch orders
-router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response) => {
+router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
   // Ensure that user is defined before proceeding
   const user = req.user;
 

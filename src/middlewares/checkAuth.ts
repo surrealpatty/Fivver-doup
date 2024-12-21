@@ -1,14 +1,14 @@
 // src/middlewares/checkAuth.ts
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from 'types/';  // Correct import for AuthRequest
-import { UserPayload } from '../types/index'; // Explicitly reference the correct path
+import { CustomAuthRequest } from 'types'; 
+import { UserPayload } from '../types'; // Explicitly reference the correct path for UserPayload
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
 // Middleware to authenticate the user using a JWT token
 export const authenticateToken = (
-  req: AuthRequest,  // Ensure req is typed as AuthRequest
+  req: CustomAuthRequest,  // Ensure req is typed as CustomAuthRequest
   res: Response,
   next: NextFunction
 ): void => {  // Return type is void because middleware doesn't return anything directly
