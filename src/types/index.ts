@@ -12,10 +12,6 @@ export interface UserPayload {
 export interface AuthRequest extends Request {
     user?: UserPayload;
 }
-// Define and export CustomAuthRequest that extends the base Request
 export interface CustomAuthRequest extends Request {
-    user?: UserPayload; // user can be undefined, hence optional
-}
-export interface CustomAuthRequest extends Request {
-    user?: UserPayload;  // Make sure it's optional and matches the UserPayload structure
+    user?: UserPayload; // Ensure user is of type UserPayload
 }
