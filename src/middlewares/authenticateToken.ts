@@ -1,39 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Ensure the path to 'types' is correct
-import { UserPayload } from '../types'; 
+import { CustomAuthRequest, UserPayload } from '../types'; // Ensure these types are correctly defined and imported
 
 // Middleware to authenticate and verify the token
 const authenticateToken = (
   req: CustomAuthRequest, 
   res: Response, 
   next: NextFunction
-) => {
+): void => {
   // Extract the token from the Authorization header
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; 
+  const authHeader = req.header('Authorization');
+  const token = authHeader?.split(' ')[1]; // Retrieve the token part after "Bearer"
 
   if (!token) {
-    // Return 401 if the token is missing
-    return res.status(401).json({ message: 'Token is missing' });
+    // Return 401 Unauthorized if the token is missing
+    res.status(401).json({ message: 'Access token is missing' });
+    return;
   }
 
-  // Verify the token using the secret
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
-    if (err) {
-      // Return 403 if the token is invalid or expired
-      return res.status(403).json({ message: 'Token is invalid or expired' });
-    }
+  try {
+    // Verify the token using the secret
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as UserPayload;
 
-    if (decoded) {
-      // Attach the decoded payload to req.user
-      req.user = decoded as UserPayload; 
-      return next(); // Proceed to the next middleware or route handler
-    }
+    // Attach the decoded payload to req.user
+    req.user = decoded;
 
-    // Handle cases where the token doesn't contain user information
-    return res.status(400).json({ message: 'Missing user information in token' });
-  });
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (error) {
+    // Return 403 Forbidden if the token is invalid or expired
+    res.status(403).json({ message: 'Invalid or expired token' });
+  }
 };
 
 export default authenticateToken;

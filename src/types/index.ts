@@ -17,11 +17,9 @@ export interface JwtPayload {
     tier?: string;  // Optional tier property in JWT token
 }
 
-// CustomAuthRequest extends the Request object with an optional user object
 export interface CustomAuthRequest extends Request {
-    user?: UserPayload; // Allow user to be undefined
+  user?: UserPayload; // Use the updated UserPayload type
 }
-
 // AuthRequest extends Request for cases where the user is guaranteed to be present
 export interface AuthRequest extends Request {
     user: UserPayload;  // `user` is guaranteed to be present (e.g., after JWT verification)
