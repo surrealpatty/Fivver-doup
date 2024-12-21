@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/user';
+import User from '../models/user';  // Correct way to import default exports
 import { v4 as uuidv4 } from 'uuid';  // UUID for generating unique user ID
+
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
 // User registration handler
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
@@ -29,14 +31,23 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       email,
       username,
       password: hashedPassword,
-      role: '',  // You can specify the default role here
-      tier: "free",  // Default tier is "free"
+      role: 'user',  // Default role (can be customized)
+      tier: 'free',  // Default tier is "free"
       isVerified: false, // User is not verified initially
     });
 
+    // Generate JWT token after user registration
+    const token = jwt.sign(
+      { id: user.id, email: user.email, username: user.username, tier: user.tier },
+      SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    // Return response with user details and token
     return res.status(201).json({
       message: 'User created successfully',
       user: { id: user.id, email: user.email, username: user.username },
+      token,  // Send the generated token as part of the response
     });
   } catch (error) {
     console.error('Error during user registration:', error);
@@ -68,14 +79,14 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your-default-secret',  // Ensure to use a strong secret key in production
+      { id: user.id, email: user.email, username: user.username, tier: user.tier },  // Include tier in token
+      SECRET_KEY,
       { expiresIn: '1h' }
     );
 
     return res.status(200).json({
       message: 'Login successful',
-      token,
+      token,  // Send the generated token as part of the response
       user: {
         id: user.id,
         email: user.email,

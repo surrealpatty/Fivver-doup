@@ -1,8 +1,8 @@
 // src/middlewares/checkAuth.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from 'types/';  // Correct relative path
-import { UserPayload } from '../types';  // Import UserPayload for typing
+import { AuthRequest } from 'types/';  // Correct import for AuthRequest
+import { UserPayload } from '../types';  // Correct import for UserPayload
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
