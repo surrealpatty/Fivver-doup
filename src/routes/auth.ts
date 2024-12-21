@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import  User  from '../models/user';  // Import User model
-import { AuthRequest } from '../types';  // Correct relative path
+import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
 
 const router = Router();
 
