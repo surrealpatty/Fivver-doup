@@ -24,6 +24,11 @@ const authenticateTokenMiddleware = (
       // Decode and type the token as UserPayload
       const user = decoded as UserPayload;  // Type assertion
 
+      // Ensure user is always set on req
+      if (!user) {
+        return res.status(403).json({ message: 'Token does not contain valid user data' });
+      }
+
       // Attach the decoded user data to the request object
       req.user = user;
 
