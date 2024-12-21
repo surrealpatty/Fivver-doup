@@ -1,5 +1,5 @@
 import { Request } from 'express';
-
+import authenticateToken from '../middlewares/authenticateToken';
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
   id: string;               // User ID

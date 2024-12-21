@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { CustomAuthRequest } from '../types'; // Import your CustomAuthRequest
-
+import { UserPayload } from '../types';
 const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
   const token = req.headers['authorization']?.split(' ')[1];  // Assuming Bearer token
 

@@ -2,8 +2,8 @@ import { Request } from 'express';
 
 export interface UserPayload {
   id: string;
-  email?: string;  // Make email optional
-  username?: string;  // Make username optional
+  email: string;  // Make email optional
+  username: string;  // Make username optional
   tier?: string;  // Optional tier
   role?: string;  // Optional role
 }
@@ -16,9 +16,8 @@ export interface JwtPayload {
   tier?: string;  // Optional tier property for the JWT token payload
 }
 
-// CustomAuthRequest extends Express's Request to include an optional user property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // user can be undefined if not authenticated
+  user?: UserPayload;  // UserPayload can be undefined
 }
 
 // AuthRequest extends Request for cases where the user is guaranteed to be authenticated
