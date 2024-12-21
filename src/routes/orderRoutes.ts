@@ -2,19 +2,21 @@
 
 import { Router, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
-import authenticateToken from '../middlewares/authenticateToken'; // Default import
+import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
 
 const router = Router();
 
 // Example route to fetch orders
-router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response): Promise<Response> => {
-  const user = req.user; // The user is guaranteed to have the correct type (UserPayload)
+router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response) => {
+  // Access the user from the request
+  const user = req.user;
 
+  // Ensure that user is defined before proceeding
   if (!user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
-  // Example of accessing user properties
+  // Destructure the properties from the user object
   const { id, email, username, tier } = user;
 
   try {
