@@ -1,42 +1,38 @@
-import { CustomAuthRequest } from '../types/user';  // Correct import for CustomAuthRequest
-import jwt from 'jsonwebtoken';  // Importing jwt
-import { NextFunction, Response } from 'express';  // Correct imports for NextFunction and Response
-import { UserPayload } from '../types/user';  // Correct import for UserPayload
+import { NextFunction, Response } from 'express';
+import jwt from 'jsonwebtoken'; // Importing jwt
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
+import { UserPayload } from '../types'; // Import UserPayload type
 
 // Middleware to authenticate and decode JWT token
-const authenticateTokenMiddleware = (
-  req: CustomAuthRequest, 
-  res: Response, 
-  next: NextFunction
-): Promise<void> => {  // Set return type to Promise<void> for async handling
-  return new Promise((resolve, reject) => {
-    const token = req.headers['authorization']?.split(' ')[1];  // Extract token
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+  // Extract the token from the Authorization header (Bearer token)
+  const token = req.headers['authorization']?.split(' ')[1]; // "Bearer <token>"
 
-    if (!token) {
-      return res.status(401).json({ message: 'Token missing' });
+  // If no token is provided, return a 401 Unauthorized error
+  if (!token) {
+    res.status(401).json({ message: 'Token missing' });
+    return; // Explicitly return here to stop further execution
+  }
+
+  // Verify the token using JWT secret key
+  jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
+    if (err) {
+      res.status(403).json({ message: 'Token is not valid' });
+      return; // Explicitly return here to stop further execution
     }
 
-    jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
-      if (err || !decoded) {
-        return res.status(403).json({ message: 'Token is not valid' });
-      }
+    // Check if the decoded token has the expected structure
+    if (decoded) {
+      // Ensure the decoded token matches the UserPayload interface
+      req.user = decoded as UserPayload; // Attach decoded user to the req object
+    } else {
+      res.status(403).json({ message: 'Invalid token structure' });
+      return; // Explicitly return if the structure is incorrect
+    }
 
-      // Decode and type the token as UserPayload
-      const user = decoded as UserPayload;  // Type assertion
-
-      // Ensure user is always set on req
-      if (!user) {
-        return res.status(403).json({ message: 'Token does not contain valid user data' });
-      }
-
-      // Attach the decoded user data to the request object
-      req.user = user;
-
-      // Proceed to next middleware or route handler
-      next();
-      resolve();  // Resolve promise after next()
-    });
+    // Proceed to the next middleware or route handler
+    next(); // Use next to pass control to the next middleware
   });
 };
 
-export default authenticateTokenMiddleware;
+export default authenticateToken;
