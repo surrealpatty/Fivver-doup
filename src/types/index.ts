@@ -8,7 +8,9 @@ export interface UserPayload {
     email: string; // Make email required
     username?: string;
 }
-
+export interface AuthRequest extends Request {
+    user?: UserPayload;  // Add user field to request, typed as UserPayload
+  }
 // Define and export CustomAuthRequest that extends the base Request
 export interface CustomAuthRequest extends Request {
     user?: UserPayload; // user can be undefined, hence optional
