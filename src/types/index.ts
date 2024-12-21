@@ -3,10 +3,10 @@ import { Request } from 'express';
 
 // Define the UserPayload interface properly
 export interface UserPayload {
-  id: string;               // `id` is required
-  email: string;            // `email` should be non-optional as expected by your logic
-  username: string;        // `username` is optional
-  teir?: string;
+  id: string;
+  email?: string;
+  username?: string;
+  tier?: string; // Add tier property
 }
 
 export interface CustomAuthRequest extends Request {
