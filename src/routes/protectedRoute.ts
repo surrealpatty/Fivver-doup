@@ -7,7 +7,7 @@ const router = Router();
 
 // A protected route
 router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Response, next: NextFunction): Response => {
-    // Ensure req.user is typed as UserPayload and handle case where it might be undefined
+    // Ensure req.user is typed as UserPayload and handle the case where it might be undefined
     const user = req.user;
 
     // Handle the case where user is undefined (invalid or missing token)
@@ -22,8 +22,8 @@ router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Respon
             id: user.id,
             email: user.email || 'Email not provided',  // Fallback if email is undefined
             username: user.username || 'Username not provided',  // Fallback if username is undefined
-            tier: user.tier || 'tier not provided', // Fallback if tier is undefined
-            role: user.role || 'user'  // Fallback if role is undefined
+            tier: user.tier || 'Tier not provided', // Fallback if tier is undefined
+            role: user.role || 'User'  // Fallback if role is undefined
         }
     });
 });
