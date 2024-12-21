@@ -20,7 +20,11 @@ export interface JwtPayload {
 }
 
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;
+  user: {
+    id: string;
+    email: string;  // Ensure this is required
+    username?: string;
+  };
 }
 // AuthRequest extends Request for cases where the user is guaranteed to be present
 export interface AuthRequest extends Request {
