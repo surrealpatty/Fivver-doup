@@ -1,48 +1,39 @@
-// src/middlewares/authenticateToken.ts
+import { Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { CustomAuthRequest } from '../types';  // Correct import path for CustomAuthRequest
+import { UserPayload } from '../types';  // Correct import path for UserPayload
 
-import { NextFunction, Response } from 'express';
-import jwt from 'jsonwebtoken'; 
-import { UserPayload } from '../types'; 
-import { CustomAuthRequest } from '../types'; 
+// Middleware to authenticate the token and set the user in the request
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+  // Extract token from the Authorization header
+  const token = req.headers['authorization']?.split(' ')[1];  // Expecting "Bearer <token>"
 
-// Middleware to authenticate and decode JWT token
-const authenticateToken = (
-  req: CustomAuthRequest, 
-  res: Response, 
-  next: NextFunction
-): void => { 
-  // Extract the token from the Authorization header (Bearer token)
-  const token = req.headers['authorization']?.split(' ')[1]; 
-
-  // If no token is provided, return a 401 Unauthorized error
   if (!token) {
-    res.status(401).json({ message: 'Token missing' });
-    return;  // Exit early to prevent further code execution
+    return res.status(403).json({ message: 'No token provided' });
   }
 
-  // Verify the token using JWT secret key
-  jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
-    // If token verification fails
+  // Verify the token using jwt.verify
+  jwt.verify(token, process.env.JWT_SECRET_KEY || '', (err, decoded) => {
     if (err) {
-      res.status(403).json({ message: 'Token is not valid' });
-      return;  // Exit early if the token is invalid
+      return res.status(403).json({ message: 'Invalid or expired token' });
     }
 
-    // If token is valid, attach decoded user to req.user
-    if (decoded) {
-      req.user = decoded as UserPayload; // Add user to the request
-
-      // Optionally, ensure the email is defined before proceeding
-      if (!req.user.email) {
-        res.status(400).json({ message: 'User email is missing' });
-        return;  // Exit early if email is missing
-      }
+    // Ensure decoded is a valid JwtPayload and safely cast to UserPayload
+    if (decoded && typeof decoded !== 'string') {
+      const { id, email, username, tier } = decoded;  // Destructure the necessary fields
+      
+      // Safely assign the decoded values to req.user with fallback for optional fields
+      req.user = {
+        id,  // decoded.id is required
+        email: email || '',  // Default to empty string if email is missing
+        username: username || '',  // Default to empty string if username is missing
+        tier: tier || '',  // Default to empty string if tier is missing
+      };
     } else {
-      res.status(403).json({ message: 'Invalid token structure' });
-      return;  // Exit early if the token structure is invalid
+      return res.status(403).json({ message: 'Invalid token format' });
     }
 
-    // Proceed to the next middleware or route handler if no issues
+    // Proceed to the next middleware or route handler
     next();
   });
 };
