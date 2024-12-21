@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; // Ensure correct import path
+import { CustomAuthRequest } from '../types';  // Ensure correct import path
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
-import  authenticateToken  from '../middlewares/authenticateToken';  // Correct import for middleware
+import authenticateToken from '../middlewares/authenticateToken';  // Correct import for middleware
 
 // Mock Order model methods
 jest.mock('../models/order');
@@ -14,12 +14,14 @@ describe('Order Controller', () => {
 
   beforeEach(() => {
     req = {
+      // For authenticated users
       user: {
-        id: '123',          // User ID (required)
-        email: 'test@example.com',  // Mock email (required)
-        username: 'testuser',      // Mock username (optional but required for the type)
-        tier: 'free',        // Mock user with 'tier' set to 'free'
-      },
+        id: '123',
+        email: 'test@example.com',
+        username: 'testuser',
+        tier: 'free',
+      } as CustomAuthRequest['user'],  // Cast to ensure the correct type for user
+
       body: {
         userId: 123,
         serviceId: 1,
@@ -70,7 +72,12 @@ describe('Order Controller', () => {
   });
 
   test('authenticateToken should call next if user is authenticated', async () => {
-    req.user = { id: '123', email: 'test@example.com', username: 'testuser', tier: 'free' };  // Mock authenticated user
+    req.user = {
+      id: '123',
+      email: 'test@example.com',
+      username: 'testuser',
+      tier: 'free',
+    } as CustomAuthRequest['user'];  // Cast to `UserPayload`
 
     // Call authenticateToken middleware
     await authenticateToken(req as CustomAuthRequest, res as Response, next);
