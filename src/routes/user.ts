@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from 'types';  // Make sure you're using the correct type
 import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authentication middleware
 import { registerUser } from '../controllers/userController';  // Import the registerUser function
+import { UserPayload } from '../types';  // Make sure this import is correct
 
 const router = Router();
 

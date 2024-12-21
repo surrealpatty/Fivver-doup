@@ -1,7 +1,7 @@
 import { Router, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken'; 
 import { CustomAuthRequest } from 'types';  // Import the CustomAuthRequest type
-
+import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
 const router = Router();
 
 // Define the route for fetching orders

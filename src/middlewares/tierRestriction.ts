@@ -1,6 +1,6 @@
 // src/middlewares/tierRestriction.ts
 import { NextFunction, Request, Response } from 'express';
-import { AuthRequest } from '../types';  // Correct relative path
+import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
 import { CustomAuthRequest } from 'types';
 
 export const tierMiddleware = (

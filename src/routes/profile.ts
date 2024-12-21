@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken'; // Default import for authentication middleware
 import { CustomAuthRequest } from 'types';  // Make sure you're using the correct type
-
+import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
 const router = Router();
 
 // Profile route - Get profile information

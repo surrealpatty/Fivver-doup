@@ -5,10 +5,13 @@ import { Request } from 'express';
 export interface UserPayload {
   id: string;               // `id` is required
   email: string;            // `email` should be non-optional as expected by your logic
-  username?: string;        // `username` is optional
+  username: string;        // `username` is optional
+  teir?: string;
 }
 
-// Extend Express's Request to include `user` as an optional property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;       // `user` is optional and will be set by the middleware if the token is valid
+  user: UserPayload;  // Ensure 'user' has the correct type (i.e., UserPayload)
+}
+export interface AuthRequest extends Request {
+  user: UserPayload;
 }

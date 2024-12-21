@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correct default import
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
 import { UserPayload } from '../types';  // Correct the import to match the export
-
+import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
 const router = Router();
 
 // POST route to create a new review
