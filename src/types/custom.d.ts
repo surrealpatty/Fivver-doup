@@ -1,9 +1,7 @@
-import { Request } from 'express';
+// src/types/custom.d.ts
 
-declare global {
-  namespace Express {
-    interface Request {
-      file?: Express.Multer.File;  // Optional file property for multer handling
-    }
-  }
+export interface UserPayload {
+  id: string;        // The user's unique identifier
+  email: string;     // Email is required, as per your app's logic
+  username?: string; // Username is optional
 }

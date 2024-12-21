@@ -1,7 +1,7 @@
 // src/routes/orderRoutes.ts
 
 import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Import the custom request type
+import { CustomAuthRequest } from '../types/authRequest';  // Import the custom request type
 import authenticateToken from '../middlewares/authenticateToken';  // Import the authenticateToken middleware
 
 const router = Router();
@@ -9,13 +9,12 @@ const router = Router();
 // Example: A route that requires a user to be authenticated
 router.get('/order/:orderId', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
   // Ensure that req.user is defined, or else respond with an error
-  if (!req.user) {
+  const user = req.user;  // `user` is of type `UserPayload | undefined`
+
+  if (!user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const user = req.user;  // `user` is of type `UserPayload | undefined`
-
-  // Access user properties
   const userId = user.id;
   const orderId = req.params.orderId;
 
@@ -35,12 +34,13 @@ router.get('/order/:orderId', authenticateToken, async (req: CustomAuthRequest, 
 
 // Example of creating an order (ensure user exists)
 router.post('/order', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+  const user = req.user;  // `user` is of type `UserPayload | undefined`
+
   // Ensure req.user is available
-  if (!req.user) {
+  if (!user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const user = req.user;  // Access user info
   const { productId, quantity } = req.body;  // Example request body
 
   try {
