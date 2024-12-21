@@ -1,18 +1,15 @@
 // src/types/index.ts
 
-// Define the UserPayload interface
+import { Request } from 'express';  // Make sure you import Request from 'express'
+
 export interface UserPayload {
-  id: string;
-  email: string;
-  username?: string;
+    id: string;
+    email: string;  // Make sure 'email' is required if needed
+    username: string;
 }
 
-// Define the AuthRequest interface extending Express's Request
-export interface AuthRequest extends Request {
-  user?: UserPayload; // The user is optional, following the UserPayload structure
+// Directly define and export CustomAuthRequest
+export interface CustomAuthRequest extends Request {
+    user?: UserPayload;  // Ensure the user is typed correctly
 }
 
-// Type guard to check if the user exists in the request
-export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
-return req.user !== undefined; // Explicitly checks if the user is set in the request
-}

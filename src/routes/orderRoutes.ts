@@ -1,9 +1,8 @@
 // src/routes/orderRoutes.ts
 
-import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
-
+import { Router, Response, Request, NextFunction } from 'express';
+import { CustomAuthRequest } from '../types';  // Import the correct type
 const router = Router();
 
 // Example route to fetch orders
