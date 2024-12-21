@@ -1,42 +1,58 @@
+// src/routes/orderRoutes.ts
+
 import { Router, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; // Correct default import for authenticateToken
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
-import { UserPayload } from '../types';  // Import UserPayload
+import { CustomAuthRequest } from '../types';  // Import the custom request type
+import authenticateToken from '../middlewares/authenticateToken';  // Import the authenticateToken middleware
 
 const router = Router();
 
-// Define the route for fetching orders
-router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
-  // Ensure the user is defined
-  const user = req.user;
-
-  // If no user is authenticated, return 401
-  if (!user) {
-    return res.status(401).json({ message: 'User not authenticated' });
+// Example: A route that requires a user to be authenticated
+router.get('/order/:orderId', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+  // Ensure that req.user is defined, or else respond with an error
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  // Destructure the user properties only if user is defined and ensure TypeScript understands user is a UserPayload
-  const { id, email, username, tier } = user as UserPayload;  // Type cast to UserPayload
+  const user = req.user;  // `user` is of type `UserPayload | undefined`
+
+  // Access user properties
+  const userId = user.id;
+  const orderId = req.params.orderId;
 
   try {
-    // Simulated orders data (replace with actual database logic)
-    const orders = [
-      { orderId: 'order-123', item: 'Service 1', quantity: 2, price: 100, amount: 200, status: 'pending' },
-      { orderId: 'order-456', item: 'Service 2', quantity: 1, price: 150, amount: 150, status: 'completed' },
-    ];
+    // Your order fetching logic goes here (for example, fetching from the database)
+    // const order = await Order.findByPk(orderId);
 
     return res.status(200).json({
-      message: 'Orders fetched successfully',
-      user: { id, email, username, tier },  // Return the user data
-      orders,  // Returning the simulated orders data
+      message: `Order ${orderId} details for user ${userId}`,
+      // order: order,  // Include order details here
     });
-  } catch (err: unknown) {
-    // Handle any unexpected errors
-    if (err instanceof Error) {
-      return res.status(500).json({ error: 'Internal server error', details: err.message });
-    } else {
-      return res.status(500).json({ error: 'Unexpected error' });
-    }
+  } catch (error) {
+    // Error handling
+    next(error);
+  }
+});
+
+// Example of creating an order (ensure user exists)
+router.post('/order', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
+  // Ensure req.user is available
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const user = req.user;  // Access user info
+  const { productId, quantity } = req.body;  // Example request body
+
+  try {
+    // Logic to create a new order
+    // const newOrder = await Order.create({ userId: user.id, productId, quantity });
+
+    return res.status(201).json({
+      message: 'Order created successfully.',
+      // order: newOrder,  // Return the created order details
+    });
+  } catch (error) {
+    next(error);
   }
 });
 

@@ -1,21 +1,32 @@
+// src/middlewares/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Import your CustomAuthRequest
-import { UserPayload } from '../types';
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Assuming Bearer token
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest from types
+import { UserPayload } from '../types';  // Import UserPayload from types
 
+const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+  // Retrieve the token from the Authorization header
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  // If no token is found, respond with an error
   if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
+    res.status(401).json({ message: 'Token is missing' });
+    return;  // Exit early to stop further processing
   }
 
+  // Verify the token using JWT
   jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+    // If the token is invalid or expired, respond with an error
     if (err) {
-      return res.status(403).json({ message: 'Token is not valid' });
+      res.status(403).json({ message: 'Token is invalid' });
+      return;  // Exit early to stop further processing
     }
 
-    req.user = decoded as UserPayload; // Attach the decoded user to the request object
-    next();
+    // Ensure decoded is properly cast to UserPayload and attach to the request
+    req.user = decoded as UserPayload;  // Cast decoded to UserPayload
+
+    // Proceed to the next middleware or route handler
+    next();  // No need to return anything, just call next()
   });
 };
 
