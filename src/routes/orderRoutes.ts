@@ -1,18 +1,21 @@
-// src/routes/orderRoutes.ts
-
 import { Router, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken'; 
-import { CustomAuthRequest } from 'types'
+import { CustomAuthRequest } from 'types';  // Import the CustomAuthRequest type
+
 const router = Router();
 
+// Define the route for fetching orders
 router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
-  const user = req.user;
   // Ensure the user is defined and has the correct properties
+  const user = req.user;
+  
+  // Add an explicit check for user presence
   if (!user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
-  const { id, email, username, tier } = req.user;
+  // Destructure the user properties only if user is defined
+  const { id, email, username, tier } = user;
 
   try {
     // Simulated orders data (normally you'd fetch this from a database)
@@ -23,7 +26,7 @@ router.get('/orders', authenticateToken, async (req: CustomAuthRequest, res: Res
 
     return res.status(200).json({
       message: 'Orders fetched successfully',
-      user: { id, email, username, tier },
+      user: { id, email, username, tier },  // Return the user data
       orders, // Returning the simulated orders data
     });
   } catch (err: unknown) {
