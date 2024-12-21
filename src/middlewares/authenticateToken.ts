@@ -1,7 +1,8 @@
+// src/middleware/authenticateToken.ts
 import { NextFunction, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest type
-import { UserPayload } from '../types';  // Import UserPayload type
+import jwt, { JwtPayload } from 'jsonwebtoken'; // Importing JwtPayload type
+import { CustomAuthRequest } from '../types/user';  // Correct import for CustomAuthRequest
+import { UserPayload } from '../types/user';  // Correct import for UserPayload
 
 const authenticateToken = (
   req: CustomAuthRequest, 
@@ -13,16 +14,14 @@ const authenticateToken = (
 
   // If no token is provided, return a 401 Unauthorized error
   if (!token) {
-    res.status(401).json({ message: 'Token missing' }); // Directly return response if no token
-    return;  // Stop further execution if no token is found
+    return res.status(401).json({ message: 'Token missing' }); // Directly return response if no token
   }
 
   // Verify the token using JWT secret key
-  jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err: any, decoded: JwtPayload | undefined) => {
     if (err || !decoded) {
       // If token is invalid or expired, return a 403 Forbidden error
-      res.status(403).json({ message: 'Token is not valid' }); // Directly return response if verification fails
-      return;  // Stop further execution if token is invalid
+      return res.status(403).json({ message: 'Token is not valid' }); // Directly return response if verification fails
     }
 
     // Decode and type the token as UserPayload
@@ -35,6 +34,5 @@ const authenticateToken = (
     next();  // Pass control to the next middleware or handler if token is valid
   });
 };
-
 
 export default authenticateToken;
