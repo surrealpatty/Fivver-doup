@@ -1,5 +1,3 @@
-// src/types/authRequest.ts
-
 import { Request } from 'express';
 import { UserPayload } from './user';  // Correct path to UserPayload
 
