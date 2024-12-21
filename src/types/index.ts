@@ -5,8 +5,8 @@ import { Request } from 'express'; // Import Request from 'express'
 // Define and export UserPayload with required fields
 export interface UserPayload {
     id: string;
-    email: string;  // email should be mandatory
-    username: string;
+    email?: string;  // email should be mandatory
+    username?: string;
     tier: "free" | "paid";  // Ensure tier is either "free" or "paid"
 }
 export interface AuthRequest extends Request {
