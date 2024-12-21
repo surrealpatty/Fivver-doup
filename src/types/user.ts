@@ -3,8 +3,8 @@ import { Request } from 'express';
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
   id: string;               // User ID
-  email?: string;           // Email address of the user (optional)
-  username?: string;        // Username of the user (optional)
+  email: string;           // Email address of the user (optional)
+  username: string;        // Username of the user (optional)
   tier: 'free' | 'paid';    // Tier (either 'free' or 'paid')
   role?: 'admin' | 'user';  // Optional role
 }

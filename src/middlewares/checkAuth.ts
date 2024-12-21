@@ -1,8 +1,9 @@
 // src/middlewares/checkAuth.ts
+
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from 'types'; 
-import { UserPayload } from '../types'; // Explicitly reference the correct path for UserPayload
+import { CustomAuthRequest } from 'types';  // Import CustomAuthRequest
+import { UserPayload } from '../types';  // Import UserPayload
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 

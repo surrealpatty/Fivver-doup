@@ -1,17 +1,9 @@
 // src/types/index.ts
 
-import { Request } from 'express'; // Import Request from 'express'
+import { Request } from 'express';
+import { UserPayload } from './user';  // Import UserPayload type from the correct file, assuming it's in src/types/user.ts
 
-// Define and export UserPayload with required fields
-export interface UserPayload {
-    id: string;
-    email?: string;  // email should be mandatory
-    username?: string;
-    tier: "free" | "paid";  // Ensure tier is either "free" or "paid"
-}
-export interface AuthRequest extends Request {
-    user?: UserPayload;
-}
+// Extend Express's Request to include `user` as an optional property
 export interface CustomAuthRequest extends Request {
-    user?: UserPayload; // Ensure user is of type UserPayload
+  user?: UserPayload; // `user` is optional and will be set by the middleware if the token is valid
 }
