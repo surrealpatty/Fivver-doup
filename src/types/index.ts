@@ -1,8 +1,9 @@
 // src/types/index.ts
 
-// Import interfaces from other files
-import { UserPayload } from '@user';  // Import UserPayload from user.ts
-import { AuthRequest, CustomAuthRequest } from './authRequest';  // Import from the correct relative path
+// Import UserPayload from the user file
+import { UserPayload } from './user';  // Correct import path for UserPayload
+// Import AuthRequest and CustomAuthRequest from the correct file
+import { AuthRequest, CustomAuthRequest } from './authRequest';  // Correct path to authRequest file
 
 // Type guard to check if the user exists in the request
 export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPayload } {
@@ -10,5 +11,5 @@ export function isUser(req: AuthRequest): req is AuthRequest & { user: UserPaylo
 }
 
 // Export the interfaces
-export { UserPayload } from '@user';  // Export UserPayload
-export { AuthRequest, CustomAuthRequest } from './authRequest';  // Export AuthRequest and CustomAuthRequest
+export { UserPayload } from './user';  // Re-export UserPayload
+export { AuthRequest, CustomAuthRequest } from './authRequest';  // Re-export AuthRequest and CustomAuthRequest

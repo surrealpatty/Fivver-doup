@@ -1,12 +1,12 @@
 // src/types/authRequest.ts
-import { Request } from 'express';
-import { UserPayload } from './user';  // Import the UserPayload interface from user.ts
 
-export interface AuthRequest {
-    user: UserPayload;
-    // Add any other custom properties needed for the request object
+import { Request } from 'express';
+import { UserPayload } from './user';  // Correct path to UserPayload
+
+export interface AuthRequest extends Request {
+  user?: UserPayload;  // Optional user (might be undefined if not authenticated)
 }
-// Define the CustomAuthRequest interface (extends Request with a mandatory user property)
-export interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Ensure user is never undefined
+
+export interface CustomAuthRequest extends AuthRequest {
+  user: UserPayload;  // CustomAuthRequest always expects user to be defined
 }
