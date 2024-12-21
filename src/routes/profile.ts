@@ -1,21 +1,25 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; // Default import for authentication middleware
-import { CustomAuthRequest } from 'types';  // Make sure you're using the correct type
-import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
+import { Router, Response, NextFunction } from 'express';
+import authenticateToken from '../middlewares/authenticateToken';  // Ensure the token authentication middleware is correctly imported
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest to type the request properly
+import { UserPayload } from '../types';  // Import the UserPayload type to ensure req.user is typed correctly
+
 const router = Router();
 
 // Profile route - Get profile information
 router.get(
   '/profile',
-  authenticateToken,  // Ensure user is authenticated with the token
+  authenticateToken,  // Ensure the user is authenticated with the token
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
     // Ensure user is authenticated
-    if (!req.user) {
+    const user = req.user;
+
+    // If user is not authenticated, return 401 Unauthorized
+    if (!user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Destructure user data from the authenticated request
-    const { id, email, username, tier } = req.user; // Added 'tier' to match the UserPayload type
+    // Destructure user data from the authenticated request (user is guaranteed to be of type UserPayload)
+    const { id, email, username, tier } = user as UserPayload;  // Type assertion to UserPayload
 
     // Return the user's profile data
     return res.status(200).json({
@@ -33,11 +37,13 @@ router.put(
   authenticateToken,  // Ensure user is authenticated with the token
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
     // Ensure user is authenticated and has valid profile
-    if (!req.user) {
+    const user = req.user;
+
+    if (!user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    const { id, email, username, tier } = req.user; // Destructure user data
+    const { id, email, username, tier } = user as UserPayload; // Type assertion to UserPayload
 
     // Validate if the necessary fields exist
     if (!id || !email || !username) {

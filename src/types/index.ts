@@ -1,11 +1,11 @@
 import { Request } from 'express';
 
-// Update UserPayload to make email and username optional
 export interface UserPayload {
   id: string;
   email?: string;  // Make email optional
   username?: string;  // Make username optional
-  tier?: string;  // Optional tier property (can be used for different user types)
+  tier?: string;  // Optional tier
+  role?: string;  // Optional role
 }
 
 // JwtPayload interface to represent the structure of the JWT token

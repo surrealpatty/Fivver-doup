@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct default import
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
+import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authentication middleware
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest type
 import { UserPayload } from '../types';  // Correct the import to match the export
-import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
+
 const router = Router();
 
 // POST route to create a new review
@@ -14,7 +14,7 @@ router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response
     }
 
     // Check if email is present (it's optional, so handle the case where it might be undefined)
-    const email = req.user.email ? req.user.email : 'No email provided'; // Handle missing email case
+    const email = req.user.email ?? 'No email provided'; // Use nullish coalescing for fallback
 
     // Logic to create a review (e.g., saving it in the database)
     // Example: await Review.create({ userId: req.user.id, review: req.body.review, serviceId: req.body.serviceId });
@@ -31,7 +31,7 @@ router.get('/:serviceId', authenticateToken, async (req: CustomAuthRequest, res:
   try {
     // Ensure the user is authenticated
     if (!req.user) {
-      return res.status(400).json({ message: 'User not authenticated.' });
+      return res.status(401).json({ message: 'User not authenticated.' });
     }
 
     const serviceId = req.params.serviceId;

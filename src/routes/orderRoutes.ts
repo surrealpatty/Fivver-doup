@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; 
+import authenticateToken from '../middlewares/authenticateToken'; // Correct default import for authenticateToken
 import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
 import { UserPayload } from '../types';  // Import UserPayload
 

@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import authenticateToken from '../middlewares/authenticateToken'; // Correct import for authenticateToken middleware
-import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
-import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
-const router = Router(); // Initialize the router
+import { CustomAuthRequest } from '../types'; // Ensure this is imported correctly
+
+const router = Router();
 
 // Define the route for premium service access with JWT authentication middleware
 router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
