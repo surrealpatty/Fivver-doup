@@ -1,6 +1,6 @@
-import { Router, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
+import authenticateToken from '../middlewares/authenticateToken'; // Import the authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correct import for the custom request type
-import authenticateToken from '../middlewares/authenticateToken';  // Import the authenticateToken middleware
 
 const router = Router();
 

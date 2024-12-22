@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest, UserPayload } from '../types';  // Correct import of types
+import { CustomAuthRequest, UserPayload } from '../types';  // Ensure correct import of types
 
 // Middleware to authenticate and verify the token
 const authenticateToken = (
@@ -29,7 +29,7 @@ const authenticateToken = (
     }
 
     // Attach the decoded payload to req.user (ensure user type matches UserPayload)
-    req.user = decoded;
+    req.user = decoded;  // TypeScript will now know that req.user is of type UserPayload
 
     // Proceed to the next middleware or route handler
     next();
