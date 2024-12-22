@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["vue"], // Only Vue types should be here
+    "types": ["vite/client", "vue"], // Ensure Vue and Vite types are included
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
