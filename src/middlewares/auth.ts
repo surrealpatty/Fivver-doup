@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config';
+import config from '../config/config'; // Assuming your config is properly set up
+import { Request } from 'express';
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
