@@ -6,8 +6,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue'; // Import ExampleComponent
+import { defineComponent } from 'vue'; // Correctly import defineComponent
+import ExampleComponent from './components/ExampleComponent.vue'; // Correctly import ExampleComponent
 
 export default defineComponent({
   name: 'App',
@@ -25,8 +25,8 @@ export default defineComponent({
 
 h1 {
   color: #42b983;
-  font-family: 'Arial', sans-serif; /* Adding font for better text style */
-  font-size: 2.5rem; /* Adjusting font size */
+  font-family: 'Arial', sans-serif;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-top: 20px;
 }

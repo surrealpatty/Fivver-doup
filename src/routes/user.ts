@@ -1,11 +1,13 @@
 // src/routes/user.ts
-import { Router } from 'express';
 
-const userRoutes = Router();
+import express from 'express';
 
-// Define your user routes here, e.g.
-userRoutes.get('/', (req, res) => {
-  res.send('User routes');
+const router = express.Router();
+
+// Your route definitions here, for example:
+router.get('/', (req, res) => {
+  res.send('User Routes');
 });
 
-export { userRoutes }; // Make sure it's named export
+// Named export of the router
+export { router as userRoutes };
