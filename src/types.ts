@@ -10,12 +10,12 @@ export interface UserPayload {
 }
 
 // Extend the Express Request interface to include the user property
-// CustomAuthRequest will be the version of the request object that includes an optional 'user' field
+// CustomAuthRequest will be the version of the request object that includes a mandatory 'user' field
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Optional user field (UserPayload or undefined)
+  user: UserPayload;  // Ensure 'user' is typed as 'UserPayload' (email is guaranteed to be a string)
 }
 
 // Type guard to check if a user is a UserPayload
 export function isUser(user: any): user is UserPayload {
-  return user && typeof user.id === 'string';  // Ensure 'user.id' is a string
+  return user && typeof user.id === 'string' && typeof user.email === 'string';  // Ensure 'user.id' and 'user.email' are strings
 }
