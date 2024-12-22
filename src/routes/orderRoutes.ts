@@ -1,8 +1,9 @@
 // src/routes/orderRoutes.ts
 
 import { Router, RequestHandler, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Correct path for the authenticateToken middleware
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types'; // Correct path for CustomAuthRequest type
+import { UserPayload } from '../types'; // Correct path for UserPayload type
 
 const router = Router();
 
@@ -14,14 +15,16 @@ const getOrderDetailsHandler: RequestHandler = async (
   req: CustomAuthRequest,  // Cast request to CustomAuthRequest
   res: Response, 
   next: NextFunction
-) => {
+): Promise<Response> => {
   try {
-    // Ensure req.user is defined (since it comes from authenticateToken)
-    if (!req.user || !req.user.email) {
+    // Ensure req.user is defined and is of type UserPayload (email should be a string)
+    const user = req.user as UserPayload;  // Type assertion to UserPayload
+
+    if (!user || !user.email) {
       return res.status(401).json({ message: 'Unauthorized: Missing user info' });
     }
 
-    const { id: userId } = req.user; // Destructure user ID from req.user
+    const { id: userId } = user; // Destructure user ID from req.user
     const { orderId } = req.params; // Extract orderId from request params
 
     // Example order fetching logic (replace with your actual database logic)
@@ -44,14 +47,16 @@ const createOrderHandler: RequestHandler = async (
   req: CustomAuthRequest,  // Cast request to CustomAuthRequest
   res: Response, 
   next: NextFunction
-) => {
+): Promise<Response> => {
   try {
-    // Ensure req.user is defined (since it comes from authenticateToken)
-    if (!req.user || !req.user.email) {
+    // Ensure req.user is defined and is of type UserPayload (email should be a string)
+    const user = req.user as UserPayload;  // Type assertion to UserPayload
+
+    if (!user || !user.email) {
       return res.status(401).json({ message: 'Unauthorized: Missing user info' });
     }
 
-    const { id: userId } = req.user; // Destructure user ID from req.user
+    const { id: userId } = user; // Destructure user ID from req.user
     const { productId, quantity } = req.body; // Extract product details from request body
 
     // Example order creation logic (replace with your database logic)

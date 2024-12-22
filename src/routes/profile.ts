@@ -1,9 +1,9 @@
 // src/routes/profile.ts
 
-import { Router, Response, NextFunction, Request } from 'express';
-import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
+import { Router, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correctly import CustomAuthRequest
-import { UserPayload } from '../types';  // Correctly import UserPayload to ensure proper typing
+import { UserPayload } from '../types';  // Correctly import UserPayload for proper typing
 
 const router = Router();
 
