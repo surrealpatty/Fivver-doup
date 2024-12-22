@@ -1,13 +1,13 @@
-import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken
+import { Router, Response, NextFunction, Request } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 
 const router = Router();
 
-// Define the route for premium service access with JWT authentication middleware
-router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: Response) => {
+// Route for premium service access with JWT authentication middleware
+router.get('/service/premium', authenticateToken, (req: Request, res: Response) => {
   // Ensure req.user is not undefined before using it
-  const user = req.user;
+  const user = (req as CustomAuthRequest).user;
 
   // Handle case where user is not authenticated
   if (!user) {
@@ -31,10 +31,10 @@ router.get('/service/premium', authenticateToken, (req: CustomAuthRequest, res: 
 });
 
 // Route for creating a new service (authentication required)
-router.post('/service', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+router.post('/service', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure user is authenticated
-    const user = req.user;
+    const user = (req as CustomAuthRequest).user;
     if (!user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }

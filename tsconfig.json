@@ -1,31 +1,31 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "types": ["jest", "node"],
-    "module": "CommonJS",                        // Use CommonJS module system for Node.js
-    "strict": true,                              // Enable strict mode for better type checking
-    "esModuleInterop": true,                     // Allow default imports for CommonJS modules
-    "skipLibCheck": true,                        // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true,    // Enforce consistent casing for file names
-    "baseUrl": "./src",                          // Set base directory for resolving modules
+    "target": "ESNext",                              // Use the latest ECMAScript features
+    "module": "CommonJS",                            // CommonJS module system for Node.js
+    "strict": true,                                  // Enable strict mode for better type checking
+    "esModuleInterop": true,                         // Allow default imports for CommonJS modules
+    "skipLibCheck": true,                            // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,        // Enforce consistent casing for file names
+    "baseUrl": "./src",                              // Set base directory for resolving modules
     "paths": {
-      "@user": ["types/user"],                   // Alias for user-related types
-      "@typesauthRequest": ["types/authRequest"],
-      "routes/*": ["routes/*"] 
+      "@user": ["types/user"],                       // Alias for user-related types
+      "@typesauthRequest": ["types/authRequest"],    // Alias for authRequest types
+      "routes/*": ["routes/*"]                        // Alias for routes
     },
-    "outDir": "./dist",                          // Set output directory for compiled files
-    "moduleResolution": "node",                  // Resolve modules as Node.js does
-    "allowJs": true,                             // Allow JavaScript files to be included
-    "resolveJsonModule": true,                   // Allow importing JSON files
-    "experimentalDecorators": true,              // Enable experimental decorators
-    "emitDecoratorMetadata": true,               // Enable metadata generation for decorators
+    "outDir": "./dist",                              // Set output directory for compiled files
+    "moduleResolution": "node",                      // Resolve modules as Node.js does
+    "allowJs": true,                                 // Allow JavaScript files to be included
+    "resolveJsonModule": true,                       // Allow importing JSON files
+    "experimentalDecorators": true,                  // Enable experimental decorators
+    "emitDecoratorMetadata": true,                   // Enable metadata generation for decorators
     "typeRoots": ["node_modules/@types", "src/types"], // Include custom types from src/types
+    "rootDir": "./src"                               // Set root directory for TypeScript source files
   },
   "include": [
-    "src/**/*.ts",                               // Include all TypeScript files in the src directory
-    "src/types/**/*.d.ts"                        // Ensure .d.ts files in src/types are included
+    "src/**/*.ts",                                   // Include all TypeScript files in the src directory
+    "src/types/**/*.d.ts"                            // Ensure .d.ts files in src/types are included
   ],
   "exclude": [
-    "node_modules"                               // Exclude node_modules directory from compilation
+    "node_modules"                                   // Exclude node_modules directory from compilation
   ]
 }

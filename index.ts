@@ -1,9 +1,8 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { userRoutes } from './src/routes/user'; // Correct the path here
 import { sequelize } from './src/config/database';
-
+import { userRoutes } from './routes/user'; // Corrected import for user routes
 dotenv.config(); // Load environment variables from .env file
 
 const app: Application = express(); // Explicitly type the app as Application

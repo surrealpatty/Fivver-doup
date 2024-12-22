@@ -1,7 +1,7 @@
-import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Ensure correct path for authenticateToken middleware
-import { CustomAuthRequest } from '../types';  // Correctly import CustomAuthRequest
-import { UserPayload } from '../types';  // Correctly import UserPayload for proper typing
+import { Router, Response, NextFunction, RequestHandler } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct path for authenticateToken middleware
+import { CustomAuthRequest } from '../types'; // Correctly import CustomAuthRequest
+import { UserPayload } from '../types'; // Correctly import UserPayload for proper typing
 
 const router = Router();
 
@@ -50,7 +50,7 @@ router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
     }
 
     // Optionally validate the incoming data to update the user profile
-    const { newEmail, newUsername, newTier } = req.body;  // Assuming these fields can be used for updates
+    const { newEmail, newUsername, newTier } = req.body; // Assuming these fields can be used for updates
 
     if (!newEmail && !newUsername && !newTier) {
       return res.status(400).json({ message: 'No data to update' });
@@ -62,15 +62,15 @@ router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
     // Assuming we update the user data in the database (this is just an example)
     const updatedUser = {
       id,
-      email: newEmail || email,  // Use newEmail if provided, else keep current email
-      username: newUsername || username,  // Use newUsername if provided, else keep current username
-      tier: newTier || tier,  // Use newTier if provided, else keep current tier
+      email: newEmail || email, // Use newEmail if provided, else keep current email
+      username: newUsername || username, // Use newUsername if provided, else keep current username
+      tier: newTier || tier, // Use newTier if provided, else keep current tier
     };
 
     // Return response with updated user details
     return res.status(200).json({
       message: 'Profile updated successfully',
-      user: updatedUser,  // Return the updated user data
+      user: updatedUser, // Return the updated user data
     });
   } catch (err) {
     console.error(err);

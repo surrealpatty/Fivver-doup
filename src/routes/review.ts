@@ -1,14 +1,14 @@
-import { Router, Response, NextFunction } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 
 const router = Router();
 
 // POST route to create a new review
-router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+router.post('/', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure that the user is authenticated and has the necessary 'tier' property
-    const user = req.user;
+    const user = (req as CustomAuthRequest).user;
     if (!user || !user.tier) {
       return res.status(400).json({ message: 'User tier is missing or user is not authenticated.' });
     }
@@ -33,10 +33,10 @@ router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response
 });
 
 // GET route to fetch reviews for a specific service
-router.get('/:serviceId', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+router.get('/:serviceId', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure the user is authenticated
-    const user = req.user;
+    const user = (req as CustomAuthRequest).user;
     if (!user) {
       return res.status(401).json({ message: 'User not authenticated.' });
     }
