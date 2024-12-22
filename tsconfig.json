@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
+    "types": ["vue"], // Only Vue types should be here
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client", "vue"], // Include Vue and Vite types
     "baseUrl": "./src",
     "paths": {
       "@user": ["types/user"],
