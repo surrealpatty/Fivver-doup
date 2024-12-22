@@ -1,7 +1,5 @@
-// src/routes/profile.ts
-
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct path for authenticateToken middleware
+import { authenticateToken } from '../middlewares/authenticateToken';  // Ensure correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correctly import CustomAuthRequest
 import { UserPayload } from '../types';  // Correctly import UserPayload for proper typing
 
@@ -18,7 +16,7 @@ router.get('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
   }
 
   // Destructure user data from the authenticated request (user is guaranteed to be of type UserPayload)
-  const { id, email, username, tier } = user;  // Type assertion is not needed as CustomAuthRequest already provides the correct type
+  const { id, email, username, tier } = user;
 
   // Return the user's profile data
   return res.status(200).json({
@@ -38,7 +36,7 @@ router.put('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
-  const { id, email, username, tier } = user; // Type assertion to UserPayload is not needed now
+  const { id, email, username, tier } = user;
 
   // Validate if the necessary fields exist
   if (!id || !email || !username) {

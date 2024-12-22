@@ -1,9 +1,6 @@
-// src/routes/review.ts
-
-import { Router, Request, Response, NextFunction } from 'express';
-import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
-import { UserPayload } from '../types';  // Correct import to match the export
+import { Router, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 
 const router = Router();
 
@@ -11,15 +8,22 @@ const router = Router();
 router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure that the user is authenticated and has the necessary 'tier' property
-    if (!req.user || !req.user.tier) {
+    const user = req.user;
+    if (!user || !user.tier) {
       return res.status(400).json({ message: 'User tier is missing or user is not authenticated.' });
     }
 
     // Check if email is present (it's optional, so handle the case where it might be undefined)
-    const email = req.user.email ?? 'No email provided'; // Use nullish coalescing for fallback
+    const email = user.email ?? 'No email provided'; // Use nullish coalescing for fallback
+
+    // Ensure rating and comment are present in the request body
+    const { rating, comment } = req.body;
+    if (!rating || !comment) {
+      return res.status(400).json({ message: 'Rating and comment are required' });
+    }
 
     // Logic to create a review (e.g., saving it in the database)
-    // Example: await Review.create({ userId: req.user.id, review: req.body.review, serviceId: req.body.serviceId });
+    // Example: await Review.create({ userId: user.id, review: comment, serviceId: req.body.serviceId });
 
     return res.status(201).json({ message: 'Review created successfully.', userEmail: email });
   } catch (err) {
@@ -32,7 +36,8 @@ router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response
 router.get('/:serviceId', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure the user is authenticated
-    if (!req.user) {
+    const user = req.user;
+    if (!user) {
       return res.status(401).json({ message: 'User not authenticated.' });
     }
 

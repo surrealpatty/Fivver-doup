@@ -2,15 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { CustomAuthRequest } from '../types';  // Ensure correct import path
 import { createOrder } from '../controllers/orderController';  // Correct import for the order controller
 import { Order } from '../models/order';  // Correct import for the Order model
-import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct named import
 
 // Mock Order model methods
-jest.mock('../models/order');
+jest.mock('../models/order');  // Mock the Order model to intercept its method calls
 
 describe('Order Controller', () => {
   let req: Partial<CustomAuthRequest>;  // Mocked request of type CustomAuthRequest
   let res: Partial<Response>;
-  let next: jest.MockedFunction<NextFunction>;  // Correct type for next function
+  let next: jest.Mock<any, [any]>;  // Mock next function with a correct signature, expecting a single argument (any)
 
   beforeEach(() => {
     req = {
@@ -19,7 +19,7 @@ describe('Order Controller', () => {
         id: '123',
         email: 'test@example.com',
         username: 'testuser',
-        tier: 'free',
+        tier: 'free',  // Mock the user tier
       } as CustomAuthRequest['user'],  // Cast to ensure the correct type for user
 
       body: {
@@ -35,7 +35,7 @@ describe('Order Controller', () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    next = jest.fn();  // Mocked next function
+    next = jest.fn();  // Mocked next function with a correct signature
   });
 
   afterEach(() => {
@@ -50,10 +50,11 @@ describe('Order Controller', () => {
       status: 'pending',
     };
 
-    (Order.create as jest.Mock).mockResolvedValue(mockOrder);  // Mock Order.create to resolve with the mock order
+    // Mock Order.create to resolve with the mock order
+    (Order.create as jest.Mock).mockResolvedValue(mockOrder);
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response);  // Cast req to CustomAuthRequest
+    await createOrder(req as CustomAuthRequest, res as Response, next);
 
     // Verify the response status and JSON output
     expect(res.status).toHaveBeenCalledWith(201);  // Check status code 201 (created)
@@ -61,10 +62,11 @@ describe('Order Controller', () => {
   });
 
   test('createOrder should return 500 when there is an error creating the order', async () => {
-    (Order.create as jest.Mock).mockRejectedValue(new Error('Database error'));  // Mock Order.create to reject with an error
+    // Mock Order.create to reject with an error
+    (Order.create as jest.Mock).mockRejectedValue(new Error('Database error'));
 
     // Call the createOrder controller
-    await createOrder(req as CustomAuthRequest, res as Response);
+    await createOrder(req as CustomAuthRequest, res as Response, next);
 
     // Verify the response status and error message
     expect(res.status).toHaveBeenCalledWith(500);
@@ -76,8 +78,8 @@ describe('Order Controller', () => {
       id: '123',
       email: 'test@example.com',
       username: 'testuser',
-      tier: 'free',
-    } as CustomAuthRequest['user'];  // Cast to `UserPayload`
+      tier: 'free',  // Mock the tier for the user
+    } as CustomAuthRequest['user'];  // Cast to CustomAuthRequest['user']
 
     // Call authenticateToken middleware
     await authenticateToken(req as CustomAuthRequest, res as Response, next);

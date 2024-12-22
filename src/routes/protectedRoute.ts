@@ -1,29 +1,32 @@
-// src/routes/protectedRoute.ts
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
-import { CustomAuthRequest } from '../types'; // Import CustomAuthRequest for proper typing
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken
+import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
+import { UserPayload } from '../types'; // Ensure that UserPayload is imported
 
 const router = Router();
 
-// A protected route
-router.get('/protected', authenticateToken, (req: CustomAuthRequest, res: Response, next: NextFunction): Response => {
-    // Ensure req.user is typed as UserPayload and handle the case where it might be undefined
-    const user = req.user;
+// Example protected route
+router.get('/protected', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+    // Ensure user is authenticated
+    const user: UserPayload | undefined = req.user;  // Explicitly typing user as UserPayload or undefined
 
     // Handle the case where user is undefined (invalid or missing token)
     if (!user) {
-        return res.status(401).json({ message: 'User data not found' });
+        return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // If user exists, respond with their data
+    // Access user data, ensuring fallbacks for undefined properties
+    const { id, email = 'Email not provided', username = 'Username not provided', tier = 'Tier not provided', role = 'User' } = user;
+
+    // Return response with user data
     return res.status(200).json({
         message: 'You have access to this protected route.',
         user: {
-            id: user.id,
-            email: user.email || 'Email not provided',  // Fallback if email is undefined
-            username: user.username || 'Username not provided',  // Fallback if username is undefined
-            tier: user.tier || 'Tier not provided', // Fallback if tier is undefined
-            role: user.role || 'User'  // Fallback if role is undefined
+            id,
+            email,
+            username,
+            tier,
+            role
         }
     });
 });
