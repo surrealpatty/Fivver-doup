@@ -1,3 +1,4 @@
+<!-- src/views/UserProfile.vue -->
 <template>
   <div>
     <h2>User Profile</h2>
@@ -7,22 +8,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'; // Import defineComponent from Vue
-import { useRouter } from 'vue-router'; // Import useRouter from vue-router
+import { defineComponent } from 'vue'; // Should be correctly recognized with the updated tsconfig
+import { useRouter } from 'vue-router'; // Import vue-router's useRouter
 
 export default defineComponent({
   name: 'UserProfile',
   setup() {
-    const router = useRouter(); // Get the router instance
+    const router = useRouter(); // Get router instance
 
-    const username = 'John Doe'; // Placeholder, should come from backend
-
-    const logout = () => {
-      localStorage.removeItem('token'); // Remove token on logout
-      router.push('/'); // Redirect to home page using router.push
+    return {
+      username: 'John Doe', // This should come from the backend
+      logout() {
+        localStorage.removeItem('token'); // Remove token on logout
+        router.push('/'); // Redirect to home page using `useRouter` hook
+      },
     };
-
-    return { username, logout };
   },
 });
 </script>

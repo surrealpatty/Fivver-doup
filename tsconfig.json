@@ -11,8 +11,8 @@
     "resolveJsonModule": true,
     "jsx": "preserve",
     "lib": ["dom", "esnext"],
-    "types": ["vue"], // No need to include @vue/runtime-dom separately
-    "typeRoots": ["node_modules/@types", "src/types"],
+    "types": ["vue"],  // Only include "vue" here
+    "typeRoots": ["node_modules/@types"], // Vue types are in the default location
     "baseUrl": "./src",
     "paths": {
       "@/*": ["src/*"]
