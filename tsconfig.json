@@ -1,24 +1,25 @@
 {
   "compilerOptions": {
-    "types": ["vue"], // Only include vue, remove vite/client
     "target": "ESNext",
     "module": "ESNext",
-    "allowJs": false,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "lib": ["dom", "esnext"],
+    "types": ["vue"], // No need to include @vue/runtime-dom separately
+    "typeRoots": ["node_modules/@types", "src/types"],
     "baseUrl": "./src",
     "paths": {
-      "@user": ["types/user"],
-      "@typesauthRequest": ["types/authRequest"],
-      "routes/*": ["routes/*"]
+      "@/*": ["src/*"]
     },
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["node_modules/@types", "src/types"],
+    "outDir": "./dist",
     "rootDir": "./src"
   },
   "include": [
