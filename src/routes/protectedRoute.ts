@@ -1,6 +1,6 @@
 // src/routes/protectedRoute.ts
 import { Router, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Ensure the token authentication middleware is correctly imported
+import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
 import { CustomAuthRequest } from '../types'; // Import CustomAuthRequest for proper typing
 
 const router = Router();

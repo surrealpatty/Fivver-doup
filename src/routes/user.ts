@@ -1,7 +1,7 @@
 // src/routes/user.ts
 
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct the import for authenticateToken middleware
+import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
 
 const router = Router();

@@ -34,3 +34,4 @@ export function authenticateToken(req: CustomAuthRequest, res: Response, next: N
         res.status(403).json({ message: 'Invalid or expired token' });
     }
 }
+

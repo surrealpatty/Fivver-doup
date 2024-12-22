@@ -1,7 +1,7 @@
 // src/routes/review.ts
 
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';  // Correct import for authentication middleware
+import { authenticateToken } from './middlewares/authenticateToken'; // Correct named import
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest type
 import { UserPayload } from '../types';  // Correct import to match the export
 
