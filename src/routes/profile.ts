@@ -1,4 +1,5 @@
 // src/routes/profile.ts
+
 import { Router, Response, NextFunction, Request } from 'express';
 import authenticateToken from '../middlewares/authenticateToken';  // Correctly import the token authentication middleware
 import { CustomAuthRequest } from '../types';  // Correctly import CustomAuthRequest
