@@ -1,7 +1,8 @@
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Correct import for authenticateToken
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
+import { authenticateToken } from '../middlewares/authenticateToken'; // Correct import for authenticateToken
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
+// Create a new router instance
 const router = Router();
 
 // Route to check for premium access based on user role
@@ -54,4 +55,5 @@ router.get('/user', authenticateToken, async (req: CustomAuthRequest, res: Respo
   }
 });
 
-export default router;
+// Export the routes for use in the main app
+export { router as userRoutes };

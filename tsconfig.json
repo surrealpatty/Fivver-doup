@@ -10,7 +10,8 @@
     "baseUrl": "./src",                          // Set base directory for resolving modules
     "paths": {
       "@user": ["types/user"],                   // Alias for user-related types
-      "@typesauthRequest": ["types/authRequest"] // Alias for authRequest-related types
+      "@typesauthRequest": ["types/authRequest"],
+      "routes/*": ["routes/*"] 
     },
     "outDir": "./dist",                          // Set output directory for compiled files
     "moduleResolution": "node",                  // Resolve modules as Node.js does
