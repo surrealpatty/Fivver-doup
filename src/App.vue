@@ -6,10 +6,15 @@
 </template>
 
 <script lang="ts">
-
+import { defineComponent } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue'; // Correctly import ExampleComponent
 
-
+export default defineComponent({
+  name: 'App',
+  components: {
+    ExampleComponent, // Register the ExampleComponent
+  },
+});
 </script>
 
 <style scoped>
