@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'; // Should be correctly recognized with the updated tsconfig
+import { defineComponent }  from 'vue';
 import { useRouter } from 'vue-router'; // Import vue-router's useRouter
 
 export default defineComponent({

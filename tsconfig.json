@@ -7,20 +7,16 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "allowJs": false,
     "resolveJsonModule": true,
     "jsx": "preserve",
     "lib": ["dom", "esnext"],
-    "types": ["vue"],  // Only include "vue" here
-    "typeRoots": ["node_modules/@types"], // Vue types are in the default location
+    "types": ["vue"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["src/*"]
     },
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts",
@@ -28,7 +24,6 @@
     "src/**/*.vue"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules"
   ]
 }
