@@ -1,5 +1,11 @@
 import { Request } from 'express';
-import { UserPayload } from './user'; // Ensure UserPayload is imported correctly
+
+// UserPayload represents the user information, with `email` now being required
+export interface UserPayload {
+  id: string;
+  email: string;  // Make email required
+  username?: string;
+}
 
 // JwtPayload represents the structure of the JWT token payload
 export interface JwtPayload {
@@ -7,7 +13,7 @@ export interface JwtPayload {
   email: string;  // Email is required in the JWT payload
   username?: string;  // Username is optional in the JWT payload
   tier?: string;  // Optional tier property in JWT token
-  role: 'Free' | 'Paid';
+  role: 'Free' | 'Paid';  // Define the role property (Free or Paid)
 }
 
 // CustomAuthRequest extends Express Request with an optional `user` property, matching the UserPayload structure

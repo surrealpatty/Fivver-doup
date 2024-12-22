@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken
+import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken middleware
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 
 const router = Router();
@@ -17,13 +17,13 @@ router.post('/', authenticateToken, async (req: CustomAuthRequest, res: Response
     const email = user.email ?? 'No email provided'; // Use nullish coalescing for fallback
 
     // Ensure rating and comment are present in the request body
-    const { rating, comment } = req.body;
-    if (!rating || !comment) {
-      return res.status(400).json({ message: 'Rating and comment are required' });
+    const { rating, comment, serviceId } = req.body;
+    if (!rating || !comment || !serviceId) {
+      return res.status(400).json({ message: 'Rating, comment, and serviceId are required' });
     }
 
     // Logic to create a review (e.g., saving it in the database)
-    // Example: await Review.create({ userId: user.id, review: comment, serviceId: req.body.serviceId });
+    // Example: await Review.create({ userId: user.id, review: comment, serviceId: serviceId });
 
     return res.status(201).json({ message: 'Review created successfully.', userEmail: email });
   } catch (err) {

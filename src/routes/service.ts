@@ -47,8 +47,12 @@ router.post('/service', authenticateToken, async (req: CustomAuthRequest, res: R
       return res.status(400).json({ message: 'Service name, description, and price are required' });
     }
 
+    // Ensure price is a number
+    if (isNaN(price)) {
+      return res.status(400).json({ message: 'Price must be a valid number' });
+    }
+
     // Logic to save the service (e.g., save to the database)
-    // Example of service object (this would interact with your database)
     const service = {
       userId: id,
       serviceName,
