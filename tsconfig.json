@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "types": ["vite/client", "vue"], // Ensure Vue and Vite types are included
+    "types": ["vue"], // Only include vue, remove vite/client
     "target": "ESNext",
     "module": "ESNext",
+    "allowJs": false,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,7 +15,6 @@
       "routes/*": ["routes/*"]
     },
     "moduleResolution": "node",
-    "allowJs": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
