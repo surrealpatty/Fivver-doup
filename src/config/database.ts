@@ -28,5 +28,13 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     bigNumberStrings: true,
   },
 });
+module.exports = {
+  database: 'fivver_doup', // Make sure this is the same as the restored DB
+  username: 'root',
+  password: 'yourpassword',
+  host: 'localhost',
+  dialect: 'mysql',
+};
+
 
 export { sequelize }; // Ensure sequelize is exported
