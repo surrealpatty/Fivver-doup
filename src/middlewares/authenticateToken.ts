@@ -1,7 +1,5 @@
-// src/middlewares/authenticateToken.ts
-
 import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response } from 'express';  // Import Response from express
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for decoding the JWT
 import { UserPayload } from '../types';  // Import the UserPayload type
 
@@ -18,7 +16,7 @@ export const authenticateToken = (
     if (!token) {
         // Return 401 Unauthorized if the token is missing
         res.status(401).json({ message: 'Access token is missing' });
-        return;  // Prevents further execution, ensures nothing is returned
+        return;  // Ensure the function returns immediately after sending the response
     }
 
     try {
@@ -28,7 +26,7 @@ export const authenticateToken = (
         // Ensure the email is present in the decoded payload (mandatory)
         if (!decoded.email) {
             res.status(400).json({ message: 'Invalid token: Missing email' });
-            return;  // Prevents further execution, ensures nothing is returned
+            return;  // Ensure the function returns immediately after sending the response
         }
 
         // Attach the decoded payload to req.user (ensure user type matches UserPayload)
