@@ -1,9 +1,16 @@
+// src/middlewares/authenticateToken.ts
+
+import { CustomAuthRequest } from '../types';  // Import CustomAuthRequest
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for decoding the JWT
-import { CustomAuthRequest, UserPayload } from '../types';  // Import necessary types
+import { UserPayload } from '../types';  // Import the UserPayload type
 
 // Middleware to authenticate and verify the token
-export function authenticateToken(req: CustomAuthRequest, res: Response, next: NextFunction): void {
+export const authenticateToken = (
+  req: CustomAuthRequest, 
+  res: Response, 
+  next: NextFunction
+): void => {  // Ensure the return type is void, as it doesn't return a value
     // Extract the token from the Authorization header
     const authHeader = req.header('Authorization');
     const token = authHeader?.split(' ')[1];  // Retrieve token after "Bearer"
@@ -11,7 +18,7 @@ export function authenticateToken(req: CustomAuthRequest, res: Response, next: N
     if (!token) {
         // Return 401 Unauthorized if the token is missing
         res.status(401).json({ message: 'Access token is missing' });
-        return;  // Make sure to return to stop further execution
+        return;  // Prevents further execution, ensures nothing is returned
     }
 
     try {
@@ -21,7 +28,7 @@ export function authenticateToken(req: CustomAuthRequest, res: Response, next: N
         // Ensure the email is present in the decoded payload (mandatory)
         if (!decoded.email) {
             res.status(400).json({ message: 'Invalid token: Missing email' });
-            return;  // Make sure to return to stop further execution
+            return;  // Prevents further execution, ensures nothing is returned
         }
 
         // Attach the decoded payload to req.user (ensure user type matches UserPayload)
@@ -33,5 +40,4 @@ export function authenticateToken(req: CustomAuthRequest, res: Response, next: N
         // Return 403 Forbidden if the token is invalid or expired
         res.status(403).json({ message: 'Invalid or expired token' });
     }
-}
-
+};

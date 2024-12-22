@@ -1,12 +1,13 @@
+// src/types/index.ts
+
 import { Request } from 'express';
 
-// UserPayload represents the structure of a user object in your application
 export interface UserPayload {
   id: string;
-  email: string;  // Make email required
-  username?: string;  // Optional username
-  tier?: string;  // Optional tier
-  role?: string;  // Optional role
+  email?: string;  // Allow email to be optional here
+  username?: string;
+  tier?: string;
+  role?: string;
 }
 
 // JwtPayload represents the structure of the JWT token payload
@@ -17,9 +18,9 @@ export interface JwtPayload {
   tier?: string;  // Optional tier property in JWT token
 }
 
-// CustomAuthRequest extends Express Request with an optional `user` property, matching the UserPayload structure
+// CustomAuthRequest extends Express Request with a mandatory `user` property, matching the UserPayload structure
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // `user` is optional (before authentication is verified)
+  user?: UserPayload;  // Make `user` optional (it can be undefined)
 }
 
 // AuthRequest extends Express Request for cases where the `user` property is guaranteed to be present
