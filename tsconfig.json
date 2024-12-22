@@ -1,29 +1,30 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "lib": ["dom", "esnext"],
-    "jsx": "preserve",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["vue", "node"],  // Make sure this is included
-    "baseUrl": ".",
+    "target": "esnext",                  // Latest ECMAScript target
+    "module": "esnext",                  // Use ESNext module system
+    "moduleResolution": "node",         // Resolve modules like Node.js
+    "lib": ["dom", "esnext"],           // Include DOM and ESNext libraries
+    "jsx": "preserve",                  // Preserve JSX for Vue
+    "strict": true,                     // Enable all strict type-checking options
+    "esModuleInterop": true,            // Support for CommonJS modules
+    "skipLibCheck": true,               // Skip checking declaration files
+    "forceConsistentCasingInFileNames": true, // Case-sensitive file imports
+    "types": ["vue", "node"],           // Include Vue and Node types
+    "baseUrl": ".",                     // Base URL for module resolution
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]                  // Alias for cleaner imports
     },
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "outDir": "./dist",                 // Ensure compiled files go to 'dist/'
+    "rootDir": "./src",                 // Specify source directory
+    "noEmitOnError": true               // Prevent output if there are errors
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue"
+    "src/**/*.ts",                      // Include TypeScript files
+    "src/**/*.d.ts",                    // Include TypeScript declarations
+    "src/**/*.vue"                      // Include Vue files
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules",                     // Exclude dependencies
+    "dist"                              // Exclude build output
   ]
 }
