@@ -7,6 +7,7 @@ export interface JwtPayload {
   email: string;  // Email is required in the JWT payload
   username?: string;  // Username is optional in the JWT payload
   tier?: string;  // Optional tier property in JWT token
+  role: 'Free' | 'Paid';
 }
 
 // CustomAuthRequest extends Express Request with an optional `user` property, matching the UserPayload structure

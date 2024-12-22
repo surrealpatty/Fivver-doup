@@ -10,7 +10,7 @@ jest.mock('../models/order');  // Mock the Order model to intercept its method c
 describe('Order Controller', () => {
   let req: Partial<CustomAuthRequest>;  // Mocked request of type CustomAuthRequest
   let res: Partial<Response>;
-  let next: jest.Mock<any, [any]>;  // Mock next function with a correct signature, expecting a single argument (any)
+  let next: jest.Mock;  // Mock next function (no need for specific typing here)
 
   beforeEach(() => {
     req = {
@@ -35,7 +35,7 @@ describe('Order Controller', () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    next = jest.fn();  // Mocked next function with a correct signature
+    next = jest.fn();  // Mocked next function
   });
 
   afterEach(() => {
