@@ -1,8 +1,6 @@
-// src/routes/orderRoutes.ts
-
 import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types/authRequest'; // Import the custom request type
-import authenticateToken from '../middlewares/authenticateToken'; // Import the authenticateToken middleware
+import { CustomAuthRequest } from '../types';  // Correct import for the custom request type
+import authenticateToken from '../middlewares/authenticateToken';  // Import the authenticateToken middleware
 
 const router = Router();
 
@@ -12,15 +10,15 @@ const router = Router();
  */
 router.get(
   '/order/:orderId',
-  authenticateToken,
+  authenticateToken,  // Ensure token is authenticated
   async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
     try {
-      // Ensure req.user is defined
+      // Ensure req.user is defined (since it comes from authenticateToken)
       if (!req.user) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
-      const { id: userId } = req.user; // Destructure user ID
+      const { id: userId } = req.user; // Destructure user ID from req.user
       const { orderId } = req.params; // Extract orderId from request params
 
       // Example order fetching logic (replace with your database logic)
@@ -42,15 +40,15 @@ router.get(
  */
 router.post(
   '/order',
-  authenticateToken,
+  authenticateToken,  // Ensure token is authenticated
   async (req: CustomAuthRequest, res: Response, next: NextFunction) => {
     try {
-      // Ensure req.user is defined
+      // Ensure req.user is defined (since it comes from authenticateToken)
       if (!req.user) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
-      const { id: userId } = req.user; // Destructure user ID
+      const { id: userId } = req.user; // Destructure user ID from req.user
       const { productId, quantity } = req.body; // Extract product details from request body
 
       // Example order creation logic (replace with your database logic)
