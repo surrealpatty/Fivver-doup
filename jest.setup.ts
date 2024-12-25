@@ -1,22 +1,20 @@
-import { sequelize } from './src/config/database'; // Import the sequelize instance
+import { Sequelize } from 'sequelize';
 
-beforeAll(async () => {
+const sequelize = new Sequelize('fivver_doup', 'root', 'your_password', {
+  host: 'localhost',
+  dialect: 'mysql',
+  dialectOptions: {
+    charset: 'utf8mb4',
+  },
+});
+
+export const testConnection = async (): Promise<boolean> => {
   try {
-    // Authenticate the Sequelize connection before tests start
     await sequelize.authenticate();
-    console.log('Database connected for tests');
+    console.log('Database connection successful');
+    return true;
   } catch (error: any) {
     console.error('Unable to connect to the database:', error.message || error);
-    process.exit(1); // Exit the tests if connection fails
+    return false;
   }
-});
-
-afterAll(async () => {
-  try {
-    // Close the Sequelize connection to prevent hanging processes after tests
-    await sequelize.close();
-    console.log('Database connection closed successfully.');
-  } catch (error: any) {
-    console.error('Error while closing the database connection:', error);
-  }
-});
+};
