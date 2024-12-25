@@ -1,27 +1,27 @@
-// src/models/service.ts
+import express from 'express';
+import { createService, getServices } from '../controllers/serviceController'; // Ensure correct function imports
 
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+const router = express.Router();
 
-export interface ServiceCreationAttributes {
-  userId: number;
-  title: string;
-  description: string;
-  price: number;
-}
+// Route to create a service
+router.post('/', async (req, res) => {
+  try {
+    const { name, description } = req.body; // Assuming you're sending name and description in the request body
+    const result = await createService({ name, description });
+    res.status(201).json(result); // Return the created service with a 201 status
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Unknown error occurred' });
+  }
+});
 
-@Table({ tableName: 'services', timestamps: true })
-class Service extends Model<ServiceCreationAttributes> {
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number;
+// Route to get all services
+router.get('/', async (req, res) => {
+  try {
+    const result = await getServices();
+    res.status(200).json(result); // Return the list of services with a 200 status
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Unknown error occurred' });
+  }
+});
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  title!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  description!: string;
-
-  @Column({ type: DataType.FLOAT, allowNull: false })
-  price!: number;
-}
-
-export { Service };
+export default router;

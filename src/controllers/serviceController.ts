@@ -1,57 +1,42 @@
-// src/services/serviceService.ts
+// src/controllers/servicesController.ts
 
-import { Service, User } from '../models'; // Import models from the appropriate path
-import { Request, Response } from 'express'; // Correct import for request and response types
+import { Request, Response } from 'express'; // Import types for request and response
+import { createService, getServices } from '../services/serviceService'; // Import the service layer functions
 
-// Function to create a service
-export const createService = async (serviceData: { userId: string, title: string, description: string, price: number }) => {
+// Controller for creating a service
+export const createServiceController = async (req: Request, res: Response) => {
   try {
-    const { userId, title, description, price } = serviceData;
+    const { userId, title, description, price } = req.body;
 
-    // Validate required fields
-    if (!userId || !title || !description || price === undefined) {
-      throw new Error('Missing required fields: userId, title, description, and price are mandatory.');
-    }
+    // Call the service layer to create a service
+    const result = await createService({ userId, title, description, price });
 
-    // Validate price
-    if (typeof price !== 'number' || price <= 0 || isNaN(price)) {
-      throw new Error('Invalid price: must be a positive number.');
-    }
-
-    // Check if the user exists
-    const user = await User.findByPk(userId);
-    if (!user) {
-      throw new Error(`User with ID ${userId} not found.`);
-    }
-
-    // Create the service
-    const service = await Service.create({
-      userId,
-      title,
-      description,
-      price,
+    // Send success response
+    res.status(201).json({
+      message: result.message,
+      serviceId: result.serviceId,
+      title: result.title,
     });
-
-    return {
-      message: 'Service created successfully.',
-      serviceId: service.id,
-      title: service.title,
-    };
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Unknown error occurred');
+    // Handle errors and send failure response
+    res.status(400).json({
+      message: error instanceof Error ? error.message : 'Unknown error occurred while creating the service.',
+    });
   }
 };
 
-// Function to get all services
-export const getServices = async () => {
+// Controller for fetching all services
+export const getServicesController = async (req: Request, res: Response) => {
   try {
-    // Fetch all services from the database
-    const services = await Service.findAll(); // Assuming a basic fetch from the Service model
-    return {
-      message: 'Services fetched successfully.',
-      services,
-    };
+    // Call the service layer to get services
+    const result = await getServices();
+
+    // Send success response with services
+    res.status(200).json(result);
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Unknown error occurred while fetching services');
+    // Handle errors and send failure response
+    res.status(400).json({
+      message: error instanceof Error ? error.message : 'Unknown error occurred while fetching services.',
+    });
   }
 };
