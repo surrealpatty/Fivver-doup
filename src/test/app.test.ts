@@ -1,6 +1,7 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express'; // Import the Express type
+import { sequelize } from '../config/database'; // Import sequelize to close the database connection
 
 // Define the path to the compiled `index.js` file in `dist/`
 const appPath = path.resolve(__dirname, '../../dist/index'); // Adjusted path
@@ -33,4 +34,14 @@ describe('Basic Test Suite', () => {
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe('Welcome to Fiverr Clone!');
   });
+});
+
+// Cleanup: Close the database connection after tests
+afterAll(async () => {
+  try {
+    await sequelize.close(); // Ensure database connection is closed
+    console.log('Database connection closed.');
+  } catch (error) {
+    console.error('Error closing database connection:', error);
+  }
 });

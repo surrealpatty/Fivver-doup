@@ -24,7 +24,8 @@ const testDatabaseConnection = async () => {
     console.log('Database connection established.');
   } catch (error: any) {
     console.error('Unable to connect to the database:', error.message || error);
-    process.exit(1); // Exit if the connection fails
+    // Instead of process.exit, log and throw the error to allow Jest to finish its cleanup
+    throw new Error('Database connection failed'); // Throwing the error to stop the process in a controlled manner
   }
 };
 
@@ -36,23 +37,31 @@ const syncDatabase = async () => {
     console.log('Database synchronized successfully');
   } catch (error) {
     console.error('Error synchronizing database:', error);
-    process.exit(1); // Exit if syncing fails
+    // Throw error to prevent server startup if syncing fails
+    throw new Error('Database synchronization failed');
   }
 };
 
 // Initialize database connection and sync models
 const initializeDatabase = async () => {
-  await testDatabaseConnection(); // Ensure the database connection is established
-  await syncDatabase(); // Sync the models once connected
+  try {
+    await testDatabaseConnection(); // Ensure the database connection is established
+    await syncDatabase(); // Sync the models once connected
+  } catch (error) {
+    console.error('Error initializing the database:', error);
+    // You could handle this error based on your specific requirements
+    // For now, we throw to prevent starting the server with a broken database setup
+    process.exit(1);
+  }
 };
 
 // Call initializeDatabase before starting the server
-initializeDatabase();
-
-// Use the userRouter for handling /api/users routes
-app.use('/api/users', userRouter); // Register the user routes under /api/users
-
-// Start the server and listen on the specified port
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+initializeDatabase().then(() => {
+  // Start the server only if the database connection and sync are successful
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}).catch(error => {
+  // If database initialization fails, log the error and prevent server start
+  console.error('Server failed to start due to database error:', error.message || error);
 });
