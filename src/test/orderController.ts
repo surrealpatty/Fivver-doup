@@ -1,6 +1,6 @@
 import { sequelize } from '../config/database'; // Correct named import
 import Order from '../models/order';
-import User from '../models/user';
+import { User } from '../models/user'; // Correct named import
 import Service from '../models/services';
 import request from 'supertest'; // Assuming you're using supertest for API testing
 import { app } from '../index'; // Now exporting 'app' from the index file

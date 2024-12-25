@@ -7,6 +7,7 @@ export interface UserAttributes {
   username: string;
   email: string;
   password: string;
+  role?: 'free' | 'paid'; // Add role attribute (optional, free or paid role)
   createdAt?: Date; // Optional because Sequelize manages timestamps
   updatedAt?: Date; // Optional because Sequelize manages timestamps
 }
@@ -20,6 +21,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public username!: string;
   public email!: string;
   public password!: string;
+  public role?: 'free' | 'paid'; // Add role field to the class implementation
 
   public readonly createdAt!: Date; // Sequelize automatically manages this
   public readonly updatedAt!: Date; // Sequelize automatically manages this
@@ -45,6 +47,11 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('free', 'paid'), // Define ENUM for role
+      defaultValue: 'free', // Set default role to "free"
+      allowNull: false, // Ensure the role is always present
     },
   },
   {

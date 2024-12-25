@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../index'; // Import the app correctly
 import { sequelize } from '../config/database'; // Correct import for Sequelize instance
-import User from '../models/user'; // Correct default import for User model
+import { User } from '../models/user'; // Correct named import
 import services from '../models/services'; // Ensure this matches the actual export
 import Order from '../models/order'; // Correct default import for Order model
 

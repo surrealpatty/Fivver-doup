@@ -6,7 +6,7 @@ import userRouter from './routes/user'; // Path to userRouter
 // Load environment variables from .env file
 dotenv.config(); // Make sure to load environment variables before using them
 
-const app = express();
+export const app = express(); // Named export
 const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
@@ -48,6 +48,3 @@ app.use('/api/users', userRouter); // Register the user routes under /api/users
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-// Export app as the default export and for testing
-export default app; // Default export for app

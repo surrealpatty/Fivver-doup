@@ -1,5 +1,5 @@
 import { Service, ServiceCreationAttributes } from '../models/service'; // Correct path
-import User from '../models/user'; // Correct default import
+import { User } from '../models/user'; // Correct named import
 import { sequelize } from '../config/database';
 
 describe('Service Model Tests', () => {

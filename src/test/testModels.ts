@@ -1,5 +1,5 @@
 import { sequelize } from '../config/database'; // Import sequelize instance
-import User from '../models/user'; // Import User model
+import { User } from '../models/user'; // Correct named import
 import { Service, ServiceCreationAttributes } from '../models/service'; // Correct path
 
 // Function to test user and service models
