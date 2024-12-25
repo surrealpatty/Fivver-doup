@@ -1,6 +1,10 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Define the database configuration for different environments (development, production, etc.)
+// Load environment variables from .env file
+dotenv.config();
+
+// Define the database configuration object with environment-specific settings
 const config: {
   development: {
     username: string;
@@ -40,34 +44,34 @@ const config: {
   };
 } = {
   development: {
-    username: 'root',
-    password: 'f0^:8t1#qaC7',
-    database: 'fivver_doup',
-    host: '127.0.0.1',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
       ssl: false,
     },
-    logging: false,
+    logging: process.env.NODE_ENV === 'development', // Enable logging in development
   },
   production: {
-    username: 'root',
-    password: 'your_prod_password',
-    database: 'fivver_doup',
-    host: '127.0.0.1',
+    username: process.env.PROD_DB_USER || 'root',
+    password: process.env.PROD_DB_PASSWORD || '',
+    database: process.env.PROD_DB_NAME || 'fivver_doup',
+    host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: false,
+      ssl: true, // Enable SSL in production
     },
     logging: false,
   },
   test: {
-    username: 'root',
-    password: 'your_test_password',
-    database: 'fivver_doup_test',
-    host: '127.0.0.1',
+    username: process.env.TEST_DB_USER || 'root',
+    password: process.env.TEST_DB_PASSWORD || '',
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
@@ -96,6 +100,7 @@ export const sequelize = new Sequelize(
     dialect: currentConfig.dialect,
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
+    port: Number(process.env.DB_PORT) || 3306, // Use the DB_PORT environment variable if set, else default to 3306
   }
 );
 
