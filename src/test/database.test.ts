@@ -23,18 +23,18 @@ describe('Database Connection', () => {
     mockTestConnection = testConnection as jest.Mock;
   });
 
-  // Mock console methods globally
+  // Mock console methods globally for test isolation
   let consoleLogSpy: jest.SpyInstance;
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    // Mock `console.log` and `console.error` for test isolation
+    // Mock `console.log` and `console.error` to ensure clean test output
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    // Clear all mocks to reset state between tests
+    // Reset mocks to ensure tests are isolated
     jest.clearAllMocks();
   });
 
@@ -54,11 +54,11 @@ describe('Database Connection', () => {
     const connection = await testConnection();
 
     // Assertions
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
+    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Ensure authenticate is called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      'Database connection has been established successfully.'
-    ); // Check success log
+      'Database connection successful' // Check if success message is logged
+    );
     expect(connection).toBeTruthy(); // Ensure the connection returns true
   });
 
@@ -73,12 +73,12 @@ describe('Database Connection', () => {
     const connection = await testConnection();
 
     // Assertions
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Check `authenticate` was called once
+    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Ensure authenticate is called once
     expect(mockAuthenticate).toHaveBeenCalledWith(); // Ensure it was called without arguments
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Unable to connect to the database:',
-      errorMessage
-    ); // Check error log
+      errorMessage // Check if error message is logged
+    );
     expect(connection).toBeFalsy(); // Ensure the connection fails
   });
 });

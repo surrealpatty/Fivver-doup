@@ -1,20 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ES6",                            // Use ES6 features (e.g., classes, promises)
-    "module": "ESNext",                         // Use ESNext for module resolution
-    "strict": true,                             // Enable strict type-checking options
-    "esModuleInterop": true,                    // Enable interop between CommonJS and ES modules
-    "skipLibCheck": true,                       // Skip type-checking of declaration files
-    "moduleResolution": "node",                 // Use Node.js module resolution strategy
-    "outDir": "./dist",                         // Output directory for compiled files
-    "rootDir": "./src",                         // Root directory for source files
-    "baseUrl": ".",                             // Base URL for resolving non-relative modules
-    "resolveJsonModule": true,                  // Allow importing JSON files as modules
+    "target": "ES6",                              // Use ES6 features (e.g., classes, promises)
+    "module": "CommonJS",                         // Use CommonJS for compatibility with Node.js
+    "strict": true,                               // Enable strict type-checking options
+    "esModuleInterop": true,                      // Enable interop between CommonJS and ES modules
+    "skipLibCheck": true,                         // Skip type-checking of declaration files
+    "moduleResolution": "node",                   // Use Node.js module resolution strategy
+    "outDir": "./dist",                           // Output directory for compiled files
+    "rootDir": "./src",                           // Root directory for source files
+    "baseUrl": ".",                               // Base URL for resolving non-relative modules
+    "resolveJsonModule": true,                    // Allow importing JSON files as modules
     "paths": {
-      "*": ["node_modules/*", "src/*"]          // Allow resolution of files from the 'src' folder
-    }
+      "*": ["node_modules/*", "src/*"]            // Allow resolution of files from the 'src' folder
+    },
+    "allowJs": true,                              // Allow compiling JavaScript files
+    "checkJs": false,                             // Disable type-checking for JavaScript files
+    "declaration": true,                          // Generate .d.ts declaration files
+    "sourceMap": true,                            // Generate source map files for debugging
+    "forceConsistentCasingInFileNames": true      // Ensure consistent casing in file names
   },
   "include": [
-    "src/**/*"                                  // Include all files under the src directory
+    "src/**/*"                                    // Include all files under the src directory
+  ],
+  "exclude": [
+    "node_modules",                               // Exclude node_modules folder
+    "dist"                                        // Exclude dist folder to avoid circular dependencies
   ]
 }

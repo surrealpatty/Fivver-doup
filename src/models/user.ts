@@ -1,36 +1,37 @@
-// src/models/user.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-interface UserAttributes {
-  id: string;
+// Define the attributes of the User model
+export interface UserAttributes {
+  id: number;
   username: string;
   email: string;
-  password: string; // Ensure password is part of the UserAttributes interface
-  role: string;
+  password: string;
+  createdAt?: Date; // Optional because Sequelize manages timestamps
+  updatedAt?: Date; // Optional because Sequelize manages timestamps
 }
 
-export interface UserCreationAttributes
-  extends Optional<UserAttributes, 'id'> {}
+// Define the attributes required for creating a new User
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
-{
-  public id!: string;
+// Define the User model class
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: number;
   public username!: string;
   public email!: string;
-  public password!: string; // Define password here
-  public role!: string;
+  public password!: string;
+
+  public readonly createdAt!: Date; // Sequelize automatically manages this
+  public readonly updatedAt!: Date; // Sequelize automatically manages this
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
-      unique: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -42,19 +43,17 @@ User.init(
       unique: true,
     },
     password: {
-      // Define the password field
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
-    sequelize,
-    tableName: 'users',
+    sequelize, // Pass the Sequelize instance
+    modelName: 'User', // Name of the model
+    tableName: 'users', // Name of the table in the database
+    timestamps: true, // Enable createdAt and updatedAt
   }
 );
 
-export default User;
+// Export the User model
+export { User };

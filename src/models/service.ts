@@ -1,7 +1,7 @@
-// src/models/service.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
-import User from './user'; // Correct import of User model
+import { User } from './user'; // Correct named import for User model
+import { createService, getServices } from '../controllers/serviceController';
 
 // Define the interface for Service attributes
 interface ServiceAttributes {
@@ -12,7 +12,7 @@ interface ServiceAttributes {
   price: number;
 }
 
-// ServiceCreationAttributes interface is for when creating a new service (without the 'id' field)
+// Define the interface for Service creation attributes (without the 'id' field)
 interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
 // Define the Service model class
@@ -25,6 +25,10 @@ class Service
   public title!: string;
   public description!: string;
   public price!: number;
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 // Initialize the Service model
@@ -55,11 +59,11 @@ Service.init(
   {
     sequelize,
     tableName: 'services',
+    timestamps: true, // Automatically manage `createdAt` and `updatedAt`
   }
 );
 
 // Define the relationship with the User model
-Service.belongsTo(User, { foreignKey: 'userId' });
+Service.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-// Ensure we are exporting correctly
-export { Service, ServiceCreationAttributes };
+export { Service, ServiceAttributes, ServiceCreationAttributes };

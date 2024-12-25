@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { registerUser, loginUser } from '../controllers/userController'; // Import controller functions
+import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import controller functions
 
 const router = express.Router(); // Initialize router
 
@@ -22,6 +22,32 @@ router.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await loginUser(email, password); // Call loginUser function
     res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }); // Handle errors
+  }
+});
+
+// Update user route
+router.put('/update', async (req: Request, res: Response) => {
+  try {
+    const { id, username, email, password } = req.body; // Update user data from request body
+    const updatedUser = await updateUser(id, { username, email, password }); // Call updateUser function
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }); // Handle errors
+  }
+});
+
+// Delete user route
+router.delete('/delete', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.body; // User ID to delete from request body
+    const deletedUser = await deleteUser(id); // Call deleteUser function
+    res.status(200).json(deletedUser);
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',

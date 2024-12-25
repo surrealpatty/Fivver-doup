@@ -1,13 +1,10 @@
-// src/config/database.ts
 import { Sequelize } from 'sequelize';
 
 // Create and export the Sequelize instance with configuration details
-export const sequelize = new Sequelize({
+const sequelize = new Sequelize('fivver_doup', 'root', 'f0^:8t1#qaC7', {
+  host: '127.0.0.1', // Use '127.0.0.1' for localhost
   dialect: 'mysql',
-  host: 'localhost', // Adjust host if needed
-  username: 'root', // Replace with actual DB username
-  password: '', // Replace with actual DB password
-  database: 'fivver_doup', // Replace with actual DB name
+  logging: false, // Disable logging if unnecessary
 });
 
 // Function to test the connection
@@ -20,3 +17,6 @@ export const testConnection = async () => {
     throw new Error('Database connection failed');
   }
 };
+
+// Export the Sequelize instance
+export { sequelize };

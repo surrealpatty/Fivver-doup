@@ -1,47 +1,53 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { testConnection } from './config/database'; // Ensure this is for testing DB connection
-import userRouter from './routes/user'; // Use correct route for user-related endpoints
-import { sequelize } from './config/database'; 
-import dotenv from 'dotenv';
-import User from './models/user'; // Import User model
+import dotenv from 'dotenv'; // Import dotenv to load environment variables
+import express from 'express';
+import { sequelize } from './config/database'; // Path to the sequelize instance
+import userRouter from './routes/user'; // Path to userRouter
 
-dotenv.config(); // Load environment variables from .env file
+// Load environment variables from .env file
+dotenv.config(); // Make sure to load environment variables before using them
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Use userRouter for handling user-related routes under the /api/users endpoint
-app.use('/api/users', userRouter); // Correct route registration
-
-// Error handler middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.message); // Log the error
-  res.status(500).json({ message: 'An internal server error occurred.' });
+// Example route
+app.get('/', (req, res) => {
+  res.send('Welcome to Fiverr Clone!');
 });
 
-// Start the server and test the database connection
-const server = app.listen(3000, async () => {
+// Database connection check
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connection established.');
+  })
+  .catch((error: Error) => {
+    console.error('Unable to connect to the database:', error);
+  });
+
+// Sync Sequelize Models
+const syncDatabase = async () => {
   try {
-    await testConnection(); // Test database connection
-    console.log('Server is running on port 3000');
-    
-    // Fetch users after the server has started
-    User.findAll()
-      .then((users: User[]) => {  // Explicitly type 'users' as an array of User objects
-        console.log('Users:', users); // Log fetched users
-      })
-      .catch((error: Error) => {
-        console.error('Error fetching users:', error);
-      });
-    
+    // Ensure models are registered before calling sync
+    await sequelize.sync({ alter: true }); // Use 'alter: true' to modify tables if needed (for development)
+    console.log('Database synchronized successfully');
   } catch (error) {
-    console.error(
-      'Error connecting to the database:',
-      error instanceof Error ? error.message : error
-    );
+    console.error('Error synchronizing database:', error);
   }
+};
+
+// Ensure models are initialized before syncing the database
+syncDatabase();
+
+// Use the userRouter for routes starting with /api/users
+app.use('/api/users', userRouter); // Register the user routes under /api/users
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
-export { app, server }; // Export app and server for testing purposes
+// Export app as the default export and for testing
+export default app; // Default export for app

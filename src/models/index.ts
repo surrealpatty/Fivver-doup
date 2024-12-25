@@ -1,7 +1,6 @@
-// src/models/index.ts
-import User, { UserCreationAttributes } from './user'; // Import default and named export
-import { ServiceCreationAttributes } from './service'; // Import default and named export for Service
-import { Service } from './service';
+import { User,  UserCreationAttributes } from './user'; // Correct import for User and UserCreationAttributes
+import { ServiceCreationAttributes } from './service'; // Import named export for Service
+import { Service } from './service'; // Import default export for Service
 import Review from './review';
 import Order from './order';
 

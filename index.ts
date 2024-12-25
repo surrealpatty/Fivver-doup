@@ -1,7 +1,7 @@
 import express from 'express';
 import { sequelize } from './config/database'; // Path to the sequelize instance
 import { User } from './models/user'; // Path to the User model
-import userRouter from './routes/user'; // Path to userRouter
+import userRouter from './routes/user'; // Ph to userRouter
 
 const app = express();
 const port = process.env.PORT || 3000;

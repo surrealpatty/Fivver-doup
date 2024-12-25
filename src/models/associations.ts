@@ -1,9 +1,8 @@
-// src/models/associations.ts
 import { sequelize } from '../config/database';
-import User from './user'; // Default import for User model
-import { Service } from './service'; // Default import for Service model
-import Order from './order'; // Default import for Order model
-import Review from './review'; // Default import for Review model
+import { User } from './user'; // Correct named import for User model
+import { Service } from './service'; // Correct named import for Service model
+import Order from './order';
+import Review from './review';
 
 // Define associations between models
 User.hasMany(Service, { foreignKey: 'userId' }); // User has many services
@@ -16,7 +15,7 @@ Service.hasMany(Review, { foreignKey: 'serviceId' }); // Service has many review
 Review.belongsTo(Service, { foreignKey: 'serviceId' }); // Review belongs to service
 
 // Models are automatically added to sequelize.models when they are imported.
-// So no need for addModels() in this case.
+// No need for addModels() in this case.
 
 // Export models for use elsewhere
 export { User, Service, Order, Review };

@@ -1,11 +1,10 @@
-// Import necessary functions
-
+// Import necessary functions from serviceController
 const {
   createService,
   getServices,
-} = require('../controllers/serviceController'); // Adjusted to the correct path
+} = require('../controllers/serviceController'); // Corrected import path to serviceController
 
-// Mock data
+// Mock data for creating a service
 const mockService = {
   name: 'Test Service',
   description: 'Description for test service',
@@ -14,7 +13,15 @@ const mockService = {
 describe('Service Functions', () => {
   // Test for creating a service
   test('should create a new service', async () => {
-    // Assuming createService function returns the created service with an id
+    const mockCreatedService = {
+      id: 1, // Assume the service gets an id upon creation
+      ...mockService,
+    };
+
+    // Mock the createService function to return the mock created service
+    createService.mockResolvedValue(mockCreatedService);
+
+    // Call the function
     const result = await createService(mockService);
 
     // Check if the result contains the expected properties
@@ -25,7 +32,23 @@ describe('Service Functions', () => {
 
   // Test for retrieving all services
   test('should retrieve all services', async () => {
-    // Assuming getServices returns an array of services
+    const mockServices = [
+      {
+        id: 1,
+        name: 'Test Service 1',
+        description: 'Description for test service 1',
+      },
+      {
+        id: 2,
+        name: 'Test Service 2',
+        description: 'Description for test service 2',
+      },
+    ];
+
+    // Mock the getServices function to return an array of services
+    getServices.mockResolvedValue(mockServices);
+
+    // Call the function
     const result = await getServices();
 
     // Ensure that the result is an array

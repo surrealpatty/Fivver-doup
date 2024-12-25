@@ -1,52 +1,31 @@
-import User from '../models/user'; // Named import for User model
+import { User } from '../models'; // Adjust the import based on your models
 import bcrypt from 'bcryptjs'; // bcrypt for password hashing and comparison
-import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
-import { sequelize } from '../config/database';
-// Define the user data type for creating a user, excluding methods like $add, $set
-type UserCreationAttributes = {
-  username: string;
-  email: string;
-  password: string;
-  role: 'free' | 'paid'; // Define role as 'free' | 'paid'
-};
 
 // Register user function
-const registerUser = async ({
-  username,
-  email,
-  password,
-}: {
-  username: string;
-  email: string;
-  password: string;
-}) => {
+export const registerUser = async ({ username, email, password }: { username: string, email: string, password: string }) => {
   try {
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Define the type for the user being created (use the refined UserCreationAttributes type)
-    const userData: UserCreationAttributes = {
+    // Create the user with hashed password
+    const newUser = await User.create({
       username,
       email,
-      password: hashedPassword,
-      role: 'free', // Set the default role to "free"
-    };
-
-    // Create the user with hashed password
-    const user = await User.create(userData);
-
-    return user; // Return the created user object
+      password: hashedPassword, // Use hashed password
+      role: 'free', // Set default role to "free"
+    });
+    return newUser; // Return the created user
   } catch (error: unknown) {
-    // Check if error is an instance of Error
     if (error instanceof Error) {
-      throw new Error('Error registering user: ' + error.message); // Return specific error message
+      throw new Error('Error registering user: ' + error.message); // Accessing message safely
+    } else {
+      throw new Error('Error registering user: An unknown error occurred');
     }
-    throw new Error('Unknown error occurred during user registration'); // Fallback error message
   }
 };
 
 // Login user function
-const loginUser = async (email: string, password: string) => {
+export const loginUser = async (email: string, password: string) => {
   try {
     // Find the user by email
     const user = await User.findOne({ where: { email } });
@@ -66,13 +45,53 @@ const loginUser = async (email: string, password: string) => {
 
     return user; // Return the user if login is successful
   } catch (error: unknown) {
-    // Check if error is an instance of Error
     if (error instanceof Error) {
-      throw new Error('Error logging in: ' + error.message); // Return specific error message
+      throw new Error('Error logging in: ' + error.message); // Accessing message safely
+    } else {
+      throw new Error('Error logging in: An unknown error occurred');
     }
-    throw new Error('Unknown error occurred during login'); // Fallback error message
   }
 };
 
-// Export the functions
-export { registerUser, loginUser };
+// Update user function
+export const updateUser = async (id: string, updateData: { username?: string, email?: string, password?: string }) => {
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Hash the new password before updating if provided
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+
+    // Update user with the provided data
+    await user.update(updateData);
+    return user; // Return updated user
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error('Error updating user: ' + error.message); // Accessing message safely
+    } else {
+      throw new Error('Error updating user: An unknown error occurred');
+    }
+  }
+};
+
+// Delete user function
+export const deleteUser = async (id: string) => {
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    await user.destroy(); // Delete the user from the database
+    return { message: 'User deleted successfully' }; // Return success message
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error('Error deleting user: ' + error.message); // Accessing message safely
+    } else {
+      throw new Error('Error deleting user: An unknown error occurred');
+    }
+  }
+};
