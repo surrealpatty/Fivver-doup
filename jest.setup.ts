@@ -1,21 +1,31 @@
-import { sequelize } from './src/config/database'; // Adjust the path to your Sequelize config
+import { sequelize } from './src/config/database'; // Import your sequelize instance
 
 /**
- * Global setup for tests.
- * Ensures any required configuration or mocking is performed before tests run.
+ * Global setup for Jest tests.
+ * Ensures the database connection is established before tests run.
  */
+beforeAll(async () => {
+  try {
+    // Authenticate the Sequelize connection before tests start
+    await sequelize.authenticate();
+    console.log('Database connected for tests');
+  } catch (error: any) {
+    console.error('Unable to connect to the database:', error.message || error);
+    // Optionally, you can fail the tests if the connection fails
+    process.exit(1);
+  }
+});
 
 /**
- * Global teardown logic.
- * Ensures database connections and other resources are properly closed
- * after all tests are executed.
+ * Global teardown for Jest tests.
+ * Ensures the database connection is closed after tests are done.
  */
 afterAll(async () => {
   try {
-    // Close the Sequelize database connection to prevent hanging processes
+    // Close the Sequelize connection to prevent hanging processes after tests
     await sequelize.close();
     console.log('Database connection closed successfully.');
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error while closing the database connection:', error);
   }
 });

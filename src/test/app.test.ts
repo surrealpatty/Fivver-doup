@@ -31,6 +31,6 @@ describe('Basic Test Suite', () => {
 
     // Check the response
     expect(response.statusCode).toBe(200);
-    expect(response.text).toBe('Fiverr backend is running');
+    expect(response.text).toBe('Welcome to Fiverr Clone!');
   });
 });

@@ -1,11 +1,24 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize'; // Import only Sequelize
 
-// Create and export the Sequelize instance with configuration details
-const sequelize = new Sequelize('fivver_doup', 'root', 'f0^:8t1#qaC7', {
-  host: '127.0.0.1', // Use '127.0.0.1' for localhost
-  dialect: 'mysql',
-  logging: false, // Disable logging if unnecessary
-});
+// Define the database configuration for different environments (development, production, etc.)
+const config = {
+  development: {
+    username: 'root',
+    password: 'f0^:8t1#qaC7',
+    database: 'fivver_doup',
+    host: '127.0.0.1', // Use '127.0.0.1' for localhost
+    dialect: 'mysql' as const, // Cast 'mysql' as a literal type
+    dialectOptions: {
+      charset: 'utf8mb4', // Ensure correct character set for MySQL
+      ssl: false, // Disable SSL if not necessary
+    },
+    logging: false, // Disable logging if unnecessary
+  },
+  // You can add configurations for other environments (production, test) here
+};
+
+// Create and export the Sequelize instance with the development configuration
+const sequelize = new Sequelize(config.development);
 
 // Function to test the database connection
 export const testConnection = async (): Promise<boolean> => {
@@ -24,5 +37,5 @@ export const testConnection = async (): Promise<boolean> => {
   }
 };
 
-// Export the Sequelize instance
+// Export the Sequelize instance for use in models
 export { sequelize };
