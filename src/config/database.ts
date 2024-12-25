@@ -1,41 +1,115 @@
-import { Sequelize } from 'sequelize'; // Import only Sequelize
+import { Sequelize } from 'sequelize';
 
 // Define the database configuration for different environments (development, production, etc.)
-const config = {
+const config: {
+  development: {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    dialect: 'mysql';
+    dialectOptions: {
+      charset: string;
+      ssl: boolean;
+    };
+    logging: boolean;
+  };
+  production: {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    dialect: 'mysql';
+    dialectOptions: {
+      charset: string;
+      ssl: boolean;
+    };
+    logging: boolean;
+  };
+  test: {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    dialect: 'mysql';
+    dialectOptions: {
+      charset: string;
+      ssl: boolean;
+    };
+    logging: boolean;
+  };
+} = {
   development: {
     username: 'root',
     password: 'f0^:8t1#qaC7',
     database: 'fivver_doup',
-    host: '127.0.0.1', // Use '127.0.0.1' for localhost
-    dialect: 'mysql' as const, // Cast 'mysql' as a literal type
+    host: '127.0.0.1',
+    dialect: 'mysql',
     dialectOptions: {
-      charset: 'utf8mb4', // Ensure correct character set for MySQL
-      ssl: false, // Disable SSL if not necessary
+      charset: 'utf8mb4',
+      ssl: false,
     },
-    logging: false, // Disable logging if unnecessary
+    logging: false,
   },
-  // You can add configurations for other environments (production, test) here
+  production: {
+    username: 'root',
+    password: 'your_prod_password',
+    database: 'fivver_doup',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    dialectOptions: {
+      charset: 'utf8mb4',
+      ssl: false,
+    },
+    logging: false,
+  },
+  test: {
+    username: 'root',
+    password: 'your_test_password',
+    database: 'fivver_doup_test',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    dialectOptions: {
+      charset: 'utf8mb4',
+      ssl: false,
+    },
+    logging: false,
+  },
 };
 
-// Create and export the Sequelize instance with the development configuration
-const sequelize = new Sequelize(config.development);
+// Explicitly define the type of the environment variable
+type Environment = keyof typeof config; // 'development' | 'production' | 'test'
+
+// Use environment variable (default to 'development')
+const environment: Environment = (process.env.NODE_ENV as Environment) || 'development';
+
+// Access the appropriate config based on the environment
+const currentConfig = config[environment];
+
+// Create and export the Sequelize instance with the selected configuration
+export const sequelize = new Sequelize(
+  currentConfig.database,
+  currentConfig.username,
+  currentConfig.password,
+  {
+    host: currentConfig.host,
+    dialect: currentConfig.dialect,
+    dialectOptions: currentConfig.dialectOptions,
+    logging: currentConfig.logging,
+  }
+);
 
 // Function to test the database connection
 export const testConnection = async (): Promise<boolean> => {
   try {
-    // Use sequelize.authenticate() for the connection test
     await sequelize.authenticate();
     console.log('Database connection successful');
-    return true; // Return true on successful connection
+    return true;
   } catch (error) {
-    // Log the error and handle it appropriately
     console.error(
       'Unable to connect to the database:',
       error instanceof Error ? error.message : error
     );
-    return false; // Return false to indicate failure
+    return false;
   }
 };
-
-// Export the Sequelize instance for use in models
-export { sequelize };
