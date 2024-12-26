@@ -10,7 +10,7 @@ type DatabaseConfig = {
   password: string;
   database: string;
   host: string;
-  dialect: 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql';  // Use string literals for dialects
+  dialect: 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'; // Use string literals for dialects
   dialectOptions: {
     charset: string;
     ssl: boolean;
@@ -21,44 +21,44 @@ type DatabaseConfig = {
 // Define the database configuration object with environment-specific settings
 const config: { [key: string]: DatabaseConfig } = {
   development: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql', // No need to cast anymore
+    username: process.env.DB_USER || 'root', // Default to 'root' if not set
+    password: process.env.DB_PASSWORD || '', // Default to empty string if not set
+    database: process.env.DB_NAME || 'fivver_doup', // Default to 'fivver_doup' if not set
+    host: process.env.DB_HOST || '127.0.0.1', // Default to localhost if not set
+    dialect: 'mysql', // Using MySQL as default dialect
     dialectOptions: {
       charset: 'utf8mb4', // Ensure the correct charset is being used
-      ssl: false,
+      ssl: false, // No SSL in development
     },
     logging: process.env.NODE_ENV === 'development', // Enable logging in development
   },
   production: {
-    username: process.env.PROD_DB_USER || 'root',
-    password: process.env.PROD_DB_PASSWORD || '',
-    database: process.env.PROD_DB_NAME || 'fivver_doup',
-    host: process.env.PROD_DB_HOST || '127.0.0.1',
-    dialect: 'mysql', // No need to cast anymore
+    username: process.env.PROD_DB_USER || 'root', // Use 'root' or value from environment variable
+    password: process.env.PROD_DB_PASSWORD || '', // Password for production DB
+    database: process.env.PROD_DB_NAME || 'fivver_doup', // Database for production
+    host: process.env.PROD_DB_HOST || '127.0.0.1', // Host for production DB
+    dialect: 'mysql', // Using MySQL for production
     dialectOptions: {
-      charset: 'utf8mb4', // Ensure the correct charset is being used
-      ssl: true, // Enable SSL in production
+      charset: 'utf8mb4', // Ensure correct charset in production
+      ssl: true, // Enable SSL for production
     },
-    logging: false,
+    logging: false, // Disable logging in production
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',
-    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql', // No need to cast anymore
+    username: process.env.TEST_DB_USER || 'root', // Test DB user
+    password: process.env.TEST_DB_PASSWORD || '', // Test DB password
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Test DB name
+    host: process.env.DB_HOST || '127.0.0.1', // Test DB host
+    dialect: 'mysql', // Using MySQL for testing
     dialectOptions: {
-      charset: 'utf8mb4', // Ensure the correct charset is being used
-      ssl: false,
+      charset: 'utf8mb4', // Correct charset for test DB
+      ssl: false, // No SSL for testing
     },
-    logging: false,
+    logging: false, // Disable logging in test environment
   },
 };
 
-// Determine the current environment
+// Determine the current environment (default to 'development')
 const environment = process.env.NODE_ENV || 'development';
 
 // Ensure the environment is valid

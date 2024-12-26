@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 import { User } from './user'; // Correct named import for User model
-import { createService, getServices } from '../services/serviceService'; // Corrected import
-
 
 // Define the interface for Service attributes
 interface ServiceAttributes {

@@ -1,6 +1,6 @@
 // src/controllers/serviceController.ts
 import { Request, Response } from 'express';
-import { createService, getServices } from '../services/serviceService'; 
+import { createService, getServices } from '../services/serviceService';
 
 export const createServiceController = async (req: Request, res: Response) => {
   try {
@@ -19,7 +19,8 @@ export const createServiceController = async (req: Request, res: Response) => {
   }
 };
 
-export const getServicesController = async (req: Request, res: Response) => {
+// Fixed getServicesController to remove unused `req` parameter
+export const getServicesController = async (_req: Request, res: Response) => {
   try {
     const result = await getServices();
     res.status(200).json(result);

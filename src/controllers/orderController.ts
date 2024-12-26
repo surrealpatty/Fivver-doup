@@ -18,7 +18,7 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllOrders = async (req: Request, res: Response) => {
+export const getAllOrders = async (_: Request, res: Response) => { // req is no longer used
   try {
     const orders = await Order.findAll();
     res.status(200).json(orders);
