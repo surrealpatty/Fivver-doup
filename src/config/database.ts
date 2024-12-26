@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';  // No need to import Dialect
+import { Sequelize } from 'sequelize';
 
 // Load environment variables from .env file
 dotenv.config();
