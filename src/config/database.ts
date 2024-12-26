@@ -1,48 +1,25 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 dotenv.config();
 
+// Define the configuration type for the database
+type DatabaseConfig = {
+  username: string;
+  password: string;
+  database: string;
+  host: string;
+  dialect: string;
+  dialectOptions: {
+    charset: string;
+    ssl: boolean;
+  };
+  logging: boolean;
+};
+
 // Define the database configuration object with environment-specific settings
-const config: {
-  development: {
-    username: string;
-    password: string;
-    database: string;
-    host: string;
-    dialect: 'mysql';
-    dialectOptions: {
-      charset: string;
-      ssl: boolean;
-    };
-    logging: boolean;
-  };
-  production: {
-    username: string;
-    password: string;
-    database: string;
-    host: string;
-    dialect: 'mysql';
-    dialectOptions: {
-      charset: string;
-      ssl: boolean;
-    };
-    logging: boolean;
-  };
-  test: {
-    username: string;
-    password: string;
-    database: string;
-    host: string;
-    dialect: 'mysql';
-    dialectOptions: {
-      charset: string;
-      ssl: boolean;
-    };
-    logging: boolean;
-  };
-} = {
+const config: { [key: string]: DatabaseConfig } = {
   development: {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
@@ -81,17 +58,19 @@ const config: {
   },
 };
 
-// Explicitly define the type of the environment variable
-type Environment = keyof typeof config; // 'development' | 'production' | 'test'
+// Define the environment type
+const environment = process.env.NODE_ENV || 'development'; // Could be 'development', 'production', or 'test'
 
-// Use environment variable (default to 'development')
-const environment: Environment = (process.env.NODE_ENV as Environment) || 'development';
+// Ensure environment is one of the expected values
+if (!['development', 'production', 'test'].includes(environment)) {
+  throw new Error(`Invalid environment: ${environment}`);
+}
 
-// Access the appropriate config based on the environment
-const currentConfig = config[environment];
+// Use the appropriate config based on the environment
+const currentConfig = config[environment as 'development' | 'production' | 'test'];  // Type assertion to narrow down the environment type
 
 // Create and export the Sequelize instance with the selected configuration
-export const sequelize = new Sequelize(
+const sequelize = new Sequelize(
   currentConfig.database,
   currentConfig.username,
   currentConfig.password,
@@ -100,21 +79,22 @@ export const sequelize = new Sequelize(
     dialect: currentConfig.dialect,
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
-    port: Number(process.env.DB_PORT) || 3306, // Use the DB_PORT environment variable if set, else default to 3306
+    port: process.env.DB_PORT || 3306, // Use DB_PORT from environment if available
   }
 );
 
 // Function to test the database connection
-export const testConnection = async (): Promise<boolean> => {
+const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection successful');
-    return true;
   } catch (error) {
-    console.error(
-      'Unable to connect to the database:',
-      error instanceof Error ? error.message : error
-    );
-    return false;
+    if (error instanceof Error) {
+      console.error('Unable to connect to the database:', error.message);
+    } else {
+      console.error('Unknown error occurred:', error);
+    }
   }
 };
+
+module.exports = { sequelize, testConnection };
