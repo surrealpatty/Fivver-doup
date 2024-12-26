@@ -1,28 +1,31 @@
 {
   "compilerOptions": {
-    "target": "ES6",                              // Use ES6 features (e.g., classes, promises)
-    "module": "CommonJS",                         // Use CommonJS for compatibility with Node.js
-    "strict": true,                               // Enable strict type-checking options
-    "esModuleInterop": true,                      // Enable interop between CommonJS and ES modules
-    "skipLibCheck": true,                         // Skip type-checking of declaration files
-    "moduleResolution": "node",                   // Use Node.js module resolution strategy
-    "outDir": "./dist",                           // Output directory for compiled files
-    "rootDir": "./src",                           // Root directory for source files
-    "baseUrl": "./",                              // Base URL for resolving non-relative modules
-    "resolveJsonModule": true,                    // Allow importing JSON files as modules
-    "paths": {
-      "*": ["node_modules/*", "src/*"]            // Allow resolution of files from the 'src' folder
+    "target": "ES6",                              
+    "module": "CommonJS",                         
+    "strict": true,                               
+    "esModuleInterop": true,                      
+    "skipLibCheck": true,                         
+    "moduleResolution": "node",                   
+    "outDir": "./dist",                           
+    "rootDir": "./src",                           
+    "baseUrl": "./",                              
+    "resolveJsonModule": true,                    
+    "paths": {                                    
+      "*": ["node_modules/*", "src/*"]            
     },
-    "allowJs": true,                              // Allow compiling JavaScript files
-    "checkJs": false,                             // Disable type-checking for JavaScript files
-    "sourceMap": true,                            // Generate source map files for debugging
-    "forceConsistentCasingInFileNames": true      // Ensure consistent casing in file names
+    "allowJs": true,                              
+    "checkJs": false,                             
+    "sourceMap": true,                            
+    "forceConsistentCasingInFileNames": true,     
+    "types": ["node"],                            
+    "noImplicitAny": true,                        
+    "strictNullChecks": true                      
   },
   "include": [
-    "src/**/*"                                    // Include all files under the src directory
+    "src/**/*"                                    
   ],
   "exclude": [
-    "node_modules",                               // Exclude node_modules folder
-    "dist"                                        // Exclude dist folder to avoid circular dependencies
+    "node_modules",                               
+    "dist"                                        
   ]
 }

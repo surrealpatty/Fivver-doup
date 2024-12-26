@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -67,9 +67,12 @@ if (!['development', 'production', 'test'].includes(environment)) {
 }
 
 // Use the appropriate config based on the environment
-const currentConfig = config[environment as 'development' | 'production' | 'test'];  // Type assertion to narrow down the environment type
+const currentConfig = config[environment as 'development' | 'production' | 'test']; // Type assertion to narrow down the environment type
 
-// Create and export the Sequelize instance with the selected configuration
+// Convert the DB_PORT to a number or fall back to 3306
+const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;
+
+// Create the Sequelize instance with the selected configuration
 const sequelize = new Sequelize(
   currentConfig.database,
   currentConfig.username,
@@ -79,7 +82,7 @@ const sequelize = new Sequelize(
     dialect: currentConfig.dialect,
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
-    port: process.env.DB_PORT || 3306, // Use DB_PORT from environment if available
+    port: dbPort, // Pass the parsed port number
   }
 );
 
@@ -97,4 +100,5 @@ const testConnection = async () => {
   }
 };
 
-module.exports = { sequelize, testConnection };
+// Export sequelize and testConnection as named exports
+export { sequelize, testConnection };
