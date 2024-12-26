@@ -1,3 +1,5 @@
+// jest.config.ts
+
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
@@ -26,6 +28,8 @@ const config: Config.InitialOptions = {
   coverageReporters: ['text', 'lcov'], // Generate coverage reports in text and lcov formats
   verbose: true, // Enable verbose output for test results
   bail: 1, // Stop after the first failure (useful for CI)
+  globalSetup: '<rootDir>/test/setup.ts', // Use the global setup script for database connection
+  globalTeardown: '<rootDir>/test/teardown.ts', // Use the global teardown script to close the database connection
 };
 
 export default config;

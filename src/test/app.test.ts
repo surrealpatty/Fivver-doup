@@ -1,19 +1,23 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express'; // Import the Express type
-import { sequelize } from '../config/database'; // Import sequelize to close the database connection
+import { sequelize, testConnection } from '../config/database'; // Import sequelize and the testConnection function
 
 // Define the path to the compiled `index.js` file in `dist/`
 const appPath = path.resolve(__dirname, '../../dist/index'); // Adjusted path
 
 // Initialize app variable with explicit typing as Express.Application
 let app: Express | undefined; // Type it as Express.Application or undefined (in case it's not loaded)
+let connectionStatus: boolean = false; // Track connection status
 
 beforeAll(async () => {
   try {
     // Dynamically import the app from the compiled dist/index.js
     const module = await import(appPath);
     app = module.default || module.app; // Adjust depending on how your app is exported
+
+    // Test database connection
+    connectionStatus = await testConnection();
   } catch (error) {
     console.error('Error loading app from dist:', error);
   }
@@ -38,10 +42,12 @@ describe('Basic Test Suite', () => {
 
 // Cleanup: Close the database connection after tests
 afterAll(async () => {
-  try {
-    await sequelize.close(); // Ensure database connection is closed
-    console.log('Database connection closed.');
-  } catch (error) {
-    console.error('Error closing database connection:', error);
+  if (connectionStatus) {
+    try {
+      await sequelize.close(); // Ensure database connection is closed
+      console.log('Database connection closed.');
+    } catch (error) {
+      console.error('Error closing database connection:', error);
+    }
   }
 });

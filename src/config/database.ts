@@ -50,7 +50,7 @@ const config: {
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: false,
     },
     logging: process.env.NODE_ENV === 'development', // Enable logging in development
@@ -62,7 +62,7 @@ const config: {
     host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: true, // Enable SSL in production
     },
     logging: false,
@@ -74,7 +74,7 @@ const config: {
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: false,
     },
     logging: false,
