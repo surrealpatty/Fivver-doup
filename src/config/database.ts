@@ -1,3 +1,4 @@
+// src/config/database.ts
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
@@ -20,7 +21,7 @@ type DatabaseConfig = {
 const config: { [key: string]: DatabaseConfig } = {
   development: {
     username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
+    password: process.env.DB_PASSWORD || '',  // Ensure password is loaded from environment variables
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -57,11 +58,6 @@ const config: { [key: string]: DatabaseConfig } = {
 };
 
 const environment = process.env.NODE_ENV || 'development';
-
-if (!['development', 'production', 'test'].includes(environment)) {
-  throw new Error(`Invalid environment: ${environment}`);
-}
-
 const currentConfig = config[environment as 'development' | 'production' | 'test'];
 
 const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;
