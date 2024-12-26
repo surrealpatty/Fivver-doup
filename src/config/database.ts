@@ -22,10 +22,10 @@ interface SequelizeConfig {
 // Sequelize Database Configuration for different environments
 const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   development: {
-    username: process.env.DB_USER || 'root',
+    username: process.env.DB_USER || 'root',  // Ensure 'root' is set correctly
     password: process.env.DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',
+    host: process.env.DB_HOST || '127.0.0.1',  // Ensure host is correctly set
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
@@ -34,7 +34,7 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     logging: process.env.NODE_ENV === 'development',
   },
   production: {
-    username: process.env.PROD_DB_USER || 'root',
+    username: process.env.PROD_DB_USER || 'root',  // Make sure the production credentials are correct
     password: process.env.PROD_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.PROD_DB_NAME || 'fivver_doup',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
@@ -46,7 +46,7 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     logging: false,
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',
+    username: process.env.TEST_DB_USER || 'root',  // Test environment credentials
     password: process.env.TEST_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
