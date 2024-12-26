@@ -1,36 +1,36 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                          // Modern JavaScript features (target ES2020)
-    "module": "ESNext",                           // Use ESNext for ES module support
-    "moduleResolution": "node",                   // Use Node.js module resolution strategy
-    "strict": true,                               // Enable all strict type-checking options
-    "esModuleInterop": true,                      // Enable interoperability between ESModules and CommonJS
-    "skipLibCheck": true,                         // Skip type checking for declaration files
-    "outDir": "./dist",                           // Output compiled files to the dist directory
-    "rootDir": "./src",                           // Root directory for input files
-    "baseUrl": "./",                              // Base URL for module resolution
-    "resolveJsonModule": true,                    // Allow importing of JSON files
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*", "src/*"]            // Set up aliasing for module resolution
+      "*": ["node_modules/*", "src/*"]
     },
-    "allowJs": true,                              // Allow JavaScript files in TypeScript project
-    "checkJs": false,                             // Skip type checking JavaScript files
-    "sourceMap": true,                            // Generate source map files for debugging
-    "forceConsistentCasingInFileNames": true,     // Enforce consistent casing in imports
-    "types": ["node", "jest"],                    // Add 'jest' to include Jest type definitions
-    "noImplicitAny": true,                        // Report errors on expressions with implicit 'any' type
-    "strictNullChecks": true,                     // Enable strict null checks
-    "noUnusedLocals": true,                       // Report unused local variables
-    "noUnusedParameters": true,                   // Report unused function parameters
-    "noImplicitReturns": true,                    // Report functions that don't explicitly return a value
-    "noFallthroughCasesInSwitch": true            // Prevent fallthrough in switch statements
+    "allowJs": true,
+    "checkJs": false,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "jest"],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src/**/*",                                   // Include all files in the `src` directory (should cover all files)
-    "src/test/**/*"                               // Include test files in `src/test` directory
+    "src/**/*",
+    "src/test/**/*"
   ],
   "exclude": [
-    "node_modules",                               // Exclude node_modules directory
-    "dist"                                        // Exclude dist directory (compiled files)
+    "node_modules",
+    "dist"
   ]
 }
