@@ -33,19 +33,19 @@ const config: { [key: string]: DatabaseConfig } = {
   },
   production: {
     username: process.env.PROD_DB_USER || 'root',
-    password: process.env.PROD_DB_PASSWORD || '',
+    password: process.env.PROD_DB_PASSWORD || '',  // Ensure production password is loaded
     database: process.env.PROD_DB_NAME || 'fivver_doup',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: true,
+      ssl: true,  // SSL enabled for production
     },
-    logging: false,
+    logging: false,  // Disable logging in production
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',
+    password: process.env.TEST_DB_PASSWORD || '',  // Ensure test password is loaded
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -53,7 +53,7 @@ const config: { [key: string]: DatabaseConfig } = {
       charset: 'utf8mb4',
       ssl: false,
     },
-    logging: false,
+    logging: false,  // Disable logging in test environment
   },
 };
 
