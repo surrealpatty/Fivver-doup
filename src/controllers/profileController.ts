@@ -1,7 +1,5 @@
 import { User, UserCreationAttributes } from '../models';
 import bcrypt from 'bcryptjs'; // Add bcrypt for password comparison
-import { Request, Response } from 'express'; // Express types for request and response
-import { Optional } from 'sequelize/types'; // Import Optional type from Sequelize
 
 // Register user function
 export const registerUser = async ({
@@ -18,11 +16,12 @@ export const registerUser = async ({
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userData: UserCreationAttributes = {
-      username: 'newuser',
-      email: 'user@example.com',
-      password: 'password123',
-      role: 'free',
+      username: username, // Use the passed username
+      email: email, // Use the passed email
+      password: hashedPassword, // Use the hashed password
+      role: 'free', // Default to 'free' role
     };
+
     // Create the user with hashed password
     const user = await User.create(userData);
 
