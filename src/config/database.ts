@@ -10,7 +10,7 @@ type DatabaseConfig = {
   password: string;
   database: string;
   host: string;
-  dialect: string;
+  dialect: 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql';  // Use string literals for dialects
   dialectOptions: {
     charset: string;
     ssl: boolean;
@@ -25,7 +25,7 @@ const config: { [key: string]: DatabaseConfig } = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
+    dialect: 'mysql', // No need to cast anymore
     dialectOptions: {
       charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: false,
@@ -37,7 +37,7 @@ const config: { [key: string]: DatabaseConfig } = {
     password: process.env.PROD_DB_PASSWORD || '',
     database: process.env.PROD_DB_NAME || 'fivver_doup',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
+    dialect: 'mysql', // No need to cast anymore
     dialectOptions: {
       charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: true, // Enable SSL in production
@@ -49,7 +49,7 @@ const config: { [key: string]: DatabaseConfig } = {
     password: process.env.TEST_DB_PASSWORD || '',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
+    dialect: 'mysql', // No need to cast anymore
     dialectOptions: {
       charset: 'utf8mb4', // Ensure the correct charset is being used
       ssl: false,
