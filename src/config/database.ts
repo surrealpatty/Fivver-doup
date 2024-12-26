@@ -1,4 +1,3 @@
-// src/config/database.ts
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
@@ -21,7 +20,7 @@ type DatabaseConfig = {
 const config: { [key: string]: DatabaseConfig } = {
   development: {
     username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',  // Ensure password is loaded from environment variables
+    password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -33,19 +32,19 @@ const config: { [key: string]: DatabaseConfig } = {
   },
   production: {
     username: process.env.PROD_DB_USER || 'root',
-    password: process.env.PROD_DB_PASSWORD || '',  // Ensure production password is loaded
+    password: process.env.PROD_DB_PASSWORD || '',
     database: process.env.PROD_DB_NAME || 'fivver_doup',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: true,  // SSL enabled for production
+      ssl: true,
     },
-    logging: false,  // Disable logging in production
+    logging: false,
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',  // Ensure test password is loaded
+    password: process.env.TEST_DB_PASSWORD || '',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -53,7 +52,7 @@ const config: { [key: string]: DatabaseConfig } = {
       charset: 'utf8mb4',
       ssl: false,
     },
-    logging: false,  // Disable logging in test environment
+    logging: false,
   },
 };
 
