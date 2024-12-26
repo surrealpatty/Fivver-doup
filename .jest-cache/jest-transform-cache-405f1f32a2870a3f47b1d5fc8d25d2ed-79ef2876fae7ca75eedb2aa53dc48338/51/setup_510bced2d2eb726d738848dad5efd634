@@ -1,0 +1,19 @@
+d0030b55b40a58a9439208270671c7fd
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = globalSetup;
+const database_1 = require("../config/database"); // Adjust the path if necessary
+// Global setup function for Jest
+async function globalSetup() {
+    try {
+        // Attempt to authenticate the Sequelize connection to the test database
+        await database_1.sequelize.authenticate();
+        console.log('Database connected');
+    }
+    catch (error) {
+        // Log any errors related to the database connection
+        console.error('Database connection error:', error);
+        throw error; // Rethrow error to prevent tests from running if DB connection fails
+    }
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXHN1cnJlYWxzeXN0ZW1zXFxGaXZ2ZXItZG91cFxcc3JjXFx0ZXN0XFxzZXR1cC50cyIsIm1hcHBpbmdzIjoiOztBQUdBLDhCQVVDO0FBYkQsaURBQStDLENBQUMsK0JBQStCO0FBRS9FLGlDQUFpQztBQUNsQixLQUFLLFVBQVUsV0FBVztJQUN2QyxJQUFJLENBQUM7UUFDSCx3RUFBd0U7UUFDeEUsTUFBTSxvQkFBUyxDQUFDLFlBQVksRUFBRSxDQUFDO1FBQy9CLE9BQU8sQ0FBQyxHQUFHLENBQUMsb0JBQW9CLENBQUMsQ0FBQztJQUNwQyxDQUFDO0lBQUMsT0FBTyxLQUFLLEVBQUUsQ0FBQztRQUNmLG9EQUFvRDtRQUNwRCxPQUFPLENBQUMsS0FBSyxDQUFDLDRCQUE0QixFQUFFLEtBQUssQ0FBQyxDQUFDO1FBQ25ELE1BQU0sS0FBSyxDQUFDLENBQUMscUVBQXFFO0lBQ3BGLENBQUM7QUFDSCxDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxzdXJyZWFsc3lzdGVtc1xcRml2dmVyLWRvdXBcXHNyY1xcdGVzdFxcc2V0dXAudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgc2VxdWVsaXplIH0gZnJvbSAnLi4vY29uZmlnL2RhdGFiYXNlJzsgLy8gQWRqdXN0IHRoZSBwYXRoIGlmIG5lY2Vzc2FyeVxyXG5cclxuLy8gR2xvYmFsIHNldHVwIGZ1bmN0aW9uIGZvciBKZXN0XHJcbmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIGdsb2JhbFNldHVwKCkge1xyXG4gIHRyeSB7XHJcbiAgICAvLyBBdHRlbXB0IHRvIGF1dGhlbnRpY2F0ZSB0aGUgU2VxdWVsaXplIGNvbm5lY3Rpb24gdG8gdGhlIHRlc3QgZGF0YWJhc2VcclxuICAgIGF3YWl0IHNlcXVlbGl6ZS5hdXRoZW50aWNhdGUoKTtcclxuICAgIGNvbnNvbGUubG9nKCdEYXRhYmFzZSBjb25uZWN0ZWQnKTtcclxuICB9IGNhdGNoIChlcnJvcikge1xyXG4gICAgLy8gTG9nIGFueSBlcnJvcnMgcmVsYXRlZCB0byB0aGUgZGF0YWJhc2UgY29ubmVjdGlvblxyXG4gICAgY29uc29sZS5lcnJvcignRGF0YWJhc2UgY29ubmVjdGlvbiBlcnJvcjonLCBlcnJvcik7XHJcbiAgICB0aHJvdyBlcnJvcjsgLy8gUmV0aHJvdyBlcnJvciB0byBwcmV2ZW50IHRlc3RzIGZyb20gcnVubmluZyBpZiBEQiBjb25uZWN0aW9uIGZhaWxzXHJcbiAgfVxyXG59XHJcbiJdLCJ2ZXJzaW9uIjozfQ==

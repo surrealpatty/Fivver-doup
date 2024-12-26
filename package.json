@@ -5,17 +5,13 @@
   "author": "Patty",
   "main": "dist/index.js",
   "type": "module",
-  "directories": {
-    "doc": "docs",
-    "test": "src/test"
-  },
   "scripts": {
     "format": "prettier --write .",
-    "clean-build": "rimraf dist && tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "build:watch": "tsc --watch",
     "start": "node dist/index.js",
     "dev": "nodemon --exec ts-node --loader ts-node/esm src/index.ts",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
     "pretest": "npm run build",
     "test": "jest --config jest.config.ts",
     "test:watch": "jest --watch",
@@ -25,7 +21,6 @@
     "lint:check": "eslint \"src/**/*.{ts,js,vue}\"",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
-    "prepublishOnly": "npm run build",
     "prepare": "husky install"
   },
   "keywords": [
@@ -71,6 +66,7 @@
     "@vue/compiler-sfc": "^3.5.13",
     "@vue/test-utils": "^2.4.6",
     "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
     "cypress": "^13.16.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
@@ -95,36 +91,7 @@
     "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.1.10"
   },
-  "eslintConfig": {
-    "extends": [
-      "airbnb-typescript/base",
-      "plugin:import/typescript",
-      "plugin:vue/vue3-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint",
-      "vue"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.json",
-      "sourceType": "module"
-    },
-    "rules": {
-      "import/no-extraneous-dependencies": [
-        "error",
-        {
-          "devDependencies": [
-            "**/*.test.ts",
-            "**/jest.config.ts"
-          ]
-        }
-      ],
-      "vue/multi-word-component-names": "off",
-      "@typescript-eslint/no-unused-vars": "warn"
-    }
-  },
+  "eslintConfig": {},
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

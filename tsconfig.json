@@ -1,23 +1,27 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "CommonJS", // Use CommonJS for Node.js environments
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./src",  // Ensure baseUrl is set to src for correct path resolution
+    "baseUrl": "./src",
     "resolveJsonModule": true,
     "paths": {
-      "@config/*": ["config/*"],  // Add this path mapping to resolve config folder
-      "*": ["node_modules/*", "src/*"]
+      "@config/*": ["config/*"],
+      "@models/*": ["models/*"], // Example path mappings
+      "@controllers/*": ["controllers/*"],
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"],
+      "*": ["*", "node_modules/*"] // Correct fallback
     },
-    "allowJs": true,
-    "checkJs": false,
+    "allowJs": true, // If you have some JS files
+    "checkJs": false, // Usually false unless you want to type check JS
     "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
     "types": ["node", "jest"],
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -26,12 +30,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*",
-    "src/test/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*"], // Simpler include
+  "exclude": ["node_modules", "dist", "**/*.test.ts"] // Exclude test files here
 }

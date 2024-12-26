@@ -1,44 +1,40 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Dialect } from 'sequelize';
 
-// Load environment variables from .env file
 dotenv.config();
 
-// Define the Sequelize configuration interface
 interface SequelizeConfig {
   username: string;
   password: string;
   database: string;
   host: string;
-  dialect: string;
-  dialectOptions: {
+  dialect: Dialect; // Correct type here
+  dialectOptions?: {
     charset: string;
-    ssl: boolean;
+    ssl?: boolean;
   };
-  logging: boolean;
-  port?: number;  // Optional port for flexibility
+  logging?: boolean;
+  port?: number;
 }
 
-// Sequelize Database Configuration for different environments
 const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   development: {
-    username: process.env.DB_USER || 'root',  // Ensure 'root' is set correctly
-    password: process.env.DB_PASSWORD || '',  // Ensure password is fetched from environment variable
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',  // Ensure host is correctly set
-    dialect: 'mysql',
+    host: process.env.DB_HOST || '127.0.0.1',
+    dialect: 'mysql', // Correct type here
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: false,
     },
     logging: process.env.NODE_ENV === 'development',
   },
   production: {
-    username: process.env.PROD_DB_USER || 'root',  // Make sure the production credentials are correct
-    password: process.env.PROD_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
-    database: process.env.PROD_DB_NAME || 'fivver_doup',
-    host: process.env.PROD_DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
+    username: process.env.PROD_DB_USER || 'your_prod_username',
+    password: process.env.PROD_DB_PASSWORD || '',
+    database: process.env.PROD_DB_NAME || 'your_prod_database',
+    host: process.env.PROD_DB_HOST || 'your_prod_host',
+    dialect: 'mysql', // Correct type here
     dialectOptions: {
       charset: 'utf8mb4',
       ssl: true,
@@ -46,44 +42,32 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     logging: false,
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',  // Test environment credentials
-    password: process.env.TEST_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
+    username: process.env.TEST_DB_USER || 'root',
+    password: process.env.TEST_DB_PASSWORD || '',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
-    dialectOptions: {
-      charset: 'utf8mb4',
-      ssl: false,
-    },
+    dialect: 'mysql', // Correct type here
     logging: false,
   },
 };
 
-// Select the configuration based on the current environment
-const environment = process.env.NODE_ENV || 'development';  // Default to 'development' if NODE_ENV is not set
+const environment = process.env.NODE_ENV || 'development';
 const currentConfig = sequelizeConfig[environment];
 
-// Ensure DB_PORT is a valid integer
-const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;  // Default to 3306 if DB_PORT is not set
-if (isNaN(dbPort)) {
-  throw new Error(`Invalid DB_PORT: ${process.env.DB_PORT}. Falling back to default 3306.`);
+if (!currentConfig) {
+  throw new Error(`Invalid NODE_ENV: ${environment}`);
 }
 
-// Initialize Sequelize with the selected configuration
 const sequelize = new Sequelize(
   currentConfig.database,
   currentConfig.username,
   currentConfig.password,
   {
-    host: currentConfig.host,
-    dialect: currentConfig.dialect as 'mysql',
-    dialectOptions: currentConfig.dialectOptions,
-    logging: currentConfig.logging,
-    port: dbPort,
+    ...currentConfig,
+    dialect: currentConfig.dialect as Dialect, // Type assertion here
   }
 );
 
-// Function to test the database connection
 const testConnection = async (): Promise<boolean> => {
   try {
     await sequelize.authenticate();
@@ -95,5 +79,4 @@ const testConnection = async (): Promise<boolean> => {
   }
 };
 
-// Export sequelize and testConnection for use in other parts of the application
 export { sequelize, testConnection };
