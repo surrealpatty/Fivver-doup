@@ -17,7 +17,7 @@
     "checkJs": false,                              // Skip type checking JavaScript files
     "sourceMap": true,                             // Generate source map files for debugging
     "forceConsistentCasingInFileNames": true,      // Enforce consistent casing in imports
-    "types": ["node", "jest"],                     // Add 'jest' here to include Jest type definitions
+    "types": ["node", "jest"],                     // Add 'jest' to include Jest type definitions
     "noImplicitAny": true,                         // Raise error on expressions and declarations with `any` type
     "strictNullChecks": true,                      // Enable strict null checks
     "noUnusedLocals": true,                        // Report unused local variables
