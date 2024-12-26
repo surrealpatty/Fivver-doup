@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/config'; // Importing config for JWT_SECRET and JWT_EXPIRATION
-
-const JWT_SECRET: string = config.JWT_SECRET;
-const JWT_EXPIRATION: string = config.JWT_EXPIRATION || '1h';
+import { JWT_SECRET, JWT_EXPIRATION } from '../config/config'; // Importing named exports
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
@@ -23,7 +20,7 @@ export const verifyToken = (
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => { // Explicitly typing err and decoded
     if (err) {
       return res
         .status(401)
