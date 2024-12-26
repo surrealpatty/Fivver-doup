@@ -4,17 +4,18 @@ import { Sequelize, Dialect } from 'sequelize';
 dotenv.config();
 
 interface SequelizeConfig {
-  username: string;
-  password: string;
-  database: string;
-  host: string;
-  dialect: Dialect; // Correct type here
+  username?: string; // Make optional as they might be in URI
+  password?: string;
+  database?: string;
+  host?: string;
+  dialect: Dialect;
   dialectOptions?: {
     charset: string;
     ssl?: boolean;
   };
   logging?: boolean;
   port?: number;
+  uri?:string; // Add uri for connection strings
 }
 
 const sequelizeConfig: { [key: string]: SequelizeConfig } = {
@@ -23,18 +24,16 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql', // Correct type here
+    port: Number(process.env.DB_PORT) || 3306,
+    dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
     },
     logging: process.env.NODE_ENV === 'development',
   },
   production: {
-    username: process.env.PROD_DB_USER || 'your_prod_username',
-    password: process.env.PROD_DB_PASSWORD || '',
-    database: process.env.PROD_DB_NAME || 'your_prod_database',
-    host: process.env.PROD_DB_HOST || 'your_prod_host',
-    dialect: 'mysql', // Correct type here
+    uri: process.env.DATABASE_URL,
+    dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
       ssl: true,
@@ -45,8 +44,9 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     username: process.env.TEST_DB_USER || 'root',
     password: process.env.TEST_DB_PASSWORD || '',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql', // Correct type here
+    host: process.env.TEST_DB_HOST || '127.0.0.1',
+    port: Number(process.env.TEST_DB_PORT) || 3306,
+    dialect: 'mysql',
     logging: false,
   },
 };
@@ -58,25 +58,23 @@ if (!currentConfig) {
   throw new Error(`Invalid NODE_ENV: ${environment}`);
 }
 
-const sequelize = new Sequelize(
-  currentConfig.database,
-  currentConfig.username,
-  currentConfig.password,
-  {
-    ...currentConfig,
-    dialect: currentConfig.dialect as Dialect, // Type assertion here
-  }
-);
+let sequelize: Sequelize;
+if (currentConfig.uri) {
+    sequelize = new Sequelize(currentConfig.uri, currentConfig);
+} else {
+    sequelize = new Sequelize(currentConfig);
+}
+
 
 const testConnection = async (): Promise<boolean> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection successful');
-    return true;
-  } catch (error) {
-    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
-    return false;
-  }
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection successful');
+    return true;
+  } catch (error) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    return false;
+  }
 };
 
 export { sequelize, testConnection };
