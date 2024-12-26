@@ -1,8 +1,10 @@
-import { sequelize } from '../src/config/database'; // Adjust the import path to your sequelize instance
+// test/teardown.ts
+
+import { sequelize } from '../../src/config/database'; // Adjusted path to go two levels up
 
 export default async function globalTeardown() {
   try {
-    // Close the database connection after tests are completed
+    // Close the database connection after tests
     await sequelize.close();
     console.log('Global database connection closed.');
   } catch (error) {

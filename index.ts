@@ -1,7 +1,8 @@
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import express from 'express';
-import { sequelize } from './config/database'; // Correct path for sequelize import
-import userRouter from './routes/user'; // Correct path for userRouter import
+import { sequelize } from './config/database.ts'; // Explicit .ts extension
+import userRouter from './routes/user.ts'; // Explicit .ts extension
+
 
 // Load environment variables from .env file
 dotenv.config(); // Ensure to load environment variables before using them

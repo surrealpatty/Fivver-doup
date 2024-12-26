@@ -1,3 +1,4 @@
 import { Sequelize } from 'sequelize-typescript';
-declare const sequelize: Sequelize;
-export { sequelize };
+declare module 'src/config/database' {
+    export const sequelize: any; // Or replace 'any' with the correct Sequelize type
+  }

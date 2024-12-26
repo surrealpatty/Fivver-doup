@@ -8,14 +8,13 @@
     "moduleResolution": "node",                   // Use Node.js module resolution strategy
     "outDir": "./dist",                           // Output directory for compiled files
     "rootDir": "./src",                           // Root directory for source files
-    "baseUrl": ".",                               // Base URL for resolving non-relative modules
+    "baseUrl": "./",                              // Base URL for resolving non-relative modules
     "resolveJsonModule": true,                    // Allow importing JSON files as modules
     "paths": {
       "*": ["node_modules/*", "src/*"]            // Allow resolution of files from the 'src' folder
     },
     "allowJs": true,                              // Allow compiling JavaScript files
     "checkJs": false,                             // Disable type-checking for JavaScript files
-    "declaration": true,                          // Generate .d.ts declaration files
     "sourceMap": true,                            // Generate source map files for debugging
     "forceConsistentCasingInFileNames": true      // Ensure consistent casing in file names
   },
