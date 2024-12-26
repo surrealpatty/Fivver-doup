@@ -15,6 +15,7 @@ type DatabaseConfig = {
     ssl: boolean;
   };
   logging: boolean;
+  port: number;
 };
 
 const config: { [key: string]: DatabaseConfig } = {
@@ -29,6 +30,7 @@ const config: { [key: string]: DatabaseConfig } = {
       ssl: false,
     },
     logging: process.env.NODE_ENV === 'development',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
   },
   production: {
     username: process.env.PROD_DB_USER || 'root',
@@ -41,6 +43,7 @@ const config: { [key: string]: DatabaseConfig } = {
       ssl: true,
     },
     logging: false,
+    port: parseInt(process.env.DB_PORT || '3306', 10),
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
@@ -53,16 +56,12 @@ const config: { [key: string]: DatabaseConfig } = {
       ssl: false,
     },
     logging: false,
+    port: parseInt(process.env.DB_PORT || '3306', 10),
   },
 };
 
 const environment = process.env.NODE_ENV || 'development';
 const currentConfig = config[environment as 'development' | 'production' | 'test'];
-
-const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;
-if (isNaN(dbPort)) {
-  throw new Error(`Invalid DB_PORT: ${process.env.DB_PORT}. Falling back to default 3306.`);
-}
 
 const sequelize = new Sequelize(
   currentConfig.database,
@@ -73,7 +72,7 @@ const sequelize = new Sequelize(
     dialect: currentConfig.dialect,
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
-    port: dbPort,
+    port: currentConfig.port,
   }
 );
 
