@@ -1,9 +1,10 @@
+
 import { sequelize } from '../config/database'; // Adjust path if necessary
 
 // Global setup function for Jest
 export default async function globalSetup() {
   try {
-    // Attempt to authenticate the mocked Sequelize connection
+    // Attempt to authenticate the Sequelize connection to the test database
     await sequelize.authenticate();
     console.log('Database connected');
   } catch (error) {
