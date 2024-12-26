@@ -8,9 +8,10 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./",
+    "baseUrl": "./src",  // Ensure baseUrl is set to src for correct path resolution
     "resolveJsonModule": true,
     "paths": {
+      "@config/*": ["config/*"],  // Add this path mapping to resolve config folder
       "*": ["node_modules/*", "src/*"]
     },
     "allowJs": true,
@@ -33,5 +34,4 @@
     "node_modules",
     "dist"
   ]
-  
 }
