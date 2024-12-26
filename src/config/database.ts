@@ -90,12 +90,14 @@ const sequelize = new Sequelize(
 );
 
 // Function to test the database connection
-const testConnection = async () => {
+const testConnection = async (): Promise<boolean> => {
   try {
     await sequelize.authenticate();
     console.log('Database connection successful');
+    return true; // Return true if connection is successful
   } catch (error) {
     console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    return false; // Return false if there is an error
   }
 };
 

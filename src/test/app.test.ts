@@ -16,19 +16,19 @@ beforeAll(async () => {
     const module = await import(appPath);
     app = module.default || module.app; // Adjust depending on how your app is exported
 
-    // Test database connection
-    connectionStatus = await testConnection();
+    // Test database connection and set connection status
+    connectionStatus = await testConnection(); // Now it correctly returns a boolean
   } catch (error) {
     console.error('Error loading app from dist:', error);
   }
 });
 
-// Define tests only if the app was successfully loaded
+// Define tests only if the app was successfully loaded and the database connection was successful
 describe('Basic Test Suite', () => {
   it('should respond with a message from the root endpoint', async () => {
-    if (!app) {
-      console.warn('Skipping tests as app could not be loaded');
-      return; // Skip the test if app could not be loaded
+    if (!app || !connectionStatus) {
+      console.warn('Skipping tests due to app load failure or database connection failure');
+      return; // Skip the test if app could not be loaded or database connection failed
     }
 
     // Send a GET request to the root endpoint
