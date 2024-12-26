@@ -1,12 +1,11 @@
-// src/routes/orderRoutes.ts
-import express, { Request, Response } from 'express';
+import express from 'express';
 import {
   createOrder,
   getAllOrders,
   getOrderById,
   updateOrder,
   deleteOrder,
-} from '../controllers/orderController'; // Ensure correct import
+} from '../controllers/orderController'; // Correct named imports
 
 const router = express.Router();
 
