@@ -1,5 +1,4 @@
-
-import { sequelize } from '../config/database'; // Adjust path if necessary
+import { sequelize } from '../config/database'; // Adjust the path if necessary
 
 // Global setup function for Jest
 export default async function globalSetup() {
