@@ -12,8 +12,11 @@ const port = process.env.PORT || 3000; // Use environment variable PORT or defau
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+// Use the userRouter for handling user-related routes
+app.use('/users', userRouter); // Now userRouter is utilized
+
 // Example route
-app.get('/', (req, res) => {
+app.get('/', (_, res) => { // Replace 'req' with '_' to indicate it's unused
   res.send('Welcome to Fiverr Clone!');
 });
 
