@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';  // Remove the import for Dialect as it's no longer needed
+import { Sequelize } from 'sequelize';  // No need to import Dialect
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,6 +16,13 @@ declare global {
       NODE_ENV?: string;
       JWT_SECRET: string;
       JWT_EXPIRATION?: string;
+      PROD_DB_USER?: string;
+      PROD_DB_PASSWORD?: string;
+      PROD_DB_NAME?: string;
+      PROD_DB_HOST?: string;
+      TEST_DB_USER?: string;
+      TEST_DB_PASSWORD?: string;
+      TEST_DB_NAME?: string;
     }
   }
 }

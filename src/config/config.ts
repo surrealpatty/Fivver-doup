@@ -3,6 +3,10 @@ import { config } from 'dotenv';
 // Load environment variables from .env
 config();
 
+// Named exports for configuration values
+export const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
+
 export const development = {
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
@@ -11,6 +15,3 @@ export const development = {
   dialect: 'mysql',
   port: process.env.DB_PORT || 3306,
 };
-
-export const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
