@@ -1,13 +1,18 @@
-// src/controllers/orderController.ts
 import { Request, Response } from 'express';
 import Order from '../models/order'; // Importing the Order model
-
-// Importing RequestHandler type from express
 import { RequestHandler } from 'express';
+
+// Defining the type for the request body in createOrder and updateOrder
+interface OrderRequestBody {
+  serviceId: number;
+  status: string;
+  quantity: number;
+  totalPrice: number;
+}
 
 // Function to create a new order
 export const createOrder: RequestHandler = async (
-  req: Request,
+  req: Request<{}, {}, OrderRequestBody>, // Specifying the request body type
   res: Response
 ): Promise<void> => {
   const { serviceId, status, quantity, totalPrice } = req.body;
@@ -48,7 +53,7 @@ export const getAllOrders: RequestHandler = async (
 
 // Function to get an order by its ID
 export const getOrderById: RequestHandler = async (
-  req: Request,
+  req: Request<{ id: string }>, // Specify the param type (id as a string)
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
@@ -71,7 +76,7 @@ export const getOrderById: RequestHandler = async (
 
 // Function to update an order
 export const updateOrder: RequestHandler = async (
-  req: Request,
+  req: Request<{ id: string }, {}, OrderRequestBody>, // Specify both param and body types
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
@@ -84,6 +89,7 @@ export const updateOrder: RequestHandler = async (
       return;
     }
 
+    // Update only the fields provided, falling back to current values if not provided
     order.status = status ?? order.status;
     order.quantity = quantity ?? order.quantity;
     order.totalPrice = totalPrice ?? order.totalPrice;
@@ -101,7 +107,7 @@ export const updateOrder: RequestHandler = async (
 
 // Function to delete an order
 export const deleteOrder: RequestHandler = async (
-  req: Request,
+  req: Request<{ id: string }>, // Specify the param type (id as a string)
   res: Response
 ): Promise<void> => {
   const { id } = req.params;

@@ -69,8 +69,11 @@ if (!['development', 'production', 'test'].includes(environment)) {
 // Select the configuration based on the environment
 const currentConfig = config[environment as 'development' | 'production' | 'test'];
 
-// Parse the database port or fall back to 3306
-const dbPort = parseInt(process.env.DB_PORT || '3306', 10);
+// Parse the database port or fall back to 3306, ensuring it's a valid number
+const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;
+if (isNaN(dbPort)) {
+  throw new Error(`Invalid DB_PORT: ${process.env.DB_PORT}. Falling back to default 3306.`);
+}
 
 // Create a Sequelize instance with the selected configuration
 const sequelize = new Sequelize(
