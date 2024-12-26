@@ -58,21 +58,21 @@ const config: { [key: string]: DatabaseConfig } = {
   },
 };
 
-// Define the environment type
-const environment = process.env.NODE_ENV || 'development'; // Could be 'development', 'production', or 'test'
+// Determine the current environment
+const environment = process.env.NODE_ENV || 'development';
 
-// Ensure environment is one of the expected values
+// Ensure the environment is valid
 if (!['development', 'production', 'test'].includes(environment)) {
   throw new Error(`Invalid environment: ${environment}`);
 }
 
-// Use the appropriate config based on the environment
-const currentConfig = config[environment as 'development' | 'production' | 'test']; // Type assertion to narrow down the environment type
+// Select the configuration based on the environment
+const currentConfig = config[environment as 'development' | 'production' | 'test'];
 
-// Convert the DB_PORT to a number or fall back to 3306
-const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;
+// Parse the database port or fall back to 3306
+const dbPort = parseInt(process.env.DB_PORT || '3306', 10);
 
-// Create the Sequelize instance with the selected configuration
+// Create a Sequelize instance with the selected configuration
 const sequelize = new Sequelize(
   currentConfig.database,
   currentConfig.username,
@@ -82,7 +82,7 @@ const sequelize = new Sequelize(
     dialect: currentConfig.dialect,
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
-    port: dbPort, // Pass the parsed port number
+    port: dbPort, // Use the parsed port here
   }
 );
 
@@ -92,11 +92,7 @@ const testConnection = async () => {
     await sequelize.authenticate();
     console.log('Database connection successful');
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Unable to connect to the database:', error.message);
-    } else {
-      console.error('Unknown error occurred:', error);
-    }
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
   }
 };
 
