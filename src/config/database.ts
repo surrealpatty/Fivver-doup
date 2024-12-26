@@ -23,7 +23,7 @@ interface SequelizeConfig {
 const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   development: {
     username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
+    password: process.env.DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -35,7 +35,7 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   },
   production: {
     username: process.env.PROD_DB_USER || 'root',
-    password: process.env.PROD_DB_PASSWORD || '',
+    password: process.env.PROD_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.PROD_DB_NAME || 'fivver_doup',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
@@ -47,7 +47,7 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',
+    password: process.env.TEST_DB_PASSWORD || '',  // Ensure password is fetched from environment variable
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
