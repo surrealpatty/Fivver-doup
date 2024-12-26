@@ -77,7 +77,7 @@ const sequelize = new Sequelize(
   currentConfig.password,
   {
     host: currentConfig.host,
-    dialect: currentConfig.dialect, // Correct dialect type as a string
+    dialect: currentConfig.dialect as 'mysql', // Cast the dialect here
     dialectOptions: currentConfig.dialectOptions,
     logging: currentConfig.logging,
     port: dbPort,
