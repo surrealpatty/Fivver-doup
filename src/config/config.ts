@@ -1,8 +1,16 @@
+// src/config/config.ts
+
+import * as dotenv from 'dotenv';
+
 // Load environment variables from the .env file
-require('dotenv').config();
+dotenv.config();
+
+// JWT Secret and Expiration configuration
+export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecretKey';
+export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 
 // Database configuration for different environments
-module.exports = {
+export default {
   development: {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
