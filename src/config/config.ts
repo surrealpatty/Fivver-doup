@@ -1,36 +1,70 @@
-import { config } from 'dotenv';
+import { Dialect } from 'sequelize';
 
-// Load environment variables from .env file
-config();
+// Load environment variables from the correct .env file based on NODE_ENV
+import * as dotenv from 'dotenv';
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env',
+});
 
-// Named exports for configuration values
-export const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
+// Log environment variables for debugging purposes (remove in production)
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('Database Configuration:', {
+  name: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME,
+  user: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER,
+  host: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST || '127.0.0.1',
+  port: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306,
+});
+
+// Ensure environment variables are set or throw an error if undefined
+const dbName = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME;
+const dbUser = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER;
+const dbPassword = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD;
+const dbHost = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST || '127.0.0.1';
+const dbPort = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306;
+
+// Throw an error if any required environment variables are missing
+if (!dbName || !dbUser || !dbPassword) {
+  throw new Error('Missing database configuration in environment variables.');
+}
 
 // Database configuration for different environments
-export const development = {
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',  // Ensure you have the correct password in your .env file
-  database: process.env.DB_NAME || 'fivver_doup',
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'mysql',
-  port: process.env.DB_PORT || 3306,
+const config = {
+  development: {
+    username: dbUser,
+    password: dbPassword,
+    database: dbName,
+    host: dbHost,
+    port: dbPort, // Add dbPort here
+    dialect: 'mysql' as Dialect,
+    logging: process.env.NODE_ENV === 'development', // Enable logging in development only
+    dialectOptions: {
+      charset: 'utf8mb4',
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+    },
+  },
+  test: {
+    username: dbUser,
+    password: dbPassword,
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: dbHost,
+    port: dbPort, // Add dbPort here
+    dialect: 'mysql' as Dialect,
+    dialectOptions: {
+      charset: 'utf8mb4',
+    },
+  },
+  production: {
+    username: dbUser,
+    password: dbPassword,
+    database: dbName,
+    host: dbHost,
+    port: dbPort, // Add dbPort here
+    dialect: 'mysql' as Dialect,
+    dialectOptions: {
+      charset: 'utf8mb4',
+      ssl: { rejectUnauthorized: false },
+    },
+  },
 };
 
-export const test = {
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'f0^:8t1#qaC7',  // Ensure this password matches your test database setup
-  database: process.env.DB_NAME || 'fivver_doup_test',
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'mysql',
-  port: process.env.DB_PORT || 3306,
-};
-
-export const production = {
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',  // Ensure you have the correct password in your production .env file
-  database: process.env.DB_NAME || 'fivver_doup_prod',
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'mysql',
-  port: process.env.DB_PORT || 3306,
-};
+export default config;
