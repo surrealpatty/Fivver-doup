@@ -1,35 +1,35 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS", // Use CommonJS for Node.js environments
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": "./src",
-    "resolveJsonModule": true,
-    "paths": {
+    "target": "ES2020", // Modern target
+    "module": "commonjs", // ESSENTIAL FOR JEST compatibility
+    "moduleResolution": "node", // Standard Node.js module resolution
+    "strict": true, // Enable strict type checking
+    "esModuleInterop": true, // Crucial for CommonJS/ES module compatibility
+    "skipLibCheck": true, // Skip type checking of declaration files (improves build speed)
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
+    "outDir": "./dist", // Output directory for compiled JavaScript
+    "rootDir": "./src", // Root directory of your source files
+    "baseUrl": "./src", // Base URL for module resolution (for path mappings)
+    "resolveJsonModule": true, // Allow importing JSON files as modules
+    "allowJs": true, // Allow including JavaScript files (if needed)
+    "checkJs": false, // Disable type checking for JavaScript files (if allowJs is true)
+    "sourceMap": true, // Generate source maps for debugging
+    "types": ["node", "jest"], // Include type definitions for Node.js and Jest
+    "noImplicitAny": true, // Disallow implicit 'any' types
+    "strictNullChecks": true, // Enable strict null checks
+    "noUnusedLocals": true, // Report unused local variables
+    "noUnusedParameters": true, // Report unused function parameters
+    "noImplicitReturns": true, // Ensure all code paths in a function return a value
+    "noFallthroughCasesInSwitch": true, // Prevent fallthrough in switch statements
+    "paths": { // Path mappings for cleaner imports
       "@config/*": ["config/*"],
-      "@models/*": ["models/*"], // Example path mappings
+      "@models/*": ["models/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"],
-      "*": ["*", "node_modules/*"] // Correct fallback
-    },
-    "allowJs": true, // If you have some JS files
-    "checkJs": false, // Usually false unless you want to type check JS
-    "sourceMap": true,
-    "types": ["node", "jest"],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+      "*": ["*", "node_modules/*"] // Fallback for other modules
+    }
   },
-  "include": ["src/**/*"], // Simpler include
-  "exclude": ["node_modules", "dist", "**/*.test.ts"] // Exclude test files here
+  "include": ["src/**/*"], // Include all TypeScript files in the src directory
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"] // Exclude node_modules, dist, and test files
 }
