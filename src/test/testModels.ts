@@ -25,7 +25,7 @@ const testModels = async () => {
       title: 'Test Service',
       description: 'A description of the test service.',
       price: 99.99,
-      userId: testUser.id.toString(), // Ensure userId is passed as a string
+      userId: testUser.id, // Pass userId as a number (no .toString() here)
     };
 
     // Create the test service using the ServiceCreationAttributes type

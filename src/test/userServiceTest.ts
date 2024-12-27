@@ -12,7 +12,7 @@ describe('Service Model Tests', () => {
     });
 
     const serviceData: ServiceCreationAttributes = {
-      userId: user.id.toString(), // Ensure userId is passed as a string
+      userId: user.id, // Pass userId as a number (no .toString() here)
       title: 'Test Service',
       description: 'A test service description',
       price: 100.0,
@@ -22,7 +22,7 @@ describe('Service Model Tests', () => {
     const service = await Service.create(serviceData);
 
     // Ensure the service has the correct properties
-    expect(service.userId).toBe(user.id.toString()); // Check if userId is a string
+    expect(service.userId).toBe(user.id); // Check if userId is a number
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(100.0);
   });
