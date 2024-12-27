@@ -1,74 +1,68 @@
-// src/config/database.ts
-import { Sequelize, Dialect } from 'sequelize';
-import dotenv from 'dotenv';
+import dotenv from 'dotenv'; // Import dotenv to load environment variables
+import express from 'express';
+import sequelize from './config/database'; // Import the sequelize instance for database connection
+import userRouter from './routes/user'; // Import the userRouter for handling user-related routes
 
-// Set environment (default to 'development')
-const env = process.env.NODE_ENV || 'development';
+// Load environment variables from .env file
+dotenv.config(); // Ensure to load environment variables before using them
 
-// Load environment variables
-dotenv.config({ path: `./.env.${env}` });
+// Create an Express app instance
+export const app = express(); 
+const port = process.env.PORT || 3000; // Use environment variable PORT or default to 3000
 
-// Ensure required environment variables exist for the current environment
-const requiredEnvVars =
-  {
-    development: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
-    test: [
-      'TEST_DB_USER',
-      'TEST_DB_PASSWORD',
-      'TEST_DB_NAME',
-      'TEST_DB_HOST',
-      'TEST_DB_PORT',
-    ],
-    production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
-  }[env] || [];
+// Middleware to parse JSON bodies
+app.use(express.json());
 
-requiredEnvVars.forEach((variable) => {
-  if (!process.env[variable]) {
-    throw new Error(`Missing environment variable: ${variable}`);
-  }
+// Use the userRouter for handling user-related routes
+app.use('/users', userRouter); 
+
+// Example route for the home page
+app.get('/', (_, res) => {
+  res.send('Welcome to Fiverr Clone!');
 });
 
-// Define Sequelize configuration based on the environment
-const config = {
-  development: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql', // Use a valid string literal for the dialect
-    logging: true, // Set a default value for logging
-  },
-  test: {
-    username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',
-    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
-    host: process.env.TEST_DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
-    dialect: 'mysql', // Use a valid string literal for the dialect
-    logging: false,
-  },
-  production: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql', // Use a valid string literal for the dialect
-    logging: true, // Set a default value for logging
-  },
+// Function to test the database connection
+const testDatabaseConnection = async (): Promise<void> => {
+  try {
+    await sequelize.authenticate(); // Attempt to authenticate with the database
+    console.log('Database connection established.');
+  } catch (error: unknown) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    throw new Error('Database connection failed'); // Throw an error to stop further execution if the connection fails
+  }
 };
 
-// Initialize Sequelize instance
-const sequelize = new Sequelize({
-  username: config[env as keyof typeof config].username,
-  password: config[env as keyof typeof config].password,
-  database: config[env as keyof typeof config].database,
-  host: config[env as keyof typeof config].host,
-  port: config[env as keyof typeof config].port,
-  dialect: config[env as keyof typeof config].dialect as Dialect,
-  logging: config[env as keyof typeof config].logging ?? true,
-});
+// Function to sync Sequelize models (with options to automatically alter the database schema)
+const syncDatabase = async (): Promise<void> => {
+  try {
+    await sequelize.sync({ alter: true }); // Alter database schema to match the models
+    console.log('Database synchronized successfully');
+  } catch (error: unknown) {
+    console.error('Error synchronizing database:', error instanceof Error ? error.message : error);
+    throw new Error('Database synchronization failed');
+  }
+};
 
-// Export the sequelize instance as the default export
-export default sequelize;
+// Function to initialize the database connection and synchronization process
+const initializeDatabase = async (): Promise<void> => {
+  try {
+    await testDatabaseConnection(); // Test the database connection first
+    await syncDatabase(); // Sync models with the database schema once the connection is established
+  } catch (error: unknown) {
+    console.error('Error initializing the database:', error instanceof Error ? error.message : error);
+    process.exit(1); // Exit the application if database initialization fails
+  }
+};
+
+// Initialize the database before starting the server
+initializeDatabase()
+  .then(() => {
+    // Only start the server if the database connection and synchronization are successful
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error: unknown) => {
+    console.error('Server failed to start due to database error:', error instanceof Error ? error.message : error);
+    process.exit(1); // Exit if the server cannot start due to database issues
+  });

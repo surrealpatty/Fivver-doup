@@ -1,20 +1,19 @@
-import { Sequelize } from 'sequelize';
+import { testConnection } from './src/config/database'; // Adjusted import path
+import sequelize from './src/config/database'; // Import sequelize to close the connection after tests
 
-const sequelize = new Sequelize('fivver_doup', 'root', 'your_password', {
-  host: 'localhost',
-  dialect: 'mysql',
-  dialectOptions: {
-    charset: 'utf8mb4',
-  },
+// This setup file runs before any tests are executed
+beforeAll(async () => {
+  // Test database connection
+  const isConnected = await testConnection();
+  if (!isConnected) {
+    throw new Error('Database connection failed. Tests cannot be run.');
+  }
+
+  // You can add additional database setup here if needed, like syncing models
+  // await sequelize.sync({ force: true }); // Uncomment this line if you want to sync the models before tests
 });
 
-export const testConnection = async (): Promise<boolean> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection successful');
-    return true;
-  } catch (error: any) {
-    console.error('Unable to connect to the database:', error.message || error);
-    return false;
-  }
-};
+// Optionally, clean up by closing the database connection after all tests have run
+afterAll(async () => {
+  await sequelize.close(); // Ensure the connection is closed after tests
+});
