@@ -1,19 +1,18 @@
-import dotenv from 'dotenv';
-import { sequelize } from '../config/database'; // Ensure the correct path to your sequelize instance
+import { sequelize } from '../config/database';
 
-// Load test-specific environment variables
-dotenv.config({ path: '.env.test' });
-
-const setupTestDatabase = async () => {
+const setup = async () => {
   try {
-    // Ensure the database connection works
+    // Ensure the test database is connected
     await sequelize.authenticate();
-    console.log('Test database connected successfully.');
+    console.log('Connected to the test database.');
+
+    // Optionally sync the database (e.g., recreate tables for clean tests)
+    await sequelize.sync({ force: true });
+    console.log('Test database synced.');
   } catch (error) {
-    console.error('Error connecting to the test database:', error);
+    console.error('Error setting up test database:', error);
     process.exit(1);
   }
 };
 
-// Call the setup function
-setupTestDatabase();
+export default setup;
