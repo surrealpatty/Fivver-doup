@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
-dotenv.config({ path: 'src/.env.test' });  // Load environment variables from .env.test
+
+// Load environment variables from .env.test
+dotenv.config({ path: './.env.test' });
 
 // Import sequelize from your database configuration
 import { sequelize } from '../config/database';
