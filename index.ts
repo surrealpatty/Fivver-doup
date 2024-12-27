@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 import express from 'express';
-import { sequelize } from './config/database';  // Adjust if needed
-import userRouter from './routes/user';  // Adjust if needed
+import { sequelize } from '@config/database'; // Use @config instead of relative paths
+import userRouter from '@routes/user'; // Use @routes instead of relative paths
+
 
 // Load environment variables from .env file based on NODE_ENV
 const env = process.env.NODE_ENV || 'development';

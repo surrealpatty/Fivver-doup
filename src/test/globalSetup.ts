@@ -1,7 +1,7 @@
-import sequelize from '../config/database'; // Correct, default import
 import dotenv from 'dotenv';
+import sequelize from '../config/database'; // Correct, default import
 
-// Load environment variables (ensure the correct .env file is being loaded)
+// Load environment variables from .env.test file (ensure this file is available in the root directory)
 dotenv.config({ path: './.env.test' });  // If you have a separate test environment file
 
 // Log environment variables for debugging
@@ -17,20 +17,24 @@ console.log("DB_PORT:", process.env.DB_PORT);
  */
 export default async function globalSetup() {
   try {
+    // Destructure the environment variables for easier access
+    const { DB_USER, DB_PASSWORD, DB_NAME, DB_HOST, DB_PORT } = process.env;
+
     // Check if all required environment variables are present
-    const requiredEnvVars = ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'];
-    requiredEnvVars.forEach((variable) => {
-      if (!process.env[variable]) {
-        throw new Error(`Missing environment variable: ${variable}`);
-      }
-    });
+    if (!DB_USER || !DB_PASSWORD || !DB_NAME || !DB_HOST || !DB_PORT) {
+      throw new Error('Missing required environment variables');
+    }
+
+    // Log for debugging to ensure values are correct
+    console.log("Using database:", DB_NAME);
+    console.log("Connecting to DB at:", DB_HOST, "on port", DB_PORT);
 
     // Establish a connection to the test database
     await sequelize.authenticate();
     console.log('Test database connection established successfully.');
 
-    // Sync the database and reset the schema
-    await sequelize.sync({ force: true }); // Force drops and recreates tables
+    // Sync the database and reset the schema (force drop and recreate tables)
+    await sequelize.sync({ force: true });
     console.log('Test database schema synced successfully.');
   } catch (error) {
     console.error('Error during test database setup:', error);

@@ -6,43 +6,29 @@ type Environment = 'development' | 'test' | 'production';
 
 // Load environment variables based on the current NODE_ENV
 const env = (process.env.NODE_ENV || 'development') as Environment;
-dotenv.config({ path: `./src/.env.${env}` }); // Load .env.test, .env.development, or .env.production
+dotenv.config({ path: `./src/.env.${env}` });  // Load .env.test, .env.development, or .env.production
 
-// Ensure the required environment variables are present
-const requiredEnvVars = [
-  'DB_USER',
-  'DB_PASSWORD',
-  'DB_NAME',
-  'DB_HOST',
-  'DB_PORT',
-];
+// Log the current environment for debugging
+console.log(`Running in ${env} environment`);
 
-const testEnvVars = [
-  'TEST_DB_USER',
-  'TEST_DB_PASSWORD',
-  'TEST_DB_NAME',
-  'TEST_DB_HOST',
-  'TEST_DB_PORT',
-];
+// Define the required environment variables for each environment
+const envVars = {
+  development: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
+  test: ['TEST_DB_USER', 'TEST_DB_PASSWORD', 'TEST_DB_NAME', 'TEST_DB_HOST', 'TEST_DB_PORT'],
+  production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
+};
 
-const productionEnvVars = [
-  'DB_USER',
-  'DB_PASSWORD',
-  'DB_NAME',
-  'DB_HOST',
-  'DB_PORT',
-];
+// Check if required environment variables are defined for the current environment
+const requiredEnvVars = envVars[env];
 
-const missingEnvVars = env === 'test' ? testEnvVars : env === 'production' ? productionEnvVars : requiredEnvVars;
-
-missingEnvVars.forEach((variable) => {
+// Ensure all required environment variables are present
+requiredEnvVars.forEach((variable) => {
   if (!process.env[variable]) {
     throw new Error(`Missing environment variable: ${variable}`);
   }
 });
 
-// Log the current environment and loaded environment variables for debugging
-console.log(`Running in ${env} environment`);
+// Log the loaded environment variables for debugging (can be removed later)
 console.log('Loaded environment variables:', {
   DB_USER: process.env.DB_USER,
   DB_PASSWORD: process.env.DB_PASSWORD,
@@ -51,7 +37,7 @@ console.log('Loaded environment variables:', {
   DB_PORT: process.env.DB_PORT,
 });
 
-// Database configurations for different environments
+// Database configuration object for different environments
 const config: Record<Environment, { 
   username: string; 
   password: string; 
@@ -76,7 +62,7 @@ const config: Record<Environment, {
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
     dialect: 'mysql',
-    logging: false, // Disable logging in test environment
+    logging: false,  // Disable logging in the test environment
   },
   production: {
     username: process.env.DB_USER || 'root',
@@ -99,7 +85,7 @@ const sequelize = new Sequelize({
   logging: config[env].logging,
 });
 
-// Log the Sequelize configuration for debugging
+// Log the Sequelize configuration for debugging (can be removed later)
 console.log('Sequelize configuration:', {
   username: config[env].username,
   database: config[env].database,
