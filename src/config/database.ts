@@ -1,41 +1,49 @@
-import { Sequelize, Dialect } from 'sequelize';
 import * as dotenv from 'dotenv';
+import { Dialect } from 'sequelize';
 
-// Load environment variables from .env.test or .env based on NODE_ENV
-dotenv.config({ path: process.env.NODE_ENV === 'test' ? './src/.env.test' : './src/.env' });
+// Define the allowed environment keys
+type Environment = 'development' | 'test' | 'production';
 
-// Database configuration based on environment
-const dbConfig = {
-  username: process.env.TEST_DB_USER || 'root',         // Test DB username
-  password: process.env.TEST_DB_PASSWORD || '',        // Test DB password
-  database: process.env.TEST_DB_NAME || 'fivver_doup', // Test DB name
-  host: process.env.TEST_DB_HOST || 'localhost',       // Test DB host
-  port: parseInt(process.env.TEST_DB_PORT || '3306'),  // Test DB port
-  dialect: 'mysql' as Dialect,                         // Explicitly type dialect as Dialect
+// Load environment variables based on the current NODE_ENV
+const env = (process.env.NODE_ENV || 'development') as Environment;
+dotenv.config({ path: `./src/.env.${env}` }); // Load .env.test, .env.development, or .env.production
+
+// Database configurations for different environments
+const config: Record<Environment, { 
+  username: string; 
+  password: string; 
+  database: string; 
+  host: string; 
+  port: number; 
+  dialect: Dialect; 
+  logging?: boolean; 
+}> = {
+  development: {
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    dialect: 'mysql',
+  },
+  test: {
+    username: process.env.TEST_DB_USER || 'root',
+    password: process.env.TEST_DB_PASSWORD || '',
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: process.env.TEST_DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
+    dialect: 'mysql',
+    logging: false, // Disable logging in test environment
+  },
+  production: {
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    dialect: 'mysql',
+  },
 };
 
-const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.username,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    port: dbConfig.port,
-    dialect: dbConfig.dialect,
-    logging: false, // Disable logging for test environment
-  }
-);
-
-// Test database connection
-const connectTestDatabase = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Test database connected successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the test database:', error);
-    throw error;  // Ensure tests fail if DB connection fails
-  }
-};
-
-// Export sequelize and test connection function
-export { sequelize, connectTestDatabase };
+// Export the appropriate environment configuration
+export default config[env];
