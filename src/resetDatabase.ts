@@ -1,4 +1,5 @@
-import sequelize from '../config/database'; // Correct, default import
+import sequelize from '@config/database';
+
 
 
 // Function to reset the database
