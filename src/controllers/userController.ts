@@ -2,7 +2,15 @@ import { User } from '../models'; // Adjust the import based on your models
 import bcrypt from 'bcryptjs'; // bcrypt for password hashing and comparison
 
 // Register user function
-export const registerUser = async ({ username, email, password }: { username: string, email: string, password: string }) => {
+export const registerUser = async ({
+  username,
+  email,
+  password,
+}: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   try {
     // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,7 +62,10 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 // Update user function
-export const updateUser = async (id: string, updateData: { username?: string, email?: string, password?: string }) => {
+export const updateUser = async (
+  id: string,
+  updateData: { username?: string; email?: string; password?: string }
+) => {
   try {
     const user = await User.findByPk(id);
     if (!user) {

@@ -7,7 +7,9 @@ describe('Database Connection', () => {
 
   // Set up mocks before each test
   beforeEach(() => {
-    mockAuthenticate = jest.spyOn(sequelize, 'authenticate').mockResolvedValue(); // Mock authenticate method
+    mockAuthenticate = jest
+      .spyOn(sequelize, 'authenticate')
+      .mockResolvedValue(); // Mock authenticate method
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(); // Mock console log
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(); // Mock console error
   });
@@ -28,7 +30,9 @@ describe('Database Connection', () => {
     const connection = await testConnection();
 
     expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Ensure mockAuthenticate was called
-    expect(consoleLogSpy).toHaveBeenCalledWith('Database connection successful'); // Ensure console log message is correct
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Database connection successful'
+    ); // Ensure console log message is correct
     expect(connection).toBeTruthy(); // Ensure connection is successful
   });
 

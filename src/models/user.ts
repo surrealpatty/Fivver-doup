@@ -1,7 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database'; // Correct, default import
 
-
 // Define the attributes of the User model
 export interface UserAttributes {
   id: number;
@@ -14,10 +13,14 @@ export interface UserAttributes {
 }
 
 // Define the attributes required for creating a new User
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
 // Define the User model class
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
   public id!: number;
   public username!: string;
   public email!: string;

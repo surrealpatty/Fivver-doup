@@ -1,5 +1,10 @@
 import express, { Request, Response } from 'express';
-import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import controller functions
+import {
+  registerUser,
+  loginUser,
+  updateUser,
+  deleteUser,
+} from '../controllers/userController'; // Import controller functions
 
 const router = express.Router(); // Initialize router
 

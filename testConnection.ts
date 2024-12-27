@@ -6,9 +6,9 @@ dotenv.config();
 
 // Create a new Sequelize instance with the values from environment variables
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'fivver_doup',       // Default to 'fivver_doup' if DB_NAME is not set
-  process.env.DB_USER || 'root',             // Default to 'root' if DB_USER is not set
-  process.env.DB_PASSWORD || '',             // Default to empty string if DB_PASSWORD is not set
+  process.env.DB_NAME || 'fivver_doup', // Default to 'fivver_doup' if DB_NAME is not set
+  process.env.DB_USER || 'root', // Default to 'root' if DB_USER is not set
+  process.env.DB_PASSWORD || '', // Default to empty string if DB_PASSWORD is not set
   {
     host: process.env.DB_HOST || 'localhost', // Default to 'localhost' if DB_HOST is not set
     dialect: 'mysql',
@@ -17,7 +17,8 @@ const sequelize = new Sequelize(
 );
 
 // Test the database connection
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
     console.log('Database connected successfully!');
   })

@@ -9,11 +9,18 @@ const env = process.env.NODE_ENV || 'development';
 dotenv.config({ path: `./.env.${env}` });
 
 // Ensure required environment variables exist for the current environment
-const requiredEnvVars = {
-  development: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
-  test: ['TEST_DB_USER', 'TEST_DB_PASSWORD', 'TEST_DB_NAME', 'TEST_DB_HOST', 'TEST_DB_PORT'],
-  production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
-}[env] || [];
+const requiredEnvVars =
+  {
+    development: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
+    test: [
+      'TEST_DB_USER',
+      'TEST_DB_PASSWORD',
+      'TEST_DB_NAME',
+      'TEST_DB_HOST',
+      'TEST_DB_PORT',
+    ],
+    production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
+  }[env] || [];
 
 requiredEnvVars.forEach((variable) => {
   if (!process.env[variable]) {
@@ -29,8 +36,8 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use a valid string literal for the dialect
-    logging: true,  // Set a default value for logging
+    dialect: 'mysql', // Use a valid string literal for the dialect
+    logging: true, // Set a default value for logging
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
@@ -38,7 +45,7 @@ const config = {
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use a valid string literal for the dialect
+    dialect: 'mysql', // Use a valid string literal for the dialect
     logging: false,
   },
   production: {
@@ -47,8 +54,8 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use a valid string literal for the dialect
-    logging: true,  // Set a default value for logging
+    dialect: 'mysql', // Use a valid string literal for the dialect
+    logging: true, // Set a default value for logging
   },
 };
 

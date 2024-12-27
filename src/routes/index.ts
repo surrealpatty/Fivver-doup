@@ -4,7 +4,8 @@ import express, { Request, Response } from 'express'; // Import Request
 const serviceRouter = express.Router();
 
 // Define your service-related routes here
-serviceRouter.get('/', (_: Request, res: Response) => { // Use underscore for unused params
+serviceRouter.get('/', (_: Request, res: Response) => {
+  // Use underscore for unused params
   res.send('Service routes');
 });
 

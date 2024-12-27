@@ -1,15 +1,13 @@
-
 import sequelize from '../config/database'; // Correct, default import
 import dotenv from 'dotenv';
-dotenv.config({ path: './.env.test' });  // Ensure .env.test is loaded in the test environment
-
+dotenv.config({ path: './.env.test' }); // Ensure .env.test is loaded in the test environment
 
 // Log environment variables for debugging
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
-console.log("DB_NAME:", process.env.DB_NAME);
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_PORT:", process.env.DB_PORT);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_PORT:', process.env.DB_PORT);
 
 /**
  * Jest global setup for initializing the test database.
@@ -26,8 +24,8 @@ export default async function globalSetup() {
     }
 
     // Log for debugging to ensure values are correct
-    console.log("Using database:", DB_NAME);
-    console.log("Connecting to DB at:", DB_HOST, "on port", DB_PORT);
+    console.log('Using database:', DB_NAME);
+    console.log('Connecting to DB at:', DB_HOST, 'on port', DB_PORT);
 
     // Establish a connection to the test database
     await sequelize.authenticate();

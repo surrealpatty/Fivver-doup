@@ -2,7 +2,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database'; // Correct, default import
 
-
 class Review extends Model {
   public id!: number;
   public serviceId!: number;

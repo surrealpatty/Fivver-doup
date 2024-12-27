@@ -1,5 +1,7 @@
-const request = require('supertest');
-const { app } = require('../dist/index'); // Import 'app' as a named import from the compiled JS file
+// C:\surrealsystems\Fivver-doup\src\test\test.ts
+
+import request from 'supertest'; // Replace `require()` with `import`
+import { app } from '../index'; // Import 'app' from the compiled JS file
 
 describe('Basic Test Suite', () => {
   // Test for ensuring the test file runs correctly

@@ -1,3 +1,4 @@
+// src/types/user.d.ts
 import { Request } from 'express';
 
 // IUserAttributes interface for model instances (used after the user is created)
@@ -22,8 +23,8 @@ export interface UserPayload {
   username?: string; // The user's username (optional)
 }
 
-// Optionally, you could assert that `email` and `username` are never `undefined` in the request context
-// when they are expected, as in the AuthRequest type where we assume user data is available after auth.
+// AuthRequest interface extends Express Request type to include `user` property
+// This represents the authenticated user data embedded in the JWT
 export interface AuthRequest extends Request {
   user?: Omit<UserPayload, 'email'> & { email: string }; // Make email a required string in this case
 }

@@ -18,6 +18,6 @@ export default async function globalSetup() {
     console.log('Test database synced.');
   } catch (error) {
     console.error('Error setting up test database:', error);
-    throw error;  // Re-throw error to ensure test setup fails if database setup fails
+    throw error; // Re-throw error to ensure test setup fails if database setup fails
   }
 }

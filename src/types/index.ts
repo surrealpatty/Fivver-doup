@@ -1,4 +1,4 @@
-import { Request } from 'express';
+// C:\surrealsystems\Fivver-doup\src\types\index.ts
 
 /**
  * IUserAttributes interface represents the attributes of a user model instance
@@ -34,6 +34,6 @@ export interface UserPayload {
  * AuthRequest interface extends the Express Request type to include a `user` property.
  * This property represents the authenticated user's data extracted from the JWT.
  */
-export interface AuthRequest extends Request {
+export interface AuthRequest {
   user?: UserPayload; // `user` is optional and is added after token validation
 }

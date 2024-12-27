@@ -1,4 +1,4 @@
-import { Request } from 'express';
+// C:\surrealsystems\Fivver-doup\src\types\authMiddleware.d.ts
 
 // Augmenting the Express Request interface to include userId
 declare global {

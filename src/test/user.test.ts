@@ -68,7 +68,10 @@ describe('User Controller Tests', () => {
       .set('Authorization', `Bearer ${token}`); // Send the token in the Authorization header
 
     expect(deleteResponse.status).toBe(200); // Expect HTTP 200 OK
-    expect(deleteResponse.body).toHaveProperty('message', 'User deleted successfully'); // Expect a success message
+    expect(deleteResponse.body).toHaveProperty(
+      'message',
+      'User deleted successfully'
+    ); // Expect a success message
   });
 
   // After all tests, delete the test user and close the Sequelize connection

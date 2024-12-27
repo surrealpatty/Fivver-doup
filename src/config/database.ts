@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 const env = process.env.NODE_ENV || 'development';
 
 // Load the correct environment variables file based on the current environment
-dotenv.config({ path: `./.env.${env}` });  // This will load .env.development, .env.test, or .env.production based on the environment
+dotenv.config({ path: `./.env.${env}` }); // This will load .env.development, .env.test, or .env.production based on the environment
 
 // Ensure the required environment variables are defined for the current environment
 const requiredEnvVars = {
@@ -14,7 +14,6 @@ const requiredEnvVars = {
   production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
 }[env] || [];
 
-// Check if the environment variables are missing
 requiredEnvVars.forEach((variable) => {
   if (!process.env[variable]) {
     throw new Error(`Missing environment variable: ${variable}`);
@@ -29,8 +28,8 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use 'mysql' for MySQL databases
-    logging: true,  // Set a default value for logging
+    dialect: 'mysql', // Use 'mysql' for MySQL databases
+    logging: true, // Set a default value for logging
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
@@ -38,8 +37,8 @@ const config = {
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use 'mysql' for MySQL databases
-    logging: false,  // Disable logging for tests
+    dialect: 'mysql', // Use 'mysql' for MySQL databases
+    logging: false, // Disable logging for tests
   },
   production: {
     username: process.env.DB_USER || 'root',
@@ -47,8 +46,8 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',  // Use 'mysql' for MySQL databases
-    logging: true,  // Enable logging in production
+    dialect: 'mysql', // Use 'mysql' for MySQL databases
+    logging: true, // Enable logging in production
   },
 };
 
@@ -59,7 +58,7 @@ const sequelize = new Sequelize({
   database: config[env as keyof typeof config].database,
   host: config[env as keyof typeof config].host,
   port: config[env as keyof typeof config].port,
-  dialect: config[env as keyof typeof config].dialect as Dialect,  // Ensure 'dialect' is treated as a valid Dialect type
+  dialect: config[env as keyof typeof config].dialect as Dialect, // Ensure 'dialect' is treated as a valid Dialect type
   logging: config[env as keyof typeof config].logging ?? true, // Default to 'true' if logging is undefined
 });
 

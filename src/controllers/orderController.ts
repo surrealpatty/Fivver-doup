@@ -1,33 +1,47 @@
 import { Request, Response } from 'express';
-import Order from '../models/order';  // Correct import for your Order model
+import Order from '../models/order'; // Correct import for your Order model
 
 // Example controller functions (replace with actual implementations)
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const { serviceId, status, quantity, totalPrice } = req.body;
-    const order = await Order.create({ serviceId, status, quantity, totalPrice });
+    const order = await Order.create({
+      serviceId,
+      status,
+      quantity,
+      totalPrice,
+    });
     res.status(201).json(order);
   } catch (error: unknown) {
     // Type-cast error to Error to safely access its message
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Error creating order', error: error.message });
+      res
+        .status(500)
+        .json({ message: 'Error creating order', error: error.message });
     } else {
-      res.status(500).json({ message: 'Unknown error occurred during order creation' });
+      res
+        .status(500)
+        .json({ message: 'Unknown error occurred during order creation' });
     }
   }
 };
 
-export const getAllOrders = async (_: Request, res: Response) => { // req is no longer used
+export const getAllOrders = async (_: Request, res: Response) => {
+  // req is no longer used
   try {
     const orders = await Order.findAll();
     res.status(200).json(orders);
   } catch (error: unknown) {
     // Type-cast error to Error to safely access its message
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Error fetching orders', error: error.message });
+      res
+        .status(500)
+        .json({ message: 'Error fetching orders', error: error.message });
     } else {
-      res.status(500).json({ message: 'Unknown error occurred during fetching orders' });
+      res
+        .status(500)
+        .json({ message: 'Unknown error occurred during fetching orders' });
     }
   }
 };
@@ -43,9 +57,13 @@ export const getOrderById = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     // Type-cast error to Error to safely access its message
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Error fetching order', error: error.message });
+      res
+        .status(500)
+        .json({ message: 'Error fetching order', error: error.message });
     } else {
-      res.status(500).json({ message: 'Unknown error occurred during fetching order' });
+      res
+        .status(500)
+        .json({ message: 'Unknown error occurred during fetching order' });
     }
   }
 };
@@ -63,9 +81,13 @@ export const updateOrder = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     // Type-cast error to Error to safely access its message
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Error updating order', error: error.message });
+      res
+        .status(500)
+        .json({ message: 'Error updating order', error: error.message });
     } else {
-      res.status(500).json({ message: 'Unknown error occurred during order update' });
+      res
+        .status(500)
+        .json({ message: 'Unknown error occurred during order update' });
     }
   }
 };
@@ -82,9 +104,13 @@ export const deleteOrder = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     // Type-cast error to Error to safely access its message
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Error deleting order', error: error.message });
+      res
+        .status(500)
+        .json({ message: 'Error deleting order', error: error.message });
     } else {
-      res.status(500).json({ message: 'Unknown error occurred during order deletion' });
+      res
+        .status(500)
+        .json({ message: 'Unknown error occurred during order deletion' });
     }
   }
 };

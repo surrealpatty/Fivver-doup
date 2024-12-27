@@ -1,6 +1,9 @@
 // src/routes/service.ts
 import express from 'express';
-import { createServiceController, getServicesController } from '../controllers/serviceController'; // Corrected import to use controller functions
+import {
+  createServiceController,
+  getServicesController,
+} from '../controllers/serviceController'; // Corrected import to use controller functions
 
 const router = express.Router();
 

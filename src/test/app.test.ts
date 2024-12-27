@@ -27,7 +27,9 @@ beforeAll(async () => {
 describe('Basic Test Suite', () => {
   it('should respond with a message from the root endpoint', async () => {
     if (!app || !connectionStatus) {
-      console.warn('Skipping tests due to app load failure or database connection failure');
+      console.warn(
+        'Skipping tests due to app load failure or database connection failure'
+      );
       return; // Skip the test if app could not be loaded or database connection failed
     }
 

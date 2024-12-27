@@ -20,7 +20,8 @@ export const verifyToken = (
     return res.status(403).json({ message: 'No token provided' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => { // Explicitly typing err and decoded
+  jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
+    // Explicitly typing err and decoded
     if (err) {
       return res
         .status(401)

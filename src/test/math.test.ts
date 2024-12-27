@@ -1,28 +1,11 @@
-// src/__tests__/order.test.js
+// src/test/math.test.ts
+import * as mathLib from 'math-lib'; // If it's an npm package
 
-// Import mock data and other necessary modules
-const mockUsers = require('../mockData'); // Adjust the path as needed
-
-jest.mock('src/models/user', () => ({
-  findByPk: jest.fn().mockResolvedValue(mockUsers[0]), // Mocked user fetch
-}));
-
-// Import the function or module you are testing
-const { yourFunctionOrService } = require('../yourService'); // Adjust path as needed
-
-// Test suite for Order functionality
-describe('Order Tests', () => {
-  it('should fetch the user correctly', async () => {
-    const user = await yourFunctionOrService(); // Replace with the function you're testing
-    expect(user).toEqual(mockUsers[0]); // Ensure it returns the mocked user
+describe('Math Function Tests', () => {
+  it('should add two numbers correctly', () => {
+    const result = mathLib.add(2, 3);
+    expect(result).toBe(5);
   });
 
-  // Additional tests can be added here, following the pattern
-  it('should handle invalid user id', async () => {
-    jest
-      .spyOn(require('src/models/user'), 'findByPk')
-      .mockResolvedValueOnce(null); // Mock no user found
-    const user = await yourFunctionOrService(999); // Try with an invalid user ID
-    expect(user).toBeNull(); // Expect the result to be null when no user is found
-  });
+  // Other test cases can follow
 });

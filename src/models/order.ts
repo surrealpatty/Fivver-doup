@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';  // Ensure DataTypes is correctly imported
+import { Model, DataTypes } from 'sequelize'; // Ensure DataTypes is correctly imported
 import sequelize from '../config/database'; // Correct, default import
 
 // Define Order attributes interface
@@ -50,9 +50,9 @@ Order.init(
     },
   },
   {
-    sequelize,  // Sequelize instance from the database config
+    sequelize, // Sequelize instance from the database config
     modelName: 'Order',
-    tableName: 'orders',  // Make sure this matches your database table name
+    tableName: 'orders', // Make sure this matches your database table name
     timestamps: true, // Optional: add if your table has createdAt/updatedAt fields
   }
 );

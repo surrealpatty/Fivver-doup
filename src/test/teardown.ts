@@ -2,7 +2,6 @@
 
 import sequelize from '../config/database'; // Correct, default import
 
-
 export default async function globalTeardown() {
   try {
     // Close the database connection after tests

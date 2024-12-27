@@ -40,7 +40,10 @@ export default {
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined, // Enable SSL only in production
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? { rejectUnauthorized: false }
+          : undefined, // Enable SSL only in production
     },
   },
 };

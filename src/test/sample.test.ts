@@ -4,7 +4,7 @@ import { createService, getServices } from '../services/serviceService';
 // Mocking the functions in servicesController
 jest.mock('../controllers/serviceController', () => ({
   createService: jest.fn(),
-  getServices: jest.fn()
+  getServices: jest.fn(),
 }));
 
 describe('Service Functions', () => {
@@ -15,17 +15,21 @@ describe('Service Functions', () => {
   // Test for creating a service
   test('should create a new service', async () => {
     // Mock created service object
-    const mockCreatedService = { serviceId: 1, title: 'Test Service', message: 'Service created successfully' };
+    const mockCreatedService = {
+      serviceId: 1,
+      title: 'Test Service',
+      message: 'Service created successfully',
+    };
 
     // Mock the createService function to resolve with the mockCreatedService
     (createService as jest.Mock).mockResolvedValue(mockCreatedService);
 
     // Call the createService function with corrected input
     const result = await createService({
-      userId: '1',  // Add userId if required
-      title: 'Test Service',  // Use 'title' instead of 'name'
+      userId: '1', // Add userId if required
+      title: 'Test Service', // Use 'title' instead of 'name'
       description: 'Description for test service', // description is not used in the mock result, so don't check it
-      price: 100,  // Add price if it's part of the input
+      price: 100, // Add price if it's part of the input
     });
 
     // Verify the mock was called once
@@ -44,8 +48,16 @@ describe('Service Functions', () => {
   test('should retrieve all services', async () => {
     // Mock services array
     const mockServices = [
-      { serviceId: 1, title: 'Service 1', description: 'Description for service 1' },
-      { serviceId: 2, title: 'Service 2', description: 'Description for service 2' }
+      {
+        serviceId: 1,
+        title: 'Service 1',
+        description: 'Description for service 1',
+      },
+      {
+        serviceId: 2,
+        title: 'Service 2',
+        description: 'Description for service 2',
+      },
     ];
 
     // Mock the getServices function to resolve with the mockServices array
