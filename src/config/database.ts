@@ -1,26 +1,26 @@
 import dotenv from 'dotenv';
 import { Sequelize, Dialect } from 'sequelize';
 
-// Load the appropriate environment variables
-dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
+// Load the appropriate environment variables based on the NODE_ENV value
+dotenv.config({ path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env' });
 
-// Add debug logs for environment variable validation
+// Log environment variables for debugging purposes
 console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('Database Config:', {
-  name: process.env.TEST_DB_NAME || process.env.DB_NAME,
-  user: process.env.TEST_DB_USER || process.env.DB_USER,
-  host: process.env.TEST_DB_HOST || process.env.DB_HOST || '127.0.0.1',
-  port: process.env.TEST_DB_PORT || process.env.DB_PORT || 3306,
+console.log('Database Configuration:', {
+  name: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME,
+  user: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER,
+  host: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST || '127.0.0.1',
+  port: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306,
 });
 
-// Configure Sequelize based on environment variables
+// Configure Sequelize based on the environment variables
 const sequelize = new Sequelize(
-  process.env.TEST_DB_NAME || process.env.DB_NAME || '',
-  process.env.TEST_DB_USER || process.env.DB_USER || '',
-  process.env.TEST_DB_PASSWORD || process.env.DB_PASSWORD || '',
+  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME) as string, // Type assertion
+  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER) as string, // Type assertion
+  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD) as string, // Type assertion
   {
-    host: process.env.TEST_DB_HOST || process.env.DB_HOST || '127.0.0.1',
-    port: Number(process.env.TEST_DB_PORT || process.env.DB_PORT) || 3306,
+    host: (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST) || '127.0.0.1', // Default to '127.0.0.1' if undefined
+    port: Number(process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT) || 3306, // Default to 3306 if undefined
     dialect: 'mysql' as Dialect, // Explicitly set the dialect
     logging: process.env.NODE_ENV === 'development', // Enable logging only in development
     dialectOptions: {
@@ -30,7 +30,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// Function to test database connection
+// Function to test the database connection
 const initializeDatabase = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
