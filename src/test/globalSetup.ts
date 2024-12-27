@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
-import { sequelize } from '../config/database'; // Ensure this path points to your Sequelize instance
+import sequelize from '../config/database'; // Correct, default import
+
 
 // Load the environment variables for the test environment
 dotenv.config({ path: './src/.env.test' });

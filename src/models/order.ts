@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';  // Ensure DataTypes is correctly imported
-import { sequelize } from '../config/database';  // Ensure the sequelize instance is correct
+import sequelize from '../config/database'; // Correct, default import
 
 // Define Order attributes interface
 interface OrderAttributes {

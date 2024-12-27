@@ -1,6 +1,7 @@
 // test/teardown.ts
 
-import { sequelize } from '../../src/config/database'; // Adjusted path to go two levels up
+import sequelize from '../config/database'; // Correct, default import
+
 
 export default async function globalTeardown() {
   try {

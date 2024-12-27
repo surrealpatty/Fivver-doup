@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { Dialect } from 'sequelize';
+import { Sequelize, Dialect } from 'sequelize';
 
 // Define the allowed environment keys
 type Environment = 'development' | 'test' | 'production';
@@ -45,5 +45,15 @@ const config: Record<Environment, {
   },
 };
 
-// Export the appropriate environment configuration
-export default config[env];
+// Create and export the Sequelize instance
+const sequelize = new Sequelize({
+  username: config[env].username,
+  password: config[env].password,
+  database: config[env].database,
+  host: config[env].host,
+  port: config[env].port,
+  dialect: config[env].dialect,
+  logging: config[env].logging,
+});
+
+export default sequelize;

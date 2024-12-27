@@ -1,4 +1,4 @@
-import { sequelize } from '../config/database'; // Correct named import
+import sequelize from '../config/database'; // Correct, default import
 import Order from '../models/order';
 import { User } from '../models/user'; // Correct named import
 import Service from '../models/services';

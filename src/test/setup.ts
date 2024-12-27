@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: './.env.test' });
 
 // Import sequelize from your database configuration
-import { sequelize } from '../config/database';
+import sequelize from '../config/database'; // Correct, default import
 
 // Export a global setup function that Jest expects
 export default async function globalSetup() {
