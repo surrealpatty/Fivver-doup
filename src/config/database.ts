@@ -1,4 +1,4 @@
-import { Sequelize, Dialect } from 'sequelize';
+import { Dialect, Sequelize } from 'sequelize';
 import * as dotenv from 'dotenv';
 
 // Load environment variables from the correct .env file based on NODE_ENV
@@ -16,38 +16,34 @@ console.log('Database Configuration:', {
 });
 
 // Ensure environment variables are set or throw an error if undefined
-const dbName = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME;
-const dbUser = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER;
-const dbPassword = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD;
-const dbHost = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST || '127.0.0.1';
-const dbPort = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306;
+const dbName: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME! : process.env.DB_NAME!;  // Non-null assertion
+const dbUser: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER! : process.env.DB_USER!;  // Non-null assertion
+const dbPassword: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD! : process.env.DB_PASSWORD!;  // Non-null assertion
+const dbHost: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST! : process.env.DB_HOST!;  // Non-null assertion
+const dbPort: number = parseInt(process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT! : process.env.DB_PORT! || '3306', 10);
 
-// Throw an error if any required environment variables are missing
+// Throw an error if any required environment variables are missing (for more robustness)
 if (!dbName || !dbUser || !dbPassword) {
   throw new Error('Missing database configuration in environment variables.');
 }
 
-// Configure Sequelize based on environment variables
+// Create a new Sequelize instance with the database configuration
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
-  port: Number(dbPort),
+  port: dbPort, // Ensure that port is a number
   dialect: 'mysql' as Dialect,
-  logging: process.env.NODE_ENV === 'development', // Enable logging in development only
   dialectOptions: {
     charset: 'utf8mb4',
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
   },
+  logging: process.env.NODE_ENV === 'development', // Enable logging in development only
 });
 
-// Function to test the database connection
-const initializeDatabase = async (): Promise<void> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection established successfully.');
-  } catch (error) {
-    console.error('Failed to connect to the database:', error instanceof Error ? error.message : error);
-    process.exit(1); // Exit if the connection fails
-  }
-};
+// Export the Sequelize instance for use in your models
+export { sequelize };
 
-export { sequelize, initializeDatabase };
+// JWT Configuration (Add JWT_SECRET and JWT_EXPIRATION here)
+export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecretKey';
+export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
+
+export default sequelize;
