@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv';
 import { Sequelize, Dialect } from 'sequelize';
+import * as dotenv from 'dotenv';
 
 // Load environment variables from the correct .env file based on NODE_ENV
 dotenv.config({
