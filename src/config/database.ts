@@ -33,7 +33,6 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   port: dbPort,
   dialect: 'mysql' as Dialect,
   dialectOptions: {
-    // Disable strict mode in MySQL if necessary
     charset: 'utf8mb4',
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
     sqlMode: 'NO_ENGINE_SUBSTITUTION',  // Disable strict mode here
