@@ -1,14 +1,11 @@
-const dotenv = require('dotenv');
-const { Sequelize } = require('sequelize');
+import { Sequelize, Dialect } from 'sequelize';
+import dotenv from 'dotenv';
 
 // Set environment (default to 'development')
 const env = process.env.NODE_ENV || 'development';
 
 // Load environment variables
 dotenv.config({ path: `./.env.${env}` });  // Load appropriate .env file based on environment
-
-// Log the current environment for debugging
-console.log(`Running in ${env} environment`);
 
 // Ensure required environment variables exist for the current environment
 const requiredEnvVars = {
@@ -23,15 +20,6 @@ requiredEnvVars.forEach((variable) => {
   }
 });
 
-// Log the loaded environment variables for debugging (remove later)
-console.log('Loaded environment variables:', {
-  DB_USER: process.env.DB_USER,
-  DB_PASSWORD: process.env.DB_PASSWORD,
-  DB_NAME: process.env.DB_NAME,
-  DB_HOST: process.env.DB_HOST,
-  DB_PORT: process.env.DB_PORT,
-});
-
 // Define Sequelize configuration based on the environment
 const config = {
   development: {
@@ -40,7 +28,7 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',
+    dialect: 'mysql',  // Use a valid string literal for the dialect
     logging: true,  // Set a default value for logging
   },
   test: {
@@ -49,7 +37,7 @@ const config = {
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
-    dialect: 'mysql',
+    dialect: 'mysql',  // Use a valid string literal for the dialect
     logging: false,
   },
   production: {
@@ -58,7 +46,7 @@ const config = {
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
-    dialect: 'mysql',
+    dialect: 'mysql',  // Use a valid string literal for the dialect
     logging: true,  // Set a default value for logging
   },
 };
@@ -70,19 +58,9 @@ const sequelize = new Sequelize({
   database: config[env as keyof typeof config].database,
   host: config[env as keyof typeof config].host,
   port: config[env as keyof typeof config].port,
-  dialect: config[env as keyof typeof config].dialect,
+  dialect: config[env as keyof typeof config].dialect as Dialect,  // Explicitly cast dialect to the correct type
   logging: config[env as keyof typeof config].logging ?? true, // Default to true if logging is undefined
 });
 
-// Log the Sequelize configuration for debugging
-console.log('Sequelize configuration:', {
-  username: config[env as keyof typeof config].username,
-  database: config[env as keyof typeof config].database,
-  host: config[env as keyof typeof config].host,
-  port: config[env as keyof typeof config].port,
-  dialect: config[env as keyof typeof config].dialect,
-  logging: config[env as keyof typeof config].logging,
-});
-
-// Export Sequelize instance
-module.exports = sequelize;
+// Export Sequelize instance as default
+export default sequelize;

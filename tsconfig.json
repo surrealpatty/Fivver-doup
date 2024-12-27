@@ -26,7 +26,8 @@
       "@models/*": ["models/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@routes/*": ["routes/*"]  // Added the @routes alias
     }
   },
   "include": ["src/**/*"],  // Include all TypeScript files in the src folder
