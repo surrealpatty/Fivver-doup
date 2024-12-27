@@ -1,7 +1,7 @@
 import { Dialect } from 'sequelize';
+import * as dotenv from 'dotenv';
 
 // Load environment variables from the correct .env file based on NODE_ENV
-import * as dotenv from 'dotenv';
 dotenv.config({
   path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env',
 });
@@ -27,6 +27,10 @@ if (!dbName || !dbUser || !dbPassword) {
   throw new Error('Missing database configuration in environment variables.');
 }
 
+// JWT Configuration (Add JWT_SECRET and JWT_EXPIRATION here)
+export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecretKey';
+export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
+
 // Database configuration for different environments
 const config = {
   development: {
@@ -34,7 +38,7 @@ const config = {
     password: dbPassword,
     database: dbName,
     host: dbHost,
-    port: dbPort, // Add dbPort here
+    port: dbPort,
     dialect: 'mysql' as Dialect,
     logging: process.env.NODE_ENV === 'development', // Enable logging in development only
     dialectOptions: {
@@ -47,7 +51,7 @@ const config = {
     password: dbPassword,
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: dbHost,
-    port: dbPort, // Add dbPort here
+    port: dbPort,
     dialect: 'mysql' as Dialect,
     dialectOptions: {
       charset: 'utf8mb4',
@@ -58,7 +62,7 @@ const config = {
     password: dbPassword,
     database: dbName,
     host: dbHost,
-    port: dbPort, // Add dbPort here
+    port: dbPort,
     dialect: 'mysql' as Dialect,
     dialectOptions: {
       charset: 'utf8mb4',
@@ -67,4 +71,5 @@ const config = {
   },
 };
 
+// Export the config for database and JWT configuration
 export default config;

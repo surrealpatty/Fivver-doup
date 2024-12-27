@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET, JWT_EXPIRATION } from '../config/config'; // Named imports for JWT configuration
+import { JWT_SECRET, JWT_EXPIRATION } from '../config/config'; // Correctly import named exports for JWT configuration
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
