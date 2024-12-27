@@ -41,6 +41,16 @@ missingEnvVars.forEach((variable) => {
   }
 });
 
+// Log the current environment and loaded environment variables for debugging
+console.log(`Running in ${env} environment`);
+console.log('Loaded environment variables:', {
+  DB_USER: process.env.DB_USER,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+  DB_NAME: process.env.DB_NAME,
+  DB_HOST: process.env.DB_HOST,
+  DB_PORT: process.env.DB_PORT,
+});
+
 // Database configurations for different environments
 const config: Record<Environment, { 
   username: string; 
@@ -87,6 +97,15 @@ const sequelize = new Sequelize({
   port: config[env].port,
   dialect: config[env].dialect,
   logging: config[env].logging,
+});
+
+// Log the Sequelize configuration for debugging
+console.log('Sequelize configuration:', {
+  username: config[env].username,
+  database: config[env].database,
+  host: config[env].host,
+  port: config[env].port,
+  dialect: config[env].dialect,
 });
 
 export default sequelize;

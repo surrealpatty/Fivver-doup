@@ -11,7 +11,9 @@ yarn-error.log                # Exclude Yarn error logs
 # Environment Variables
 .env                           # Exclude environment file that contains sensitive data
 .env.local                    # Exclude local environment variable overrides
-
+.env.development
+.env.test
+.env.production
 # Build Directories
 dist/                          # Exclude distribution build directory
 build/                         # Exclude build directory
