@@ -1,8 +1,8 @@
-import dotenv from 'dotenv';
-import sequelize from '../config/database'; // Correct, default import
 
-// Load environment variables from .env.test file (ensure this file is available in the root directory)
-dotenv.config({ path: './.env.test' });  // If you have a separate test environment file
+import sequelize from '../config/database'; // Correct, default import
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env.test' });  // Ensure .env.test is loaded in the test environment
+
 
 // Log environment variables for debugging
 console.log("DB_USER:", process.env.DB_USER);
