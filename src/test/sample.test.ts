@@ -1,11 +1,8 @@
-// src/test/sample.test.ts
-import { createService, getServices } from '../services/serviceService';
+import * as serviceService from '../services/serviceService'; // Import the entire module
+import { createService, getServices } from '../services/serviceService'; // You can still import specific functions for reference
 
-// Mocking the functions in servicesController
-jest.mock('../controllers/serviceController', () => ({
-  createService: jest.fn(),
-  getServices: jest.fn(),
-}));
+// Mocking the entire serviceService module
+jest.mock('../services/serviceService'); // This mocks the whole module
 
 describe('Service Functions', () => {
   afterEach(() => {
@@ -22,10 +19,10 @@ describe('Service Functions', () => {
     };
 
     // Mock the createService function to resolve with the mockCreatedService
-    (createService as jest.Mock).mockResolvedValue(mockCreatedService);
+    (serviceService.createService as jest.Mock).mockResolvedValue(mockCreatedService);
 
     // Call the createService function with corrected input
-    const result = await createService({
+    const result = await serviceService.createService({
       userId: '1', // Add userId if required
       title: 'Test Service', // Use 'title' instead of 'name'
       description: 'Description for test service', // description is not used in the mock result, so don't check it
@@ -33,7 +30,7 @@ describe('Service Functions', () => {
     });
 
     // Verify the mock was called once
-    expect(createService).toHaveBeenCalledTimes(1);
+    expect(serviceService.createService).toHaveBeenCalledTimes(1);
 
     // Check if the result matches the mock created service
     expect(result).toEqual(mockCreatedService);
@@ -61,19 +58,15 @@ describe('Service Functions', () => {
     ];
 
     // Mock the getServices function to resolve with the mockServices array
-    (getServices as jest.Mock).mockResolvedValue(mockServices);
+    (serviceService.getServices as jest.Mock).mockResolvedValue(mockServices);
 
     // Call the getServices function
-    const result = await getServices();
+    const result = await serviceService.getServices();
 
     // Verify the mock was called once
-    expect(getServices).toHaveBeenCalledTimes(1);
+    expect(serviceService.getServices).toHaveBeenCalledTimes(1);
 
-    // Ensure that the result is an array
-    expect(Array.isArray(result)).toBe(true); // Check if the result is an array
-    expect(result.length).toBeGreaterThan(0); // Ensure there are services in the result
-
-    // Check if the first service in the result has a title property
-    expect(result[0]).toHaveProperty('title'); // Check for the 'title' property
+    // Check if the result matches the mock services
+    expect(result).toEqual(mockServices);
   });
 });

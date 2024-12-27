@@ -1,6 +1,6 @@
 import request from 'supertest'; // to make HTTP requests to the app
 import { app } from '../index'; // assuming this is the Express app
-import { sequelize } from '../config/database'; // Correct import for named export
+import sequelize from '../config/database'; // Correct import for default export
 import { User } from '../models/user'; // Correct named import for User model
 
 describe('User Controller Tests', () => {
