@@ -28,8 +28,8 @@ const config: Config.InitialOptions = {
   coverageReporters: ['text', 'lcov'], // Report formats for coverage
   verbose: process.env.NODE_ENV === 'test', // Verbose output in test environment
   bail: 1, // Stop after the first test failure
-  globalSetup: '<rootDir>/src/test/setup.ts', // Path to setup file
-  globalTeardown: '<rootDir>/src/test/teardown.ts', // Path to teardown file
+  globalSetup: '<rootDir>/src/test/globalSetup.ts', // Path to global setup file
+  globalTeardown: '<rootDir>/src/test/teardown.ts', // Path to global teardown file
   cacheDirectory: '<rootDir>/.jest-cache', // Cache directory
 };
 

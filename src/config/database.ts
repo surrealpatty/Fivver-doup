@@ -1,9 +1,9 @@
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import { Sequelize, Dialect } from 'sequelize';
 
 // Load environment variables from the correct .env file based on NODE_ENV
 dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env'
+  path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env',
 });
 
 // Log environment variables for debugging purposes (remove in production)
@@ -32,7 +32,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
   port: Number(dbPort),
   dialect: 'mysql' as Dialect,
-  logging: process.env.NODE_ENV === 'development',
+  logging: process.env.NODE_ENV === 'development', // Enable logging in development only
   dialectOptions: {
     charset: 'utf8mb4',
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
