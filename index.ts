@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import express from 'express';
-import sequelize from './config/database'; // Import the sequelize instance for database connection
+import sequelize from '@config/database';
 import userRouter from './routes/user'; // Import the userRouter for handling user-related routes
 
 // Load environment variables from .env file

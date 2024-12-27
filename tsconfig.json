@@ -22,7 +22,7 @@
     "noImplicitReturns": true,                    // Ensure functions have explicit return types
     "noFallthroughCasesInSwitch": true,           // Prevent fall-through in switch cases
     "paths": {
-      "@config/*": ["src/config/*"],              // Path alias for config folder
+      "@config/*": ["src/config/*"],              // Correct path alias for the config folder
       "@models/*": ["src/models/*"],              // Path alias for models folder
       "@controllers/*": ["src/controllers/*"],    // Path alias for controllers folder
       "@services/*": ["src/services/*"],          // Path alias for services folder
