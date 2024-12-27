@@ -4,7 +4,8 @@ dotenv.config({ path: 'src/.env.test' });  // Load environment variables from .e
 // Import sequelize from your database configuration
 import { sequelize } from '../config/database';
 
-export const setup = async () => {
+// Export a global setup function that Jest expects
+export default async function globalSetup() {
   try {
     // Ensure the test database is connected
     await sequelize.authenticate();
@@ -17,4 +18,4 @@ export const setup = async () => {
     console.error('Error setting up test database:', error);
     throw error;  // Re-throw error to ensure test setup fails if database setup fails
   }
-};
+}
