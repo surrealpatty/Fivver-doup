@@ -1,10 +1,18 @@
 import dotenv from 'dotenv';
 import { Sequelize, Dialect } from 'sequelize';
 
-dotenv.config();
+// Determine the environment
+const environment = process.env.NODE_ENV || 'development';
+
+// Load environment variables based on the environment
+if (environment === 'test') {
+  dotenv.config({ path: '.env.test' }); // Load .env.test for tests
+} else {
+  dotenv.config(); // Load .env for development/production
+}
 
 interface SequelizeConfig {
-  username?: string; // Make optional as they might be in URI
+  username?: string;
   password?: string;
   database?: string;
   host?: string;
@@ -15,7 +23,7 @@ interface SequelizeConfig {
   };
   logging?: boolean;
   port?: number;
-  uri?:string; // Add uri for connection strings
+  uri?: string;
 }
 
 const sequelizeConfig: { [key: string]: SequelizeConfig } = {
@@ -26,22 +34,17 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
     host: process.env.DB_HOST || '127.0.0.1',
     port: Number(process.env.DB_PORT) || 3306,
     dialect: 'mysql',
-    dialectOptions: {
-      charset: 'utf8mb4',
-    },
+    dialectOptions: { charset: 'utf8mb4' },
     logging: process.env.NODE_ENV === 'development',
   },
   production: {
     uri: process.env.DATABASE_URL,
     dialect: 'mysql',
-    dialectOptions: {
-      charset: 'utf8mb4',
-      ssl: true,
-    },
+    dialectOptions: { charset: 'utf8mb4', ssl: true },
     logging: false,
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',
+    username: process.env.TEST_DB_USER || 'root', // Provide default in case .env.test is missing
     password: process.env.TEST_DB_PASSWORD || '',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
@@ -51,7 +54,6 @@ const sequelizeConfig: { [key: string]: SequelizeConfig } = {
   },
 };
 
-const environment = process.env.NODE_ENV || 'development';
 const currentConfig = sequelizeConfig[environment];
 
 if (!currentConfig) {
@@ -60,21 +62,20 @@ if (!currentConfig) {
 
 let sequelize: Sequelize;
 if (currentConfig.uri) {
-    sequelize = new Sequelize(currentConfig.uri, currentConfig);
+  sequelize = new Sequelize(currentConfig.uri, currentConfig);
 } else {
-    sequelize = new Sequelize(currentConfig);
+  sequelize = new Sequelize(currentConfig);
 }
 
-
 const testConnection = async (): Promise<boolean> => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection successful');
-    return true;
-  } catch (error) {
-    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
-    return false;
-  }
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection successful');
+    return true;
+  } catch (error) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    return false;
+  }
 };
 
 export { sequelize, testConnection };
