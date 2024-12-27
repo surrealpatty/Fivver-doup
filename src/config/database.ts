@@ -16,13 +16,13 @@ console.log('Database Configuration:', {
 });
 
 // Ensure environment variables are set or throw an error if undefined
-const dbName: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME! : process.env.DB_NAME!;  // Non-null assertion
-const dbUser: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER! : process.env.DB_USER!;  // Non-null assertion
-const dbPassword: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD! : process.env.DB_PASSWORD!;  // Non-null assertion
-const dbHost: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST! : process.env.DB_HOST!;  // Non-null assertion
-const dbPort: number = parseInt(process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT! : process.env.DB_PORT! || '3306', 10);
+const dbName: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME! : process.env.DB_NAME!;
+const dbUser: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER! : process.env.DB_USER!;
+const dbPassword: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD! : process.env.DB_PASSWORD!;
+const dbHost: string = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST! : (process.env.DB_HOST || '127.0.0.1');
+const dbPort: number = parseInt(process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT! : (process.env.DB_PORT || '3306'), 10);
 
-// Throw an error if any required environment variables are missing (for more robustness)
+// Ensure that none of the environment variables are undefined
 if (!dbName || !dbUser || !dbPassword) {
   throw new Error('Missing database configuration in environment variables.');
 }
@@ -30,7 +30,7 @@ if (!dbName || !dbUser || !dbPassword) {
 // Create a new Sequelize instance with the database configuration
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
-  port: dbPort, // Ensure that port is a number
+  port: dbPort,
   dialect: 'mysql' as Dialect,
   dialectOptions: {
     charset: 'utf8mb4',
@@ -43,7 +43,5 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 export { sequelize };
 
 // JWT Configuration (Add JWT_SECRET and JWT_EXPIRATION here)
-export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecretKey';
-export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
-
-export default sequelize;
+export const JWT_SECRET: string = process.env.JWT_SECRET || 'defaultSecretKey';
+export const JWT_EXPIRATION: string = process.env.JWT_EXPIRATION || '1h';
