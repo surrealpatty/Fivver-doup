@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/database'; // Correct, default import
+import { Model, DataTypes, Optional } from 'sequelize';
+import sequelize from '../config/database'; // Correct import
 
 // Define the attributes of the User model
 export interface UserAttributes {
@@ -7,7 +7,7 @@ export interface UserAttributes {
   username: string;
   email: string;
   password: string;
-  role?: 'free' | 'paid'; // Add role attribute (optional, free or paid role)
+  role?: 'free' | 'paid'; // Role can be 'free' or 'paid'
   createdAt?: Date; // Optional because Sequelize manages timestamps
   updatedAt?: Date; // Optional because Sequelize manages timestamps
 }
@@ -25,10 +25,11 @@ class User
   public username!: string;
   public email!: string;
   public password!: string;
-  public role?: 'free' | 'paid'; // Add role field to the class implementation
+  public role?: 'free' | 'paid'; // Role field can be free or paid
 
-  public readonly createdAt!: Date; // Sequelize automatically manages this
-  public readonly updatedAt!: Date; // Sequelize automatically manages this
+  // These fields are automatically managed by Sequelize, hence read-only
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 // Initialize the User model
@@ -46,25 +47,25 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensure email is unique
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('free', 'paid'), // Define ENUM for role
-      defaultValue: 'free', // Set default role to "free"
-      allowNull: false, // Ensure the role is always present
+      type: DataTypes.ENUM('free', 'paid'), // Define role options as ENUM
+      defaultValue: 'free', // Default to 'free' if not provided
+      allowNull: false, // Role must be specified
     },
   },
   {
-    sequelize, // Pass the Sequelize instance
-    modelName: 'User', // Name of the model
-    tableName: 'users', // Name of the table in the database
-    timestamps: true, // Enable createdAt and updatedAt
+    sequelize, // Sequelize instance passed here
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in the database
+    timestamps: true, // Automatically manage createdAt and updatedAt
   }
 );
 
-// Export the User model
+// Export the User model for use in other files
 export { User };
