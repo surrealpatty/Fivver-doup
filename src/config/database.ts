@@ -1,38 +1,29 @@
-import * as dotenv from 'dotenv';
-import { Sequelize, Dialect } from 'sequelize';
+const dotenv = require('dotenv');
+const { Sequelize } = require('sequelize');
 
-// Define the allowed environment keys
-type Environment = 'development' | 'test' | 'production';
+// Set environment (default to 'development')
+const env = process.env.NODE_ENV || 'development';
 
-// Load environment variables based on the current NODE_ENV
-const env = (process.env.NODE_ENV || 'development') as Environment;
-dotenv.config({ path: `./src/.env.${env}` });  // Load .env.test, .env.development, or .env.production
+// Load environment variables
+dotenv.config({ path: `./.env.${env}` });  // Load appropriate .env file based on environment
 
 // Log the current environment for debugging
 console.log(`Running in ${env} environment`);
 
-// Define the required environment variables for each environment
-const envVars = {
+// Ensure required environment variables exist for the current environment
+const requiredEnvVars = {
   development: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
   test: ['TEST_DB_USER', 'TEST_DB_PASSWORD', 'TEST_DB_NAME', 'TEST_DB_HOST', 'TEST_DB_PORT'],
   production: ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_HOST', 'DB_PORT'],
-};
+}[env] || [];
 
-// Check if required environment variables are defined for the current environment
-const requiredEnvVars = envVars[env] || []; // Default to an empty array if undefined
+requiredEnvVars.forEach((variable) => {
+  if (!process.env[variable]) {
+    throw new Error(`Missing environment variable: ${variable}`);
+  }
+});
 
-// Ensure all required environment variables are present
-if (requiredEnvVars.length > 0) {
-  requiredEnvVars.forEach((variable) => {
-    if (!process.env[variable]) {
-      throw new Error(`Missing environment variable: ${variable}`);
-    }
-  });
-} else {
-  console.error('No environment variables defined for the current environment.');
-}
-
-// Log the loaded environment variables for debugging (can be removed later)
+// Log the loaded environment variables for debugging (remove later)
 console.log('Loaded environment variables:', {
   DB_USER: process.env.DB_USER,
   DB_PASSWORD: process.env.DB_PASSWORD,
@@ -41,16 +32,8 @@ console.log('Loaded environment variables:', {
   DB_PORT: process.env.DB_PORT,
 });
 
-// Database configuration object for different environments
-const config: Record<Environment, { 
-  username: string; 
-  password: string; 
-  database: string; 
-  host: string; 
-  port: number; 
-  dialect: Dialect; 
-  logging?: boolean; 
-}> = {
+// Define Sequelize configuration based on the environment
+const config = {
   development: {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
@@ -58,6 +41,7 @@ const config: Record<Environment, {
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
     dialect: 'mysql',
+    logging: true,  // Set a default value for logging
   },
   test: {
     username: process.env.TEST_DB_USER || 'root',
@@ -66,7 +50,7 @@ const config: Record<Environment, {
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
     dialect: 'mysql',
-    logging: false,  // Disable logging in the test environment
+    logging: false,
   },
   production: {
     username: process.env.DB_USER || 'root',
@@ -75,27 +59,30 @@ const config: Record<Environment, {
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '3306', 10),
     dialect: 'mysql',
+    logging: true,  // Set a default value for logging
   },
 };
 
-// Create and export the Sequelize instance
+// Initialize Sequelize instance with type assertion
 const sequelize = new Sequelize({
-  username: config[env].username,
-  password: config[env].password,
-  database: config[env].database,
-  host: config[env].host,
-  port: config[env].port,
-  dialect: config[env].dialect,
-  logging: config[env].logging,
+  username: config[env as keyof typeof config].username,
+  password: config[env as keyof typeof config].password,
+  database: config[env as keyof typeof config].database,
+  host: config[env as keyof typeof config].host,
+  port: config[env as keyof typeof config].port,
+  dialect: config[env as keyof typeof config].dialect,
+  logging: config[env as keyof typeof config].logging ?? true, // Default to true if logging is undefined
 });
 
-// Log the Sequelize configuration for debugging (can be removed later)
+// Log the Sequelize configuration for debugging
 console.log('Sequelize configuration:', {
-  username: config[env].username,
-  database: config[env].database,
-  host: config[env].host,
-  port: config[env].port,
-  dialect: config[env].dialect,
+  username: config[env as keyof typeof config].username,
+  database: config[env as keyof typeof config].database,
+  host: config[env as keyof typeof config].host,
+  port: config[env as keyof typeof config].port,
+  dialect: config[env as keyof typeof config].dialect,
+  logging: config[env as keyof typeof config].logging,
 });
 
-export default sequelize;
+// Export Sequelize instance
+module.exports = sequelize;
