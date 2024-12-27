@@ -19,14 +19,18 @@ const envVars = {
 };
 
 // Check if required environment variables are defined for the current environment
-const requiredEnvVars = envVars[env];
+const requiredEnvVars = envVars[env] || []; // Default to an empty array if undefined
 
 // Ensure all required environment variables are present
-requiredEnvVars.forEach((variable) => {
-  if (!process.env[variable]) {
-    throw new Error(`Missing environment variable: ${variable}`);
-  }
-});
+if (requiredEnvVars.length > 0) {
+  requiredEnvVars.forEach((variable) => {
+    if (!process.env[variable]) {
+      throw new Error(`Missing environment variable: ${variable}`);
+    }
+  });
+} else {
+  console.error('No environment variables defined for the current environment.');
+}
 
 // Log the loaded environment variables for debugging (can be removed later)
 console.log('Loaded environment variables:', {
