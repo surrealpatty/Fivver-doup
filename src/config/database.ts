@@ -1,10 +1,12 @@
 import dotenv from 'dotenv';
 import { Sequelize, Dialect } from 'sequelize';
 
-// Load the appropriate environment variables based on the NODE_ENV value
-dotenv.config({ path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env' });
+// Load environment variables from the correct .env file based on NODE_ENV
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? 'src/.env.test' : 'src/.env'
+});
 
-// Log environment variables for debugging purposes
+// Log environment variables for debugging purposes (remove in production)
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('Database Configuration:', {
   name: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME,
@@ -13,22 +15,29 @@ console.log('Database Configuration:', {
   port: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306,
 });
 
-// Configure Sequelize based on the environment variables
-const sequelize = new Sequelize(
-  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME) as string, // Type assertion
-  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER) as string, // Type assertion
-  (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD) as string, // Type assertion
-  {
-    host: (process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST) || '127.0.0.1', // Default to '127.0.0.1' if undefined
-    port: Number(process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT) || 3306, // Default to 3306 if undefined
-    dialect: 'mysql' as Dialect, // Explicitly set the dialect
-    logging: process.env.NODE_ENV === 'development', // Enable logging only in development
-    dialectOptions: {
-      charset: 'utf8mb4',
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined, // SSL for production
-    },
-  }
-);
+// Ensure environment variables are set or throw an error if undefined
+const dbName = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_NAME : process.env.DB_NAME;
+const dbUser = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_USER : process.env.DB_USER;
+const dbPassword = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD;
+const dbHost = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_HOST : process.env.DB_HOST || '127.0.0.1';
+const dbPort = process.env.NODE_ENV === 'test' ? process.env.TEST_DB_PORT : process.env.DB_PORT || 3306;
+
+// Throw an error if any required environment variables are missing
+if (!dbName || !dbUser || !dbPassword) {
+  throw new Error('Missing database configuration in environment variables.');
+}
+
+// Configure Sequelize based on environment variables
+const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+  host: dbHost,
+  port: Number(dbPort),
+  dialect: 'mysql' as Dialect,
+  logging: process.env.NODE_ENV === 'development',
+  dialectOptions: {
+    charset: 'utf8mb4',
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  },
+});
 
 // Function to test the database connection
 const initializeDatabase = async (): Promise<void> => {
