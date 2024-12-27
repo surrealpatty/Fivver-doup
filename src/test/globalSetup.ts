@@ -1,9 +1,8 @@
-import * as dotenv from 'dotenv';
+
 import sequelize from '../config/database'; // Correct, default import
 
-
-// Load the environment variables for the test environment
-dotenv.config({ path: './src/.env.test' });
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env.test' });  // If you have a separate test environment file
 
 /**
  * Jest global setup for initializing the test database.

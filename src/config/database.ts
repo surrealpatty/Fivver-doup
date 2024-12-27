@@ -8,6 +8,39 @@ type Environment = 'development' | 'test' | 'production';
 const env = (process.env.NODE_ENV || 'development') as Environment;
 dotenv.config({ path: `./src/.env.${env}` }); // Load .env.test, .env.development, or .env.production
 
+// Ensure the required environment variables are present
+const requiredEnvVars = [
+  'DB_USER',
+  'DB_PASSWORD',
+  'DB_NAME',
+  'DB_HOST',
+  'DB_PORT',
+];
+
+const testEnvVars = [
+  'TEST_DB_USER',
+  'TEST_DB_PASSWORD',
+  'TEST_DB_NAME',
+  'TEST_DB_HOST',
+  'TEST_DB_PORT',
+];
+
+const productionEnvVars = [
+  'DB_USER',
+  'DB_PASSWORD',
+  'DB_NAME',
+  'DB_HOST',
+  'DB_PORT',
+];
+
+const missingEnvVars = env === 'test' ? testEnvVars : env === 'production' ? productionEnvVars : requiredEnvVars;
+
+missingEnvVars.forEach((variable) => {
+  if (!process.env[variable]) {
+    throw new Error(`Missing environment variable: ${variable}`);
+  }
+});
+
 // Database configurations for different environments
 const config: Record<Environment, { 
   username: string; 
