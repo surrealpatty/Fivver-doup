@@ -1,26 +1,26 @@
 import request from 'supertest';
 import { app } from '../index'; // Import the app correctly
-import  sequelize  from '../config/database'; // Correct import for Sequelize instance
+import sequelize from '../config/database'; // Correct import for Sequelize instance
 import { User } from '../models/user'; // Correct named import
-import services from '../models/services'; // Ensure this matches the actual export
+import { Service } from '../models/services'; // Correct named import for services model
 import Order from '../models/order'; // Correct default import for Order model
 
 // Correct mock for services model
 jest.mock('../models/services', () => ({
-  default: {
+  Service: {
     findByPk: jest.fn(),
   },
 }));
 
 // Mock for other models
 jest.mock('../models/user', () => ({
-  default: {
+  User: {
     findByPk: jest.fn(),
   },
 }));
 
 jest.mock('../models/order', () => ({
-  default: {
+  Order: {
     create: jest.fn(),
     findAll: jest.fn(),
     findByPk: jest.fn(),
@@ -47,7 +47,7 @@ describe('Order Controller Tests', () => {
 
     // Mock the response for finding the user and service
     (User.findByPk as jest.Mock).mockResolvedValueOnce(mockUser);
-    (services.findByPk as jest.Mock).mockResolvedValueOnce(mockService);
+    (Service.findByPk as jest.Mock).mockResolvedValueOnce(mockService);
 
     // Mock the Order create method to return a mock order
     (Order.create as jest.Mock).mockResolvedValueOnce({

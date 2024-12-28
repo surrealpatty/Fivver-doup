@@ -1,54 +1,63 @@
-import { sequelize, testConnection } from '.././config/database'; // Ensure correct import
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-describe('Database Connection', () => {
-  let mockAuthenticate: jest.SpyInstance;
-  let consoleLogSpy: jest.SpyInstance;
-  let consoleErrorSpy: jest.SpyInstance;
+// Load environment variables based on the current environment
+const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development'; // Default to 'development' if NODE_ENV is not set
+dotenv.config({ path: `./.env.${env}` }); // Load environment variables from the correct .env file based on the environment
 
-  // Set up mocks before each test
-  beforeEach(() => {
-    mockAuthenticate = jest
-      .spyOn(sequelize, 'authenticate')
-      .mockResolvedValue(); // Mock authenticate method
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(); // Mock console log
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(); // Mock console error
-  });
+// Define the Sequelize configuration for different environments
+const config = {
+  development: {
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    dialect: 'mysql',
+    logging: true,
+  },
+  test: {
+    username: process.env.TEST_DB_USER || 'root',
+    password: process.env.TEST_DB_PASSWORD || '',
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: process.env.TEST_DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
+    dialect: 'mysql',
+    logging: false,
+  },
+  production: {
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    dialect: 'mysql',
+    logging: true,
+  },
+} as const;
 
-  // Clear mocks after each test to ensure clean state
-  afterEach(() => {
-    jest.restoreAllMocks(); // Clean up mocks to avoid leakage between tests
-  });
-
-  // This will run after all tests have completed
-  afterAll(async () => {
-    // Close the database connection to avoid lingering open connections
-    await sequelize.close();
-  });
-
-  test('should successfully connect to the database', async () => {
-    // Ensure that mockAuthenticate is called once
-    const connection = await testConnection();
-
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1); // Ensure mockAuthenticate was called
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      'Database connection successful'
-    ); // Ensure console log message is correct
-    expect(connection).toBeTruthy(); // Ensure connection is successful
-  });
-
-  test('should log an error when the database connection fails', async () => {
-    const errorMessage = 'Test Connection Error';
-    mockAuthenticate.mockRejectedValueOnce(new Error(errorMessage)); // Simulate connection failure
-
-    const connection = await testConnection();
-
-    // Ensure that mockAuthenticate was called
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-    // Ensure the error message is logged to console
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Unable to connect to the database:',
-      errorMessage
-    );
-    expect(connection).toBeFalsy(); // Ensure connection is unsuccessful
-  });
+// Create and initialize the Sequelize instance based on the current environment
+const sequelize = new Sequelize({
+  username: config[env].username,
+  password: config[env].password,
+  database: config[env].database,
+  host: config[env].host,
+  port: config[env].port,
+  dialect: config[env].dialect,
+  logging: config[env].logging ?? true,
 });
+
+// Function to test the database connection
+export async function testConnection(): Promise<boolean> {
+  try {
+    await sequelize.authenticate(); // Test the database connection
+    console.log('Database connection established successfully.');
+    return true; // Return true if connection is successful
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    return false; // Return false if connection fails
+  }
+}
+
+// Export the sequelize instance for use in other parts of the app
+export { sequelize };

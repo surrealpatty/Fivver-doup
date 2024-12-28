@@ -1,7 +1,7 @@
 import path from 'path';
 import request from 'supertest';
 import { Express } from 'express'; // Import the Express type
-import { sequelize, testConnection } from '../config/database'; // Import sequelize and the testConnection function
+import { sequelize, testConnection } from '../config/database'; // Correct import for sequelize and testConnection
 
 // Define the path to the compiled `index.js` file in `dist/`
 const appPath = path.resolve(__dirname, '../../dist/index'); // Adjusted path
