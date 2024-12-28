@@ -1,5 +1,3 @@
-// C:\surrealsystems\Fivver-doup\src\types\index.ts
-
 /**
  * IUserAttributes interface represents the attributes of a user model instance
  * (used after the user is created in the database).
@@ -26,8 +24,8 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
  */
 export interface UserPayload {
   id: string; // The user's ID (required)
-  email: string; // The user's email (required)
-  username: string; // The user's username (required)
+  email?: string; // The user's email (optional, to match the global declaration)
+  username?: string; // The user's username (optional, to match the global declaration)
 }
 
 /**
@@ -36,4 +34,13 @@ export interface UserPayload {
  */
 export interface AuthRequest {
   user?: UserPayload; // `user` is optional and is added after token validation
+}
+
+// Extend the Express Request interface globally to include `user` in the request object
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload; // Attach `user` to `Request`
+    }
+  }
 }

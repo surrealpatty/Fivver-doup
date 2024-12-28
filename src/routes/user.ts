@@ -1,59 +1,66 @@
-import { Router } from 'express';
-import { loginUser, updateUser, deleteUser, registerUser } from '../controllers/userController';
+import express, { Request, Response, NextFunction } from 'express';
+import { loginUser, updateUser, deleteUser, registerUser } from '../controllers/userController'; // Import the functions
+import { authenticateToken } from '../middlewares/authenticateToken';
 
-const userRouter = Router();
+const router = express.Router();
 
-// Register route
-userRouter.post('/register', async (req, res) => {
+// Register route - public route for user registration
+router.post('/register', async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { username, email, password } = req.body; // Extract user details from the request body
-    const newUser = await registerUser({ username, email, password }); // Call registerUser function
-    res.status(201).json(newUser); // Respond with the new user object
+    return await registerUser(req, res); // Now registerUser directly returns a Response
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 });
 
-// Login route
-userRouter.post('/login', async (req, res) => {
+// Login route - public route for user login
+router.post('/login', async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { email, password } = req.body; // Extract email and password from the request body
-    const user = await loginUser(email, password); // Call loginUser function
-    res.status(200).json(user); // Respond with the logged-in user object
+    const { email, password } = req.body;
+    const user = await loginUser(req, res, email, password); // loginUser now directly returns a Response
+    return res.status(200).json(user); // You no longer need to return res here, loginUser already handles it
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 });
 
-// Update user route
-userRouter.put('/update/:id', async (req, res) => {
+// Update user route - protected route (authentication required)
+router.put('/update', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { id } = req.params; // Extract user ID from the route parameter
-    const { username, email, password } = req.body; // Extract updated user details from the request body
-    const updatedUser = await updateUser(id, { username, email, password }); // Call updateUser function
-    res.status(200).json(updatedUser); // Respond with the updated user object
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const { id } = req.user; // Retrieve the user ID from the token or user object
+    const { username, email, password } = req.body; // Get new data from request body
+
+    return await updateUser(req, res, id, { username, email, password }); // Ensure updateUser returns a Response
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 });
 
-// Delete user route
-userRouter.delete('/delete/:id', async (req, res) => {
+// Delete user route - protected route (authentication required)
+router.delete('/delete', authenticateToken, async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { id } = req.params; // Extract user ID from the route parameter
-    const deletedUser = await deleteUser(id); // Call deleteUser function
-    res.status(200).json(deletedUser); // Respond with the deleted user object
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const { id } = req.user; // Retrieve the user ID from the token or user object
+
+    return await deleteUser(req, res, id); // Ensure deleteUser returns a Response
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 });
 
-export default userRouter; // Export the user routes for use in other files
+export default router;

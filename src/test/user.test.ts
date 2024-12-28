@@ -1,24 +1,28 @@
-import request from 'supertest'; // to make HTTP requests to the app
-import { app } from '../index'; // assuming this is the Express app
-import sequelize from '../config/database'; // Correct import for default export
-import { User } from '../models/user'; // Correct named import for User model
+import request from 'supertest'; // To make HTTP requests to the app
+import { app } from '../index'; // Import the exported app instance
+import sequelize from '../config/database'; // Import the Sequelize instance
+import { User } from '../models/user'; // Import the User model
 
 describe('User Controller Tests', () => {
   // Before all tests, sync the database and create a test user
   beforeAll(async () => {
-    await sequelize.sync(); // Sync the database
-    // Create a test user for login and other actions
-    await User.create({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'password123',
-    });
+    try {
+      await sequelize.sync({ force: true }); // Sync the database and reset it
+      // Create a test user for login and other actions
+      await User.create({
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'password123',
+      });
+    } catch (error) {
+      console.error('Error setting up test environment:', error);
+    }
   });
 
   // Test user login
   test('should log in a user and return a token', async () => {
     const response = await request(app)
-      .post('/login') // Ensure this path matches your actual login route
+      .post('/users/login') // Match your actual login route
       .send({
         email: 'test@example.com',
         password: 'password123',
@@ -30,22 +34,24 @@ describe('User Controller Tests', () => {
 
   // Test update user profile
   test('should update the user profile', async () => {
+    // Login to get the token for authentication
     const loginResponse = await request(app)
-      .post('/login') // Login to get the token for authentication
+      .post('/users/login') // Match your actual login route
       .send({
         email: 'test@example.com',
         password: 'password123',
       });
 
-    const token = loginResponse.body.token; // Get the token from the login response
+    const token = loginResponse.body.token; // Extract the token
 
+    // Update the user's profile
     const updateResponse = await request(app)
-      .put('/users/1') // Assuming this is the correct route for updating user profile
+      .put('/users/1') // Match your update user profile route
       .send({
         email: 'updated@example.com',
         username: 'updatedUser',
       })
-      .set('Authorization', `Bearer ${token}`); // Send the token in the Authorization header
+      .set('Authorization', `Bearer ${token}`); // Include the token in the Authorization header
 
     expect(updateResponse.status).toBe(200); // Expect HTTP 200 OK
     expect(updateResponse.body).toHaveProperty('id', 1); // Expect the updated user ID
@@ -54,18 +60,20 @@ describe('User Controller Tests', () => {
 
   // Test delete user account
   test('should delete the user account', async () => {
+    // Login to get the token for authentication
     const loginResponse = await request(app)
-      .post('/login') // Login to get the token for authentication
+      .post('/users/login') // Match your actual login route
       .send({
         email: 'test@example.com',
         password: 'password123',
       });
 
-    const token = loginResponse.body.token; // Get the token from the login response
+    const token = loginResponse.body.token; // Extract the token
 
+    // Delete the user's account
     const deleteResponse = await request(app)
-      .delete('/users/1') // Assuming this is the correct route for deleting the user account
-      .set('Authorization', `Bearer ${token}`); // Send the token in the Authorization header
+      .delete('/users/1') // Match your delete user route
+      .set('Authorization', `Bearer ${token}`); // Include the token in the Authorization header
 
     expect(deleteResponse.status).toBe(200); // Expect HTTP 200 OK
     expect(deleteResponse.body).toHaveProperty(
@@ -74,9 +82,12 @@ describe('User Controller Tests', () => {
     ); // Expect a success message
   });
 
-  // After all tests, delete the test user and close the Sequelize connection
+  // After all tests, clean up the test user and close the Sequelize connection
   afterAll(async () => {
-    await User.destroy({ where: { email: 'test@example.com' } }); // Clean up the test user
-    await sequelize.close(); // Close the database connection
+    try {
+      await sequelize.close(); // Close the database connection
+    } catch (error) {
+      console.error('Error closing test environment:', error);
+    }
   });
 });

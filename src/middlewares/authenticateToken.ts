@@ -1,75 +1,61 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types'; // Assuming the UserPayload interface is defined
 
-// Define the expected structure of the decoded JWT payload
-interface UserPayload extends JwtPayload {
-  id: string;
-  email: string;
-  username: string;
+// Retrieve JWT secret from environment variables and assert its type as string
+const jwtSecret = process.env.JWT_SECRET as string | undefined;
+
+if (!jwtSecret) {
+  console.error('JWT_SECRET is not set. Authentication will fail.');
 }
 
-// Extend the Request interface to include the `user` property
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: UserPayload;
-  }
-}
-
-// Middleware to authenticate the token
-export const authenticateToken = async (
-  req: Request,
+/**
+ * Middleware to authenticate the token provided in the Authorization header.
+ * If the token is valid, the decoded payload is attached to `req.user`.
+ */
+export const authenticateToken = (
+  req: Request & { user?: UserPayload }, // Extend Request type to include user
   res: Response,
   next: NextFunction
-): Promise<void> => {
+): void => { // Ensure the return type is void (no Response object directly returned)
   try {
-    // Extract the token from the Authorization header
-    const authorizationHeader = req.headers['authorization'];
+    // Extract token from the Authorization header
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.startsWith('Bearer ')
+      ? authHeader.split(' ')[1]
+      : undefined;
 
-    // Check if the header exists and starts with "Bearer"
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      res
-        .status(401)
-        .json({ message: 'Authorization token is missing or invalid' });
-      return; // Return early to stop execution
-    }
-
-    const token = authorizationHeader.split(' ')[1]; // Extract the token after "Bearer"
-
-    // Ensure the token is present
     if (!token) {
-      res.status(401).json({ message: 'Authorization token is missing' });
-      return; // Return early to stop execution
+      // Respond with an error if the token is not present
+      res.status(401).json({ message: 'Access denied, no token provided.' });
+      return; // Ensure we return after sending the response
     }
 
-    const jwtSecret = process.env.JWT_SECRET;
-
-    // Ensure the JWT_SECRET is configured in the environment variables
     if (!jwtSecret) {
-      console.error(
-        'JWT_SECRET is not configured in the environment variables'
-      );
-      res.status(500).json({ message: 'Internal server error' });
-      return; // Return early to stop execution
+      // Respond with an error if the JWT secret is missing
+      res.status(500).json({ message: 'Internal server error: Missing JWT secret.' });
+      return; // Ensure we return after sending the response
     }
 
-    // Verify the token and decode the payload
+    // Verify the token
     const decoded = jwt.verify(token, jwtSecret) as UserPayload;
 
-    // Attach the user data from the decoded token to the request object
+    // Attach the decoded payload to req.user
     req.user = decoded;
 
     // Proceed to the next middleware or route handler
-    next();
+    next(); // `next()` is used, not returning anything
   } catch (error) {
-    console.error('Token authentication failed:', error);
-
-    // Handle specific error messages based on the type of error
-    if (error instanceof jwt.JsonWebTokenError) {
-      res.status(403).json({ message: 'Invalid or expired token' });
-      return; // Return early to stop execution
+    // Handle errors properly, but DO NOT return the Response object directly
+    if (error instanceof Error) {
+      console.error('Authentication error:', error.message);
+      res.status(403).json({ message: 'Invalid or expired token.' });
+      return; // Ensure we return after sending the response
     }
 
-    // Handle unexpected errors
-    res.status(500).json({ message: 'Internal server error' });
+    // Fallback for cases when the error is not of type `Error`
+    console.error('Unexpected error during authentication:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+    return; // Ensure we return after sending the response
   }
 };
