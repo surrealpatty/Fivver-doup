@@ -21,7 +21,7 @@ describe('User Controller Tests', () => {
         isPaid: false, // Add necessary field values
       });
 
-      userId = testUser.id; // Store the created user's ID
+      userId = testUser.id.toString(); // Ensure `id` is a string
 
       // Log in and get the token
       const loginResponse = await request(app)
@@ -58,6 +58,7 @@ describe('User Controller Tests', () => {
         username: 'newuser',
         email: 'newuser@example.com',
         password: 'password123',
+        isPaid: false, // Ensure `isPaid` is included
       });
 
     expect(response.status).toBe(201); // Expect HTTP 201 Created

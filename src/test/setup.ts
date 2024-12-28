@@ -1,4 +1,14 @@
-import sequelize from '../config/database'; // Import sequelize instance from the configuration
+import { Sequelize } from 'sequelize'; // Import Sequelize constructor
+
+// Set up the test database connection for Sequelize
+const sequelize = new Sequelize({
+  username: 'testuser', // Ensure this is the correct test database username
+  password: 'testpassword', // Ensure this is the correct password for the test user
+  database: 'fivver_doup_test', // Test database name, ensure it exists
+  host: '127.0.0.1', // Database host (usually localhost or 127.0.0.1)
+  port: 3306, // MySQL default port
+  dialect: 'mysql', // Dialect for MySQL
+});
 
 // Before all tests, authenticate and sync the test database
 beforeAll(async () => {
@@ -26,3 +36,5 @@ afterAll(async () => {
     console.error('Error closing test database connection:', error instanceof Error ? error.message : error);
   }
 });
+
+export { sequelize };

@@ -9,7 +9,7 @@ interface UserPayload extends JwtPayload {
 }
 
 // Middleware to authenticate JWT token
-const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
   // Extract token from the Authorization header
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -26,7 +26,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction): voi
     req.user = decoded; // TypeScript now knows that req.user will have the 'id' field
 
     // Proceed to the next middleware or route handler
-    return next(); // Ensure next is called here
+    next(); // Ensure next is called here
   } catch (error) {
     // If the token is invalid or expired, return a 403 Forbidden status
     return res.status(403).json({ message: 'Invalid or expired token.' });
