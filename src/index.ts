@@ -33,11 +33,11 @@ const testDatabaseConnection = async (): Promise<void> => {
   }
 };
 
-// Sync Sequelize models (alter: true is useful for development)
+// Sync Sequelize models (force: true will drop and recreate tables)
 const syncDatabase = async (): Promise<void> => {
   try {
-    // Sync Sequelize models manually (no need for addModels, models are already imported)
-    await sequelize.sync({ alter: true }); // Use 'alter: true' for auto-syncing changes to the database schema
+    // Sync Sequelize models manually (force: true drops and recreates the tables)
+    await sequelize.sync({ force: true }); // Use 'force: true' for development to drop/recreate tables
     console.log('Database synchronized successfully');
   } catch (error: unknown) {
     console.error('Error synchronizing database:', error instanceof Error ? error.message : error);
