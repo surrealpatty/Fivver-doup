@@ -1,36 +1,46 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types'; // Assuming you have the UserPayload interface
 
-// Define a custom type for the user in the request
-interface UserPayload extends JwtPayload {
-  id: string; // Ensure the `id` is always present
-  email?: string;
-  username?: string;
+const jwtSecret = process.env.JWT_SECRET;
+
+if (!jwtSecret) {
+  console.error('JWT_SECRET is not set. Authentication will fail.');
 }
 
-// Middleware to authenticate JWT token
-const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
+/**
+ * Middleware to authenticate the token provided in the Authorization header.
+ * If the token is valid, the decoded payload is attached to `req.user`.
+ */
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   // Extract token from the Authorization header
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const authHeader = req.headers['authorization'];
+  const token = authHeader?.startsWith('Bearer ')
+    ? authHeader.split(' ')[1]
+    : undefined;
 
-  // If no token is provided, return a 401 Unauthorized status
   if (!token) {
-    return res.status(401).json({ message: 'Access denied, no token provided.' });
+    res.status(401).json({ message: 'Access denied, no token provided.' });
+    return; // End the function here if no token is provided
   }
 
+  // Try to verify the token and attach the decoded payload to req.user
   try {
-    // Verify the token using JWT secret (ensure it's stored in environment variables)
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload;
-
-    // Store the decoded user information in the request object
-    req.user = decoded; // TypeScript now knows that req.user will have the 'id' field
-
-    // Proceed to the next middleware or route handler
-    next(); // Ensure next is called here
-  } catch (error) {
-    // If the token is invalid or expired, return a 403 Forbidden status
-    return res.status(403).json({ message: 'Invalid or expired token.' });
+    const decoded = jwt.verify(token, jwtSecret as string) as UserPayload;
+    req.user = decoded; // Attach decoded payload to req.user
+    next(); // Proceed to next middleware or route handler
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Authentication error:', error.message);
+      res.status(403).json({ message: 'Invalid or expired token.' });
+    } else {
+      // Handle unexpected errors
+      console.error('Unexpected error during authentication:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+    }
   }
 };
-
-export default authenticateToken;
