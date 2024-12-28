@@ -1,12 +1,16 @@
 import { Sequelize } from 'sequelize'; // Import Sequelize constructor
+import dotenv from 'dotenv'; // To load environment variables
+
+// Load environment variables from a .env file
+dotenv.config();
 
 // Set up the test database connection for Sequelize
 const sequelize = new Sequelize({
-  username: 'testuser', // Ensure this is the correct test database username
-  password: 'testpassword', // Ensure this is the correct password for the test user
-  database: 'fivver_doup_test', // Test database name, ensure it exists
-  host: '127.0.0.1', // Database host (usually localhost or 127.0.0.1)
-  port: 3306, // MySQL default port
+  username: process.env.DB_USER || 'root', // Use environment variable for DB user, fallback to 'root'
+  password: process.env.DB_PASSWORD || '', // Use environment variable for DB password
+  database: process.env.DB_NAME || 'fivver_doup_test', // Use environment variable for DB name
+  host: process.env.DB_HOST || '127.0.0.1', // Use environment variable for DB host
+  port: parseInt(process.env.DB_PORT || '3306', 10), // Use environment variable for DB port (default to 3306)
   dialect: 'mysql', // Dialect for MySQL
 });
 

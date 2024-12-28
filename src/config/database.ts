@@ -1,65 +1,35 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
+
+// Load environment variables from the .env file
+dotenv.config();
 
 // Determine the current environment or default to 'development'
-const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development';
+const env = process.env.NODE_ENV || 'development';
 
-// Load environment variables based on the environment
-dotenv.config({ path: `./.env.${env}` });
-
-// Define the Sequelize configuration for different environments
-const config = {
+// Export the database configuration based on the environment
+module.exports = {
   development: {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
     dialect: 'mysql',
-    logging: true,
+    logging: true,  // Enable logging in development
   },
   test: {
-    username: process.env.TEST_DB_USER || 'testuser',
+    username: process.env.TEST_DB_USER || 'root',  // Use root or specific test user
     password: process.env.TEST_DB_PASSWORD || 'testpassword',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
     dialect: 'mysql',
-    logging: false,
+    logging: false,  // Disable logging in tests
   },
   production: {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
     dialect: 'mysql',
-    logging: true,
+    logging: false,  // Disable logging in production
   },
-} as const;
-
-// Create and initialize the Sequelize instance based on the current environment
-const sequelize = new Sequelize({
-  username: config[env].username,
-  password: config[env].password,
-  database: config[env].database,
-  host: config[env].host,
-  port: config[env].port,
-  dialect: config[env].dialect,
-  logging: config[env].logging ?? true,
-});
-
-// Function to test the database connection
-export async function testConnection(): Promise<boolean> {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection established successfully.');
-    return true;
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-    return false;
-  }
-}
-
-// Export the sequelize instance for use in other parts of the app
-export default sequelize;
+};
