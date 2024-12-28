@@ -10,12 +10,13 @@ const testModels = async () => {
 
     console.log('Database synced successfully.');
 
-    // Create a test user
+    // Create a test user with the missing 'isPaid' property
     const testUser = await User.create({
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
       role: 'free',
+      isPaid: false, // Added the 'isPaid' property here
     });
 
     console.log('Test User created:', testUser.toJSON());

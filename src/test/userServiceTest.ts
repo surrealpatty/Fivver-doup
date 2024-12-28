@@ -3,12 +3,13 @@ import { User } from '../models/user'; // Correct named import
 
 describe('Service Model Tests', () => {
   it('should create a new service', async () => {
-    // Create a user with all required fields (password and role)
+    // Create a user with all required fields (including 'isPaid')
     const user = await User.create({
       username: 'testUser',
       email: 'test@example.com',
       password: 'testPassword123', // Ensure password is provided
       role: 'free', // Ensure role is provided
+      isPaid: false, // Add the missing 'isPaid' property
     });
 
     const serviceData: ServiceCreationAttributes = {

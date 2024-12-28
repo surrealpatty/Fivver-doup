@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express'; // Removed unused NextFunction
+import express, { Router, Request, Response, NextFunction } from 'express'; // Removed unused NextFunction
 import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import the functions
 import authenticateToken from '../middlewares/authenticateToken'; // Use default import
 
@@ -35,6 +35,7 @@ router.put('/update/:id', authenticateToken, async (req: Request, res: Response)
       return; // Stop execution if not authorized
     }
 
+    // Ensure the correct typing for `req.params.id`
     const updatedUser = await updateUser(req.params.id, req.body); // Ensure this returns a value
     res.status(200).json(updatedUser); // Response will be handled here
   } catch (error) {
@@ -53,7 +54,8 @@ router.delete('/delete/:id', authenticateToken, async (req: Request, res: Respon
       return; // Stop execution if not authorized
     }
 
-    await deleteUser(req.params.id); // Delete the user
+    // Pass res to deleteUser function, to match the expected arguments
+    await deleteUser(req.params.id, res); // Pass 'res' as the second argument to deleteUser
     res.status(204).end(); // Send a successful deletion response
   } catch (error) {
     res.status(500).json({
