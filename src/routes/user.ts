@@ -18,8 +18,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 // Login route - public route for user login
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body; // Extract email and password from the body
-    await loginUser(req, res, email, password); // loginUser should already handle the response internally
+    await loginUser(req, res); // Only pass req and res to the function (email and password are handled inside)
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
@@ -35,10 +34,8 @@ router.put('/update', authenticateToken, async (req: Request, res: Response): Pr
       return; // Return early if user is not authenticated
     }
 
-    const { id } = req.user; // Retrieve the user ID from the token or user object
-    const { username, email, password } = req.body; // Get new data from request body
-
-    await updateUser(req, res, { id, username, email, password }); // Pass the whole user data object to the controller
+    // Pass the whole user data object to the updateUser function
+    await updateUser(req, res); // Only pass req and res to the function
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
@@ -54,8 +51,7 @@ router.delete('/delete', authenticateToken, async (req: Request, res: Response):
       return; // Return early if user is not authenticated
     }
 
-    const { id } = req.user; // Retrieve the user ID from the token or user object
-    await deleteUser(req, res, id); // Pass just the id of the user to deleteUser controller
+    await deleteUser(req, res); // Only pass req and res to the function
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
