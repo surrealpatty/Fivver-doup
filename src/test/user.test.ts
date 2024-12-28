@@ -1,19 +1,36 @@
 import request from 'supertest'; // To make HTTP requests to the app
+import bcrypt from 'bcrypt'; // For hashing the password
 import { app } from '../index'; // Import the exported app instance
 import sequelize from '../config/database'; // Import the Sequelize instance
 import { User } from '../models/user'; // Import the User model
 
 describe('User Controller Tests', () => {
-  // Before all tests, sync the database and create a test user
+  let token: string; // Store token to use in tests
+  let userId: number; // Store user ID to use in tests
+
+  // Before all tests, sync the database, create a test user, and store the user ID and token
   beforeAll(async () => {
     try {
       await sequelize.sync({ force: true }); // Sync the database and reset it
-      // Create a test user for login and other actions
-      await User.create({
+
+      // Create a test user with a hashed password
+      const testUser = await User.create({
         username: 'testuser',
         email: 'test@example.com',
-        password: 'password123',
+        password: await bcrypt.hash('password123', 10), // Hash the password
       });
+
+      userId = testUser.id; // Store the created user's ID
+
+      // Log in and get the token
+      const loginResponse = await request(app)
+        .post('/users/login')
+        .send({
+          email: 'test@example.com',
+          password: 'password123',
+        });
+
+      token = loginResponse.body.token; // Extract the token from the login response
     } catch (error) {
       console.error('Error setting up test environment:', error);
     }
@@ -34,19 +51,8 @@ describe('User Controller Tests', () => {
 
   // Test update user profile
   test('should update the user profile', async () => {
-    // Login to get the token for authentication
-    const loginResponse = await request(app)
-      .post('/users/login') // Match your actual login route
-      .send({
-        email: 'test@example.com',
-        password: 'password123',
-      });
-
-    const token = loginResponse.body.token; // Extract the token
-
-    // Update the user's profile
     const updateResponse = await request(app)
-      .put('/users/1') // Match your update user profile route
+      .put(`/users/${userId}`) // Match your update user profile route with dynamic user ID
       .send({
         email: 'updated@example.com',
         username: 'updatedUser',
@@ -54,25 +60,14 @@ describe('User Controller Tests', () => {
       .set('Authorization', `Bearer ${token}`); // Include the token in the Authorization header
 
     expect(updateResponse.status).toBe(200); // Expect HTTP 200 OK
-    expect(updateResponse.body).toHaveProperty('id', 1); // Expect the updated user ID
+    expect(updateResponse.body).toHaveProperty('id', userId); // Expect the updated user ID
     expect(updateResponse.body).toHaveProperty('email', 'updated@example.com'); // Expect the updated email
   });
 
   // Test delete user account
   test('should delete the user account', async () => {
-    // Login to get the token for authentication
-    const loginResponse = await request(app)
-      .post('/users/login') // Match your actual login route
-      .send({
-        email: 'test@example.com',
-        password: 'password123',
-      });
-
-    const token = loginResponse.body.token; // Extract the token
-
-    // Delete the user's account
     const deleteResponse = await request(app)
-      .delete('/users/1') // Match your delete user route
+      .delete(`/users/${userId}`) // Match your delete user route with dynamic user ID
       .set('Authorization', `Bearer ${token}`); // Include the token in the Authorization header
 
     expect(deleteResponse.status).toBe(200); // Expect HTTP 200 OK
@@ -85,6 +80,7 @@ describe('User Controller Tests', () => {
   // After all tests, clean up the test user and close the Sequelize connection
   afterAll(async () => {
     try {
+      await User.destroy({ where: { id: userId } }); // Remove the test user from the database
       await sequelize.close(); // Close the database connection
     } catch (error) {
       console.error('Error closing test environment:', error);
