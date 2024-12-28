@@ -20,8 +20,8 @@ export const authenticateToken = (
 ): void => { // Ensure the return type is void (no Response object directly returned)
   // Extract token from the Authorization header
   const authHeader = req.headers['authorization'];
-  const token = authHeader?.startsWith('Bearer ')
-    ? authHeader.split(' ')[1]
+  const token = authHeader?.startsWith('Bearer ') 
+    ? authHeader.split(' ')[1] 
     : undefined;
 
   if (!token) {
@@ -34,7 +34,7 @@ export const authenticateToken = (
     return res.status(500).json({ message: 'Internal server error: Missing JWT secret.' });
   }
 
-  // Verify the token synchronously using jwt.verify
+  // Verify the token asynchronously using jwt.verify
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       // If token is invalid or expired, respond with an error
