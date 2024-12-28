@@ -2,10 +2,10 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 // Load environment variables based on the current environment
-const env = process.env.NODE_ENV as 'development' | 'test' | 'production' || 'development';
-dotenv.config({ path: `./.env.${env}` });
+const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development'; // Default to 'development' if NODE_ENV is not set
+dotenv.config({ path: `./.env.${env}` }); // Load environment variables from the correct .env file based on the environment
 
-// Define the Sequelize configuration
+// Define the Sequelize configuration for different environments
 const config = {
   development: {
     username: process.env.DB_USER || 'root',
@@ -50,7 +50,7 @@ const sequelize = new Sequelize({
 // Function to test the database connection
 export async function testConnection(): Promise<boolean> {
   try {
-    await sequelize.authenticate();
+    await sequelize.authenticate(); // Test the database connection
     console.log('Database connection established successfully.');
     return true;
   } catch (error) {

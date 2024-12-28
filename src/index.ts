@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import express from 'express';
-import sequelize from '@config/database'; // Correctly import sequelize as a default export
+import sequelize from '@config/database'; // Default import for sequelize
 import userRouter from './routes/user'; // Import the userRouter for handling user-related routes
 
 // Load environment variables from .env file
@@ -36,6 +36,7 @@ const testDatabaseConnection = async (): Promise<void> => {
 // Sync Sequelize models (alter: true is useful for development)
 const syncDatabase = async (): Promise<void> => {
   try {
+    // Sync Sequelize models manually (no need for addModels, models are already imported)
     await sequelize.sync({ alter: true }); // Use 'alter: true' for auto-syncing changes to the database schema
     console.log('Database synchronized successfully');
   } catch (error: unknown) {

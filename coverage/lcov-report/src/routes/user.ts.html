@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">27.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/32</span>
+                <span class='fraction'>8/29</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">27.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/28</span>
+                <span class='fraction'>8/29</span>
             </div>
         
             
@@ -159,6 +159,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,7 +175,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,64 +182,64 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express, { Request, Response } from 'express';
-import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import controller functions
+import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController';
 &nbsp;
-const router = express.Router(); // Initialize router
+const router = express.Router();
 &nbsp;
 // Register route
-router.post('/register', <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
+router.post('/register', <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const { username, email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span>
+    const { username, email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span> // Extract user details from the request body
     const newUser = <span class="cstat-no" title="statement not covered" >await registerUser({ username, email, password });</span> // Call registerUser function
-<span class="cstat-no" title="statement not covered" >    res.status(201).json(newUser);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(201).json(newUser); </span>// Respond with the new user object
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({</span>
-      message: error instanceof Error ? error.message : 'Unknown error',
-    }); // Handle errors
+      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    });
   }
 });
 &nbsp;
 // Login route
-router.post('/login', <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
+router.post('/login', <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const { email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span>
+    const { email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span> // Extract email and password from the request body
     const user = <span class="cstat-no" title="statement not covered" >await loginUser(email, password);</span> // Call loginUser function
-<span class="cstat-no" title="statement not covered" >    res.status(200).json(user);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(200).json(user); </span>// Respond with the logged-in user object
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({</span>
-      message: error instanceof Error ? error.message : 'Unknown error',
-    }); // Handle errors
+      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    });
   }
 });
 &nbsp;
 // Update user route
-router.put('/update', <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
+router.put('/update/:id', <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const { id, username, email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span> // Update user data from request body
+    const { id } = <span class="cstat-no" title="statement not covered" >req.params;</span> // Extract user ID from the route parameter
+    const { username, email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span> // Extract updated user details from the request body
     const updatedUser = <span class="cstat-no" title="statement not covered" >await updateUser(id, { username, email, password });</span> // Call updateUser function
-<span class="cstat-no" title="statement not covered" >    res.status(200).json(updatedUser);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(200).json(updatedUser); </span>// Respond with the updated user object
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({</span>
-      message: error instanceof Error ? error.message : 'Unknown error',
-    }); // Handle errors
+      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    });
   }
 });
 &nbsp;
 // Delete user route
-router.delete('/delete', <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
+router.delete('/delete/:id', <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const { id } = <span class="cstat-no" title="statement not covered" >req.body;</span> // User ID to delete from request body
+    const { id } = <span class="cstat-no" title="statement not covered" >req.params;</span> // Extract user ID from the route parameter
     const deletedUser = <span class="cstat-no" title="statement not covered" >await deleteUser(id);</span> // Call deleteUser function
-<span class="cstat-no" title="statement not covered" >    res.status(200).json(deletedUser);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(200).json(deletedUser); </span>// Respond with the deleted user object
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({</span>
-      message: error instanceof Error ? error.message : 'Unknown error',
-    }); // Handle errors
+      message: error instanceof Error ? error.message : 'Unknown error', // Handle errors
+    });
   }
 });
 &nbsp;
-// Export the router as default
-export default router;
+export default router; // Export the user routes for use in other files
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -247,7 +247,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-25T22:01:29.335Z
+                at 2024-12-28T02:41:25.810Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

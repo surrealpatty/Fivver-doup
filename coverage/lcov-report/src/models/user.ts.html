@@ -129,7 +129,12 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,44 +164,49 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Model, DataTypes, Optional } from 'sequelize';
+import sequelize from '../config/database'; // Correct import
 &nbsp;
 // Define the attributes of the User model
 export interface UserAttributes {
@@ -204,24 +214,29 @@ export interface UserAttributes {
   username: string;
   email: string;
   password: string;
-  role?: 'free' | 'paid'; // Add role attribute (optional, free or paid role)
+  role?: 'free' | 'paid'; // Role can be 'free' or 'paid'
   createdAt?: Date; // Optional because Sequelize manages timestamps
   updatedAt?: Date; // Optional because Sequelize manages timestamps
 }
 &nbsp;
 // Define the attributes required for creating a new User
-export interface UserCreationAttributes extends Optional&lt;UserAttributes, 'id' | 'createdAt' | 'updatedAt'&gt; {}
+export interface UserCreationAttributes
+  extends Optional&lt;UserAttributes, 'id' | 'createdAt' | 'updatedAt'&gt; {}
 &nbsp;
 // Define the User model class
-class User extends Model&lt;UserAttributes, UserCreationAttributes&gt; implements UserAttributes {
+class User
+  extends Model&lt;UserAttributes, UserCreationAttributes&gt;
+  implements UserAttributes
+{
   public id!: number;
   public username!: string;
   public email!: string;
   public password!: string;
-  public role?: 'free' | 'paid'; // Add role field to the class implementation
+  public role?: 'free' | 'paid'; // Role field can be free or paid
 &nbsp;
-  public readonly createdAt!: Date; // Sequelize automatically manages this
-  public readonly updatedAt!: Date; // Sequelize automatically manages this
+  // These fields are automatically managed by Sequelize, hence read-only
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 &nbsp;
 // Initialize the User model
@@ -239,27 +254,27 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Ensure email is unique
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('free', 'paid'), // Define ENUM for role
-      defaultValue: 'free', // Set default role to "free"
-      allowNull: false, // Ensure the role is always present
+      type: DataTypes.ENUM('free', 'paid'), // Define role options as ENUM
+      defaultValue: 'free', // Default to 'free' if not provided
+      allowNull: false, // Role must be specified
     },
   },
   {
-    sequelize, // Pass the Sequelize instance
-    modelName: 'User', // Name of the model
-    tableName: 'users', // Name of the table in the database
-    timestamps: true, // Enable createdAt and updatedAt
+    sequelize, // Sequelize instance passed here
+    modelName: 'User', // Model name
+    tableName: 'users', // Table name in the database
+    timestamps: true, // Automatically manage createdAt and updatedAt
   }
 );
 &nbsp;
-// Export the User model
+// Export the User model for use in other files
 export { User };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -268,7 +283,7 @@ export { User };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-25T22:01:29.335Z
+                at 2024-12-28T02:41:25.810Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
