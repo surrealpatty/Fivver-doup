@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import express from 'express';
-import sequelize from '@config/database';
+import sequelize from '@config/database'; // Correctly import sequelize as a default export
 import userRouter from './routes/user'; // Import the userRouter for handling user-related routes
 
 // Load environment variables from .env file
@@ -28,15 +28,14 @@ const testDatabaseConnection = async (): Promise<void> => {
     console.log('Database connection established.');
   } catch (error: unknown) {
     console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
-    // Instead of process.exit, log and throw the error to allow Jest to finish its cleanup
-    throw new Error('Database connection failed'); // Throwing the error to stop the process in a controlled manner
+    // Throwing the error to stop the process in a controlled manner
+    throw new Error('Database connection failed');
   }
 };
 
 // Sync Sequelize models (alter: true is useful for development)
 const syncDatabase = async (): Promise<void> => {
   try {
-    // Ensure models are registered before calling sync
     await sequelize.sync({ alter: true }); // Use 'alter: true' for auto-syncing changes to the database schema
     console.log('Database synchronized successfully');
   } catch (error: unknown) {
@@ -53,9 +52,14 @@ const initializeDatabase = async (): Promise<void> => {
     await syncDatabase(); // Sync the models once connected
   } catch (error: unknown) {
     console.error('Error initializing the database:', error instanceof Error ? error.message : error);
-    // You could handle this error based on your specific requirements
-    // For now, we throw to prevent starting the server with a broken database setup
-    process.exit(1);
+
+    if (process.env.NODE_ENV === 'test') {
+      // In test environment, throw the error to allow Jest to finish its cleanup
+      throw new Error('Database initialization failed during testing.');
+    } else {
+      // In production, exit the process to prevent starting a broken server
+      process.exit(1);
+    }
   }
 };
 

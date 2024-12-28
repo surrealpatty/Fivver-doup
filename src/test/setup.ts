@@ -1,23 +1,28 @@
-import * as dotenv from 'dotenv';
+import sequelize from '../config/database'; // Correct default import for sequelize
 
-// Load environment variables from .env.test
-dotenv.config({ path: './.env.test' });
-
-// Import sequelize from your database configuration
-import sequelize from '../config/database'; // Correct, default import
-
-// Export a global setup function that Jest expects
-export default async function globalSetup() {
+// Before all tests, authenticate and sync the test database
+beforeAll(async () => {
   try {
-    // Ensure the test database is connected
+    // Authenticate the database connection
     await sequelize.authenticate();
-    console.log('Test database connected successfully.');
+    console.log('Test database connection established.');
 
-    // Optionally sync the database (e.g., recreate tables for clean tests)
+    // Sync the database schema with force: true to reset tables
     await sequelize.sync({ force: true });
-    console.log('Test database synced.');
-  } catch (error) {
-    console.error('Error setting up test database:', error);
-    throw error; // Re-throw error to ensure test setup fails if database setup fails
+    console.log('Test database schema synced.');
+  } catch (error: unknown) {
+    console.error('Error setting up test database:', error instanceof Error ? error.message : error);
+    throw error; // Re-throw the error to ensure the test suite fails if setup fails
   }
-}
+});
+
+// After all tests, close the database connection
+afterAll(async () => {
+  try {
+    // Close the Sequelize connection
+    await sequelize.close();
+    console.log('Test database connection closed.');
+  } catch (error: unknown) {
+    console.error('Error closing test database connection:', error instanceof Error ? error.message : error);
+  }
+});
