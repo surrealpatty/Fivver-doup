@@ -1,5 +1,5 @@
-import sequelize from '../config/database'; // Correct, default import
 import dotenv from 'dotenv';
+import sequelize from '../config/database'; // Correct, default import
 
 // Load the .env.test file for the test environment
 dotenv.config({ path: './.env.test' }); 
@@ -36,6 +36,7 @@ export default async function globalSetup() {
     // Sync the database and reset the schema (force drop and recreate tables)
     await sequelize.sync({ force: true });
     console.log('Test database schema synced successfully.');
+
   } catch (error) {
     console.error('Error during test database setup:', error);
     throw error; // Propagate the error to stop Jest if setup fails

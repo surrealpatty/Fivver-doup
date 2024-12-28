@@ -1,5 +1,3 @@
-// src/index.ts
-
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import sequelize from '@config/database'; // Import sequelize instance from your database config
@@ -14,8 +12,8 @@ const port = process.env.PORT || 3000; // Use environment variable PORT or defau
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// User routes (e.g., /users route)
-app.use('/users', userRouter); 
+// User routes (e.g., /api/users route)
+app.use('/api/users', userRouter); 
 
 // Example route
 app.get('/', (_, res) => {

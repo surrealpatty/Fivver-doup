@@ -1,3 +1,7 @@
+// src/types/index.ts
+
+import { JwtPayload } from 'jsonwebtoken';
+
 /**
  * IUserAttributes interface represents the attributes of a user model instance
  * (used after the user is created in the database).
@@ -24,15 +28,16 @@ export interface IUserCreationAttributes extends Omit<IUserAttributes, 'id'> {
  */
 export interface UserPayload {
   id: string; // The user's ID (required)
-  email?: string; // The user's email (optional, to match the global declaration)
-  username?: string; // The user's username (optional, to match the global declaration)
+  email?: string; // The user's email (optional)
+  username?: string; // The user's username (optional)
+  isPaid?: boolean; // Whether the user has a paid subscription (optional)
 }
 
 /**
  * AuthRequest interface extends the Express Request type to include a `user` property.
  * This property represents the authenticated user's data extracted from the JWT.
  */
-export interface AuthRequest {
+export interface AuthRequest extends Request {
   user?: UserPayload; // `user` is optional and is added after token validation
 }
 

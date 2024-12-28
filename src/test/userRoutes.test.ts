@@ -30,7 +30,7 @@ describe('User Routes', () => {
   // Test for user registration
   it('should register a new user', async () => {
     const response = await request(app)
-      .post('/user/register')  // Assuming your register route is '/user/register'
+      .post('/users/register')  // Assuming your register route is '/users/register'
       .send({
         username: 'newuser',
         email: 'newuser@example.com',
@@ -45,7 +45,7 @@ describe('User Routes', () => {
   // Test for user login
   it('should log in an existing user', async () => {
     const response = await request(app)
-      .post('/user/login')  // Assuming your login route is '/user/login'
+      .post('/users/login')  // Assuming your login route is '/users/login'
       .send({
         email: 'test@example.com',
         password: 'password123', // Ensure the password is correct
@@ -59,7 +59,7 @@ describe('User Routes', () => {
   // Test for updating user profile (protected route)
   it('should update the user profile', async () => {
     const response = await request(app)
-      .put(`/user/update/${testUserId}`)  // Use the test user's ID for the update
+      .put(`/users/update/${testUserId}`)  // Use the test user's ID for the update
       .set('Authorization', `Bearer ${token}`)  // Pass the token in the Authorization header
       .send({
         username: 'updatedUsername',
@@ -74,7 +74,7 @@ describe('User Routes', () => {
   // Test for unauthorized access to update route (protected route)
   it('should not update user profile without authentication', async () => {
     const response = await request(app)
-      .put(`/user/update/${testUserId}`)  // Use the test user's ID for the update
+      .put(`/users/update/${testUserId}`)  // Use the test user's ID for the update
       .send({
         username: 'unauthorizedUpdate',
         email: 'unauthorized@example.com',
@@ -88,7 +88,7 @@ describe('User Routes', () => {
   // Test for deleting a user (protected route)
   it('should delete the user', async () => {
     const response = await request(app)
-      .delete(`/user/delete/${testUserId}`)  // Use the test user's ID for deletion
+      .delete(`/users/delete/${testUserId}`)  // Use the test user's ID for deletion
       .set('Authorization', `Bearer ${token}`)  // Pass the token in the Authorization header
       .send(); // Send an empty body or any necessary data
 
@@ -100,7 +100,7 @@ describe('User Routes', () => {
   // Test for unauthorized access to delete route (protected route)
   it('should not delete user without authentication', async () => {
     const response = await request(app)
-      .delete(`/user/delete/${testUserId}`)  // Use the test user's ID for deletion
+      .delete(`/users/delete/${testUserId}`)  // Use the test user's ID for deletion
       .send(); // Send an empty body or any necessary data
 
     // Assert that the response status is 401 (Unauthorized)

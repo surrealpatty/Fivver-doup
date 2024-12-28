@@ -1,12 +1,12 @@
 import request from 'supertest'; // To make HTTP requests to the app
 import bcrypt from 'bcrypt'; // For hashing the password
-import { app } from '../index'; // Import the exported app instance
+import { app } from '../index'; // Import the app instance
 import sequelize from '../config/database'; // Import the Sequelize instance
 import { User } from '../models/user'; // Import the User model
 
 describe('User Controller Tests', () => {
   let token: string; // Store token to use in tests
-  let userId: number; // Store user ID to use in tests
+  let userId: string; // Store user ID to use in tests (assuming string UUID for ID)
 
   // Before all tests, sync the database, create a test user, and store the user ID and token
   beforeAll(async () => {
@@ -18,6 +18,7 @@ describe('User Controller Tests', () => {
         username: 'testuser',
         email: 'test@example.com',
         password: await bcrypt.hash('password123', 10), // Hash the password
+        isPaid: false, // Add necessary field values
       });
 
       userId = testUser.id; // Store the created user's ID
@@ -47,6 +48,20 @@ describe('User Controller Tests', () => {
 
     expect(response.status).toBe(200); // Expect HTTP 200 OK
     expect(response.body).toHaveProperty('token'); // Expect a token in the response body
+  });
+
+  // Test user registration
+  test('should register a new user', async () => {
+    const response = await request(app)
+      .post('/user/register') // This should match your register route path
+      .send({
+        username: 'newuser',
+        email: 'newuser@example.com',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(201); // Expect HTTP 201 Created
+    expect(response.body.username).toBe('newuser'); // Expect username to match
   });
 
   // Test update user profile

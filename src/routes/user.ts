@@ -1,71 +1,62 @@
-import express, { Request, Response } from 'express';
-import { loginUser, updateUser, deleteUser, registerUser } from '../controllers/userController'; // Import the functions
+import express, { Router } from 'express';
+import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import the functions
 import { authenticateToken } from '../middlewares/authenticateToken';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-// Register route - public route for user registration
-router.post('/register', async (req: Request, res: Response): Promise<void> => {
+// Route to register a new user
+router.post('/register', async (req, res) => {
   try {
-    await registerUser(req, res); // registerUser only needs req and res
-    return; // Explicitly return to ensure the function has no return value
+    await registerUser(req, res); // Register the user
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
     });
-    return; // Ensure to return here as well
   }
 });
 
-// Login route - public route for user login
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
+// Route to log in an existing user
+router.post('/login', async (req, res) => {
   try {
-    await loginUser(req, res); // Only pass req and res to the function (email and password are handled inside)
-    return; // Explicitly return to ensure the function has no return value
+    await loginUser(req, res); // Log in the user
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
     });
-    return; // Ensure to return here as well
   }
 });
 
-// Update user route - protected route (authentication required)
-router.put('/update/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+// Route to update user profile (requires authentication)
+router.put('/update/:id', authenticateToken, async (req, res) => {
   try {
     // Check if the authenticated user is trying to update their own profile
     if (req.user?.id !== req.params.id) {
       res.status(403).json({ message: 'You are not authorized to update this profile' });
-      return; // Return after sending response
+      return; // Stop execution if not authorized
     }
 
-    // Pass the whole user data object to the updateUser function
-    await updateUser(req, res); // Only pass req and res to the function
-    return; // Explicitly return to ensure the function has no return value
+    await updateUser(req, res); // Update the user
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
     });
-    return; // Ensure to return here as well
   }
 });
 
-// Delete user route - protected route (authentication required)
-router.delete('/delete/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+// Route to delete user (requires authentication)
+router.delete('/delete/:id', authenticateToken, async (req, res) => {
   try {
     // Check if the authenticated user is trying to delete their own account
     if (req.user?.id !== req.params.id) {
       res.status(403).json({ message: 'You are not authorized to delete this account' });
-      return; // Return after sending response
+      return; // Stop execution if not authorized
     }
 
-    await deleteUser(req, res); // Only pass req and res to the function
-    return; // Explicitly return to ensure the function has no return value
+    await deleteUser(req, res); // Delete the user
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : 'Unknown error',
     });
-    return; // Ensure to return here as well
   }
 });
 
