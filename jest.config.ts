@@ -1,6 +1,4 @@
-import type { Config } from '@jest/types';
-
-const config: Config.InitialOptions = {
+module.exports = {
   preset: 'ts-jest', // Use ts-jest for transpiling TypeScript
   testEnvironment: 'node', // Node.js environment for testing
   maxWorkers: process.env.CI ? 2 : 1, // Adjust workers for CI/CD
@@ -32,5 +30,3 @@ const config: Config.InitialOptions = {
   globalTeardown: '<rootDir>/src/test/teardown.ts', // Path to global teardown file
   cacheDirectory: '<rootDir>/.jest-cache', // Cache directory
 };
-
-export default config;

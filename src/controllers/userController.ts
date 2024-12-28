@@ -60,6 +60,11 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
     const { id } = req.params;
     const updates = req.body;
 
+    // Check if the authenticated user is the one requesting the update
+    if (req.user?.id !== id) {
+      return res.status(403).json({ message: 'You are not authorized to update this profile' });
+    }
+
     // Update user details in the database
     const [updated] = await User.update(updates, { where: { id } });
     if (!updated) {
@@ -80,6 +85,11 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
 export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
+
+    // Check if the authenticated user is the one requesting the delete
+    if (req.user?.id !== id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this account' });
+    }
 
     // Delete user from the database
     const deleted = await User.destroy({ where: { id } });
