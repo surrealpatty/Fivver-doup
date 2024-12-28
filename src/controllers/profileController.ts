@@ -1,7 +1,6 @@
 import { User, UserCreationAttributes } from '../models';
-import bcrypt from 'bcryptjs'; // Add bcrypt for password comparison
+import bcrypt from 'bcryptjs';
 
-// Register user function
 export const registerUser = async ({
   username,
   email,
@@ -16,20 +15,21 @@ export const registerUser = async ({
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userData: UserCreationAttributes = {
-      username: username, // Use the passed username
-      email: email, // Use the passed email
-      password: hashedPassword, // Use the hashed password
-      role: 'free', // Default to 'free' role
+      username: username,
+      email: email,
+      password: hashedPassword,
+      role: 'free', // Default role
+      isPaid: false, // Ensure the 'isPaid' field is provided
     };
 
     // Create the user with hashed password
     const user = await User.create(userData);
 
-    return user; // Return the created user object
+    return user;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error('Error registering user: ' + error.message); // Return specific error message
+      throw new Error('Error registering user: ' + error.message);
     }
-    throw new Error('Unknown error occurred during user registration'); // Fallback error message
+    throw new Error('Unknown error occurred during user registration');
   }
 };
