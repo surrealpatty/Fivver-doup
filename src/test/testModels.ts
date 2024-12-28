@@ -1,4 +1,5 @@
-import sequelize from '../config/database'; // Correct, default import
+import { sequelize } from '@config/database';  // Named import for sequelize
+
 import { User } from '../models/user'; // Correct named import
 import { Service, ServiceCreationAttributes } from '../models/service'; // Correct path
 

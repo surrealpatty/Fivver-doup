@@ -1,6 +1,7 @@
 // src/test/orderController.ts
 
-import sequelize from '../config/database'; 
+import { sequelize } from '@config/database';  // Named import for sequelize
+
 import Order from '../models/order';
 import { User } from '../models/user'; 
 import Service from '../models/services';

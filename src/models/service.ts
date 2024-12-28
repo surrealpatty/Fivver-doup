@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../config/database';
+import { sequelize } from '@config/database';  // Named import for sequelize
+
 import { User } from './user'; // Correct named import for User model
 
 // Define the interface for Service attributes

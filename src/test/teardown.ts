@@ -1,6 +1,6 @@
 // test/teardown.ts
+import { sequelize } from '@config/database';  // Named import for sequelize
 
-import sequelize from '../config/database'; // Correct, default import
 
 export default async function globalTeardown() {
   try {
