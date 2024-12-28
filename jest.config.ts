@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'ts-jest', // Use ts-jest for transpiling TypeScript
   testEnvironment: 'node', // Node.js environment for testing
+  roots: ['<rootDir>/src'], // Ensure Jest looks in the src directory
   maxWorkers: process.env.CI ? 2 : 1, // Adjust workers for CI/CD
   transform: {
     '^.+\\.tsx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }], // Transpile TypeScript files

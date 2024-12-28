@@ -8,6 +8,7 @@ export interface UserAttributes {
   email: string;
   password: string;
   role?: 'free' | 'paid'; // Role can be 'free' or 'paid'
+  isPaid: boolean; // Add the isPaid field as required
   createdAt?: Date; // Optional because Sequelize manages timestamps
   updatedAt?: Date; // Optional because Sequelize manages timestamps
 }
@@ -26,6 +27,7 @@ class User
   public email!: string;
   public password!: string;
   public role?: 'free' | 'paid'; // Role field can be free or paid
+  public isPaid!: boolean; // Add isPaid field as required
 
   // These fields are automatically managed by Sequelize, hence read-only
   public readonly createdAt!: Date;
@@ -57,6 +59,11 @@ User.init(
       type: DataTypes.ENUM('free', 'paid'), // Define role options as ENUM
       defaultValue: 'free', // Default to 'free' if not provided
       allowNull: false, // Role must be specified
+    },
+    isPaid: {
+      type: DataTypes.BOOLEAN, // Define isPaid as a boolean
+      defaultValue: false, // Default to false if not provided
+      allowNull: false, // isPaid must be specified
     },
   },
   {
