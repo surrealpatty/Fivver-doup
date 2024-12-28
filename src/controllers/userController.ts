@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'; // Keep these imports as they are needed
 import { User } from '../models';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 // Register user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {

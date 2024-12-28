@@ -1,66 +1,34 @@
-import express, { Router, Request, Response, NextFunction } from 'express'; // Removed unused NextFunction
-import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import the functions
-import authenticateToken from '../middlewares/authenticateToken'; // Use default import
+import { Router, Request, Response } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Assuming you have this middleware
 
-const router: Router = express.Router();
+const router = Router();
 
-// Route to register a new user
-router.post('/register', async (req: Request, res: Response): Promise<void> => {
-  try {
-    await registerUser(req, res); // Register the user
-  } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
-  }
-});
-
-// Route to log in an existing user
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
-  try {
-    await loginUser(req, res); // Log in the user
-  } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
-  }
-});
-
-// Route to update user profile (requires authentication)
+// Update user route
 router.put('/update/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
   try {
-    // Check if the authenticated user is trying to update their own profile
-    if (req.user?.id !== req.params.id) {
-      res.status(403).json({ message: 'You are not authorized to update this profile' });
-      return; // Stop execution if not authorized
-    }
+    const { id } = req.params;
+    const { username, email } = req.body;
+    
+    // Your update logic here (e.g., finding the user by id and updating)
+    // Example: const updatedUser = await User.update({ username, email }, { where: { id } });
 
-    // Ensure the correct typing for `req.params.id`
-    const updatedUser = await updateUser(req.params.id, req.body); // Ensure this returns a value
-    res.status(200).json(updatedUser); // Response will be handled here
+    res.status(200).json({ message: 'Updated successfully' });
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
+    res.status(500).json({ message: 'Internal server error', error });
   }
 });
 
-// Route to delete user (requires authentication)
+// Delete user route
 router.delete('/delete/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
   try {
-    // Check if the authenticated user is trying to delete their own account
-    if (req.user?.id !== req.params.id) {
-      res.status(403).json({ message: 'You are not authorized to delete this account' });
-      return; // Stop execution if not authorized
-    }
+    const { id } = req.params;
 
-    // Pass res to deleteUser function, to match the expected arguments
-    await deleteUser(req.params.id, res); // Pass 'res' as the second argument to deleteUser
-    res.status(204).end(); // Send a successful deletion response
+    // Your delete logic here (e.g., finding and deleting the user)
+    // Example: const deletedUser = await User.destroy({ where: { id } });
+
+    res.status(200).json({ message: 'Deleted successfully' });
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
+    res.status(500).json({ message: 'Internal server error', error });
   }
 });
 

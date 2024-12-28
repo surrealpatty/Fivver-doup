@@ -15,6 +15,7 @@ describe('User Routes', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: 'password123', // Ensure the password is hashed properly
+      isPaid: false, // Add the missing 'isPaid' field here
     });
 
     // Generate a token for the created user
@@ -35,6 +36,7 @@ describe('User Routes', () => {
         username: 'newuser',
         email: 'newuser@example.com',
         password: 'newpassword123', // Ensure password is hashed in your controller
+        isPaid: false, // Include the isPaid field here
       });
 
     // Assert that the response status is 201 (Created)
