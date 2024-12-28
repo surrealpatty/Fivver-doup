@@ -1,9 +1,11 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Load environment variables based on the current environment
-const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development'; // Default to 'development' if NODE_ENV is not set
-dotenv.config({ path: `./.env.${env}` }); // Load environment variables from the correct .env file based on the environment
+// Determine the current environment or default to 'development'
+const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development';
+
+// Load environment variables based on the environment
+dotenv.config({ path: `./.env.${env}` });
 
 // Define the Sequelize configuration for different environments
 const config = {
@@ -17,8 +19,8 @@ const config = {
     logging: true,
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',
-    password: process.env.TEST_DB_PASSWORD || '',
+    username: process.env.TEST_DB_USER || 'testuser',
+    password: process.env.TEST_DB_PASSWORD || 'testpassword',
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     port: parseInt(process.env.TEST_DB_PORT || '3306', 10),
@@ -50,12 +52,12 @@ const sequelize = new Sequelize({
 // Function to test the database connection
 export async function testConnection(): Promise<boolean> {
   try {
-    await sequelize.authenticate(); // Test the database connection
+    await sequelize.authenticate();
     console.log('Database connection established successfully.');
-    return true; // Return true if connection is successful
+    return true;
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-    return false; // Return false if connection fails
+    return false;
   }
 }
 
