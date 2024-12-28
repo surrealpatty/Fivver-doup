@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';
-import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController';
+import { Router } from 'express';
+import { loginUser, updateUser, deleteUser, registerUser } from '../controllers/userController';
 
-const router = express.Router();
+const userRouter = Router();
 
 // Register route
-router.post('/register', async (req: Request, res: Response) => {
+userRouter.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body; // Extract user details from the request body
     const newUser = await registerUser({ username, email, password }); // Call registerUser function
@@ -17,7 +17,7 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 // Login route
-router.post('/login', async (req: Request, res: Response) => {
+userRouter.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body; // Extract email and password from the request body
     const user = await loginUser(email, password); // Call loginUser function
@@ -30,7 +30,7 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 // Update user route
-router.put('/update/:id', async (req: Request, res: Response) => {
+userRouter.put('/update/:id', async (req, res) => {
   try {
     const { id } = req.params; // Extract user ID from the route parameter
     const { username, email, password } = req.body; // Extract updated user details from the request body
@@ -44,7 +44,7 @@ router.put('/update/:id', async (req: Request, res: Response) => {
 });
 
 // Delete user route
-router.delete('/delete/:id', async (req: Request, res: Response) => {
+userRouter.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params; // Extract user ID from the route parameter
     const deletedUser = await deleteUser(id); // Call deleteUser function
@@ -56,4 +56,4 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
   }
 });
 
-export default router; // Export the user routes for use in other files
+export default userRouter; // Export the user routes for use in other files

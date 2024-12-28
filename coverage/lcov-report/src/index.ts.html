@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/35</span>
+                <span class='fraction'>25/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.66% </span>
+                <span class="strong">8.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/12</span>
+                <span class='fraction'>1/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/7</span>
+                <span class='fraction'>5/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/35</span>
+                <span class='fraction'>25/35</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -184,43 +184,43 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,16 +260,16 @@ const testDatabaseConnection = async (): Promise&lt;void&gt; =&gt; {
   }
 };
 &nbsp;
-// Sync Sequelize models (alter: true is useful for development)
+// Sync Sequelize models (force: true will drop and recreate tables)
 const syncDatabase = async (): Promise&lt;void&gt; =&gt; {
   try {
-    // Sync Sequelize models manually (no need for addModels, models are already imported)
-    await sequelize.sync({ alter: true }); // Use 'alter: true' for auto-syncing changes to the database schema
-<span class="cstat-no" title="statement not covered" >    console.log('Database synchronized successfully');</span>
+    // Sync Sequelize models manually (force: true drops and recreates the tables)
+    await sequelize.sync({ force: true }); // Use 'force: true' for development to drop/recreate tables
+    console.log('Database synchronized successfully');
   } catch (error: unknown) {
-    console.error('Error synchronizing database:', error instanceof Error ? error.message : <span class="branch-1 cbranch-no" title="branch not covered" >error)</span>;
+<span class="cstat-no" title="statement not covered" >    console.error('Error synchronizing database:', error instanceof Error ? error.message : error);</span>
     // Throw error to prevent server startup if syncing fails
-    throw new Error('Database synchronization failed');
+<span class="cstat-no" title="statement not covered" >    throw new Error('Database synchronization failed');</span>
   }
 };
 &nbsp;
@@ -279,12 +279,12 @@ const initializeDatabase = async (): Promise&lt;void&gt; =&gt; {
     await testDatabaseConnection(); // Ensure the database connection is established
     await syncDatabase(); // Sync the models once connected
   } catch (error: unknown) {
-    console.error('Error initializing the database:', error instanceof Error ? error.message : <span class="branch-1 cbranch-no" title="branch not covered" >error)</span>;
+<span class="cstat-no" title="statement not covered" >    console.error('Error initializing the database:', error instanceof Error ? error.message : error);</span>
 &nbsp;
-    if (process.env.NODE_ENV === 'test') {
+<span class="cstat-no" title="statement not covered" >    if (process.env.NODE_ENV === 'test') {</span>
       // In test environment, throw the error to allow Jest to finish its cleanup
-      throw new Error('Database initialization failed during testing.');
-    } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >      throw new Error('Database initialization failed during testing.');</span>
+    } else {
       // In production, exit the process to prevent starting a broken server
 <span class="cstat-no" title="statement not covered" >      process.exit(1);</span>
     }
@@ -293,17 +293,17 @@ const initializeDatabase = async (): Promise&lt;void&gt; =&gt; {
 &nbsp;
 // Call initializeDatabase before starting the server
 initializeDatabase()
-  .then(<span class="fstat-no" title="function not covered" >() =</span>&gt; {
+  .then(() =&gt; {
     // Start the server only if the database connection and sync are successful
-<span class="cstat-no" title="statement not covered" >    app.listen(port, <span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      console.log(`Server is running on port ${port}`);</span>
+    app.listen(port, () =&gt; {
+      console.log(`Server is running on port ${port}`);
     });
   })
-  .catch((error: unknown) =&gt; {
+  .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: unknown) =&gt; {
     // If database initialization fails, log the error and prevent server start
-    console.error(
+<span class="cstat-no" title="statement not covered" >    console.error(</span>
       'Server failed to start due to database error:',
-      error instanceof Error ? error.message : <span class="branch-1 cbranch-no" title="branch not covered" >error</span>
+      error instanceof Error ? error.message : error
     );
   });
 &nbsp;</pre></td></tr></table></pre>
@@ -313,7 +313,7 @@ initializeDatabase()
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-28T03:13:27.783Z
+                at 2024-12-28T03:16:24.365Z
             </div>
         <script src="../prettify.js"></script>
         <script>
