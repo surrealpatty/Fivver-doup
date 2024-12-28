@@ -1,4 +1,4 @@
-import sequelize from '../config/database'; // Correct default import for sequelize
+import sequelize from '../config/database'; // Import sequelize instance from the configuration
 
 // Before all tests, authenticate and sync the test database
 beforeAll(async () => {
@@ -7,7 +7,7 @@ beforeAll(async () => {
     await sequelize.authenticate();
     console.log('Test database connection established.');
 
-    // Sync the database schema with force: true to reset tables
+    // Sync the database schema with force: true to reset tables before running tests
     await sequelize.sync({ force: true });
     console.log('Test database schema synced.');
   } catch (error: unknown) {
