@@ -1,8 +1,9 @@
+// src/test/globalSetup.ts
 import dotenv from 'dotenv';
-import sequelize from '../config/database'; // Correct, default import
+import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
 
 // Load the .env.test file for the test environment
-dotenv.config({ path: './.env.test' }); 
+dotenv.config({ path: './.env.test' });
 
 // Log environment variables for debugging
 console.log('DB_USER:', process.env.DB_USER);
@@ -28,6 +29,16 @@ export default async function globalSetup() {
     // Log for debugging to ensure values are correct
     console.log('Using database:', DB_NAME);
     console.log('Connecting to DB at:', DB_HOST, 'on port', DB_PORT);
+
+    // Create a Sequelize instance using the environment variables
+    const sequelize = new Sequelize({
+      username: DB_USER, 
+      password: DB_PASSWORD, // Use the password from the environment variables
+      database: DB_NAME, 
+      host: DB_HOST,
+      port: parseInt(DB_PORT, 10), // Ensure the port is parsed as an integer
+      dialect: 'mysql',
+    });
 
     // Establish a connection to the test database
     await sequelize.authenticate();

@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { registerUser, loginUser, updateUser, deleteUser } from '../controllers/userController'; // Import the functions
-import { authenticateToken } from '../middlewares/authenticateToken';
+import authenticateToken from '../middlewares/authenticateToken'; // Use default import
 
 const router: Router = express.Router();
 

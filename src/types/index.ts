@@ -1,6 +1,4 @@
-// src/types/index.ts
-
-import { JwtPayload } from 'jsonwebtoken';
+import { Request } from 'express';
 
 /**
  * IUserAttributes interface represents the attributes of a user model instance
@@ -38,14 +36,14 @@ export interface UserPayload {
  * This property represents the authenticated user's data extracted from the JWT.
  */
 export interface AuthRequest extends Request {
-  user?: UserPayload; // `user` is optional and is added after token validation
+  user?: UserPayload; // Ensure consistency with the global `Express.Request` type
 }
 
 // Extend the Express Request interface globally to include `user` in the request object
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload; // Attach `user` to `Request`
+      user?: UserPayload; // Ensure this type matches the `AuthRequest` declaration
     }
   }
 }
