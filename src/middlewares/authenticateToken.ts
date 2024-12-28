@@ -17,7 +17,7 @@ export const authenticateToken = (
   req: Request & { user?: UserPayload }, // Extend Request type to include user
   res: Response,
   next: NextFunction
-): void => { // Ensure the return type is void (no Response object directly returned)
+): void => {
   // Extract token from the Authorization header
   const authHeader = req.headers['authorization'];
   const token = authHeader?.startsWith('Bearer ') 
@@ -26,25 +26,31 @@ export const authenticateToken = (
 
   if (!token) {
     // Respond with an error if the token is not present
-    return res.status(401).json({ message: 'Access denied, no token provided.' });
+    res.status(401).json({ message: 'Access denied, no token provided.' });
+    return; // End the request-response cycle
   }
 
   if (!jwtSecret) {
     // Respond with an error if the JWT secret is missing
-    return res.status(500).json({ message: 'Internal server error: Missing JWT secret.' });
+    res.status(500).json({ message: 'Internal server error: Missing JWT secret.' });
+    return; // End the request-response cycle
   }
 
   // Verify the token asynchronously using jwt.verify
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       // If token is invalid or expired, respond with an error
-      return res.status(403).json({ message: 'Invalid or expired token.' });
+      res.status(403).json({ message: 'Invalid or expired token.' });
+      return; // End the request-response cycle
     }
 
-    // Attach the decoded payload to req.user
-    req.user = decoded as UserPayload;
+    // Type assertion for decoded, as jwt.verify returns a string or JwtPayload
+    if (decoded) {
+      req.user = decoded as UserPayload; // Ensure decoded is assigned as UserPayload
+      return next(); // Proceed to the next middleware or route handler
+    }
 
-    // Proceed to the next middleware or route handler
-    next();
+    // If decoded is undefined, respond with an error
+    res.status(403).json({ message: 'Invalid or expired token.' });
   });
 };

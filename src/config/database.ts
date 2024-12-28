@@ -52,10 +52,10 @@ export async function testConnection(): Promise<boolean> {
   try {
     await sequelize.authenticate(); // Test the database connection
     console.log('Database connection established successfully.');
-    return true;
+    return true; // Return true if connection is successful
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-    return false;
+    return false; // Return false if connection fails
   }
 }
 
