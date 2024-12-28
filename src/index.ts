@@ -1,3 +1,5 @@
+// src/index.ts
+
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import sequelize from '@config/database'; // Import sequelize instance from your database config
@@ -76,3 +78,6 @@ initializeDatabase()
     // If database initialization fails, log the error and prevent server start
     console.error('Server failed to start due to database error:', error instanceof Error ? error.message : error);
   });
+
+// Export the app instance for use elsewhere, like in tests
+export { app }; // Export the app instance

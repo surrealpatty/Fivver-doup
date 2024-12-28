@@ -1,9 +1,11 @@
-import sequelize from '../config/database'; // Correct, default import
+// src/test/orderController.ts
+
+import sequelize from '../config/database'; 
 import Order from '../models/order';
-import { User } from '../models/user'; // Correct named import
+import { User } from '../models/user'; 
 import Service from '../models/services';
-import request from 'supertest'; // Assuming you're using supertest for API testing
-import { app } from '../index'; // Now exporting 'app' from the index file
+import request from 'supertest'; 
+import { app } from '../index';  // Now importing correctly after app export
 
 // Mock models with correct types
 jest.mock('../models/user');
@@ -11,43 +13,44 @@ jest.mock('../models/services');
 jest.mock('../models/order');
 
 // Mocking methods for Sequelize models
-const mockFindByPk = jest.fn();
-const mockFindAll = jest.fn();
+const mockFindByPkUser = jest.fn();
+const mockFindByPkService = jest.fn();
+const mockFindByPkOrder = jest.fn();
+const mockFindAllOrder = jest.fn();
 
-(User.findByPk as jest.Mock) = mockFindByPk;
-(Service.findByPk as jest.Mock) = mockFindByPk;
-(Order.findByPk as jest.Mock) = mockFindByPk;
-(Order.findAll as jest.Mock) = mockFindAll;
+// Assigning mock functions to models
+(User.findByPk as jest.Mock) = mockFindByPkUser;
+(Service.findByPk as jest.Mock) = mockFindByPkService;
+(Order.findByPk as jest.Mock) = mockFindByPkOrder;
+(Order.findAll as jest.Mock) = mockFindAllOrder;
 
 describe('Order Controller', () => {
   beforeAll(async () => {
-    // Setup database before tests (optional depending on your test environment)
-    await sequelize.sync({ force: true }); // Create tables and reset data
+    await sequelize.sync({ force: true });
   });
 
   beforeEach(() => {
-    // Reset mocks before each test to ensure clean slate for tests
     jest.resetAllMocks();
   });
 
   afterAll(async () => {
-    // Clean up after tests
     await sequelize.close();
   });
 
-  // Test createOrder
   describe('POST /orders', () => {
     it('should create a new order successfully', async () => {
-      // Mock User and Service findByPk
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test User' }); // Mock User found
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
+      // Mocking the User and Service data for successful creation
+      mockFindByPkUser.mockResolvedValueOnce({ id: 1, name: 'Test User' });
+      mockFindByPkService.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
 
+      // Sending request to create order
       const response = await request(app).post('/orders').send({
         userId: 1,
         serviceId: 1,
         orderDetails: 'Test order details',
       });
 
+      // Asserting successful response
       expect(response.status).toBe(201);
       expect(response.body.message).toBe('Order created successfully');
       expect(response.body.order).toHaveProperty('userId', 1);
@@ -55,19 +58,37 @@ describe('Order Controller', () => {
     });
 
     it('should return 404 if user or service not found', async () => {
-      mockFindByPk.mockResolvedValueOnce(null); // User not found
-      mockFindByPk.mockResolvedValueOnce({ id: 1, name: 'Test Service' }); // Mock Service found
+      // Mocking user not found
+      mockFindByPkUser.mockResolvedValueOnce(null);
+      mockFindByPkService.mockResolvedValueOnce({ id: 1, name: 'Test Service' });
 
+      // Sending request to create order
       const response = await request(app).post('/orders').send({
         userId: 1,
         serviceId: 1,
         orderDetails: 'Test order details',
       });
 
+      // Asserting response for not found user
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('User or Service not found');
+    });
+
+    it('should return 404 if service not found', async () => {
+      // Mocking service not found
+      mockFindByPkUser.mockResolvedValueOnce({ id: 1, name: 'Test User' });
+      mockFindByPkService.mockResolvedValueOnce(null);
+
+      // Sending request to create order
+      const response = await request(app).post('/orders').send({
+        userId: 1,
+        serviceId: 1,
+        orderDetails: 'Test order details',
+      });
+
+      // Asserting response for not found service
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('User or Service not found');
     });
   });
-
-  // Other test cases as needed...
 });
