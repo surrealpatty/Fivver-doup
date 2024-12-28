@@ -17,6 +17,7 @@ export const registerUser = async (
       username,
       email,
       password: hashedPassword,
+      isPaid: false, // Add the missing 'isPaid' property
     });
 
     // Send response back to the client
@@ -26,10 +27,13 @@ export const registerUser = async (
         id: user.id,
         email: user.email,
         username: user.username,
+        isPaid: user.isPaid, // Include 'isPaid' in the response
       },
     });
   } catch (error) {
-    console.error('Error during user registration:', error);
-    res.status(500).json({ message: 'Server error during user registration.' });
+    console.error('Error registering user:', error);
+    res.status(500).json({
+      message: 'Server error, please try again later.',
+    });
   }
 };

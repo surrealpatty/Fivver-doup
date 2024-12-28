@@ -53,7 +53,7 @@ router.delete('/delete/:id', authenticateToken, async (req: Request, res: Respon
       return; // Stop execution if not authorized
     }
 
-    await deleteUser(req, res); // Delete the user
+    await deleteUser(req.params.id); // Delete the user
     res.status(204).end(); // Send a successful deletion response
   } catch (error) {
     res.status(500).json({
