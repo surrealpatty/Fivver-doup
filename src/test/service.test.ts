@@ -1,4 +1,5 @@
-import { createService, getServices } from '../services/serviceService'; // Full path: src/services/serviceService.ts
+import { sequelize } from '../config/database'; // Assuming sequelize is imported from your database config
+import { createService, getServices } from '../services/serviceService'; // Adjust paths as necessary
 
 // Mock the service functions
 jest.mock('../services/serviceService', () => ({
@@ -35,10 +36,26 @@ describe('Service Functions', () => {
     },
   ];
 
-  beforeEach(() => {
-    jest.clearAllMocks(); // Reset mocks before each test
+  // Runs before any test starts
+  beforeAll(async () => {
+    // Initialize your database connection before running any tests
+    await sequelize.authenticate();
+    console.log('Database connection established');
   });
 
+  // Runs after all tests have finished
+  afterAll(async () => {
+    // Close the database connection after tests finish
+    await sequelize.close();
+    console.log('Database connection closed');
+  });
+
+  // Runs after each test case
+  afterEach(() => {
+    jest.clearAllMocks(); // Clear mocks after each test to ensure clean test environment
+  });
+
+  // Test case for creating a service
   test('should create a new service', async () => {
     // Mock the createService function to return the mock created service
     (createService as jest.Mock).mockResolvedValue(mockCreatedService);
@@ -52,6 +69,7 @@ describe('Service Functions', () => {
     expect(result).toHaveProperty('title', mockService.title); // Check title matches input
   });
 
+  // Test case for retrieving all services
   test('should retrieve all services', async () => {
     // Mock the getServices function to return a list of services
     (getServices as jest.Mock).mockResolvedValue(mockServices);
