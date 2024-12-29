@@ -23,7 +23,7 @@ type DBConfig = {
     database: string | undefined;
     host: string;
     dialect: Dialect;
-    logging: boolean;  // Added logging property for the test environment
+    logging: boolean;
     dialectOptions: {
       charset: string;
     };
@@ -34,7 +34,7 @@ type DBConfig = {
     database: string | undefined;
     host: string;
     dialect: Dialect;
-    logging: boolean;  // Added logging property for the production environment
+    logging: boolean;
     dialectOptions: {
       charset: string;
       ssl: boolean | { rejectUnauthorized: boolean };
@@ -59,10 +59,10 @@ const config: DBConfig = {
     },
   },
   test: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup_test',
-    host: process.env.DB_HOST || '127.0.0.1',
+    username: process.env.TEST_DB_USER || 'root', // Use TEST_DB_USER for the test environment
+    password: process.env.TEST_DB_PASSWORD || '',
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: process.env.TEST_DB_HOST || '127.0.0.1',
     dialect: 'mysql' as Dialect,
     logging: false, // Set to false for testing (or keep true for debugging)
     dialectOptions: {
