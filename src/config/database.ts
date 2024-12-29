@@ -82,7 +82,7 @@ const environment = (process.env.NODE_ENV as 'development' | 'test' | 'productio
 const dbConfig = config[environment];
 
 // Create a Sequelize instance using the configuration
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
   dbConfig.database,
   dbConfig.username,
   dbConfig.password,
@@ -106,6 +106,3 @@ export const testConnection = async (): Promise<boolean> => {
     return false; // Return false if there was an error during connection
   }
 };
-
-export const sequelize = 'some-database-connection';
-
