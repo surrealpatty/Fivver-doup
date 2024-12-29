@@ -1,3 +1,5 @@
+// src/test/setup.ts
+
 import { Sequelize } from 'sequelize'; // Import Sequelize constructor
 import dotenv from 'dotenv'; // To load environment variables
 

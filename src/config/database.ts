@@ -1,22 +1,26 @@
+// src/config/database.ts
+
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import config from './config'; // Import the config file that exports environments
 
-// Load environment variables
-dotenv.config();
+// Get the environment (defaults to 'development' if not set)
+const environment = process.env.NODE_ENV || 'development';
 
-// Determine the current environment or default to 'development'
-const env = process.env.NODE_ENV || 'development';
+// Get the database configuration for the current environment
+const dbConfig = config[environment];
 
-// Define the Sequelize instance for the current environment
-const sequelize = new Sequelize({
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'fivver_doup',
-  host: process.env.DB_HOST || '127.0.0.1',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
-  dialect: 'mysql',
-  logging: env === 'development',  // Enable logging only in development
-});
+// Create a new Sequelize instance with the current environment's configuration
+const sequelize = new Sequelize(
+  dbConfig.database, // Database name
+  dbConfig.username,  // Username
+  dbConfig.password,  // Password
+  {
+    host: dbConfig.host,         // Host
+    dialect: dbConfig.dialect,   // Dialect (mysql in this case)
+    logging: dbConfig.logging,   // Enable logging based on the environment
+    dialectOptions: dbConfig.dialectOptions, // Charset and other dialect-specific options
+    ssl: dbConfig.dialectOptions.ssl, // SSL configuration for production
+  }
+);
 
-// Export sequelize as a named export
-export { sequelize };
+export { sequelize }; // Export the sequelize instance
