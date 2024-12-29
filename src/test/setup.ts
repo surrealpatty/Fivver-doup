@@ -1,11 +1,12 @@
 import { Sequelize } from 'sequelize'; // Import Sequelize constructor
 import dotenv from 'dotenv'; // To load environment variables
+import { User } from '@models/user'; // Import the User model
 
 // Load environment variables from a .env file
 dotenv.config();
 
 // Set up the test database connection for Sequelize with environment-specific variables
-const sequelize = new Sequelize({
+const testSequelize = new Sequelize({
   username: process.env.TEST_DB_USER || 'root', // Use environment variable for DB user, fallback to 'root'
   password: process.env.TEST_DB_PASSWORD || '', // Use environment variable for DB password, fallback to empty string
   database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Use environment variable for DB name, fallback to 'fivver_doup_test'
@@ -19,11 +20,11 @@ const sequelize = new Sequelize({
 beforeAll(async () => {
   try {
     // Authenticate the database connection
-    await sequelize.authenticate();
+    await testSequelize.authenticate();
     console.log('Test database connection established.');
 
     // Sync the database schema with force: true to reset tables before running tests
-    await sequelize.sync({ force: true });
+    await testSequelize.sync({ force: true });
     console.log('Test database schema synced.');
   } catch (error) {
     console.error('Error setting up test database:', error instanceof Error ? error.message : error);
@@ -31,15 +32,20 @@ beforeAll(async () => {
   }
 });
 
+// Before each test, clean up the database to avoid conflicts with existing data
+beforeEach(async () => {
+  await User.destroy({ where: {} }); // Clean up the User table before each test
+});
+
 // After all tests, close the database connection
 afterAll(async () => {
   try {
     // Close the Sequelize connection
-    await sequelize.close();
+    await testSequelize.close();
     console.log('Test database connection closed.');
   } catch (error) {
     console.error('Error closing test database connection:', error instanceof Error ? error.message : error);
   }
 });
 
-export { sequelize };
+export { testSequelize };

@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '@config/database';  // Named import for sequelize
-
+import bcrypt from 'bcrypt';  // Import bcrypt for password hashing
 
 // Define the attributes of the User model
 export interface UserAttributes {
@@ -33,6 +33,11 @@ class User
   // These fields are automatically managed by Sequelize, hence read-only
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  // Method to compare passwords (useful for authentication)
+  public comparePassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password); // Synchronous password comparison
+  }
 }
 
 // Initialize the User model
@@ -74,6 +79,15 @@ User.init(
     timestamps: true, // Automatically manage createdAt and updatedAt
   }
 );
+
+// Hash the password before saving the user to the database
+User.beforeCreate(async (user) => {
+  if (user.password) {
+    // Hash the password with bcrypt before saving
+    const saltRounds = 10; // Number of salt rounds, can be adjusted
+    user.password = await bcrypt.hash(user.password, saltRounds);
+  }
+});
 
 // Export the User model for use in other files
 export { User };
