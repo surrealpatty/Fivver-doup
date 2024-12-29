@@ -1,7 +1,8 @@
 import request from 'supertest';
 import { app } from '../index'; // Import your Express app
-import { User } from '../models'; // Assuming User model is used for creating users
+import { User } from '../models/user'; // Import User model
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 // Test setup variables
 let token: string;
@@ -10,17 +11,18 @@ let testUserId: string;
 describe('User Routes', () => {
   // This hook runs before all tests
   beforeAll(async () => {
-    // Create a new user (or use an existing one) for testing
+    // Create a new user for testing with a hashed password
+    const hashedPassword = await bcrypt.hash('password123', 10); // Hash password for testing
     const user = await User.create({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123', // Ensure the password is hashed properly
-      isPaid: false, // Add the missing 'isPaid' field here
+      password: hashedPassword, // Use the hashed password
+      isPaid: false, // Add the 'isPaid' field
     });
 
     // Generate a token for the created user
     token = jwt.sign(
-      { id: user.id, email: user.email }, 
+      { id: user.id, email: user.email },
       process.env.JWT_SECRET!, // Ensure you have a secret in your environment variables
       { expiresIn: '1h' }
     );
@@ -36,7 +38,7 @@ describe('User Routes', () => {
         username: 'newuser',
         email: 'newuser@example.com',
         password: 'newpassword123', // Ensure password is hashed in your controller
-        isPaid: false, // Include the isPaid field here
+        isPaid: false, // Include the 'isPaid' field here
       });
 
     // Assert that the response status is 201 (Created)
