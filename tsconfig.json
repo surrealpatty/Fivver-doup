@@ -1,33 +1,35 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                 
-    "module": "ESNext",                 
-    "moduleResolution": "Node",         
-    "lib": ["DOM", "ESNext"],           
-    "strict": true,                     
-    "esModuleInterop": true,            
-    "skipLibCheck": true,               
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vue", "node", "jest"],   
-    "baseUrl": ".",                     
+    "types": ["vue", "node", "jest"],
+    "experimentalDecorators": true,      // Enable decorator support
+    "emitDecoratorMetadata": true,      // Emit metadata for decorators
+    "baseUrl": "./", 
     "paths": {
-      "@/*": ["src/*"],                
-      "types/*": ["src/types/*"]        // Add this path mapping
+      "@/*": ["src/*"],
+      "types/*": ["src/types/*"]
     },
-    "outDir": "./dist",                 
-    "rootDir": "./src",                 
-    "noEmitOnError": true              
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "noEmitOnError": true
   },
   "include": [
-    "src/**/*.ts",                     
-    "src/**/*.d.ts",                   
-    "src/**/*.vue",                    
-    "src/**/*.tsx",                    
-    "tests/**/*.ts"                    
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "src/**/*.tsx",
+    "tests/**/*.ts"
   ],
   "exclude": [
-    "node_modules",                    
-    "dist",                            
-    "**/*.js"                          
+    "node_modules",
+    "dist",
+    "**/*.js"
   ]
 }

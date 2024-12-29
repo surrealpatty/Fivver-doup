@@ -1,7 +1,6 @@
-// src/routes/profile.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct path for authenticateToken middleware
-import { CustomAuthRequest } from '../types/customAuthRequest'; // Correctly import CustomAuthRequest
+import { CustomAuthRequest } from '../types'; // Correctly import CustomAuthRequest
 import { UserPayload } from '../types'; // Correctly import UserPayload for proper typing
 
 const router = Router();
@@ -17,15 +16,12 @@ router.get('/profile', authenticateToken, async (req: CustomAuthRequest, res: Re
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Destructure user data from the authenticated request (user is guaranteed to be of type UserPayload)
-    const { id, email, username, tier } = user;
-
     // Return the user's profile data
     return res.status(200).json({
-      id,
-      email,
-      username,
-      tier, // Returning tier as part of user profile
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      tier: user.tier, // Returning tier as part of user profile
     });
   } catch (err) {
     console.error(err);

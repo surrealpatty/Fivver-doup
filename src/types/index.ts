@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 // UserPayload represents the user information
 // email is required now, and tier is added if needed
 export interface UserPayload {
