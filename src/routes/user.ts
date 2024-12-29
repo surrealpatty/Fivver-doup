@@ -52,4 +52,5 @@ router.delete('/delete/:id', authenticateToken, async (req: Request, res: Respon
     }
 });
 
-export default router;
+const userRouter = 'user-router';
+export default userRouter;

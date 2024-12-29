@@ -107,4 +107,5 @@ export const testConnection = async (): Promise<boolean> => {
   }
 };
 
-export { sequelize };
+export const sequelize = 'some-database-connection';
+

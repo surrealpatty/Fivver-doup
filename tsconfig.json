@@ -1,36 +1,36 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // Or higher (ES2022, ESNext, NodeNext, etc.)
-    "module": "commonjs", // ESSENTIAL for Jest compatibility
-    "moduleResolution": "node", // Standard Node.js module resolution
-    "esModuleInterop": true, // Crucial for CommonJS/ES module interoperability
-    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
-    "strict": true, // Enable strict type checking (recommended)
-    "skipLibCheck": true, // Skip type checking of declaration files (improves build speed)
-    "outDir": "./dist", // Output directory for compiled JavaScript
-    "rootDir": "./src", // Root directory of your source files
-    "baseUrl": "./src", // Base URL for module resolution (for path mappings)
-    "resolveJsonModule": true, // Allow importing JSON files as modules
-    "allowJs": true, // Allow including JavaScript files (if needed)
-    "checkJs": false, // Disable type checking for JavaScript files (if allowJs is true)
-    "sourceMap": true, // Generate source maps for debugging
-    "types": ["node", "jest"], // Include type definitions for Node.js and Jest
-    "noImplicitAny": true, // Disallow implicit 'any' types
-    "strictNullChecks": true, // Enable strict null checks
-    "noUnusedLocals": true, // Report unused local variables
-    "noUnusedParameters": true, // Report unused function parameters
-    "noImplicitReturns": true, // Ensure all code paths in a function return a value
-    "noFallthroughCasesInSwitch": true, // Prevent fallthrough in switch statements
-    "paths": { // Path mappings for cleaner imports
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "sourceMap": true,
+    "types": ["node", "jest"],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
       "@models/*": ["models/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"],
       "*": ["*", "node_modules/*"],
-      "@config/*": ["config/*"], // Maps '@config' to 'src/config'
-      "@routes/*": ["routes/*"],  // Maps '@routes' to 'src/routes'
+      "@config/*": ["config/*"],
+      "@routes/*": ["routes/*"]
     }
   },
-  "include": ["src/**/*"], // Include all TypeScript files in the src directory
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"] // Exclude node_modules, dist, and test files
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
