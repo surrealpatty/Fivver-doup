@@ -1,103 +1,80 @@
 import { Sequelize, Dialect } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
+// Load environment variables from the .env file
 dotenv.config();
 
 // Define the database configurations for different environments
-type DBConfig = {
-  development: {
+type DBConfig = Record<
+  'development' | 'test' | 'production',
+  {
     username: string | undefined;
     password: string | undefined;
     database: string | undefined;
     host: string;
     dialect: Dialect;
-    logging: boolean;
+    logging: boolean; // Ensure logging is explicitly included
     dialectOptions: {
       charset: string;
+      ssl?: boolean | { rejectUnauthorized: boolean }; // Optional for production
     };
-  };
-  test: {
-    username: string | undefined;
-    password: string | undefined;
-    database: string | undefined;
-    host: string;
-    dialect: Dialect;
-    logging: boolean;
-    dialectOptions: {
-      charset: string;
-    };
-  };
-  production: {
-    username: string | undefined;
-    password: string | undefined;
-    database: string | undefined;
-    host: string;
-    dialect: Dialect;
-    logging: boolean;
-    dialectOptions: {
-      charset: string;
-      ssl: boolean | { rejectUnauthorized: boolean };
-    };
-  };
-};
+  }
+>;
 
-// Get the environment from the process (defaults to 'development' if not set)
-const environment = process.env.NODE_ENV as keyof DBConfig || 'development';
-
-// Load the configuration for the current environment
+// Create the configuration object
 const config: DBConfig = {
   development: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql' as Dialect,
-    logging: true, // Set to true for development
+    dialect: 'mysql',
+    logging: true,
     dialectOptions: {
-      charset: 'utf8mb4', // Ensure correct charset
+      charset: 'utf8mb4',
     },
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root', // Use TEST_DB_USER for the test environment
-    password: process.env.TEST_DB_PASSWORD || '',
-    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    username: process.env.TEST_DB_USER,
+    password: process.env.TEST_DB_PASSWORD,
+    database: process.env.TEST_DB_NAME,
     host: process.env.TEST_DB_HOST || '127.0.0.1',
-    dialect: 'mysql' as Dialect,
-    logging: false, // Set to false for testing (or keep true for debugging)
+    dialect: 'mysql',
+    logging: false,
     dialectOptions: {
       charset: 'utf8mb4',
     },
   },
   production: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql' as Dialect,
-    logging: false, // Set to false for production (or enable if needed)
+    username: process.env.PROD_DB_USER,
+    password: process.env.PROD_DB_PASSWORD,
+    database: process.env.PROD_DB_NAME,
+    host: process.env.PROD_DB_HOST || '127.0.0.1',
+    dialect: 'mysql',
+    logging: false,
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: {
-        rejectUnauthorized: true, // Ensure production has proper SSL config
-      },
+      ssl: { rejectUnauthorized: false }, // Example SSL setting for production
     },
   },
 };
 
-// Ensure that the correct configuration is loaded based on the environment
+// Get the current environment (defaults to 'development' if not set)
+const environment = (process.env.NODE_ENV as keyof DBConfig) || 'development';
+
+// Load the configuration for the current environment
 const dbConfig = config[environment];
 
-// Create a new Sequelize instance with the loaded configuration
+// Ensure `dialect` is correctly typed as `Dialect`
 const sequelize = new Sequelize(
   dbConfig.database!,
   dbConfig.username!,
   dbConfig.password!,
   {
     host: dbConfig.host,
-    dialect: dbConfig.dialect,
+    dialect: dbConfig.dialect, // Already correctly typed
     dialectOptions: dbConfig.dialectOptions,
-    logging: dbConfig.logging, // Now logging is defined for all environments
+    logging: dbConfig.logging, // This will always exist
   }
 );
 
