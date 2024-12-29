@@ -1,7 +1,7 @@
 import request from 'supertest'; // To make HTTP requests to the app
 import bcrypt from 'bcrypt'; // For hashing the password
 import { app } from '../index'; // Import the app instance
-import sequelize from '../config/database'; // Import the Sequelize instance
+import { sequelize } from '../config/database'; // Correct import for named export
 import { User } from '../models/user'; // Import the User model
 
 describe('User Controller Tests', () => {

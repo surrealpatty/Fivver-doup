@@ -17,7 +17,11 @@ const config = {
     dialect: 'mysql',
     logging: process.env.NODE_ENV === 'development', // Enable logging in development only
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Set charset to utf8mb4 for compatibility
+    },
+    define: {
+      charset: 'utf8mb4', // Apply charset to Sequelize models
+      collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci collation
     },
   },
   test: {
@@ -28,7 +32,11 @@ const config = {
     dialect: 'mysql',
     logging: process.env.NODE_ENV === 'test', // Enable logging only for test environment
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Set charset to utf8mb4 for compatibility
+    },
+    define: {
+      charset: 'utf8mb4', // Apply charset to Sequelize models
+      collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci collation
     },
   },
   production: {
@@ -38,11 +46,12 @@ const config = {
     host: process.env.DB_HOST || '127.0.0.1', // Default to localhost if DB_HOST is not set
     dialect: 'mysql',
     dialectOptions: {
-      charset: 'utf8mb4',
-      ssl:
-        process.env.NODE_ENV === 'production'
-          ? { rejectUnauthorized: false } // Enable SSL only in production
-          : undefined,
+      charset: 'utf8mb4', // Set charset to utf8mb4 for compatibility
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined, // Enable SSL only in production
+    },
+    define: {
+      charset: 'utf8mb4', // Apply charset to Sequelize models
+      collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci collation
     },
   },
 };
