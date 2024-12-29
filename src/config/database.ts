@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Define the database configurations for different environments
-type DBConfig = Record<
-  'development' | 'test' | 'production',
+type DBConfig = Record< 
+  'development' | 'test' | 'production', 
   {
     username: string;
     password: string;
@@ -94,5 +94,17 @@ const sequelize = new Sequelize(
     define: dbConfig.define, // Apply charset and collation to Sequelize models
   }
 );
+
+// Function to test database connection
+export const testConnection = async (): Promise<boolean> => {
+  try {
+    await sequelize.authenticate(); // Attempt to authenticate the connection
+    console.log('Database connection established.');
+    return true; // Return true if the connection is successful
+  } catch (error) {
+    console.error('Error establishing database connection:', error); // Log error details
+    return false; // Return false if there was an error during connection
+  }
+};
 
 export { sequelize };

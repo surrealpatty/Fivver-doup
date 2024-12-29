@@ -1,6 +1,7 @@
 import path from 'path';
 import request from 'supertest';
-import { Express } from 'express'; // Import the Express type
+import { Express } from 'express';
+import http from 'http'; // Import the http module to work with server cleanup
 import { sequelize, testConnection } from '../config/database'; // Correct import for sequelize and testConnection
 
 // Define the path to the compiled `index.js` file in `dist/`
@@ -8,6 +9,7 @@ const appPath = path.resolve(__dirname, '../../dist/index'); // Adjusted path
 
 // Initialize app variable with explicit typing as Express.Application
 let app: Express | undefined; // Type it as Express.Application or undefined (in case it's not loaded)
+let server: http.Server | undefined; // Server instance for cleanup
 let connectionStatus: boolean = false; // Track connection status
 
 beforeAll(async () => {
@@ -18,6 +20,13 @@ beforeAll(async () => {
 
     // Test database connection and set connection status
     connectionStatus = await testConnection(); // Now it correctly returns a boolean
+
+    // Start the server if the app and database connection are successful
+    if (app && connectionStatus) {
+      server = app.listen(3000, () => {
+        console.log('Test server is running on port 3000');
+      });
+    }
   } catch (error) {
     console.error('Error loading app from dist:', error);
   }
@@ -42,8 +51,20 @@ describe('Basic Test Suite', () => {
   });
 });
 
-// Cleanup: Close the database connection after tests
+// Cleanup: Close the database connection and stop the server after tests
 afterAll(async () => {
+  // Ensure 'server' is not undefined before performing cleanup
+  if (server) { // Check that 'server' is defined before attempting to stop it
+    try {
+      server.close(() => {
+        console.log('Test server closed.');
+      });
+    } catch (error) {
+      console.error('Error closing server:', error);
+    }
+  }
+  
+  // Ensure database cleanup happens if connection was successful
   if (connectionStatus) {
     try {
       await sequelize.close(); // Ensure database connection is closed

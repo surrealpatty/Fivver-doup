@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
-import { sequelize } from '@config/database';  // Correct named import
-
+import { sequelize } from '@config/database'; // Correct named import for sequelize
 import userRouter from './routes/user'; // Import userRouter for user-related routes
 
 // Load environment variables from .env file
@@ -14,9 +13,9 @@ const port = process.env.PORT || 3000; // Use environment variable PORT or defau
 app.use(express.json());
 
 // User routes (e.g., /api/users route)
-app.use('/api/users', userRouter); 
+app.use('/api/users', userRouter);
 
-// Example route
+// Example route for testing server
 app.get('/', (_, res) => {
   res.send('Welcome to Fiverr Clone!');
 });
@@ -50,7 +49,6 @@ const initializeDatabase = async (): Promise<void> => {
     await syncDatabase(); // Sync the models once connected
   } catch (error: unknown) {
     console.error('Error initializing the database:', error instanceof Error ? error.message : error);
-
     if (process.env.NODE_ENV === 'test') {
       throw new Error('Database initialization failed during testing.');
     } else {
@@ -79,4 +77,4 @@ initializeDatabase()
   });
 
 // Export the app instance for use elsewhere, like in tests
-export { app }; // Export the app instance
+export { app };

@@ -5,7 +5,7 @@ import { User } from '../models/user';
 const router = Router();
 
 // Update user route
-router.put('/update/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+router.put('/users/update/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { username, email } = req.body;
 
@@ -31,7 +31,7 @@ router.put('/update/:id', authenticateToken, async (req: Request, res: Response)
 });
 
 // Delete user route
-router.delete('/delete/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+router.delete('/users/delete/:id', authenticateToken, async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 
     try {

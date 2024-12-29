@@ -8,30 +8,25 @@ describe('User Controller Tests', () => {
   let token: string; // Store token to use in tests
   let userId: string; // Store user ID to use in tests (assuming string UUID for ID)
 
-  // Before all tests, sync the database, create a test user, and store the user ID and token
+  // Set up the user before tests
   beforeAll(async () => {
     try {
-      await sequelize.sync({ force: true }); // Sync the database and reset it
+      // Sync the database and reset it before running tests
+      await sequelize.sync({ force: true });
 
-      // Create a test user with a hashed password
-      const testUser = await User.create({
-        username: 'testuser',
-        email: 'test@example.com',
-        password: await bcrypt.hash('password123', 10), // Hash the password
-        isPaid: false, // Add necessary field values
-      });
-
-      userId = testUser.id.toString(); // Ensure `id` is a string
-
-      // Log in and get the token
-      const loginResponse = await request(app)
-        .post('/users/login')
+      // Register the user (or create a test user manually)
+      const registerResponse = await request(app)
+        .post('/api/users/register')  // Use the correct registration route
         .send({
+          username: 'testuser',
           email: 'test@example.com',
           password: 'password123',
+          isPaid: false,
         });
 
-      token = loginResponse.body.token; // Extract the token from the login response
+      // Ensure the user ID and token are set correctly
+      userId = registerResponse.body.id; // Assuming the response contains the user ID
+      token = registerResponse.body.token; // Assuming the token is returned upon registration (if needed)
     } catch (error) {
       console.error('Error setting up test environment:', error);
     }
@@ -40,7 +35,7 @@ describe('User Controller Tests', () => {
   // Test user login
   test('should log in a user and return a token', async () => {
     const response = await request(app)
-      .post('/users/login') // Match your actual login route
+      .post('/api/users/login') // Match your actual login route
       .send({
         email: 'test@example.com',
         password: 'password123',
@@ -53,7 +48,7 @@ describe('User Controller Tests', () => {
   // Test user registration
   test('should register a new user', async () => {
     const response = await request(app)
-      .post('/user/register') // This should match your register route path
+      .post('/api/users/register') // Ensure this matches the registration route
       .send({
         username: 'newuser',
         email: 'newuser@example.com',
@@ -68,7 +63,7 @@ describe('User Controller Tests', () => {
   // Test update user profile
   test('should update the user profile', async () => {
     const updateResponse = await request(app)
-      .put(`/users/${userId}`) // Match your update user profile route with dynamic user ID
+      .put(`/api/users/${userId}`) // Match your update user profile route with dynamic user ID
       .send({
         email: 'updated@example.com',
         username: 'updatedUser',
@@ -82,11 +77,16 @@ describe('User Controller Tests', () => {
 
   // Test delete user account
   test('should delete the user account', async () => {
+    // Ensure userId is defined before attempting to delete
+    expect(userId).toBeDefined();  // Check if userId is correctly set
+
+    // Perform the delete request using the user ID
     const deleteResponse = await request(app)
-      .delete(`/users/${userId}`) // Match your delete user route with dynamic user ID
+      .delete(`/api/users/${userId}`) // Match your delete route with dynamic user ID
       .set('Authorization', `Bearer ${token}`); // Include the token in the Authorization header
 
-    expect(deleteResponse.status).toBe(200); // Expect HTTP 200 OK
+    // Check the response
+    expect(deleteResponse.status).toBe(200);  // Expect 200 status on successful deletion
     expect(deleteResponse.body).toHaveProperty(
       'message',
       'User deleted successfully'
