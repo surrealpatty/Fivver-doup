@@ -1,26 +1,58 @@
-// src/config/database.ts
-
 import { Sequelize } from 'sequelize';
-import config from './config'; // Import the config file that exports environments
+import dotenv from 'dotenv';
+import config from './config'; // Assuming this is the correct import
 
-// Get the environment (defaults to 'development' if not set)
+dotenv.config();
+
+// Type for the configuration object
+type DBConfig = {
+  development: {
+    username: string | undefined;
+    password: string | undefined;
+    database: string | undefined;
+    host: string;
+    dialect: string;
+    logging: boolean;
+    dialectOptions: {
+      charset: string;
+    };
+  };
+  test: {
+    username: string | undefined;
+    password: string | undefined;
+    database: string | undefined;
+    host: string;
+    dialect: string;
+    dialectOptions: {
+      charset: string;
+    };
+  };
+  production: {
+    username: string | undefined;
+    password: string | undefined;
+    database: string | undefined;
+    host: string;
+    dialect: string;
+    dialectOptions: {
+      charset: string;
+      ssl: boolean | { rejectUnauthorized: boolean };
+    };
+  };
+};
+
+// Get the environment from the process
 const environment = process.env.NODE_ENV || 'development';
 
-// Get the database configuration for the current environment
-const dbConfig = config[environment];
+// Ensure TypeScript knows that config is of the correct type
+const dbConfig: DBConfig[keyof DBConfig] = config[environment];
 
-// Create a new Sequelize instance with the current environment's configuration
-const sequelize = new Sequelize(
-  dbConfig.database, // Database name
-  dbConfig.username,  // Username
-  dbConfig.password,  // Password
-  {
-    host: dbConfig.host,         // Host
-    dialect: dbConfig.dialect,   // Dialect (mysql in this case)
-    logging: dbConfig.logging,   // Enable logging based on the environment
-    dialectOptions: dbConfig.dialectOptions, // Charset and other dialect-specific options
-    ssl: dbConfig.dialectOptions.ssl, // SSL configuration for production
-  }
-);
+const sequelize = new Sequelize({
+  username: dbConfig.username,
+  password: dbConfig.password,
+  database: dbConfig.database,
+  host: dbConfig.host,
+  dialect: dbConfig.dialect,
+  dialectOptions: dbConfig.dialectOptions,
+});
 
-export { sequelize }; // Export the sequelize instance
+export { sequelize };
