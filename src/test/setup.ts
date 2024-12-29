@@ -1,37 +1,45 @@
-import type { Config } from '@jest/types'; // Import the correct type for Jest configuration
+import { Sequelize } from 'sequelize'; // Import Sequelize constructor
+import dotenv from 'dotenv'; // To load environment variables
 
-const config: Config.InitialOptions = {
-  preset: 'ts-jest', // Use ts-jest for transpiling TypeScript
-  testEnvironment: 'node', // Node.js environment for testing
-  roots: ['<rootDir>/src'], // Ensure Jest looks in the src directory
-  maxWorkers: process.env.CI ? 2 : 1, // Adjust workers for CI/CD
-  transform: {
-    '^.+\\.tsx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }], // Transpile TypeScript files
-  },
-  moduleNameMapper: {
-    '^@models/(.*)$': '<rootDir>/src/models/$1',
-    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
-    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@config/(.*)$': '<rootDir>/src/config/$1', // Map for @config
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js'], // Recognized file extensions
-  transformIgnorePatterns: ['/node_modules/'], // Ignore transformations for node_modules
-  setupFiles: ['dotenv/config'], // Load environment variables from .env files
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Correct path for jest.setup.ts in the root
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'], // Exclude paths from tests
-  testMatch: ['**/src/**/*.test.(ts|tsx)'], // Match test files in the src directory
-  extensionsToTreatAsEsm: ['.ts'], // Treat .ts files as ESM
-  restoreMocks: true, // Automatically restore mocks between tests
-  collectCoverage: true, // Enable coverage collection
-  coverageDirectory: '<rootDir>/coverage', // Directory for coverage reports
-  coveragePathIgnorePatterns: ['/node_modules/', '/dist/'], // Ignore these paths for coverage
-  coverageReporters: ['text', 'lcov'], // Report formats for coverage
-  verbose: process.env.NODE_ENV === 'test', // Verbose output in test environment
-  bail: 1, // Stop after the first test failure
-  globalSetup: '<rootDir>/src/test/globalSetup.ts', // Path to global setup file
-  globalTeardown: '<rootDir>/src/test/teardown.ts', // Path to global teardown file
-  cacheDirectory: '<rootDir>/.jest-cache', // Cache directory
-};
+// Load environment variables from a .env file
+dotenv.config();
 
-export default config;
+// Set up the test database connection for Sequelize with environment-specific variables
+const sequelize = new Sequelize({
+  username: process.env.TEST_DB_USER || 'root', // Use environment variable for DB user, fallback to 'root'
+  password: process.env.TEST_DB_PASSWORD || '', // Use environment variable for DB password, fallback to empty string
+  database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Use environment variable for DB name, fallback to 'fivver_doup_test'
+  host: process.env.TEST_DB_HOST || '127.0.0.1', // Use environment variable for DB host, fallback to '127.0.0.1'
+  port: parseInt(process.env.TEST_DB_PORT || '3306', 10), // Use environment variable for DB port, default to 3306
+  dialect: 'mysql', // Dialect for MySQL
+  logging: false, // Set to false to disable logging for test environment (optional)
+});
+
+// Before all tests, authenticate and sync the test database
+beforeAll(async () => {
+  try {
+    // Authenticate the database connection
+    await sequelize.authenticate();
+    console.log('Test database connection established.');
+
+    // Sync the database schema with force: true to reset tables before running tests
+    await sequelize.sync({ force: true });
+    console.log('Test database schema synced.');
+  } catch (error) {
+    console.error('Error setting up test database:', error instanceof Error ? error.message : error);
+    throw error; // Re-throw the error to ensure the test suite fails if setup fails
+  }
+});
+
+// After all tests, close the database connection
+afterAll(async () => {
+  try {
+    // Close the Sequelize connection
+    await sequelize.close();
+    console.log('Test database connection closed.');
+  } catch (error) {
+    console.error('Error closing test database connection:', error instanceof Error ? error.message : error);
+  }
+});
+
+export { sequelize };

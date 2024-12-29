@@ -18,7 +18,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js'], // Recognized file extensions
   transformIgnorePatterns: ['/node_modules/'], // Ignore transformations for node_modules
   setupFiles: ['dotenv/config'], // Load environment variables from .env files
-  setupFilesAfterEnv: ['<rootDir>/src/test/jest.setup.ts'], // Custom Jest setup file
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Correct path for jest.setup.ts in the root
   testPathIgnorePatterns: ['/node_modules/', '/dist/'], // Exclude paths from tests
   testMatch: ['**/src/**/*.test.(ts|tsx)'], // Match test files in the src directory
   extensionsToTreatAsEsm: ['.ts'], // Treat .ts files as ESM
