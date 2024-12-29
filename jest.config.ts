@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from '@jest/types'; // Import the correct type for Jest configuration
+
+const config: Config.InitialOptions = {
   preset: 'ts-jest', // Use ts-jest for transpiling TypeScript
   testEnvironment: 'node', // Node.js environment for testing
   roots: ['<rootDir>/src'], // Ensure Jest looks in the src directory
@@ -15,12 +17,12 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js'], // Recognized file extensions
   transformIgnorePatterns: ['/node_modules/'], // Ignore transformations for node_modules
-  setupFiles: ['dotenv/config'], // Load environment variables
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Custom Jest setup
+  setupFiles: ['dotenv/config'], // Load environment variables from .env files
+  setupFilesAfterEnv: ['<rootDir>/src/test/jest.setup.ts'], // Custom Jest setup file
   testPathIgnorePatterns: ['/node_modules/', '/dist/'], // Exclude paths from tests
   testMatch: ['**/src/**/*.test.(ts|tsx)'], // Match test files in the src directory
   extensionsToTreatAsEsm: ['.ts'], // Treat .ts files as ESM
-  restoreMocks: true, // Automatically restore mocks
+  restoreMocks: true, // Automatically restore mocks between tests
   collectCoverage: true, // Enable coverage collection
   coverageDirectory: '<rootDir>/coverage', // Directory for coverage reports
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/'], // Ignore these paths for coverage
@@ -31,3 +33,5 @@ module.exports = {
   globalTeardown: '<rootDir>/src/test/teardown.ts', // Path to global teardown file
   cacheDirectory: '<rootDir>/.jest-cache', // Cache directory
 };
+
+export default config;
