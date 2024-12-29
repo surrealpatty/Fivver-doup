@@ -1,7 +1,6 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType } from 'sequelize-typescript';
 
-// Define the User model with decorators
-@Table({ tableName: 'users', timestamps: true }) // Add `timestamps: true` if you use createdAt and updatedAt
+@Table({ tableName: 'users', timestamps: true }) // Add `timestamps: true` to automatically handle createdAt and updatedAt
 export class User extends Model<User> {
   @PrimaryKey
   @AutoIncrement
@@ -25,6 +24,12 @@ export class User extends Model<User> {
 
   @Column(DataType.BOOLEAN)
   isVerified!: boolean;  // Verification status of the user (true or false)
+
+  @Column(DataType.STRING)
+  passwordResetToken?: string | null;  // Allow null for the reset token
+
+  @Column(DataType.DATE)
+  passwordResetTokenExpiry?: Date | null;  // Allow null for the expiry date
 }
 
 export default User;
