@@ -8,7 +8,7 @@ export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecretKey';
 export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 
 // Database configuration for different environments
-export default {
+const config = {
   development: {
     username: process.env.DB_USER || 'root', // Default to 'root' if not set
     password: process.env.DB_PASSWORD || '', // Default to empty string if not set
@@ -41,8 +41,10 @@ export default {
       charset: 'utf8mb4',
       ssl:
         process.env.NODE_ENV === 'production'
-          ? { rejectUnauthorized: false }
-          : undefined, // Enable SSL only in production
+          ? { rejectUnauthorized: false } // Enable SSL only in production
+          : undefined,
     },
   },
 };
+
+export default config;

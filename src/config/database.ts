@@ -13,10 +13,10 @@ type DBConfig = Record<
     database: string | undefined;
     host: string;
     dialect: Dialect;
-    logging: boolean; // Ensure logging is explicitly included
+    logging: boolean;
     dialectOptions: {
       charset: string;
-      ssl?: boolean | { rejectUnauthorized: boolean }; // Optional for production
+      ssl?: boolean | { rejectUnauthorized: boolean };
     };
   }
 >;
@@ -24,9 +24,9 @@ type DBConfig = Record<
 // Create the configuration object
 const config: DBConfig = {
   development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    username: process.env.DB_USER || 'devuser',
+    password: process.env.DB_PASSWORD || 'devpassword',
+    database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     logging: true,
@@ -35,9 +35,9 @@ const config: DBConfig = {
     },
   },
   test: {
-    username: process.env.TEST_DB_USER,
-    password: process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME,
+    username: process.env.TEST_DB_USER || 'testuser',
+    password: process.env.TEST_DB_PASSWORD || 'testpassword',
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     logging: false,
@@ -46,15 +46,15 @@ const config: DBConfig = {
     },
   },
   production: {
-    username: process.env.PROD_DB_USER,
-    password: process.env.PROD_DB_PASSWORD,
-    database: process.env.PROD_DB_NAME,
+    username: process.env.PROD_DB_USER || 'produser',
+    password: process.env.PROD_DB_PASSWORD || 'prodpassword',
+    database: process.env.PROD_DB_NAME || 'fivver_doup_prod',
     host: process.env.PROD_DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     logging: false,
     dialectOptions: {
       charset: 'utf8mb4',
-      ssl: { rejectUnauthorized: false }, // Example SSL setting for production
+      ssl: { rejectUnauthorized: false },
     },
   },
 };
@@ -72,9 +72,9 @@ const sequelize = new Sequelize(
   dbConfig.password!,
   {
     host: dbConfig.host,
-    dialect: dbConfig.dialect, // Already correctly typed
+    dialect: dbConfig.dialect,
     dialectOptions: dbConfig.dialectOptions,
-    logging: dbConfig.logging, // This will always exist
+    logging: dbConfig.logging,
   }
 );
 
