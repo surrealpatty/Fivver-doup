@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 
+// Import your Sequelize instance
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'fivver_doup_test',
   process.env.DB_USER || 'testuser',
@@ -11,9 +12,23 @@ const sequelize = new Sequelize(
   }
 );
 
-sequelize.authenticate()
-  .then(() => console.log('Test database connection established successfully.'))
-  .catch((error) => {
+// Establish the database connection before tests
+beforeAll(async () => {
+  try {
+    await sequelize.authenticate(); // Ensure the connection is established before running tests
+    console.log('Test database connection established successfully.');
+  } catch (error) {
     console.error('Unable to connect to the database:', error);
-    throw error; // Propagate the error to fail the tests
-  });
+    throw error; // Fail the test setup if the database connection fails
+  }
+});
+
+// Close the database connection after all tests are done
+afterAll(async () => {
+  try {
+    await sequelize.close(); // Close the Sequelize connection
+    console.log('Database connection closed.');
+  } catch (error) {
+    console.error('Error closing the database connection:', error);
+  }
+});
