@@ -13,7 +13,7 @@ router.put('/users/update/:id', authenticateToken, async (req: Request, res: Res
         const userToUpdate = await User.findByPk(id);
         if (!userToUpdate) {
             res.status(404).json({ message: 'User not found' });
-            return; // Ensure the function exits after sending a response
+            return;
         }
 
         if (username) userToUpdate.username = username;
@@ -38,7 +38,7 @@ router.delete('/users/delete/:id', authenticateToken, async (req: Request, res: 
         const userToDelete = await User.findByPk(id);
         if (!userToDelete) {
             res.status(404).json({ message: 'User not found' });
-            return; // Ensure the function exits after sending a response
+            return;
         }
 
         await userToDelete.destroy();

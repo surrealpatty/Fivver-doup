@@ -2,11 +2,11 @@ import { app } from '../index';  // Use named import
 import http from 'http';  // Import http module to create a server instance
 import { sequelize } from '../config/database'; // Import your Sequelize instance
 import * as serviceService from '../services/serviceService'; // Import your service functions
-import request from 'supertest';  // If you are using supertest for making requests
 
 jest.mock('../services/serviceService'); // Mocking the service module
 
 let server: http.Server;  // Declare server variable
+const port = process.env.PORT || 3002;  // Use a different port if 3001 is in use
 
 describe('Service Functions', () => {
   // Runs before any test starts
@@ -15,10 +15,10 @@ describe('Service Functions', () => {
     try {
       await sequelize.authenticate();
       console.log('Database connection established');
-      // Create the server using http.createServer
+      // Create the server using http.createServer and specify the port
       server = http.createServer(app);
-      await new Promise<void>((resolve) => server.listen(0, resolve)); // Start server on any available port
-      console.log('Server started');
+      await new Promise<void>((resolve) => server.listen(port, resolve)); // Use the dynamic port
+      console.log(`Server started on port ${port}`);
     } catch (error) {
       console.error('Error establishing database connection or starting server:', error);
       throw error; // Rethrow the error to ensure the test suite fails

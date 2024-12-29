@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000; // Use environment variable PORT or defau
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// User routes (e.g., /api/users route)
+// Register the user-related routes
 app.use('/api/users', userRouter);
 
 // Example route for testing server
