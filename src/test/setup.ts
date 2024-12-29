@@ -1,5 +1,3 @@
-// src/test/setup.ts
-
 import { Sequelize } from 'sequelize'; // Import Sequelize constructor
 import dotenv from 'dotenv'; // To load environment variables
 
@@ -9,11 +7,12 @@ dotenv.config();
 // Set up the test database connection for Sequelize
 const sequelize = new Sequelize({
   username: process.env.TEST_DB_USER || 'root', // Use environment variable for DB user, fallback to 'root'
-  password: process.env.TEST_DB_PASSWORD || '', // Use environment variable for DB password
-  database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Use environment variable for DB name
-  host: process.env.TEST_DB_HOST || '127.0.0.1', // Use environment variable for DB host
-  port: parseInt(process.env.TEST_DB_PORT || '3306', 10), // Use environment variable for DB port (default to 3306)
+  password: process.env.TEST_DB_PASSWORD || '', // Use environment variable for DB password, fallback to empty string
+  database: process.env.TEST_DB_NAME || 'fivver_doup_test', // Use environment variable for DB name, fallback to 'fivver_doup_test'
+  host: process.env.TEST_DB_HOST || '127.0.0.1', // Use environment variable for DB host, fallback to '127.0.0.1'
+  port: parseInt(process.env.TEST_DB_PORT || '3306', 10), // Use environment variable for DB port, default to 3306
   dialect: 'mysql', // Dialect for MySQL
+  logging: false, // Set to false to disable logging for test environment (optional)
 });
 
 // Before all tests, authenticate and sync the test database
