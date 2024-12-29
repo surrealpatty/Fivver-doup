@@ -18,6 +18,10 @@ type DBConfig = Record<
       charset: string;
       ssl?: { rejectUnauthorized: boolean };
     };
+    define: {
+      charset: string;
+      collate: string;
+    };
   }
 >;
 
@@ -31,7 +35,11 @@ const config: DBConfig = {
     dialect: 'mysql',
     logging: true,
     dialectOptions: {
-      charset: 'utf8mb4',
+      charset: 'utf8mb4', // Set the charset to utf8mb4
+    },
+    define: {
+      charset: 'utf8mb4', // Ensure the charset is set for Sequelize models
+      collate: 'utf8mb4_unicode_ci', // Use a compatible collation
     },
   },
   test: {
@@ -44,6 +52,10 @@ const config: DBConfig = {
     dialectOptions: {
       charset: 'utf8mb4',
     },
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
   },
   production: {
     username: process.env.PROD_DB_USER || 'produser',
@@ -55,6 +67,10 @@ const config: DBConfig = {
     dialectOptions: {
       charset: 'utf8mb4',
       ssl: { rejectUnauthorized: false },
+    },
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
     },
   },
 };
@@ -75,6 +91,7 @@ const sequelize = new Sequelize(
     dialect: dbConfig.dialect,
     dialectOptions: dbConfig.dialectOptions,
     logging: dbConfig.logging,
+    define: dbConfig.define, // Apply charset and collation to Sequelize models
   }
 );
 
