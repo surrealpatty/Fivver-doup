@@ -3,8 +3,8 @@ import 'reflect-metadata'; // Import reflect-metadata before other imports
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { sequelize } from './src/config/database';
-import { userRoutes } from './src/routes/user'; // Corrected to use the proper path
+import { sequelize } from './config/database'; // Ensure correct relative path
+import { userRoutes } from './routes/user'; // Ensure correct relative path
 
 dotenv.config(); // Load environment variables from .env file
 
