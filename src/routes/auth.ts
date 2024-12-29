@@ -1,9 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import  User  from '../models/user';  // Import User model
-import { AuthRequest } from 'types/';  // Import the AuthRequest correctly
-import { CustomAuthRequest } from 'types';
+import User, { UserCreationAttributes } from '../models/user';  // Import User model and UserCreationAttributes
 
 const router = Router();
 
@@ -29,14 +27,16 @@ router.post('/signup', async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
     // Create the new user in the database (id is handled automatically)
-    const user = await User.create({
+    const newUser: UserCreationAttributes = {
       email,
       username,
       password: hashedPassword,
       role: 'user', // Default role (can be modified)
-      tier: "free",  // Default tier should be "free"
+      tier: 'free', // Default tier should be "free"
       isVerified: false, // Assuming user isn't verified initially
-    });
+    };
+
+    const user = await User.create(newUser); // Pass newUser as the object to create
 
     // Generate JWT token
     const token = jwt.sign(

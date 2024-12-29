@@ -1,35 +1,64 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Optional } from 'sequelize';  // Import Optional from Sequelize
 
-@Table({ tableName: 'users', timestamps: true }) // Add `timestamps: true` to automatically handle createdAt and updatedAt
-export class User extends Model<User> {
+// Define the UserAttributes interface which reflects the fields in the database
+export interface UserAttributes {
+  id: number;  // ID should be a number because you're using DataType.INTEGER
+  email: string;
+  username: string;
+  password: string;
+  role: string;
+  tier: string;
+  isVerified: boolean;
+  passwordResetToken?: string | null;
+  passwordResetTokenExpiry?: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// Define the UserCreationAttributes interface for the creation attributes (excluding `id` as it is auto-incremented)
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+@Table({ tableName: 'users', timestamps: true })
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  declare id: number;  // Declare the 'id' explicitly to avoid overwriting base property
+  declare id: number;  // Declare 'id' explicitly as a primary key
 
   @Column(DataType.STRING)
-  username!: string;  // Username field
+  username!: string;
 
   @Column(DataType.STRING)
-  email!: string;  // Email field
+  email!: string;
 
   @Column(DataType.STRING)
-  password!: string;  // Password field (store hashed passwords)
+  password!: string;
 
   @Column(DataType.STRING)
-  tier!: string;  // Tier of the user (e.g., 'Free' or 'Paid')
+  tier!: string;
 
   @Column(DataType.STRING)
-  role!: string;  // Role of the user (e.g., 'Admin', 'User', etc.)
+  role!: string;
 
   @Column(DataType.BOOLEAN)
-  isVerified!: boolean;  // Verification status of the user (true or false)
+  isVerified!: boolean;
 
   @Column(DataType.STRING)
-  passwordResetToken?: string | null;  // Allow null for the reset token
+  passwordResetToken?: string | null;
 
   @Column(DataType.DATE)
-  passwordResetTokenExpiry?: Date | null;  // Allow null for the expiry date
+  passwordResetTokenExpiry?: Date | null;
+
+  // Use declare modifier to avoid overwriting base properties
+  @CreatedAt
+  @Column(DataType.DATE)
+  declare createdAt: Date;  // Declare 'createdAt' to avoid TypeScript conflict
+
+  @UpdatedAt
+  @Column(DataType.DATE)
+  declare updatedAt: Date;  // Declare 'updatedAt' to avoid TypeScript conflict
 }
 
 export default User;
