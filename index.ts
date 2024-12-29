@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Load environment variables from .env file
-import { sequelize } from '@config/database'; // Corrected path for sequelize
-import userRouter from '@routes/user'; // Corrected path for user routes
+import { sequelize } from '@config/database.ts'; // Add '.ts' explicitly
+import userRouter from '@routes/user.ts'; // Add '.ts' explicitly
 import path from 'path'; // Required to serve static files
 
 dotenv.config(); // Ensure to load environment variables before using them
