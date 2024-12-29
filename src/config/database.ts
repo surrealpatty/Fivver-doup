@@ -89,14 +89,16 @@ const config: DBConfig = {
 const dbConfig = config[environment];
 
 // Create a new Sequelize instance with the loaded configuration
-const sequelize = new Sequelize({
-  username: dbConfig.username,
-  password: dbConfig.password,
-  database: dbConfig.database,
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-  dialectOptions: dbConfig.dialectOptions,
-  logging: dbConfig.logging, // Now logging is defined for all environments
-});
+const sequelize = new Sequelize(
+  dbConfig.database!,
+  dbConfig.username!,
+  dbConfig.password!,
+  {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    dialectOptions: dbConfig.dialectOptions,
+    logging: dbConfig.logging, // Now logging is defined for all environments
+  }
+);
 
 export { sequelize };

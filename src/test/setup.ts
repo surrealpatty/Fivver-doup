@@ -4,7 +4,7 @@ import dotenv from 'dotenv'; // To load environment variables
 // Load environment variables from a .env file
 dotenv.config();
 
-// Set up the test database connection for Sequelize
+// Set up the test database connection for Sequelize with environment-specific variables
 const sequelize = new Sequelize({
   username: process.env.TEST_DB_USER || 'root', // Use environment variable for DB user, fallback to 'root'
   password: process.env.TEST_DB_PASSWORD || '', // Use environment variable for DB password, fallback to empty string
