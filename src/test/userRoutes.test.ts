@@ -139,4 +139,13 @@ describe('User Routes', () => {
       console.error('Error during unauthorized deletion:', error); // Log any errors during unauthorized deletion attempt
     }
   });
+
+  // Cleanup: Delete the test user after all tests
+  afterAll(async () => {
+    try {
+      await User.destroy({ where: { id: testUserId } }); // Ensure the test user is deleted after tests
+    } catch (error) {
+      console.error('Error during cleanup:', error); // Log any errors during cleanup
+    }
+  });
 });

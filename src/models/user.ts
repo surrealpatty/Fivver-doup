@@ -77,17 +77,17 @@ User.init(
     modelName: 'User', // Model name
     tableName: 'users', // Table name in the database
     timestamps: true, // Automatically manage createdAt and updatedAt
+    hooks: {
+      // Hook to hash password before creating a new user
+      beforeCreate: async (user) => {
+        if (user.password) {
+          const saltRounds = 10; // Number of salt rounds, can be adjusted
+          user.password = await bcryptjs.hash(user.password, saltRounds);
+        }
+      },
+    },
   }
 );
-
-// Hash the password before saving the user to the database
-User.beforeCreate(async (user) => {
-  if (user.password) {
-    // Hash the password with bcryptjs before saving
-    const saltRounds = 10; // Number of salt rounds, can be adjusted
-    user.password = await bcryptjs.hash(user.password, saltRounds);
-  }
-});
 
 // Export the User model for use in other files
 export { User };

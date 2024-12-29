@@ -1,7 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express'; 
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Load environment variables from .env file
-import { sequelize } from '@config/database'; // Named import for sequelize instance
-import userRouter from './routes/user'; // Import userRouter for user-related routes
+import { sequelize } from '@config/database'; // Corrected path for sequelize
+import userRouter from '@routes/user'; // Corrected path for user routes
+import path from 'path'; // Required to serve static files
 
 dotenv.config(); // Ensure to load environment variables before using them
 
@@ -10,6 +11,15 @@ const port = process.env.PORT || 3000; // Use environment variable PORT or defau
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
+
+// Log the incoming request method and URL for debugging
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`); // Log method and URL
+  next(); // Pass the request to the next middleware or route handler
+});
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // User routes (e.g., /api/users route)
 app.use('/api/users', userRouter);
@@ -67,7 +77,7 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
 initializeDatabase()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      console.log(`Server is running at http://localhost:${port}`);
     });
   })
   .catch((error: unknown) => {
@@ -75,4 +85,4 @@ initializeDatabase()
   });
 
 // Export the app instance for use in tests or elsewhere
-export { app }; 
+export { app };
