@@ -1,32 +1,33 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                  // Latest ECMAScript target
-    "module": "ESNext",                  // Use ESNext module system
-    "moduleResolution": "Node",          // Resolve modules like Node.js
-    "lib": ["DOM", "ESNext"],            // Include DOM and ESNext libraries
-    "strict": true,                      // Enable all strict type-checking options
-    "esModuleInterop": true,             // Support for CommonJS modules
-    "skipLibCheck": true,                // Skip checking declaration files
-    "forceConsistentCasingInFileNames": true, // Case-sensitive file imports
-    "types": ["vue", "node", "jest"],    // Include Vue, Node, and Jest types
-    "baseUrl": ".",                      // Base URL for module resolution
+    "target": "ESNext",                 
+    "module": "ESNext",                 
+    "moduleResolution": "Node",         
+    "lib": ["DOM", "ESNext"],           
+    "strict": true,                     
+    "esModuleInterop": true,            
+    "skipLibCheck": true,               
+    "forceConsistentCasingInFileNames": true,
+    "types": ["vue", "node", "jest"],   
+    "baseUrl": ".",                     
     "paths": {
-      "@/*": ["src/*"]                   // Alias for cleaner imports
+      "@/*": ["src/*"],                
+      "types/*": ["src/types/*"]        // Add this path mapping
     },
-    "outDir": "./dist",                  // Ensure compiled files go to 'dist/'
-    "rootDir": "./src",                  // Specify source directory
-    "noEmitOnError": true                // Prevent output if there are errors
+    "outDir": "./dist",                 
+    "rootDir": "./src",                 
+    "noEmitOnError": true              
   },
   "include": [
-    "src/**/*.ts",                       // Include TypeScript files
-    "src/**/*.d.ts",                     // Include TypeScript declarations
-    "src/**/*.vue",                      // Include Vue files
-    "src/**/*.tsx",                      // Include TypeScript with JSX files
-    "tests/**/*.ts"                      // Include test files
+    "src/**/*.ts",                     
+    "src/**/*.d.ts",                   
+    "src/**/*.vue",                    
+    "src/**/*.tsx",                    
+    "tests/**/*.ts"                    
   ],
   "exclude": [
-    "node_modules",                      // Exclude dependencies
-    "dist",                              // Exclude build output
-    "**/*.js"                            // Exclude JavaScript files (optional)
+    "node_modules",                    
+    "dist",                            
+    "**/*.js"                          
   ]
 }
