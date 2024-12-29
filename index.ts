@@ -1,31 +1,78 @@
-import dotenv from 'dotenv'; // Load environment variables
-import express from 'express'; // Express framework
-import sequelize from '@config/database'; // Import Sequelize database configuration
-import userRouter from '@routes/user'; // Import user routes
+import express, { Request, Response, NextFunction } from 'express'; 
+import dotenv from 'dotenv'; // Load environment variables from .env file
+import { sequelize } from '@config/database'; // Named import for sequelize instance
+import userRouter from './routes/user'; // Import userRouter for user-related routes
 
-dotenv.config(); // Load environment variables
+dotenv.config(); // Ensure to load environment variables before using them
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app = express(); // Initialize the Express app
+const port = process.env.PORT || 3000; // Use environment variable PORT or default to 3000
 
-// Middleware to parse JSON requests
+// Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Set up routes
-app.use('/users', userRouter);
+// User routes (e.g., /api/users route)
+app.use('/api/users', userRouter);
 
-// Test database connection
-sequelize.authenticate().then(() => {
-  console.log('Database connection established.');
-}).catch((err) => {
-  console.error('Failed to connect to the database:', err);
-  process.exit(1);
+// Example route for the root path
+app.get('/', (_, res) => {
+  res.send('Welcome to Fiverr Clone!');
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// Function to test the database connection
+const testDatabaseConnection = async (): Promise<void> => {
+  try {
+    await sequelize.authenticate(); // Attempt to authenticate with the database
+    console.log('Database connection established.');
+  } catch (error: unknown) {
+    console.error('Unable to connect to the database:', error instanceof Error ? error.message : error);
+    throw new Error('Database connection failed');
+  }
+};
+
+// Function to synchronize Sequelize models
+const syncDatabase = async (): Promise<void> => {
+  try {
+    await sequelize.sync({ force: false }); // force: true for dev, force: false for prod
+    console.log('Database synchronized successfully');
+  } catch (error: unknown) {
+    console.error('Error synchronizing database:', error instanceof Error ? error.message : error);
+    throw new Error('Database synchronization failed');
+  }
+};
+
+// Function to initialize the database connection and sync models
+const initializeDatabase = async (): Promise<void> => {
+  try {
+    await testDatabaseConnection(); // Ensure the database connection is established
+    await syncDatabase(); // Sync the models once connected
+  } catch (error: unknown) {
+    console.error('Error initializing the database:', error instanceof Error ? error.message : error);
+
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error('Database initialization failed during testing.');
+    } else {
+      process.exit(1); // Exit if the database connection or sync fails
+    }
+  }
+};
+
+// Global error-handling middleware
+app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('Error:', error); // Log the error for debugging
+  res.status(500).json({ message: error.message || 'Internal Server Error' });
 });
 
-// Export the app for testing or other purposes
-export { app };
+// Initialize the database and start the server if successful
+initializeDatabase()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error: unknown) => {
+    console.error('Server failed to start due to database error:', error instanceof Error ? error.message : error);
+  });
+
+// Export the app instance for use in tests or elsewhere
+export { app }; 
