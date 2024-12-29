@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '@config/database';  // Named import for sequelize
-import bcryptjs from 'bcryptjs';  // Import bcryptjs for password hashing
+import { sequelize } from '@config/database'; // Correctly import sequelize from your database config
+import bcryptjs from 'bcryptjs'; // Import bcryptjs for password hashing
 
 // Define the attributes of the User model
 export interface UserAttributes {
