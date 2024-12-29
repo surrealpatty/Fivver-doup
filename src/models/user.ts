@@ -1,9 +1,10 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Optional } from 'sequelize';  // Import Optional from Sequelize
+import { v4 as uuidv4 } from 'uuid';  // Import uuidv4 for generating UUIDs
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
-  id: number;  // ID should be a number because you're using DataType.INTEGER
+  id: string;  // ID should be a string (UUID)
   email: string;
   username: string;
   password: string;
@@ -16,16 +17,15 @@ export interface UserAttributes {
   updatedAt?: Date;
 }
 
-// Define the UserCreationAttributes interface for the creation attributes (excluding `id` as it is auto-incremented)
+// Define the UserCreationAttributes interface for the creation attributes (excluding `id` as it is auto-generated)
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
 
   @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER)
-  declare id: number;  // Declare 'id' explicitly as a primary key
+  @Column(DataType.STRING)  // Change type to STRING for UUID
+  declare id: string;  // Declare 'id' as a string (UUID)
 
   @Column(DataType.STRING)
   username!: string;
@@ -60,5 +60,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @Column(DataType.DATE)
   declare updatedAt: Date;  // Declare 'updatedAt' to avoid TypeScript conflict
 }
+
+// Ensure that the UUID is set as a default value for the id field
+User.beforeCreate((user: User) => {
+  user.id = uuidv4();  // Automatically generate UUID for new user records
+});
 
 export default User;
