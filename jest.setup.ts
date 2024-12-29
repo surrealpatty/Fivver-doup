@@ -1,11 +1,19 @@
-// Load environment variables from the .env.test file
-require('dotenv').config({ path: '.env.test' });
+import { Sequelize } from 'sequelize';
 
-// Optional: Log environment variables to verify they are loaded correctly
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_PORT:', process.env.DB_PORT);
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'fivver_doup_test',
+  process.env.DB_USER || 'testuser',
+  process.env.DB_PASSWORD || 'testpassword',
+  {
+    host: process.env.DB_HOST || '127.0.0.1',
+    dialect: 'mysql',
+    port: Number(process.env.DB_PORT) || 3306,
+  }
+);
 
-// You can also set up other test configurations here if needed
+sequelize.authenticate()
+  .then(() => console.log('Test database connection established successfully.'))
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+    throw error; // Propagate the error to fail the tests
+  });
