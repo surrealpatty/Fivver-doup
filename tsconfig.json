@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./src",
+    "baseUrl": "./src",  // Points to the src folder for module resolution
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
@@ -22,15 +22,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      "@config/*": ["config/*"],
+      "@routes/*": ["routes/*"],
       "@models/*": ["models/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"],
-      "*": ["*", "node_modules/*"],
-      "@config/*": ["config/*"],
-      "@routes/*": ["routes/*"]
+      "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+  "include": ["src/**/*"],  // Include all files inside src
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]  // Exclude node_modules, dist, and test files
 }

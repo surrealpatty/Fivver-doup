@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'; // Load environment variables
-import { sequelize } from '@config/database';
-import userRouter from '@routes/user';
+import { sequelize } from './config/database'; // Import sequelize from the correct path
+import { userRouter } from './routes/user'; // Ensure the correct import of userRouter
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -75,5 +76,3 @@ initializeDatabase()
 
 // Export the app instance for use in testing
 export { app };
-console.log(sequelize);
-console.log(userRouter);

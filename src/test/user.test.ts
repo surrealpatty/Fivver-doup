@@ -1,7 +1,7 @@
 import request from 'supertest'; // To make HTTP requests to the app
-import { app } from '../index'; // Import the app instance
-import { sequelize } from '../config/database'; // Correct import for named export
-import { User } from '../models/user'; // Import the User model
+import { app } from '@src/index'; // Import the app instance using the alias
+import { sequelize } from '@config/database'; // Correct import for named export with alias
+import { User } from '@models/user'; // Import the User model using the alias
 
 describe('User Controller Tests', () => {
   let token: string; // Store token to use in tests

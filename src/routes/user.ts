@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { User } from '../models/user';
 
+// Create an instance of the Express Router
 const router = Router();
 
 // Update user route
@@ -52,5 +53,5 @@ router.delete('/delete/:id', authenticateToken, async (req: Request, res: Respon
     }
 });
 
-const userRouter = 'user-router';
-export default userRouter;
+// Export the router instance, not a string
+export const userRouter = router;
