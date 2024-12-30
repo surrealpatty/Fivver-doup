@@ -1,11 +1,11 @@
 import { NextFunction, Response } from 'express';
-import { CustomAuthRequest } from '../types/customRequest'; // Correctly import the CustomAuthRequest type
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
+import { CustomAuthRequest } from '../types/customRequest'; // Ensure correct import
+import { UserPayload } from '../types'; // Import the UserPayload interface
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
-  req: CustomAuthRequest, // Correctly typed request with optional `user`
+  req: CustomAuthRequest, // Type the request to include the optional `user`
   res: Response,
   next: NextFunction
 ): void => {
@@ -15,38 +15,32 @@ export const authenticateToken = (
 
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
-    res.status(401).json({ message: 'Access token is missing' }); // Send response and return nothing
+    res.status(401).json({ message: 'Access token is missing' });
+    return;
+  }
+
+  // Ensure the JWT_SECRET environment variable is set
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
     return;
   }
 
   try {
-    // Ensure JWT_SECRET is set
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      res.status(500).json({ message: 'JWT_SECRET is not defined' }); // Send response and return nothing
-      return;
-    }
-
     // Verify the token using the JWT secret
     const decoded = jwt.verify(token, jwtSecret) as UserPayload;
-
-    // Ensure the decoded payload contains required fields
-    if (!decoded || !decoded.id || !decoded.email || !decoded.username) {
-      res.status(400).json({ message: 'Invalid token: Missing required fields' }); // Send response and return nothing
-      return;
-    }
 
     // Attach the decoded user payload to the request object
     req.user = {
       id: decoded.id,
-      email: decoded.email, // Ensure email is always provided
-      username: decoded.username, // Ensure username is always provided
+      email: decoded.email || null, // Ensure email is optional
+      username: decoded.username || null, // Ensure username is optional
     };
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     // Handle invalid or expired token
-    res.status(403).json({ message: 'Invalid or expired token' }); // Send response and return nothing
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
 };

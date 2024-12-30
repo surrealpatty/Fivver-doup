@@ -1,9 +1,11 @@
 import { Request } from 'express';
 
+export interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+}
+
 export interface CustomAuthRequest extends Request {
-  user?: { 
-    id: string; 
-    email?: string; // Optional to reflect middleware behavior
-    username?: string; // Optional to reflect middleware behavior
-  };
+  user?: UserPayload; // Make user optional to handle undefined cases
 }
