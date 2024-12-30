@@ -1,30 +1,30 @@
 import { NextFunction, Response } from 'express';
 import { CustomAuthRequest } from '../types/customRequest'; // Correctly import the CustomAuthRequest type
-import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
 import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
-  req: CustomAuthRequest,  // Correctly typed request with optional `user`
+  req: CustomAuthRequest, // Correctly typed request with optional `user`
   res: Response,
   next: NextFunction
-): void => { // The return type is void; no return value is expected
+): void => {
   // Extract the token from the Authorization header
   const authHeader = req.headers.authorization;
-  const token = authHeader?.split(' ')[1];  // Extract the token after "Bearer"
+  const token = authHeader?.split(' ')[1]; // Extract the token after "Bearer"
 
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
-    res.status(401).json({ message: 'Access token is missing' });
-    return; // Simply exit after sending the response
+    res.status(401).json({ message: 'Access token is missing' }); // Send response and return nothing
+    return; // Return to prevent further code execution
   }
 
   try {
     // Ensure JWT_SECRET is set
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      res.status(500).json({ message: 'JWT_SECRET is not defined' });
-      return; // Exit after sending the response
+      res.status(500).json({ message: 'JWT_SECRET is not defined' }); // Send response and return nothing
+      return;
     }
 
     // Verify the token using the JWT secret
@@ -32,8 +32,8 @@ export const authenticateToken = (
 
     // Ensure the decoded payload contains required fields
     if (!decoded || !decoded.id || !decoded.email || !decoded.username) {
-      res.status(400).json({ message: 'Invalid token: Missing required fields' });
-      return; // Exit after sending the response
+      res.status(400).json({ message: 'Invalid token: Missing required fields' }); // Send response and return nothing
+      return;
     }
 
     // Attach the decoded user payload to the request object
@@ -44,10 +44,9 @@ export const authenticateToken = (
     };
 
     // Proceed to the next middleware or route handler
-    next(); // No need to return anything after calling next
+    next(); // Call next to continue the request flow
   } catch (error) {
     // Handle invalid or expired token
-    res.status(403).json({ message: 'Invalid or expired token' });
-    return; // Exit after sending the response
+    res.status(403).json({ message: 'Invalid or expired token' }); // Send response and return nothing
   }
 };
