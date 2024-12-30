@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _database = require("../config/database");
+const _user = require("../models/user");
+// Ensure that Sequelize is aware of all the models
+_database.sequelize.addModels([
+    _user.User
+]);
 /**
  * Sync the database and reset the schema before running tests
  */ const syncDatabase = async ()=>{

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 for generating UUIDs
 let User = class User extends Model {
     username;
@@ -18,6 +18,12 @@ let User = class User extends Model {
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
+    /**
+     * Automatically generate UUID for new user records
+     */
+    static assignUuid(user) {
+        user.id = uuidv4(); // Automatically generate UUID for new user records
+    }
 };
 __decorate([
     PrimaryKey,
@@ -67,12 +73,14 @@ __decorate([
     Column(DataType.DATE),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
+__decorate([
+    BeforeCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [User]),
+    __metadata("design:returntype", void 0)
+], User, "assignUuid", null);
 User = __decorate([
     Table({ tableName: 'users', timestamps: true })
 ], User);
 export { User };
-// Ensure that the UUID is set as a default value for the id field
-User.beforeCreate((user) => {
-    user.id = uuidv4(); // Automatically generate UUID for new user records
-});
 export default User;

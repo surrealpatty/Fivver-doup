@@ -1,30 +1,25 @@
-import type { Config } from '@jest/types';
+// jest.setup.ts
 
-const config: Config.InitialOptions = {
-  preset: 'ts-jest', // Use ts-jest for TypeScript support
-  testEnvironment: 'jsdom', // Set the test environment to jsdom for browser-like features
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'], // Include Vue file extensions
-  transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }], // Use ts-jest for TypeScript files
-    '^.+\\.vue$': 'vue3-jest', // Use vue3-jest for Vue 3 files
-  },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Specify setup file to configure mocks and globals
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Alias to map '@' to the src folder (optional, based on your project structure)
-  },
-  transformIgnorePatterns: [
-    'node_modules/(?!(vue|@vue|vue-router|vuex|@vue/test-utils)/)', // Ensure that Vue-related packages are transformed
-  ],
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx,vue}', // Collect coverage from TypeScript and Vue files
-    '!src/**/*.d.ts', // Exclude declaration files from coverage
-  ],
-  coverageDirectory: 'coverage', // Specify the directory where coverage reports will be stored
-  coverageProvider: 'v8', // Use v8 for faster code coverage collection
-  testPathIgnorePatterns: [
-    '/node_modules/', // Ignore node_modules during tests
-  ],
-  verbose: true, // Enable verbose output to see detailed test results
-};
+// Example: Import reflect-metadata if you're using TypeORM or any other libraries that rely on decorators.
+import 'reflect-metadata';
 
-export default config;
+// You can include other global mocks or setups here if needed. For example:
+// Mock global functions, timers, or other test-specific initializations.
+
+beforeAll(() => {
+  // Global setup code can go here, e.g., initializing a database connection or setting up mocks.
+  console.log("Test environment initialized");
+});
+
+beforeEach(() => {
+  // Run some code before each test, like resetting mocks or clearing caches.
+});
+
+afterEach(() => {
+  // Clean up or reset any states after each test runs.
+});
+
+afterAll(() => {
+  // Clean up global resources or close database connections after all tests have finished.
+  console.log("Test environment cleaned up");
+});

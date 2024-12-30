@@ -36,7 +36,7 @@ const config: JestConfigWithTsJest = {
   },
 
   // Setup script after environment is configured
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Adjust if you have setup files
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Ensure setup.ts exists and is configured properly
 
   // Define the root folder for Jest to look for tests
   roots: ['<rootDir>/src'], 
@@ -61,6 +61,9 @@ const config: JestConfigWithTsJest = {
 
   // Match test files based on their extension
   testMatch: ['<rootDir>/src/**/*.test.ts'],
+
+  // Increase worker limit to avoid child process exceptions
+  maxWorkers: 4, // or adjust this based on your system's capacity
 };
 
 export default config;

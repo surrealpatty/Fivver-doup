@@ -36,6 +36,11 @@ class User extends _sequelizetypescript.Model {
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
+    /**
+   * Automatically generate UUID for new user records
+   */ static assignUuid(user) {
+        user.id = (0, _uuid.v4)(); // Automatically generate UUID for new user records
+    }
 }
 _ts_decorate([
     _sequelizetypescript.PrimaryKey,
@@ -84,16 +89,20 @@ _ts_decorate([
     (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.DATE),
     _ts_metadata("design:type", typeof Date === "undefined" ? Object : Date)
 ], User.prototype, "updatedAt", void 0);
+_ts_decorate([
+    _sequelizetypescript.BeforeCreate,
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        Object
+    ]),
+    _ts_metadata("design:returntype", void 0)
+], User, "assignUuid", null);
 User = _ts_decorate([
     (0, _sequelizetypescript.Table)({
         tableName: 'users',
         timestamps: true
     })
 ], User);
-// Ensure that the UUID is set as a default value for the id field
-User.beforeCreate((user)=>{
-    user.id = (0, _uuid.v4)(); // Automatically generate UUID for new user records
-});
 const _default = User;
 
 //# sourceMappingURL=user.js.map

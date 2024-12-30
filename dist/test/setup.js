@@ -1,4 +1,7 @@
-import { sequelize } from '../config/database'; // Import sequelize instance
+import { sequelize } from '../config/database'; // Import the sequelize instance
+import { User } from '../models/user'; // Import the User model
+// Ensure that Sequelize is aware of all the models
+sequelize.addModels([User]);
 /**
  * Sync the database and reset the schema before running tests
  */
