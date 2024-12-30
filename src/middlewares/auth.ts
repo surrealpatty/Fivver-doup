@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config/config'; // Assuming your config is properly set up
 import { Request } from 'express';
-import { CustomAuthRequest } from '../types';
+import { CustomAuthRequest } from '../types'; // Use the correct relative path
 
 // Define the expected JWT Payload structure
 interface JwtPayload {
