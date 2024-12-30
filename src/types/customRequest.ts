@@ -1,8 +1,11 @@
 // src/types/customRequest.ts
+import { Request } from 'express';
+
 export interface CustomAuthRequest extends Request {
-  user?: { // Make user optional
-      id: string;
-      email: string;
-      username: string;
+  user?: {
+    id: string;
+    email: string;
+    username: string;
+    tier: string;
   };
 }
