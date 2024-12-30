@@ -1,6 +1,6 @@
 import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import the authenticateToken middleware
-import { CustomAuthRequest } from '../types/index'; // Import CustomAuthRequest type
+import { CustomAuthRequest } from '../types'; // Import CustomAuthRequest type
 
 const router = Router();
 
@@ -14,12 +14,10 @@ router.get(
     next: NextFunction
   ): Promise<Response> => {
     try {
-      // Check if the user is authenticated (via req.user)
       if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      // If the user exists, proceed with the route logic
       const { id, email, username } = req.user;
 
       return res.status(200).json({
@@ -27,7 +25,6 @@ router.get(
         user: { id, email, username }, // Optionally return user data
       });
     } catch (error) {
-      // Pass any errors to the error-handling middleware
       next(error);
     }
   }

@@ -7,16 +7,14 @@ const router = Router();
 // POST route to create a new review
 router.post('/', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
-    // Ensure that the user is authenticated and has the necessary 'tier' property
-    const user = (req as CustomAuthRequest).user;
+    const user = (req as CustomAuthRequest).user; // Type casting to CustomAuthRequest
+
     if (!user || !user.tier) {
       return res.status(400).json({ message: 'User tier is missing or user is not authenticated.' });
     }
 
-    // Check if email is present (it's optional, so handle the case where it might be undefined)
     const email = user.email ?? 'No email provided'; // Use nullish coalescing for fallback
 
-    // Ensure rating and comment are present in the request body
     const { rating, comment, serviceId } = req.body;
     if (!rating || !comment || !serviceId) {
       return res.status(400).json({ message: 'Rating, comment, and serviceId are required' });
@@ -35,8 +33,8 @@ router.post('/', authenticateToken, async (req: Request, res: Response, next: Ne
 // GET route to fetch reviews for a specific service
 router.get('/:serviceId', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
-    // Ensure the user is authenticated
     const user = (req as CustomAuthRequest).user;
+
     if (!user) {
       return res.status(401).json({ message: 'User not authenticated.' });
     }

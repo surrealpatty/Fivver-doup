@@ -1,10 +1,9 @@
-import { Request } from 'express';
+export interface UserPayload {
+  id: string;
+  email: string;  // Ensure email is always a string
+  username?: string;
+}
 
-// Extend the Request interface to include additional properties like `user`
 export interface CustomAuthRequest extends Request {
-    user?: {
-        id: string;
-        email?: string;
-        username?: string;
-    }; // Add any additional properties you need
+  user?: UserPayload; // Make user optional if it's not always present
 }
