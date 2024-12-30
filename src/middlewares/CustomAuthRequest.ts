@@ -1,17 +1,9 @@
 import { Request } from 'express';
-import { UserPayload } from '../types'; // Adjust the path as necessary
+import { UserPayload } from '../types';  // Correct path to 'src/types/index.ts'
 
-// Define the UserPayload interface
-export interface UserPayload {
-  id: string;          // Required: User ID
-  email: string;       // Required: Email (string)
-  username?: string;   // Optional: Username (string or undefined)
-  role?: string;       // Optional: Role (string)
-  tier?: string;       // Optional: Subscription tier (string)
-}
-
+// Extend the Express Request interface to include the 'user' property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // Ensure user is always typed as UserPayload
+  user?: UserPayload;  // 'user' is optional here, indicating it might be undefined
 }
 
 // Define a type guard to check if an object is a valid UserPayload
