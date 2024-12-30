@@ -33,8 +33,8 @@ export const authenticateToken = (
     // Attach the decoded user payload to the request object (with null checks)
     req.user = {
       id: decoded.id,
-      email: decoded.email ? decoded.email : '', // Provide a fallback value (empty string) if undefined
-      username: decoded.username ? decoded.username : '', // Provide a fallback value (empty string) if undefined
+      email: decoded.email ?? '', // Provide a fallback value (empty string) if undefined
+      username: decoded.username ?? '', // Provide a fallback value (empty string) if undefined
     };
 
     // Proceed to the next middleware or route handler
