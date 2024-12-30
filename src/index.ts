@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database'; // Ensure correct relative path for database config
-import { userRoutes } from './routes/user'; // Ensure correct relative path for user routes
+import  userRoutes  from './routes/user'; // Ensure correct relative path for user routes
 import protectedRoute from './routes/protectedRoute'; // Import the protected route
 import { authenticateToken } from './middlewares/authenticateToken'; // Import the authenticateToken middleware
 

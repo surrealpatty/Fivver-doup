@@ -1,39 +1,36 @@
-import express, { Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Import the middleware
-import { CustomAuthRequest } from '../types/customRequest'; // Import the CustomAuthRequest type for proper typing
-import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
+import { Router, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Import the authenticateToken middleware
+import { CustomAuthRequest } from '../types/index'; // Import CustomAuthRequest type
 
-const router = express.Router();
+const router = Router();
 
-// Define a protected route
-router.get('/protected', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    // Ensure req.user is available before proceeding
-    const user: UserPayload | undefined = req.user; // Explicitly typing user as UserPayload or undefined
-
-    if (!user) {
-      return res.status(403).json({ message: 'User not authenticated.' });
-    }
-
-    // Destructure user data with fallbacks for undefined properties
-    const { id, email = 'Email not provided', username = 'Username not provided', tier = 'Tier not provided', role = 'User' } = user;
-
-    // Return the user data in the response
-    return res.status(200).json({
-      message: 'You have access to this protected route.',
-      user: {
-        id,
-        email,
-        username,
-        tier,
-        role
+// Protected route example
+router.get(
+  '/protected',
+  authenticateToken, // Use the authenticateToken middleware
+  async (
+    req: CustomAuthRequest, // Ensure the correct typing for `req`
+    res: Response,
+    next: NextFunction
+  ): Promise<Response> => {
+    try {
+      // Check if the user is authenticated (via req.user)
+      if (!req.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
       }
-    });
 
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Internal server error' });
+      // If the user exists, proceed with the route logic
+      const { id, email, username } = req.user;
+
+      return res.status(200).json({
+        message: 'Protected route accessed',
+        user: { id, email, username }, // Optionally return user data
+      });
+    } catch (error) {
+      // Pass any errors to the error-handling middleware
+      next(error);
+    }
   }
-});
+);
 
 export default router;

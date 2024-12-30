@@ -33,8 +33,8 @@ export const authenticateToken = (
     // Attach the decoded user payload to the request object
     req.user = {
       id: decoded.id,
-      email: decoded.email || null, // Ensure email is optional
-      username: decoded.username || null, // Ensure username is optional
+      email: decoded.email || undefined, // Ensure email is undefined if not present
+      username: decoded.username || undefined, // Ensure username is undefined if not present
     };
 
     // Proceed to the next middleware or route handler
