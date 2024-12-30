@@ -8,7 +8,7 @@ export const authenticateToken = (
   req: CustomAuthRequest,  // Correctly typed request with optional `user`
   res: Response,
   next: NextFunction
-): void => { // Ensure the return type is `void`, not `Response`
+): void => { // The return type is void; no return value is expected
   // Extract the token from the Authorization header
   const authHeader = req.headers.authorization;
   const token = authHeader?.split(' ')[1];  // Extract the token after "Bearer"
@@ -16,7 +16,7 @@ export const authenticateToken = (
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
     res.status(401).json({ message: 'Access token is missing' });
-    return; // No return value after sending the response
+    return; // Simply exit after sending the response
   }
 
   try {
@@ -24,7 +24,7 @@ export const authenticateToken = (
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       res.status(500).json({ message: 'JWT_SECRET is not defined' });
-      return; // No return value after sending the response
+      return; // Exit after sending the response
     }
 
     // Verify the token using the JWT secret
@@ -33,7 +33,7 @@ export const authenticateToken = (
     // Ensure the decoded payload contains required fields
     if (!decoded || !decoded.id || !decoded.email || !decoded.username) {
       res.status(400).json({ message: 'Invalid token: Missing required fields' });
-      return; // No return value after sending the response
+      return; // Exit after sending the response
     }
 
     // Attach the decoded user payload to the request object
@@ -48,5 +48,6 @@ export const authenticateToken = (
   } catch (error) {
     // Handle invalid or expired token
     res.status(403).json({ message: 'Invalid or expired token' });
+    return; // Exit after sending the response
   }
 };
