@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import { CustomAuthRequest } from '../types/customRequest'; // Ensure correct import
 import { UserPayload } from '../types'; // Import the UserPayload interface
 
+const authHeader = req.headers['authorization'] as string | undefined; // Cast to string | undefined
+
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
   req: CustomAuthRequest, // Type the request to include the optional `user`
@@ -33,8 +35,8 @@ export const authenticateToken = (
     // Attach the decoded user payload to the request object
     req.user = {
       id: decoded.id,
-      email: decoded.email || undefined, // Ensure email is undefined if not present
-      username: decoded.username || undefined, // Ensure username is undefined if not present
+      email: decoded.email || '', // Provide a fallback value (empty string) if undefined
+      username: decoded.username || '', // Provide a fallback value (empty string) if undefined      
     };
 
     // Proceed to the next middleware or route handler
