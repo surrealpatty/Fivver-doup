@@ -1,6 +1,6 @@
 import { Router, Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types'; // Ensure this path is correct
 import { authenticateToken } from '../middlewares/authenticateToken';
+import { CustomAuthRequest, AuthRequest } from '../types'; // Make sure you import both types
 
 const router = Router();
 
@@ -10,13 +10,15 @@ router.get(
   authenticateToken, // Middleware to authenticate user
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-      const user = req.user; // Properly typed as UserPayload from CustomAuthRequest
+      // Check if the user exists (after authentication)
+      const user = req.user;
 
       // If user is undefined, return 401 Unauthorized
       if (!user) {
         return res.status(401).json({ message: 'User not authenticated' });
       }
 
+      // If user exists, safely access their properties
       return res.status(200).json({
         message: 'Profile fetched successfully',
         user: {
@@ -38,7 +40,8 @@ router.put(
   authenticateToken, // Middleware to authenticate user
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-      const user = req.user; // Properly typed as UserPayload from CustomAuthRequest
+      // Ensure user is authenticated (user is guaranteed to be present after authenticateToken middleware)
+      const user = req.user;
 
       // If user is undefined, return 401 Unauthorized
       if (!user) {
