@@ -1,7 +1,7 @@
 // src/test/database.test.ts
 
 import { sequelize } from '../config/database';
-import { CustomAuthRequest } from '../types/index';  // Should work if paths are configured correctly
+// Removed CustomAuthRequest import as it's not used in this test file
 import { UserPayload } from '../types'; // Correct the import to match the export
 
 describe('Database Connection', () => {
