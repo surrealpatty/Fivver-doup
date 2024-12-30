@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { CustomAuthRequest } from '../types'; // Ensure correct import
 
@@ -8,7 +8,7 @@ const router = express.Router();
 router.get(
   '/profile',
   authenticateToken, // Middleware to authenticate user
-  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
     try {
       // Access the user property with correct typing from CustomAuthRequest
       const user = req.user;
@@ -28,6 +28,8 @@ router.get(
       });
     } catch (error) {
       next(error); // Pass error to global error handler
+      // If needed, return a response here as a fallback for errors
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 );
