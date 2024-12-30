@@ -1,7 +1,8 @@
+// src/middlewares/authenticateToken.ts
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Make sure this import exists and is correct
-import { UserPayload } from '../types'; // Import the UserPayload interface
+import { CustomAuthRequest } from '../types'; // Ensure the path is correct for your project
+import { UserPayload } from '../types'; // Ensure this interface exists in your types
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
@@ -15,15 +16,13 @@ export const authenticateToken = (
 
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
-    res.status(401).json({ message: 'Access token is missing' });
-    return;
+    return res.status(401).json({ message: 'Access token is missing' });
   }
 
   // Ensure the JWT_SECRET environment variable is set
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
-    return;
+    return res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
   }
 
   try {
@@ -34,13 +33,13 @@ export const authenticateToken = (
     req.user = {
       id: decoded.id,
       email: decoded.email || '', // Provide a fallback value (empty string) if undefined
-      username: decoded.username || '', // Provide a fallback value (empty string) if undefined      
+      username: decoded.username || '', // Provide a fallback value (empty string) if undefined
     };
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
     // Handle invalid or expired token
-    res.status(403).json({ message: 'Invalid or expired token' });
+    return res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
