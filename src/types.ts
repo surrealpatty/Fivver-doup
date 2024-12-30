@@ -1,7 +1,6 @@
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Adjust the path as necessary
 
-// Define the UserPayload interface
 export interface UserPayload {
   id: string;          // Required: User ID
   email: string;       // Required: Email (string)
