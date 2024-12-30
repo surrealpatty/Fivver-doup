@@ -2,7 +2,7 @@
 
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from 'types';  // Import CustomAuthRequest
+import { CustomAuthRequest } from '../types';  // Adjust path as necessary
 import { UserPayload } from '../types';  // Import UserPayload
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';

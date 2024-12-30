@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { CustomAuthRequest, UserPayload } from '../types'; // Import necessary types
+import { CustomAuthRequest } from '../types/customRequest'; // Correctly import the CustomAuthRequest type
+import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
 import jwt from 'jsonwebtoken';
 
 // Middleware to authenticate and verify the token
@@ -15,7 +16,7 @@ export const authenticateToken = (
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
     res.status(401).json({ message: 'Access token is missing' });
-    return;
+    return;  // Explicitly return after sending a response
   }
 
   try {
@@ -25,7 +26,7 @@ export const authenticateToken = (
     // Ensure the decoded payload contains required fields
     if (!decoded || !decoded.id || !decoded.email) {
       res.status(400).json({ message: 'Invalid token: Missing required fields' });
-      return;
+      return; // Explicitly return after sending a response
     }
 
     // Attach the decoded user payload to the request object
