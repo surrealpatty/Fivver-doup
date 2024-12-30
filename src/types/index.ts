@@ -9,3 +9,8 @@ export interface CustomAuthRequest extends Request {
         tier?: string;
     };
 }
+export interface UserPayload {
+    id: string;
+    email?: string;
+    username?: string;
+}
