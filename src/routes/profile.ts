@@ -1,4 +1,3 @@
-// src/routes/profile.ts
 import { Router, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct import
 import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
@@ -11,7 +10,8 @@ router.get(
   authenticateToken, // Middleware to authenticate user
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-      const user = req.user; // CustomAuthRequest will provide correct typing for req.user
+      // Access the user property with correct typing from CustomAuthRequest
+      const user = req.user;
 
       if (!user) {
         return res.status(401).json({ message: 'User not authenticated' });
@@ -38,7 +38,8 @@ router.put(
   authenticateToken, // Middleware to authenticate user
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-      const user = req.user; // CustomAuthRequest will provide correct typing for req.user
+      // Access the user property with correct typing from CustomAuthRequest
+      const user = req.user;
 
       if (!user) {
         return res.status(401).json({ message: 'User not authenticated' });
