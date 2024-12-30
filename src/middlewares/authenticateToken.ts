@@ -1,17 +1,16 @@
 // src/middlewares/authenticateToken.ts
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Ensure the path is correct for your project
-import { UserPayload } from '../types'; // Ensure this interface exists in your types
+import { CustomAuthRequest } from '../types'; // Ensure the path is correct
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
-  req: CustomAuthRequest, // Type the request to include the optional `user`
+  req: CustomAuthRequest,
   res: Response,
   next: NextFunction
 ): void => {
   // Extract the token from the Authorization header
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers?.authorization;
   const token = authHeader?.split(' ')[1]; // Extract the token after "Bearer"
 
   // If no token is provided, return a 401 Unauthorized response
@@ -29,13 +28,13 @@ export const authenticateToken = (
 
   try {
     // Verify the token using the JWT secret
-    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
+    const decoded = jwt.verify(token, jwtSecret) as { id: string; email: string; username: string };
 
-    // Attach the decoded user payload to the request object
+    // Attach the decoded user payload to the request object (with null checks)
     req.user = {
       id: decoded.id,
-      email: decoded.email || '', // Provide a fallback value (empty string) if undefined
-      username: decoded.username || '', // Provide a fallback value (empty string) if undefined
+      email: decoded.email ? decoded.email : '', // Provide a fallback value (empty string) if undefined
+      username: decoded.username ? decoded.username : '', // Provide a fallback value (empty string) if undefined
     };
 
     // Proceed to the next middleware or route handler

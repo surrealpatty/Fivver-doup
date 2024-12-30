@@ -1,5 +1,5 @@
 import 'reflect-metadata'; // Import reflect-metadata before other imports
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express'; 
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database'; 
@@ -39,3 +39,12 @@ sequelize
   });
 
 export default app;
+
+// Define CustomAuthRequest interface (within src/index.ts or a separate file)
+interface CustomAuthRequest extends Request {
+  user: {
+    id: string;
+    email: string; // Ensure email is a required string property
+    username?: string; // Optional username property
+  };
+}
