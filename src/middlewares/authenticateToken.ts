@@ -9,7 +9,7 @@ export const authenticateToken = (
   req: CustomAuthRequest,  // Correctly typed request with non-optional `user`
   res: Response,
   next: NextFunction
-): void => {
+): void => { // Ensure the return type is `void`, not `Response`
   // Extract the token from the Authorization header
   const authHeader = req.headers.authorization;
   const token = authHeader?.split(' ')[1];  // Extract the token after "Bearer"
@@ -17,7 +17,7 @@ export const authenticateToken = (
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
     res.status(401).json({ message: 'Access token is missing' });
-    return;  // No need to return anything after sending a response
+    return; // No return value after sending the response
   }
 
   try {
@@ -25,7 +25,7 @@ export const authenticateToken = (
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       res.status(500).json({ message: 'JWT_SECRET is not defined' });
-      return;  // No need to return anything after sending a response
+      return; // No return value after sending the response
     }
 
     // Verify the token using the JWT secret
@@ -34,7 +34,7 @@ export const authenticateToken = (
     // Ensure the decoded payload contains required fields
     if (!decoded || !decoded.id || !decoded.email || !decoded.username) {
       res.status(400).json({ message: 'Invalid token: Missing required fields' });
-      return;  // No need to return anything after sending a response
+      return; // No return value after sending the response
     }
 
     // Attach the decoded user payload to the request object

@@ -17,14 +17,14 @@ export interface JwtPayload {
   role: 'Free' | 'Paid'; // Define role as 'Free' or 'Paid'
 }
 
-// CustomAuthRequest extends Express Request to include the optional `user` property
-// `user` can be undefined before authentication
+// CustomAuthRequest extends Express Request to include the user property
+// Now, the user property is mandatory and is always available after JWT validation
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // `user` is optional and can be undefined before JWT validation
+  user: UserPayload; // user is now mandatory after authentication
 }
 
 // AuthRequest extends Express Request for cases where the `user` property is guaranteed to be present
 // This interface should be used after JWT validation
 export interface AuthRequest extends Request {
-  user: UserPayload; // `user` is guaranteed to be available after authentication
+  user: UserPayload; // user is guaranteed to be available after authentication
 }
