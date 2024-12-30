@@ -16,7 +16,7 @@ export const authenticateToken = (
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
     res.status(401).json({ message: 'Access token is missing' }); // Send response and return nothing
-    return; // Return to prevent further code execution
+    return;
   }
 
   try {
@@ -44,7 +44,7 @@ export const authenticateToken = (
     };
 
     // Proceed to the next middleware or route handler
-    next(); // Call next to continue the request flow
+    next();
   } catch (error) {
     // Handle invalid or expired token
     res.status(403).json({ message: 'Invalid or expired token' }); // Send response and return nothing

@@ -18,7 +18,7 @@ router.get(
         return res.status(401).json({ message: 'User not authenticated' });
       }
 
-      // If user exists, safely access their properties
+      // Safely access user properties
       return res.status(200).json({
         message: 'Profile fetched successfully',
         user: {
