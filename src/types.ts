@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserPayload } from '../types'; // Correct path to go up one directory
+
 
 export interface UserPayload {
   id: string;          // Required: User ID
