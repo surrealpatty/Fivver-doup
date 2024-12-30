@@ -1,9 +1,7 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types/customRequest'; // Ensure correct import
+import { CustomAuthRequest } from '../types'; // Adjust the import based on your file structure
 import { UserPayload } from '../types'; // Import the UserPayload interface
-
-const authHeader = req.headers['authorization'] as string | undefined; // Cast to string | undefined
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
