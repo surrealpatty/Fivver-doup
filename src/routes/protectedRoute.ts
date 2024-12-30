@@ -27,7 +27,7 @@ router.get(
         message: 'Protected route accessed',
         user: { id, email, username }, // Optionally return user data
       });
-    } catch (error) {
+    } catch (error: any) {  // Explicitly type the error as 'any' or 'Error'
       // Return error response instead of calling next(error)
       return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
