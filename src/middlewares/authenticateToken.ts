@@ -24,13 +24,17 @@ export const authenticateToken = (
     const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as UserPayload;
 
     // Ensure the decoded payload contains required fields
-    if (!decoded || !decoded.id || !decoded.email) {
+    if (!decoded || !decoded.id || !decoded.email || !decoded.username) {
       res.status(400).json({ message: 'Invalid token: Missing required fields' });
       return; // Explicitly return after sending a response
     }
 
     // Attach the decoded user payload to the request object
-    req.user = decoded; // Attach the decoded payload as `user`
+    req.user = {
+      id: decoded.id,
+      email: decoded.email, // Ensure email is always provided
+      username: decoded.username, // Ensure username is always provided
+    };
 
     // Proceed to the next middleware or route handler
     next();

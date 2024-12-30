@@ -1,7 +1,11 @@
 // src/types/customRequest.ts
-import { Request } from 'express';
 import { UserPayload } from './index'; // Adjust the import path if necessary
+import { Request } from 'express';
 
 export interface CustomAuthRequest extends Request {
-    user?: UserPayload; // user is optional to handle unauthenticated requests
+  user: { 
+    id: string; 
+    email: string; // email is now non-optional
+    username: string; // username is now non-optional
+  };
 }
