@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from './config/database'; 
-import { userRoutes } from './routes/user'; 
+import  userRoutes  from './routes/user'; 
 import profileRoutes from './routes/profile'; 
 import { authenticateToken } from './middlewares/authenticateToken'; 
 
