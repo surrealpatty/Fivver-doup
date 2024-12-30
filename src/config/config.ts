@@ -5,7 +5,7 @@ dotenv.config();
 const {
   DB_HOST = 'localhost',
   DB_USER = 'root',
-  DB_PASSWORD = 'f0^:8t1#qa7',
+  DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',
   DB_NAME = 'fivver_doup',
   DB_PORT = '3306',  // Default MySQL port
   NODE_ENV = 'development',  // Default to 'development' if not set
