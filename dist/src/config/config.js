@@ -17,7 +17,7 @@ function _interop_require_default(obj) {
     };
 }
 _dotenv.default.config();
-const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'f0^:8t1#qa7', DB_NAME = 'fivver_doup', DB_PORT = '3306', NODE_ENV = 'development', JWT_SECRET = 'your-secret-key', JWT_EXPIRATION = '1h' } = process.env;
+const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', DB_NAME = 'fivver_doup', DB_PORT = '3306', NODE_ENV = 'development', JWT_SECRET = 'your-secret-key', JWT_EXPIRATION = '1h' } = process.env;
 // Ensure DB_PORT is a valid number
 const parsedDBPort = parseInt(DB_PORT, 10);
 if (isNaN(parsedDBPort)) {

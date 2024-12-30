@@ -20,7 +20,7 @@ function _interop_require_default(obj) {
 // Load environment variables from .env file
 _dotenv.default.config();
 // Ensure that environment variables are loaded properly
-const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'f0^:8t1#qa7', DB_NAME = 'fivver_doup' } = process.env;
+const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', DB_NAME = 'fivver_doup' } = process.env;
 // Initialize Sequelize instance with sequelize-typescript and models
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',

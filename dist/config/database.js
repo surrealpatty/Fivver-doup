@@ -7,7 +7,7 @@ dotenv.config();
 // Ensure that environment variables are loaded properly
 const { DB_HOST = 'localhost', // Default to 'localhost' if DB_HOST is not set
 DB_USER = 'root', // Default to 'root' if DB_USER is not set
-DB_PASSWORD = 'f0^:8t1#qa7', // Default to a specific password if DB_PASSWORD is not set
+DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', // Default to a specific password if DB_PASSWORD is not set
 DB_NAME = 'fivver_doup', // Default to 'fivver_doup' if DB_NAME is not set
  } = process.env;
 // Initialize Sequelize instance with sequelize-typescript and models
