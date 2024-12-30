@@ -2,9 +2,9 @@ import 'reflect-metadata'; // Import reflect-metadata before other imports
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { sequelize } from './config/database'; // Ensure correct relative path for database config
-import { userRoutes } from './routes/user';
-import protectedRoute from './routes/protectedRoute'; // Import the protected route
+import { sequelize } from './config/database'; // Correct path for database config
+import userRoutes from './routes/user'; // Ensure userRoutes is correctly imported
+import profileRoutes from './routes/profile'; // Adjust the path for profile routes
 import { authenticateToken } from './middlewares/authenticateToken'; // Import the authenticateToken middleware
 
 dotenv.config(); // Load environment variables from .env file
@@ -17,7 +17,7 @@ app.use(express.json()); // Parse JSON bodies in incoming requests
 
 // Routes setup
 app.use('/api/users', userRoutes); // Register user routes under /api/users
-app.use('/api', authenticateToken, protectedRoute); // Register protected routes under /api with authentication middleware
+app.use('/api', authenticateToken, profileRoutes); // Register profile routes under /api with authentication middleware
 
 // Test the database connection and sync the schema
 sequelize

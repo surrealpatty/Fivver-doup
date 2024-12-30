@@ -1,36 +1,11 @@
-import { Router, Response, NextFunction, Request } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';  // Correct path for authenticateToken middleware
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
+// src/routes/service.ts
+import { Router, Request, Response, NextFunction } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken'; // Import the middleware
+import { CustomAuthRequest } from '../types'; // Ensure correct typing for req.user
 
 const router = Router();
 
-// Route for premium service access with JWT authentication middleware
-router.get('/service/premium', authenticateToken, (req: Request, res: Response) => {
-  // Ensure req.user is not undefined before using it
-  const user = (req as CustomAuthRequest).user;
-
-  // Handle case where user is not authenticated
-  if (!user) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  // Ensure the role exists (TypeScript type check)
-  const userRole = user.role;
-
-  // If the user does not have a role or the role is not 'paid', deny access
-  if (!userRole) {
-    return res.status(403).json({ message: 'User role not found.' });
-  }
-
-  // Handle the role logic (assuming 'role' is either 'admin' or 'paid')
-  if (userRole === 'paid') {
-    return res.status(200).json({ message: 'Premium service access granted.' });
-  } else {
-    return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
-  }
-});
-
-// Route for creating a new service (authentication required)
+// POST /service - Create a new service
 router.post('/service', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure user is authenticated
@@ -47,7 +22,7 @@ router.post('/service', authenticateToken, async (req: Request, res: Response, n
       return res.status(400).json({ message: 'Service name, description, and price are required' });
     }
 
-    // Ensure price is a number
+    // Ensure price is a valid number
     if (isNaN(price)) {
       return res.status(400).json({ message: 'Price must be a valid number' });
     }
@@ -57,7 +32,7 @@ router.post('/service', authenticateToken, async (req: Request, res: Response, n
       userId: id,
       serviceName,
       description,
-      price
+      price,
     };
 
     // Example: save the service in the database (replace with actual DB interaction)
@@ -65,6 +40,33 @@ router.post('/service', authenticateToken, async (req: Request, res: Response, n
 
     // Return a success response with the created service data
     return res.status(201).json({ message: 'Service created successfully', service });
+  } catch (err) {
+    next(err);  // Pass errors to the error handler
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET /service/:id - Retrieve a service by ID
+router.get('/service/:id', authenticateToken, async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+  try {
+    // Ensure user is authenticated
+    const user = (req as CustomAuthRequest).user;
+    if (!user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const { id } = req.params; // Extract service ID from URL params
+
+    // Logic to retrieve the service from the database (replace with actual DB query)
+    // const service = await Service.findById(id);
+    const service = { id, serviceName: 'Sample Service', description: 'Sample Description', price: 100 }; // Example service
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    // Return the found service data
+    return res.status(200).json({ message: 'Service found', service });
   } catch (err) {
     next(err);  // Pass errors to the error handler
     return res.status(500).json({ message: 'Server error' });

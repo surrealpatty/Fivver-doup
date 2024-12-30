@@ -1,6 +1,7 @@
+// src/routes/profile.ts
 import { Router, Response, NextFunction } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types'; // Ensure correct import
+import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure correct import
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get(
           id: user.id,
           email: user.email || 'No email provided',
           username: user.username || 'Anonymous',
-          tier: user.tier || 'Free', // Make sure tier exists in the user object or fallback to 'Free'
+          tier: user.tier || 'Free', // Fallback to 'Free' if no tier provided
         },
       });
     } catch (error) {
@@ -45,21 +46,24 @@ router.put(
 
       const { id, email, username, tier } = user;
 
+      // Validate if necessary user fields exist
       if (!id || !email || !username) {
         return res.status(400).json({ message: 'Invalid user data' });
       }
 
       const { newEmail, newUsername, newTier } = req.body;
 
+      // Ensure that at least one field is provided for update
       if (!newEmail && !newUsername && !newTier) {
         return res.status(400).json({ message: 'No data provided for update' });
       }
 
+      // Create the updated user object
       const updatedUser = {
         id,
-        email: newEmail || email,
-        username: newUsername || username,
-        tier: newTier || tier,
+        email: newEmail || email, // Fallback to current email if no new email provided
+        username: newUsername || username, // Fallback to current username if no new username provided
+        tier: newTier || tier, // Fallback to current tier if no new tier provided
       };
 
       return res.status(200).json({

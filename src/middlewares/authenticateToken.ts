@@ -16,13 +16,15 @@ export const authenticateToken = (
 
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
-    return res.status(401).json({ message: 'Access token is missing' });
+    res.status(401).json({ message: 'Access token is missing' });
+    return; // Ensure no further code is executed
   }
 
   // Ensure the JWT_SECRET environment variable is set
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    return res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
+    res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
+    return; // Ensure no further code is executed
   }
 
   try {
@@ -40,6 +42,6 @@ export const authenticateToken = (
     next();
   } catch (error) {
     // Handle invalid or expired token
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
