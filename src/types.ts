@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserPayload } from './types'; // Assuming types.ts is in the same directory
+import { UserPayload } from '../types'; // Going up one level to src/
 
 
 export interface UserPayload {
