@@ -10,8 +10,9 @@ export interface UserPayload {
 }
 
 // Extend the Express Request interface to include the 'user' property
+// 'user' is optional here, indicating that it might be undefined
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Make 'user' optional in case it's undefined
+  user?: UserPayload;  // 'user' can be undefined
 }
 
 // Define a type guard to check if an object is a valid UserPayload
@@ -27,6 +28,7 @@ export function isUser(user: any): user is UserPayload {
 }
 
 // Define AuthRequest interface for additional typing needs
+// This is used when we are sure that the 'user' property is not undefined
 export interface AuthRequest extends Request {
-  user: UserPayload;  // 'user' property typed as UserPayload
+  user: UserPayload;  // 'user' is required here
 }
