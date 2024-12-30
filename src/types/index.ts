@@ -1,9 +1,11 @@
-export interface UserPayload {
-  id: string;
-  email: string;  // Ensure email is always a string
-  username?: string;
-}
+// src/types/index.ts
+import { Request } from 'express';
 
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // Make user optional if it's not always present
+    user?: {
+        id: string;
+        email: string;
+        username: string;
+        tier?: string;
+    };
 }

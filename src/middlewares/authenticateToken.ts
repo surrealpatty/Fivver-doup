@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Adjust the import based on your file structure
+import { CustomAuthRequest } from '../types'; // Make sure this import exists and is correct
 import { UserPayload } from '../types'; // Import the UserPayload interface
 
 // Middleware to authenticate and verify the token

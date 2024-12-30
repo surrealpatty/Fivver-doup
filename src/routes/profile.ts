@@ -22,7 +22,7 @@ router.get(
           id: user.id,
           email: user.email || 'No email provided',
           username: user.username || 'Anonymous',
-          tier: user.tier || 'Free',
+          tier: user.tier || 'Free', // Make sure tier exists in the user object or fallback to 'Free'
         },
       });
     } catch (error) {
