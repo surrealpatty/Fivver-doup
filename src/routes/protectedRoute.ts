@@ -1,4 +1,3 @@
-// src/routes/protectedRoute.ts
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken'; // Import authenticateToken middleware
 import { CustomAuthRequest } from '../types'; // Import CustomAuthRequest type
