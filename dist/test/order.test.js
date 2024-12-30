@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { sequelize } from '../config/database'; // Corrected import for sequelizes
-import User from '../models/user';
-import Service from '../models/services';
-import { Order } from '../models/order';
+import { Order } from '../models/order'; // Ensure the correct import for Order model
+import { sequelize } from '../config/database'; // Correct import for sequelize
 import app from '../../src/index'; // Import app from src/index directly
+import User from '../models/user'; // Import User model
+import Service from '../models/services'; // Import Service model
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),

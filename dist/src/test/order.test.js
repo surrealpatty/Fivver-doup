@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
+const _order = require("../models/order");
 const _database = require("../config/database");
+const _index = /*#__PURE__*/ _interop_require_default(require("../../src/index"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
-const _order = require("../models/order");
-const _index = /*#__PURE__*/ _interop_require_default(require("../../src/index"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
