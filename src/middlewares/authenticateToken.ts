@@ -1,4 +1,3 @@
-// src/middlewares/authenticateToken.ts
 import { NextFunction, Response } from 'express';
 import { CustomAuthRequest } from '../types/customRequest'; // Correctly import the CustomAuthRequest type
 import { UserPayload } from '../types'; // Ensure UserPayload is correctly imported
@@ -6,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 // Middleware to authenticate and verify the token
 export const authenticateToken = (
-  req: CustomAuthRequest,  // Correctly typed request with non-optional `user`
+  req: CustomAuthRequest,  // Correctly typed request with optional `user`
   res: Response,
   next: NextFunction
 ): void => { // Ensure the return type is `void`, not `Response`

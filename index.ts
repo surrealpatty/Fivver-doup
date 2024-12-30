@@ -1,9 +1,10 @@
 // fivver_doup/index.ts
+
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { sequelize } from './src/config/database';
-import { userRoutes } from './src/routes/user'; // Corrected to use the proper path
+import { sequelize } from './src/config/database'; // Correct path for sequelize config
+import { userRoutes } from './src/routes/user'; // Ensure this path is correct based on your folder structure
 
 dotenv.config(); // Load environment variables from .env file
 
