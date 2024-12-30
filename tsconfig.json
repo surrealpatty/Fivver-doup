@@ -13,7 +13,7 @@
     "emitDecoratorMetadata": true,      // Emit metadata for decorators
     "baseUrl": "./", 
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"],                   // Adjust the path for alias @ to map to src/
       "types/*": ["src/types/*"]
     },
     "outDir": "./dist",

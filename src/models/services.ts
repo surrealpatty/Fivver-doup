@@ -4,11 +4,11 @@ import { sequelize } from '../config/database';  // Ensure this path is correct
 
 // Define the actual attributes of the Service model (includes all fields)
 export interface ServiceAttributes {
-  id: number;
+  id: string;  // Change from number to string for UUID
   title: string;
   description: string;
   price: number;
-  userId: string;  // Change userId type to string (for UUID)
+  userId: string;  // userId type remains string (UUID)
   image?: string;  // Optional image field
 }
 
@@ -17,20 +17,20 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 
 // Define the Service model
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
-  id!: number;
+  id!: string;  // Change from number to string (UUID)
   title!: string;
   description!: string;
   price!: number;
-  userId!: string;  // Change userId type to string (for UUID)
+  userId!: string;  // Change userId type to string (UUID)
   image?: string;  // Define image as optional
 }
 
 Service.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,  // Change to UUID type
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,  // Set default value to auto-generate UUIDs
     },
     title: {
       type: DataTypes.STRING,
@@ -45,7 +45,7 @@ Service.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.STRING,  // Change to STRING to handle UUID as a string
+      type: DataTypes.STRING,  // userId remains a string (UUID)
       allowNull: false,
     },
     image: {
