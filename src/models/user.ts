@@ -1,4 +1,4 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, CreatedAt, UpdatedAt, BeforeCreate } from 'sequelize-typescript';
 import { Optional } from 'sequelize';  // Import Optional from Sequelize
 import { v4 as uuidv4 } from 'uuid';  // Import uuidv4 for generating UUIDs
 
@@ -59,11 +59,14 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @UpdatedAt
   @Column(DataType.DATE)
   declare updatedAt: Date;  // Declare 'updatedAt' to avoid TypeScript conflict
-}
 
-// Ensure that the UUID is set as a default value for the id field
-User.beforeCreate((user: User) => {
-  user.id = uuidv4();  // Automatically generate UUID for new user records
-});
+  /**
+   * Automatically generate UUID for new user records
+   */
+  @BeforeCreate
+  static assignUuid(user: User): void {
+    user.id = uuidv4();  // Automatically generate UUID for new user records
+  }
+}
 
 export default User;
