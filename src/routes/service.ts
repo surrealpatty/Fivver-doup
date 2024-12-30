@@ -34,4 +34,16 @@ router.post('/service', authenticateToken, async (req: CustomAuthRequest, res: R
       price,
     };
 
-  
+    // Assuming you would save the service to the database here (e.g., using Sequelize)
+    // Example (this line should be replaced with actual database logic):
+    // await Service.create(service);
+
+    // Return success response
+    return res.status(201).json({ message: 'Service created successfully', service });
+  } catch (error) {
+    // Return error response if something goes wrong
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+export default router;

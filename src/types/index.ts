@@ -6,4 +6,4 @@ export interface UserPayload {
   username?: string;
   role?: string;
   tier?: string;
-}
+};
