@@ -11,7 +11,7 @@ export interface UserPayload {
 
 // Extend the Express Request interface to include the 'user' property
 export interface CustomAuthRequest extends Request {
-  user: UserPayload;  // Ensure 'user' is typed as 'UserPayload' (email is guaranteed to be a string)
+  user?: UserPayload;  // Make 'user' optional in case it's undefined
 }
 
 // Define a type guard to check if an object is a valid UserPayload
