@@ -1,5 +1,4 @@
 // src/types/customRequest.ts
-import { UserPayload } from './index'; // Adjust the import path if necessary
 import { Request } from 'express';
 
 export interface CustomAuthRequest extends Request {
