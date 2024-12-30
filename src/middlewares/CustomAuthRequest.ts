@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserPayload } from '../types';  // Correct path to 'src/types/index.ts'
+import { UserPayload } from '../types';  // Ensure the correct path to 'src/types/index.ts'
 
 // Extend the Express Request interface to include the 'user' property
 export interface CustomAuthRequest extends Request {
