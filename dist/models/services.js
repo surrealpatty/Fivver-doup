@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, } from 'sequelize-typescript';
-import User from './user'; // Import User model
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { User } from './user'; // Corrected import of User model with named import
 let Service = class Service extends Model {
     title;
     description;

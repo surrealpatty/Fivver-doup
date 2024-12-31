@@ -11,17 +11,17 @@ describe('Role-based Access', () => {
     // Test case for allowing paid users to access premium services
     it('should allow paid users to access premium services', async () => {
         const response = await request(app)
-            .get('/services/premium')
+            .get('/services/premium') // Ensure this route exists in your app
             .set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(200); // Expect a 200 OK status
         expect(response.body.message).toBe('Premium service access granted.');
     });
     // Test case for denying free users from accessing premium services
     it('should deny free users from accessing premium services', async () => {
         const response = await request(app)
-            .get('/services/premium')
+            .get('/services/premium') // Ensure this route exists in your app
             .set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
-        expect(response.status).toBe(403); // Forbidden
+        expect(response.status).toBe(403); // Forbidden for free users
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
 });
