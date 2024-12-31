@@ -12,7 +12,6 @@ import {
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services';  // Import the Service model
-import { sequelize } from '../config/database';  // Correct import for sequelize instance
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
@@ -35,7 +34,7 @@ export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   @PrimaryKey
-  @Column(DataType.STRING) // Use STRING for UUID
+  @Column(DataType.UUID) // UUID for ID
   declare id: string;
 
   @Column(DataType.STRING)
@@ -47,9 +46,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @Column(DataType.STRING)
   password!: string;
 
-  @Column(DataType.STRING)
-  tier!: string;
-
   @Column({
     type: DataType.STRING,
     defaultValue: 'free', // Default role is 'free'
@@ -58,6 +54,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     },
   })
   declare role: string; // Only define it here
+
+  @Column(DataType.STRING)
+  tier!: string;
 
   @Column(DataType.BOOLEAN)
   isVerified!: boolean;
@@ -97,5 +96,4 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   }
 }
 
-// No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
 export default User;

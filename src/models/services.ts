@@ -42,7 +42,7 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   price!: number;
 
   @ForeignKey(() => User) // Foreign key to User
-  @Column(DataType.STRING)
+  @Column(DataType.STRING)  // Make sure the foreign key is of the same type as User's id (string for UUIDs)
   userId!: string;
 
   @BelongsTo(() => User) // Define association to User
@@ -56,3 +56,5 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date;
 }
+
+export default Service;
