@@ -1,11 +1,8 @@
-// src/test/database.test.ts
-
 import { sequelize } from '../config/database';
-// Removed CustomAuthRequest import as it's not used in this test file
-import { UserPayload } from '../types'; // Correct the import to match the export
+import { UserPayload } from '../types';  // Ensure the import is correct
 
 describe('Database Connection', () => {
-  
+
   // Real database connection test
   it('should connect to the database successfully', async () => {
     try {
@@ -20,10 +17,7 @@ describe('Database Connection', () => {
   // Mocked database connection test
   it('should mock database connection successfully', async () => {
     // Mock the sequelize.authenticate method to simulate a successful connection
-    const mockAuthenticate = jest.fn().mockResolvedValue(undefined);
-
-    // Temporarily replace the sequelize.authenticate method with the mock
-    sequelize.authenticate = mockAuthenticate;
+    const mockAuthenticate = jest.spyOn(sequelize, 'authenticate').mockResolvedValue(undefined);
 
     // Call authenticate to test the mocked method
     const result = await sequelize.authenticate();
@@ -31,5 +25,8 @@ describe('Database Connection', () => {
     // Assert that the mocked authenticate method was called and no error was thrown
     expect(mockAuthenticate).toHaveBeenCalled();
     expect(result).toBeUndefined(); // This checks that no error was thrown
+
+    // Restore the original authenticate method after the test
+    mockAuthenticate.mockRestore();
   });
 });
