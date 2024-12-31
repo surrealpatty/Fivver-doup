@@ -2,19 +2,22 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export the router to be used in app.js or index.js
-"default", {
+Object.defineProperty(exports, "default", {
     enumerable: true,
     get: function() {
         return _default;
     }
 });
-const _express = require("express");
-const router = (0, _express.Router)();
-// Example route: /some-route
-router.get('/some-route', (req, res)=>{
-    return res.status(200).send('Success');
-});
+const _express = /*#__PURE__*/ _interop_require_default(require("express"));
+const _serviceController = require("../controllers/serviceController");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const router = _express.default.Router();
+// Define a route for services
+router.get('/services', _serviceController.ServiceController.getServices); // Ensure this matches the route you're testing
 const _default = router;
 
 //# sourceMappingURL=service.js.map

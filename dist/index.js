@@ -1,6 +1,7 @@
+import 'reflect-metadata'; // Ensure decorators work with Sequelize models
 import express from 'express';
 import http from 'http';
-import { sequelize } from './config/database';
+import { sequelize } from './config/database'; // Now correctly importing the sequelize instance
 import serverRoutes from './routes/server'; // Ensure this path is correct
 const app = express();
 const server = http.createServer(app);
