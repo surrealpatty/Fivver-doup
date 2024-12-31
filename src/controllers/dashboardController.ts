@@ -1,7 +1,7 @@
 // src/controllers/dashboardController.ts
 import { Request, Response } from 'express';
-import Service from '../models/services';  // Assuming this model exists
 import { Order } from '../models/order';  // Assuming this model exists
+import { Service } from '../models/services';
 
 export const getDashboardData = async (req: Request, res: Response) => {
   try {

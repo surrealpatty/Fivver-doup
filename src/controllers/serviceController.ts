@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import Service, { ServiceAttributes } from '../models/services'; // Correct import
+import { Service, ServiceAttributes } from '../models/services';
+
 
 // Controller to get a service by ID
 export const getServiceById = async (req: Request, res: Response): Promise<Response> => {

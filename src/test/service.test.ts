@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database';
 import app from '../index';
 import User from '../models/user';
-import Service from '../models/services';
+import { Service } from '../models/services';
 
 let server: any;
 let serviceId: number | null = null;
