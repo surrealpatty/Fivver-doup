@@ -16,6 +16,7 @@ _export(exports, {
         return sequelize;
     }
 });
+require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
 const _user = require("../models/user");

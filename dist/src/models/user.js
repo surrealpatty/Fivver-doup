@@ -16,6 +16,7 @@ _export(exports, {
         return _default;
     }
 });
+require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _uuid = require("uuid");
 const _services = require("./services");

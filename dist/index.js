@@ -1,13 +1,13 @@
 import express from 'express';
 import http from 'http';
 import { sequelize } from './config/database';
+import serverRoutes from './routes/server'; // Ensure this path is correct
 const app = express();
 const server = http.createServer(app);
-// Set up the root route
-app.get('/', (req, res) => {
-    // Return the expected message
-    res.status(200).send('Fiverr backend is running');
-});
+// Middleware setup
+app.use(express.json()); // To parse incoming JSON requests
+// Use the server routes and mount them under '/api'
+app.use('/api', serverRoutes);
 // Sync database and start the server if not in test environment
 sequelize.sync().then(() => {
     if (process.env.NODE_ENV !== 'test') {
@@ -17,6 +17,6 @@ sequelize.sync().then(() => {
         });
     }
 });
-// Export both app and server for use in other files, such as tests
+// Export both app and server for use in tests and other files
 export { app, server };
 //# sourceMappingURL=index.js.map

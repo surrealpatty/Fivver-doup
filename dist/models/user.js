@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+import 'reflect-metadata'; // Import reflect-metadata to enable decorators for Sequelize models
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services'; // Ensure the correct path for Service model import

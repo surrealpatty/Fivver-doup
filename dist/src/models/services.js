@@ -1,3 +1,4 @@
+// Ensure reflect-metadata is imported to enable decorators
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -16,9 +17,9 @@ _export(exports, {
         return _default;
     }
 });
+require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
-require("reflect-metadata");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
