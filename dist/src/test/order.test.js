@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _order = require("../models/order");
 const _database = require("../config/database");
 const _index = /*#__PURE__*/ _interop_require_default(require("../../src/index"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
+const _order = require("../models/order");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -31,15 +31,18 @@ jest.mock('../models/order', ()=>({
 jest.mock('../config/database', ()=>({
         sequelize: {
             sync: jest.fn().mockResolvedValue(null),
-            close: jest.fn().mockResolvedValue(null)
+            close: jest.fn().mockResolvedValue(null),
+            authenticate: jest.fn().mockResolvedValue(null)
         }
     }));
 beforeAll(async ()=>{
     try {
         // Mock the database sync before running tests
+        await _database.sequelize.authenticate(); // Authenticate connection before running tests
+        console.log('Database connected successfully!');
         await _database.sequelize.sync({
             force: true
-        });
+        }); // Mock the sync method to avoid real database interaction
     } catch (error) {
         console.error('Error syncing database:', error);
         throw error; // Ensure the test fails if the database sync fails

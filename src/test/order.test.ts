@@ -1,9 +1,9 @@
-import request from 'supertest';
+import { Order } from '../models/order';  // Import the Order model
 import { sequelize } from '../config/database'; // Ensure correct import for sequelize
 import app from '../../src/index'; // Import app from src/index directly
-import User from '../models/user'; // Import User model
+import request from 'supertest'; // Import supertest for making API requests
+import { User } from '../models/user'; // Import User model
 import Service from '../models/services'; // Import Service model
-import { Order } from '../models/order'; // Ensure correct import for Order model
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({

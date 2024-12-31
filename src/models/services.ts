@@ -12,9 +12,9 @@ import {
 import { Optional } from 'sequelize'; // Import Optional type from Sequelize
 import User from './user'; // Import User model
 
-// Define Service attributes
+// Define Service attributes interface
 export interface ServiceAttributes {
-  id: string;
+  id: number;  // IDs should typically be of type 'number' for auto-increment
   title: string;
   description: string;
   price: number;
@@ -29,8 +29,8 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 @Table({ tableName: 'services', timestamps: true })
 export default class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.STRING)
-  declare id: string;
+  @Column(DataType.INTEGER)  // Use INTEGER type for the id field
+  declare id: number;
 
   @Column(DataType.STRING)
   title!: string;

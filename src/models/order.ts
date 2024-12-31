@@ -1,17 +1,19 @@
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
+import { User } from './user';  // Import User model for foreign key relationship
+import Service from './services';  // Import Service model for foreign key relationship
 
-// Define the Order model, which represents the 'orders' table
 @Table({ tableName: 'orders', timestamps: false }) // Disable timestamps if not using createdAt and updatedAt
 export class Order extends Model<Order> {
-  // Remove the redeclaration of the 'id' field since Sequelize handles it automatically
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  declare id: number; // Declare it explicitly but without redeclaring it
+  declare id: number;  // Declare it explicitly without redeclaring it
 
+  @ForeignKey(() => User)  // Link to User model
   @Column(DataType.INTEGER)
   userId!: number; // Foreign key to the user who made the order
 
+  @ForeignKey(() => Service)  // Link to Service model
   @Column(DataType.INTEGER)
   serviceId!: number; // Foreign key to the service ordered
 

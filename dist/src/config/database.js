@@ -9,6 +9,7 @@ Object.defineProperty(exports, "sequelize", {
     }
 });
 const _sequelize = require("sequelize");
+// Initialize the Sequelize instance with environment variables
 const sequelize = new _sequelize.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST,
@@ -20,6 +21,12 @@ const sequelize = new _sequelize.Sequelize({
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci'
     }
+});
+// Authenticate the Sequelize connection to ensure it works
+sequelize.authenticate().then(()=>{
+    console.log('Database connected successfully!');
+}).catch((error)=>{
+    console.error('Unable to connect to the database:', error);
 });
  // Named export
 
