@@ -9,7 +9,15 @@ Object.defineProperty(exports, "sequelize", {
     }
 });
 const _sequelize = require("sequelize");
-// Initialize the Sequelize instance with environment variables
+const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Load environment variables from .env file
+_dotenv.default.config();
+// Sequelize connection configuration
 const sequelize = new _sequelize.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST,

@@ -1,5 +1,8 @@
 import { Sequelize } from 'sequelize';
-// Initialize the Sequelize instance with environment variables
+import dotenv from 'dotenv';
+// Load environment variables from .env file
+dotenv.config();
+// Sequelize connection configuration
 const sequelize = new Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST, // Ensure these environment variables are set correctly
@@ -8,10 +11,10 @@ const sequelize = new Sequelize({
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT), // Ensure that DB_PORT is set in your environment variables
     dialectOptions: {
-        charset: 'utf8mb4', // Change the charset to utf8mb4 for compatibility
-        collate: 'utf8mb4_general_ci', // Collate setting for utf8mb4
+        charset: 'utf8mb4', // utf8mb4 is the best choice for modern MySQL applications
+        collate: 'utf8mb4_general_ci', // Collation for utf8mb4
     },
-    logging: false, // Disable logging if you don't need SQL queries to be logged
+    logging: false, // Disable logging of SQL queries, set to `true` if you want to see them
 });
 // Authenticate the Sequelize connection to ensure it works
 sequelize.authenticate()

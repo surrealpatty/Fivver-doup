@@ -1,4 +1,3 @@
-// src/test/setup.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -43,5 +42,7 @@ afterAll(async ()=>{
     console.log('Closing the database connection after tests...');
     await _database.sequelize.close(); // Close the database connection after tests complete
 });
+// Specify a different port for testing
+process.env.PORT = '3001'; // Change the port for testing to 3001 or another available port
 
 //# sourceMappingURL=setup.js.map
