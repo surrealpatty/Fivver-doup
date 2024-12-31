@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from './services';
+import { Service } from './services';  // Import the Service model
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 
 // Define the UserAttributes interface which reflects the fields in the database
@@ -50,7 +50,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @Column(DataType.STRING)
   tier!: string;
 
-  // Remove the duplicate role declaration
   @Column({
     type: DataType.STRING,
     defaultValue: 'free', // Default role is 'free'
@@ -98,4 +97,5 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   }
 }
 
+// No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
 export default User;

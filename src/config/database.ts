@@ -1,31 +1,23 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize-typescript';  // Use sequelize-typescript for TypeScript support
+import * as dotenv from 'dotenv';  // dotenv to load environment variables from .env file
+import path from 'path';
 
-// Load environment variables from .env file
+// Load environment variables from .env file (ensure .env file exists in the root directory)
 dotenv.config();
 
-// Sequelize connection configuration
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: process.env.DB_HOST, // Ensure these environment variables are set correctly
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT), // Ensure that DB_PORT is set in your environment variables
-  dialectOptions: {
-    charset: 'utf8mb4', // utf8mb4 is the best choice for modern MySQL applications
-    // Removed the collate option to avoid the warning
+// Initialize Sequelize instance using environment variables
+export const sequelize = new Sequelize({
+  dialect: 'mysql',  // Set the dialect to MySQL
+  host: process.env.DB_HOST || 'localhost',  // Default to 'localhost' if no DB_HOST is provided
+  username: process.env.DB_USER || 'root',  // Default to 'root' if no DB_USER is provided
+  password: process.env.DB_PASSWORD || '',  // Default to empty string if no DB_PASSWORD is provided
+  database: process.env.DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if no DB_NAME is provided
+  models: [path.join(__dirname, '..', 'models')],  // Automatically load models from 'src/models'
+  logging: false,  // Disable SQL query logging (can be set to true in development)
+  define: {
+    freezeTableName: true,  // Prevent Sequelize from pluralizing table names
   },
-  logging: false, // Disable logging of SQL queries, set to `true` if you want to see them
 });
 
-// Authenticate the Sequelize connection to ensure it works
-sequelize.authenticate()
-  .then(() => {
-    console.log('Database connected successfully!');
-  })
-  .catch((error) => {
-    console.error('Unable to connect to the database:', error);
-  });
-
-export { sequelize }; // Named export
+// Export the sequelize instance for use in models and elsewhere in the application
+export default sequelize;
