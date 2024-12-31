@@ -36,7 +36,7 @@ let User = class User extends Model {
 };
 __decorate([
     PrimaryKey,
-    Column(DataType.STRING) // Use STRING for UUID
+    Column(DataType.UUID) // UUID for ID
     ,
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
@@ -53,10 +53,6 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    Column(DataType.STRING),
-    __metadata("design:type", String)
-], User.prototype, "tier", void 0);
-__decorate([
     Column({
         type: DataType.STRING,
         defaultValue: 'free', // Default role is 'free'
@@ -66,6 +62,10 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    Column(DataType.STRING),
+    __metadata("design:type", String)
+], User.prototype, "tier", void 0);
 __decorate([
     Column(DataType.BOOLEAN),
     __metadata("design:type", Boolean)
@@ -103,5 +103,4 @@ User = __decorate([
     Table({ tableName: 'users', timestamps: true })
 ], User);
 export { User };
-// No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
 export default User;

@@ -37,7 +37,8 @@ __decorate([
 __decorate([
     ForeignKey(() => User) // Foreign key to User
     ,
-    Column(DataType.STRING),
+    Column(DataType.STRING) // Make sure the foreign key is of the same type as User's id (string for UUIDs)
+    ,
     __metadata("design:type", String)
 ], Service.prototype, "userId", void 0);
 __decorate([
@@ -59,3 +60,4 @@ Service = __decorate([
     Table({ tableName: 'services', timestamps: true })
 ], Service);
 export { Service };
+export default Service;
