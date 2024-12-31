@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("src/index"));
 const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+const _index = /*#__PURE__*/ _interop_require_default(require("src/index"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj

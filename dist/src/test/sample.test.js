@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
+const _services = require("../models/services");
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _database = require("../config/database");
 const _uuid = require("uuid");
@@ -43,7 +43,7 @@ describe('Service Model Tests', ()=>{
             userId: user.id
         };
         // Create the service and associate it with the user
-        const service = await _services.default.create(serviceData);
+        const service = await _services.Service.create(serviceData);
         // Ensure that the userId is correctly compared as a string (UUID)
         expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
         expect(service.title).toBe('Test Service');

@@ -1,5 +1,5 @@
 import User from './models/user'; // Correct import path for the User model
-import Service from './models/services'; // Adjusted import for the Service model
+import { Service } from './models/services';
 // Insert a test user
 User.create({
     id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',

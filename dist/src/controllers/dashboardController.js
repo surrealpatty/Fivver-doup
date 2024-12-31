@@ -9,13 +9,8 @@ Object.defineProperty(exports, "getDashboardData", {
         return getDashboardData;
     }
 });
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _order = require("../models/order");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _services = require("../models/services");
 const getDashboardData = async (req, res)=>{
     try {
         // Ensure that req.user is defined before using it
@@ -26,7 +21,7 @@ const getDashboardData = async (req, res)=>{
         }
         const userId = req.user.id; // Extract user ID from the authenticated user
         // Fetch user services and orders (no ratings since there's no ratings model)
-        const services = await _services.default.findAll({
+        const services = await _services.Service.findAll({
             where: {
                 userId
             }

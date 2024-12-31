@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _user = /*#__PURE__*/ _interop_require_default(require("./models/user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("./models/services"));
+const _services = require("./models/services");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -21,7 +21,7 @@ _user.default.create({
 }).then((user)=>{
     console.log('User created:', user);
     // Optionally, insert a test service for the created user
-    return _services.default.create({
+    return _services.Service.create({
         title: 'Web Development',
         description: 'Full-stack web development services.',
         price: 500,

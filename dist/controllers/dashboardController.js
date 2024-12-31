@@ -1,5 +1,5 @@
-import Service from '../models/services'; // Assuming this model exists
 import { Order } from '../models/order'; // Assuming this model exists
+import { Service } from '../models/services';
 export const getDashboardData = async (req, res) => {
     try {
         // Ensure that req.user is defined before using it

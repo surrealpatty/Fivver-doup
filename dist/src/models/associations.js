@@ -16,14 +16,14 @@ _export(exports, {
         return _review.Review;
     },
     Service: function() {
-        return _services.default;
+        return _services.Service;
     },
     User: function() {
         return _user.default;
     }
 });
 const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("./services"));
+const _services = require("./services");
 const _order = require("./order");
 const _review = require("./review");
 const _database = require("../config/database");
@@ -33,10 +33,10 @@ function _interop_require_default(obj) {
     };
 }
 // User can have many services (a user can post many services)
-_user.default.hasMany(_services.default, {
+_user.default.hasMany(_services.Service, {
     foreignKey: 'userId'
 }); // Foreign key will be userId in Service
-_services.default.belongsTo(_user.default, {
+_services.Service.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // A service belongs to one user
 // User can have many reviews (a user can leave many reviews)
@@ -47,17 +47,17 @@ _review.Review.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // A review belongs to one user
 // Service can have many reviews (a service can have many reviews)
-_services.default.hasMany(_review.Review, {
+_services.Service.hasMany(_review.Review, {
     foreignKey: 'serviceId'
 }); // Foreign key will be serviceId in Review
-_review.Review.belongsTo(_services.default, {
+_review.Review.belongsTo(_services.Service, {
     foreignKey: 'serviceId'
 }); // A review belongs to one service
 // Order belongs to a user and a service (an order is linked to one user and one service)
 _order.Order.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // An order belongs to one user
-_order.Order.belongsTo(_services.default, {
+_order.Order.belongsTo(_services.Service, {
     foreignKey: 'serviceId'
 }); // An order belongs to one service
 // Sync models with the database

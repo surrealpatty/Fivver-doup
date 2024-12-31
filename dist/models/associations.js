@@ -1,5 +1,5 @@
 import User from './user'; // Import the User model
-import Service from './services'; // Import the Service model (ensure this matches the export in services.ts)
+import { Service } from './services';
 import { Order } from './order'; // Import the Order model
 import { Review } from './review'; // Import the Review model
 import { sequelize } from '../config/database';

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
 import { User } from './user'; // Import User model for foreign key relationship
-import Service from './services'; // Import Service model for foreign key relationship
+import { Service } from './services'; // Import Service model for foreign key relationship
 let Order = class Order extends Model {
     userId; // Foreign key to the user who made the order
     serviceId; // Foreign key to the service ordered

@@ -1,4 +1,4 @@
-import Service from '../models/services'; // Correct import
+import { Service } from '../models/services';
 // Controller to get a service by ID
 export const getServiceById = async (req, res) => {
     try {

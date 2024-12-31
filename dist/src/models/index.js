@@ -17,14 +17,14 @@ _export(exports, {
         return _review.Review;
     },
     Service: function() {
-        return _services.default;
+        return _services.Service;
     },
     User: function() {
         return _user.default;
     }
 });
 const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("./services"));
+const _services = require("./services");
 const _order = require("./order");
 const _review = require("./review");
 function _interop_require_default(obj) {

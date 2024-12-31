@@ -7,7 +7,7 @@ const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtok
 const _database = require("../config/database");
 const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
+const _services = require("../models/services");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -43,7 +43,7 @@ describe('Service Model Tests', ()=>{
             tier: 'Tier1',
             isVerified: true
         });
-        const service = await _services.default.create({
+        const service = await _services.Service.create({
             title: 'Test Service',
             description: 'Service Description',
             price: 10,

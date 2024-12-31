@@ -16,12 +16,7 @@ _export(exports, {
         return updateService;
     }
 });
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _services = require("../models/services");
 const getServiceById = async (req, res)=>{
     try {
         const { serviceId } = req.params;
@@ -31,7 +26,7 @@ const getServiceById = async (req, res)=>{
             });
         }
         // Fetch service by ID
-        const service = await _services.default.findByPk(serviceId);
+        const service = await _services.Service.findByPk(serviceId);
         // Check if service exists
         if (!service) {
             return res.status(404).json({
@@ -59,7 +54,7 @@ const updateService = async (req, res)=>{
             return;
         }
         // Fetch the service by ID
-        const service = await _services.default.findByPk(serviceId);
+        const service = await _services.Service.findByPk(serviceId);
         // Check if service exists
         if (!service) {
             res.status(404).json({

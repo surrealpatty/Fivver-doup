@@ -1,7 +1,7 @@
 import request from 'supertest';
-import app from 'src/index'; // Your app setup
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
+import app from 'src/index'; // Old import (causing error)
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
     User: {

@@ -18,12 +18,7 @@ _export(exports, {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _uuid = require("uuid");
-const _services = /*#__PURE__*/ _interop_require_default(require("./services"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _services = require("./services");
 function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -126,7 +121,7 @@ _ts_decorate([
     _ts_metadata("design:returntype", void 0)
 ], User, "assignUuid", null);
 _ts_decorate([
-    (0, _sequelizetypescript.HasMany)(()=>_services.default),
+    (0, _sequelizetypescript.HasMany)(()=>_services.Service),
     _ts_metadata("design:type", Array)
 ], User.prototype, "services", void 0);
 User = _ts_decorate([

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, } from 'sequelize-typescript';
 import User from './user'; // Import User model
 let Service = class Service extends Model {
     title;
@@ -18,7 +18,8 @@ let Service = class Service extends Model {
 };
 __decorate([
     PrimaryKey,
-    Column(DataType.STRING),
+    Column(DataType.STRING) // Use STRING for UUID if you're using UUIDs
+    ,
     __metadata("design:type", String)
 ], Service.prototype, "id", void 0);
 __decorate([
@@ -34,12 +35,14 @@ __decorate([
     __metadata("design:type", Number)
 ], Service.prototype, "price", void 0);
 __decorate([
-    ForeignKey(() => User),
+    ForeignKey(() => User) // Foreign key to User
+    ,
     Column(DataType.STRING),
     __metadata("design:type", String)
 ], Service.prototype, "userId", void 0);
 __decorate([
-    BelongsTo(() => User),
+    BelongsTo(() => User) // Define association to User
+    ,
     __metadata("design:type", User)
 ], Service.prototype, "user", void 0);
 __decorate([
@@ -55,4 +58,4 @@ __decorate([
 Service = __decorate([
     Table({ tableName: 'services', timestamps: true })
 ], Service);
-export default Service;
+export { Service };

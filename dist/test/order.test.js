@@ -3,7 +3,7 @@ import { sequelize } from '../config/database'; // Ensure correct import for seq
 import app from '../../src/index'; // Import app from src/index directly
 import request from 'supertest'; // Import supertest for making API requests
 import { User } from '../models/user'; // Import User model
-import Service from '../models/services'; // Import Service model
+import { Service } from '../models/services';
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),

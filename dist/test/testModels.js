@@ -1,4 +1,4 @@
-import Service from '../models/services';
+import { Service } from '../models/services';
 import User from '../models/user';
 import { sequelize } from '../config/database';
 import { v4 as uuidv4 } from 'uuid';

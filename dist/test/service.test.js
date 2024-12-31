@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database';
 import app from '../index';
 import User from '../models/user';
-import Service from '../models/services';
+import { Service } from '../models/services';
 let server;
 let serviceId = null;
 const paidToken = jwt.sign({ id: '1', role: 'Paid' }, process.env.JWT_SECRET || 'default_secret', { expiresIn: '1h' });
