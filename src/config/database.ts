@@ -1,6 +1,8 @@
 import 'reflect-metadata';  // Import reflect-metadata to enable decorators for Sequelize models
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
 import * as dotenv from 'dotenv';  // Import dotenv to load environment variables from the .env file
+
+// Import models directly
 import { User } from '../models/user';  // Import User model
 import { Service } from '../models/services';  // Import Service model
 import { Order } from '../models/order';  // Import Order model
@@ -16,7 +18,7 @@ export const sequelize = new Sequelize({
   username: process.env.DB_USER || 'root',  // Default to 'root' if no DB_USER is provided
   password: process.env.DB_PASSWORD || '',  // Default to empty string if no DB_PASSWORD is provided
   database: process.env.DB_NAME || 'fivver_doup',  // Default to 'fivver_doup' if no DB_NAME is provided
-  models: [User, Service, Order, Review],  // Register models to Sequelize instance here
+  models: [User, Service, Order, Review],  // Directly specify models
   logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Enable logging in development mode
   define: {
     freezeTableName: true,  // Prevent Sequelize from pluralizing table names

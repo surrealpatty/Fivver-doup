@@ -1,19 +1,9 @@
 // Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
 
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Optional } from 'sequelize'; // Import Optional from Sequelize
-import User from './user'; // Import User model
+import { User } from './user'; // Corrected import of User model with named import
 
 // Define Service attributes interface
 export interface ServiceAttributes {
