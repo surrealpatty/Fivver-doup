@@ -9,7 +9,7 @@ module.exports = {
     [
       '@babel/plugin-proposal-decorators',  // Allow decorator syntax
       {
-        version: '2021-12',                // Use the latest decorators version
+        version: '2021-12',                // Ensure the latest decorators version is used
         decoratorsBeforeExport: true       // Ensure decorators are before exports
       }
     ],
@@ -20,7 +20,7 @@ module.exports = {
     {
       test: /\.ts$/,  // Apply additional plugins for TypeScript files
       plugins: [
-        '@babel/plugin-proposal-decorators'  // Keep this plugin for TypeScript as well
+        '@babel/plugin-proposal-decorators'  // Ensure decorators are applied to TypeScript files as well
       ]
     }
   ],
