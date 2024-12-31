@@ -20,7 +20,7 @@ module.exports = {
     {
       test: /\.ts$/,  // Apply additional plugins for TypeScript files
       plugins: [
-        '@babel/plugin-proposal-decorators'  // Ensure decorators are applied to TypeScript files as well
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }]  // Ensure decorators are applied to TypeScript files as well
       ]
     }
   ],
