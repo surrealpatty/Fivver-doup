@@ -45,7 +45,7 @@ describe('Service Model Tests', () => {
     });
 
     expect(service.userId).toBe(user.id);
-    serviceId = service.id;
+    serviceId = Number(service.id);  // Convert service.id to a number
   });
 
   it('should return 404 if the service is not found', async () => {
