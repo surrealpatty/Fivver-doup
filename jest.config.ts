@@ -1,5 +1,5 @@
 import { sequelize } from './src/config/database'; // Import the sequelize instance
-import app from './src/index'; // Adjust this to the correct path to your app instance
+import { app } from './src/index'; // Adjust this to the correct path to your app instance
 
 // Global teardown to ensure cleanup of resources after all tests
 afterAll(async () => {
