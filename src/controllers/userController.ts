@@ -1,6 +1,8 @@
+// src/controllers/userController.ts
+
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import  User  from '../models/user'; // Importing the User model
+import { User } from '../models/user'; // Importing the User model
 import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
 
 // Controller for registering a new user
@@ -16,6 +18,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     // Check if the user already exists by email
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
+      // If a user exists with the given email, respond with a 409 conflict error
       return res.status(409).json({ message: 'User already exists with this email.' });
     }
 
