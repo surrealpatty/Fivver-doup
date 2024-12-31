@@ -1,62 +1,58 @@
-// src/models/services.ts
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database';  // Ensure this path is correct
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  ForeignKey,
+  BelongsTo,
+} from 'sequelize-typescript';
+import { Optional } from 'sequelize'; // Import Optional type from Sequelize
+import User from './user'; // Import User model
 
-// Define the actual attributes of the Service model (includes all fields)
+// Define Service attributes
 export interface ServiceAttributes {
-  id: string;  // Change from number to string for UUID
+  id: string;
   title: string;
   description: string;
   price: number;
-  userId: string;  // userId type remains string (UUID)
-  image?: string;  // Optional image field
+  userId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Define the attributes for creation where 'id' is optional (it's auto-generated)
+// Define creation attributes for the Service model
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {}
 
-// Define the Service model
-export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implements ServiceAttributes {
-  id!: string;  // Change from number to string (UUID)
+@Table({ tableName: 'services', timestamps: true })
+export default class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
+  @PrimaryKey
+  @Column(DataType.STRING)
+  declare id: string;
+
+  @Column(DataType.STRING)
   title!: string;
+
+  @Column(DataType.TEXT)
   description!: string;
+
+  @Column(DataType.FLOAT)
   price!: number;
-  userId!: string;  // Change userId type to string (UUID)
-  image?: string;  // Define image as optional
+
+  @ForeignKey(() => User) // Foreign key to User
+  @Column(DataType.STRING)
+  userId!: string;
+
+  @BelongsTo(() => User) // Define association to User
+  user!: User;
+
+  @CreatedAt
+  @Column(DataType.DATE)
+  declare createdAt: Date;
+
+  @UpdatedAt
+  @Column(DataType.DATE)
+  declare updatedAt: Date;
 }
-
-Service.init(
-  {
-    id: {
-      type: DataTypes.UUID,  // Change to UUID type
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,  // Set default value to auto-generate UUIDs
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.STRING,  // userId remains a string (UUID)
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.STRING,  // Define 'image' as a string (could be URL or file path)
-      allowNull: true,  // Allow image to be optional
-    },
-  },
-  {
-    sequelize,
-    modelName: 'Service',
-  }
-);
-
-export default Service;

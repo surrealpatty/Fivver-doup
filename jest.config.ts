@@ -1,57 +1,42 @@
-import type { JestConfigWithTsJest } from 'ts-jest';
+const { pathsToModuleNameMapper } = require('ts-jest/utils'); // For mapping paths from tsconfig.json
+const { compilerOptions } = require('./tsconfig.json'); // Import compiler options from tsconfig.json
 
-const config: JestConfigWithTsJest = {
+module.exports = {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json', // Ensure Jest uses the correct tsconfig
-    },
-  },
-  testEnvironment: 'node', // Running tests in a Node environment
+  testEnvironment: 'node', // Set the test environment to Node.js
 
-  // Module alias mappings for path resolution
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Alias for root-relative imports
-    '^dist/(.*)$': '<rootDir>/dist/$1', // Alias for transpiled files in dist
-    '^@models/(.*)$': '<rootDir>/src/models/$1', // Alias for models directory
-    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1', // Alias for controllers
-    '^@routes/(.*)$': '<rootDir>/src/routes/$1', // Alias for routes directory
-    '^@config/(.*)$': '<rootDir>/src/config/$1', // Alias for configuration files
-    '^@types/(.*)$': '<rootDir>/src/types/$1',  // Map @types to src/types
-    '^@shared/(.*)$': '<rootDir>/src/shared/$1', // Alias for shared resources
-  },
-
-  // Directories Jest will search for modules
-  moduleDirectories: ['node_modules', 'src'], 
-
-  // Transform settings for TypeScript and JavaScript
+  // Transform settings for handling TypeScript and JavaScript files
   transform: {
-    '^.+\\.ts$': [
+    '^.+\\.(t|j)s$': [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig.json', // Ensure tsconfig.json is used for TypeScript files
+        tsconfig: './tsconfig.json', // Path to your tsconfig.json
       },
-    ], // Use ts-jest for TypeScript files
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for JavaScript files
+    ],
   },
 
-  // Setup script after environment is configured
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Ensure setup.ts exists and is configured properly
+  // Resolve module aliases based on tsconfig paths
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
+    prefix: '<rootDir>/',
+  }),
 
-  // Define the root folder for Jest to look for tests
-  roots: ['<rootDir>/src'], 
+  // Directories Jest will search for modules
+  moduleDirectories: ['node_modules', 'src'],
+
+  // Setup script after environment is configured
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'], // Ensure setup.ts is configured correctly
+
+  // Define the root directory for tests
+  roots: ['<rootDir>/src'],
 
   // Enable code coverage collection
   collectCoverage: true,
-  coverageDirectory: '<rootDir>/coverage', // Directory to store coverage reports
+  coverageDirectory: '<rootDir>/coverage', // Directory for coverage reports
   collectCoverageFrom: [
     '<rootDir>/src/**/*.{ts,tsx}', // Collect coverage from TypeScript files
     '!<rootDir>/src/**/*.d.ts', // Exclude declaration files
     '!<rootDir>/src/**/index.ts', // Exclude index files
   ],
-
-  // Enable verbose output for test results
-  verbose: true,
 
   // File extensions to be recognized by Jest
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
@@ -59,11 +44,12 @@ const config: JestConfigWithTsJest = {
   // Treat .ts files as ES modules
   extensionsToTreatAsEsm: ['.ts'],
 
-  // Match test files based on their extension
+  // Match test files by naming convention
   testMatch: ['<rootDir>/src/**/*.test.ts'],
 
-  // Increase worker limit to avoid child process exceptions
-  maxWorkers: 4, // or adjust this based on your system's capacity
-};
+  // Increase worker limit for better performance
+  maxWorkers: 4, // Adjust based on system capacity
 
-export default config;
+  // Enable verbose output for test results
+  verbose: true,
+};

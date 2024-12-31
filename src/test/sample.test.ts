@@ -1,3 +1,4 @@
+// src/test/sample.test.ts
 import Service, { ServiceAttributes } from '../models/services';
 import User from '../models/user';
 import { sequelize } from '../config/database';
@@ -29,7 +30,7 @@ describe('Service Model Tests', () => {
 
   it('should create a new service', async () => {
     const serviceData: ServiceAttributes = {
-      id: uuidv4(), // Assuming service.id is a UUID (string)
+      id: uuidv4(),  // Assuming service.id is a UUID (string)
       title: 'Test Service',
       description: 'A test service',
       price: 10,

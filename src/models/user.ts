@@ -1,10 +1,21 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, CreatedAt, UpdatedAt, BeforeCreate } from 'sequelize-typescript';
-import { Optional } from 'sequelize';  // Import Optional from Sequelize
-import { v4 as uuidv4 } from 'uuid';  // Import uuidv4 for generating UUIDs
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  BeforeCreate,
+  HasMany,
+} from 'sequelize-typescript';
+import { Optional } from 'sequelize';
+import { v4 as uuidv4 } from 'uuid';
+import Service from './services'; // Import the Service model
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
-  id: string;  // ID should be a string (UUID)
+  id: string;
   email: string;
   username: string;
   password: string;
@@ -22,10 +33,9 @@ export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-
   @PrimaryKey
-  @Column(DataType.STRING)  // Change type to STRING for UUID
-  declare id: string;  // Declare 'id' as a string (UUID)
+  @Column(DataType.STRING) // Use STRING for UUID
+  declare id: string;
 
   @Column(DataType.STRING)
   username!: string;
@@ -51,22 +61,25 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @Column(DataType.DATE)
   passwordResetTokenExpiry?: Date | null;
 
-  // Use declare modifier to avoid overwriting base properties
   @CreatedAt
   @Column(DataType.DATE)
-  declare createdAt: Date;  // Declare 'createdAt' to avoid TypeScript conflict
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  declare updatedAt: Date;  // Declare 'updatedAt' to avoid TypeScript conflict
+  declare updatedAt: Date;
 
   /**
    * Automatically generate UUID for new user records
    */
   @BeforeCreate
   static assignUuid(user: User): void {
-    user.id = uuidv4();  // Automatically generate UUID for new user records
+    user.id = uuidv4();
   }
+
+  // Define the association to the Service model
+  @HasMany(() => Service) // A User has many Services
+  services!: Service[];
 }
 
 export default User;
