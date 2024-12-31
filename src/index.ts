@@ -1,47 +1,19 @@
-import express, { Application } from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import jwt from 'jsonwebtoken';
-import userRoutes from './routes/user';
-import profileRoutes from './routes/profile';
-import { sequelize } from './config/database';
+import express from 'express';
 
-dotenv.config();  // Load environment variables
+const app = express();
 
-const app: Application = express();
-
-// Middleware and routes setup
-app.use(cors());
-app.use(express.json());  // For JSON payload parsing
-
-// Routes
-app.use('/api/users', userRoutes);
-app.use('/api/profile', profileRoutes);
-
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).json({ message: 'API is running' });
+// Define your routes and middleware here
+app.get('/some-route', (req, res) => {
+  res.status(200).send('Hello, World!');
 });
 
-// Database connection and server startup
-const PORT = process.env.PORT || 3001;
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Database connected successfully!');
-    return sequelize.sync({ alter: true });  // Sync DB schema
-  })
-  .then(() => {
-    console.log('Database schema synced successfully!');
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1);  // Exit if DB connection fails
+// Start the server only if not in a test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
+}
 
-// Export app for testing and graceful shutdown
 export default app;
+export const server = app.listen(3001); // Export the server instance for testing
