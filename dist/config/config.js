@@ -1,4 +1,3 @@
-// src/config/config.ts
 import dotenv from 'dotenv';
 dotenv.config();
 const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', DB_NAME = 'fivver_doup', DB_PORT = '3306', // Default MySQL port
@@ -25,3 +24,16 @@ const config = {
 };
 // Export the configuration as the default export
 export default config;
+// MySQL connection configuration with charset and collation
+export const sequelizeConfig = {
+    dialect: 'mysql',
+    host: config.DB_HOST,
+    username: config.DB_USER,
+    password: config.DB_PASSWORD,
+    database: config.DB_NAME,
+    port: config.DB_PORT,
+    dialectOptions: {
+        charset: 'utf8mb4', // Use utf8mb4 for better Unicode support
+        collate: 'utf8mb4_general_ci', // Collation for MySQL to support multilingual data
+    },
+};

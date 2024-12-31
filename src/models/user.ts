@@ -74,7 +74,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
    */
   @BeforeCreate
   static assignUuid(user: User): void {
-    user.id = uuidv4();
+    user.id = uuidv4(); // Generate UUID if not already provided
   }
 
   // Define the association to the Service model

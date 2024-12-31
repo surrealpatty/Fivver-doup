@@ -1,13 +1,20 @@
-// src/config/config.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export the configuration as the default export
-"default", {
-    enumerable: true,
-    get: function() {
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    // Export the configuration as the default export
+    default: function() {
         return _default;
+    },
+    sequelizeConfig: function() {
+        return sequelizeConfig;
     }
 });
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
@@ -36,5 +43,17 @@ const config = {
     JWT_EXPIRATION
 };
 const _default = config;
+const sequelizeConfig = {
+    dialect: 'mysql',
+    host: config.DB_HOST,
+    username: config.DB_USER,
+    password: config.DB_PASSWORD,
+    database: config.DB_NAME,
+    port: config.DB_PORT,
+    dialectOptions: {
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_general_ci'
+    }
+};
 
 //# sourceMappingURL=config.js.map
