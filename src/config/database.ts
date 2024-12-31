@@ -21,7 +21,7 @@ const sequelize = new Sequelize({
   username: DB_USER,         // Database username
   password: DB_PASSWORD,     // Database password
   database: DB_NAME,         // Database name
-  models: [User, Order],     // Add your models here for sequelize-typescript
+  models: [User, Order],     // Explicitly reference the models you want to use
   logging: false,            // Disable query logging (set to true for debugging)
   define: {
     timestamps: true,         // Automatically add createdAt and updatedAt fields
