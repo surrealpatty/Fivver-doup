@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { Order } from '../models/order'; // Ensure the correct import for Order model
+import { Order } from '../models/order'; // Ensure correct import for Order model
 import { sequelize } from '../config/database'; // Correct import for sequelize
 import app from '../../src/index'; // Import app from src/index directly
 import User from '../models/user'; // Import User model
