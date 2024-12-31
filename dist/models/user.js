@@ -100,7 +100,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], User, "assignUuid", null);
 User = __decorate([
-    Table({ tableName: 'users', timestamps: true })
+    Table({ tableName: 'users', timestamps: true }) // Removed sequelize property
 ], User);
 export { User };
 export default User;

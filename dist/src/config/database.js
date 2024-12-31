@@ -83,6 +83,10 @@ const sequelize = new _sequelizetypescript.Sequelize({
         freezeTableName: true
     }
 });
+// Sync the database to ensure all tables are created (optional based on your needs)
+sequelize.sync({
+    alter: true
+}); // This will alter the tables to match the model structure
 const _default = sequelize;
 
 //# sourceMappingURL=database.js.map
