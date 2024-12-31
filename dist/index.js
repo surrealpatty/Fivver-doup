@@ -1,14 +1,12 @@
+// src/index.ts
 import express from 'express';
 import http from 'http';
-import { sequelize } from './config/database'; // Ensure the sequelize instance is imported
+import { sequelize } from './config/database';
 const app = express();
+const server = http.createServer(app);
 // Set up routes and middleware
 app.get('/', (req, res) => res.send('Hello World!'));
-// Create the HTTP server to use with Express
-const server = http.createServer(app);
-// Sync sequelize with the database (optional, depending on your setup)
 sequelize.sync().then(() => {
-    // Start the server only if not in a test environment
     if (process.env.NODE_ENV !== 'test') {
         const PORT = process.env.PORT || 3000;
         server.listen(PORT, () => {
@@ -16,5 +14,5 @@ sequelize.sync().then(() => {
         });
     }
 });
-// Export both app and server for use in tests
-export { app, server }; // Export both app and server for testing purposes
+// Export both app and server as named exports
+export { app, server };
