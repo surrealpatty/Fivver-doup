@@ -1,37 +1,37 @@
 {
   "compilerOptions": {
-    "target": "ESNext", 
-    "module": "ESNext", 
-    "moduleResolution": "Node", 
-    "lib": ["DOM", "ESNext"], 
-    "strict": true, 
-    "esModuleInterop": true, 
-    "skipLibCheck": true, 
-    "forceConsistentCasingInFileNames": true, 
-    "types": ["vue", "node", "jest"], 
-    "experimentalDecorators": true, 
-    "emitDecoratorMetadata": true, 
-    "baseUrl": "./", 
+    "target": "ESNext",                        // Keep target as ESNext for modern JavaScript features
+    "module": "ESNext",                        // Use ESNext module system for modern JavaScript
+    "moduleResolution": "node",                // Ensures correct module resolution in Node.js
+    "lib": ["DOM", "ESNext"],                  // Include DOM and ESNext for modern features
+    "strict": true,                            // Enable strict mode for type safety
+    "esModuleInterop": true,                   // Enable interop between CommonJS and ES modules
+    "skipLibCheck": true,                      // Skip type checking of declaration files for faster compilation
+    "forceConsistentCasingInFileNames": true,  // Ensure consistent casing in file imports
+    "types": ["vue", "node", "jest"],          // Include types for Vue, Node, and Jest
+    "experimentalDecorators": true,            // Enable experimental support for decorators
+    "emitDecoratorMetadata": true,             // Emit metadata required by some libraries using decorators
+    "baseUrl": "./",                           // Base URL for relative module imports
     "paths": {
-      "@/*": ["src/*"], 
-      "types/*": ["src/types/*"]
+      "@/*": ["src/*"],                        // Alias for src folder
+      "types/*": ["src/types/*"]                // Alias for types folder
     },
-    "outDir": "./dist", 
-    "rootDir": "./src", 
-    "noEmitOnError": true, 
-    "resolveJsonModule": true, 
-    "allowJs": true
+    "outDir": "./dist",                        // Output directory for transpiled files
+    "rootDir": "./src",                        // Root directory for source files
+    "noEmitOnError": true,                     // Do not emit files if there are errors
+    "resolveJsonModule": true,                 // Allow importing JSON files as modules
+    "allowJs": true                            // Allow JavaScript files in the project
   },
   "include": [
-    "src/**/*.ts", 
-    "src/**/*.d.ts", 
-    "src/**/*.vue", 
-    "src/**/*.tsx", 
-    "tests/**/*.ts"
-  ], 
+    "src/**/*.ts",                             // Include all TypeScript files in src
+    "src/**/*.d.ts",                           // Include all TypeScript declaration files in src
+    "src/**/*.vue",                            // Include Vue components in src
+    "src/**/*.tsx",                            // Include TypeScript JSX files in src
+    "tests/**/*.ts"                            // Include TypeScript test files
+  ],
   "exclude": [
-    "node_modules", 
-    "dist", 
-    "**/*.js"
+    "node_modules",                            // Exclude node_modules directory
+    "dist",                                    // Exclude dist directory (compiled files)
+    "**/*.js"                                  // Exclude JavaScript files
   ]
 }

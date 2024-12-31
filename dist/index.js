@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
 import { sequelize } from './config/database'; // Correct import for sequelize
-dotenv.config();
+dotenv.config(); // Ensure dotenv is loaded to access .env variables
 const app = express();
 // Middleware setup
 app.use(cors());
@@ -50,5 +50,6 @@ sequelize
 })
     .catch((error) => {
     console.error('Error connecting to the database or syncing schema:', error);
+    process.exit(1); // Ensure the app stops if the DB connection fails
 });
 export default app;

@@ -1,4 +1,4 @@
-import 'reflect-metadata'; // Required for decorators, if you're using TypeORM or similar libraries
+import 'reflect-metadata'; // Required for decorators (if you're using TypeORM or similar libraries)
 import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
 import { authenticateToken } from './middlewares/authenticateToken';
-import { sequelize } from './config/database'; // Correct import for sequelize
+import { sequelize } from './config/database'; // Correct named import from database configuration
 
 dotenv.config(); // Ensure dotenv is loaded to access .env variables
 
