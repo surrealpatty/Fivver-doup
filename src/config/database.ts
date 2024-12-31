@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // Import reflect-metadata to enable decorators for Sequelize models
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
 import * as dotenv from 'dotenv';  // Import dotenv to load environment variables from the .env file
 import { User } from '../models/user';  // Import User model

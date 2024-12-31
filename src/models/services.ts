@@ -1,3 +1,6 @@
+// Ensure reflect-metadata is imported to enable decorators
+import 'reflect-metadata';
+
 import {
   Table,
   Column,
@@ -11,9 +14,6 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize'; // Import Optional from Sequelize
 import User from './user'; // Import User model
-
-// Ensure reflect-metadata is imported to enable decorators
-import 'reflect-metadata';
 
 // Define Service attributes interface
 export interface ServiceAttributes {

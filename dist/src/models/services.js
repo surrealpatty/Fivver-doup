@@ -18,6 +18,7 @@ _export(exports, {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
+require("reflect-metadata");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj

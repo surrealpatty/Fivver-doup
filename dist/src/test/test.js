@@ -26,6 +26,7 @@ describe('Role-based Access', ()=>{
     it('should allow paid users to access premium services', async ()=>{
         const response = await (0, _supertest.default)(_index.app).get('/services/premium') // Ensure the route path is correct
         .set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
+        // Ensure the endpoint exists for paid users
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Premium service access granted.');
     });
@@ -33,6 +34,7 @@ describe('Role-based Access', ()=>{
     it('should deny free users from accessing premium services', async ()=>{
         const response = await (0, _supertest.default)(_index.app).get('/services/premium') // Ensure the route path is correct
         .set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
+        // Ensure the service denies access for free-tier users with proper authorization checks
         expect(response.status).toBe(403); // Forbidden
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });

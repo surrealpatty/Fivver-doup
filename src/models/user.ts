@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // Import reflect-metadata to enable decorators for Sequelize models
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
