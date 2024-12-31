@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany, } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from './services';
+import { Service } from './services'; // Import the Service model
 let User = class User extends Model {
     username;
     email;
@@ -103,4 +103,5 @@ User = __decorate([
     Table({ tableName: 'users', timestamps: true })
 ], User);
 export { User };
+// No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
 export default User;

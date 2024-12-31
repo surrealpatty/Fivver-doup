@@ -1,9 +1,13 @@
-// src/test/app.test.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+const _database = require("../config/database");
 const _user = require("../models/user");
+// Run migrations or sync models before tests to ensure database is set up correctly
+beforeAll(async ()=>{
+    await _database.sequelize.sync(); // Sync the database before running tests
+});
 describe('User Creation Tests', ()=>{
     it('should create a user successfully', async ()=>{
         const user = await _user.User.create({
@@ -23,6 +27,9 @@ describe('User Creation Tests', ()=>{
         expect(user.tier).toBe('1'); // Expect '1' as a string
         expect(user.isVerified).toBe(false);
     });
+});
+afterAll(async ()=>{
+    await _database.sequelize.close(); // Close the connection after tests
 });
 
 //# sourceMappingURL=app.test.js.map

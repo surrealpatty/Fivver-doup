@@ -12,6 +12,7 @@ _export(exports, {
     User: function() {
         return User;
     },
+    // No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
     default: function() {
         return _default;
     }

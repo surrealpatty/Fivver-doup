@@ -1,5 +1,9 @@
-// src/test/app.test.ts
+import { sequelize } from '../config/database'; // Ensure sequelize is imported here
 import { User } from '../models/user'; // Ensure the User model is properly imported
+// Run migrations or sync models before tests to ensure database is set up correctly
+beforeAll(async () => {
+    await sequelize.sync(); // Sync the database before running tests
+});
 describe('User Creation Tests', () => {
     it('should create a user successfully', async () => {
         const user = await User.create({
@@ -19,4 +23,7 @@ describe('User Creation Tests', () => {
         expect(user.tier).toBe('1'); // Expect '1' as a string
         expect(user.isVerified).toBe(false);
     });
+});
+afterAll(async () => {
+    await sequelize.close(); // Close the connection after tests
 });
