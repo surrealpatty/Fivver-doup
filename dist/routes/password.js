@@ -6,3 +6,4 @@ const router = express.Router();
 // Route for password reset
 router.post('/reset', validatePasswordReset, resetPassword);
 export default router;
+//# sourceMappingURL=password.js.map

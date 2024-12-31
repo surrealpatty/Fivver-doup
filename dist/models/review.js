@@ -30,3 +30,4 @@ Review = __decorate([
     Table({ tableName: 'reviews' })
 ], Review);
 export { Review };
+//# sourceMappingURL=review.js.map

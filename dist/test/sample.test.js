@@ -39,3 +39,4 @@ describe('Service Model Tests', () => {
         expect(service.price).toBe(10);
     });
 });
+//# sourceMappingURL=sample.test.js.map

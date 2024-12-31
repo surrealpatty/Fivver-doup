@@ -27,3 +27,4 @@ async (req, res, next) => {
     }
 });
 export default router;
+//# sourceMappingURL=profile.js.map

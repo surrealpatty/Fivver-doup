@@ -54,3 +54,4 @@ router.post('/service', authenticateToken, async (req, res, next) => {
 // GET /premium-service - Access premium service (Role-based access)
 router.get('/premium-service', authenticateToken, premiumServiceHandler);
 export default router;
+//# sourceMappingURL=service.js.map

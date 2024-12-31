@@ -10,3 +10,4 @@ async function syncDatabase() {
     }
 }
 syncDatabase();
+//# sourceMappingURL=sync.js.map

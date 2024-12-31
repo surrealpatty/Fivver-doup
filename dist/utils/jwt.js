@@ -28,3 +28,4 @@ export const verifyToken = (token) => {
         return null; // Return null if the token is invalid or expired
     }
 };
+//# sourceMappingURL=jwt.js.map

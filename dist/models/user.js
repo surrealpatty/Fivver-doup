@@ -7,9 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany, } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from './services'; // Import the Service model
+import { Service } from './services'; // Ensure the correct path for Service model import
 let User = class User extends Model {
     username;
     email;
@@ -104,3 +104,4 @@ User = __decorate([
 ], User);
 export { User };
 export default User;
+//# sourceMappingURL=user.js.map

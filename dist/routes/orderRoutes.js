@@ -7,3 +7,4 @@ const createOrderHandler = async (req, res, next) => {
     return res.json({ orderCreated: true });
 };
 export {};
+//# sourceMappingURL=orderRoutes.js.map

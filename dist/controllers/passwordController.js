@@ -26,3 +26,4 @@ export const resetPassword = async (req, res) => {
         }
     }
 };
+//# sourceMappingURL=passwordController.js.map

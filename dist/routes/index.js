@@ -6,3 +6,4 @@ router.get('/', (req, res) => {
 });
 // Export the router as the default export
 export default router;
+//# sourceMappingURL=index.js.map

@@ -7,3 +7,4 @@ module.exports = {
     }
 };
 export {};
+//# sourceMappingURL=migrations.js.map

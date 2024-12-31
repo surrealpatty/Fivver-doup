@@ -9,7 +9,6 @@ function _export(target, all) {
     });
 }
 _export(exports, {
-    // Export the sequelize instance for use in models and elsewhere in the application
     default: function() {
         return _default;
     },
@@ -19,12 +18,10 @@ _export(exports, {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
-const _path = /*#__PURE__*/ _interop_require_default(require("path"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _user = require("../models/user");
+const _services = require("../models/services");
+const _order = require("../models/order");
+const _review = require("../models/review");
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -68,6 +65,7 @@ function _interop_require_wildcard(obj, nodeInterop) {
 }
 // Load environment variables from .env file (ensure .env file exists in the root directory)
 _dotenv.config();
+// Initialize Sequelize instance using environment variables
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST || 'localhost',
@@ -75,7 +73,10 @@ const sequelize = new _sequelizetypescript.Sequelize({
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'fivver_doup',
     models: [
-        _path.default.join(__dirname, '..', 'models')
+        _user.User,
+        _services.Service,
+        _order.Order,
+        _review.Review
     ],
     logging: false,
     define: {

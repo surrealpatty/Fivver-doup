@@ -17,3 +17,4 @@ const testDeleteUser = async (userId) => {
 };
 // Replace with a valid user ID
 testDeleteUser(1);
+//# sourceMappingURL=testUserDelete.js.map

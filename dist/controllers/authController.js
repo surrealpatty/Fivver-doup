@@ -80,3 +80,4 @@ export const loginUser = async (req, res) => {
         return res.status(500).json({ message: 'Server error during login' });
     }
 };
+//# sourceMappingURL=authController.js.map

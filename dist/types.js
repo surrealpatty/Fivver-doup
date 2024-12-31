@@ -7,3 +7,4 @@ export function isUser(user) {
         (user.role === undefined || typeof user.role === 'string') &&
         (user.tier === undefined || typeof user.tier === 'string'));
 }
+//# sourceMappingURL=types.js.map

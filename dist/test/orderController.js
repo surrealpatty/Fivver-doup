@@ -73,3 +73,4 @@ export const getUserById = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error while fetching user.' });
     }
 };
+//# sourceMappingURL=orderController.js.map

@@ -8,3 +8,4 @@ export const tierMiddleware = (req, res, next) => {
     // Proceed to the next middleware if the user is paid
     next();
 };
+//# sourceMappingURL=tierRestriction.js.map

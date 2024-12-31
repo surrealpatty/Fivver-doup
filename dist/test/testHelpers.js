@@ -12,3 +12,4 @@ export const createMockUserToken = (userId) => {
     const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
     return token;
 };
+//# sourceMappingURL=testHelpers.js.map

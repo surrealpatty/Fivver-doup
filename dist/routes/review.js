@@ -40,3 +40,4 @@ router.get('/:serviceId', authenticateToken, async (req, res, next) => {
     }
 });
 export default router;
+//# sourceMappingURL=review.js.map

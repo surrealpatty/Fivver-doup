@@ -7,3 +7,4 @@ const dashboardHandler = (req, res) => {
     res.json({ user });
 };
 export default dashboardHandler;
+//# sourceMappingURL=dashboard.js.map

@@ -70,3 +70,4 @@ export const premiumServiceHandler = (req, res) => {
     // Just an example for premium service access
     return res.status(200).json({ message: 'Premium service access granted.' });
 };
+//# sourceMappingURL=serviceController.js.map

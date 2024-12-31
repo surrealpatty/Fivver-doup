@@ -38,3 +38,4 @@ export const authenticateJWT = (req, res, next) => {
     }
     next(); // User authenticated, proceed to the next middleware or route handler
 };
+//# sourceMappingURL=auth.js.map

@@ -25,3 +25,4 @@ describe('Database Connection', () => {
         expect(result).toBeUndefined(); // This checks that no error was thrown
     });
 });
+//# sourceMappingURL=database.test.js.map

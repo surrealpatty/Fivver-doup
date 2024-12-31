@@ -39,3 +39,4 @@ export const checkUserRole = (req, res, next) => {
     // If role is valid, proceed to the next middleware or handler
     next();
 };
+//# sourceMappingURL=authenticateToken.js.map

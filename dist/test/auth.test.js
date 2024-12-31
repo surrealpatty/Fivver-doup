@@ -39,3 +39,4 @@ describe('Authentication Tests', () => {
         expect(decoded).toHaveProperty('email');
     });
 });
+//# sourceMappingURL=auth.test.js.map

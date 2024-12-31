@@ -18,3 +18,4 @@ export const getDashboardData = async (req, res) => {
         res.status(500).json({ message: 'Error fetching dashboard data' });
     }
 };
+//# sourceMappingURL=dashboardController.js.map

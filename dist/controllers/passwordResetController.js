@@ -50,3 +50,4 @@ export const resetPassword = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+//# sourceMappingURL=passwordResetController.js.map

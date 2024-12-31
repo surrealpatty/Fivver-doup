@@ -47,3 +47,4 @@ router.post('/signup', async (req, res) => {
 });
 // Export the router to use in the main app
 export default router;
+//# sourceMappingURL=auth.js.map

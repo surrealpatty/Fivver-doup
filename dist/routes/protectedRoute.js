@@ -24,3 +24,4 @@ res, next) => {
     }
 });
 export default router;
+//# sourceMappingURL=protectedRoute.js.map

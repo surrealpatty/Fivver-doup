@@ -20,3 +20,4 @@ Service.init({
     modelName: 'Service',
 });
 export default Service;
+//# sourceMappingURL=userServiceTest.js.map

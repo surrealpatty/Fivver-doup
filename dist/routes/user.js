@@ -31,3 +31,4 @@ router.post('/register', validateRegistration, async (req, res) => {
     }
 });
 export default router;
+//# sourceMappingURL=user.js.map
