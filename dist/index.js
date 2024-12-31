@@ -4,10 +4,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT signing
-import { sequelize } from './config/database'; // Ensure sequelize is imported correctly
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
 import { authenticateToken } from './middlewares/authenticateToken';
+import { sequelize } from './config/database';
 dotenv.config();
 const app = express();
 // Middleware setup

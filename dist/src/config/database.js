@@ -10,7 +10,6 @@ Object.defineProperty(exports, "sequelize", {
 });
 const _sequelize = require("sequelize");
 const _config = /*#__PURE__*/ _interop_require_default(require("./config"));
-const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -29,7 +28,5 @@ const sequelize = new _sequelize.Sequelize({
         collate: 'utf8mb4_general_ci'
     }
 });
-// Manually add models to sequelize instance (if necessary)
-sequelize.models.User = _user.default; // You can directly associate models like this
 
 //# sourceMappingURL=database.js.map

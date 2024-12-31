@@ -12,6 +12,7 @@ import {
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import Service from './services'; // Import the Service model
+import { sequelize } from '../config/database';  // Correct import for sequelize instance
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
