@@ -1,19 +1,19 @@
-import 'reflect-metadata'; 
+import 'reflect-metadata';
 import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT signing
-import { sequelize } from './config/database'; 
-import userRoutes from './routes/user'; 
-import profileRoutes from './routes/profile'; 
-import { authenticateToken } from './middlewares/authenticateToken'; 
+import { sequelize } from './config/database';  // Ensure sequelize is imported correctly
+import userRoutes from './routes/user';
+import profileRoutes from './routes/profile';
+import { authenticateToken } from './middlewares/authenticateToken';
 
-dotenv.config(); 
+dotenv.config();
 
 const app: Application = express();
 
 // Middleware setup
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());  // For parsing application/json
 
 // Routes setup
@@ -23,41 +23,39 @@ app.use('/api/users', userRoutes);
 app.post('/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  // Simulate authentication logic (you should replace this with real authentication)
+  // Simulate authentication logic (replace with real authentication)
   if (email === 'test@example.com' && password === 'password123') {
-    // If authentication is successful, create and send a JWT token
     const token = jwt.sign(
-      { id: 'user123', email },  // Payload with user information
-      process.env.JWT_SECRET || 'your-secret-key',  // Secret for signing the token
-      { expiresIn: '1h' }  // Optional expiration time
+      { id: 'user123', email },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '1h' }
     );
     return res.status(200).json({ token });
   }
 
-  // If authentication fails, return an error
   return res.status(401).json({ message: 'Invalid credentials' });
 });
 
 // Apply authenticateToken to each route handler that needs it
 profileRoutes.get('/profile', authenticateToken, (req, res) => {
-  const user = req.user; // Now req has the type CustomAuthRequest
-  res.json({ user });  // Respond with user data (or other profile data)
+  const user = req.user;  // Now req has the type CustomAuthRequest
+  res.json({ user });
 });
 
 profileRoutes.put('/profile', authenticateToken, (req, res) => {
-  const user = req.user; // Now req has the type CustomAuthRequest
+  const user = req.user;  // Now req has the type CustomAuthRequest
   // Profile update logic here
   res.status(200).json({ message: 'Profile updated' });
 });
 
-app.use('/api/profile', profileRoutes); 
+app.use('/api/profile', profileRoutes);
 
 // Database connection and schema synchronization
 sequelize
-  .authenticate()
+  .authenticate()  // Make sure authenticate() method is called on the sequelize instance
   .then(() => {
     console.log('Database connected successfully!');
-    return sequelize.sync({ alter: true }); 
+    return sequelize.sync({ alter: true });
   })
   .then(() => {
     console.log('Database schema synced successfully!');

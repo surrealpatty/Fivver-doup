@@ -34,5 +34,5 @@ const sequelize = new Sequelize({
   },
 });
 
-// Export sequelize instance
+// Export sequelize instance for use in other files
 export { sequelize };

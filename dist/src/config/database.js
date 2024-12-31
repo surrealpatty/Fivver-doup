@@ -44,6 +44,5 @@ const sequelize = new _sequelizetypescript.Sequelize({
         bigNumberStrings: true
     }
 });
- // Export sequelize instance
 
 //# sourceMappingURL=database.js.map

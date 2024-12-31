@@ -29,4 +29,5 @@ const sequelize = new Sequelize({
         bigNumberStrings: true,
     },
 });
-export { sequelize }; // Export sequelize instance
+// Export sequelize instance
+export { sequelize };
