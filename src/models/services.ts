@@ -28,7 +28,7 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 
 @Table({ tableName: 'services', timestamps: true })
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
-  
+
   @PrimaryKey
   @Column(DataType.STRING)  // Use STRING for UUID if you're using UUIDs
   declare id: string;  // Declare id as a string for UUID

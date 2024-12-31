@@ -21,7 +21,7 @@ export interface UserAttributes {
 // Define the UserCreationAttributes interface for the creation attributes (excluding `id` as it is auto-generated)
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-@Table({ tableName: 'users', timestamps: true })
+@Table({ tableName: 'users', timestamps: true }) // Removed sequelize property
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   @PrimaryKey
   @Column(DataType.UUID) // UUID for ID
