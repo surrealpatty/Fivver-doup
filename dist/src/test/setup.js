@@ -1,7 +1,9 @@
+// src/test/setup.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _database = require("../config/database");
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 function _interop_require_default(obj) {
@@ -9,6 +11,7 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
+_dotenv.default.config(); // Load environment variables from .env file
 /**
  * Ensure that Sequelize is aware of all the models
  */ _database.sequelize.models.User = _user.default; // Manually add the model to Sequelize's models

@@ -33,7 +33,11 @@ export const sequelizeConfig = {
     database: config.DB_NAME,
     port: config.DB_PORT,
     dialectOptions: {
-        charset: 'utf8mb4', // Use utf8mb4 for better Unicode support
-        collate: 'utf8mb4_general_ci', // Collation for MySQL to support multilingual data
+        charset: 'utf8mb4', // Ensure utf8mb4 charset is used for full Unicode support
+        collate: 'utf8mb4_general_ci', // MySQL collation for multilingual support
+    },
+    define: {
+        charset: 'utf8mb4', // Default charset for table creation
+        collate: 'utf8mb4_general_ci', // Default collation for table creation
     },
 };

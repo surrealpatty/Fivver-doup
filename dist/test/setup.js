@@ -1,3 +1,6 @@
+// src/test/setup.ts
+import dotenv from 'dotenv'; // Import dotenv to load environment variables
+dotenv.config(); // Load environment variables from .env file
 import { sequelize } from '../config/database'; // Import the sequelize instance
 import User from '../models/user'; // Import the User model
 /**

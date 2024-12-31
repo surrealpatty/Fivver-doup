@@ -1,11 +1,17 @@
-// src/routes/user.ts
-import { Router } from 'express';
-import { User } from '../models/user'; // Correct relative path to the User model
+import { Router, Request, Response } from 'express';
+import { User } from '../models/user';  // Correct relative path to the User model
 import { validateRegistration } from '../middlewares/validateRegistration'; // Correct relative path to the middleware
 
 const router = Router();
 
-router.post('/register', validateRegistration, async (req, res) => {
+// Define the shape of the registration body to help with type safety
+interface RegistrationBody {
+  email: string;
+  username: string;
+  password: string;
+}
+
+router.post('/register', validateRegistration, async (req: Request<{}, {}, RegistrationBody>, res: Response): Promise<Response> => {
     const { email, username, password } = req.body;
 
     // Check if all required fields are present

@@ -1,31 +1,34 @@
-// src/middlewares/roleMiddleware.ts
 import { Response, NextFunction } from 'express';
-import { CustomAuthRequest } from '../types';  // Relative path to src/types/index.ts
+import { CustomAuthRequest } from '../types'; // Ensure the path is correct
+
+// Define possible roles and tiers
+type UserRole = 'admin' | 'paid' | 'user'; // Add other roles as needed
+type UserTier = 'free' | 'paid'; // Add other tiers if needed
 
 // Middleware to check user roles
-export const checkRole = (requiredRole: 'admin' | 'paid') => {
-  return (req: CustomAuthRequest, res: Response, next: NextFunction): void => {  // Explicitly declare return type as void
-    const user = req.user; // `user` will be populated by authenticateToken middleware
+export const checkRole = (requiredRole: UserRole, requiredTier: UserTier) => {
+  return (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
+    const user = req.user; // `user` is populated by the authenticateToken middleware
 
-    // Ensure the user is authenticated and has the role
+    // Ensure the user is authenticated and exists
     if (!user) {
-      res.status(401).json({ message: 'User not authenticated' }); // Send response and exit middleware
-      return;  // Ensure no further processing occurs after sending the response
+      res.status(401).json({ message: 'User not authenticated' });
+      return; // Explicit return to ensure middleware exits
     }
 
     // Check if the user has the required tier
-    if (requiredRole === 'paid' && user.tier !== 'paid') {
-      res.status(403).json({ message: 'Forbidden: Paid tier required' }); // Send response and exit middleware
-      return;  // Ensure no further processing occurs after sending the response
+    if (user.tier !== requiredTier) {
+      res.status(403).json({ message: `Forbidden: ${requiredTier} tier required` });
+      return; // Explicit return to ensure middleware exits
     }
 
     // Check if the user has the required role
-    if (requiredRole === 'admin' && user.role !== 'admin') {
-      res.status(403).json({ message: 'Forbidden: Admin role required' }); // Send response and exit middleware
-      return;  // Ensure no further processing occurs after sending the response
+    if (user.role !== requiredRole) {
+      res.status(403).json({ message: `Forbidden: ${requiredRole} role required` });
+      return; // Explicit return to ensure middleware exits
     }
 
     // Proceed to the next middleware or route handler if the user has the required role and tier
-    next();  // No need to return anything, just call next() to proceed
+    next();
   };
 };

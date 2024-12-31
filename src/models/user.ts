@@ -81,6 +81,24 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   // Define the association to the Service model
   @HasMany(() => Service) // A User has many Services
   services!: Service[];
+
+  // Set default value for role and validate it
+  @Column({
+    type: DataType.STRING,
+    defaultValue: 'free', // Default role is 'free'
+    validate: {
+      isIn: [['free', 'paid']], // Only allow 'free' or 'paid' as valid roles
+    },
+  })
+  declare role: string;
+
+  // Additional method to handle role assignment logic (optional)
+  setRole(role: string): void {
+    if (!['free', 'paid'].includes(role)) {
+      throw new Error('Invalid role assignment');
+    }
+    this.role = role;
+  }
 }
 
 export default User;

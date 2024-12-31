@@ -1,71 +1,97 @@
-import request from 'supertest'; // Import request for HTTP testing
-import { User } from '../models/user'; // Adjust based on your project structure
-import Service from '../models/services'; // Adjust based on your project structure
-import { sequelize } from '../config/database'; // Adjust based on your project structure
-import app from '../index'; // Adjust this import to point to your Express app
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken for generating JWT token
+import request from 'supertest';
+import jwt from 'jsonwebtoken';
+import { sequelize } from '../config/database';
+import app from '../index';
+import User from '../models/user';
+import Service from '../models/services';
 
-// Generate a JWT token for testing (assuming you have JWT-based authentication)
-const paidToken = jwt.sign({ id: '1', role: 'Paid' }, process.env.JWT_SECRET as string);
+let server: any;
+let serviceId: number | null = null;
 
-describe('Service Model', () => {
-  let serviceId: string;
+const paidToken = jwt.sign(
+  { id: '1', role: 'Paid' },
+  process.env.JWT_SECRET || 'default_secret',
+  { expiresIn: '1h' }
+);
 
-  beforeAll(async () => {
-    // Sync the database before tests
-    await sequelize.sync();
+beforeAll(async () => {
+  await sequelize.sync({ force: true });
+  server = app.listen(3000, () => {
+    console.log('Test server running on port 3000');
   });
+});
 
-  it('should associate userId correctly when creating a service', async () => {
-    // Step 1: Create the user first
+afterAll(async () => {
+  await sequelize.close();
+  server.close();
+});
+
+describe('Service Model Tests', () => {
+  it('should correctly associate userId when creating a service', async () => {
     const user = await User.create({
       username: 'testuser',
       email: 'testuser@example.com',
-      password: 'password123', // Ensure this matches your actual User model
-      role: 'Free', // Assuming 'role' is a required field
-      tier: 'Tier1', // Assuming 'tier' is a required field
-      isVerified: true, // Assuming 'isVerified' is a required field
+      password: 'password123',
+      role: 'Free',
+      tier: 'Tier1',
+      isVerified: true,
     });
 
-    // Step 2: Create the service and associate it with the user
     const service = await Service.create({
       title: 'Test Service',
       description: 'Service Description',
       price: 10,
-      userId: user.id, // Correctly associate the userId
+      userId: user.id,
     });
 
-    // Step 3: Verify the service is correctly associated with the user
-    expect(service.userId).toBe(user.id); // This should pass if association is correct
-
-    // Store the serviceId for later tests
+    expect(service.userId).toBe(user.id);
     serviceId = service.id;
   });
 
   it('should return 404 if the service is not found', async () => {
     const response = await request(app)
-      .put('/services/9999')  // Assuming service with ID 9999 does not exist
+      .put('/services/9999') // Assuming service with ID 9999 does not exist
       .set('Authorization', `Bearer ${paidToken}`)
-      .send({ 
-        title: 'Non-existent Service' 
-      });
+      .send({ title: 'Non-existent Service' });
 
-    // Assertions
     expect(response.status).toBe(404);
     expect(response.body.message).toBe('Service not found');
   });
 
   it('should return 400 if the price is invalid', async () => {
+    if (!serviceId) {
+      throw new Error('serviceId is not set');
+    }
+
+    // Test with invalid negative price
     const response = await request(app)
       .put(`/services/${serviceId}`)
       .set('Authorization', `Bearer ${paidToken}`)
-      .send({ 
-        title: 'Invalid Service Title', 
-        description: 'Description with invalid price', 
-        price: 'invalid' // Invalid price value
+      .send({
+        title: 'Invalid Service Title',
+        description: 'Description with invalid price',
+        price: -1, // Invalid price
       });
 
-    // Assertions
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Invalid price value');
+  });
+
+  it('should return 400 if price is a string', async () => {
+    if (!serviceId) {
+      throw new Error('serviceId is not set');
+    }
+
+    // Test with invalid string price
+    const response = await request(app)
+      .put(`/services/${serviceId}`)
+      .set('Authorization', `Bearer ${paidToken}`)
+      .send({
+        title: 'Invalid Service Title',
+        description: 'Description with invalid price',
+        price: 'invalid' as any, // Forcefully cast as a string
+      });
+
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Invalid price value');
   });
