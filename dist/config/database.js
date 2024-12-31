@@ -12,7 +12,7 @@ const sequelize = new Sequelize({
     port: Number(process.env.DB_PORT), // Ensure that DB_PORT is set in your environment variables
     dialectOptions: {
         charset: 'utf8mb4', // utf8mb4 is the best choice for modern MySQL applications
-        collate: 'utf8mb4_general_ci', // Collation for utf8mb4
+        // Removed the collate option to avoid the warning
     },
     logging: false, // Disable logging of SQL queries, set to `true` if you want to see them
 });

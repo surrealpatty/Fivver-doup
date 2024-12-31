@@ -26,8 +26,7 @@ const sequelize = new _sequelize.Sequelize({
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
     dialectOptions: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci'
+        charset: 'utf8mb4'
     },
     logging: false
 });
