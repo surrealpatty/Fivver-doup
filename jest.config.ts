@@ -24,8 +24,8 @@ const config: Config.InitialOptions = {
   // Use ts-jest preset for TypeScript and Babel integration
   preset: 'ts-jest/presets/js-with-babel',  // Use this preset to support TypeScript + Babel
 
-  // Additional Jest config options can go here
-  setupFiles: ['<rootDir>/src/setupTests.ts'], // Optional: Set up test configurations if needed
+  // Remove or empty the setupFiles array if not needed
+  setupFiles: [],  // Empty the setupFiles array
 
   // Automatically clear mock calls, instances, and results before every test
   clearMocks: true,
