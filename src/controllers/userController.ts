@@ -52,9 +52,19 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       },
       token,
     });
-  } catch (error) {
-    // Log the error and respond with a generic server error message
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Internal server error during registration.' });
+  } catch (error: unknown) {
+    // Type assertion for 'error' to be of type 'Error'
+    if (error instanceof Error) {
+      console.error('Error registering user:', error);
+      // Check if the error is related to a database issue or something else
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      return res.status(500).json({ message: 'Internal server error during registration.' });
+    } else {
+      // In case the error is not of type 'Error', log and handle the unknown case
+      console.error('Unknown error:', error);
+      return res.status(500).json({ message: 'Internal server error during registration.' });
+    }
   }
 };
