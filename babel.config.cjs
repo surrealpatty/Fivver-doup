@@ -5,21 +5,22 @@ module.exports = {
     '@babel/preset-react',          // If using React, add JSX support
   ],
   plugins: [
-    '@babel/plugin-transform-runtime',   // For efficient runtime helpers
+    '@babel/plugin-transform-runtime',  // For efficient runtime helpers
     [
-      '@babel/plugin-proposal-decorators', // Allow decorator syntax
+      '@babel/plugin-proposal-decorators',  // Allow decorator syntax
       {
-        version: '2021-12',               // Use the latest decorators version
-        decoratorsBeforeExport: true      // Ensure decorators are before exports
+        version: '2021-12',                // Use the latest decorators version
+        decoratorsBeforeExport: true       // Ensure decorators are before exports
       }
     ],
-    '@babel/plugin-proposal-class-properties', // Support for class properties
+    '@babel/plugin-proposal-class-properties',  // Support for class properties
+    'babel-plugin-transform-es2015-modules-commonjs'  // For converting ES Modules to CommonJS
   ],
   overrides: [
     {
-      test: /\.ts$/, // Apply additional plugins for TypeScript files
+      test: /\.ts$/,  // Apply additional plugins for TypeScript files
       plugins: [
-        '@babel/plugin-proposal-decorators'
+        '@babel/plugin-proposal-decorators'  // Keep this plugin for TypeScript as well
       ]
     }
   ],
