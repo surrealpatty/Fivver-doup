@@ -7,8 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
-// Define the Order model, which represents the 'orders' table
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
+import { User } from './user'; // Import User model for foreign key relationship
+import Service from './services'; // Import Service model for foreign key relationship
 let Order = class Order extends Model {
     userId; // Foreign key to the user who made the order
     serviceId; // Foreign key to the service ordered
@@ -24,10 +25,14 @@ __decorate([
     __metadata("design:type", Number)
 ], Order.prototype, "id", void 0);
 __decorate([
+    ForeignKey(() => User) // Foreign key to User model
+    ,
     Column(DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "userId", void 0);
 __decorate([
+    ForeignKey(() => Service) // Foreign key to Service model
+    ,
     Column(DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "serviceId", void 0);

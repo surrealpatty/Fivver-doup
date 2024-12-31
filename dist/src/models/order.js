@@ -17,6 +17,13 @@ _export(exports, {
     }
 });
 const _sequelizetypescript = require("sequelize-typescript");
+const _user = require("./user");
+const _services = /*#__PURE__*/ _interop_require_default(require("./services"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,10 +48,12 @@ _ts_decorate([
     _ts_metadata("design:type", Number)
 ], Order.prototype, "id", void 0);
 _ts_decorate([
+    (0, _sequelizetypescript.ForeignKey)(()=>_user.User),
     (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.INTEGER),
     _ts_metadata("design:type", Number)
 ], Order.prototype, "userId", void 0);
 _ts_decorate([
+    (0, _sequelizetypescript.ForeignKey)(()=>_services.default),
     (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.INTEGER),
     _ts_metadata("design:type", Number)
 ], Order.prototype, "serviceId", void 0);

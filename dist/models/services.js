@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import User from './user'; // Import User model
 let Service = class Service extends Model {
     title;
@@ -34,14 +34,12 @@ __decorate([
     __metadata("design:type", Number)
 ], Service.prototype, "price", void 0);
 __decorate([
-    ForeignKey(() => User) // Foreign key to User
-    ,
+    ForeignKey(() => User),
     Column(DataType.STRING),
     __metadata("design:type", String)
 ], Service.prototype, "userId", void 0);
 __decorate([
-    BelongsTo(() => User) // Define association to User
-    ,
+    BelongsTo(() => User),
     __metadata("design:type", User)
 ], Service.prototype, "user", void 0);
 __decorate([
