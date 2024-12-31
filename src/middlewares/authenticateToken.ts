@@ -1,46 +1,61 @@
-// src/middlewares/authenticateToken.ts
-import { NextFunction, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types'; // Ensure the path is correct
+import { UserPayload } from '../types';  // Ensure proper type import
 
-// Middleware to authenticate and verify the token
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+// Middleware to authenticate the user using a JWT token
 export const authenticateToken = (
-  req: CustomAuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  // Extract the token from the Authorization header
-  const authHeader = req.headers?.authorization;
-  const token = authHeader?.split(' ')[1]; // Extract the token after "Bearer"
+  const authorizationHeader = req.headers['authorization'] as string | undefined;
 
-  // If no token is provided, return a 401 Unauthorized response
-  if (!token) {
-    res.status(401).json({ message: 'Access token is missing' });
-    return; // Ensure no further code is executed
+  // Check if the Authorization header exists
+  if (!authorizationHeader) {
+    res.status(401).json({ message: 'Authorization token is missing or invalid' });
+    return; // Ensure early return to prevent further code execution
   }
 
-  // Ensure the JWT_SECRET environment variable is set
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) {
-    res.status(500).json({ message: 'JWT_SECRET is not defined in the environment' });
-    return; // Ensure no further code is executed
+  // Extract the token from the Authorization header (expected in "Bearer token" format)
+  const token = authorizationHeader.split(' ')[1]; 
+
+  // If no token, return error
+  if (!token) {
+    res.status(401).json({ message: 'Authorization token is missing' });
+    return; // Ensure early return
   }
 
   try {
-    // Verify the token using the JWT secret
-    const decoded = jwt.verify(token, jwtSecret) as { id: string; email: string; username: string };
+    // Decode the token and ensure it's a valid UserPayload type
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload; // Assert type as UserPayload
 
-    // Attach the decoded user payload to the request object (with null checks)
-    req.user = {
-      id: decoded.id,
-      email: decoded.email ?? '', // Provide a fallback value (empty string) if undefined
-      username: decoded.username ?? '', // Provide a fallback value (empty string) if undefined
-    };
+    // Attach the decoded user information to the request object
+    req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
-    // Handle invalid or expired token
-    res.status(401).json({ message: 'Invalid or expired token' });  // Return 401 instead of 403
+    res.status(401).json({ message: 'Invalid or expired token' });
+    return; // Ensure early return in case of error
   }
+};
+
+// Middleware to check if the user has the 'paid' role
+export const checkUserRole = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const user = req.user as UserPayload; // Ensure req.user is of type UserPayload
+
+  // Check if the user role is 'paid'
+  if (user?.role !== 'paid') {
+    res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
+    return; // Ensure early return to prevent further code execution
+  }
+
+  // If role is valid, proceed to the next middleware or handler
+  next();
 };

@@ -1,42 +1,40 @@
-// src/middlewares/checkAuth.ts
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { CustomAuthRequest } from '../types';  // Adjust path as necessary
-import { UserPayload } from '../types';  // Import UserPayload
+// Define UserPayload to type the decoded token
+interface UserPayload extends JwtPayload {
+  id: string;
+  email: string;
+  username: string;
+}
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
-
-// Middleware to authenticate the user using a JWT token
+// Middleware to authenticate the token and attach user information to req.user
 export const authenticateToken = (
-  req: CustomAuthRequest,  // Ensure req is typed as CustomAuthRequest
+  req: Request,
   res: Response,
   next: NextFunction
-): void => {  // Return type is void because middleware doesn't return anything directly
-  const authorizationHeader = req.headers['authorization'] as string | undefined;
-
-  if (!authorizationHeader) {
-    res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return;  // Terminate the function after sending the response
-  }
-
-  // Extract the token from the Authorization header
-  const token = authorizationHeader.split(' ')[1]; // Token is expected in "Bearer token" format
+): void => {  // Returning void, no value from this function
+  // Extract token from the Authorization header
+  const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    res.status(401).json({ message: 'Authorization token is missing' });
-    return;  // Terminate the function after sending the response
+    // If no token is provided, send a response and return early
+    res.status(401).json({ message: 'No token provided.' });
+    return;
   }
 
   try {
-    // Decode the token and ensure it's a valid UserPayload
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;  // Assert type as UserPayload
+    // Verify the token and decode the payload
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as UserPayload;
+    
+    // Attach the decoded user payload to req.user
+    req.user = decoded;
 
-    req.user = decoded; // Set req.user to the decoded payload (UserPayload)
-
-    next(); // Proceed to the next middleware or route handler
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid or expired token' });
-    return;  // Terminate the function after sending the response
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (err) {
+    // If token verification fails, send a response and return early
+    res.status(403).json({ message: 'Invalid token.' });
+    return;
   }
 };

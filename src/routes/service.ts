@@ -4,11 +4,29 @@ import { CustomAuthRequest } from '../types'; // Ensure correct typing for req.u
 
 const router = Router();
 
+// Handler to check user role for premium service access
+const premiumServiceHandler = (req: CustomAuthRequest, res: Response): Response => {
+  // Ensure user is authenticated and check their role
+  const user = req.user;
+
+  if (!user) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  // Check if the user has the 'paid' role
+  if (user.role === 'free') {
+    return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
+  }
+
+  // If the user has a 'paid' role, grant access to premium service
+  return res.status(200).json({ message: 'Premium service access granted.' });
+};
+
 // POST /service - Create a new service
 router.post('/service', authenticateToken, async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
   try {
     // Ensure user is authenticated
-    const user = (req as CustomAuthRequest).user;
+    const user = req.user;
     if (!user) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
@@ -45,5 +63,8 @@ router.post('/service', authenticateToken, async (req: CustomAuthRequest, res: R
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+// GET /premium-service - Access premium service (Role-based access)
+router.get('/premium-service', authenticateToken, premiumServiceHandler);
 
 export default router;

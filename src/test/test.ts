@@ -1,12 +1,11 @@
 import request from 'supertest';
 import { app } from '../index';  // Corrected import to use named import
 import jwt from 'jsonwebtoken'; // For generating tokens
-import { Service } from '../models/services';
-
+import { Service } from '../models/services'; // Assuming Service model is relevant for tests
 
 // Helper function to generate JWT token with a role
 const generateToken = (userId: string, role: 'Free' | 'Paid') => {
-  return jwt.sign({ id: userId, role }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+  return jwt.sign({ id: userId, role }, process.env.JWT_SECRET_KEY || 'your-secret-key', { expiresIn: '1h' });
 };
 
 describe('Role-based Access', () => {
@@ -16,7 +15,7 @@ describe('Role-based Access', () => {
   // Test case for allowing paid users to access premium services
   it('should allow paid users to access premium services', async () => {
     const response = await request(app)
-      .get('/services/premium')
+      .get('/services/premium') // Ensure the route path is correct
       .set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
 
     expect(response.status).toBe(200);
@@ -26,7 +25,7 @@ describe('Role-based Access', () => {
   // Test case for denying free users from accessing premium services
   it('should deny free users from accessing premium services', async () => {
     const response = await request(app)
-      .get('/services/premium')
+      .get('/services/premium') // Ensure the route path is correct
       .set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
 
     expect(response.status).toBe(403); // Forbidden
