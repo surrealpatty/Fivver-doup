@@ -1,17 +1,19 @@
-import { sequelize } from './src/config/database'; // Import the sequelize instance
-import { app } from './src/index'; // Adjust this to the correct path to your app instance
+import { server } from './src/index';  // Import the server instance
 
-// Global teardown to ensure cleanup of resources after all tests
-afterAll(async () => {
-  // Close the database connection if it exists
-  if (sequelize) {
-    await sequelize.close();
-    console.log('Database connection closed.');
-  }
+module.exports = {
+  // Jest configuration options
+  globalTeardown: async () => {
+    // Close the server instead of app.close()
+    if (server && typeof server.close === 'function') {
+      await server.close();  // Close the server properly after tests
+      console.log('Server closed.');
+    }
 
-  // Close the server if it has a close method
-  if (app && typeof app.close === 'function') {
-    await app.close();
-    console.log('Server closed.');
-  }
-});
+    // You can also close the database connection here if needed
+    // if (sequelize) {
+    //   await sequelize.close();
+    //   console.log('Database connection closed.');
+    // }
+  },
+  // Other Jest config options...
+};
