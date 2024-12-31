@@ -5,10 +5,13 @@ export default {
   globalTeardown: './src/globalTeardown.ts',  // Reference the globalTeardown file
 
   transform: {
-    '^.+\\.tsx?$': 'babel-jest',  // Use babel-jest for TypeScript files
+    '^.+\\.tsx?$': 'babel-jest',  // Use babel-jest to transform TypeScript files
   },
 
   testEnvironment: 'node',  // Set the test environment to Node.js
+
+  // Enable TypeScript support in Jest
+  moduleFileExtensions: ['js', 'ts', 'tsx'],  // Ensure Jest recognizes .ts and .tsx extensions
 
   // Other Jest config options...
 };
