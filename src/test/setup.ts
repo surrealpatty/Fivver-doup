@@ -1,5 +1,3 @@
-// src/test/setup.ts
-
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 dotenv.config();  // Load environment variables from .env file
 
@@ -42,3 +40,6 @@ afterAll(async () => {
   console.log('Closing the database connection after tests...');
   await sequelize.close();  // Close the database connection after tests complete
 });
+
+// Specify a different port for testing
+process.env.PORT = '3001';  // Change the port for testing to 3001 or another available port
