@@ -33,9 +33,9 @@ const registerUser = async (req, res)=>{
             }
         });
         if (existingUser) {
-            // If a user exists with the given email, respond with a 409 conflict error
-            return res.status(409).json({
-                message: 'User already exists with this email.'
+            // If a user exists with the given email, respond with a 400 status code
+            return res.status(400).json({
+                error: 'Email already exists'
             });
         }
         // Hash the user's password before saving to the database
