@@ -7,8 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid'; // Import uuidv4 for generating UUIDs
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany, } from 'sequelize-typescript';
+import { v4 as uuidv4 } from 'uuid';
+import Service from './services'; // Import the Service model
 let User = class User extends Model {
     username;
     email;
@@ -22,12 +23,14 @@ let User = class User extends Model {
      * Automatically generate UUID for new user records
      */
     static assignUuid(user) {
-        user.id = uuidv4(); // Automatically generate UUID for new user records
+        user.id = uuidv4();
     }
+    // Define the association to the Service model
+    services;
 };
 __decorate([
     PrimaryKey,
-    Column(DataType.STRING) // Change type to STRING for UUID
+    Column(DataType.STRING) // Use STRING for UUID
     ,
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
@@ -73,6 +76,11 @@ __decorate([
     Column(DataType.DATE),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
+__decorate([
+    HasMany(() => Service) // A User has many Services
+    ,
+    __metadata("design:type", Array)
+], User.prototype, "services", void 0);
 __decorate([
     BeforeCreate,
     __metadata("design:type", Function),

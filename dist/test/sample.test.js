@@ -1,3 +1,4 @@
+// src/test/sample.test.ts
 import Service from '../models/services';
 import User from '../models/user';
 import { sequelize } from '../config/database';

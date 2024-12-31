@@ -18,6 +18,12 @@ _export(exports, {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _uuid = require("uuid");
+const _services = /*#__PURE__*/ _interop_require_default(require("./services"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -39,8 +45,10 @@ class User extends _sequelizetypescript.Model {
     /**
    * Automatically generate UUID for new user records
    */ static assignUuid(user) {
-        user.id = (0, _uuid.v4)(); // Automatically generate UUID for new user records
+        user.id = (0, _uuid.v4)();
     }
+    // Define the association to the Service model
+    services;
 }
 _ts_decorate([
     _sequelizetypescript.PrimaryKey,
@@ -97,6 +105,10 @@ _ts_decorate([
     ]),
     _ts_metadata("design:returntype", void 0)
 ], User, "assignUuid", null);
+_ts_decorate([
+    (0, _sequelizetypescript.HasMany)(()=>_services.default),
+    _ts_metadata("design:type", Array)
+], User.prototype, "services", void 0);
 User = _ts_decorate([
     (0, _sequelizetypescript.Table)({
         tableName: 'users',

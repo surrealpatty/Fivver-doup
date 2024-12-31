@@ -8,15 +8,24 @@ const user = {
     tier: 'paid',
     role: 'user',
 };
-// Generate and verify token
-const token = generateToken(user);
-console.log('Generated Token:', token);
-const decoded = verifyToken(token);
-console.log('Decoded User:', decoded);
-// Optionally, you can also assert the expected decoded value here for testing purposes
-if (decoded) {
-    console.log('Token verified successfully:', decoded);
-}
-else {
-    console.log('Token verification failed');
-}
+describe('JWT Token Generation and Verification', () => {
+    it('should generate and verify a JWT token correctly', () => {
+        // Generate token
+        const token = generateToken(user);
+        console.log('Generated Token:', token);
+        // Verify the token
+        const decoded = verifyToken(token);
+        console.log('Decoded User:', decoded);
+        // Assert that the decoded token matches the user information
+        if (decoded) {
+            expect(decoded.id).toBe(user.id);
+            expect(decoded.email).toBe(user.email);
+            expect(decoded.username).toBe(user.username);
+            expect(decoded.tier).toBe(user.tier);
+            expect(decoded.role).toBe(user.role);
+        }
+        else {
+            fail('Token verification failed'); // Fail the test if the token could not be decoded
+        }
+    });
+});

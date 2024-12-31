@@ -1,43 +1,60 @@
-// src/models/services.ts
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Ensure this path is correct
-// Define the Service model
-export class Service extends Model {
-    id; // Change from number to string (UUID)
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, } from 'sequelize-typescript';
+import User from './user'; // Import User model
+let Service = class Service extends Model {
     title;
     description;
     price;
-    userId; // Change userId type to string (UUID)
-    image; // Define image as optional
-}
-Service.init({
-    id: {
-        type: DataTypes.UUID, // Change to UUID type
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4, // Set default value to auto-generate UUIDs
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    price: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-    },
-    userId: {
-        type: DataTypes.STRING, // userId remains a string (UUID)
-        allowNull: false,
-    },
-    image: {
-        type: DataTypes.STRING, // Define 'image' as a string (could be URL or file path)
-        allowNull: true, // Allow image to be optional
-    },
-}, {
-    sequelize,
-    modelName: 'Service',
-});
+    userId;
+    user;
+};
+__decorate([
+    PrimaryKey,
+    Column(DataType.STRING),
+    __metadata("design:type", String)
+], Service.prototype, "id", void 0);
+__decorate([
+    Column(DataType.STRING),
+    __metadata("design:type", String)
+], Service.prototype, "title", void 0);
+__decorate([
+    Column(DataType.TEXT),
+    __metadata("design:type", String)
+], Service.prototype, "description", void 0);
+__decorate([
+    Column(DataType.FLOAT),
+    __metadata("design:type", Number)
+], Service.prototype, "price", void 0);
+__decorate([
+    ForeignKey(() => User) // Foreign key to User
+    ,
+    Column(DataType.STRING),
+    __metadata("design:type", String)
+], Service.prototype, "userId", void 0);
+__decorate([
+    BelongsTo(() => User) // Define association to User
+    ,
+    __metadata("design:type", User)
+], Service.prototype, "user", void 0);
+__decorate([
+    CreatedAt,
+    Column(DataType.DATE),
+    __metadata("design:type", Date)
+], Service.prototype, "createdAt", void 0);
+__decorate([
+    UpdatedAt,
+    Column(DataType.DATE),
+    __metadata("design:type", Date)
+], Service.prototype, "updatedAt", void 0);
+Service = __decorate([
+    Table({ tableName: 'services', timestamps: true })
+], Service);
 export default Service;

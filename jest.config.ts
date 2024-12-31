@@ -1,7 +1,7 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils'); // For mapping paths from tsconfig.json
-const { compilerOptions } = require('./tsconfig.json'); // Import compiler options from tsconfig.json
+import { pathsToModuleNameMapper } from 'ts-jest'; // Import pathsToModuleNameMapper from ts-jest
+import { compilerOptions } from './tsconfig.json'; // Import compiler options from tsconfig.json
 
-module.exports = {
+export default {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
   testEnvironment: 'node', // Set the test environment to Node.js
 

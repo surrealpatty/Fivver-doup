@@ -16,44 +16,38 @@ function _interop_require_default(obj) {
 }
 const updateService = async (req, res)=>{
     try {
-        // Retrieve serviceId from the request parameters and userId from authenticated user
         const { serviceId } = req.params;
-        const userId = req.user?.id; // Ensure user is set after authentication middleware
-        // Check if serviceId is provided
+        const userId = req.user?.id;
         if (!serviceId) {
             res.status(400).json({
                 message: 'Service ID is required'
             });
-            return; // Exit early to avoid returning `Response<any, Record<string, any>>` type
+            return;
         }
-        // Find the service by primary key
         const service = await _services.default.findByPk(serviceId);
         if (!service) {
             res.status(404).json({
                 message: 'Service not found'
             });
-            return; // Exit early if service is not found
+            return;
         }
-        // Ensure the logged-in user owns the service
         if (String(service.userId) !== String(userId)) {
             res.status(403).json({
                 message: 'You can only update your own services'
             });
-            return; // Exit early if user does not own the service
+            return;
         }
-        // Prepare updated data (handle image upload if available)
+        // Prepare updated data with explicit type
         const updatedData = {
             title: req.body.title,
             description: req.body.description,
             price: req.body.price
         };
-        // Add image path if a new image was uploaded
+        // Add the image if provided
         if (req.file) {
-            updatedData.image = req.file.path; // Add image path to the update
+            updatedData.image = req.file.path;
         }
-        // Proceed with updating the service in the database
         const updatedService = await service.update(updatedData);
-        // Respond with the updated service
         res.status(200).json({
             message: 'Service updated successfully',
             service: updatedService

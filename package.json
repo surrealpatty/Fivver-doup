@@ -128,16 +128,6 @@
     "vue": "^3.5.13",
     "vue-tsc": "^2.1.10"
   },
-  "jest": {
-    "transform": {
-      "^.+\\.(t|j)s$": [
-        "ts-jest",
-        {
-          "tsconfig": "tsconfig.json"
-        }
-      ]
-    }
-  },
   "eslintConfig": {
     "extends": [
       "airbnb-typescript/base",
