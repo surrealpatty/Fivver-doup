@@ -12,7 +12,7 @@ const app = express();
 app.use(json());  // For parsing application/json
 app.use(urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
 
-// Example route (adjust this according to your actual routes)
+// Example POST route (login endpoint)
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   
@@ -20,6 +20,11 @@ app.post('/login', (req, res) => {
   const token = 'dummy-jwt-token';  // Replace with actual JWT generation
   
   res.status(200).json({ token });
+});
+
+// Add the missing GET route for the test
+app.get('/some-route', (req, res) => {
+  res.status(200).send('This is a response from /some-route');
 });
 
 // Export the app for use in your tests or other modules

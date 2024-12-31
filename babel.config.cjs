@@ -2,7 +2,7 @@ module.exports = {
   presets: [
     '@babel/preset-env',            // Transpile modern JavaScript syntax
     '@babel/preset-typescript',     // Support for TypeScript
-    '@babel/preset-react',          // If using React, add JSX support
+    '@babel/preset-react',          // If using React, add JSX support (optional)
   ],
   plugins: [
     '@babel/plugin-transform-runtime',  // For efficient runtime helpers
