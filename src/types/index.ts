@@ -1,8 +1,8 @@
 import { Request } from 'express';
 
-// Extend roles and tiers as needed
-type UserRole = 'admin' | 'paid' | 'user';
-type UserTier = 'free' | 'paid';
+// Define roles and tiers as needed
+export type UserRole = 'admin' | 'paid' | 'user'; // Can extend with more roles
+export type UserTier = 'free' | 'paid'; // Can extend with more tiers
 
 // Define the user payload structure
 export interface UserPayload {
@@ -15,5 +15,5 @@ export interface UserPayload {
 
 // Extend the Request type to include the `user` property
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;
+  user?: UserPayload; // Optional user property in the request
 }

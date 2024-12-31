@@ -17,7 +17,7 @@ app.get('/health', (req, res) => {
     res.status(200).json({ message: 'API is running' });
 });
 // Database connection and server startup
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 sequelize
     .authenticate()
     .then(() => {

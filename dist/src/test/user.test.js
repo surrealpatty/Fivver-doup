@@ -28,7 +28,10 @@ describe('User Tests', ()=>{
             _user.User.create.mockResolvedValueOnce({
                 id: '1',
                 email: 'test@example.com',
-                username: 'testuser'
+                username: 'testuser',
+                isVerified: false,
+                role: 'user',
+                tier: 'free'
             });
             // Send a POST request to register endpoint
             const response = await (0, _supertest.default)(_index.default).post('/api/users/register').send({
@@ -37,13 +40,17 @@ describe('User Tests', ()=>{
                 password: 'password123'
             });
             // Verify the response
-            expect(response.status).toBe(201);
+            expect(response.status).toBe(201); // Expecting a 201 Created status
             expect(response.body).toHaveProperty('id');
             expect(response.body.email).toBe('test@example.com');
+            // Verify that User.create was called with the correct parameters
             expect(_user.User.create).toHaveBeenCalledWith({
                 email: 'test@example.com',
                 username: 'testuser',
-                password: 'password123'
+                password: 'password123',
+                isVerified: false,
+                role: 'user',
+                tier: 'free'
             });
         });
         it('should return an error if email is already taken', async ()=>{
@@ -54,7 +61,7 @@ describe('User Tests', ()=>{
                 username: 'testuser',
                 password: 'password123'
             });
-            expect(response.status).toBe(400);
+            expect(response.status).toBe(400); // Correcting the expected status
             expect(response.body).toHaveProperty('error', 'Email already exists');
         });
     });
@@ -77,22 +84,22 @@ describe('User Tests', ()=>{
         });
         it('should allow access to paid users', async ()=>{
             const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer valid_paid_user_token');
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(200); // Correcting expected status
             expect(response.body.message).toBe('Welcome to the premium content!');
         });
         it('should deny access to free users for premium content', async ()=>{
             const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer valid_free_user_token');
-            expect(response.status).toBe(403);
+            expect(response.status).toBe(403); // Correcting expected status for forbidden access
             expect(response.body.message).toBe('Access forbidden: Insufficient role');
         });
         it('should allow access to free content for all users', async ()=>{
             const response = await (0, _supertest.default)(_index.default).get('/free-content').set('Authorization', 'Bearer valid_free_user_token');
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(200); // Correct expected status for free content
             expect(response.body.message).toBe('Welcome to the free content!');
         });
         it('should return an error for invalid tokens', async ()=>{
             const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer invalid_token');
-            expect(response.status).toBe(401);
+            expect(response.status).toBe(401); // Correcting expected status for unauthorized
             expect(response.body.message).toBe('Unauthorized');
         });
     });
