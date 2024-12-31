@@ -1,79 +1,75 @@
-import { createOrder } from '../controllers/orderController'; // Correct import for the order controller
-import { Order } from '../models/order'; // Correct import for the Order model
-import { authenticateToken } from '../middlewares/authenticateToken'; // Correct named import
-// Mock Order model methods
-jest.mock('../models/order'); // Mock the Order model to intercept its method calls
-describe('Order Controller', () => {
-    let req; // Mocked request of type CustomAuthRequest
-    let res;
-    let next; // Mock next with correct argument type
-    beforeEach(() => {
-        req = {
-            // For authenticated users
+import bcrypt from 'bcryptjs';
+import User from '../models/user'; // Importing the User model
+import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
+// Controller for registering a new user
+export const registerUser = async (req, res) => {
+    const { email, username, password, tier = 'free' } = req.body;
+    // Input validation: Ensure required fields are provided
+    if (!email || !username || !password) {
+        return res.status(400).json({ message: 'Email, username, and password are required.' });
+    }
+    try {
+        // Check if the user already exists by email
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(409).json({ message: 'User already exists with this email.' });
+        }
+        // Hash the user's password before saving to the database
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // Default role, tier, and isVerified properties (assumed defaults)
+        const newUser = await User.create({
+            email,
+            username,
+            password: hashedPassword,
+            tier, // Optional tier (defaults to 'free')
+            role: 'user', // Default role
+            isVerified: false, // Default verification status
+        });
+        // Generate a JWT token for the new user
+        const token = generateToken(newUser);
+        // Respond with the user data (excluding password) and the JWT token
+        return res.status(201).json({
+            message: 'User registered successfully',
             user: {
-                id: '123',
-                email: 'test@example.com',
-                username: 'testuser', // Ensure this is always a string
-                tier: 'free', // Mock the user tier
-            }, // Cast to ensure the correct type for user
-            body: {
-                userId: 123,
-                serviceId: 1,
-                orderDetails: 'Test order',
-                status: 'pending',
+                id: newUser.id,
+                email: newUser.email,
+                username: newUser.username,
+                role: newUser.role, // Default role is 'user'
+                tier: newUser.tier, // The user's tier (e.g., 'free')
+                isVerified: newUser.isVerified,
+                createdAt: newUser.createdAt,
             },
-        };
-        res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn().mockReturnThis(),
-        };
-        next = jest.fn(); // Mocked next function
-    });
-    afterEach(() => {
-        jest.clearAllMocks(); // Clean mocks after each test
-    });
-    test('createOrder should return 201 when order is successfully created', async () => {
-        const mockOrder = {
-            userId: 123,
-            serviceId: 1,
-            orderDetails: 'Test order',
-            status: 'pending',
-        };
-        // Mock Order.create to resolve with the mock order
-        Order.create.mockResolvedValue(mockOrder);
-        // Call the createOrder controller
-        await createOrder(req, res);
-        // Verify the response status and JSON output
-        expect(res.status).toHaveBeenCalledWith(201); // Check status code 201 (created)
-        expect(res.json).toHaveBeenCalledWith(mockOrder); // Ensure the correct order data is returned
-    });
-    test('createOrder should return 500 when there is an error creating the order', async () => {
-        // Mock Order.create to reject with an error
-        Order.create.mockRejectedValue(new Error('Database error'));
-        // Call the createOrder controller
-        await createOrder(req, res);
-        // Verify the response status and error message
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Error creating order', error: expect.any(Error) });
-    });
-    test('authenticateToken should call next if user is authenticated', async () => {
-        req.user = {
-            id: '123',
-            email: 'test@example.com',
-            username: 'testuser', // Ensure this is always a string
-            tier: 'free', // Mock the tier for the user
-        }; // Cast to CustomAuthRequest['user']
-        // Call authenticateToken middleware
-        await authenticateToken(req, res, next);
-        // Check that the next function was called
-        expect(next).toHaveBeenCalledTimes(1); // Ensure next is called once
-    });
-    test('authenticateToken should return 401 if no user is authenticated', async () => {
-        req.user = undefined; // Mock unauthenticated user (no user)
-        // Call authenticateToken middleware
-        await authenticateToken(req, res, next);
-        // Verify that the response status is 401 and error message
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ error: 'User is not authenticated or missing tier information' });
-    });
-});
+            token,
+        });
+    }
+    catch (error) {
+        // Log the error and respond with a generic server error message
+        console.error('Error registering user:', error);
+        return res.status(500).json({ message: 'Internal server error during registration.' });
+    }
+};
+// Example function to get a user by ID
+export const getUserById = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id); // Or another method to find the user
+        if (!user) {
+            // Return a 404 status with the correct message
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // Return the user data (excluding sensitive data like password)
+        return res.status(200).json({
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            role: user.role,
+            tier: user.tier,
+            isVerified: user.isVerified,
+            createdAt: user.createdAt,
+        });
+    }
+    catch (error) {
+        // Handle any unexpected errors
+        console.error('Error fetching user by ID:', error);
+        return res.status(500).json({ message: 'Internal server error while fetching user.' });
+    }
+};

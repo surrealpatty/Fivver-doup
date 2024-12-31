@@ -119,6 +119,28 @@ describe('Order Controller Tests', ()=>{
         expect(response.status).toBe(404);
         expect(response.body.message).toBe('Service not found');
     });
+    it('should return an error if order details are missing', async ()=>{
+        const mockUser = {
+            id: 1,
+            username: 'testuser',
+            email: 'user@example.com'
+        };
+        const mockService = {
+            id: 1,
+            name: 'Test Service'
+        };
+        // Mock the response for finding the user and service
+        _user.default.findByPk.mockResolvedValueOnce(mockUser);
+        _services.default.findByPk.mockResolvedValueOnce(mockService);
+        // Make the API request with missing order details
+        const response = await (0, _supertest.default)(_index.default).post('/api/orders').send({
+            userId: mockUser.id,
+            serviceId: mockService.id
+        });
+        // Assert the expected outcome for missing order details
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Order details are required');
+    });
 });
 
 //# sourceMappingURL=order.test.js.map
