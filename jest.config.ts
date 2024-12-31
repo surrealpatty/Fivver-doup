@@ -1,13 +1,15 @@
-import { pathsToModuleNameMapper } from 'ts-jest'; // Import pathsToModuleNameMapper from ts-jest
-import { compilerOptions } from './tsconfig.json'; // Import compiler options from tsconfig.json
+// jest.config.js
 
-export default {
+const { pathsToModuleNameMapper } = require('ts-jest'); // Import pathsToModuleNameMapper from ts-jest
+const { compilerOptions } = require('./tsconfig.json'); // Import compiler options from tsconfig.json
+
+module.exports = {
   preset: 'ts-jest', // Use ts-jest for TypeScript support
   testEnvironment: 'node', // Set the test environment to Node.js
 
   // Transform settings for handling TypeScript and JavaScript files
   transform: {
-    '^.+\\.(t|j)s$': [
+    '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
         tsconfig: './tsconfig.json', // Path to your tsconfig.json

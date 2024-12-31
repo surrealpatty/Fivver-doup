@@ -12,6 +12,7 @@ const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _user = require("../models/user");
 const _order = require("../models/order");
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -30,7 +31,8 @@ const sequelize = new _sequelizetypescript.Sequelize({
     database: DB_NAME,
     models: [
         _user.User,
-        _order.Order
+        _order.Order,
+        _services.default
     ],
     logging: false,
     define: {

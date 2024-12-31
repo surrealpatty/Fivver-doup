@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
 import { User } from '../models/user'; // Import the User model
 import { Order } from '../models/order'; // Import the Order model
+import Service from '../models/services'; // Import the Service model
 // Load environment variables from .env file
 dotenv.config();
 // Ensure that environment variables are loaded properly
@@ -17,7 +18,7 @@ const sequelize = new Sequelize({
     username: DB_USER, // Database username
     password: DB_PASSWORD, // Database password
     database: DB_NAME, // Database name
-    models: [User, Order], // Explicitly reference the models you want to use
+    models: [User, Order, Service], // Explicitly reference the models you want to use
     logging: false, // Disable query logging (set to true for debugging)
     define: {
         timestamps: true, // Automatically add createdAt and updatedAt fields
