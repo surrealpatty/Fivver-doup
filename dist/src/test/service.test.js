@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -13,7 +13,7 @@ function _interop_require_default(obj) {
 let server;
 beforeAll(()=>{
     // Start the server before any tests
-    server = _index.default.listen(3001, ()=>{
+    server = _index.app.listen(3001, ()=>{
         console.log('Test server is running on port 3001');
     });
 });
@@ -25,7 +25,7 @@ afterAll(async ()=>{
 });
 describe('GET /', ()=>{
     it('should respond with 200', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/');
+        const response = await (0, _supertest.default)(_index.app).get('/');
         expect(response.status).toBe(200);
     });
 });

@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -13,7 +13,7 @@ function _interop_require_default(obj) {
 describe('Authentication Tests', ()=>{
     it('should authenticate and return a valid JWT token', async ()=>{
         // Example request to authenticate and get a token
-        const response = await (0, _supertest.default)(_index.default) // Use supertest to make a request to the app
+        const response = await (0, _supertest.default)(_index.app) // Use supertest to make a request to the app
         .post('/login') // Adjust the route based on your actual route
         .send({
             email: 'test@example.com',

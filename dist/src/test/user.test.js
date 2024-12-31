@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -34,7 +34,7 @@ describe('User Tests', ()=>{
                 tier: 'free'
             });
             // Send a POST request to register endpoint
-            const response = await (0, _supertest.default)(_index.default).post('/api/users/register').send({
+            const response = await (0, _supertest.default)(_index.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123'
@@ -56,7 +56,7 @@ describe('User Tests', ()=>{
         it('should return an error if email is already taken', async ()=>{
             // Mock rejected value for User.create
             _user.User.create.mockRejectedValueOnce(new Error('Email already exists'));
-            const response = await (0, _supertest.default)(_index.default).post('/api/users/register').send({
+            const response = await (0, _supertest.default)(_index.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123'
@@ -83,22 +83,22 @@ describe('User Tests', ()=>{
             });
         });
         it('should allow access to paid users', async ()=>{
-            const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer valid_paid_user_token');
+            const response = await (0, _supertest.default)(_index.app).get('/premium-content').set('Authorization', 'Bearer valid_paid_user_token');
             expect(response.status).toBe(200); // Correcting expected status
             expect(response.body.message).toBe('Welcome to the premium content!');
         });
         it('should deny access to free users for premium content', async ()=>{
-            const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer valid_free_user_token');
+            const response = await (0, _supertest.default)(_index.app).get('/premium-content').set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(403); // Correcting expected status for forbidden access
             expect(response.body.message).toBe('Access forbidden: Insufficient role');
         });
         it('should allow access to free content for all users', async ()=>{
-            const response = await (0, _supertest.default)(_index.default).get('/free-content').set('Authorization', 'Bearer valid_free_user_token');
+            const response = await (0, _supertest.default)(_index.app).get('/free-content').set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(200); // Correct expected status for free content
             expect(response.body.message).toBe('Welcome to the free content!');
         });
         it('should return an error for invalid tokens', async ()=>{
-            const response = await (0, _supertest.default)(_index.default).get('/premium-content').set('Authorization', 'Bearer invalid_token');
+            const response = await (0, _supertest.default)(_index.app).get('/premium-content').set('Authorization', 'Bearer invalid_token');
             expect(response.status).toBe(401); // Correcting expected status for unauthorized
             expect(response.body.message).toBe('Unauthorized');
         });

@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _order = require("../models/order");
 const _database = require("../config/database");
-const _index = /*#__PURE__*/ _interop_require_default(require("../../src/index"));
+const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
 const _services = require("../models/services");
@@ -77,7 +77,7 @@ describe('Order Controller Tests', ()=>{
             status: 'Pending'
         });
         // Make the API request to create the order
-        const response = await (0, _supertest.default)(_index.default).post('/api/orders').send({
+        const response = await (0, _supertest.default)(_index.app).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: mockService.id,
             orderDetails: 'Test order details'
@@ -101,7 +101,7 @@ describe('Order Controller Tests', ()=>{
         _user.User.findByPk.mockResolvedValueOnce(null); // No user found
         _services.Service.findByPk.mockResolvedValueOnce(mockService);
         // Make the API request to create the order
-        const response = await (0, _supertest.default)(_index.default).post('/api/orders').send({
+        const response = await (0, _supertest.default)(_index.app).post('/api/orders').send({
             userId: 999,
             serviceId: mockService.id,
             orderDetails: 'Test order details'
@@ -120,7 +120,7 @@ describe('Order Controller Tests', ()=>{
         _user.User.findByPk.mockResolvedValueOnce(mockUser);
         _services.Service.findByPk.mockResolvedValueOnce(null); // No service found
         // Make the API request to create the order
-        const response = await (0, _supertest.default)(_index.default).post('/api/orders').send({
+        const response = await (0, _supertest.default)(_index.app).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: 999,
             orderDetails: 'Test order details'
@@ -143,7 +143,7 @@ describe('Order Controller Tests', ()=>{
         _user.User.findByPk.mockResolvedValueOnce(mockUser);
         _services.Service.findByPk.mockResolvedValueOnce(mockService);
         // Make the API request with missing order details
-        const response = await (0, _supertest.default)(_index.default).post('/api/orders').send({
+        const response = await (0, _supertest.default)(_index.app).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: mockService.id
         });

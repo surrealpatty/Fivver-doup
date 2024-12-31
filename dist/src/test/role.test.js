@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -24,13 +24,13 @@ describe('Role-based Access', ()=>{
     const freeToken = generateToken('2', 'Free'); // Generate token for free user
     // Test case for allowing paid users to access premium services
     it('should allow paid users to access premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/services/premium').set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
+        const response = await (0, _supertest.default)(_index.app).get('/services/premium').set('Authorization', `Bearer ${paidToken}`); // Send the paid user's token
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Premium service access granted.');
     });
     // Test case for denying free users from accessing premium services
     it('should deny free users from accessing premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/services/premium').set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
+        const response = await (0, _supertest.default)(_index.app).get('/services/premium').set('Authorization', `Bearer ${freeToken}`); // Send the free user's token
         expect(response.status).toBe(403); // Forbidden
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
@@ -43,7 +43,7 @@ describe('Basic Test Suite', ()=>{
     });
     // Test to check if the root endpoint is responding correctly
     it('should respond with a message from the root endpoint', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/'); // Send a GET request to the root endpoint
+        const response = await (0, _supertest.default)(_index.app).get('/'); // Send a GET request to the root endpoint
         expect(response.statusCode).toBe(200); // Expect a status code of 200 (OK)
         expect(response.text).toBe('Fiverr backend is running'); // Expect the correct response message
     });
