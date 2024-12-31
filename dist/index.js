@@ -1,38 +1,44 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import userRoutes from './routes/user';
-import profileRoutes from './routes/profile';
-import { sequelize } from './config/database';
-dotenv.config(); // Load environment variables
-const app = express();
-// Middleware and routes setup
-app.use(cors());
-app.use(express.json()); // For JSON payload parsing
-// Routes
-app.use('/api/users', userRoutes);
-app.use('/api/profile', profileRoutes);
-// Health check route
-app.get('/health', (req, res) => {
-    res.status(200).json({ message: 'API is running' });
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
-// Database connection and server startup
-const PORT = process.env.PORT || 3001;
-sequelize
-    .authenticate()
-    .then(() => {
-    console.log('Database connected successfully!');
-    return sequelize.sync({ alter: true }); // Sync DB schema
-})
-    .then(() => {
-    console.log('Database schema synced successfully!');
-    app.listen(PORT, () => {
-        console.log(`Server running on http://localhost:${PORT}`);
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
     });
-})
-    .catch((error) => {
-    console.error('Error connecting to the database or syncing schema:', error);
-    process.exit(1); // Exit if DB connection fails
+}
+_export(exports, {
+    app: function() {
+        return app;
+    },
+    server: function() {
+        return server;
+    }
 });
-// Export app for testing and graceful shutdown
-export default app;
+const _express = /*#__PURE__*/ _interop_require_default(require("express"));
+const _http = /*#__PURE__*/ _interop_require_default(require("http"));
+const _database = require("./config/database");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const app = (0, _express.default)();
+// Setup your app (middleware, routes, etc.)
+app.get('/', (req, res)=>res.send('Hello World!'));
+// Create the HTTP server to use with Express
+const server = _http.default.createServer(app);
+// Sync sequelize with the database (optional, depending on your setup)
+_database.sequelize.sync().then(()=>{
+    // Start the server only if not in a test environment
+    if (process.env.NODE_ENV !== 'test') {
+        const PORT = process.env.PORT || 3000;
+        server.listen(PORT, ()=>{
+            console.log(`Server running on port ${PORT}`);
+        });
+    }
+});
+ // Export both app and server for testing purposes
+
+//# sourceMappingURL=index.js.map
