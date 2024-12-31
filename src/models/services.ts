@@ -1,21 +1,10 @@
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Optional } from 'sequelize'; // Import Optional type from Sequelize
 import User from './user'; // Import User model
-import { Service } from '../models/service';  // If service.ts is located in the models folder inside src
 
-// Define Service attributes interface
+// Define Service attributes
 export interface ServiceAttributes {
-  id: string; // Change this from 'number' to 'string' if you're using UUIDs
+  id: string;  // Use `string` if using UUIDs
   title: string;
   description: string;
   price: number;
@@ -30,8 +19,8 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 @Table({ tableName: 'services', timestamps: true })
 export default class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.INTEGER)  // Use INTEGER type for the id field
-  declare id: number;
+  @Column(DataType.STRING)
+  declare id: string;  // Use string if UUID
 
   @Column(DataType.STRING)
   title!: string;
@@ -42,11 +31,11 @@ export default class Service extends Model<ServiceAttributes, ServiceCreationAtt
   @Column(DataType.FLOAT)
   price!: number;
 
-  @ForeignKey(() => User) // Foreign key to User
+  @ForeignKey(() => User)
   @Column(DataType.STRING)
   userId!: string;
 
-  @BelongsTo(() => User) // Define association to User
+  @BelongsTo(() => User)
   user!: User;
 
   @CreatedAt
