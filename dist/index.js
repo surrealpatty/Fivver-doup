@@ -1,4 +1,3 @@
-// src/index.ts
 import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
@@ -7,7 +6,7 @@ import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT signing
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
 import { authenticateToken } from './middlewares/authenticateToken';
-import { sequelize } from './config/database';
+import { sequelize } from './config/database'; // Import the sequelize instance
 dotenv.config();
 const app = express();
 // Middleware setup
@@ -38,10 +37,10 @@ profileRoutes.put('/profile', authenticateToken, (req, res) => {
 app.use('/api/profile', profileRoutes);
 // Database connection and schema synchronization
 sequelize
-    .authenticate() // Make sure authenticate() method is called on the sequelize instance
+    .authenticate() // Ensure this is called to check database connection
     .then(() => {
     console.log('Database connected successfully!');
-    return sequelize.sync({ alter: true });
+    return sequelize.sync({ alter: true }); // Sync schema changes
 })
     .then(() => {
     console.log('Database schema synced successfully!');
