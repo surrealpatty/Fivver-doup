@@ -47,9 +47,9 @@ const authenticateToken = (req, res, next)=>{
         next();
     } catch (error) {
         // Handle invalid or expired token
-        res.status(403).json({
+        res.status(401).json({
             message: 'Invalid or expired token'
-        });
+        }); // Return 401 instead of 403
     }
 };
 
