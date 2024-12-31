@@ -1,5 +1,6 @@
+// src/config/database.ts
 import { Sequelize } from 'sequelize';
-import config from './config'; // Ensure your config file provides the correct DB credentials
+import config from './config'; // Ensure that your config file provides the correct DB credentials
 // Initialize Sequelize with the configuration values
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -13,5 +14,5 @@ const sequelize = new Sequelize({
         collate: 'utf8mb4_general_ci', // Collation for MySQL to support multilingual data
     },
 });
-// Export sequelize instance
+// Export sequelize instance for use in other files
 export { sequelize };

@@ -8,7 +8,7 @@ import profileRoutes from './routes/profile';
 import { authenticateToken } from './middlewares/authenticateToken';
 import { sequelize } from './config/database'; // Correct import for sequelize
 
-dotenv.config();
+dotenv.config(); // Ensure dotenv is loaded to access .env variables
 
 const app: Application = express();
 
@@ -65,6 +65,7 @@ sequelize
   })
   .catch((error) => {
     console.error('Error connecting to the database or syncing schema:', error);
+    process.exit(1); // Ensure the app stops if the DB connection fails
   });
 
 export default app;

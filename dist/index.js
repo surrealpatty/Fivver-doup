@@ -5,7 +5,7 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
-import { sequelize } from './config/database';
+import { sequelize } from './config/database'; // Correct import for sequelize
 dotenv.config();
 const app = express();
 // Middleware setup
