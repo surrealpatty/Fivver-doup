@@ -18,9 +18,16 @@ jest.mock('../models/order', () => ({
     findByPk: jest.fn(),
     destroy: jest.fn(),
 }));
+// Mock the sequelize.sync() method to avoid interacting with the actual database
+jest.mock('../config/database', () => ({
+    sequelize: {
+        sync: jest.fn().mockResolvedValue(null),
+        close: jest.fn().mockResolvedValue(null),
+    },
+}));
 beforeAll(async () => {
     try {
-        // Sync the database before running tests
+        // Mock the database sync before running tests
         await sequelize.sync({ force: true });
     }
     catch (error) {

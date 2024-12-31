@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
 import { User } from '../models/user';  // Import the User model
 import { Order } from '../models/order';  // Import the Order model
-import  Service  from '../models/services';  // Import the Service model
+import Service from '../models/services';  // Import the Service model
 
 // Load environment variables from .env file
 dotenv.config();
@@ -34,4 +34,5 @@ const sequelize = new Sequelize({
   },
 });
 
-export { sequelize };  // Export sequelize instance
+// Export sequelize instance
+export { sequelize };
