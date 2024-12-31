@@ -28,7 +28,7 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "clean": "rimraf dist/ build/",
-    "start": "node index.js" 
+    "start": "node index.js"
   },
   "keywords": [
     "fiverr-clone",

@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import { sequelize } from './config/database'; // Ensure the sequelize instance is imported
 const app = express();
-// Setup your app (middleware, routes, etc.)
+// Set up routes and middleware
 app.get('/', (req, res) => res.send('Hello World!'));
 // Create the HTTP server to use with Express
 const server = http.createServer(app);
@@ -16,5 +16,5 @@ sequelize.sync().then(() => {
         });
     }
 });
-// Export the app and server for use in tests
+// Export both app and server for use in tests
 export { app, server }; // Export both app and server for testing purposes
