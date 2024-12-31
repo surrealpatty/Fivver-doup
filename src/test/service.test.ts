@@ -1,7 +1,7 @@
 // src/test/server.test.ts
 
 import request from 'supertest'; // For making HTTP requests in tests
-import app from '../index'; // Your Express app (adjust the path as necessary)
+import { app } from '../index';  // Corrected import to use named import
 
 let server: any;
 

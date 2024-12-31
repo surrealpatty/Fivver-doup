@@ -1,6 +1,6 @@
 import { Order } from '../models/order';  // Import the Order model
 import { sequelize } from '../config/database'; // Ensure correct import for sequelize
-import app from '../../src/index'; // Import app from src/index directly
+import { app } from '../index';  // Corrected import to use named import
 import request from 'supertest'; // Import supertest for making API requests
 import { User } from '../models/user'; // Import User model
 import { Service } from '../models/services';

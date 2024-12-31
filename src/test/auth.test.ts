@@ -1,6 +1,7 @@
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import app from '../index';  // Import the app from the entry point (index.ts)
+import { app } from '../index';  // Corrected import to use named import
+
 
 describe('Authentication Tests', () => {
   it('should authenticate and return a valid JWT token', async () => {

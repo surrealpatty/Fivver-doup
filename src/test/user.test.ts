@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
-import app from '../index'; // Corrected the import path
+import { app } from '../index';  // Corrected import to use named import
 
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({

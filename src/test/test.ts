@@ -1,5 +1,5 @@
 import request from 'supertest';
-import  app  from '../index';  // Import the app instance
+import { app } from '../index';  // Corrected import to use named import
 import jwt from 'jsonwebtoken'; // For generating tokens
 import { Service } from '../models/services';
 
