@@ -1,16 +1,14 @@
-import { Request } from 'express';
-
 // Define roles and tiers as needed
-export type UserRole = 'admin' | 'paid' | 'user'; // Can extend with more roles
-export type UserTier = 'free' | 'paid'; // Can extend with more tiers
+export type UserRole = 'admin' | 'paid' | 'user'; // You can extend this with more roles
+export type UserTier = 'free' | 'paid'; // You can extend this with more tiers
 
 // Define the user payload structure
 export interface UserPayload {
-  id: string;
-  email: string;
-  username?: string;
-  role?: UserRole;
-  tier?: UserTier;
+  id: string;        // Unique identifier for the user
+  email: string;     // User's email
+  username?: string; // Optional username
+  role?: UserRole;   // Role of the user, can be 'admin', 'paid', 'user'
+  tier?: UserTier;   // Tier of the user, can be 'free', 'paid'
 }
 
 // Extend the Request type to include the `user` property

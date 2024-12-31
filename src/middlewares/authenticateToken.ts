@@ -9,36 +9,35 @@ export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): void | Response<any, Record<string, any>> => { // Allow Response type as a valid return type
+  // Extract the token from the Authorization header (expected format "Bearer token")
   const authorizationHeader = req.headers['authorization'] as string | undefined;
 
-  // Check if the Authorization header exists
   if (!authorizationHeader) {
-    res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    return; // Ensure early return to prevent further code execution
+    // If no token is provided, send an error and stop further processing
+    return res.status(401).json({ message: 'Authorization token is missing or invalid' });
   }
 
-  // Extract the token from the Authorization header (expected in "Bearer token" format)
-  const token = authorizationHeader.split(' ')[1]; 
+  // Extract token from "Bearer token" format
+  const token = authorizationHeader.split(' ')[1];
 
-  // If no token, return error
   if (!token) {
-    res.status(401).json({ message: 'Authorization token is missing' });
-    return; // Ensure early return
+    // If no token after "Bearer", send an error and stop further processing
+    return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
   try {
     // Decode the token and ensure it's a valid UserPayload type
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload; // Assert type as UserPayload
+    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
     // Attach the decoded user information to the request object
     req.user = decoded;
 
     // Proceed to the next middleware or route handler
-    next();
+    next();  // This will proceed to the next middleware or handler
   } catch (error) {
-    res.status(401).json({ message: 'Invalid or expired token' });
-    return; // Ensure early return in case of error
+    // Token verification failed, send error and stop further processing
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
@@ -47,13 +46,19 @@ export const checkUserRole = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
-  const user = req.user as UserPayload; // Ensure req.user is of type UserPayload
+): void | Response<any, Record<string, any>> => { // Allow Response type as a valid return type
+  // Ensure req.user is correctly typed as UserPayload
+  const user = req.user as UserPayload;
 
-  // Check if the user role is 'paid'
-  if (user?.role !== 'paid') {
-    res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
-    return; // Ensure early return to prevent further code execution
+  if (!user?.role) {
+    // If no role is defined in the user, send an error and stop further processing
+    return res.status(403).json({ message: 'User role is missing or invalid' });
+  }
+
+  // Check if the user role is 'Paid'
+  if (user.role !== 'Paid') {
+    // If the user is not 'Paid', deny access
+    return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
   }
 
   // If role is valid, proceed to the next middleware or handler

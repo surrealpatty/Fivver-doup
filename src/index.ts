@@ -10,6 +10,11 @@ const server = http.createServer(app);
 // Middleware setup
 app.use(express.json());  // To parse incoming JSON requests
 
+// Root endpoint setup to avoid 404 errors in tests
+app.get('/', (req, res) => {
+  res.status(200).send('Fiverr backend is running');  // Respond with 200 OK and a message
+});
+
 // Use the server routes and mount them under '/api'
 app.use('/api', serverRoutes);
 
