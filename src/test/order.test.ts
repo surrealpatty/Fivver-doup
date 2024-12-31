@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { Order } from '../models/order'; // Ensure correct import for Order model
-import { sequelize } from '../config/database';  // Correct path to the database file
+import { sequelize } from '../config/database'; // Ensure correct import for sequelize
 import app from '../../src/index'; // Import app from src/index directly
 import User from '../models/user'; // Import User model
 import Service from '../models/services'; // Import Service model
+import { Order } from '../models/order'; // Ensure correct import for Order model
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
@@ -27,13 +27,16 @@ jest.mock('../config/database', () => ({
   sequelize: {
     sync: jest.fn().mockResolvedValue(null),
     close: jest.fn().mockResolvedValue(null),
+    authenticate: jest.fn().mockResolvedValue(null), // Mock authenticate
   },
 }));
 
 beforeAll(async () => {
   try {
     // Mock the database sync before running tests
-    await sequelize.sync({ force: true });
+    await sequelize.authenticate(); // Authenticate connection before running tests
+    console.log('Database connected successfully!');
+    await sequelize.sync({ force: true }); // Mock the sync method to avoid real database interaction
   } catch (error) {
     console.error('Error syncing database:', error);
     throw error; // Ensure the test fails if the database sync fails
