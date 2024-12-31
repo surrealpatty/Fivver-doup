@@ -11,10 +11,11 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize'; // Import Optional type from Sequelize
 import User from './user'; // Import User model
+import { Service } from '../models/service';  // If service.ts is located in the models folder inside src
 
 // Define Service attributes interface
 export interface ServiceAttributes {
-  id: number;  // IDs should typically be of type 'number' for auto-increment
+  id: string; // Change this from 'number' to 'string' if you're using UUIDs
   title: string;
   description: string;
   price: number;
