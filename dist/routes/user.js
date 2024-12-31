@@ -1,4 +1,3 @@
-// src/routes/user.ts
 import { Router } from 'express';
 import { User } from '../models/user'; // Correct relative path to the User model
 import { validateRegistration } from '../middlewares/validateRegistration'; // Correct relative path to the middleware

@@ -38,7 +38,6 @@ class User extends _sequelizetypescript.Model {
     email;
     password;
     tier;
-    role;
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
@@ -49,6 +48,16 @@ class User extends _sequelizetypescript.Model {
     }
     // Define the association to the Service model
     services;
+    // Additional method to handle role assignment logic (optional)
+    setRole(role) {
+        if (![
+            'free',
+            'paid'
+        ].includes(role)) {
+            throw new Error('Invalid role assignment');
+        }
+        this.role = role;
+    }
 }
 _ts_decorate([
     _sequelizetypescript.PrimaryKey,
@@ -72,7 +81,18 @@ _ts_decorate([
     _ts_metadata("design:type", String)
 ], User.prototype, "tier", void 0);
 _ts_decorate([
-    (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.STRING),
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.STRING,
+        defaultValue: 'free',
+        validate: {
+            isIn: [
+                [
+                    'free',
+                    'paid'
+                ]
+            ]
+        }
+    }),
     _ts_metadata("design:type", String)
 ], User.prototype, "role", void 0);
 _ts_decorate([

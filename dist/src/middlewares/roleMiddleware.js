@@ -1,4 +1,3 @@
-// src/middlewares/roleMiddleware.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9,32 +8,32 @@ Object.defineProperty(exports, "checkRole", {
         return checkRole;
     }
 });
-const checkRole = (requiredRole)=>{
+const checkRole = (requiredRole, requiredTier)=>{
     return (req, res, next)=>{
-        const user = req.user; // `user` will be populated by authenticateToken middleware
-        // Ensure the user is authenticated and has the role
+        const user = req.user; // `user` is populated by the authenticateToken middleware
+        // Ensure the user is authenticated and exists
         if (!user) {
             res.status(401).json({
                 message: 'User not authenticated'
-            }); // Send response and exit middleware
-            return; // Ensure no further processing occurs after sending the response
+            });
+            return; // Explicit return to ensure middleware exits
         }
         // Check if the user has the required tier
-        if (requiredRole === 'paid' && user.tier !== 'paid') {
+        if (user.tier !== requiredTier) {
             res.status(403).json({
-                message: 'Forbidden: Paid tier required'
-            }); // Send response and exit middleware
-            return; // Ensure no further processing occurs after sending the response
+                message: `Forbidden: ${requiredTier} tier required`
+            });
+            return; // Explicit return to ensure middleware exits
         }
         // Check if the user has the required role
-        if (requiredRole === 'admin' && user.role !== 'admin') {
+        if (user.role !== requiredRole) {
             res.status(403).json({
-                message: 'Forbidden: Admin role required'
-            }); // Send response and exit middleware
-            return; // Ensure no further processing occurs after sending the response
+                message: `Forbidden: ${requiredRole} role required`
+            });
+            return; // Explicit return to ensure middleware exits
         }
         // Proceed to the next middleware or route handler if the user has the required role and tier
-        next(); // No need to return anything, just call next() to proceed
+        next();
     };
 };
 

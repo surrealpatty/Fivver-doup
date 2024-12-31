@@ -15,7 +15,6 @@ let User = class User extends Model {
     email;
     password;
     tier;
-    role;
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
@@ -27,6 +26,13 @@ let User = class User extends Model {
     }
     // Define the association to the Service model
     services;
+    // Additional method to handle role assignment logic (optional)
+    setRole(role) {
+        if (!['free', 'paid'].includes(role)) {
+            throw new Error('Invalid role assignment');
+        }
+        this.role = role;
+    }
 };
 __decorate([
     PrimaryKey,
@@ -51,7 +57,13 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "tier", void 0);
 __decorate([
-    Column(DataType.STRING),
+    Column({
+        type: DataType.STRING,
+        defaultValue: 'free', // Default role is 'free'
+        validate: {
+            isIn: [['free', 'paid']], // Only allow 'free' or 'paid' as valid roles
+        },
+    }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
