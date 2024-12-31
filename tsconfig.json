@@ -9,17 +9,17 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["vue", "node", "jest"],
-    "experimentalDecorators": true,  // Enable decorator support
-    "emitDecoratorMetadata": true,   // Emit metadata for decorators
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],  // Adjust the path for alias @ to map to src/
+      "@/*": ["src/*"],
       "types/*": ["src/types/*"]
     },
     "outDir": "./dist",
     "rootDir": "./src",
     "noEmitOnError": true,
-    "resolveJsonModule": true  // Enable JSON module resolution
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts",
