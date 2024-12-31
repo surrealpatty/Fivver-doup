@@ -1,33 +1,20 @@
-import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv';
-import { User } from '../models/user'; // Import the User model
-import { Order } from '../models/order'; // Import the Order model
-import Service from '../models/services'; // Import the Service model
-// Load environment variables from .env file
-dotenv.config();
-// Ensure that environment variables are loaded properly
-const { DB_HOST = 'localhost', // Default to 'localhost' if DB_HOST is not set
-DB_USER = 'root', // Default to 'root' if DB_USER is not set
-DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', // Default to a specific password if DB_PASSWORD is not set
-DB_NAME = 'fivver_doup', // Default to 'fivver_doup' if DB_NAME is not set
- } = process.env;
-// Initialize Sequelize instance with sequelize-typescript and models
+import { Sequelize } from 'sequelize';
+import config from './config'; // Import configuration values
+import User from '../models/user'; // Import your models
+// Initialize Sequelize with the configuration values
 const sequelize = new Sequelize({
-    dialect: 'mysql', // Database dialect (e.g., mysql, postgres, sqlite)
-    host: DB_HOST, // Host for the database
-    username: DB_USER, // Database username
-    password: DB_PASSWORD, // Database password
-    database: DB_NAME, // Database name
-    models: [User, Order, Service], // Explicitly reference the models you want to use
-    logging: false, // Disable query logging (set to true for debugging)
-    define: {
-        timestamps: true, // Automatically add createdAt and updatedAt fields
-        freezeTableName: true, // Disable pluralization of table names
-    },
+    dialect: 'mysql',
+    host: config.DB_HOST,
+    username: config.DB_USER,
+    password: config.DB_PASSWORD,
+    database: config.DB_NAME,
+    port: config.DB_PORT,
     dialectOptions: {
-        supportBigNumbers: true,
-        bigNumberStrings: true,
+        charset: 'utf8mb4', // Use utf8mb4 for better Unicode support
+        collate: 'utf8mb4_general_ci', // Collation for MySQL to support multilingual data
     },
 });
-// Export sequelize instance for use in other files
+// Manually add models to sequelize instance (if necessary)
+sequelize.models.User = User; // You can directly associate models like this
+// Export the sequelize instance
 export { sequelize };

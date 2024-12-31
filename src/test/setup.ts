@@ -1,10 +1,8 @@
 import { sequelize } from '../config/database';  // Import the sequelize instance
-import User from '../models/user';  // Import the User model
+import { User } from '../models/user';  // Import the User model
 
-/**
- * Ensure that Sequelize is aware of all the models
- */
-sequelize.models.User = User;  // Manually add the model to Sequelize's models
+// Ensure that Sequelize is aware of all the models
+sequelize.addModels([User]);
 
 /**
  * Sync the database and reset the schema before running tests
@@ -14,10 +12,10 @@ const syncDatabase = async (): Promise<void> => {
     console.log('Connecting to the database...');
     await sequelize.authenticate();  // Authenticate the connection
     console.log('Database connected successfully!');
-    
+
     console.log('Syncing database schema...');
     // Use `force: true` to drop and recreate the schema before each test run
-    await sequelize.sync({ force: true });  
+    await sequelize.sync({ force: true });
     console.log('Database schema synced successfully!');
   } catch (error) {
     console.error('Error connecting to the database or syncing schema:', error);
