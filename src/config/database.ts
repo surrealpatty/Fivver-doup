@@ -1,8 +1,8 @@
-// src/config/database.ts
 import { Sequelize } from 'sequelize';
-import config from './config'; // Import your configuration
+import config from './config'; // Import configuration values
+import User from '../models/user'; // Import your models
 
-// Initialize Sequelize with the values from config
+// Initialize Sequelize with the configuration values
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: config.DB_HOST,
@@ -16,5 +16,8 @@ const sequelize = new Sequelize({
   },
 });
 
-// Export sequelize for use in your models and other parts of the app
+// Manually add models to sequelize instance (if necessary)
+sequelize.models.User = User; // You can directly associate models like this
+
+// Export the sequelize instance
 export { sequelize };
