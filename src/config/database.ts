@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
-import config from './config'; // Import configuration values
-import User from '../models/user'; // Import your models
+
+// Configuration values (ensure these are properly set in your config file)
+import config from './config';
 
 // Initialize Sequelize with the configuration values
 const sequelize = new Sequelize({
@@ -15,9 +16,6 @@ const sequelize = new Sequelize({
     collate: 'utf8mb4_general_ci', // Collation for MySQL to support multilingual data
   },
 });
-
-// Manually add models to sequelize instance (if necessary)
-sequelize.models.User = User; // You can directly associate models like this
 
 // Export the sequelize instance
 export { sequelize };
