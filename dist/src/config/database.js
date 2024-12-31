@@ -20,7 +20,8 @@ const sequelize = new _sequelize.Sequelize({
     dialectOptions: {
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci'
-    }
+    },
+    logging: false
 });
 // Authenticate the Sequelize connection to ensure it works
 sequelize.authenticate().then(()=>{
