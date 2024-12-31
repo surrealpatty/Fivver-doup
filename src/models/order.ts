@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
 import { User } from './user';  // Import User model for foreign key relationship
-import  Service  from './services';  // Import Service model for foreign key relationship
+import { Service } from './services';  // Import Service model for foreign key relationship
 
 @Table({ tableName: 'orders', timestamps: false })  // Disable timestamps if not using createdAt and updatedAt
 export class Order extends Model<Order> {
