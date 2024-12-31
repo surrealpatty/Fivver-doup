@@ -1,31 +1,31 @@
+import 'reflect-metadata';  // Ensure reflect-metadata is imported to enable decorators for Sequelize models
 import express from 'express';
-import { json, urlencoded } from 'express';
-import dotenv from 'dotenv';
+import http from 'http';
+import { sequelize } from './src/config/database';  // Correct the path to src/config/database
+import serverRoutes from './src/routes/server';  // Correct the path to src/routes/server
+import * as dotenv from 'dotenv';  // To load environment variables from .env file
 
-// Load environment variables from .env file
-dotenv.config();
+dotenv.config();  // Load environment variables from the .env file
 
-// Initialize the app
 const app = express();
+const server = http.createServer(app);
 
 // Middleware setup
-app.use(json());  // For parsing application/json
-app.use(urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
+app.use(express.json());  // To parse incoming JSON requests
 
-// Example POST route (login endpoint)
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  
-  // Authentication logic goes here (e.g., validate user credentials)
-  const token = 'dummy-jwt-token';  // Replace with actual JWT generation
-  
-  res.status(200).json({ token });
+// Use the server routes and mount them under '/api'
+app.use('/api', serverRoutes);
+
+// Sync database and start the server if not in the test environment
+sequelize.sync({ alter: true }).then(() => {
+  // Only start the server if we are not in the 'test' environment
+  if (process.env.NODE_ENV !== 'test') {
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  }
 });
 
-// Add the missing GET route for the test
-app.get('/some-route', (req, res) => {
-  res.status(200).send('This is a response from /some-route');
-});
-
-// Export the app for use in your tests or other modules
-export default app;
+// Export both app and server for use in tests and other files
+export { app, server };

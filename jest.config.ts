@@ -41,6 +41,11 @@ const config: Config.InitialOptions = {
       isolatedModules: true,  // Isolate modules for better performance
     },
   },
+
+  // Ensure Jest resolves TypeScript files correctly
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1', // Handle aliased imports if using TypeScript path mappings
+  },
 };
 
 export default config;

@@ -1,11 +1,9 @@
-import { Router, Request, Response } from 'express';
+import express from 'express';
+import { ServiceController } from '../controllers/serviceController';  // Use named import for ServiceController
 
-const router = Router();
+const router = express.Router();
 
-// Example route: /some-route
-router.get('/some-route', (req: Request, res: Response): Response => {
-  return res.status(200).send('Success');
-});
+// Define a route for services
+router.get('/services', ServiceController.getServices);  // Ensure this matches the route you're testing
 
-// Export the router to be used in app.js or index.js
 export default router;
