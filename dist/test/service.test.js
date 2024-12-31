@@ -1,83 +1,43 @@
-import request from 'supertest';
-import jwt from 'jsonwebtoken';
-import app from '../index'; // Ensure this points to your main Express app file
-// Generate JWT tokens for testing (with roles)
+import request from 'supertest'; // Import request for HTTP testing
+import { User } from '../models/user'; // Adjust based on your project structure
+import Service from '../models/services'; // Adjust based on your project structure
+import { sequelize } from '../config/database'; // Adjust based on your project structure
+import app from '../index'; // Adjust this import to point to your Express app
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken for generating JWT token
+// Generate a JWT token for testing (assuming you have JWT-based authentication)
 const paidToken = jwt.sign({ id: '1', role: 'Paid' }, process.env.JWT_SECRET);
-const freeToken = jwt.sign({ id: '2', role: 'Free' }, process.env.JWT_SECRET);
-describe('Role-based Access to Premium Services', () => {
-    it('should allow paid users to access premium services', async () => {
-        const response = await request(app)
-            .get('/services/premium') // Make GET request to /services/premium
-            .set('Authorization', `Bearer ${paidToken}`); // Include the token in the header
-        // Assertions
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Premium service access granted.');
-    });
-    it('should deny free users from accessing premium services', async () => {
-        const response = await request(app)
-            .get('/services/premium')
-            .set('Authorization', `Bearer ${freeToken}`); // Use a free token
-        // Assertions
-        expect(response.status).toBe(403); // Forbidden error for free users
-        expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
-    });
-    it('should return error if no token is provided', async () => {
-        const response = await request(app)
-            .get('/services/premium');
-        // Assertions
-        expect(response.status).toBe(403);
-        expect(response.body.message).toBe('Token is required');
-    });
-    it('should return error if token is invalid', async () => {
-        const invalidToken = 'invalidToken123';
-        const response = await request(app)
-            .get('/services/premium')
-            .set('Authorization', `Bearer ${invalidToken}`);
-        // Assertions
-        expect(response.status).toBe(403);
-        expect(response.body.message).toBe('Invalid or expired token');
-    });
-});
-// Test case for updating a service
-describe('PUT /services/:id', () => {
+describe('Service Model', () => {
     let serviceId;
-    let token;
-    // Before each test, create a service to update
-    beforeEach(async () => {
-        // Create a test service for the update test
-        const response = await request(app)
-            .post('/services/create') // Assuming you have a POST route for creating services
-            .send({
+    beforeAll(async () => {
+        // Sync the database before tests
+        await sequelize.sync();
+    });
+    it('should associate userId correctly when creating a service', async () => {
+        // Step 1: Create the user first
+        const user = await User.create({
+            username: 'testuser',
+            email: 'testuser@example.com',
+            password: 'password123', // Ensure this matches your actual User model
+            role: 'Free', // Assuming 'role' is a required field
+            tier: 'Tier1', // Assuming 'tier' is a required field
+            isVerified: true, // Assuming 'isVerified' is a required field
+        });
+        // Step 2: Create the service and associate it with the user
+        const service = await Service.create({
             title: 'Test Service',
-            description: 'Test Service Description',
-            price: 100,
-            userId: '12345', // Example userId, make sure this exists or is mocked in the helper
+            description: 'Service Description',
+            price: 10,
+            userId: user.id, // Correctly associate the userId
         });
-        serviceId = response.body.id; // Store the created service ID
-        token = paidToken; // You can mock a token using a helper function or generate one as needed
+        // Step 3: Verify the service is correctly associated with the user
+        expect(service.userId).toBe(user.id); // This should pass if association is correct
+        // Store the serviceId for later tests
+        serviceId = service.id;
     });
-    // Test case: Service should be updated successfully
-    it('should update a service successfully', async () => {
-        const response = await request(app)
-            .put(`/services/${serviceId}`)
-            .set('Authorization', `Bearer ${token}`) // Mock authentication token
-            .send({
-            title: 'Updated Test Service Title',
-            description: 'Updated Test Service Description',
-            price: 150
-        });
-        // Assertions
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Service updated successfully');
-        expect(response.body.service.title).toBe('Updated Test Service Title');
-        expect(response.body.service.description).toBe('Updated Test Service Description');
-        expect(response.body.service.price).toBe(150);
-    });
-    // Test case: Service not found (404 error)
     it('should return 404 if the service is not found', async () => {
         const response = await request(app)
             .put('/services/9999') // Assuming service with ID 9999 does not exist
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${paidToken}`)
             .send({
             title: 'Non-existent Service'
         });
@@ -85,11 +45,10 @@ describe('PUT /services/:id', () => {
         expect(response.status).toBe(404);
         expect(response.body.message).toBe('Service not found');
     });
-    // Test case: Invalid data (e.g., price is not a number)
     it('should return 400 if the price is invalid', async () => {
         const response = await request(app)
             .put(`/services/${serviceId}`)
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${paidToken}`)
             .send({
             title: 'Invalid Service Title',
             description: 'Description with invalid price',

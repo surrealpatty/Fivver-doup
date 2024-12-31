@@ -1,3 +1,4 @@
+// src/routes/user.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10,7 +11,7 @@ Object.defineProperty(exports, "default", {
 });
 const _express = require("express");
 const _user = require("../models/user");
-const _validateRegistration = require("src/middlewares/validateRegistration");
+const _validateRegistration = require("../middlewares/validateRegistration");
 const router = (0, _express.Router)();
 router.post('/register', _validateRegistration.validateRegistration, async (req, res)=>{
     const { email, username, password } = req.body;
@@ -52,11 +53,11 @@ router.post('/register', _validateRegistration.validateRegistration, async (req,
             tier: 'free',
             isVerified: false
         });
-        return res.status(201).json(user);
+        return res.status(201).json(user); // Respond with the created user
     } catch (error) {
         return res.status(500).json({
             error: 'Internal Server Error'
-        });
+        }); // Handle internal errors
     }
 });
 const _default = router;
