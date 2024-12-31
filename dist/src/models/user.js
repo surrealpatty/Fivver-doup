@@ -45,7 +45,7 @@ class User extends _sequelizetypescript.Model {
     /**
    * Automatically generate UUID for new user records
    */ static assignUuid(user) {
-        user.id = (0, _uuid.v4)();
+        user.id = (0, _uuid.v4)(); // Generate UUID if not already provided
     }
     // Define the association to the Service model
     services;

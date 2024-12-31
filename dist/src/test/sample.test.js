@@ -21,13 +21,13 @@ describe('Service Model Tests', ()=>{
         });
         // Create a user before tests
         user = await _user.default.create({
-            username: 'testUser',
-            email: 'test@example.com',
+            id: '176019c7-46ea-4e86-aa00-caf519a26b3e',
+            username: 'testuser',
+            email: 'testuser@example.com',
             password: 'password123',
             role: 'free',
             tier: 'free',
-            isVerified: true,
-            id: (0, _uuid.v4)()
+            isVerified: true
         });
     });
     afterAll(async ()=>{
@@ -42,6 +42,7 @@ describe('Service Model Tests', ()=>{
             price: 10,
             userId: user.id
         };
+        // Create the service and associate it with the user
         const service = await _services.default.create(serviceData);
         // Ensure that the userId is correctly compared as a string (UUID)
         expect(service.userId).toBe(user.id); // Compare UUID string to UUID string

@@ -23,7 +23,7 @@ let User = class User extends Model {
      * Automatically generate UUID for new user records
      */
     static assignUuid(user) {
-        user.id = uuidv4();
+        user.id = uuidv4(); // Generate UUID if not already provided
     }
     // Define the association to the Service model
     services;

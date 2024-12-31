@@ -10,13 +10,13 @@ describe('Service Model Tests', () => {
         await sequelize.sync({ force: true });
         // Create a user before tests
         user = await User.create({
-            username: 'testUser',
-            email: 'test@example.com',
+            id: '176019c7-46ea-4e86-aa00-caf519a26b3e', // Sample UUID for testing
+            username: 'testuser',
+            email: 'testuser@example.com',
             password: 'password123',
             role: 'free',
             tier: 'free',
             isVerified: true,
-            id: uuidv4(),
         });
     });
     afterAll(async () => {
@@ -29,8 +29,9 @@ describe('Service Model Tests', () => {
             title: 'Test Service',
             description: 'A test service',
             price: 10,
-            userId: user.id, // user.id is a string (UUID)
+            userId: user.id, // user.id is a string (UUID) from the user created in beforeAll
         };
+        // Create the service and associate it with the user
         const service = await Service.create(serviceData);
         // Ensure that the userId is correctly compared as a string (UUID)
         expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
