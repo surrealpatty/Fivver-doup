@@ -1,17 +1,7 @@
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  BeforeCreate,
-  HasMany,
-} from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from './services';  // Import the Service model
+import { Service } from './services';  // Ensure the correct path for Service model import
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
@@ -53,7 +43,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
       isIn: [['free', 'paid']], // Only allow 'free' or 'paid' as valid roles
     },
   })
-  declare role: string; // Only define it here
+  declare role: string;
 
   @Column(DataType.STRING)
   tier!: string;

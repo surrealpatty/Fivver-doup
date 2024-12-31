@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     "target": "ESNext",                        // Target the latest ECMAScript version
-    "module": "ESNext",                        // Use ES modules
+    "module": "ESNext",                        // Use ES modules (for modern module system)
     "moduleResolution": "node",                // Resolve modules using Node.js resolution
-    "lib": ["DOM", "ESNext"],                  // Include DOM and ESNext libraries
+    "lib": ["DOM", "ESNext"],                  // Include DOM and ESNext libraries for a modern environment
     "strict": true,                            // Enable strict type-checking options
     "esModuleInterop": true,                   // Allow default imports from non-ES modules
     "skipLibCheck": true,                      // Skip type checking of declaration files for faster builds
     "forceConsistentCasingInFileNames": true,  // Ensure consistent casing of file names
     "types": ["vue", "node", "jest"],          // Include type definitions for Vue, Node, and Jest
-    "experimentalDecorators": true,            // Enable experimental decorators
-    "emitDecoratorMetadata": true,             // Emit metadata for decorators
+    "experimentalDecorators": true,            // Enable experimental decorators for Sequelize, etc.
+    "emitDecoratorMetadata": true,             // Emit metadata for decorators (important for Sequelize)
     "baseUrl": "./",                           // Base directory for non-relative paths
     "paths": {
       "@/*": ["src/*"],                        // Custom path mapping for 'src' directory
@@ -20,13 +20,17 @@
     "rootDir": "./src",                        // Root directory for source files
     "noEmitOnError": true,                     // Don't emit output if there are type errors
     "resolveJsonModule": true,                 // Allow importing JSON files as modules
-    "allowJs": true                            // Allow JavaScript files to be imported
+    "allowJs": true,                           // Allow JavaScript files to be imported
+    "jsx": "react",                            // Support JSX if you are using React with TypeScript
+    "sourceMap": true,                         // Generate source maps for better debugging
+    "downlevelIteration": true,                // Allows proper iteration with async generators
+    "skipDefaultLibCheck": true                // Skip type checking of default library files for faster compilation
   },
   "include": [
     "src/**/*.ts",                             // Include all TypeScript files in 'src'
     "src/**/*.d.ts",                           // Include declaration files
     "src/**/*.vue",                            // Include Vue component files
-    "src/**/*.tsx",                            // Include TypeScript React files
+    "src/**/*.tsx",                            // Include TypeScript React files (if needed)
     "tests/**/*.ts"                            // Include test files
   ],
   "exclude": [

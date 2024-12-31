@@ -2,10 +2,18 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, "Service", {
-    enumerable: true,
-    get: function() {
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    Service: function() {
         return Service;
+    },
+    default: function() {
+        return _default;
     }
 });
 const _sequelizetypescript = require("sequelize-typescript");
@@ -73,5 +81,6 @@ Service = _ts_decorate([
         timestamps: true
     })
 ], Service);
+const _default = Service;
 
 //# sourceMappingURL=services.js.map

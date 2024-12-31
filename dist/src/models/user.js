@@ -12,7 +12,6 @@ _export(exports, {
     User: function() {
         return User;
     },
-    // No need for sequelize.addModels([User]); because sequelize-typescript does this automatically
     default: function() {
         return _default;
     }
@@ -57,7 +56,7 @@ class User extends _sequelizetypescript.Model {
 }
 _ts_decorate([
     _sequelizetypescript.PrimaryKey,
-    (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.STRING),
+    (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.UUID),
     _ts_metadata("design:type", String)
 ], User.prototype, "id", void 0);
 _ts_decorate([
@@ -73,10 +72,6 @@ _ts_decorate([
     _ts_metadata("design:type", String)
 ], User.prototype, "password", void 0);
 _ts_decorate([
-    (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.STRING),
-    _ts_metadata("design:type", String)
-], User.prototype, "tier", void 0);
-_ts_decorate([
     (0, _sequelizetypescript.Column)({
         type: _sequelizetypescript.DataType.STRING,
         defaultValue: 'free',
@@ -91,6 +86,10 @@ _ts_decorate([
     }),
     _ts_metadata("design:type", String)
 ], User.prototype, "role", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.STRING),
+    _ts_metadata("design:type", String)
+], User.prototype, "tier", void 0);
 _ts_decorate([
     (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.BOOLEAN),
     _ts_metadata("design:type", Boolean)
