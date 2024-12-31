@@ -11,7 +11,6 @@
     "sequelize": "NODE_ENV=development ts-node --transpileOnly node_modules/.bin/sequelize-cli",
     "format": "prettier --write .",
     "clean-build": "rimraf dist && tsc",
-    "start": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
     "build": "swc src --out-dir dist --config-file .swcrc && cmd /c move dist\\src\\index.js dist\\index.js && npx tsc",
     "build:watch": "swc src -d dist --watch",
@@ -28,7 +27,8 @@
     "prepublishOnly": "npm run build",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "clean": "rimraf dist/ build/"
+    "clean": "rimraf dist/ build/",
+    "start": "node index.js" 
   },
   "keywords": [
     "fiverr-clone",

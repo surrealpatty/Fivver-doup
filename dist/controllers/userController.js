@@ -1,5 +1,6 @@
+// src/controllers/userController.ts
 import bcrypt from 'bcryptjs';
-import User from '../models/user'; // Importing the User model
+import { User } from '../models/user'; // Importing the User model
 import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
 // Controller for registering a new user
 export const registerUser = async (req, res) => {
@@ -12,6 +13,7 @@ export const registerUser = async (req, res) => {
         // Check if the user already exists by email
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
+            // If a user exists with the given email, respond with a 409 conflict error
             return res.status(409).json({ message: 'User already exists with this email.' });
         }
         // Hash the user's password before saving to the database

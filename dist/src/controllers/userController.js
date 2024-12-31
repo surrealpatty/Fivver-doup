@@ -1,3 +1,4 @@
+// src/controllers/userController.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9,7 +10,7 @@ Object.defineProperty(exports, "registerUser", {
     }
 });
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
-const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+const _user = require("../models/user");
 const _jwt = require("../utils/jwt");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -26,12 +27,13 @@ const registerUser = async (req, res)=>{
     }
     try {
         // Check if the user already exists by email
-        const existingUser = await _user.default.findOne({
+        const existingUser = await _user.User.findOne({
             where: {
                 email
             }
         });
         if (existingUser) {
+            // If a user exists with the given email, respond with a 409 conflict error
             return res.status(409).json({
                 message: 'User already exists with this email.'
             });
@@ -39,7 +41,7 @@ const registerUser = async (req, res)=>{
         // Hash the user's password before saving to the database
         const hashedPassword = await _bcryptjs.default.hash(password, 10);
         // Default role, tier, and isVerified properties (assumed defaults)
-        const newUser = await _user.default.create({
+        const newUser = await _user.User.create({
             email,
             username,
             password: hashedPassword,
