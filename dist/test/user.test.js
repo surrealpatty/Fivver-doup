@@ -1,9 +1,9 @@
 import request from 'supertest';
 import app from 'src/index'; // Your app setup
-import { User } from 'src/models/user'; // Import the User model
+import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
 // Mocking the User model and JWT methods
-jest.mock('src/models/user', () => ({
+jest.mock('../models/user', () => ({
     User: {
         create: jest.fn(),
         findOne: jest.fn(),

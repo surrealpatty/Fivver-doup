@@ -1,4 +1,3 @@
-// src/config/database.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

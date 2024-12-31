@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _index = /*#__PURE__*/ _interop_require_default(require("src/index"));
-const _user = require("src/models/user");
+const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -12,7 +12,7 @@ function _interop_require_default(obj) {
     };
 }
 // Mocking the User model and JWT methods
-jest.mock('src/models/user', ()=>({
+jest.mock('../models/user', ()=>({
         User: {
             create: jest.fn(),
             findOne: jest.fn()
