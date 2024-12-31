@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import userRoutes from './routes/user';
 import profileRoutes from './routes/profile';
 import { authenticateToken } from './middlewares/authenticateToken';
-import { sequelize } from './config/database';
+import { sequelize } from './config/database'; // Correct import for sequelize
 
 dotenv.config();
 

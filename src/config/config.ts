@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+
+// Load environment variables from a .env file
 dotenv.config();
 
 const {
@@ -63,4 +65,3 @@ export const sequelizeConfig = {
     collate: 'utf8mb4_general_ci', // Default collation for table creation
   },
 };
-
