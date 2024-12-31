@@ -1,4 +1,3 @@
-// src/test/sample.test.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

@@ -2,6 +2,8 @@ import request from 'supertest';
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
 import { app } from '../index'; // Corrected import to use named import
+import { Sequelize } from 'sequelize'; // Import Sequelize for environment mocking
+
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
     User: {
@@ -12,6 +14,15 @@ jest.mock('../models/user', () => ({
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
+
+// Mock environment variables for Sequelize
+beforeAll(() => {
+    process.env.DB_HOST = 'localhost';
+    process.env.DB_USER = 'root';
+    process.env.DB_PASSWORD = '';
+    process.env.DB_NAME = 'fivver_doup';
+});
+
 describe('User Tests', () => {
     describe('POST /api/users/register', () => {
         it('should register a user successfully', async () => {
@@ -44,6 +55,7 @@ describe('User Tests', () => {
                 tier: 'free',
             });
         });
+
         it('should return an error if email is already taken', async () => {
             // Mock rejected value for User.create
             User.create.mockRejectedValueOnce(new Error('Email already exists'));
@@ -56,6 +68,7 @@ describe('User Tests', () => {
             expect(response.body).toHaveProperty('error', 'Email already exists');
         });
     });
+
     describe('Role-based Access Control', () => {
         beforeEach(() => {
             // Mock JWT.verify to simulate token validation
@@ -71,6 +84,7 @@ describe('User Tests', () => {
                 }
             });
         });
+
         it('should allow access to paid users', async () => {
             const response = await request(app)
                 .get('/premium-content')
@@ -78,6 +92,7 @@ describe('User Tests', () => {
             expect(response.status).toBe(200); // Correcting expected status
             expect(response.body.message).toBe('Welcome to the premium content!');
         });
+
         it('should deny access to free users for premium content', async () => {
             const response = await request(app)
                 .get('/premium-content')
@@ -85,6 +100,7 @@ describe('User Tests', () => {
             expect(response.status).toBe(403); // Correcting expected status for forbidden access
             expect(response.body.message).toBe('Access forbidden: Insufficient role');
         });
+
         it('should allow access to free content for all users', async () => {
             const response = await request(app)
                 .get('/free-content')
@@ -92,6 +108,7 @@ describe('User Tests', () => {
             expect(response.status).toBe(200); // Correct expected status for free content
             expect(response.body.message).toBe('Welcome to the free content!');
         });
+
         it('should return an error for invalid tokens', async () => {
             const response = await request(app)
                 .get('/premium-content')
@@ -101,4 +118,3 @@ describe('User Tests', () => {
         });
     });
 });
-//# sourceMappingURL=user.test.js.map
