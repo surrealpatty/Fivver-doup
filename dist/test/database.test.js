@@ -1,4 +1,3 @@
-// src/test/database.test.ts
 import { sequelize } from '../config/database';
 describe('Database Connection', () => {
     // Real database connection test
@@ -15,14 +14,14 @@ describe('Database Connection', () => {
     // Mocked database connection test
     it('should mock database connection successfully', async () => {
         // Mock the sequelize.authenticate method to simulate a successful connection
-        const mockAuthenticate = jest.fn().mockResolvedValue(undefined);
-        // Temporarily replace the sequelize.authenticate method with the mock
-        sequelize.authenticate = mockAuthenticate;
+        const mockAuthenticate = jest.spyOn(sequelize, 'authenticate').mockResolvedValue(undefined);
         // Call authenticate to test the mocked method
         const result = await sequelize.authenticate();
         // Assert that the mocked authenticate method was called and no error was thrown
         expect(mockAuthenticate).toHaveBeenCalled();
         expect(result).toBeUndefined(); // This checks that no error was thrown
+        // Restore the original authenticate method after the test
+        mockAuthenticate.mockRestore();
     });
 });
 //# sourceMappingURL=database.test.js.map

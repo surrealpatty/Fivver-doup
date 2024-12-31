@@ -65,7 +65,6 @@ function _interop_require_wildcard(obj, nodeInterop) {
 }
 // Load environment variables from .env file (ensure .env file exists in the root directory)
 _dotenv.config();
-// Initialize Sequelize instance using environment variables
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST || 'localhost',
@@ -78,15 +77,16 @@ const sequelize = new _sequelizetypescript.Sequelize({
         _order.Order,
         _review.Review
     ],
-    logging: false,
+    logging: process.env.NODE_ENV === 'development' ? console.log : false,
     define: {
         freezeTableName: true
     }
 });
 // Sync the database to ensure all tables are created (optional based on your needs)
+// Use `{ alter: true }` to ensure the tables are altered to match the model structure
 sequelize.sync({
     alter: true
-}); // This will alter the tables to match the model structure
+}).catch((error)=>console.error('Error syncing the database:', error));
 const _default = sequelize;
 
 //# sourceMappingURL=database.js.map
