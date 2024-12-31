@@ -12,7 +12,7 @@ import { Review } from '../models/review';  // Import Review model
 dotenv.config();
 
 // Initialize Sequelize instance using environment variables
-export const sequelize = new Sequelize({
+const sequelize = new Sequelize({
   dialect: 'mysql',  // Set the dialect to MySQL
   host: process.env.DB_HOST || 'localhost',  // Default to 'localhost' if no DB_HOST is provided
   username: process.env.DB_USER || 'root',  // Default to 'root' if no DB_USER is provided

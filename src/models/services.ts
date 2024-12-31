@@ -2,16 +2,16 @@
 import 'reflect-metadata';
 
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Optional } from 'sequelize'; // Import Optional from Sequelize
+import { Optional } from 'sequelize';
 import { User } from './user'; // Corrected import of User model with named import
 
 // Define Service attributes interface
 export interface ServiceAttributes {
-  id: string;  // Use string for UUIDs, change to number if using auto-increment IDs
+  id: string;  // Use string for UUIDs (UUID should be a string)
   title: string;
   description: string;
   price: number;
-  userId: string;
+  userId: string;  // userId should match the type of User's id
   createdAt?: Date;
   updatedAt?: Date;
 }

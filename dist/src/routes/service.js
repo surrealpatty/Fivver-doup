@@ -8,16 +8,28 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _serviceController = require("../controllers/serviceController");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
+const _express = require("express");
+const _authenticateToken = require("../middlewares/authenticateToken");
+const router = (0, _express.Router)();
+// Example middleware to check user roles
+const checkRole = (role)=>{
+    return (req, res, next)=>{
+        const user = req.user; // Type the user as UserPayload
+        const userRole = user.role; // Now TypeScript knows that user has a 'role' property
+        if (userRole !== role) {
+            return res.status(403).json({
+                message: 'Access denied. Only paid users can access this service.'
+            });
+        }
+        next();
     };
-}
-const router = _express.default.Router();
-// Define a route for services
-router.get('/services', _serviceController.ServiceController.getServices); // Ensure this matches the route you're testing
+};
+// Premium service route for paid users only
+router.get('/premium', _authenticateToken.authenticateToken, checkRole('Paid'), (req, res)=>{
+    res.status(200).json({
+        message: 'Premium service access granted.'
+    });
+});
 const _default = router;
 
 //# sourceMappingURL=service.js.map
