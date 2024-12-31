@@ -9,7 +9,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _express = require("express");
-const _user = require("src/models/user");
+const _user = require("../models/user");
 const _validateRegistration = require("src/middlewares/validateRegistration");
 const router = (0, _express.Router)();
 router.post('/register', _validateRegistration.validateRegistration, async (req, res)=>{

@@ -3,18 +3,18 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database'; // Ensure this path is correct
 // Define the Service model
 export class Service extends Model {
-    id;
+    id; // Change from number to string (UUID)
     title;
     description;
     price;
-    userId; // Change userId type to string (for UUID)
+    userId; // Change userId type to string (UUID)
     image; // Define image as optional
 }
 Service.init({
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID, // Change to UUID type
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: DataTypes.UUIDV4, // Set default value to auto-generate UUIDs
     },
     title: {
         type: DataTypes.STRING,
@@ -29,7 +29,7 @@ Service.init({
         allowNull: false,
     },
     userId: {
-        type: DataTypes.STRING, // Change to STRING to handle UUID as a string
+        type: DataTypes.STRING, // userId remains a string (UUID)
         allowNull: false,
     },
     image: {

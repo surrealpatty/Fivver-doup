@@ -24,15 +24,15 @@ describe('Service Model Tests', () => {
     });
     it('should create a new service', async () => {
         const serviceData = {
-            id: 1,
+            id: uuidv4(), // Assuming service.id is a UUID (string)
             title: 'Test Service',
             description: 'A test service',
             price: 10,
-            userId: String(user.id), // Convert user.id to string (UUID)
-            // Remove the image property since it's not in ServiceAttributes
+            userId: user.id, // user.id is a string (UUID)
         };
         const service = await Service.create(serviceData);
-        expect(service.userId).toBe(Number(user.id));
+        // Ensure that the userId is correctly compared as a string (UUID)
+        expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
         expect(service.title).toBe('Test Service');
         expect(service.price).toBe(10);
     });

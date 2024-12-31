@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { User } from 'src/models/user';
+import { User } from '../models/user'; // Use relative path
 import { validateRegistration } from 'src/middlewares/validateRegistration'; // Assuming you have middleware for validation
 const router = Router();
 router.post('/register', validateRegistration, async (req, res) => {

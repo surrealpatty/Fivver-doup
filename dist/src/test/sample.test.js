@@ -35,14 +35,15 @@ describe('Service Model Tests', ()=>{
     });
     it('should create a new service', async ()=>{
         const serviceData = {
-            id: 1,
+            id: (0, _uuid.v4)(),
             title: 'Test Service',
             description: 'A test service',
             price: 10,
-            userId: String(user.id)
+            userId: user.id
         };
         const service = await _services.default.create(serviceData);
-        expect(service.userId).toBe(Number(user.id));
+        // Ensure that the userId is correctly compared as a string (UUID)
+        expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
         expect(service.title).toBe('Test Service');
         expect(service.price).toBe(10);
     });

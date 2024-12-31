@@ -29,9 +29,9 @@ class Service extends _sequelize.Model {
 }
 Service.init({
     id: {
-        type: _sequelize.DataTypes.INTEGER,
+        type: _sequelize.DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true
+        defaultValue: _sequelize.DataTypes.UUIDV4
     },
     title: {
         type: _sequelize.DataTypes.STRING,
