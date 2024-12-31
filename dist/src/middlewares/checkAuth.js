@@ -1,4 +1,3 @@
-// src/middlewares/checkAuth.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15,33 +14,29 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 const authenticateToken = (req, res, next)=>{
-    const authorizationHeader = req.headers['authorization'];
-    if (!authorizationHeader) {
-        res.status(401).json({
-            message: 'Authorization token is missing or invalid'
-        });
-        return; // Terminate the function after sending the response
-    }
-    // Extract the token from the Authorization header
-    const token = authorizationHeader.split(' ')[1]; // Token is expected in "Bearer token" format
+    // Extract token from the Authorization header
+    const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
+        // If no token is provided, send a response and return early
         res.status(401).json({
-            message: 'Authorization token is missing'
+            message: 'No token provided.'
         });
-        return; // Terminate the function after sending the response
+        return;
     }
     try {
-        // Decode the token and ensure it's a valid UserPayload
-        const decoded = _jsonwebtoken.default.verify(token, SECRET_KEY); // Assert type as UserPayload
-        req.user = decoded; // Set req.user to the decoded payload (UserPayload)
-        next(); // Proceed to the next middleware or route handler
-    } catch (error) {
-        res.status(401).json({
-            message: 'Invalid or expired token'
+        // Verify the token and decode the payload
+        const decoded = _jsonwebtoken.default.verify(token, process.env.JWT_SECRET);
+        // Attach the decoded user payload to req.user
+        req.user = decoded;
+        // Proceed to the next middleware or route handler
+        next();
+    } catch (err) {
+        // If token verification fails, send a response and return early
+        res.status(403).json({
+            message: 'Invalid token.'
         });
-        return; // Terminate the function after sending the response
+        return;
     }
 };
 

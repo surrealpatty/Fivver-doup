@@ -1,28 +1,24 @@
-// src/middlewares/checkAuth.ts
 import jwt from 'jsonwebtoken';
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
-// Middleware to authenticate the user using a JWT token
-export const authenticateToken = (req, // Ensure req is typed as CustomAuthRequest
-res, next) => {
-    const authorizationHeader = req.headers['authorization'];
-    if (!authorizationHeader) {
-        res.status(401).json({ message: 'Authorization token is missing or invalid' });
-        return; // Terminate the function after sending the response
-    }
-    // Extract the token from the Authorization header
-    const token = authorizationHeader.split(' ')[1]; // Token is expected in "Bearer token" format
+// Middleware to authenticate the token and attach user information to req.user
+export const authenticateToken = (req, res, next) => {
+    // Extract token from the Authorization header
+    const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
-        res.status(401).json({ message: 'Authorization token is missing' });
-        return; // Terminate the function after sending the response
+        // If no token is provided, send a response and return early
+        res.status(401).json({ message: 'No token provided.' });
+        return;
     }
     try {
-        // Decode the token and ensure it's a valid UserPayload
-        const decoded = jwt.verify(token, SECRET_KEY); // Assert type as UserPayload
-        req.user = decoded; // Set req.user to the decoded payload (UserPayload)
-        next(); // Proceed to the next middleware or route handler
+        // Verify the token and decode the payload
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // Attach the decoded user payload to req.user
+        req.user = decoded;
+        // Proceed to the next middleware or route handler
+        next();
     }
-    catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token' });
-        return; // Terminate the function after sending the response
+    catch (err) {
+        // If token verification fails, send a response and return early
+        res.status(403).json({ message: 'Invalid token.' });
+        return;
     }
 };

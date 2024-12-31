@@ -1,12 +1,19 @@
-// src/middlewares/authenticateToken.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, "authenticateToken", {
-    enumerable: true,
-    get: function() {
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    authenticateToken: function() {
         return authenticateToken;
+    },
+    checkUserRole: function() {
+        return checkUserRole;
     }
 });
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
@@ -15,42 +22,50 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 const authenticateToken = (req, res, next)=>{
-    // Extract the token from the Authorization header
-    const authHeader = req.headers?.authorization;
-    const token = authHeader?.split(' ')[1]; // Extract the token after "Bearer"
-    // If no token is provided, return a 401 Unauthorized response
+    const authorizationHeader = req.headers['authorization'];
+    // Check if the Authorization header exists
+    if (!authorizationHeader) {
+        res.status(401).json({
+            message: 'Authorization token is missing or invalid'
+        });
+        return; // Ensure early return to prevent further code execution
+    }
+    // Extract the token from the Authorization header (expected in "Bearer token" format)
+    const token = authorizationHeader.split(' ')[1];
+    // If no token, return error
     if (!token) {
         res.status(401).json({
-            message: 'Access token is missing'
+            message: 'Authorization token is missing'
         });
-        return; // Ensure no further code is executed
-    }
-    // Ensure the JWT_SECRET environment variable is set
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-        res.status(500).json({
-            message: 'JWT_SECRET is not defined in the environment'
-        });
-        return; // Ensure no further code is executed
+        return; // Ensure early return
     }
     try {
-        // Verify the token using the JWT secret
-        const decoded = _jsonwebtoken.default.verify(token, jwtSecret);
-        // Attach the decoded user payload to the request object (with null checks)
-        req.user = {
-            id: decoded.id,
-            email: decoded.email ?? '',
-            username: decoded.username ?? ''
-        };
+        // Decode the token and ensure it's a valid UserPayload type
+        const decoded = _jsonwebtoken.default.verify(token, SECRET_KEY); // Assert type as UserPayload
+        // Attach the decoded user information to the request object
+        req.user = decoded;
         // Proceed to the next middleware or route handler
         next();
     } catch (error) {
-        // Handle invalid or expired token
         res.status(401).json({
             message: 'Invalid or expired token'
-        }); // Return 401 instead of 403
+        });
+        return; // Ensure early return in case of error
     }
+};
+const checkUserRole = (req, res, next)=>{
+    const user = req.user; // Ensure req.user is of type UserPayload
+    // Check if the user role is 'paid'
+    if (user?.role !== 'paid') {
+        res.status(403).json({
+            message: 'Access denied. Only paid users can access this service.'
+        });
+        return; // Ensure early return to prevent further code execution
+    }
+    // If role is valid, proceed to the next middleware or handler
+    next();
 };
 
 //# sourceMappingURL=authenticateToken.js.map

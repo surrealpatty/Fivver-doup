@@ -1,11 +1,14 @@
-// src/index.ts
 import express from 'express';
 import http from 'http';
 import { sequelize } from './config/database';
 const app = express();
 const server = http.createServer(app);
-// Set up routes and middleware
-app.get('/', (req, res) => res.send('Hello World!'));
+// Set up the root route
+app.get('/', (req, res) => {
+    // Return the expected message
+    res.status(200).send('Fiverr backend is running');
+});
+// Sync database and start the server if not in test environment
 sequelize.sync().then(() => {
     if (process.env.NODE_ENV !== 'test') {
         const PORT = process.env.PORT || 3000;
@@ -14,5 +17,5 @@ sequelize.sync().then(() => {
         });
     }
 });
-// Export both app and server as named exports
+// Export both app and server for use in other files, such as tests
 export { app, server };
