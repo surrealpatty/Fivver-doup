@@ -1,5 +1,5 @@
 // src/db/sync.ts
-import { sequelize } from '../config/database'; // Adjust import path as needed
+import sequelize from '../config/database';  // Correct way to import default export
 import User from '../models/user'; // Adjust import path as needed
 
 // Function to sync database and create tables

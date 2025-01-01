@@ -1,4 +1,4 @@
-import { sequelize } from '../config/database';  // Ensure sequelize is imported here
+import sequelize from '../config/database';  // Correct way to import default export
 import { User } from '../models/user';  // Ensure the User model is properly imported
 
 // Run migrations or sync models before tests to ensure database is set up correctly

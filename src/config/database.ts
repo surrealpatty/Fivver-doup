@@ -29,4 +29,5 @@ const sequelize = new Sequelize({
 // Use `{ alter: true }` to ensure the tables are altered to match the model structure
 sequelize.sync({ alter: true }).catch((error) => console.error('Error syncing the database:', error));
 
+// Export sequelize as a default export
 export default sequelize;

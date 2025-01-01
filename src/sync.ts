@@ -1,4 +1,4 @@
-import { sequelize } from './config/database';  // Make sure this is the correct path
+import sequelize from './config/database';  // Correct way to import default export
 import User from './models/user';  // Make sure this is the correct path
 
 async function syncDatabase() {

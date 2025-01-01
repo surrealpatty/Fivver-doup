@@ -1,5 +1,5 @@
 // src/models/associations.ts
-import { sequelize } from '../config/database';
+import sequelize from '../config/database';  // Correct way to import default export
 import User from './user';        // Import the User model
 import { Service } from './services'; // Import the Service model
 import Order from './order';      // Import the Order model
