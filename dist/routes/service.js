@@ -1,6 +1,6 @@
-import { Router } from 'express'; // Import required types
+import express from 'express'; // Import required types
 import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token verification
-const router = Router();
+const router = express.Router();
 // Example middleware to check user roles
 const checkRole = (role) => {
     return (req, res, next) => {

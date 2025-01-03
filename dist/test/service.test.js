@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { app } from '../index'; // Import the app
 // Example JWT tokens (use actual generated tokens for your tests)
-// In a real test, you would generate valid tokens based on your authentication logic.
 const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
 const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
 describe('Role-based Access for Premium Service', () => {
