@@ -5,26 +5,26 @@ import Order from '../models/order'; // Import Order model (ensure this is corre
 import { Review } from '../models/review'; // Import Review model (ensure this is correctly defined)
 // Define the configuration object for Sequelize
 const config = {
-    username: 'root', // Your DB username
-    password: 'password', // Your DB password (ensure it matches the password in MySQL)
+    username: 'root', // Your DB username (ensure this is correct)
+    password: 'password', // Your DB password (ensure this matches the password in MySQL)
     database: 'fivver_doup', // Your DB name
     host: 'localhost', // Your DB host
-    dialect: 'mysql', // MySQL dialect as a string
+    dialect: 'mysql', // MySQL dialect
     models: [User, Service, Order, Review], // Register models
-    logging: process.env.NODE_ENV === 'development' ? console.log : false, // Log SQL queries in development
+    logging: process.env.NODE_ENV === 'development' ? console.log : false, // Log SQL queries in development environment
     define: {
         freezeTableName: true, // Prevent pluralization of table names
     },
     pool: {
         max: 10, // Max number of database connections
         min: 0, // Min number of database connections
-        acquire: 30000, // Max time (ms) to wait for a connection
-        idle: 10000, // Max time (ms) a connection can be idle
+        acquire: 30000, // Max time to wait for a connection (ms)
+        idle: 10000, // Max time a connection can be idle (ms)
     },
     dialectOptions: {
         ssl: process.env.DB_USE_SSL === 'true'
             ? { require: true, rejectUnauthorized: false }
-            : undefined,
+            : undefined, // Use SSL if configured in environment variables
     },
 };
 // Initialize Sequelize with the configuration
