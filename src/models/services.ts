@@ -1,5 +1,6 @@
 // Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
+import { sequelize } from '../config/database'; // Correct import if exported as a named export
 
 import { 
   Table, 
@@ -60,4 +61,5 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
 
+// Export the Service model
 export default Service;
