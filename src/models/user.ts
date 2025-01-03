@@ -1,4 +1,4 @@
-import 'reflect-metadata'; // Import reflect-metadata to enable decorators for Sequelize models
+import 'reflect-metadata';  // Required for decorators
 import { 
   Table, 
   Column, 
@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import Service from '../models/services'; // Use default import
+import Service from '../models/services';  // Ensure the correct import
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {

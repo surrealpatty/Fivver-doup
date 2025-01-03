@@ -1,4 +1,3 @@
-// Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
 import { sequelize } from '../config/database'; // Correct import of sequelize instance
 import { 
@@ -59,10 +58,6 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
-
-// Define the association between Service and User explicitly
-Service.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
 // Export the Service model
 export default Service;
