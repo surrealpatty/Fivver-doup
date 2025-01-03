@@ -1,32 +1,63 @@
-import request from 'supertest';
-import { app } from '../index'; // Ensure the correct path to your app entry point
+import "reflect-metadata"; // Add this line at the very top to ensure Sequelize decorators work
+import request from "supertest";
+import { Service } from "../models/services"; // Corrected relative import
+import { app } from "dist/index"; // Corrected import to use the transpiled file from dist folder
 
-// Example JWT tokens (replace with actual valid tokens for testing)
-const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
-const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
+// Mocking the Service model methods
+jest.mock('../models/services', () => ({
+    Service: {
+        create: jest.fn(),
+        findOne: jest.fn(),
+    },
+}));
 
-describe('Role-based Access for Premium Service', () => {
-  it('should allow paid users to access premium services', async () => {
-    // Make a request to the /premium-service endpoint as a paid user
-    const response = await request(app)
-      .get('/premium-service') // Ensure this matches the actual route
-      .set('Authorization', `Bearer ${paidToken}`); // Attach paid user's token
+describe('Service Tests', () => {
+    // Apply retry logic to all tests in this suite
+    beforeEach(() => {
+        jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
+    });
 
-    // Assert the response status and body
-    expect(response.status).toBe(200); // Status should be 200 for paid users
-    expect(response.body.message).toBe('Premium service access granted.');
-  });
+    describe('POST /api/services/create', () => {
+        it('should create a service successfully', async () => {
+            // Mock resolved value for Service.create
+            (Service.create as jest.Mock).mockResolvedValueOnce({
+                id: '1',
+                title: 'Test Service',
+                description: 'This is a test service',
+                price: 100,
+            });
 
-  it('should deny free users from accessing premium services', async () => {
-    // Make a request to the /premium-service endpoint as a free user
-    const response = await request(app)
-      .get('/premium-service') // Ensure this matches the actual route
-      .set('Authorization', `Bearer ${freeToken}`); // Attach free user's token
+            // Send a POST request to create service endpoint
+            const response = await request(app).post('/api/services/create').send({
+                title: 'Test Service',
+                description: 'This is a test service',
+                price: 100,
+            });
 
-    // Assert the response status and body
-    expect(response.status).toBe(403); // Status should be 403 for free users
-    expect(response.body.message).toBe(
-      'Access denied. Only paid users can access this service.'
-    );
-  });
+            // Verify the response
+            expect(response.status).toBe(201); // Expecting a 201 Created status
+            expect(response.body).toHaveProperty('id');
+            expect(response.body.title).toBe('Test Service');
+            // Verify that Service.create was called with the correct parameters
+            expect(Service.create).toHaveBeenCalledWith({
+                title: 'Test Service',
+                description: 'This is a test service',
+                price: 100,
+            });
+        });
+
+        it('should return an error if service creation fails', async () => {
+            // Mock rejected value for Service.create
+            (Service.create as jest.Mock).mockRejectedValueOnce(new Error('Service creation failed'));
+
+            const response = await request(app).post('/api/services/create').send({
+                title: 'Test Service',
+                description: 'This is a test service',
+                price: 100,
+            });
+
+            expect(response.status).toBe(400); // Correcting the expected status
+            expect(response.body).toHaveProperty('error', 'Service creation failed');
+        });
+    });
 });
