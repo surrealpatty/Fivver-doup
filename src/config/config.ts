@@ -1,3 +1,5 @@
+// config/config.ts
+
 import dotenv from 'dotenv';
 
 // Load environment variables from a .env file
@@ -8,10 +10,10 @@ const {
   DB_USER = 'root',
   DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',
   DB_NAME = 'fivver_doup',
-  DB_PORT = '3306',  // Default MySQL port
-  NODE_ENV = 'development',  // Default to 'development' if not set
-  JWT_SECRET = 'your-secret-key',  // Default JWT secret
-  JWT_EXPIRATION = '1h',  // Default expiration time for JWT
+  DB_PORT = '3306', // Default MySQL port
+  NODE_ENV = 'development', // Default to 'development' if not set
+  JWT_SECRET = 'your-secret-key', // Default JWT secret
+  JWT_EXPIRATION = '1h', // Default expiration time for JWT
 } = process.env;
 
 // Ensure DB_PORT is a valid number
@@ -33,35 +35,39 @@ export interface Config {
   JWT_EXPIRATION: string;
 }
 
-// Configuration object
-const config: Config = {
-  DB_HOST,
-  DB_USER,
-  DB_PASSWORD,
-  DB_NAME,
-  DB_PORT: parsedDBPort,
-  NODE_ENV,
-  JWT_SECRET,
-  JWT_EXPIRATION,
+// Configuration object for different environments
+const config: { [key: string]: Config } = {
+  development: {
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT: parsedDBPort,
+    NODE_ENV,
+    JWT_SECRET,
+    JWT_EXPIRATION,
+  },
+  test: {
+    DB_HOST: process.env.TEST_DB_HOST || 'localhost',
+    DB_USER: process.env.TEST_DB_USER || 'test_user',
+    DB_PASSWORD: process.env.TEST_DB_PASSWORD || 'test_password',
+    DB_NAME: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    DB_PORT: parsedDBPort,
+    NODE_ENV,
+    JWT_SECRET,
+    JWT_EXPIRATION,
+  },
+  production: {
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT: parsedDBPort,
+    NODE_ENV,
+    JWT_SECRET,
+    JWT_EXPIRATION,
+  },
 };
 
-// Export the configuration as the default export
-export default config;
-
-// MySQL connection configuration with charset and collation
-export const sequelizeConfig = {
-  dialect: 'mysql',
-  host: config.DB_HOST,
-  username: config.DB_USER,
-  password: config.DB_PASSWORD,
-  database: config.DB_NAME,
-  port: config.DB_PORT,
-  dialectOptions: {
-    charset: 'utf8mb4', // Ensure utf8mb4 charset is used for full Unicode support
-    collate: 'utf8mb4_general_ci', // MySQL collation for multilingual support
-  },
-  define: {
-    charset: 'utf8mb4', // Default charset for table creation
-    collate: 'utf8mb4_general_ci', // Default collation for table creation
-  },
-};
+// Export the appropriate configuration based on NODE_ENV
+export default config[NODE_ENV];

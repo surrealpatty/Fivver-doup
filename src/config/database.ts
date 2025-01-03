@@ -6,20 +6,17 @@ import { User } from '../models/user'; // Correct import path for User model
 import { Service } from '../models/services'; // Correct import path for Service model
 import { Order } from '../models/order'; // Correct import path for Order model
 import { Review } from '../models/review'; // Correct import path for Review model
-import * as dotenv from 'dotenv'; // Load environment variables
-
-// Load environment variables from .env file
-dotenv.config();
+import config from '../config/config'; // Import configuration
 
 // Initialize Sequelize instance with necessary configurations
 const sequelize = new Sequelize({
   dialect: 'mysql', // Database dialect
-  host: process.env.DB_HOST || 'localhost', // Default to 'localhost' if not set
-  username: process.env.DB_USER || 'root', // Default to 'root' if not set
-  password: process.env.DB_PASSWORD || '', // Default to an empty string if not set
-  database: process.env.DB_NAME || 'fivver_doup', // Default to 'fivver_doup' if not set
+  host: config.DB_HOST, // Get the host from config
+  username: config.DB_USER, // Get the username from config
+  password: config.DB_PASSWORD, // Get the password from config
+  database: config.DB_NAME, // Get the database name from config
   models: [User, Service, Order, Review], // Register all models here
-  logging: process.env.NODE_ENV === 'development' ? console.log : false, // Enable logging in development mode
+  logging: config.NODE_ENV === 'development' ? console.log : false, // Enable logging in development mode
   define: {
     freezeTableName: true, // Prevent Sequelize from pluralizing table names
   },
@@ -49,7 +46,7 @@ sequelize
   });
 
 // Sync database schema in non-production environments
-if (process.env.NODE_ENV !== 'production') {
+if (config.NODE_ENV !== 'production') {
   sequelize
     .sync({ alter: true }) // Adjust tables to match models (use cautiously)
     .then(() => {
