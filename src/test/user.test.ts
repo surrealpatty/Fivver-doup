@@ -3,7 +3,7 @@ import 'reflect-metadata';  // Add this line at the very top to ensure Sequelize
 import request from 'supertest';
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
-import { app } from '../index';  // Corrected import to use named import
+import { app } from '../index.js';  // Corrected import to use .js extension explicitly
 
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",                           // Set the target JavaScript version to ESNext
-    "module": "ESNext",                           // Use ESNext module system for ES modules
+    "module": "CommonJS",                          // Use CommonJS module system for Node.js compatibility
     "moduleResolution": "node",                   // Resolve modules like Node.js
     "strict": true,                               // Enable strict type-checking options
     "esModuleInterop": true,                      // Enable interop between ES modules and CommonJS
@@ -15,7 +15,9 @@
     "experimentalDecorators": true,               // Enable decorators (required by some libraries like TypeORM)
     "emitDecoratorMetadata": true,                // Emit metadata for decorators (required for sequelize-typescript)
     "skipDefaultLibCheck": true,                  // Skip checking default lib.d.ts for performance
-    "allowJs": false                              // Ensure only TypeScript files are compiled
+    "allowJs": false,                             // Ensure only TypeScript files are compiled
+    "declaration": true,                          // Emit type declaration files (.d.ts)
+    "declarationMap": true                        // Generate declaration map files for debugging
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
