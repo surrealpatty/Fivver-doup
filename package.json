@@ -179,39 +179,5 @@
       "pre-commit": "lint-staged"
     }
   },
-  "types": "dist/index.d.ts",
-  "jest": {
-    "transform": {
-      "^.+\\.ts$": [
-        "ts-jest",
-        {
-          "tsconfig": "tsconfig.json"
-        }
-      ]
-    },
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.jest.json"
-      }
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
-      "tests/**/*.{ts,tsx}"
-    ],
-    "testMatch": [
-      "**/*.test.ts",
-      "**/*.test.tsx"
-    ]
-  }
+  "types": "dist/index.d.ts"
 }
