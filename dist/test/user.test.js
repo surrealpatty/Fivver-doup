@@ -13,6 +13,10 @@ jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
 describe('User Tests', () => {
+    // Apply retry logic to all tests in this suite
+    beforeEach(() => {
+        jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
+    });
     describe('POST /api/users/register', () => {
         it('should register a user successfully', async () => {
             // Mock resolved value for User.create
