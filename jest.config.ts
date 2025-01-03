@@ -7,7 +7,7 @@ const config: JestConfigWithTsJest = {
     '^.+\\.ts$': 'ts-jest',  // Transform TypeScript files with ts-jest
     '^.+\\.js$': 'babel-jest', // Transform JavaScript files with babel-jest
   },
-  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts'], // Include .js in moduleFileExtensions
+  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts'], // Include .ts and .js in moduleFileExtensions
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,js}',  // Collect coverage from both TypeScript and JavaScript files
@@ -18,6 +18,10 @@ const config: JestConfigWithTsJest = {
   maxWorkers: '50%',       // Use fewer workers to reduce resource load
   transformIgnorePatterns: ['node_modules/(?!your-esm-package/)'],  // Ensure ESM packages are transformed
   moduleDirectories: ['node_modules', 'dist/src'], // Ensure Jest can resolve files from the dist directory
+  moduleNameMapper: {
+    // Add mappings to handle imports correctly
+    '^src/(.*)$': '<rootDir>/src/$1',  // Map `src/` to the correct directory in your project
+  },
 };
 
 export default config;
