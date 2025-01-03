@@ -16,8 +16,12 @@
     "emitDecoratorMetadata": true,                // Emit metadata for decorators (required for sequelize-typescript)
     "skipDefaultLibCheck": true,                  // Skip checking default lib.d.ts for performance
     "allowJs": false,                             // Ensure only TypeScript files are compiled
-    "declaration": true,                          // Emit type declaration files (.d.ts)
-    "declarationMap": true                        // Generate declaration map files for debugging
+    "declaration": false,                         // Remove the declaration option so .d.ts files aren't generated
+    "declarationMap": false,                      // Do not generate declaration maps
+    "paths": {
+      "src/*": ["./src/*"],                       // Ensure that Jest resolves `src/` correctly
+      "dist/*": ["./dist/*"]                       // Ensure that Jest resolves `dist/` correctly
+    }
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
