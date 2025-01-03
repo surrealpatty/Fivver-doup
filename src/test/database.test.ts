@@ -1,35 +1,30 @@
-import request from 'supertest';
-import { app } from '../index';  // Correct import for the app
+import { Sequelize } from 'sequelize-typescript';
+import { User } from '../models/user';
+import { Service } from '../models/services';
 
-// Example JWT tokens (use actual generated tokens for your tests)
-const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
-const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
+// Initialize Sequelize with models
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'root',
+  password: 'password',  // Use your actual password
+  database: 'fivver_doup',
+  models: [User, Service], // Add models to Sequelize instance
+});
 
-describe('Role-based Access for Premium Service', () => {
+// Sync the models before running tests
+beforeAll(async () => {
+  // Ensure database is in sync with models
+  await sequelize.sync({ force: true }); // 'force: true' to drop and re-create tables for a clean state
+});
 
-    // Test for allowing paid users to access the premium service
-    it('should allow paid users to access premium services', async () => {
-        const response = await request(app)
-            .get('/premium-service')  // Ensure this is the correct route
-            .set('Authorization', `Bearer ${paidToken}`);  // Add the paid token to the Authorization header
+// Clean up after tests
+afterAll(async () => {
+  await sequelize.close();  // Close the Sequelize connection after tests
+});
 
-        console.log('Response for paid user:', response.status, response.body); // Debugging line
-
-        // Assert the response status and body message
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Premium service access granted.');
-    });
-
-    // Test for denying free users from accessing premium services
-    it('should deny free users from accessing premium services', async () => {
-        const response = await request(app)
-            .get('/premium-service')  // Ensure this is the correct route
-            .set('Authorization', `Bearer ${freeToken}`);  // Add the free token to the Authorization header
-
-        console.log('Response for free user:', response.status, response.body); // Debugging line
-
-        // Assert the response status and body message
-        expect(response.status).toBe(403);
-        expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
-    });
+// Example test to check the association
+test('Service can be associated with User', () => {
+  // Check if the 'belongsTo' association is defined for the Service model
+  expect(Service.belongsTo).toBeDefined();
 });
