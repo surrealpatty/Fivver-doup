@@ -83,4 +83,7 @@ Service = _ts_decorate([
 Service.belongsTo(_user.User, {
     foreignKey: 'userId'
 });
+_user.User.hasMany(Service, {
+    foreignKey: 'userId'
+}); // Define the reverse association (optional)
 const _default = Service;

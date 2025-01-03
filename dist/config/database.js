@@ -1,10 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
 import config from './config'; // Import the configuration file
-import Service from '../models/services'; // Use default import
-// src/config/database.ts
-import User from '../models/user'; // Remove the .ts extension
-import Order from '../models/order'; // Remove the .ts extension
-import { Review } from '../models/review'; // Remove the .ts extension
+import User from '../models/user'; // Import User model
+import Service from '../models/services'; // Import Service model
+import Order from '../models/order'; // Import Order model
+import { Review } from '../models/review'; // Import Review model
 // Initialize Sequelize instance with the necessary configuration
 const sequelize = new Sequelize({
     dialect: 'mysql', // Database dialect
@@ -29,6 +28,9 @@ const sequelize = new Sequelize({
             : undefined,
     },
 });
+// Define associations AFTER models are added to Sequelize instance
+Service.belongsTo(User, { foreignKey: 'userId' }); // Service belongs to User
+User.hasMany(Service, { foreignKey: 'userId' }); // User can have many Services
 // Test the database connection
 const testConnection = async () => {
     try {

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 // Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { User } from './user'; // Corrected import of User model with named import
+import { User } from './user'; // Correct import of User model with named import
 let Service = class Service extends Model {
     title;
     description;
@@ -64,5 +64,6 @@ Service = __decorate([
 export { Service };
 // Define the association between Service and User explicitly
 Service.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Service, { foreignKey: 'userId' }); // Define the reverse association (optional)
 // Export the Service model
 export default Service;

@@ -1,8 +1,10 @@
-import { sequelize } from '../config/database'; // Correct import
-import { User } from '../models/user'; // Ensure the User model is properly imported
+import 'reflect-metadata'; // Ensure reflect-metadata is imported for decorators to work
+import { sequelize } from '../config/database'; // Correct import of sequelize instance
+import { User } from '../models/user'; // Correct import of the User model
 // Run migrations or sync models before tests to ensure database is set up correctly
 beforeAll(async () => {
-    await sequelize.sync(); // Sync the database before running tests
+    // Sync the models with the database before running tests
+    await sequelize.sync({ force: true }); // `force: true` will drop and re-create the tables for a clean slate
 });
 describe('User Creation Tests', () => {
     it('should create a user successfully', async () => {
@@ -24,6 +26,8 @@ describe('User Creation Tests', () => {
         expect(user.isVerified).toBe(false);
     });
 });
+// Add tests for other models or functionality here as needed
 afterAll(async () => {
-    await sequelize.close(); // Close the connection after tests
+    // Close the database connection after tests
+    await sequelize.close();
 });

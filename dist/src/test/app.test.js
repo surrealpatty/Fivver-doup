@@ -2,11 +2,15 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+require("reflect-metadata");
 const _database = require("../config/database");
 const _user = require("../models/user");
 // Run migrations or sync models before tests to ensure database is set up correctly
 beforeAll(async ()=>{
-    await _database.sequelize.sync(); // Sync the database before running tests
+    // Sync the models with the database before running tests
+    await _database.sequelize.sync({
+        force: true
+    }); // `force: true` will drop and re-create the tables for a clean slate
 });
 describe('User Creation Tests', ()=>{
     it('should create a user successfully', async ()=>{
@@ -28,6 +32,8 @@ describe('User Creation Tests', ()=>{
         expect(user.isVerified).toBe(false);
     });
 });
+// Add tests for other models or functionality here as needed
 afterAll(async ()=>{
-    await _database.sequelize.close(); // Close the connection after tests
+    // Close the database connection after tests
+    await _database.sequelize.close();
 });

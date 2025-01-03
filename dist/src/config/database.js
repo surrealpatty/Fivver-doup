@@ -10,8 +10,8 @@ Object.defineProperty(exports, "sequelize", {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _config = /*#__PURE__*/ _interop_require_default(require("./config"));
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _order = /*#__PURE__*/ _interop_require_default(require("../models/order"));
 const _review = require("../models/review");
 function _interop_require_default(obj) {
@@ -49,6 +49,13 @@ const sequelize = new _sequelizetypescript.Sequelize({
         } : undefined
     }
 });
+// Define associations AFTER models are added to Sequelize instance
+_services.default.belongsTo(_user.default, {
+    foreignKey: 'userId'
+}); // Service belongs to User
+_user.default.hasMany(_services.default, {
+    foreignKey: 'userId'
+}); // User can have many Services
 // Test the database connection
 const testConnection = async ()=>{
     try {
