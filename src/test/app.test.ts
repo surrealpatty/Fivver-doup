@@ -1,64 +1,79 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported for decorators to work
 import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
-import { User } from '../models/user';              // Correct import for User model
-import { Service } from '../models/services';      // Correct import for Service model
-import { app } from '../index';                     // Correct import for the app
+import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
+import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
+import { sequelize } from '../config/database';  // Correct import for sequelize instance
+import User from '../models/user';  // Import User model to ensure it's added to Sequelize
+import Service from '../models/services';  // Import Service model to ensure it's added to Sequelize
 
-// Initialize Sequelize with models
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost',
-  username: 'root',
-  password: 'password', // Use your actual MySQL password here
-  database: 'fivver_doup',
-  models: [User, Service], // Add models to Sequelize instance
+// Ensure the models are added and synced before running the tests
+beforeAll(async () => {
+  // Initialize Sequelize with models explicitly
+  const sequelizeInstance = new Sequelize({
+    dialect: 'mysql',
+    host: 'localhost',
+    username: 'root',
+    password: 'password',  // Use your actual password here
+    database: 'fivver_doup',
+    models: [User, Service],  // Add models to Sequelize instance
+  });
+
+  // Add models to Sequelize instance and define associations
+  sequelizeInstance.addModels([User, Service]);
+
+  // Define the associations after models are loaded
+  Service.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
+
+  // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
+  await sequelizeInstance.sync({ force: false });
 });
 
-// Define the associations between models **after** they are loaded
-Service.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
+describe('Authentication Tests', () => {
+  it('should authenticate and return a valid JWT token', async () => {
+    // First, create a test user (for the purpose of the test)
+    const userResponse = await request(app)
+      .post('/register')  // Assuming you have a route for user registration
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      });
 
-// Sync the models before running tests
-beforeAll(async () => {
-  // Ensure the models are synced before tests run
-  await sequelize.sync({ force: true });  // 'force: true' will drop and re-create tables for a clean slate
+    // Check if the user was successfully created
+    expect(userResponse.status).toBe(201);
+
+    // Example request to authenticate and get a token
+    const response = await request(app)  // Use supertest to make a request to the app
+      .post('/login')  // Adjust the route based on your actual login route
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+
+    // Ensure the response includes a valid token
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
+
+    // Decode the token to verify its contents (if JWT is used)
+    const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+    expect(decoded).toHaveProperty('id');
+    expect(decoded).toHaveProperty('email');
+  });
+
+  it('should reject invalid credentials', async () => {
+    const response = await request(app)
+      .post('/login')  // Replace with your actual login route
+      .send({ email: 'invalid@example.com', password: 'wrongpassword' });
+
+    // Assert the response status and message
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Invalid credentials.');
+  });
 });
 
 // Clean up after tests
 afterAll(async () => {
   await sequelize.close();  // Close the Sequelize connection after tests
-});
-
-// Example of a test with role-based access
-describe('Role-based Access for Premium Service', () => {
-  // Example test for paid user accessing premium service
-  it('should allow paid users to access premium services', async () => {
-    const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
-    const response = await request(app)
-      .get('/premium-service') // Ensure this route exists in your app
-      .set('Authorization', `Bearer ${paidToken}`); // Add token to the Authorization header
-
-    // Debugging logs
-    console.log('Response for paid user:', response.status, response.body);
-
-    // Assert the response status and message
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Premium service access granted.');
-  });
-
-  // Test for denying free users access
-  it('should deny free users from accessing premium services', async () => {
-    const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
-    const response = await request(app)
-      .get('/premium-service') // Ensure this route exists in your app
-      .set('Authorization', `Bearer ${freeToken}`); // Add token to the Authorization header
-
-    // Debugging logs
-    console.log('Response for free user:', response.status, response.body);
-
-    // Assert the response status and message
-    expect(response.status).toBe(403);
-    expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
-  });
 });

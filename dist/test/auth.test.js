@@ -1,13 +1,17 @@
+import 'reflect-metadata'; // Ensure reflect-metadata is imported for decorators to work
+import { app } from '../index'; // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT verification
-import { app } from '../index'; // Corrected import to use named import
-import { sequelize } from '../config/database'; // Correct import
+import { sequelize } from '../config/database'; // Correct import for sequelize instance
 import User from '../models/user'; // Import User model to ensure it's added to Sequelize
-import Service from '../models/services'; // Use default import
+import Service from '../models/services'; // Import Service model to ensure it's added to Sequelize
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
-    // Add models to Sequelize instance
+    // Add models to Sequelize instance before associations
     sequelize.addModels([User, Service]);
+    // Define the associations after models are loaded
+    Service.belongsTo(User, { foreignKey: 'userId' });
+    User.hasMany(Service, { foreignKey: 'userId' });
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
     await sequelize.sync({ force: false });
 });
@@ -38,4 +42,16 @@ describe('Authentication Tests', () => {
         expect(decoded).toHaveProperty('id');
         expect(decoded).toHaveProperty('email');
     });
+    it('should reject invalid credentials', async () => {
+        const response = await request(app)
+            .post('/login') // Replace with your actual login route
+            .send({ email: 'invalid@example.com', password: 'wrongpassword' });
+        // Assert the response status and message
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe('Invalid credentials.');
+    });
+});
+// Clean up after tests
+afterAll(async () => {
+    await sequelize.close(); // Close the Sequelize connection after tests
 });
