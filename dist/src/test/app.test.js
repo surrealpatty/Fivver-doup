@@ -25,6 +25,13 @@ const sequelize = new _sequelizetypescript.Sequelize({
         _services.Service
     ]
 });
+// Define associations after models are loaded
+_services.Service.belongsTo(_user.User, {
+    foreignKey: 'userId'
+});
+_user.User.hasMany(_services.Service, {
+    foreignKey: 'userId'
+}); // Define the reverse association (optional)
 // Sync the models before running tests
 beforeAll(async ()=>{
     // Ensure the models are synced before tests run

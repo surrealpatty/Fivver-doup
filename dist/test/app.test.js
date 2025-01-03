@@ -13,6 +13,9 @@ const sequelize = new Sequelize({
     database: 'fivver_doup',
     models: [User, Service], // Add models to Sequelize instance
 });
+// Define associations after models are loaded
+Service.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Service, { foreignKey: 'userId' }); // Define the reverse association (optional)
 // Sync the models before running tests
 beforeAll(async () => {
     // Ensure the models are synced before tests run
