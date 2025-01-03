@@ -1,10 +1,8 @@
-// jest.setup.js
-
 // Import reflect-metadata if you're using TypeORM or any other libraries that rely on decorators.
 import 'reflect-metadata';
 
-// Import the Sequelize instance
-import sequelize from './src/config/database'; // Adjust the path as necessary
+// Import the sequelize instance as a named import
+import { sequelize } from './src/config/database'; // Corrected to use named import
 
 // Global setup before all tests
 beforeAll(async () => {

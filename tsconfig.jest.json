@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",              // Inherit the base TypeScript configuration
+    "compilerOptions": {
+      "module": "commonjs",                    // Use CommonJS for Jest
+      "esModuleInterop": true,                 // Enable interop for ES modules
+      "skipLibCheck": true,                    // Skip checking library files
+      "strict": true                           // Enable strict type checking for tests
+    },
+    "include": [
+      "src/**/*.ts",                           // Include TypeScript files in the src folder
+      "tests/**/*.ts",                         // Include TypeScript files in the tests folder
+      "jest.setup.ts"                          // Include Jest setup file if it exists
+    ]
+  }
+  

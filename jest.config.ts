@@ -2,7 +2,7 @@ import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   // Specify the preset for TypeScript
-  preset: 'ts-jest', 
+  preset: 'ts-jest',
 
   // Define the test environment
   testEnvironment: 'node', // Or 'jsdom' if testing client-side code
@@ -11,12 +11,12 @@ const config: Config.InitialOptions = {
   globals: {
     'ts-jest': {
       isolatedModules: true, // Enables faster testing when possible
-      tsconfig: 'tsconfig.json', // Ensure correct TypeScript config for Jest
+      tsconfig: 'tsconfig.jest.json', // Use the Jest-specific tsconfig
     },
   },
 
   // Handle different file extensions (including .ts and .tsx)
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'], 
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
 
   // Use ts-jest for TypeScript files
   transform: {
@@ -25,8 +25,15 @@ const config: Config.InitialOptions = {
     '^.+\\.js$': 'babel-jest', // Optionally use babel-jest for .js files
   },
 
-  // If necessary, set up other options like setupFiles, collectCoverage, etc.
-  setupFiles: ['<rootDir>/jest.setup.ts'], // Optional, for setup before tests
+  // Specify the location of the setup file for global setup/teardown
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Corrected to use `setupFilesAfterEnv`
+
+  // Optional: Set up coverage collection
+  collectCoverage: true, // Collect coverage reports for tests
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'], // Specify files to collect coverage from
+  
+  // Optional: Additional Jest settings (custom test match, etc.)
+  testMatch: ['**/*.test.ts', '**/*.test.tsx'], // Match test files
 };
 
 export default config;
