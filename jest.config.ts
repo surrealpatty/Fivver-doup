@@ -7,7 +7,7 @@ const config: JestConfigWithTsJest = {
     '^.+\\.ts$': 'ts-jest',  // Transform TypeScript files with ts-jest
     '^.+\\.js$': 'babel-jest', // Transform JavaScript files with babel-jest
   },
-  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts'], // Include .ts and .js in moduleFileExtensions
+  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts'], // Ensure .js is included in moduleFileExtensions
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,js}',  // Collect coverage from both TypeScript and JavaScript files
