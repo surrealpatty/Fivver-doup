@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+import { app } from '../../src/index.ts';  // Add .ts extension
 import request from 'supertest';
-import { app } from '../index'; // Correct import assuming index.js exports the app
 // Explicitly define the type for obj
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
