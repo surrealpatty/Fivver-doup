@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'; // Import necessary types
-import { Service } from '../models/services'; // Adjust according to your model location
+import Service from '../models/services'; // Use default import
+
 import { CustomAuthRequest } from '../types'; // Import the custom request type
 
 export class ServiceController {

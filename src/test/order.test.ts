@@ -3,7 +3,7 @@ import { sequelize } from '../config/database';  // Correct import
 import { app } from '../index';  // Corrected import to use named import
 import request from 'supertest'; // Import supertest for making API requests
 import { User } from '../models/user'; // Import User model
-import { Service } from '../models/services';
+import Service from '../models/services'; // Use default import
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({

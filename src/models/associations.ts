@@ -1,7 +1,7 @@
 // src/models/associations.ts
 import { sequelize } from '../config/database';  // Correct import
 import User from './user';        // Import the User model
-import { Service } from './services'; // Import the Service model
+import Service from '../models/services'; // Use default import
 import Order from './order';      // Import the Order model
 import { Review } from './review';    // Import the Review model
 

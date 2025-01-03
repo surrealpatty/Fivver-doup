@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import config from './config'; // Import the configuration file
+import Service from '../models/services'; // Use default import
 
 import User from './models/user.ts';
-import Service from './models/services.ts';
 import Order from './models/order.ts';
 import Review from './models/review.ts';
 
