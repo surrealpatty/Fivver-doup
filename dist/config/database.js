@@ -5,10 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
+const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = __importDefault(require("../models/user")); // Ensure the path is correct
 const services_1 = __importDefault(require("../models/services")); // Ensure the path is correct
 const order_1 = __importDefault(require("../models/order")); // Ensure the Order model exists and is correctly defined
 const review_1 = require("../models/review"); // Ensure the Review model exists and is correctly defined
+dotenv_1.default.config(); // Load environment variables from .env
 // Initialize Sequelize instance with environment variables or defaults
 const sequelize = new sequelize_typescript_1.Sequelize({
     username: process.env.DB_USERNAME || 'root', // Replace 'root' if a different user is used
@@ -32,8 +34,8 @@ const sequelize = new sequelize_typescript_1.Sequelize({
         ssl: process.env.DB_USE_SSL === 'true'
             ? { require: true, rejectUnauthorized: false } // Enable SSL if required
             : undefined,
-        charset: 'utf8mb4', // Move charset here
-        collate: 'utf8mb4_unicode_ci', // Move collate here
+        charset: 'utf8mb4', // Use utf8mb4 for storing multi-byte characters like emojis
+        collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci for proper character collation
     },
 });
 exports.sequelize = sequelize;

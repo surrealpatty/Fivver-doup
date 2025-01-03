@@ -9,6 +9,7 @@ Object.defineProperty(exports, "sequelize", {
     }
 });
 const _sequelizetypescript = require("sequelize-typescript");
+const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _order = /*#__PURE__*/ _interop_require_default(require("../models/order"));
@@ -18,6 +19,7 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
+_dotenv.default.config(); // Load environment variables from .env
 // Initialize Sequelize instance with environment variables or defaults
 const sequelize = new _sequelizetypescript.Sequelize({
     username: process.env.DB_USERNAME || 'root',
