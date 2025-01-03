@@ -10,10 +10,11 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-_dotenv.default.config(); // Load environment variables from .env file
+// Load environment variables from .env file
+_dotenv.default.config();
 /**
  * Ensure that Sequelize is aware of all the models
- */ _database.sequelize.models.User = _user.default; // Manually add the model to Sequelize's models
+ */ _database.sequelize.models.User = _user.default; // Manually add the User model to Sequelize's models if necessary
 /**
  * Sync the database and reset the schema before running tests
  */ const syncDatabase = async ()=>{
@@ -42,5 +43,5 @@ afterAll(async ()=>{
     console.log('Closing the database connection after tests...');
     await _database.sequelize.close(); // Close the database connection after tests complete
 });
-// Specify a different port for testing
+// Specify a different port for testing (optional)
 process.env.PORT = '3001'; // Change the port for testing to 3001 or another available port

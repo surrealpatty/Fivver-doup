@@ -87,12 +87,7 @@ const sequelize = new _sequelizetypescript.Sequelize({
         ssl: process.env.DB_USE_SSL === 'true' ? {
             require: true,
             rejectUnauthorized: false
-        } : undefined,
-        authSwitch: {
-            'auth_switch_request': ()=>{
-            // handle authentication switch if needed (MySQL 8.0+)
-            }
-        }
+        } : undefined
     }
 });
 // Test the database connection

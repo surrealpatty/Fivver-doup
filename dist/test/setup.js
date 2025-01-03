@@ -1,11 +1,12 @@
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
-dotenv.config(); // Load environment variables from .env file
-import { sequelize } from '../config/database'; // Correct import
+import { sequelize } from '../config/database'; // Import the Sequelize instance
 import User from '../models/user'; // Import the User model
+// Load environment variables from .env file
+dotenv.config();
 /**
  * Ensure that Sequelize is aware of all the models
  */
-sequelize.models.User = User; // Manually add the model to Sequelize's models
+sequelize.models.User = User; // Manually add the User model to Sequelize's models if necessary
 /**
  * Sync the database and reset the schema before running tests
  */
@@ -35,5 +36,5 @@ afterAll(async () => {
     console.log('Closing the database connection after tests...');
     await sequelize.close(); // Close the database connection after tests complete
 });
-// Specify a different port for testing
+// Specify a different port for testing (optional)
 process.env.PORT = '3001'; // Change the port for testing to 3001 or another available port
