@@ -8,9 +8,14 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _express = require("express");
+const _express = /*#__PURE__*/ _interop_require_default(require("express"));
 const _authenticateToken = require("../middlewares/authenticateToken");
-const router = (0, _express.Router)();
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const router = _express.default.Router();
 // Example middleware to check user roles
 const checkRole = (role)=>{
     return (req, res, next)=>{
