@@ -62,5 +62,6 @@ Service = __decorate([
     Table({ tableName: 'services', timestamps: true })
 ], Service);
 export { Service };
+// Export the Service model
 export default Service;
 //# sourceMappingURL=services.js.map

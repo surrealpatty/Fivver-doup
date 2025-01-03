@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database'; // Correct way to import default export
+import { sequelize } from '../config/database'; // Correct import
 class Service extends Model {
     id;
     userId;

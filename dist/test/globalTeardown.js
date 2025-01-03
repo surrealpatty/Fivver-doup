@@ -1,4 +1,4 @@
-import sequelize from '../config/database'; // Correct way to import default export
+import { sequelize } from '../config/database'; // Correct import
 import { server } from '../index'; // Import the server instance
 // Global teardown to ensure cleanup of resources after all tests
 afterAll(async () => {

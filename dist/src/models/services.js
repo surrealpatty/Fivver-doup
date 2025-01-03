@@ -13,6 +13,7 @@ _export(exports, {
     Service: function() {
         return Service;
     },
+    // Export the Service model
     default: function() {
         return _default;
     }

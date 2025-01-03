@@ -1,5 +1,4 @@
-import 'reflect-metadata'; // Enable decorators for Sequelize models
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript'; // Import sequelize-typescript
 import * as dotenv from 'dotenv'; // Load environment variables
 // Import models (adjust paths if needed)
 import { User } from '../models/user';
@@ -48,5 +47,5 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 // Export the Sequelize instance
-export default sequelize;
+export { sequelize };
 //# sourceMappingURL=database.js.map

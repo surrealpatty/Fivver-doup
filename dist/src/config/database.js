@@ -2,14 +2,12 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export the Sequelize instance
-"default", {
+Object.defineProperty(exports, "sequelize", {
     enumerable: true,
     get: function() {
-        return _default;
+        return sequelize;
     }
 });
-require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
 const _user = require("../models/user");
@@ -100,4 +98,3 @@ if (process.env.NODE_ENV !== 'production') {
         console.error('Error synchronizing the database:', error);
     });
 }
-const _default = sequelize;

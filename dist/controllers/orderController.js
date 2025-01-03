@@ -1,5 +1,5 @@
 import { Order } from '../models/order'; // Correct path for the Order model
-import sequelize from '../config/database'; // Correct way to import default export
+import { sequelize } from '../config/database'; // Correct import
 // Create order controller
 export const createOrder = async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-import sequelize from './config/database'; // Correct way to import default export
+import { sequelize } from './config/database'; // Correct import
 async function syncDatabase() {
     try {
         // Force sync will drop and recreate the table if it exists

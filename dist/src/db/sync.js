@@ -3,17 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _database = require("../config/database");
 // Function to sync database and create tables
 async function syncDatabase() {
     try {
         // Force sync will drop and recreate the tables
-        await _database.default.sync({
+        await _database.sequelize.sync({
             force: true
         });
         console.log('Database synchronized successfully!');

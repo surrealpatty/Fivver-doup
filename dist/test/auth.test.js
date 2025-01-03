@@ -1,7 +1,7 @@
 import request from 'supertest';
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT verification
 import { app } from '../index'; // Corrected import to use named import
-import sequelize from '../config/database'; // Correct way to import default export
+import { sequelize } from '../config/database'; // Correct import
 import User from '../models/user'; // Import User model to ensure it's added to Sequelize
 import { Service } from '../models/services'; // Import other models if needed
 // Ensure the models are added and synced before running the tests

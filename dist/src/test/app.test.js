@@ -2,16 +2,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
+const _database = require("../config/database");
 const _user = require("../models/user");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
 // Run migrations or sync models before tests to ensure database is set up correctly
 beforeAll(async ()=>{
-    await _database.default.sync(); // Sync the database before running tests
+    await _database.sequelize.sync(); // Sync the database before running tests
 });
 describe('User Creation Tests', ()=>{
     it('should create a user successfully', async ()=>{
@@ -34,5 +29,5 @@ describe('User Creation Tests', ()=>{
     });
 });
 afterAll(async ()=>{
-    await _database.default.close(); // Close the connection after tests
+    await _database.sequelize.close(); // Close the connection after tests
 });

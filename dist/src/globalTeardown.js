@@ -9,12 +9,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _index = require("./index");
-const _database = /*#__PURE__*/ _interop_require_default(require("./config/database"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+const _database = require("./config/database");
 async function globalTeardown() {
     // Close the server if it has a close method
     if (_index.server && typeof _index.server.close === 'function') {
@@ -22,8 +17,8 @@ async function globalTeardown() {
         console.log('Server closed.');
     }
     // Disconnect Sequelize connection
-    if (_database.default && _database.default.close) {
-        await _database.default.close(); // Close the database connection
+    if (_database.sequelize && _database.sequelize.close) {
+        await _database.sequelize.close(); // Close the database connection
         console.log('Sequelize connection closed.');
     }
 }
