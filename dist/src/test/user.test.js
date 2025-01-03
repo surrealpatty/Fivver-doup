@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+require("reflect-metadata");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
