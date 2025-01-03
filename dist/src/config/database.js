@@ -15,64 +15,26 @@ const _user = require("../models/user");
 const _services = require("../models/services");
 const _order = require("../models/order");
 const _review = require("../models/review");
-const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+const _config = /*#__PURE__*/ _interop_require_default(require("../config/config"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
-// Load environment variables from .env file
-_dotenv.config();
 // Initialize Sequelize instance with necessary configurations
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
-    host: process.env.DB_HOST || 'localhost',
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fivver_doup',
+    host: _config.default.DB_HOST,
+    username: _config.default.DB_USER,
+    password: _config.default.DB_PASSWORD,
+    database: _config.default.DB_NAME,
     models: [
         _user.User,
         _services.Service,
         _order.Order,
         _review.Review
     ],
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    logging: _config.default.NODE_ENV === 'development' ? console.log : false,
     define: {
         freezeTableName: true
     },
@@ -97,7 +59,7 @@ sequelize.authenticate().then(()=>{
     console.error('Unable to connect to the database:', error);
 });
 // Sync database schema in non-production environments
-if (process.env.NODE_ENV !== 'production') {
+if (_config.default.NODE_ENV !== 'production') {
     sequelize.sync({
         alter: true
     }) // Adjust tables to match models (use cautiously)

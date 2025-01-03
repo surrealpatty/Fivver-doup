@@ -6,7 +6,7 @@ import { User } from '../models/user'; // Correct import path for User model
 import { Service } from '../models/services'; // Correct import path for Service model
 import { Order } from '../models/order'; // Correct import path for Order model
 import { Review } from '../models/review'; // Correct import path for Review model
-import config from '../config/config'; // Import configuration
+import config from './config'; // Correct import path for configuration
 
 // Initialize Sequelize instance with necessary configurations
 const sequelize = new Sequelize({
@@ -27,7 +27,6 @@ const sequelize = new Sequelize({
     idle: 10000, // Maximum time (ms) a connection can remain idle
   },
   dialectOptions: {
-    // SSL configuration, enable if needed
     ssl: process.env.DB_USE_SSL === 'true' ? { 
       require: true, 
       rejectUnauthorized: false 
@@ -36,26 +35,30 @@ const sequelize = new Sequelize({
 });
 
 // Test the database connection
-sequelize
-  .authenticate()
-  .then(() => {
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
     console.log('Database connection established successfully.');
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('Unable to connect to the database:', error);
-  });
+  }
+};
 
 // Sync database schema in non-production environments
-if (config.NODE_ENV !== 'production') {
-  sequelize
-    .sync({ alter: true }) // Adjust tables to match models (use cautiously)
-    .then(() => {
+const syncDatabase = async () => {
+  if (config.NODE_ENV !== 'production') {
+    try {
+      await sequelize.sync({ alter: true }); // Adjust tables to match models (use cautiously)
       console.log('Database synchronized successfully.');
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error synchronizing the database:', error);
-    });
-}
+    }
+  }
+};
+
+// Execute database connection and sync logic
+testConnection();
+syncDatabase();
 
 // Export the Sequelize instance
 export { sequelize };

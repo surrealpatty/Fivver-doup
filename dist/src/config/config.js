@@ -1,20 +1,13 @@
+// config/config.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    // Export the configuration as the default export
-    default: function() {
+Object.defineProperty(exports, // Export the appropriate configuration based on NODE_ENV
+"default", {
+    enumerable: true,
+    get: function() {
         return _default;
-    },
-    sequelizeConfig: function() {
-        return sequelizeConfig;
     }
 });
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
@@ -32,31 +25,37 @@ if (isNaN(parsedDBPort)) {
     console.error('DB_PORT must be a valid number.');
     process.exit(1);
 }
-// Configuration object
+// Configuration object for different environments
 const config = {
-    DB_HOST,
-    DB_USER,
-    DB_PASSWORD,
-    DB_NAME,
-    DB_PORT: parsedDBPort,
-    NODE_ENV,
-    JWT_SECRET,
-    JWT_EXPIRATION
-};
-const _default = config;
-const sequelizeConfig = {
-    dialect: 'mysql',
-    host: config.DB_HOST,
-    username: config.DB_USER,
-    password: config.DB_PASSWORD,
-    database: config.DB_NAME,
-    port: config.DB_PORT,
-    dialectOptions: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci'
+    development: {
+        DB_HOST,
+        DB_USER,
+        DB_PASSWORD,
+        DB_NAME,
+        DB_PORT: parsedDBPort,
+        NODE_ENV,
+        JWT_SECRET,
+        JWT_EXPIRATION
     },
-    define: {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_general_ci'
+    test: {
+        DB_HOST: process.env.TEST_DB_HOST || 'localhost',
+        DB_USER: process.env.TEST_DB_USER || 'test_user',
+        DB_PASSWORD: process.env.TEST_DB_PASSWORD || 'test_password',
+        DB_NAME: process.env.TEST_DB_NAME || 'fivver_doup_test',
+        DB_PORT: parsedDBPort,
+        NODE_ENV,
+        JWT_SECRET,
+        JWT_EXPIRATION
+    },
+    production: {
+        DB_HOST,
+        DB_USER,
+        DB_PASSWORD,
+        DB_NAME,
+        DB_PORT: parsedDBPort,
+        NODE_ENV,
+        JWT_SECRET,
+        JWT_EXPIRATION
     }
 };
+const _default = config[NODE_ENV];

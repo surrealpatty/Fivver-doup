@@ -3,6 +3,7 @@
 import http from 'http';
 import { app } from '../index'; // Adjust the path to your app entry point
 import request from 'supertest';
+import { sequelize } from '../config/database'; // Import sequelize instance to close connection
 
 describe('Server Tests', () => {
   let server: http.Server;
@@ -19,7 +20,8 @@ describe('Server Tests', () => {
   });
 
   afterAll(async () => {
-    // Close the server after tests
+    // Close the Sequelize connection and the server after all tests
+    await sequelize.close(); // Close the Sequelize connection after tests
     await new Promise<void>((resolve) => {
       server.close(() => {
         resolve();
