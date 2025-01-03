@@ -60,5 +60,3 @@ router.post('/register', _validateRegistration.validateRegistration, async (req,
     }
 });
 const _default = router;
-
-//# sourceMappingURL=user.js.map

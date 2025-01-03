@@ -8,5 +8,3 @@ Object.defineProperty(exports, "app", {
         return app;
     }
 });
-
-//# sourceMappingURL=index.d.js.map

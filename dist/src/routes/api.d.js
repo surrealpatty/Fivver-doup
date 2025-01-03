@@ -18,5 +18,3 @@ _export(exports, {
 });
 const _authMiddleware = require("../middlewares/authMiddleware");
 const _default = router;
-
-//# sourceMappingURL=api.d.js.map

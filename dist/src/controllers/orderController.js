@@ -29,7 +29,12 @@ _export(exports, {
     }
 });
 const _order = require("../models/order");
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const createOrder = async (req, res)=>{
     try {
         const { userId, serviceId, orderDetails, status } = req.body;
@@ -115,7 +120,7 @@ const deleteOrder = async (req, res)=>{
 };
 const testConnection = async ()=>{
     try {
-        await _database.sequelize.authenticate(); // Test the connection
+        await _database.default.authenticate(); // Test the connection
         console.log('Database connection successful');
         return true; // Return true if connection is successful
     } catch (error) {
@@ -128,5 +133,3 @@ const testConnection = async ()=>{
         return false; // Return false if there is an error
     }
 };
-
-//# sourceMappingURL=orderController.js.map

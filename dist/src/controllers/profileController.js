@@ -106,5 +106,3 @@ const updateProfile = async (req, res)=>{
         });
     }
 };
-
-//# sourceMappingURL=profileController.js.map

@@ -8,5 +8,3 @@ Object.defineProperty(exports, "sequelize", {
         return sequelize;
     }
 });
-
-//# sourceMappingURL=database.d.js.map

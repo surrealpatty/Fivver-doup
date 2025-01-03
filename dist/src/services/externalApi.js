@@ -31,5 +31,3 @@ async function fetchData(url) {
     }
 }
  // Export the fetchData function for use elsewhere
-
-//# sourceMappingURL=externalApi.js.map

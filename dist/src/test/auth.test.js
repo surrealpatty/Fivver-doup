@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _index = require("../index");
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
 function _interop_require_default(obj) {
@@ -16,12 +16,12 @@ function _interop_require_default(obj) {
 // Ensure the models are added and synced before running the tests
 beforeAll(async ()=>{
     // Add models to Sequelize instance
-    _database.sequelize.addModels([
+    _database.default.addModels([
         _user.default,
         _services.Service
     ]);
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-    await _database.sequelize.sync({
+    await _database.default.sync({
         force: false
     });
 });
@@ -52,5 +52,3 @@ describe('Authentication Tests', ()=>{
         expect(decoded).toHaveProperty('email');
     });
 });
-
-//# sourceMappingURL=auth.test.js.map

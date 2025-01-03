@@ -63,5 +63,3 @@ router.get('/:serviceId', _authenticateToken.authenticateToken, async (req, res,
     }
 });
 const _default = router;
-
-//# sourceMappingURL=review.js.map

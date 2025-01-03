@@ -2,18 +2,23 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _database = require("./config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("./config/database"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 // Function to reset the database
 const resetDatabase = async ()=>{
     try {
         console.log('Starting database reset process...');
         // Step 1: Drop all tables in the database
         console.log('Dropping all tables...');
-        await _database.sequelize.drop(); // Drops all tables
+        await _database.default.drop(); // Drops all tables
         console.log('Tables dropped successfully.');
         // Step 2: Re-sync models to the database (recreates tables)
         console.log('Re-syncing database...');
-        await _database.sequelize.sync({
+        await _database.default.sync({
             force: true
         }); // 'force: true' drops and recreates tables
         console.log('Database re-synced successfully!');
@@ -28,5 +33,3 @@ const resetDatabase = async ()=>{
 };
 // Call the function to reset the database
 resetDatabase();
-
-//# sourceMappingURL=resetDatabase.js.map

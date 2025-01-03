@@ -9,5 +9,3 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _default = config;
-
-//# sourceMappingURL=config.d.js.map

@@ -92,5 +92,3 @@ const deleteReview = async (req, res)=>{
         message: 'Review deleted successfully'
     });
 };
-
-//# sourceMappingURL=reviewController.js.map

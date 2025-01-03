@@ -27,5 +27,3 @@ describe('Math Functions', ()=>{
         expect(user).toBeUndefined(); // Expect that no user is found
     });
 });
-
-//# sourceMappingURL=math.test.js.map

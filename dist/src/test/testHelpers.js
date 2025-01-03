@@ -28,5 +28,3 @@ const createMockUserToken = (userId)=>{
     });
     return token;
 };
-
-//# sourceMappingURL=testHelpers.js.map

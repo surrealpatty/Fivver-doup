@@ -25,5 +25,3 @@ const testUpdateUser = async (userId)=>{
 };
 // Replace 1 with an actual user ID from your database
 testUpdateUser(1);
-
-//# sourceMappingURL=testUserUpdate.js.map

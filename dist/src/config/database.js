@@ -2,18 +2,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    default: function() {
+Object.defineProperty(exports, // Export sequelize as a default export
+"default", {
+    enumerable: true,
+    get: function() {
         return _default;
-    },
-    sequelize: function() {
-        return sequelize;
     }
 });
 require("reflect-metadata");
@@ -66,6 +59,7 @@ function _interop_require_wildcard(obj, nodeInterop) {
 }
 // Load environment variables from .env file (ensure .env file exists in the root directory)
 _dotenv.config();
+// Initialize Sequelize instance using environment variables
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST || 'localhost',
@@ -89,5 +83,3 @@ sequelize.sync({
     alter: true
 }).catch((error)=>console.error('Error syncing the database:', error));
 const _default = sequelize;
-
-//# sourceMappingURL=database.js.map

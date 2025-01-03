@@ -29,5 +29,3 @@ const tierMiddleware = (requiredTier)=>{
         next();
     };
 };
-
-//# sourceMappingURL=tierMiddleware.js.map

@@ -9,5 +9,3 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _default = router;
-
-//# sourceMappingURL=orderRoutes.d.js.map

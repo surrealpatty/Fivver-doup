@@ -10,5 +10,3 @@ Object.defineProperty(exports, "default", {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _default = Service;
-
-//# sourceMappingURL=services.d.js.map

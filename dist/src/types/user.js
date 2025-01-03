@@ -12,5 +12,3 @@ Object.defineProperty(exports, "isUser", {
 function isUser(req) {
     return req.user !== undefined; // Explicitly checks if user is set in the request
 }
-
-//# sourceMappingURL=user.js.map

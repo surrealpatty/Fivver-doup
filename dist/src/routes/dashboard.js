@@ -19,5 +19,3 @@ const dashboardHandler = (req, res)=>{
     });
 };
 const _default = dashboardHandler;
-
-//# sourceMappingURL=dashboard.js.map

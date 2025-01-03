@@ -33,5 +33,3 @@ router.get('/test-email', async (req, res, next)=>{
     }
 });
 const _default = router;
-
-//# sourceMappingURL=testEmailRoute.js.map

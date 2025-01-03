@@ -40,5 +40,3 @@ const authenticateToken = (req, res, next)=>{
     });
 };
 const _default = authenticateToken;
-
-//# sourceMappingURL=authMiddleware.js.map

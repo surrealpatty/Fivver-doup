@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _services = require("../models/services");
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
 const _uuid = require("uuid");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -15,7 +15,7 @@ describe('Service Model Tests', ()=>{
     let user; // Declare user at the top to use across tests
     beforeAll(async ()=>{
         // Sync the database (ensure it's ready before tests)
-        await _database.sequelize.sync({
+        await _database.default.sync({
             force: true
         });
         // Create a user before tests
@@ -31,7 +31,7 @@ describe('Service Model Tests', ()=>{
     });
     afterAll(async ()=>{
         // Close the database connection after tests
-        await _database.sequelize.close();
+        await _database.default.close();
     });
     it('should create a new service', async ()=>{
         const serviceData = {
@@ -48,5 +48,3 @@ describe('Service Model Tests', ()=>{
         expect(service.price).toBe(10);
     });
 });
-
-//# sourceMappingURL=testModels.js.map

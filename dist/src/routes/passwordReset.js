@@ -108,5 +108,3 @@ router.post('/reset-password/:token', async (req, res)=>{
     }
 });
 const _default = router;
-
-//# sourceMappingURL=passwordReset.js.map

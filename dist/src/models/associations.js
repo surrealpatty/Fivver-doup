@@ -23,7 +23,7 @@ _export(exports, {
         return _user.default;
     }
 });
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
 const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 const _services = require("./services");
 const _order = /*#__PURE__*/ _interop_require_default(require("./order"));
@@ -34,7 +34,7 @@ function _interop_require_default(obj) {
     };
 }
 // Register models with Sequelize
-_database.sequelize.addModels([
+_database.default.addModels([
     _user.default,
     _services.Service,
     _order.default,
@@ -71,7 +71,7 @@ _order.default.belongsTo(_services.Service, {
 // Optionally, you can sync models here if needed (but this should typically be done in a separate initialization file)
 (async ()=>{
     try {
-        await _database.sequelize.sync({
+        await _database.default.sync({
             force: false
         }); // Use { force: false } to avoid overwriting existing data
         console.log('Model associations are successfully set up.');
@@ -79,5 +79,3 @@ _order.default.belongsTo(_services.Service, {
         console.error('Error setting up model associations:', error);
     }
 })();
-
-//# sourceMappingURL=associations.js.map

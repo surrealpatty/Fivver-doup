@@ -60,5 +60,3 @@ const sequelizeConfig = {
         collate: 'utf8mb4_general_ci'
     }
 };
-
-//# sourceMappingURL=config.js.map

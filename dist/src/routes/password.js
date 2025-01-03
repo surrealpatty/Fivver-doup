@@ -21,5 +21,3 @@ const router = _express.default.Router();
 // Route for password reset
 router.post('/reset', _validatePasswordReset.validatePasswordReset, _passwordController.resetPassword);
 const _default = router;
-
-//# sourceMappingURL=password.js.map

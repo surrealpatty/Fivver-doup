@@ -32,5 +32,3 @@ _user.default.create({
 }).catch((error)=>{
     console.error('Error:', error);
 });
-
-//# sourceMappingURL=testData.js.map

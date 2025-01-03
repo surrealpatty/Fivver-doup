@@ -16,5 +16,3 @@ router.get('/', (req, res)=>{
     res.send('Welcome to the API');
 });
 const _default = router;
-
-//# sourceMappingURL=index.js.map

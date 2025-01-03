@@ -31,5 +31,3 @@ describe('Server Tests', ()=>{
         });
     });
 });
-
-//# sourceMappingURL=server.test.js.map

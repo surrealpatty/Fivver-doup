@@ -10,5 +10,3 @@ Object.defineProperty(exports, "default", {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _default = Order;
-
-//# sourceMappingURL=order.d.js.map

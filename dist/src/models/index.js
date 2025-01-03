@@ -33,5 +33,3 @@ function _interop_require_default(obj) {
     };
 }
  // Exporting models
-
-//# sourceMappingURL=index.js.map

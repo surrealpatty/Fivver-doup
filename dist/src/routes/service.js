@@ -31,5 +31,3 @@ router.get('/premium', _authenticateToken.authenticateToken, checkRole('Paid'), 
     });
 });
 const _default = router;
-
-//# sourceMappingURL=service.js.map

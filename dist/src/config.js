@@ -11,5 +11,3 @@ Object.defineProperty(exports, "jwtSecret", {
     }
 });
 const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
-
-//# sourceMappingURL=config.js.map

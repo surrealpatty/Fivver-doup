@@ -20,5 +20,3 @@ router.get('/some-route', (req, res)=>{
     res.status(200).send('Success');
 });
 const _default = router;
-
-//# sourceMappingURL=server.js.map

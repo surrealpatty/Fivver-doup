@@ -12,5 +12,3 @@ Object.defineProperty(exports, // BaseModel class definition
 const _types = require("sequelize/types");
 class BaseModel extends _types.Model {
 }
-
-//# sourceMappingURL=BaseModel.js.map

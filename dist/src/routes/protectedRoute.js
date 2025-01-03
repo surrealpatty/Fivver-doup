@@ -40,5 +40,3 @@ router.get('/protected', _authenticateToken.authenticateToken, async (req, res, 
     }
 });
 const _default = router;
-
-//# sourceMappingURL=protectedRoute.js.map

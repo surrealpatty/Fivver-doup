@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _order = require("../models/order");
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
 const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
@@ -38,9 +38,9 @@ jest.mock('../config/database', ()=>({
 beforeAll(async ()=>{
     try {
         // Mock the database sync before running tests
-        await _database.sequelize.authenticate(); // Authenticate connection before running tests
+        await _database.default.authenticate(); // Authenticate connection before running tests
         console.log('Database connected successfully!');
-        await _database.sequelize.sync({
+        await _database.default.sync({
             force: true
         }); // Mock the sync method to avoid real database interaction
     } catch (error) {
@@ -52,7 +52,7 @@ afterEach(()=>{
     jest.clearAllMocks(); // Clear mocks to ensure clean state between tests
 });
 afterAll(async ()=>{
-    await _database.sequelize.close(); // Close the database connection after all tests
+    await _database.default.close(); // Close the database connection after all tests
 });
 describe('Order Controller Tests', ()=>{
     it('should create a new order', async ()=>{
@@ -152,5 +152,3 @@ describe('Order Controller Tests', ()=>{
         expect(response.body.message).toBe('Order details are required');
     });
 });
-
-//# sourceMappingURL=order.test.js.map

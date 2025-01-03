@@ -52,5 +52,3 @@ describe('Basic Test Suite', ()=>{
         expect(response.text).toBe('Fiverr backend is running'); // Expect the correct response message
     });
 });
-
-//# sourceMappingURL=test.js.map

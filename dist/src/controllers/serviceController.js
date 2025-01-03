@@ -23,5 +23,3 @@ class ServiceController {
         }
     }
 }
-
-//# sourceMappingURL=serviceController.js.map

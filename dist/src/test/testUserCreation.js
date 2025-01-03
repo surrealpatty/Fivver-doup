@@ -25,5 +25,3 @@ describe('User creation test', ()=>{
         expect(newUser.email).toBe('testuser@example.com');
     });
 });
-
-//# sourceMappingURL=testUserCreation.js.map

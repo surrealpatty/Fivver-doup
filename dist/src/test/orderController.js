@@ -106,5 +106,3 @@ const getUserById = async (req, res)=>{
         });
     }
 };
-
-//# sourceMappingURL=orderController.js.map

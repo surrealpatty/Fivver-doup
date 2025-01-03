@@ -46,5 +46,3 @@ const authenticateToken = (req, res, next)=>{
         });
     }
 };
-
-//# sourceMappingURL=api.js.map

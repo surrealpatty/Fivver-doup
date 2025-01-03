@@ -21,5 +21,3 @@ const mockUsers = [
         email: 'user2@example.com'
     }
 ];
-
-//# sourceMappingURL=mockData.js.map

@@ -10,5 +10,3 @@ module.exports = {
     // Your rollback logic here
     }
 };
-
-//# sourceMappingURL=migrations.js.map

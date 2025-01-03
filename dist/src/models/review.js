@@ -41,5 +41,3 @@ Review = _ts_decorate([
         tableName: 'reviews'
     })
 ], Review);
-
-//# sourceMappingURL=review.js.map

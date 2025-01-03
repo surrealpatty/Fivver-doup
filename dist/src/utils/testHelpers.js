@@ -25,5 +25,3 @@ const createMockUserToken = (user)=>{
     } // Token expiration time
     );
 };
-
-//# sourceMappingURL=testHelpers.js.map

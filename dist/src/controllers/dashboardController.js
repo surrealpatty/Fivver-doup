@@ -43,5 +43,3 @@ const getDashboardData = async (req, res)=>{
         });
     }
 };
-
-//# sourceMappingURL=dashboardController.js.map

@@ -14,5 +14,3 @@ const createOrderHandler = async (req, res, next)=>{
         orderCreated: true
     });
 };
-
-//# sourceMappingURL=orderRoutes.js.map

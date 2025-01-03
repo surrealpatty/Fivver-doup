@@ -9,7 +9,12 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _sequelize = require("sequelize");
-const _database = require("../config/database");
+const _database = /*#__PURE__*/ _interop_require_default(require("../config/database"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 class Service extends _sequelize.Model {
     id;
     userId;
@@ -44,9 +49,7 @@ Service.init({
         type: _sequelize.DataTypes.STRING
     }
 }, {
-    sequelize: _database.sequelize,
+    sequelize: _database.default,
     modelName: 'Service'
 });
 const _default = Service;
-
-//# sourceMappingURL=userServiceTest.js.map

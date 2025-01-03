@@ -44,5 +44,3 @@ router.get('/profile', _authenticateToken.authenticateToken, async (req, res, ne
     }
 });
 const _default = router;
-
-//# sourceMappingURL=profile.js.map

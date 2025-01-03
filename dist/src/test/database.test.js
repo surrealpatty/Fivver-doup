@@ -40,5 +40,3 @@ describe('Role-based Access for Premium Service', ()=>{
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
 }); //# sourceMappingURL=service.test.js.map
-
-//# sourceMappingURL=database.test.js.map

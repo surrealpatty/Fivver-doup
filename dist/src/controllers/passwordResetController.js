@@ -87,5 +87,3 @@ const resetPassword = async (req, res)=>{
         });
     }
 };
-
-//# sourceMappingURL=passwordResetController.js.map

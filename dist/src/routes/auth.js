@@ -74,5 +74,3 @@ router.post('/signup', async (req, res)=>{
     }
 });
 const _default = router;
-
-//# sourceMappingURL=auth.js.map
