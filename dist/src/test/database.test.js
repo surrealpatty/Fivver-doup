@@ -15,7 +15,7 @@ const freeToken = 'your-valid-free-user-token'; // Replace with actual free user
 describe('Role-based Access for Premium Service', ()=>{
     // Test for allowing paid users to access the premium service
     it('should allow paid users to access premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Check if this is the correct route
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
         .set('Authorization', `Bearer ${paidToken}`); // Add the paid token to the Authorization header
         console.log('Response for paid user:', response.status, response.body); // Debugging line
         // Assert the response status and body message
@@ -24,7 +24,7 @@ describe('Role-based Access for Premium Service', ()=>{
     });
     // Test for denying free users from accessing premium services
     it('should deny free users from accessing premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Check if this is the correct route
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
         .set('Authorization', `Bearer ${freeToken}`); // Add the free token to the Authorization header
         console.log('Response for free user:', response.status, response.body); // Debugging line
         // Assert the response status and body message
