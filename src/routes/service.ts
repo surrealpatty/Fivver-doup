@@ -1,12 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';  // Import required types
-import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token verification
-import { UserPayload } from '../types'; // Import UserPayload interface
+import express, { Request, Response } from 'express';  // Import required types
+import { authenticateToken } from '../middlewares/authenticateToken';  // Middleware for token verification
+import { UserPayload } from '../types';  // Import UserPayload interface
 
-const router = Router();
+const router = express.Router();
 
 // Example middleware to check user roles
 const checkRole = (role: 'Free' | 'Paid') => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: Function) => {
     const user = req.user as UserPayload;  // Type the user as UserPayload
     const userRole = user.role; // Now TypeScript knows that user has a 'role' property
 

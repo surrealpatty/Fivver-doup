@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import http from 'http';
 import sequelize from './config/database'; // Correct import for the Sequelize instance
 import userRoutes from './routes/user'; // Correct path for user routes
+import serviceRoutes from './routes/service'; // Import the service routes (including the premium-service route)
 
 // Initialize Express application
 const app: Application = express();
@@ -18,6 +19,9 @@ app.get('/', (req: Request, res: Response) => {
 
 // Mount user routes under '/api/users'
 app.use('/api/users', userRoutes);
+
+// Mount service routes under '/api' to ensure the '/premium-service' path is available
+app.use('/api', serviceRoutes); // Register the service routes here
 
 // Sync database and start server if not in test environment
 sequelize.sync().then(() => {
