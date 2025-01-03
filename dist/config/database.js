@@ -1,13 +1,14 @@
-import { Sequelize } from 'sequelize-typescript'; // Import sequelize-typescript
+// src/config/database.ts
+import 'reflect-metadata'; // Ensure reflect-metadata is imported at the top
+import { Sequelize } from 'sequelize-typescript'; // Import Sequelize
+import { User } from '../models/user'; // Correct import path for User model
+import { Service } from '../models/services'; // Correct import path for Service model
+import { Order } from '../models/order'; // Correct import path for Order model
+import { Review } from '../models/review'; // Correct import path for Review model
 import * as dotenv from 'dotenv'; // Load environment variables
-// Import models (adjust paths if needed)
-import { User } from '../models/user'; // Ensure correct import paths for models
-import { Service } from '../models/services';
-import { Order } from '../models/order';
-import { Review } from '../models/review';
 // Load environment variables from .env file
 dotenv.config();
-// Initialize Sequelize instance
+// Initialize Sequelize instance with necessary configurations
 const sequelize = new Sequelize({
     dialect: 'mysql', // Database dialect
     host: process.env.DB_HOST || 'localhost', // Default to 'localhost' if not set
@@ -26,7 +27,7 @@ const sequelize = new Sequelize({
         idle: 10000, // Maximum time (ms) a connection can remain idle
     },
 });
-// Test database connection
+// Test the database connection
 sequelize
     .authenticate()
     .then(() => {

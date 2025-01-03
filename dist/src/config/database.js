@@ -1,3 +1,4 @@
+// src/config/database.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8,12 +9,13 @@ Object.defineProperty(exports, "sequelize", {
         return sequelize;
     }
 });
+require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
-const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
 const _user = require("../models/user");
 const _services = require("../models/services");
 const _order = require("../models/order");
 const _review = require("../models/review");
+const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -57,7 +59,7 @@ function _interop_require_wildcard(obj, nodeInterop) {
 }
 // Load environment variables from .env file
 _dotenv.config();
-// Initialize Sequelize instance
+// Initialize Sequelize instance with necessary configurations
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST || 'localhost',
@@ -81,7 +83,7 @@ const sequelize = new _sequelizetypescript.Sequelize({
         idle: 10000
     }
 });
-// Test database connection
+// Test the database connection
 sequelize.authenticate().then(()=>{
     console.log('Database connection established successfully.');
 }).catch((error)=>{

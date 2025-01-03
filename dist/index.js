@@ -1,9 +1,20 @@
 import 'reflect-metadata'; // Ensure decorators work with Sequelize models
 import express from 'express';
 import http from 'http';
-import { sequelize } from './config/database'; // Correct import for Sequelize instance
+import { Sequelize } from 'sequelize-typescript'; // Import Sequelize
+import User from './models/user'; // Correct path to your User model
+import { Service } from './models/services'; // Correct path to Service model
 import userRoutes from './routes/user'; // Correct path for user routes
 import serviceRoutes from './routes/service'; // Correct path for service routes
+// Initialize Sequelize instance
+const sequelize = new Sequelize({
+    dialect: 'mysql',
+    host: process.env.DB_HOST || 'localhost',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fivver_doup',
+    models: [User, Service], // Include all models here
+});
 // Initialize Express application
 const app = express();
 const server = http.createServer(app);
