@@ -20,11 +20,20 @@ describe('Role-based Access Tests', ()=>{
             password: 'password',
             role: 'free'
         });
-        testUser = response.body;
+        // Store the id and token correctly from response.body
+        testUser = {
+            id: response.body.id,
+            token: response.body.token
+        };
+        // Ensure the response contains token and id
+        expect(testUser).toHaveProperty('id');
+        expect(testUser).toHaveProperty('token');
     });
     afterAll(async ()=>{
         // Clean up the database or reset state if necessary.
-        await (0, _supertest.default)(_index.app).delete(`/users/${testUser.body.id}`); // Example cleanup, adjust as needed
+        if (testUser && testUser.id) {
+            await (0, _supertest.default)(_index.app).delete(`/users/${testUser.id}`); // Example cleanup, adjust as needed
+        }
     });
     it('should run the test file successfully', ()=>{
         console.log('Test file is running successfully!');
@@ -39,7 +48,7 @@ describe('Role-based Access Tests', ()=>{
     // Test to check role-based access (for example, 'free' role user trying to access premium service)
     it('should deny access to premium service for free users', async ()=>{
         const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Assuming your endpoint for premium access
-        .set('Authorization', `Bearer ${testUser.body.token}`); // Add the token for the created test user
+        .set('Authorization', `Bearer ${testUser.token}`); // Add the token for the created test user
         expect(response.statusCode).toBe(403); // Expect a 403 Forbidden status
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
@@ -48,11 +57,14 @@ describe('Role-based Access Tests', ()=>{
         // Modify the user role to 'paid' and test again
         const paidUserResponse = await (0, _supertest.default)(_index.app).post('/update-role') // Assuming you have an endpoint for updating role
         .send({
-            userId: testUser.body.id,
+            userId: testUser.id,
             role: 'paid'
         });
+        // Ensure the response contains the updated token
+        const paidUserToken = paidUserResponse.body.token;
+        expect(paidUserResponse.body).toHaveProperty('token');
         const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Assuming your endpoint for premium access
-        .set('Authorization', `Bearer ${paidUserResponse.body.token}`); // Use updated role user token
+        .set('Authorization', `Bearer ${paidUserToken}`); // Use updated role user token
         expect(response.statusCode).toBe(200); // Expect a successful access
         expect(response.body.message).toBe('Premium service access granted.');
     });
