@@ -1,60 +1,51 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  // Specify recognized module file extensions
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'],
+  preset: 'ts-jest', // Use ts-jest preset for TypeScript testing
+  testEnvironment: 'node', // Set Node.js as the test environment
 
-  // Use ts-jest for TypeScript transformation and babel-jest for JavaScript
+  // Transform TypeScript files with ts-jest and JavaScript files with babel-jest
   transform: {
-    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest to handle TypeScript files
-    '^.+\\.jsx?$': 'babel-jest', // Use babel-jest to handle JavaScript files
+    '^.+\\.ts$': 'ts-jest', // Use ts-jest for .ts files
+    '^.+\\.js$': 'babel-jest', // Use babel-jest for .js files
   },
 
-  // Ignore transformations for node_modules except specific ESM packages
+  // Ignore transformations for node_modules except ESM-compatible packages
   transformIgnorePatterns: [
     '/node_modules/(?!specific-esm-module|another-esm-package)/',
   ],
 
-  // Set Node.js as the test environment
-  testEnvironment: 'node',
+  // Include setup files for environment configuration
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
-  // Specify a global teardown script (update path if necessary)
-  globalTeardown: '<rootDir>/src/globalTeardown.ts',
-
-  // Use ts-jest preset for advanced TypeScript support
-  preset: 'ts-jest',
-
-  // Include setup files if required, otherwise leave as an empty array
-  setupFiles: [],
-
-  // Include the setup file for additional environment configuration
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Path to the setup file
-
-  // Automatically clear mocks before each test
+  // Clear mocks before each test to ensure clean state
   clearMocks: true,
 
-  // Collect coverage data
+  // Enable coverage collection and specify the output directory
   collectCoverage: true,
   coverageDirectory: '<rootDir>/coverage',
-  coverageProvider: 'v8',
+  coverageProvider: 'v8', // Use the v8 coverage provider for better performance
 
-  // Configure ts-jest options for better performance
+  // Configure ts-jest options for isolated module testing
   globals: {
     'ts-jest': {
       isolatedModules: true,
     },
   },
 
-  // Map module aliases for TypeScript path mappings
+  // Resolve module paths for aliases
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Example alias mapping
+    '^@/(.*)$': '<rootDir>/src/$1', // Example alias for paths starting with @/
   },
 
-  // Watch for changes only in the specified directories
+  // Watch only relevant paths for changes
   watchPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist/',
   ],
+
+  // Recognize file extensions for modules
+  moduleFileExtensions: ['js', 'ts', 'json', 'node'],
 };
 
 export default config;
