@@ -1,3 +1,4 @@
+import 'reflect-metadata'; // Ensure decorators work with Sequelize models
 import request from 'supertest';
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation

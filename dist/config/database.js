@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'; // Import sequelize-typescript
 import * as dotenv from 'dotenv'; // Load environment variables
 // Import models (adjust paths if needed)
-import { User } from '../models/user';
+import { User } from '../models/user'; // Ensure correct import paths for models
 import { Service } from '../models/services';
 import { Order } from '../models/order';
 import { Review } from '../models/review';
@@ -14,7 +14,7 @@ const sequelize = new Sequelize({
     username: process.env.DB_USER || 'root', // Default to 'root' if not set
     password: process.env.DB_PASSWORD || '', // Default to an empty string if not set
     database: process.env.DB_NAME || 'fivver_doup', // Default to 'fivver_doup' if not set
-    models: [User, Service, Order, Review], // Register models
+    models: [User, Service, Order, Review], // Register all models here
     logging: process.env.NODE_ENV === 'development' ? console.log : false, // Enable logging in development mode
     define: {
         freezeTableName: true, // Prevent Sequelize from pluralizing table names
