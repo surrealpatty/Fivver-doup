@@ -6,8 +6,8 @@ const config: Config.InitialOptions = {
 
   // Use ts-jest for TypeScript transformation and babel-jest for JavaScript
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',  // Use ts-jest to handle TypeScript files
-    '^.+\\.jsx?$': 'babel-jest',  // Use babel-jest to handle JavaScript files
+    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest to handle TypeScript files
+    '^.+\\.jsx?$': 'babel-jest', // Use babel-jest to handle JavaScript files
   },
 
   // Ignore transformations for node_modules except specific ESM packages
@@ -26,6 +26,9 @@ const config: Config.InitialOptions = {
 
   // Include setup files if required, otherwise leave as an empty array
   setupFiles: [],
+
+  // Include the setup file for additional environment configuration
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Path to the setup file
 
   // Automatically clear mocks before each test
   clearMocks: true,

@@ -1,25 +1,36 @@
-// jest.setup.ts
+// jest.setup.js
 
-// Example: Import reflect-metadata if you're using TypeORM or any other libraries that rely on decorators.
+// Import reflect-metadata if you're using TypeORM or any other libraries that rely on decorators.
 import 'reflect-metadata';
 
-// You can include other global mocks or setups here if needed. For example:
-// Mock global functions, timers, or other test-specific initializations.
+// Import the Sequelize instance
+import sequelize from './src/config/database'; // Adjust the path as necessary
 
-beforeAll(() => {
-  // Global setup code can go here, e.g., initializing a database connection or setting up mocks.
-  console.log("Test environment initialized");
+// Global setup before all tests
+beforeAll(async () => {
+  // Initialize the database connection if needed
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection established for testing.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    throw error; // Fail tests if the database cannot connect
+  }
 });
 
-beforeEach(() => {
-  // Run some code before each test, like resetting mocks or clearing caches.
-});
-
+// Clean up states after each test
 afterEach(() => {
-  // Clean up or reset any states after each test runs.
+  // You can reset mocks, clear caches, or reset any shared state here if needed
+  jest.clearAllMocks();
 });
 
-afterAll(() => {
-  // Clean up global resources or close database connections after all tests have finished.
-  console.log("Test environment cleaned up");
+// Global teardown after all tests
+afterAll(async () => {
+  // Close the database connection after all tests are complete
+  try {
+    await sequelize.close();
+    console.log('Database connection closed after testing.');
+  } catch (error) {
+    console.error('Error while closing the database connection:', error);
+  }
 });
