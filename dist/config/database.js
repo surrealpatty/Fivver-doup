@@ -1,6 +1,5 @@
-// src/config/database.ts
 import 'reflect-metadata'; // Ensure reflect-metadata is imported at the top
-import { Sequelize } from 'sequelize-typescript'; // Import Sequelize
+import { Sequelize } from 'sequelize-typescript';
 import { User } from '../models/user'; // Correct import path for User model
 import { Service } from '../models/services'; // Correct import path for Service model
 import { Order } from '../models/order'; // Correct import path for Order model
@@ -10,9 +9,9 @@ import config from './config'; // Correct import path for configuration
 const sequelize = new Sequelize({
     dialect: 'mysql', // Database dialect
     host: config.DB_HOST, // Get the host from config
-    username: config.DB_USER, // Get the username from config
-    password: config.DB_PASSWORD, // Get the password from config
-    database: config.DB_NAME, // Get the database name from config
+    username: 'test_user', // Replace with the test user's username
+    password: 'password', // Replace with the test user's password
+    database: 'fivver_doup', // Database name
     models: [User, Service, Order, Review], // Register all models here
     logging: config.NODE_ENV === 'development' ? console.log : false, // Enable logging in development mode
     define: {
@@ -25,10 +24,9 @@ const sequelize = new Sequelize({
         idle: 10000, // Maximum time (ms) a connection can remain idle
     },
     dialectOptions: {
-        ssl: process.env.DB_USE_SSL === 'true' ? {
-            require: true,
-            rejectUnauthorized: false
-        } : undefined,
+        ssl: process.env.DB_USE_SSL === 'true'
+            ? { require: true, rejectUnauthorized: false }
+            : undefined,
     },
 });
 // Test the database connection

@@ -1,4 +1,3 @@
-// src/config/database.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -25,9 +24,9 @@ function _interop_require_default(obj) {
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: _config.default.DB_HOST,
-    username: _config.default.DB_USER,
-    password: _config.default.DB_PASSWORD,
-    database: _config.default.DB_NAME,
+    username: 'test_user',
+    password: 'password',
+    database: 'fivver_doup',
     models: [
         _user.User,
         _services.Service,

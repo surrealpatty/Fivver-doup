@@ -14,36 +14,41 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use environment variable or fallback to default key
+// Define the secret key for JWT
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 const authenticateToken = (req, res, next)=>{
-    const authorizationHeader = req.headers['authorization'];
+    // Extract the authorization header
+    const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
-        // If no token is provided, send an error and stop further processing
-        console.log('Authorization token is missing or invalid'); // Debugging log
-        return res.status(401).json({
-            message: 'Authorization token is missing or invalid'
-        });
-    }
-    // Extract token from "Bearer token" format
-    const token = authorizationHeader.split(' ')[1];
-    if (!token) {
-        // If no token after "Bearer", send an error and stop further processing
-        console.log('Authorization token is missing'); // Debugging log
+        // Log missing token for debugging purposes
+        console.log('Authorization token is missing');
         return res.status(401).json({
             message: 'Authorization token is missing'
         });
     }
+    // Parse the token from "Bearer <token>" format
+    const token = authorizationHeader.split(' ')[1];
+    if (!token) {
+        // Log missing token for debugging purposes
+        console.log('Token is missing after Bearer keyword');
+        return res.status(401).json({
+            message: 'Access token is missing'
+        });
+    }
     try {
-        // Decode the token and ensure it's a valid UserPayload type
+        // Verify and decode the token
         const decoded = _jsonwebtoken.default.verify(token, SECRET_KEY);
-        console.log('Decoded user:', decoded); // Debugging log
+        // Log the decoded token for debugging purposes
+        console.log('Decoded token:', decoded);
         // Attach the decoded user information to the request object
         req.user = decoded;
         // Proceed to the next middleware or route handler
         next();
     } catch (error) {
-        console.log('Token verification failed:', error); // Debugging log
-        return res.status(401).json({
+        // Log token verification failure for debugging purposes
+        console.log('Token verification failed:', error);
+        // Return a 403 status if the token is invalid or expired
+        return res.status(403).json({
             message: 'Invalid or expired token'
         });
     }
