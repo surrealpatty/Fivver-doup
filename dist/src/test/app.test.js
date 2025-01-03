@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 require("reflect-metadata");
 const _database = require("../config/database");
 const _user = require("../models/user");
-// Run migrations or sync models before tests to ensure database is set up correctly
+// Run migrations or sync models before tests to ensure the database is set up correctly
 beforeAll(async ()=>{
     // Sync the models with the database before running tests
     await _database.sequelize.sync({
@@ -14,6 +14,7 @@ beforeAll(async ()=>{
 });
 describe('User Creation Tests', ()=>{
     it('should create a user successfully', async ()=>{
+        // Create a new user
         const user = await _user.User.create({
             username: 'testuser',
             email: 'test@example.com',

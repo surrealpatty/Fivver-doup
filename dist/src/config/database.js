@@ -8,11 +8,12 @@ Object.defineProperty(exports, "sequelize", {
         return sequelize;
     }
 });
+require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _config = /*#__PURE__*/ _interop_require_default(require("./config"));
-const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
-const _order = /*#__PURE__*/ _interop_require_default(require("../models/order"));
+const _user = require("../models/user");
+const _services = require("../models/services");
+const _order = require("../models/order");
 const _review = require("../models/review");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -27,9 +28,9 @@ const sequelize = new _sequelizetypescript.Sequelize({
     password: _config.default.DB_PASSWORD,
     database: _config.default.DB_NAME,
     models: [
-        _user.default,
-        _services.default,
-        _order.default,
+        _user.User,
+        _services.Service,
+        _order.Order,
         _review.Review
     ],
     logging: _config.default.NODE_ENV === 'development' ? console.log : false,
@@ -50,10 +51,10 @@ const sequelize = new _sequelizetypescript.Sequelize({
     }
 });
 // Define associations AFTER models are added to Sequelize instance
-_services.default.belongsTo(_user.default, {
+_services.Service.belongsTo(_user.User, {
     foreignKey: 'userId'
 }); // Service belongs to User
-_user.default.hasMany(_services.default, {
+_user.User.hasMany(_services.Service, {
     foreignKey: 'userId'
 }); // User can have many Services
 // Test the database connection
@@ -69,6 +70,7 @@ const testConnection = async ()=>{
 const syncDatabase = async ()=>{
     if (_config.default.NODE_ENV !== 'production') {
         try {
+            // Use `sync` cautiously, can be changed to `force: true` for table re-creation
             await sequelize.sync({
                 alter: true
             }); // Adjust tables to match models (use cautiously)
