@@ -1,8 +1,9 @@
+import 'reflect-metadata';
 import { Sequelize } from 'sequelize-typescript';
 import config from './config'; // Import the configuration file
-import User from '../models/user';  // Import User model
-import Service from '../models/services';  // Import Service model
-import Order from '../models/order';  // Import Order model
+import { User } from '../models/user';  // Import User model
+import { Service } from '../models/services';  // Import Service model
+import { Order } from '../models/order';  // Import Order model
 import { Review } from '../models/review';  // Import Review model
 
 // Initialize Sequelize instance with the necessary configuration
@@ -48,7 +49,8 @@ const testConnection = async () => {
 const syncDatabase = async () => {
   if (config.NODE_ENV !== 'production') {
     try {
-      await sequelize.sync({ alter: true }); // Adjust tables to match models (use cautiously)
+      // Use `sync` cautiously, can be changed to `force: true` for table re-creation
+      await sequelize.sync({ alter: true });  // Adjust tables to match models (use cautiously)
       console.log('Database synchronized successfully.');
     } catch (error) {
       console.error('Error synchronizing the database:', error);

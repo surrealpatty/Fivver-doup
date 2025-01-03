@@ -3,7 +3,7 @@ import { sequelize } from '../config/database';  // Correct import of sequelize 
 import { User } from '../models/user';           // Correct import of the User model
 import { Service } from '../models/services';   // Correct import of the Service model (if you use it in tests)
 
-// Run migrations or sync models before tests to ensure database is set up correctly
+// Run migrations or sync models before tests to ensure the database is set up correctly
 beforeAll(async () => {
   // Sync the models with the database before running tests
   await sequelize.sync({ force: true });  // `force: true` will drop and re-create the tables for a clean slate
@@ -11,6 +11,7 @@ beforeAll(async () => {
 
 describe('User Creation Tests', () => {
   it('should create a user successfully', async () => {
+    // Create a new user
     const user = await User.create({
       username: 'testuser',
       email: 'test@example.com',
