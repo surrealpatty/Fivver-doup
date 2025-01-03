@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export sequelize as a default export
+Object.defineProperty(exports, // Export the sequelize instance
 "default", {
     enumerable: true,
     get: function() {
@@ -57,7 +57,7 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
     return newObj;
 }
-// Load environment variables from .env file (ensure .env file exists in the root directory)
+// Load environment variables from .env file
 _dotenv.config();
 // Initialize Sequelize instance using environment variables
 const sequelize = new _sequelizetypescript.Sequelize({
@@ -75,11 +75,29 @@ const sequelize = new _sequelizetypescript.Sequelize({
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
     define: {
         freezeTableName: true
+    },
+    pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
     }
 });
-// Sync the database to ensure all tables are created (optional based on your needs)
-// Use `{ alter: true }` to ensure the tables are altered to match the model structure
-sequelize.sync({
-    alter: true
-}).catch((error)=>console.error('Error syncing the database:', error));
+// Test the database connection
+sequelize.authenticate().then(()=>{
+    console.log('Database connection has been established successfully.');
+}).catch((error)=>{
+    console.error('Unable to connect to the database:', error);
+});
+// Sync the database (optional, use cautiously in production)
+if (process.env.NODE_ENV !== 'production') {
+    sequelize.sync({
+        alter: true
+    }) // Alter tables to match models in non-production environments
+    .then(()=>{
+        console.log('Database synchronized successfully.');
+    }).catch((error)=>{
+        console.error('Error syncing the database:', error);
+    });
+}
 const _default = sequelize;
