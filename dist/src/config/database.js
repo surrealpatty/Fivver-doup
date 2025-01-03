@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export the sequelize instance
+Object.defineProperty(exports, // Export the Sequelize instance
 "default", {
     enumerable: true,
     get: function() {
@@ -59,7 +59,7 @@ function _interop_require_wildcard(obj, nodeInterop) {
 }
 // Load environment variables from .env file
 _dotenv.config();
-// Initialize Sequelize instance using environment variables
+// Initialize Sequelize instance
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: process.env.DB_HOST || 'localhost',
@@ -83,21 +83,21 @@ const sequelize = new _sequelizetypescript.Sequelize({
         idle: 10000
     }
 });
-// Test the database connection
+// Test database connection
 sequelize.authenticate().then(()=>{
-    console.log('Database connection has been established successfully.');
+    console.log('Database connection established successfully.');
 }).catch((error)=>{
     console.error('Unable to connect to the database:', error);
 });
-// Sync the database (optional, use cautiously in production)
+// Sync database schema in non-production environments
 if (process.env.NODE_ENV !== 'production') {
     sequelize.sync({
         alter: true
-    }) // Alter tables to match models in non-production environments
+    }) // Adjust tables to match models (use cautiously)
     .then(()=>{
         console.log('Database synchronized successfully.');
     }).catch((error)=>{
-        console.error('Error syncing the database:', error);
+        console.error('Error synchronizing the database:', error);
     });
 }
 const _default = sequelize;
