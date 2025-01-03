@@ -11,7 +11,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "noEmitOnError": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,    // Enable experimental decorators
+    "emitDecoratorMetadata": true      // Emit metadata for decorators
   },
   "include": [
     "src/**/*.ts",

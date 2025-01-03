@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../index.ts';  // Include the .ts extension
+import { app } from '../index';  // Include the .ts extension
 
 
 // Example JWT tokens (use actual generated tokens for your tests)
