@@ -1,5 +1,5 @@
 // src/test/jest.setup.ts
-import sequelize from '../config/database';  // Correct way to import default export
+import { sequelize } from '../config/database';  // Correct import
 
 afterAll(async () => {
   // Close the database connection after all tests have completed

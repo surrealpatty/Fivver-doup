@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 dotenv.config();  // Load environment variables from .env file
-import sequelize from '../config/database';  // Correct way to import default export
+import { sequelize } from '../config/database';  // Correct import
 import User from '../models/user';  // Import the User model
 
 /**

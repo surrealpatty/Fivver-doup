@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../config/database';  // Correct way to import default export
+import { sequelize } from '../config/database';  // Correct import
 
 // Define the interface for the attributes used to create a Service (without the primary key)
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id'> {

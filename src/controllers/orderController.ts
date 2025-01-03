@@ -1,6 +1,7 @@
 import { Order } from '../models/order';  // Correct path for the Order model
 import { Request, Response } from 'express';
-import sequelize from '../config/database';  // Correct way to import default export
+import { sequelize } from '../config/database';  // Correct import
+
 import authenticateToken from '../middlewares/authMiddleware';  // Change to default import
 
 
