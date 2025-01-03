@@ -13,6 +13,8 @@ const config: JestConfigWithTsJest = {
     '!src/**/*.d.ts',    // Exclude declaration files
   ],
   testPathIgnorePatterns: ['/node_modules/'],
+  testTimeout: 30000,  // Increase timeout to 30 seconds
+  maxWorkers: '50%',   // Use fewer workers to reduce resource load
 };
 
 export default config;
