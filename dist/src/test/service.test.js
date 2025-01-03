@@ -9,24 +9,24 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-// Example JWT tokens (use actual generated tokens for your tests)
+// Example JWT tokens (replace with actual valid tokens for testing)
 const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
 const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
 describe('Role-based Access for Premium Service', ()=>{
     it('should allow paid users to access premium services', async ()=>{
-        // Make a request to the /premium-service endpoint
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
-        .set('Authorization', `Bearer ${paidToken}`); // Add the paid token in Authorization header
-        // Assert that the response status is 200 and the message is correct
-        expect(response.status).toBe(200);
+        // Make a request to the /premium-service endpoint as a paid user
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this matches the actual route
+        .set('Authorization', `Bearer ${paidToken}`); // Attach paid user's token
+        // Assert the response status and body
+        expect(response.status).toBe(200); // Status should be 200 for paid users
         expect(response.body.message).toBe('Premium service access granted.');
     });
     it('should deny free users from accessing premium services', async ()=>{
-        // Make a request to the /premium-service endpoint with a free token
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
-        .set('Authorization', `Bearer ${freeToken}`); // Add the free token in Authorization header
-        // Assert that the response status is 403 and the message is correct
-        expect(response.status).toBe(403);
+        // Make a request to the /premium-service endpoint as a free user
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this matches the actual route
+        .set('Authorization', `Bearer ${freeToken}`); // Attach free user's token
+        // Assert the response status and body
+        expect(response.status).toBe(403); // Status should be 403 for free users
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
 });

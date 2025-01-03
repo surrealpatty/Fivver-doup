@@ -44,8 +44,13 @@ const sequelize = new _sequelizetypescript.Sequelize({
         ssl: process.env.DB_USE_SSL === 'true' ? {
             require: true,
             rejectUnauthorized: false
-        } : undefined
+        } // Enable SSL if required
+         : undefined
     }
 });
-// Test database connection
-sequelize.authenticate().then(()=>console.log('Database connection established successfully.')).catch((err)=>console.error('Unable to connect to the database:', err));
+// Test the database connection
+sequelize.authenticate().then(()=>{
+    console.log('Database connection established successfully.');
+}).catch((error)=>{
+    console.error('Unable to connect to the database:', error);
+});
