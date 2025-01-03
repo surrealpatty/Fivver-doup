@@ -1,3 +1,5 @@
+// jest.setup.ts
+
 // Import reflect-metadata if you're using TypeORM or any other libraries that rely on decorators.
 import 'reflect-metadata';
 

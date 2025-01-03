@@ -29,6 +29,18 @@ const sequelize = new Sequelize({
     acquire: 30000, // Maximum time (ms) to wait for a connection
     idle: 10000, // Maximum time (ms) a connection can remain idle
   },
+  dialectOptions: {
+    // SSL configuration, enable if needed
+    ssl: process.env.DB_USE_SSL === 'true' ? { 
+      require: true, 
+      rejectUnauthorized: false 
+    } : undefined,
+    authSwitch: {
+      'auth_switch_request': () => {
+        // handle authentication switch if needed (MySQL 8.0+)
+      }
+    }
+  },
 });
 
 // Test the database connection
