@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 const _http = /*#__PURE__*/ _interop_require_default(require("http"));
 const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
+const _database = require("../config/database");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -23,7 +24,8 @@ describe('Server Tests', ()=>{
         expect(res.status).toBe(200);
     });
     afterAll(async ()=>{
-        // Close the server after tests
+        // Close the Sequelize connection and the server after all tests
+        await _database.sequelize.close(); // Close the Sequelize connection after tests
         await new Promise((resolve)=>{
             server.close(()=>{
                 resolve();

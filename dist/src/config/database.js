@@ -15,7 +15,7 @@ const _user = require("../models/user");
 const _services = require("../models/services");
 const _order = require("../models/order");
 const _review = require("../models/review");
-const _config = /*#__PURE__*/ _interop_require_default(require("../config/config"));
+const _config = /*#__PURE__*/ _interop_require_default(require("./config"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -45,7 +45,6 @@ const sequelize = new _sequelizetypescript.Sequelize({
         idle: 10000
     },
     dialectOptions: {
-        // SSL configuration, enable if needed
         ssl: process.env.DB_USE_SSL === 'true' ? {
             require: true,
             rejectUnauthorized: false
@@ -53,19 +52,27 @@ const sequelize = new _sequelizetypescript.Sequelize({
     }
 });
 // Test the database connection
-sequelize.authenticate().then(()=>{
-    console.log('Database connection established successfully.');
-}).catch((error)=>{
-    console.error('Unable to connect to the database:', error);
-});
+const testConnection = async ()=>{
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+};
 // Sync database schema in non-production environments
-if (_config.default.NODE_ENV !== 'production') {
-    sequelize.sync({
-        alter: true
-    }) // Adjust tables to match models (use cautiously)
-    .then(()=>{
-        console.log('Database synchronized successfully.');
-    }).catch((error)=>{
-        console.error('Error synchronizing the database:', error);
-    });
-}
+const syncDatabase = async ()=>{
+    if (_config.default.NODE_ENV !== 'production') {
+        try {
+            await sequelize.sync({
+                alter: true
+            }); // Adjust tables to match models (use cautiously)
+            console.log('Database synchronized successfully.');
+        } catch (error) {
+            console.error('Error synchronizing the database:', error);
+        }
+    }
+};
+// Execute database connection and sync logic
+testConnection();
+syncDatabase();
