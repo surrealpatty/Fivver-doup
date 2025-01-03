@@ -7,7 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
 import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { User } from './user'; // Correct import of User model with named import
@@ -62,8 +61,5 @@ Service = __decorate([
     Table({ tableName: 'services', timestamps: true })
 ], Service);
 export { Service };
-// Define the association between Service and User explicitly
-Service.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Service, { foreignKey: 'userId' }); // Define the reverse association (optional)
 // Export the Service model
 export default Service;

@@ -1,4 +1,3 @@
-// Ensure reflect-metadata is imported to enable decorators
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -79,11 +78,4 @@ Service = _ts_decorate([
         timestamps: true
     })
 ], Service);
-// Define the association between Service and User explicitly
-Service.belongsTo(_user.User, {
-    foreignKey: 'userId'
-});
-_user.User.hasMany(Service, {
-    foreignKey: 'userId'
-}); // Define the reverse association (optional)
 const _default = Service;

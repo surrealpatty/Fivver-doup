@@ -1,16 +1,33 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import User from '../models/user';  // Import User model
 import Service from '../models/services';  // Import Service model
 import Order from '../models/order';  // Import Order model (ensure this is correctly defined)
-import {Review} from '../models/review';  // Import Review model (ensure this is correctly defined)
+import { Review } from '../models/review';  // Import Review model (ensure this is correctly defined)
 
-// Create a Sequelize instance and pass models
-const sequelize = new Sequelize({
-  dialect: 'mysql',  // MySQL dialect
-  host: 'localhost', // Your DB host
+interface DatabaseConfig extends SequelizeOptions {  // Extend SequelizeOptions directly
+  models: any[];
+  logging: boolean | ((sql: string, timing?: number) => void);  // Correct logging type
+  define: {
+    freezeTableName: boolean;
+  };
+  pool: {
+    max: number;
+    min: number;
+    acquire: number;
+    idle: number;
+  };
+  dialectOptions?: {
+    ssl?: object;
+  };
+}
+
+// Define the configuration object for Sequelize
+const config: DatabaseConfig = {
   username: 'root',  // Your DB username
-  password: 'password',  // Your DB password
+  password: 'password',  // Your DB password (ensure it matches the password in MySQL)
   database: 'fivver_doup',  // Your DB name
+  host: 'localhost',  // Your DB host
+  dialect: 'mysql',  // MySQL dialect as a string
   models: [User, Service, Order, Review],  // Register models
   logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Log SQL queries in development
   define: {
@@ -27,7 +44,10 @@ const sequelize = new Sequelize({
       ? { require: true, rejectUnauthorized: false }
       : undefined,
   },
-});
+};
+
+// Initialize Sequelize with the configuration
+const sequelize = new Sequelize(config);
 
 // Export the sequelize instance for use elsewhere in the app
 export { sequelize };
