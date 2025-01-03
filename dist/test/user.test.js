@@ -2,8 +2,7 @@ import 'reflect-metadata'; // Add this line at the very top to ensure Sequelize 
 import request from 'supertest';
 import { User } from '../models/user'; // Corrected relative import
 import jwt from 'jsonwebtoken'; // For mocking token validation
-import { app } from '../index.js'; // Corrected import with the .js extension
-
+import { app } from '../index'; // Corrected import to use named import
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
     User: {
@@ -14,13 +13,11 @@ jest.mock('../models/user', () => ({
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
-
 describe('User Tests', () => {
     // Apply retry logic to all tests in this suite
     beforeEach(() => {
         jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
     });
-
     describe('POST /api/users/register', () => {
         it('should register a user successfully', async () => {
             // Mock resolved value for User.create
@@ -64,7 +61,6 @@ describe('User Tests', () => {
             expect(response.body).toHaveProperty('error', 'Email already exists');
         });
     });
-
     describe('Role-based Access Control', () => {
         beforeEach(() => {
             // Mock JWT.verify to simulate token validation
