@@ -4,7 +4,8 @@ const config: JestConfigWithTsJest = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
-    '^.+\\.ts$': 'ts-jest',  // Add this to transform TypeScript files
+    '^.+\\.ts$': 'ts-jest',           // Transform TypeScript files with ts-jest
+    '^.+\\.js$': 'babel-jest',         // Transform JavaScript files with babel-jest
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
   coverageDirectory: 'coverage',
@@ -13,8 +14,9 @@ const config: JestConfigWithTsJest = {
     '!src/**/*.d.ts',    // Exclude declaration files
   ],
   testPathIgnorePatterns: ['/node_modules/'],
-  testTimeout: 30000,  // Increase timeout to 30 seconds
-  maxWorkers: '50%',   // Use fewer workers to reduce resource load
+  testTimeout: 30000,      // Increase timeout to 30 seconds for tests
+  maxWorkers: '50%',       // Use fewer workers to reduce resource load
+  transformIgnorePatterns: ['node_modules/(?!your-esm-package/)'],  // Ensure ESM packages are transformed
 };
 
 export default config;
