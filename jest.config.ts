@@ -17,6 +17,7 @@ const config: JestConfigWithTsJest = {
   testTimeout: 30000,      // Increase timeout to 30 seconds for tests
   maxWorkers: '50%',       // Use fewer workers to reduce resource load
   transformIgnorePatterns: ['node_modules/(?!your-esm-package/)'],  // Ensure ESM packages are transformed
+  moduleDirectories: ['node_modules', 'dist/src'], // Ensure Jest can resolve files from the dist directory
 };
 
 export default config;
