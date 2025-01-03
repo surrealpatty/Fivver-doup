@@ -18,13 +18,13 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-// Create a Sequelize instance and pass models
-const sequelize = new _sequelizetypescript.Sequelize({
-    dialect: 'mysql',
-    host: 'localhost',
+// Define the configuration object for Sequelize
+const config = {
     username: 'root',
     password: 'password',
     database: 'fivver_doup',
+    host: 'localhost',
+    dialect: 'mysql',
     models: [
         _user.default,
         _services.default,
@@ -47,4 +47,6 @@ const sequelize = new _sequelizetypescript.Sequelize({
             rejectUnauthorized: false
         } : undefined
     }
-});
+};
+// Initialize Sequelize with the configuration
+const sequelize = new _sequelizetypescript.Sequelize(config);
