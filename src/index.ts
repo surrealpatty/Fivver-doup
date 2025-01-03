@@ -1,46 +1,46 @@
-import 'reflect-metadata';  // Ensure decorators work with Sequelize models
+import 'reflect-metadata'; // Required for Sequelize decorators
 import express, { Application, Request, Response } from 'express';
 import http from 'http';
-import { Sequelize } from 'sequelize-typescript';  // Import Sequelize
-import User from './models/user';  // Correct path to your User model
-import { Service } from './models/services';  // Correct path to Service model
-import userRoutes from './routes/user';  // Correct path for user routes
-import serviceRoutes from './routes/service';  // Correct path for service routes
+import { Sequelize } from 'sequelize-typescript'; // Sequelize ORM with TypeScript support
+import User from './models/user'; // Path to the User model
+import { Service } from './models/services'; // Path to the Service model
+import userRoutes from './routes/user'; // User-related routes
+import serviceRoutes from './routes/service'; // Service-related routes
 
-// Initialize Sequelize instance
+// Initialize Sequelize instance with database connection
 const sequelize = new Sequelize({
   dialect: 'mysql',
   host: process.env.DB_HOST || 'localhost',
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'fivver_doup',
-  models: [User, Service],  // Include all models here
+  models: [User, Service], // Load models
 });
 
 // Initialize Express application
 const app: Application = express();
 const server = http.createServer(app);
 
-// Middleware to parse JSON
+// Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// Root endpoint to avoid 404 errors in tests and confirm server is running
+// Root route to confirm server is running
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).send('Fiverr backend is running');  // Respond with 200 OK
+  res.status(200).send('Fiverr backend is running');
 });
 
-// Define a specific /some-route endpoint to avoid 404 errors in tests
+// Additional endpoint for testing or specific functionality
 app.get('/some-route', (req: Request, res: Response) => {
-  res.status(200).send('This is the some-route endpoint');  // Respond with a 200 OK
+  res.status(200).send('This is the some-route endpoint');
 });
 
-// Mount user routes under '/api/users'
+// Mount user routes at /api/users
 app.use('/api/users', userRoutes);
 
-// Mount service routes under '/api' to ensure '/premium-service' path is available
-app.use('/api', serviceRoutes);  // Register all service-related routes here
+// Mount service routes at /api
+app.use('/api', serviceRoutes);
 
-// Sync database and start server if not in test environment
+// Sync the database and start the server if not in a test environment
 sequelize.sync().then(() => {
   if (process.env.NODE_ENV !== 'test') {
     const PORT = process.env.PORT || 3000;
@@ -50,5 +50,5 @@ sequelize.sync().then(() => {
   }
 });
 
-// Export app and server for use in tests or other files
+// Export the app and server for testing or further integration
 export { app, server };
