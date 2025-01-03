@@ -2,7 +2,7 @@ import "reflect-metadata"; // Add this line at the very top to ensure Sequelize 
 import request from "supertest";
 import { User } from "../models/user"; // Corrected relative import
 import jwt from "jsonwebtoken"; // For mocking token validation
-import { app } from "dist/index"; // Corrected import to use the transpiled file from dist folder
+const _index = require("../../dist/index.js"); // Corrected import to use the transpiled file from dist folder
 
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
@@ -36,7 +36,7 @@ describe('User Tests', () => {
             });
 
             // Send a POST request to register endpoint
-            const response = await request(app).post('/api/users/register').send({
+            const response = await request(_index.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123',
@@ -61,7 +61,7 @@ describe('User Tests', () => {
             // Mock rejected value for User.create
             (User.create as jest.Mock).mockRejectedValueOnce(new Error('Email already exists'));
 
-            const response = await request(app).post('/api/users/register').send({
+            const response = await request(_index.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123',
@@ -87,7 +87,7 @@ describe('User Tests', () => {
         });
 
         it('should allow access to paid users', async () => {
-            const response = await request(app)
+            const response = await request(_index.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer valid_paid_user_token');
             expect(response.status).toBe(200); // Correcting expected status
@@ -95,7 +95,7 @@ describe('User Tests', () => {
         });
 
         it('should deny access to free users for premium content', async () => {
-            const response = await request(app)
+            const response = await request(_index.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(403); // Correcting expected status for forbidden access
@@ -103,7 +103,7 @@ describe('User Tests', () => {
         });
 
         it('should allow access to free content for all users', async () => {
-            const response = await request(app)
+            const response = await request(_index.app)
                 .get('/free-content')
                 .set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(200); // Correct expected status for free content
@@ -111,7 +111,7 @@ describe('User Tests', () => {
         });
 
         it('should return an error for invalid tokens', async () => {
-            const response = await request(app)
+            const response = await request(_index.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer invalid_token');
             expect(response.status).toBe(401); // Correcting expected status for unauthorized

@@ -1,7 +1,7 @@
-import 'reflect-metadata'; // Required for Sequelize decorators
+import 'reflect-metadata';
 import express, { Application, Request, Response } from 'express';
 import http from 'http';
-import { Sequelize } from 'sequelize-typescript'; // Sequelize ORM with TypeScript support
+import { Sequelize } from 'sequelize-typescript';
 import User from './models/user'; // Path to the User model
 import Service from './models/services'; // Path to the Service model
 import userRoutes from './routes/user'; // User-related routes
@@ -19,7 +19,20 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'fivver_doup',
   models: [User, Service], // Load models
+  dialectOptions: {
+    charset: 'utf8mb4', // Ensure utf8mb4 is used for encoding
+  },
 });
+
+// Error handling for database connection
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection established successfully');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+    process.exit(1); // Exit with error if the connection fails
+  });
 
 // Add associations after the models are initialized
 Service.belongsTo(User, { foreignKey: 'userId' });
@@ -44,14 +57,19 @@ app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 
 // Sync the database and start the server if not in a test environment
-sequelize.sync().then(() => {
-  if (process.env.NODE_ENV !== 'test') {
-    const PORT = process.env.PORT || 3000;
-    server.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  }
-});
+sequelize.sync()
+  .then(() => {
+    if (process.env.NODE_ENV !== 'test') {
+      const PORT = process.env.PORT || 3000;
+      server.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error syncing the database:', error);
+    process.exit(1); // Exit with error if sync fails
+  });
 
 // Export the app and server for testing or further integration
 export { app, server };
