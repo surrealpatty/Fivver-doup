@@ -35,8 +35,12 @@ const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) { // Type guard to ensure 'error' is of type Error
+      console.error('Unable to connect to the database:', error.message);
+    } else {
+      console.error('An unknown error occurred during the connection test');
+    }
     process.exit(1); // Exit the process if connection fails
   }
 };
