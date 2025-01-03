@@ -3,11 +3,12 @@ import { app } from '../index';  // Ensure correct import for your app
 import { User } from '../models/user';  // Adjust the path as necessary
 
 describe('Role-based Access Tests', () => {
-  let testUser: { body: { id: string; token: string } };
+  let testUser: { id: string; token: string };
 
   beforeAll(async () => {
     // Here, you can create a user in the database or mock the user data.
-    const response = await request(app).post('/register') // Replace with your registration route
+    const response = await request(app)
+      .post('/register') // Replace with your registration route
       .send({
         username: 'testuser',
         email: 'testuser@example.com',
@@ -15,12 +16,22 @@ describe('Role-based Access Tests', () => {
         role: 'free',  // Set role to 'free' for the test
       });
 
-    testUser = response.body;
+    // Store the id and token correctly from response.body
+    testUser = {
+      id: response.body.id,
+      token: response.body.token,
+    };
+
+    // Ensure the response contains token and id
+    expect(testUser).toHaveProperty('id');
+    expect(testUser).toHaveProperty('token');
   });
 
   afterAll(async () => {
     // Clean up the database or reset state if necessary.
-    await request(app).delete(`/users/${testUser.body.id}`);  // Example cleanup, adjust as needed
+    if (testUser && testUser.id) {
+      await request(app).delete(`/users/${testUser.id}`);  // Example cleanup, adjust as needed
+    }
   });
 
   it('should run the test file successfully', () => {
@@ -39,7 +50,8 @@ describe('Role-based Access Tests', () => {
   it('should deny access to premium service for free users', async () => {
     const response = await request(app)
       .get('/premium-service') // Assuming your endpoint for premium access
-      .set('Authorization', `Bearer ${testUser.body.token}`);  // Add the token for the created test user
+      .set('Authorization', `Bearer ${testUser.token}`);  // Add the token for the created test user
+
     expect(response.statusCode).toBe(403); // Expect a 403 Forbidden status
     expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
   });
@@ -50,13 +62,17 @@ describe('Role-based Access Tests', () => {
     const paidUserResponse = await request(app)
       .post('/update-role') // Assuming you have an endpoint for updating role
       .send({
-        userId: testUser.body.id,
+        userId: testUser.id,
         role: 'paid',
       });
 
+    // Ensure the response contains the updated token
+    const paidUserToken = paidUserResponse.body.token;
+    expect(paidUserResponse.body).toHaveProperty('token');
+
     const response = await request(app)
       .get('/premium-service') // Assuming your endpoint for premium access
-      .set('Authorization', `Bearer ${paidUserResponse.body.token}`); // Use updated role user token
+      .set('Authorization', `Bearer ${paidUserToken}`); // Use updated role user token
 
     expect(response.statusCode).toBe(200); // Expect a successful access
     expect(response.body.message).toBe('Premium service access granted.');
