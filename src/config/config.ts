@@ -1,72 +1,50 @@
-import dotenv from 'dotenv';
-
-// Load environment variables from a .env file
+import * as dotenv from 'dotenv';
+import { Dialect } from 'sequelize';
 dotenv.config();
 
-// Destructure environment variables with fallback defaults
-const {
-  DB_HOST = 'localhost',
-  DB_USER = 'root',
-  DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', // Use a secure default or value from .env
-  DB_NAME = 'fivver_doup',
-  DB_PORT = '3306', // Default MySQL port
-  NODE_ENV = 'development', // Default to 'development' if not set
-  JWT_SECRET = 'your-secret-key', // Default JWT secret
-  JWT_EXPIRATION = '1h', // Default expiration time for JWT
-} = process.env;
-
-// Ensure DB_PORT is a valid number
-const parsedDBPort = parseInt(DB_PORT, 10);
+// Parse and validate DB_PORT environment variable
+const parsedDBPort = parseInt(process.env.DB_PORT || '3306', 10);
 if (isNaN(parsedDBPort)) {
   console.error('DB_PORT must be a valid number.');
   process.exit(1);
 }
 
-// Define the interface for configuration
-export interface Config {
-  DB_HOST: string;
-  DB_USER: string;
-  DB_PASSWORD: string;
-  DB_NAME: string;
-  DB_PORT: number;
-  NODE_ENV: string;
-  JWT_SECRET: string;
-  JWT_EXPIRATION: string;
+// Define the Sequelize configuration interface
+interface SequelizeConfig {
+  username: string;
+  password: string;
+  database: string;
+  host: string;
+  port: number;
+  dialect: Dialect;
 }
 
-// Configuration object for different environments
-const config: { [key: string]: Config } = {
+// Sequelize configuration for different environments
+const config: Record<string, SequelizeConfig> = {
   development: {
-    DB_HOST,
-    DB_USER,
-    DB_PASSWORD,
-    DB_NAME,
-    DB_PORT: parsedDBPort,
-    NODE_ENV,
-    JWT_SECRET,
-    JWT_EXPIRATION,
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Replace with your secure value
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parsedDBPort,
+    dialect: 'mysql',
   },
   test: {
-    DB_HOST: process.env.TEST_DB_HOST || 'localhost',
-    DB_USER: process.env.TEST_DB_USER || 'test_user',
-    DB_PASSWORD: process.env.TEST_DB_PASSWORD || 'test_password',
-    DB_NAME: process.env.TEST_DB_NAME || 'fivver_doup_test',
-    DB_PORT: parsedDBPort,
-    NODE_ENV,
-    JWT_SECRET,
-    JWT_EXPIRATION,
+    username: process.env.TEST_DB_USER || 'root',
+    password: process.env.TEST_DB_PASSWORD || 'test_password', // Replace with your secure test value
+    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+    host: process.env.TEST_DB_HOST || '127.0.0.1',
+    port: parsedDBPort,
+    dialect: 'mysql',
   },
   production: {
-    DB_HOST,
-    DB_USER,
-    DB_PASSWORD,
-    DB_NAME,
-    DB_PORT: parsedDBPort,
-    NODE_ENV,
-    JWT_SECRET,
-    JWT_EXPIRATION,
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Replace with your secure value
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: parsedDBPort,
+    dialect: 'mysql',
   },
 };
 
-// Export the appropriate configuration based on NODE_ENV
-export default config[NODE_ENV];
+export default config;

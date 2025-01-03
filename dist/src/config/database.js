@@ -18,12 +18,11 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-// Define the configuration object for Sequelize
-const config = {
-    username: 'root',
-    password: 'password',
-    database: 'fivver_doup',
-    host: 'localhost',
+const sequelize = new _sequelizetypescript.Sequelize({
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'password',
+    database: process.env.DB_NAME || 'fivver_doup',
+    host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
     models: [
         _user.default,
@@ -47,6 +46,6 @@ const config = {
             rejectUnauthorized: false
         } : undefined
     }
-};
-// Initialize Sequelize with the configuration
-const sequelize = new _sequelizetypescript.Sequelize(config);
+});
+// Test database connection
+sequelize.authenticate().then(()=>console.log('Database connection established successfully.')).catch((err)=>console.error('Unable to connect to the database:', err));
