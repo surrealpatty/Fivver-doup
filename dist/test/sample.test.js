@@ -1,11 +1,9 @@
-import { sequelize } from '../config/database.js'; // Correct import with .js extension
+import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid'; // UUID generator
-import User from '../models/user.js'; // Ensure the path is correct with .js extension
-import Service from '../models/services.js'; // Ensure the path is correct with .js extension
-
+import User from '../models/user'; // Ensure the path is correct
+import Service from '../models/services'; // Ensure the path is correct
 describe('Service Model Tests', () => {
     let user; // Declare a user variable to be used across tests
-
     beforeAll(async () => {
         // Ensure the database is ready before running tests
         await sequelize.sync({ force: true });
@@ -20,12 +18,10 @@ describe('Service Model Tests', () => {
             isVerified: true,
         });
     });
-
     afterAll(async () => {
         // Close the database connection after running tests
         await sequelize.close();
     });
-
     it('should create a new service', async () => {
         // Define service data
         const serviceData = {

@@ -1,3 +1,4 @@
+"use strict";
 // src/test/math.test.ts
 describe('Math Functions', () => {
     const mockUsers = [
