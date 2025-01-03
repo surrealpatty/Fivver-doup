@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _database = require("../config/database");
 const _uuid = require("uuid");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -12,13 +12,13 @@ function _interop_require_default(obj) {
     };
 }
 describe('Service Model Tests', ()=>{
-    let user; // Declare user at the top to use across tests
+    let user; // Declare a user variable to be used across tests
     beforeAll(async ()=>{
-        // Sync the database (ensure it's ready before tests)
+        // Ensure the database is ready before running tests
         await _database.sequelize.sync({
             force: true
         });
-        // Create a user before tests
+        // Create a test user before running the tests
         user = await _user.default.create({
             id: '176019c7-46ea-4e86-aa00-caf519a26b3e',
             username: 'testuser',
@@ -30,10 +30,11 @@ describe('Service Model Tests', ()=>{
         });
     });
     afterAll(async ()=>{
-        // Close the database connection after tests
+        // Close the database connection after running tests
         await _database.sequelize.close();
     });
     it('should create a new service', async ()=>{
+        // Define service data
         const serviceData = {
             id: (0, _uuid.v4)(),
             title: 'Test Service',
@@ -41,10 +42,10 @@ describe('Service Model Tests', ()=>{
             price: 10,
             userId: user.id
         };
-        // Create the service and associate it with the user
+        // Create the service and save it in the database
         const service = await _services.default.create(serviceData);
-        // Ensure that the userId is correctly compared as a string (UUID)
-        expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
+        // Validate the created service's attributes
+        expect(service.userId).toBe(user.id); // Ensure the userId matches
         expect(service.title).toBe('Test Service');
         expect(service.price).toBe(10);
     });

@@ -18,6 +18,7 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
+// Initialize Sequelize instance with environment variables or defaults
 const sequelize = new _sequelizetypescript.Sequelize({
     username: process.env.DB_USERNAME || 'root',
     password: process.env.DB_PASSWORD || 'password',

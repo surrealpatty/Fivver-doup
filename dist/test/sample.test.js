@@ -1,15 +1,15 @@
-import User from '../models/user'; // Ensure correct path
 import { sequelize } from '../config/database'; // Correct import
-import { v4 as uuidv4 } from 'uuid';
-import Service from '../models/services'; // Use default import
+import { v4 as uuidv4 } from 'uuid'; // UUID generator
+import User from '../models/user'; // Ensure the path is correct
+import Service from '../models/services'; // Ensure the path is correct
 describe('Service Model Tests', () => {
-    let user; // Declare user at the top to use across tests
+    let user; // Declare a user variable to be used across tests
     beforeAll(async () => {
-        // Sync the database (ensure it's ready before tests)
+        // Ensure the database is ready before running tests
         await sequelize.sync({ force: true });
-        // Create a user before tests
+        // Create a test user before running the tests
         user = await User.create({
-            id: '176019c7-46ea-4e86-aa00-caf519a26b3e', // Sample UUID for testing
+            id: '176019c7-46ea-4e86-aa00-caf519a26b3e', // Predefined UUID for the test
             username: 'testuser',
             email: 'testuser@example.com',
             password: 'password123',
@@ -19,21 +19,22 @@ describe('Service Model Tests', () => {
         });
     });
     afterAll(async () => {
-        // Close the database connection after tests
+        // Close the database connection after running tests
         await sequelize.close();
     });
     it('should create a new service', async () => {
+        // Define service data
         const serviceData = {
-            id: uuidv4(), // Assuming service.id is a UUID (string)
+            id: uuidv4(), // Generate a unique ID
             title: 'Test Service',
             description: 'A test service',
             price: 10,
-            userId: user.id, // user.id is a string (UUID) from the user created in beforeAll
+            userId: user.id, // Associate the service with the created user
         };
-        // Create the service and associate it with the user
+        // Create the service and save it in the database
         const service = await Service.create(serviceData);
-        // Ensure that the userId is correctly compared as a string (UUID)
-        expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
+        // Validate the created service's attributes
+        expect(service.userId).toBe(user.id); // Ensure the userId matches
         expect(service.title).toBe('Test Service');
         expect(service.price).toBe(10);
     });
