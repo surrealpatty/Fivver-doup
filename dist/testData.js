@@ -26,4 +26,3 @@ User.create({
     .catch((error) => {
     console.error('Error:', error);
 });
-//# sourceMappingURL=testData.js.map

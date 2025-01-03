@@ -10,4 +10,3 @@ router.get('/some-route', (req, res) => {
 });
 // Export the router
 export default router;
-//# sourceMappingURL=server.js.map

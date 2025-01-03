@@ -1,8 +1,22 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  // Other Jest configurations
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'], // Include 'ts' and 'tsx'
+  // Specify the preset for TypeScript
+  preset: 'ts-jest', 
+
+  // Define the test environment
+  testEnvironment: 'node', // Or 'jsdom' if testing client-side code
+  
+  // Enable support for decorators (e.g., @BeforeCreate)
+  globals: {
+    'ts-jest': {
+      isolatedModules: true, // Enables faster testing when possible
+      tsconfig: 'tsconfig.json', // Ensure correct TypeScript config for Jest
+    },
+  },
+
+  // Handle different file extensions (including .ts and .tsx)
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'], 
 
   // Use ts-jest for TypeScript files
   transform: {
@@ -11,11 +25,8 @@ const config: Config.InitialOptions = {
     '^.+\\.js$': 'babel-jest', // Optionally use babel-jest for .js files
   },
 
-  // Specify the preset for TypeScript
-  preset: 'ts-jest',
-
-  // If necessary, add other configurations such as testEnvironment, etc.
-  testEnvironment: 'node', // or 'jsdom' if you're testing client-side code
+  // If necessary, set up other options like setupFiles, collectCoverage, etc.
+  setupFiles: ['<rootDir>/jest.setup.ts'], // Optional, for setup before tests
 };
 
 export default config;

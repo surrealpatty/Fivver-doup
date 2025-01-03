@@ -17,4 +17,3 @@ router.get('/premium', authenticateToken, checkRole('Paid'), (req, res) => {
     res.status(200).json({ message: 'Premium service access granted.' });
 });
 export default router;
-//# sourceMappingURL=service.js.map

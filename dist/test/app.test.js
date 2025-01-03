@@ -27,4 +27,3 @@ describe('User Creation Tests', () => {
 afterAll(async () => {
     await sequelize.close(); // Close the connection after tests
 });
-//# sourceMappingURL=app.test.js.map

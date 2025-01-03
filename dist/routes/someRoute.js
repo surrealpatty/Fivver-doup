@@ -5,4 +5,3 @@ router.get('/', (req, res) => {
     res.status(200).send('Some route');
 });
 export default router;
-//# sourceMappingURL=someRoute.js.map

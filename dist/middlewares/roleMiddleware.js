@@ -22,4 +22,3 @@ export const checkRole = (requiredRole, requiredTier) => {
         next(); // Continue to the next middleware or route handler
     };
 };
-//# sourceMappingURL=roleMiddleware.js.map

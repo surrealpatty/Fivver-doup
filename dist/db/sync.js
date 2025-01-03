@@ -13,4 +13,3 @@ async function syncDatabase() {
 }
 // Call the sync function
 syncDatabase();
-//# sourceMappingURL=sync.js.map

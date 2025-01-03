@@ -6,4 +6,3 @@ router.get('/', (req, res) => {
     res.status(200).send('Fiverr backend is running');
 });
 export default router;
-//# sourceMappingURL=api.js.map

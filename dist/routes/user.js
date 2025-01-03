@@ -35,4 +35,3 @@ router.post('/register', validateRegistration, async (req, res) => {
 });
 // Export the router to be used in the main app
 export default router;
-//# sourceMappingURL=user.js.map

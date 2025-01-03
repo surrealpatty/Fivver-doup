@@ -32,4 +32,3 @@ sequelize.sync().then(() => {
 });
 // Export app and server for use in tests or other files
 export { app, server };
-//# sourceMappingURL=index.js.map

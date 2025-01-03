@@ -64,4 +64,3 @@ Service = __decorate([
 export { Service };
 // Export the Service model
 export default Service;
-//# sourceMappingURL=services.js.map

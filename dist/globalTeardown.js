@@ -12,4 +12,3 @@ export default async function globalTeardown() {
         console.log('Sequelize connection closed.');
     }
 }
-//# sourceMappingURL=globalTeardown.js.map

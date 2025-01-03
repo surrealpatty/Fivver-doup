@@ -12,4 +12,3 @@ export const mockUsers = [
     },
     // Add more mock users as needed
 ];
-//# sourceMappingURL=mockData.js.map

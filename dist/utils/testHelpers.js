@@ -7,4 +7,3 @@ export const createMockUserToken = (user) => {
     { expiresIn: '1h' } // Token expiration time
     );
 };
-//# sourceMappingURL=testHelpers.js.map

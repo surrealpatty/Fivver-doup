@@ -22,4 +22,3 @@ export const authenticateToken = (req, res, next) => {
         return;
     }
 };
-//# sourceMappingURL=checkAuth.js.map

@@ -5,4 +5,3 @@ export const config = {
     DB_PASSWORD: process.env.DB_PASSWORD || 'default_password',
     DB_NAME: process.env.DB_NAME || 'default_database',
 };
-//# sourceMappingURL=env.js.map

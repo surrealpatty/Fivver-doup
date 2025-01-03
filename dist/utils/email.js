@@ -63,4 +63,3 @@ export const sendVerificationEmail = async (email, verificationToken) => {
         throw new Error('Error sending verification email');
     }
 };
-//# sourceMappingURL=email.js.map

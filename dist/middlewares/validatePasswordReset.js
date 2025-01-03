@@ -10,4 +10,3 @@ export const validatePasswordReset = (req, res, next) => {
     // If validation passes, proceed to the next middleware/controller
     next();
 };
-//# sourceMappingURL=validatePasswordReset.js.map

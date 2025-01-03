@@ -1,9 +1,21 @@
-import 'reflect-metadata'; // Ensure decorators work with Sequelize models
+import 'reflect-metadata';  // Ensure decorators work with Sequelize models
 import express, { Application, Request, Response } from 'express';
 import http from 'http';
-import { sequelize } from './config/database';  // Correct import for Sequelize instance
-import userRoutes from './routes/user'; // Correct path for user routes
-import serviceRoutes from './routes/service'; // Correct path for service routes
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize
+import User from './models/user';  // Correct path to your User model
+import { Service } from './models/services';  // Correct path to Service model
+import userRoutes from './routes/user';  // Correct path for user routes
+import serviceRoutes from './routes/service';  // Correct path for service routes
+
+// Initialize Sequelize instance
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: process.env.DB_HOST || 'localhost',
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'fivver_doup',
+  models: [User, Service],  // Include all models here
+});
 
 // Initialize Express application
 const app: Application = express();
@@ -14,12 +26,12 @@ app.use(express.json());
 
 // Root endpoint to avoid 404 errors in tests and confirm server is running
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).send('Fiverr backend is running'); // Respond with 200 OK
+  res.status(200).send('Fiverr backend is running');  // Respond with 200 OK
 });
 
 // Define a specific /some-route endpoint to avoid 404 errors in tests
 app.get('/some-route', (req: Request, res: Response) => {
-  res.status(200).send('This is the some-route endpoint'); // Respond with a 200 OK
+  res.status(200).send('This is the some-route endpoint');  // Respond with a 200 OK
 });
 
 // Mount user routes under '/api/users'

@@ -48,4 +48,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 // Export the Sequelize instance
 export { sequelize };
-//# sourceMappingURL=database.js.map

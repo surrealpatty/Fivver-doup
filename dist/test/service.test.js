@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../index'; // Import the app
+import { app } from '../index'; // Include the .ts extension
 // Example JWT tokens (use actual generated tokens for your tests)
 const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
 const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
@@ -23,4 +23,3 @@ describe('Role-based Access for Premium Service', () => {
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
 });
-//# sourceMappingURL=service.test.js.map

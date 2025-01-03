@@ -75,4 +75,3 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
-//# sourceMappingURL=profileController.js.map

@@ -42,4 +42,3 @@ export const sequelizeConfig = {
         collate: 'utf8mb4_general_ci', // Default collation for table creation
     },
 };
-//# sourceMappingURL=config.js.map

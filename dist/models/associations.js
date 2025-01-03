@@ -30,4 +30,3 @@ Order.belongsTo(Service, { foreignKey: 'serviceId' }); // An order belongs to on
 })();
 // Export the models with their associations
 export { User, Service, Order, Review };
-//# sourceMappingURL=associations.js.map
