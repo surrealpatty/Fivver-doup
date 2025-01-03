@@ -13,7 +13,8 @@
     "noEmitOnError": true,                  // Don't emit output if there are errors
     "resolveJsonModule": true,              // Allow importing JSON modules
     "experimentalDecorators": true,         // Enable decorators (required by some libraries like TypeORM)
-    "emitDecoratorMetadata": true           // Emit metadata for decorators (required for some libraries)
+    "emitDecoratorMetadata": true,          // Emit metadata for decorators (required for some libraries like sequelize-typescript)
+    "skipDefaultLibCheck": true             // Skip checking default lib.d.ts (useful for performance)
   },
   "include": [
     "src/**/*.ts",                          // Include all TypeScript files in the src folder

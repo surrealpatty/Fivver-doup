@@ -1,14 +1,13 @@
-// config/config.ts
-
 import dotenv from 'dotenv';
 
 // Load environment variables from a .env file
 dotenv.config();
 
+// Destructure environment variables with fallback defaults
 const {
   DB_HOST = 'localhost',
   DB_USER = 'root',
-  DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*',
+  DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', // Use a secure default or value from .env
   DB_NAME = 'fivver_doup',
   DB_PORT = '3306', // Default MySQL port
   NODE_ENV = 'development', // Default to 'development' if not set

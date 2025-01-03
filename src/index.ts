@@ -6,6 +6,10 @@ import User from './models/user'; // Path to the User model
 import { Service } from './models/services'; // Path to the Service model
 import userRoutes from './routes/user'; // User-related routes
 import serviceRoutes from './routes/service'; // Service-related routes
+import dotenv from 'dotenv'; // To load environment variables
+
+// Initialize environment variables
+dotenv.config();
 
 // Initialize Sequelize instance with database connection
 const sequelize = new Sequelize({
@@ -29,16 +33,11 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).send('Fiverr backend is running');
 });
 
-// Additional endpoint for testing or specific functionality
-app.get('/some-route', (req: Request, res: Response) => {
-  res.status(200).send('This is the some-route endpoint');
-});
-
 // Mount user routes at /api/users
 app.use('/api/users', userRoutes);
 
-// Mount service routes at /api
-app.use('/api', serviceRoutes);
+// Mount service routes at /api/services
+app.use('/api/services', serviceRoutes);
 
 // Sync the database and start the server if not in a test environment
 sequelize.sync().then(() => {

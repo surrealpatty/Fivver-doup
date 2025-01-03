@@ -14,21 +14,13 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ): void | Response<any, Record<string, any>> => {
-  // Extract the authorization header
-  const authorizationHeader = req.headers.authorization;
+  // Extract the token from the Authorization header (Bearer token)
+  const token = req.header('Authorization')?.replace('Bearer ', '');
 
-  if (!authorizationHeader) {
+  if (!token) {
     // Log missing token for debugging purposes
     console.log('Authorization token is missing');
     return res.status(401).json({ message: 'Authorization token is missing' });
-  }
-
-  // Parse the token from "Bearer <token>" format
-  const token = authorizationHeader.split(' ')[1];
-  if (!token) {
-    // Log missing token for debugging purposes
-    console.log('Token is missing after Bearer keyword');
-    return res.status(401).json({ message: 'Access token is missing' });
   }
 
   try {

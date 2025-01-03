@@ -1,20 +1,20 @@
-import 'reflect-metadata'; // Ensure reflect-metadata is imported at the top
 import { Sequelize } from 'sequelize-typescript';
-import { User } from '../models/user'; // Correct import path for User model
-import { Service } from '../models/services'; // Correct import path for Service model
-import { Order } from '../models/order'; // Correct import path for Order model
-import { Review } from '../models/review'; // Correct import path for Review model
-import config from './config'; // Correct import path for configuration
+import config from './config'; // Import the configuration file
 
-// Initialize Sequelize instance with necessary configurations
+import User from './models/user';
+import Service from './models/service';
+import Order from './models/order';
+import Review from './models/review';
+
+// Initialize Sequelize instance with the necessary configuration
 const sequelize = new Sequelize({
   dialect: 'mysql', // Database dialect
-  host: config.DB_HOST, // Get the host from config
-  username: 'test_user', // Replace with the test user's username
-  password: 'password', // Replace with the test user's password
-  database: 'fivver_doup', // Database name
+  host: config.DB_HOST, // Database host
+  username: config.DB_USER, // Database username from config
+  password: config.DB_PASSWORD, // Database password from config
+  database: config.DB_NAME, // Database name from config
   models: [User, Service, Order, Review], // Register all models here
-  logging: config.NODE_ENV === 'development' ? console.log : false, // Enable logging in development mode
+  logging: config.NODE_ENV === 'development' ? console.log : false, // Enable logging in development
   define: {
     freezeTableName: true, // Prevent Sequelize from pluralizing table names
   },
@@ -57,5 +57,5 @@ const syncDatabase = async () => {
 testConnection();
 syncDatabase();
 
-// Export the Sequelize instance
+// Export the Sequelize instance for use elsewhere
 export { sequelize };

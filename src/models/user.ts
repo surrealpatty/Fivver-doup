@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from './services'; // Ensure the correct path for Service model import
+import { Service } from './services'; // Ensure the correct path for the Service model import
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
@@ -32,7 +32,7 @@ export interface UserAttributes {
 // Define the UserCreationAttributes interface for creation attributes (excluding `id` as it is auto-generated)
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-@Table({ tableName: 'users', timestamps: true }) // Removed sequelize property
+@Table({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   @PrimaryKey
   @Column(DataType.UUID) // Use UUID for the ID
