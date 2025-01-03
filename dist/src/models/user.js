@@ -44,8 +44,10 @@ class User extends _sequelizetypescript.Model {
     }
     // Define the association to the Service model
     services;
-    // Additional method to handle role assignment logic (optional)
-    setRole(role) {
+    /**
+   * Set the role of the user, ensuring it is valid.
+   * @param role - The role to assign ('free' or 'paid').
+   */ setRole(role) {
         if (![
             'free',
             'paid'

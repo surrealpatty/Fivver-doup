@@ -27,7 +27,10 @@ let User = class User extends Model {
     }
     // Define the association to the Service model
     services;
-    // Additional method to handle role assignment logic (optional)
+    /**
+     * Set the role of the user, ensuring it is valid.
+     * @param role - The role to assign ('free' or 'paid').
+     */
     setRole(role) {
         if (!['free', 'paid'].includes(role)) {
             throw new Error('Invalid role assignment');
@@ -37,7 +40,7 @@ let User = class User extends Model {
 };
 __decorate([
     PrimaryKey,
-    Column(DataType.UUID) // UUID for ID
+    Column(DataType.UUID) // Use UUID for the ID
     ,
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
@@ -58,7 +61,7 @@ __decorate([
         type: DataType.STRING,
         defaultValue: 'free', // Default role is 'free'
         validate: {
-            isIn: [['free', 'paid']], // Only allow 'free' or 'paid' as valid roles
+            isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
         },
     }),
     __metadata("design:type", String)
