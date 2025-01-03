@@ -32,6 +32,8 @@ const sequelize = new sequelize_typescript_1.Sequelize({
         ssl: process.env.DB_USE_SSL === 'true'
             ? { require: true, rejectUnauthorized: false } // Enable SSL if required
             : undefined,
+        charset: 'utf8mb4', // Move charset here
+        collate: 'utf8mb4_unicode_ci', // Move collate here
     },
 });
 exports.sequelize = sequelize;

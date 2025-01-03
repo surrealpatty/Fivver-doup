@@ -47,7 +47,9 @@ const sequelize = new _sequelizetypescript.Sequelize({
             require: true,
             rejectUnauthorized: false
         } // Enable SSL if required
-         : undefined
+         : undefined,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci'
     }
 });
 // Test the database connection

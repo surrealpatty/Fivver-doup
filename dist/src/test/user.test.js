@@ -6,7 +6,7 @@ require("reflect-metadata");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-const _index = require("../index.js");
+const _index = require("dist/index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
