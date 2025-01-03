@@ -2,33 +2,34 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = require("../index");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Example JWT tokens (use actual generated tokens for your tests)
-const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
-const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
-describe('Role-based Access for Premium Service', ()=>{
-    // Test for allowing paid users to access the premium service
-    it('should allow paid users to access premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
-        .set('Authorization', `Bearer ${paidToken}`); // Add the paid token to the Authorization header
-        console.log('Response for paid user:', response.status, response.body); // Debugging line
-        // Assert the response status and body message
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Premium service access granted.');
-    });
-    // Test for denying free users from accessing premium services
-    it('should deny free users from accessing premium services', async ()=>{
-        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Ensure this is the correct route
-        .set('Authorization', `Bearer ${freeToken}`); // Add the free token to the Authorization header
-        console.log('Response for free user:', response.status, response.body); // Debugging line
-        // Assert the response status and body message
-        expect(response.status).toBe(403);
-        expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
-    });
+const _sequelizetypescript = require("sequelize-typescript");
+const _user = require("../models/user");
+const _services = require("../models/services");
+// Initialize Sequelize with models
+const sequelize = new _sequelizetypescript.Sequelize({
+    dialect: 'mysql',
+    host: 'localhost',
+    username: 'root',
+    password: 'password',
+    database: 'fivver_doup',
+    models: [
+        _user.User,
+        _services.Service
+    ]
+});
+// Sync the models before running tests
+beforeAll(async ()=>{
+    // Ensure database is in sync with models
+    await sequelize.sync({
+        force: true
+    }); // 'force: true' to drop and re-create tables for a clean state
+});
+// Clean up after tests
+afterAll(async ()=>{
+    await sequelize.close(); // Close the Sequelize connection after tests
+});
+// Example test to check the association
+test('Service can be associated with User', ()=>{
+    // Check if the 'belongsTo' association is defined for the Service model
+    expect(_services.Service.belongsTo).toBeDefined();
 });

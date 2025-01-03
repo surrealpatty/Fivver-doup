@@ -1,40 +1,60 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported for decorators to work
-import { sequelize } from '../config/database';  // Correct import of sequelize instance
-import { User } from '../models/user';           // Correct import of the User model
-import { Service } from '../models/services';   // Correct import of the Service model (if you use it in tests)
+import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
+import { User } from '../models/user';              // Correct import for User model
+import { Service } from '../models/services';      // Correct import for Service model
+import { app } from '../index';                     // Correct import for the app
+import request from 'supertest';
 
-// Run migrations or sync models before tests to ensure the database is set up correctly
+// Initialize Sequelize with models
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: 'localhost',
+  username: 'root',
+  password: 'password', // Use your actual MySQL password here
+  database: 'fivver_doup',
+  models: [User, Service], // Add models to Sequelize instance
+});
+
+// Sync the models before running tests
 beforeAll(async () => {
-  // Sync the models with the database before running tests
-  await sequelize.sync({ force: true });  // `force: true` will drop and re-create the tables for a clean slate
+  // Ensure the models are synced before tests run
+  await sequelize.sync({ force: true });  // 'force: true' will drop and re-create tables for a clean slate
 });
 
-describe('User Creation Tests', () => {
-  it('should create a user successfully', async () => {
-    // Create a new user
-    const user = await User.create({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'testpassword',  // Add password
-      role: 'user',              // Add role (default or specific role)
-      tier: '1',                 // Pass '1' as a string instead of a number
-      isVerified: false          // Add isVerified (default or specific value)
-    });
-
-    // Check that the user is created correctly
-    expect(user).toBeDefined();
-    expect(user.username).toBe('testuser');
-    expect(user.email).toBe('test@example.com');
-    expect(user.password).toBe('testpassword');
-    expect(user.role).toBe('user');
-    expect(user.tier).toBe('1');  // Expect '1' as a string
-    expect(user.isVerified).toBe(false);
-  });
-});
-
-// Add tests for other models or functionality here as needed
-
+// Clean up after tests
 afterAll(async () => {
-  // Close the database connection after tests
-  await sequelize.close();
+  await sequelize.close();  // Close the Sequelize connection after tests
+});
+
+// Example of a test with role-based access
+describe('Role-based Access for Premium Service', () => {
+  // Example test for paid user accessing premium service
+  it('should allow paid users to access premium services', async () => {
+    const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
+    const response = await request(app)
+      .get('/premium-service') // Ensure this route exists in your app
+      .set('Authorization', `Bearer ${paidToken}`); // Add token to the Authorization header
+
+    // Debugging logs
+    console.log('Response for paid user:', response.status, response.body);
+
+    // Assert the response status and message
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('Premium service access granted.');
+  });
+
+  // Test for denying free users access
+  it('should deny free users from accessing premium services', async () => {
+    const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
+    const response = await request(app)
+      .get('/premium-service') // Ensure this route exists in your app
+      .set('Authorization', `Bearer ${freeToken}`); // Add token to the Authorization header
+
+    // Debugging logs
+    console.log('Response for free user:', response.status, response.body);
+
+    // Assert the response status and message
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+  });
 });

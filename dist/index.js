@@ -3,7 +3,7 @@ import express from 'express';
 import http from 'http';
 import { Sequelize } from 'sequelize-typescript'; // Sequelize ORM with TypeScript support
 import User from './models/user'; // Path to the User model
-import Service from './models/services'; // Use default import
+import Service from './models/services'; // Path to the Service model
 import userRoutes from './routes/user'; // User-related routes
 import serviceRoutes from './routes/service'; // Service-related routes
 import dotenv from 'dotenv'; // To load environment variables
@@ -18,6 +18,9 @@ const sequelize = new Sequelize({
     database: process.env.DB_NAME || 'fivver_doup',
     models: [User, Service], // Load models
 });
+// Add associations after the models are initialized
+Service.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Service, { foreignKey: 'userId' });
 // Initialize Express application
 const app = express();
 const server = http.createServer(app);
