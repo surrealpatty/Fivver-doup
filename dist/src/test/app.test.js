@@ -25,7 +25,7 @@ const sequelize = new _sequelizetypescript.Sequelize({
         _services.Service
     ]
 });
-// Define associations after models are loaded
+// Define the associations between models **after** they are loaded
 _services.Service.belongsTo(_user.User, {
     foreignKey: 'userId'
 });
