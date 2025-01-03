@@ -1,15 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var dotenv = require("dotenv");
+import * as dotenv from 'dotenv';
 dotenv.config();
 // Parse and validate DB_PORT environment variable
-var parsedDBPort = parseInt(process.env.DB_PORT || '3306', 10);
+const parsedDBPort = parseInt(process.env.DB_PORT || '3306', 10);
 if (isNaN(parsedDBPort)) {
     console.error('DB_PORT must be a valid number.');
     process.exit(1);
 }
-// Sequelize configuration for different environments
-var config = {
+// Merge both the Sequelize and JWT configurations into one final config
+const config = {
     development: {
         username: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Replace with your secure value
@@ -17,6 +15,8 @@ var config = {
         host: process.env.DB_HOST || '127.0.0.1',
         port: parsedDBPort,
         dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key', // JWT_SECRET as string
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h', // JWT_EXPIRATION, default to '1h'
     },
     test: {
         username: process.env.TEST_DB_USER || 'root',
@@ -25,6 +25,8 @@ var config = {
         host: process.env.TEST_DB_HOST || '127.0.0.1',
         port: parsedDBPort,
         dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key', // JWT_SECRET as string
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h', // JWT_EXPIRATION, default to '1h'
     },
     production: {
         username: process.env.DB_USER || 'root',
@@ -33,6 +35,8 @@ var config = {
         host: process.env.DB_HOST || '127.0.0.1',
         port: parsedDBPort,
         dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key', // JWT_SECRET as string
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h', // JWT_EXPIRATION, default to '1h'
     },
 };
-exports.default = config;
+export default config;

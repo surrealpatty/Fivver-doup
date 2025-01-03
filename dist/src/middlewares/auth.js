@@ -33,8 +33,10 @@ const verifyToken = (req, res, next)=>{
             message: 'No token provided'
         });
     }
+    // Ensure config.JWT_SECRET is typed as a string
+    const jwtSecret = _config.default[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
     // Verify the token using the secret from config
-    _jsonwebtoken.default.verify(token, _config.default.JWT_SECRET, (err, decoded)=>{
+    _jsonwebtoken.default.verify(token, jwtSecret, (err, decoded)=>{
         if (err) {
             return res.status(401).json({
                 message: 'Unauthorized',
@@ -54,10 +56,11 @@ const verifyToken = (req, res, next)=>{
     });
 };
 const generateToken = (userId)=>{
+    const jwtSecret = _config.default[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
     return _jsonwebtoken.default.sign({
         id: userId
-    }, _config.default.JWT_SECRET, {
-        expiresIn: _config.default.JWT_EXPIRATION
+    }, jwtSecret, {
+        expiresIn: _config.default[process.env.NODE_ENV || 'development'].JWT_EXPIRATION
     });
 };
 const authenticateJWT = (req, res, next)=>{

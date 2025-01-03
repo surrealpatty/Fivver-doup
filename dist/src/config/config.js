@@ -2,60 +2,92 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, // Export the appropriate configuration based on NODE_ENV
-"default", {
+Object.defineProperty(exports, "default", {
     enumerable: true,
     get: function() {
         return _default;
     }
 });
-const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
+const _dotenv = /*#__PURE__*/ _interop_require_wildcard(require("dotenv"));
+function _getRequireWildcardCache(nodeInterop) {
+    if (typeof WeakMap !== "function") return null;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function(nodeInterop) {
+        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
 }
-// Load environment variables from a .env file
-_dotenv.default.config();
-// Destructure environment variables with fallback defaults
-const { DB_HOST = 'localhost', DB_USER = 'root', DB_PASSWORD = 'X^SE4Jzp$qfd1Fs2qfT*', DB_NAME = 'fivver_doup', DB_PORT = '3306', NODE_ENV = 'development', JWT_SECRET = 'your-secret-key', JWT_EXPIRATION = '1h' } = process.env;
-// Ensure DB_PORT is a valid number
-const parsedDBPort = parseInt(DB_PORT, 10);
+function _interop_require_wildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
+        return obj;
+    }
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
+        return {
+            default: obj
+        };
+    }
+    var cache = _getRequireWildcardCache(nodeInterop);
+    if (cache && cache.has(obj)) {
+        return cache.get(obj);
+    }
+    var newObj = {
+        __proto__: null
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj){
+        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+            if (desc && (desc.get || desc.set)) {
+                Object.defineProperty(newObj, key, desc);
+            } else {
+                newObj[key] = obj[key];
+            }
+        }
+    }
+    newObj.default = obj;
+    if (cache) {
+        cache.set(obj, newObj);
+    }
+    return newObj;
+}
+_dotenv.config();
+// Parse and validate DB_PORT environment variable
+const parsedDBPort = parseInt(process.env.DB_PORT || '3306', 10);
 if (isNaN(parsedDBPort)) {
     console.error('DB_PORT must be a valid number.');
     process.exit(1);
 }
-// Configuration object for different environments
+// Merge both the Sequelize and JWT configurations into one final config
 const config = {
     development: {
-        DB_HOST,
-        DB_USER,
-        DB_PASSWORD,
-        DB_NAME,
-        DB_PORT: parsedDBPort,
-        NODE_ENV,
-        JWT_SECRET,
-        JWT_EXPIRATION
+        username: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*',
+        database: process.env.DB_NAME || 'fivver_doup',
+        host: process.env.DB_HOST || '127.0.0.1',
+        port: parsedDBPort,
+        dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h'
     },
     test: {
-        DB_HOST: process.env.TEST_DB_HOST || 'localhost',
-        DB_USER: process.env.TEST_DB_USER || 'test_user',
-        DB_PASSWORD: process.env.TEST_DB_PASSWORD || 'test_password',
-        DB_NAME: process.env.TEST_DB_NAME || 'fivver_doup_test',
-        DB_PORT: parsedDBPort,
-        NODE_ENV,
-        JWT_SECRET,
-        JWT_EXPIRATION
+        username: process.env.TEST_DB_USER || 'root',
+        password: process.env.TEST_DB_PASSWORD || 'test_password',
+        database: process.env.TEST_DB_NAME || 'fivver_doup_test',
+        host: process.env.TEST_DB_HOST || '127.0.0.1',
+        port: parsedDBPort,
+        dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h'
     },
     production: {
-        DB_HOST,
-        DB_USER,
-        DB_PASSWORD,
-        DB_NAME,
-        DB_PORT: parsedDBPort,
-        NODE_ENV,
-        JWT_SECRET,
-        JWT_EXPIRATION
+        username: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*',
+        database: process.env.DB_NAME || 'fivver_doup',
+        host: process.env.DB_HOST || '127.0.0.1',
+        port: parsedDBPort,
+        dialect: 'mysql',
+        JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
+        JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h'
     }
 };
-const _default = config[NODE_ENV];
+const _default = config;
