@@ -1,7 +1,6 @@
 // Ensure reflect-metadata is imported to enable decorators
 import 'reflect-metadata';
-import { sequelize } from '../config/database'; // Correct import if exported as a named export
-
+import { sequelize } from '../config/database'; // Correct import of sequelize instance
 import { 
   Table, 
   Column, 
@@ -14,7 +13,7 @@ import {
   BelongsTo 
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
-import { User } from './user'; // Corrected import of User model with named import
+import { User } from './user';  // Correct import of User model with named import
 
 // Define Service attributes interface
 export interface ServiceAttributes {
@@ -63,6 +62,7 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
 
 // Define the association between Service and User explicitly
 Service.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
 // Export the Service model
 export default Service;
