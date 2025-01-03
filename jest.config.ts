@@ -1,51 +1,57 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  // Enable TypeScript support in Jest
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'], // Ensure Jest recognizes .ts, .tsx, .json, and .node extensions
+  // Specify recognized module file extensions
+  moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'],
 
-  // Use babel-jest to transform TypeScript and JavaScript files
+  // Use ts-jest for TypeScript transformation and babel-jest for JavaScript
   transform: {
-    '^.+\\.tsx?$': 'babel-jest',  // Use babel-jest to handle TypeScript files
+    '^.+\\.tsx?$': 'ts-jest',  // Use ts-jest to handle TypeScript files
     '^.+\\.jsx?$': 'babel-jest',  // Use babel-jest to handle JavaScript files
   },
 
-  // Handle ES Modules (ESM) imports
+  // Ignore transformations for node_modules except specific ESM packages
   transformIgnorePatterns: [
-    "/node_modules/(?!some-es-module)/", // Add necessary packages if using ES modules
+    '/node_modules/(?!specific-esm-module|another-esm-package)/',
   ],
 
-  // Set the test environment to Node.js
-  testEnvironment: 'node',  // Set the test environment to Node.js
+  // Set Node.js as the test environment
+  testEnvironment: 'node',
 
-  // Global teardown script
-  globalTeardown: './src/globalTeardown.ts',  // Reference the globalTeardown file (ensure this path is correct)
+  // Specify a global teardown script (update path if necessary)
+  globalTeardown: '<rootDir>/src/globalTeardown.ts',
 
-  // Use ts-jest preset for TypeScript and Babel integration
-  preset: 'ts-jest/presets/js-with-babel',  // Use this preset to support TypeScript + Babel
+  // Use ts-jest preset for advanced TypeScript support
+  preset: 'ts-jest',
 
-  // Remove or empty the setupFiles array if not needed
-  setupFiles: [],  // Empty the setupFiles array
+  // Include setup files if required, otherwise leave as an empty array
+  setupFiles: [],
 
-  // Automatically clear mock calls, instances, and results before every test
+  // Automatically clear mocks before each test
   clearMocks: true,
 
-  // Collect coverage information
+  // Collect coverage data
   collectCoverage: true,
-  coverageDirectory: './coverage',  // Specify coverage output directory
-  coverageProvider: 'v8',  // Use V8 for coverage collection
+  coverageDirectory: '<rootDir>/coverage',
+  coverageProvider: 'v8',
 
-  // If using Babel decorators, ensure Babel configuration is set correctly in the jest config
+  // Configure ts-jest options for better performance
   globals: {
     'ts-jest': {
-      isolatedModules: true,  // Isolate modules for better performance
+      isolatedModules: true,
     },
   },
 
-  // Ensure Jest resolves TypeScript files correctly
+  // Map module aliases for TypeScript path mappings
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Handle aliased imports if using TypeScript path mappings
+    '^@/(.*)$': '<rootDir>/src/$1', // Example alias mapping
   },
+
+  // Watch for changes only in the specified directories
+  watchPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/dist/',
+  ],
 };
 
 export default config;

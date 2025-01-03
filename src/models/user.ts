@@ -1,5 +1,15 @@
 import 'reflect-metadata';  // Import reflect-metadata to enable decorators for Sequelize models
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
+import { 
+  Table, 
+  Column, 
+  Model, 
+  PrimaryKey, 
+  DataType, 
+  CreatedAt, 
+  UpdatedAt, 
+  BeforeCreate, 
+  HasMany 
+} from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services';  // Ensure the correct path for Service model import
@@ -19,13 +29,13 @@ export interface UserAttributes {
   updatedAt?: Date;
 }
 
-// Define the UserCreationAttributes interface for the creation attributes (excluding `id` as it is auto-generated)
+// Define the UserCreationAttributes interface for creation attributes (excluding `id` as it is auto-generated)
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 @Table({ tableName: 'users', timestamps: true }) // Removed sequelize property
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   @PrimaryKey
-  @Column(DataType.UUID) // UUID for ID
+  @Column(DataType.UUID) // Use UUID for the ID
   declare id: string;
 
   @Column(DataType.STRING)
@@ -41,7 +51,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     type: DataType.STRING,
     defaultValue: 'free', // Default role is 'free'
     validate: {
-      isIn: [['free', 'paid']], // Only allow 'free' or 'paid' as valid roles
+      isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
     },
   })
   declare role: string;
@@ -78,7 +88,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @HasMany(() => Service) // A User has many Services
   services!: Service[];
 
-  // Additional method to handle role assignment logic (optional)
+  /**
+   * Set the role of the user, ensuring it is valid.
+   * @param role - The role to assign ('free' or 'paid').
+   */
   setRole(role: string): void {
     if (!['free', 'paid'].includes(role)) {
       throw new Error('Invalid role assignment');
