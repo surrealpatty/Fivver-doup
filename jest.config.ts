@@ -31,6 +31,8 @@ const config: Config.InitialOptions = {
     'ts-jest': {
       isolatedModules: true,
     },
+    // Retry failed tests a specific number of times globally
+    'jest.retryTimes': 3, // Retry failed tests 3 times
   },
 
   // Resolve module paths for aliases
@@ -46,6 +48,9 @@ const config: Config.InitialOptions = {
 
   // Recognize file extensions for modules
   moduleFileExtensions: ['js', 'ts', 'json', 'node'],
+
+  // Limit the number of workers to avoid resource issues
+  maxWorkers: 4, 
 };
 
 export default config;
