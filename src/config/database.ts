@@ -35,11 +35,6 @@ const sequelize = new Sequelize({
       require: true, 
       rejectUnauthorized: false 
     } : undefined,
-    authSwitch: {
-      'auth_switch_request': () => {
-        // handle authentication switch if needed (MySQL 8.0+)
-      }
-    }
   },
 });
 

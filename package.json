@@ -182,7 +182,12 @@
   "types": "dist/index.d.ts",
   "jest": {
     "transform": {
-      "^.+\\.ts$": ["ts-jest", { "tsconfig": "tsconfig.json" }]
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
     },
     "preset": "ts-jest",
     "testEnvironment": "node",
@@ -192,9 +197,21 @@
         "tsconfig": "tsconfig.jest.json"
       }
     },
-    "moduleFileExtensions": ["ts", "tsx", "js", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.{ts,tsx}", "tests/**/*.{ts,tsx}"],
-    "testMatch": ["**/*.test.ts", "**/*.test.tsx"]
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "tests/**/*.{ts,tsx}"
+    ],
+    "testMatch": [
+      "**/*.test.ts",
+      "**/*.test.tsx"
+    ]
   }
 }
