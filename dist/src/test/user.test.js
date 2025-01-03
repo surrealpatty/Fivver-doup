@@ -19,6 +19,7 @@ jest.mock('../models/user', ()=>({
             findOne: jest.fn()
         }
     }));
+// Cast `jwt.verify` to a jest mock function
 jest.mock('jsonwebtoken', ()=>({
         verify: jest.fn()
     }));
