@@ -1,8 +1,13 @@
-import { Router } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/user'; // Import User model and UserCreationAttributes
-const router = Router();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_1 = __importDefault(require("../models/user")); // Import User model and UserCreationAttributes
+const router = (0, express_1.Router)();
 // User Registration (Signup) Route
 router.post('/signup', async (req, res) => {
     const { email, username, password } = req.body;
@@ -12,14 +17,14 @@ router.post('/signup', async (req, res) => {
     }
     try {
         // Check if user already exists
-        const existingUser = await User.findOne({
+        const existingUser = await user_1.default.findOne({
             where: { email },
         });
         if (existingUser) {
             return res.status(400).json({ message: 'Email is already in use.' });
         }
         // Hash the password using bcrypt
-        const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10); // Salt rounds = 10
         // Create the new user in the database (id is handled automatically)
         const newUser = {
             email,
@@ -29,9 +34,9 @@ router.post('/signup', async (req, res) => {
             tier: 'free', // Default tier should be "free"
             isVerified: false, // Assuming user isn't verified initially
         };
-        const user = await User.create(newUser); // Pass newUser as the object to create
+        const user = await user_1.default.create(newUser); // Pass newUser as the object to create
         // Generate JWT token
-        const token = jwt.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
         { expiresIn: '1h' } // Expiry time of the token
         );
         // Send back response with token
@@ -46,4 +51,4 @@ router.post('/signup', async (req, res) => {
     }
 });
 // Export the router to use in the main app
-export default router;
+exports.default = router;

@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tierMiddleware = void 0;
 // Fix the return types for middleware
-export const tierMiddleware = (requiredTier) => {
+const tierMiddleware = (requiredTier) => {
     return (req, res, next) => {
         const user = req.user;
         // If user is not authenticated, send a 401 response
@@ -16,3 +19,4 @@ export const tierMiddleware = (requiredTier) => {
         next();
     };
 };
+exports.tierMiddleware = tierMiddleware;

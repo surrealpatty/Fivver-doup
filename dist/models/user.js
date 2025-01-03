@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,11 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import 'reflect-metadata'; // Required for decorators
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, BeforeCreate, HasMany } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid';
-import Service from '../models/services'; // Ensure the correct import
-let User = class User extends Model {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
+require("reflect-metadata"); // Required for decorators
+const sequelize_typescript_1 = require("sequelize-typescript");
+const uuid_1 = require("uuid");
+const services_1 = __importDefault(require("../models/services")); // Ensure the correct import
+let User = class User extends sequelize_typescript_1.Model {
     username;
     email;
     password;
@@ -23,7 +29,7 @@ let User = class User extends Model {
      * Automatically generate UUID for new user records
      */
     static assignUuid(user) {
-        user.id = uuidv4(); // Generate UUID if not already provided
+        user.id = (0, uuid_1.v4)(); // Generate UUID if not already provided
     }
     // Define the association to the Service model
     services;
@@ -38,27 +44,28 @@ let User = class User extends Model {
         this.role = role;
     }
 };
+exports.User = User;
 __decorate([
-    PrimaryKey,
-    Column(DataType.UUID) // Use UUID for the ID
+    sequelize_typescript_1.PrimaryKey,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the ID
     ,
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    Column({
-        type: DataType.STRING,
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.STRING,
         defaultValue: 'free', // Default role is 'free'
         validate: {
             isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
@@ -67,44 +74,43 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], User.prototype, "tier", void 0);
 __decorate([
-    Column(DataType.BOOLEAN),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.BOOLEAN),
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", Object)
 ], User.prototype, "passwordResetToken", void 0);
 __decorate([
-    Column(DataType.DATE),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
     __metadata("design:type", Object)
 ], User.prototype, "passwordResetTokenExpiry", void 0);
 __decorate([
-    CreatedAt,
-    Column(DataType.DATE),
+    sequelize_typescript_1.CreatedAt,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
 __decorate([
-    UpdatedAt,
-    Column(DataType.DATE),
+    sequelize_typescript_1.UpdatedAt,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
-    HasMany(() => Service) // A User has many Services
+    (0, sequelize_typescript_1.HasMany)(() => services_1.default) // A User has many Services
     ,
     __metadata("design:type", Array)
 ], User.prototype, "services", void 0);
 __decorate([
-    BeforeCreate,
+    sequelize_typescript_1.BeforeCreate,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [User]),
     __metadata("design:returntype", void 0)
 ], User, "assignUuid", null);
-User = __decorate([
-    Table({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
+exports.User = User = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
 ], User);
-export { User };
-export default User;
+exports.default = User;

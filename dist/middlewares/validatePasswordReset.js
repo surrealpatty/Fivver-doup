@@ -1,6 +1,9 @@
+"use strict";
 // src/middlewares/validatePasswordReset.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validatePasswordReset = void 0;
 // Middleware to validate password reset requests
-export const validatePasswordReset = (req, res, next) => {
+const validatePasswordReset = (req, res, next) => {
     const { email, token, newPassword } = req.body;
     // Check if the required fields are present in the request body
     if (!email || !token || !newPassword) {
@@ -10,3 +13,4 @@ export const validatePasswordReset = (req, res, next) => {
     // If validation passes, proceed to the next middleware/controller
     next();
 };
+exports.validatePasswordReset = validatePasswordReset;

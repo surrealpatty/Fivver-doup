@@ -1,9 +1,15 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendVerificationEmail = exports.sendPasswordResetEmail = exports.sendEmail = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
 // Load environment variables from .env file
-dotenv.config();
+dotenv_1.default.config();
 // Create a transporter object using Gmail service and credentials from environment variables
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.GMAIL_USER, // Sender's Gmail address from environment variables
@@ -11,7 +17,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 // Function to send a general email (can be reused for verification and reset)
-export const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, text) => {
     try {
         const mailOptions = {
             from: process.env.GMAIL_USER, // Sender address
@@ -27,8 +33,9 @@ export const sendEmail = async (to, subject, text) => {
         throw new Error('Error sending email');
     }
 };
+exports.sendEmail = sendEmail;
 // Function to send the password reset email
-export const sendPasswordResetEmail = async (email, resetToken) => {
+const sendPasswordResetEmail = async (email, resetToken) => {
     try {
         const resetUrl = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
         const mailOptions = {
@@ -45,8 +52,9 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
         throw new Error('Error sending password reset email');
     }
 };
+exports.sendPasswordResetEmail = sendPasswordResetEmail;
 // Optionally, you can add more functions for other email types (like registration verification)
-export const sendVerificationEmail = async (email, verificationToken) => {
+const sendVerificationEmail = async (email, verificationToken) => {
     try {
         const verificationUrl = `${process.env.BASE_URL}/verify?token=${verificationToken}`;
         const mailOptions = {
@@ -63,3 +71,4 @@ export const sendVerificationEmail = async (email, verificationToken) => {
         throw new Error('Error sending verification email');
     }
 };
+exports.sendVerificationEmail = sendVerificationEmail;

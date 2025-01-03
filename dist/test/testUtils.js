@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.capitalizeFirstLetter = capitalizeFirstLetter;
 // Example utility function that could be tested
-export function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 describe('Test Utils', () => {

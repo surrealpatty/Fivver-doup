@@ -1,6 +1,12 @@
-import jwt from 'jsonwebtoken';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Middleware to authenticate the token
-export const authenticateToken = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     try {
         const authorizationHeader = req.headers['authorization'];
         if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -16,7 +22,7 @@ export const authenticateToken = (req, res, next) => {
             return res.status(500).json({ message: 'Internal server error' });
         }
         // Decode the JWT and cast it to the UserPayload type
-        const decoded = jwt.verify(token, jwtSecret);
+        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
         req.user = decoded;
         next();
     }
@@ -25,3 +31,4 @@ export const authenticateToken = (req, res, next) => {
         return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
+exports.authenticateToken = authenticateToken;

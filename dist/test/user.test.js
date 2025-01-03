@@ -1,8 +1,13 @@
-import 'reflect-metadata'; // Add this line at the very top to ensure Sequelize decorators work
-import request from 'supertest';
-import { User } from '../models/user'; // Corrected relative import
-import jwt from 'jsonwebtoken'; // For mocking token validation
-import { app } from '../index'; // Corrected import to use named import
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+require("reflect-metadata"); // Add this line at the very top to ensure Sequelize decorators work
+const supertest_1 = __importDefault(require("supertest"));
+const user_1 = require("../models/user"); // Corrected relative import
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For mocking token validation
+const index_js_1 = require("../index.js"); // Corrected import to use .js extension explicitly
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
     User: {
@@ -21,7 +26,7 @@ describe('User Tests', () => {
     describe('POST /api/users/register', () => {
         it('should register a user successfully', async () => {
             // Mock resolved value for User.create
-            User.create.mockResolvedValueOnce({
+            user_1.User.create.mockResolvedValueOnce({
                 id: '1',
                 email: 'test@example.com',
                 username: 'testuser',
@@ -30,7 +35,7 @@ describe('User Tests', () => {
                 tier: 'free', // Mocking the default tier
             });
             // Send a POST request to register endpoint
-            const response = await request(app).post('/api/users/register').send({
+            const response = await (0, supertest_1.default)(index_js_1.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123',
@@ -40,7 +45,7 @@ describe('User Tests', () => {
             expect(response.body).toHaveProperty('id');
             expect(response.body.email).toBe('test@example.com');
             // Verify that User.create was called with the correct parameters
-            expect(User.create).toHaveBeenCalledWith({
+            expect(user_1.User.create).toHaveBeenCalledWith({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123',
@@ -51,8 +56,8 @@ describe('User Tests', () => {
         });
         it('should return an error if email is already taken', async () => {
             // Mock rejected value for User.create
-            User.create.mockRejectedValueOnce(new Error('Email already exists'));
-            const response = await request(app).post('/api/users/register').send({
+            user_1.User.create.mockRejectedValueOnce(new Error('Email already exists'));
+            const response = await (0, supertest_1.default)(index_js_1.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
                 password: 'password123',
@@ -64,7 +69,7 @@ describe('User Tests', () => {
     describe('Role-based Access Control', () => {
         beforeEach(() => {
             // Mock JWT.verify to simulate token validation
-            jwt.verify.mockImplementation((token) => {
+            jsonwebtoken_1.default.verify.mockImplementation((token) => {
                 if (token === 'valid_paid_user_token') {
                     return { role: 'paid' };
                 }
@@ -77,28 +82,28 @@ describe('User Tests', () => {
             });
         });
         it('should allow access to paid users', async () => {
-            const response = await request(app)
+            const response = await (0, supertest_1.default)(index_js_1.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer valid_paid_user_token');
             expect(response.status).toBe(200); // Correcting expected status
             expect(response.body.message).toBe('Welcome to the premium content!');
         });
         it('should deny access to free users for premium content', async () => {
-            const response = await request(app)
+            const response = await (0, supertest_1.default)(index_js_1.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(403); // Correcting expected status for forbidden access
             expect(response.body.message).toBe('Access forbidden: Insufficient role');
         });
         it('should allow access to free content for all users', async () => {
-            const response = await request(app)
+            const response = await (0, supertest_1.default)(index_js_1.app)
                 .get('/free-content')
                 .set('Authorization', 'Bearer valid_free_user_token');
             expect(response.status).toBe(200); // Correct expected status for free content
             expect(response.body.message).toBe('Welcome to the free content!');
         });
         it('should return an error for invalid tokens', async () => {
-            const response = await request(app)
+            const response = await (0, supertest_1.default)(index_js_1.app)
                 .get('/premium-content')
                 .set('Authorization', 'Bearer invalid_token');
             expect(response.status).toBe(401); // Correcting expected status for unauthorized

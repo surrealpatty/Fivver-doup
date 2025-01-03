@@ -1,6 +1,11 @@
-import express from 'express'; // Import required types
-import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token verification
-const router = express.Router();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express")); // Import required types
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Middleware for token verification
+const router = express_1.default.Router();
 // Example middleware to check user roles
 const checkRole = (role) => {
     return (req, res, next) => {
@@ -13,7 +18,7 @@ const checkRole = (role) => {
     };
 };
 // Premium service route for paid users only
-router.get('/premium', authenticateToken, checkRole('Paid'), (req, res) => {
+router.get('/premium', authenticateToken_1.authenticateToken, checkRole('Paid'), (req, res) => {
     res.status(200).json({ message: 'Premium service access granted.' });
 });
-export default router;
+exports.default = router;

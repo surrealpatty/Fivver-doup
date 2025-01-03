@@ -1,9 +1,15 @@
+"use strict";
 // src/controllers/userController.ts
-import bcrypt from 'bcryptjs';
-import { User } from '../models/user'; // Importing the User model
-import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerUser = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const user_1 = require("../models/user"); // Importing the User model
+const jwt_1 = require("../utils/jwt"); // Helper function to generate JWT
 // Controller for registering a new user
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
     const { email, username, password, tier = 'free' } = req.body;
     // Input validation: Ensure required fields are provided
     if (!email || !username || !password) {
@@ -11,15 +17,15 @@ export const registerUser = async (req, res) => {
     }
     try {
         // Check if the user already exists by email
-        const existingUser = await User.findOne({ where: { email } });
+        const existingUser = await user_1.User.findOne({ where: { email } });
         if (existingUser) {
             // If a user exists with the given email, respond with a 400 status code
             return res.status(400).json({ error: 'Email already exists' });
         }
         // Hash the user's password before saving to the database
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         // Default role, tier, and isVerified properties (assumed defaults)
-        const newUser = await User.create({
+        const newUser = await user_1.User.create({
             email,
             username,
             password: hashedPassword,
@@ -28,7 +34,7 @@ export const registerUser = async (req, res) => {
             isVerified: false, // Default verification status
         });
         // Generate a JWT token for the new user
-        const token = generateToken(newUser);
+        const token = (0, jwt_1.generateToken)(newUser);
         // Respond with the user data (excluding password) and the JWT token
         return res.status(201).json({
             message: 'User registered successfully',
@@ -61,3 +67,4 @@ export const registerUser = async (req, res) => {
         }
     }
 };
+exports.registerUser = registerUser;

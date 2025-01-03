@@ -1,4 +1,7 @@
-import { Model } from 'sequelize/types'; // Correct import for Optional from sequelize/types
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const types_1 = require("sequelize/types"); // Correct import for Optional from sequelize/types
 // BaseModel class definition
-export default class BaseModel extends Model {
+class BaseModel extends types_1.Model {
 }
+exports.default = BaseModel;

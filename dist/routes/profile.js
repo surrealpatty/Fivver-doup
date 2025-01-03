@@ -1,8 +1,13 @@
-import express from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken';
-const router = express.Router();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authenticateToken_1 = require("../middlewares/authenticateToken");
+const router = express_1.default.Router();
 // GET /profile - Fetch profile information
-router.get('/profile', authenticateToken, // Middleware to authenticate user
+router.get('/profile', authenticateToken_1.authenticateToken, // Middleware to authenticate user
 async (req, res, next) => {
     try {
         // Access the user property with correct typing from CustomAuthRequest
@@ -26,4 +31,4 @@ async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
-export default router;
+exports.default = router;

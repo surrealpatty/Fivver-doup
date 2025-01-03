@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,26 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
-let Review = class Review extends Model {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Review = void 0;
+const sequelize_typescript_1 = require("sequelize-typescript");
+let Review = class Review extends sequelize_typescript_1.Model {
     userId;
     content;
 };
+exports.Review = Review;
 __decorate([
-    PrimaryKey,
-    AutoIncrement,
-    Column(DataType.INTEGER),
+    sequelize_typescript_1.PrimaryKey,
+    sequelize_typescript_1.AutoIncrement,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Review.prototype, "id", void 0);
 __decorate([
-    Column(DataType.INTEGER),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Review.prototype, "userId", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], Review.prototype, "content", void 0);
-Review = __decorate([
-    Table({ tableName: 'reviews' })
+exports.Review = Review = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: 'reviews' })
 ], Review);
-export { Review };

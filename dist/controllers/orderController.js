@@ -1,11 +1,14 @@
-import { Order } from '../models/order'; // Correct path for the Order model
-import { sequelize } from '../config/database'; // Correct import
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.testConnection = exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
+const order_1 = require("../models/order"); // Correct path for the Order model
+const database_1 = require("../config/database"); // Correct import
 // Create order controller
-export const createOrder = async (req, res) => {
+const createOrder = async (req, res) => {
     try {
         const { userId, serviceId, orderDetails, status } = req.body;
         // Use type assertion to match the expected input for Order.create
-        const order = await Order.create({
+        const order = await order_1.Order.create({
             userId,
             serviceId,
             orderDetails,
@@ -17,20 +20,22 @@ export const createOrder = async (req, res) => {
         return res.status(500).json({ message: 'Error creating order', error });
     }
 };
+exports.createOrder = createOrder;
 // Get all orders controller
-export const getAllOrders = async (req, res) => {
+const getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.findAll();
+        const orders = await order_1.Order.findAll();
         return res.status(200).json(orders);
     }
     catch (error) {
         return res.status(500).json({ message: 'Error fetching orders', error });
     }
 };
+exports.getAllOrders = getAllOrders;
 // Get order by ID controller
-export const getOrderById = async (req, res) => {
+const getOrderById = async (req, res) => {
     try {
-        const order = await Order.findByPk(req.params.id);
+        const order = await order_1.Order.findByPk(req.params.id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
@@ -40,10 +45,11 @@ export const getOrderById = async (req, res) => {
         return res.status(500).json({ message: 'Error fetching order', error });
     }
 };
+exports.getOrderById = getOrderById;
 // Update order controller
-export const updateOrder = async (req, res) => {
+const updateOrder = async (req, res) => {
     try {
-        const order = await Order.findByPk(req.params.id);
+        const order = await order_1.Order.findByPk(req.params.id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
@@ -56,10 +62,11 @@ export const updateOrder = async (req, res) => {
         return res.status(500).json({ message: 'Error updating order', error });
     }
 };
+exports.updateOrder = updateOrder;
 // Delete order controller
-export const deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res) => {
     try {
-        const order = await Order.findByPk(req.params.id);
+        const order = await order_1.Order.findByPk(req.params.id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
@@ -70,10 +77,11 @@ export const deleteOrder = async (req, res) => {
         return res.status(500).json({ message: 'Error deleting order', error });
     }
 };
+exports.deleteOrder = deleteOrder;
 // Function to test the database connection
-export const testConnection = async () => {
+const testConnection = async () => {
     try {
-        await sequelize.authenticate(); // Test the connection
+        await database_1.sequelize.authenticate(); // Test the connection
         console.log('Database connection successful');
         return true; // Return true if connection is successful
     }
@@ -88,3 +96,4 @@ export const testConnection = async () => {
         return false; // Return false if there is an error
     }
 };
+exports.testConnection = testConnection;

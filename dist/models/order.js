@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,10 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
-import { User } from './user'; // Import User model for foreign key relationship
-import Service from '../models/services'; // Use default import
-let Order = class Order extends Model {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Order = void 0;
+const sequelize_typescript_1 = require("sequelize-typescript");
+const user_1 = require("./user"); // Import User model for foreign key relationship
+const services_1 = __importDefault(require("../models/services")); // Use default import
+let Order = class Order extends sequelize_typescript_1.Model {
     userId; // Foreign key to the user who made the order
     serviceId; // Foreign key to the service ordered
     orderDetails; // Details of the order
@@ -18,42 +24,42 @@ let Order = class Order extends Model {
     item; // The item related to the order
     quantity; // The quantity of the item ordered
 };
+exports.Order = Order;
 __decorate([
-    PrimaryKey,
-    AutoIncrement,
-    Column(DataType.INTEGER),
+    sequelize_typescript_1.PrimaryKey,
+    sequelize_typescript_1.AutoIncrement,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "id", void 0);
 __decorate([
-    ForeignKey(() => User) // Foreign key to User model
+    (0, sequelize_typescript_1.ForeignKey)(() => user_1.User) // Foreign key to User model
     ,
-    Column(DataType.INTEGER),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "userId", void 0);
 __decorate([
-    ForeignKey(() => Service) // Foreign key to Service model
+    (0, sequelize_typescript_1.ForeignKey)(() => services_1.default) // Foreign key to Service model
     ,
-    Column(DataType.INTEGER),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "serviceId", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], Order.prototype, "orderDetails", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], Order.prototype, "status", void 0);
 __decorate([
-    Column(DataType.STRING),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
     __metadata("design:type", String)
 ], Order.prototype, "item", void 0);
 __decorate([
-    Column(DataType.INTEGER),
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], Order.prototype, "quantity", void 0);
-Order = __decorate([
-    Table({ tableName: 'orders', timestamps: false }) // Disable timestamps if not using createdAt and updatedAt
+exports.Order = Order = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: 'orders', timestamps: false }) // Disable timestamps if not using createdAt and updatedAt
 ], Order);
-export { Order };
-export default Order;
+exports.default = Order;

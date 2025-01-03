@@ -1,7 +1,12 @@
-import User from '../models/user'; // Adjust the path if necessary
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = __importDefault(require("../models/user")); // Adjust the path if necessary
 const testDeleteUser = async (userId) => {
     try {
-        const deletedUser = await User.destroy({
+        const deletedUser = await user_1.default.destroy({
             where: { id: userId }, // Replace with your identifier (primary key)
         });
         if (deletedUser) {

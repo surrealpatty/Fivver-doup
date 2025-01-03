@@ -1,13 +1,19 @@
-import User from '../models/user'; // Correct import for the User model
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateProfile = exports.getProfile = void 0;
+const user_1 = __importDefault(require("../models/user")); // Correct import for the User model
 // GET /profile - Get user profile
-export const getProfile = async (req, res) => {
+const getProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
     if (!userId) {
         return res.status(400).json({ message: 'User not authenticated or invalid user data' });
     }
     try {
         // Find the user by their ID
-        const user = await User.findByPk(userId);
+        const user = await user_1.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -26,8 +32,9 @@ export const getProfile = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+exports.getProfile = getProfile;
 // PUT /profile - Update user profile
-export const updateProfile = async (req, res) => {
+const updateProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
     if (!userId) {
         return res.status(400).json({ message: 'User not authenticated or invalid user data' });
@@ -35,7 +42,7 @@ export const updateProfile = async (req, res) => {
     const { email, username, role, tier, isVerified } = req.body; // Get all updateable fields from the request body
     try {
         // Find the user and update their details
-        const user = await User.findByPk(userId);
+        const user = await user_1.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -75,3 +82,4 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+exports.updateProfile = updateProfile;

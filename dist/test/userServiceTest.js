@@ -1,6 +1,8 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Correct import
-class Service extends Model {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Correct import
+class Service extends sequelize_1.Model {
     id;
     userId;
     name;
@@ -9,14 +11,14 @@ class Service extends Model {
     image; // Add image property to your model
 }
 Service.init({
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    userId: { type: DataTypes.INTEGER, allowNull: false },
-    name: { type: DataTypes.STRING, allowNull: false },
-    description: { type: DataTypes.STRING, allowNull: false },
-    price: { type: DataTypes.FLOAT, allowNull: false },
-    image: { type: DataTypes.STRING }, // Make sure this matches your DB schema
+    id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
+    name: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    description: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    price: { type: sequelize_1.DataTypes.FLOAT, allowNull: false },
+    image: { type: sequelize_1.DataTypes.STRING }, // Make sure this matches your DB schema
 }, {
-    sequelize,
+    sequelize: database_1.sequelize,
     modelName: 'Service',
 });
-export default Service;
+exports.default = Service;

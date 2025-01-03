@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         // Your migration logic here
@@ -6,4 +8,3 @@ module.exports = {
         // Your rollback logic here
     }
 };
-export {};

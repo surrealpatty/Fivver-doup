@@ -1,4 +1,7 @@
-export const createReview = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteReview = exports.updateReview = exports.getReviewsForService = exports.createReview = void 0;
+const createReview = async (req, res) => {
     const { reviewText, rating, serviceId } = req.body; // Access the review data and serviceId from req.body
     if (!reviewText || !rating || !serviceId) {
         res
@@ -11,7 +14,8 @@ export const createReview = async (req, res) => {
     // await Review.create({ reviewText, rating, serviceId });
     res.status(201).json({ message: 'Review created successfully' });
 };
-export const getReviewsForService = async (req, res) => {
+exports.createReview = createReview;
+const getReviewsForService = async (req, res) => {
     const { serviceId } = req.params; // Accessing serviceId from route parameters
     if (!serviceId) {
         res.status(400).json({ message: 'Service ID is required' });
@@ -22,7 +26,8 @@ export const getReviewsForService = async (req, res) => {
     // const reviews = await Review.findAll({ where: { serviceId } });
     res.status(200).json({ reviews: [] }); // Replace with actual reviews
 };
-export const updateReview = async (req, res) => {
+exports.getReviewsForService = getReviewsForService;
+const updateReview = async (req, res) => {
     const { reviewId } = req.params; // Access reviewId from route parameters
     const { reviewText, rating } = req.body; // Access review details from request body
     if (!reviewId || !reviewText || !rating) {
@@ -41,7 +46,8 @@ export const updateReview = async (req, res) => {
     // }
     res.status(200).json({ message: 'Review updated successfully' });
 };
-export const deleteReview = async (req, res) => {
+exports.updateReview = updateReview;
+const deleteReview = async (req, res) => {
     const { reviewId } = req.params; // Access reviewId from route parameters
     if (!reviewId) {
         res.status(400).json({ message: 'Review ID is required' });
@@ -55,3 +61,4 @@ export const deleteReview = async (req, res) => {
     // }
     res.status(200).json({ message: 'Review deleted successfully' });
 };
+exports.deleteReview = deleteReview;

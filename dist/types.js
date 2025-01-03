@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isUser = isUser;
 // Define a type guard to check if an object is a valid UserPayload
-export function isUser(user) {
+function isUser(user) {
     return (user &&
         typeof user.id === 'string' &&
         typeof user.email === 'string' &&

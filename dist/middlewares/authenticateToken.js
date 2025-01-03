@@ -1,11 +1,17 @@
-import jwt from 'jsonwebtoken';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Define the secret key for JWT
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 /**
  * Middleware to authenticate users via JWT token.
  * Attaches the decoded user information to the `req.user` property.
  */
-export const authenticateToken = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     // Extract the token from the Authorization header (Bearer token)
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
@@ -15,7 +21,7 @@ export const authenticateToken = (req, res, next) => {
     }
     try {
         // Verify and decode the token
-        const decoded = jwt.verify(token, SECRET_KEY);
+        const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         // Log the decoded token for debugging purposes
         console.log('Decoded token:', decoded);
         // Attach the decoded user information to the request object
@@ -30,3 +36,4 @@ export const authenticateToken = (req, res, next) => {
         return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
+exports.authenticateToken = authenticateToken;

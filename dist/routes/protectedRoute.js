@@ -1,8 +1,10 @@
-import { Router } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Import the middleware
-const router = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Import the middleware
+const router = (0, express_1.Router)();
 // Protected route example
-router.get('/protected', authenticateToken, // Use the authenticateToken middleware
+router.get('/protected', authenticateToken_1.authenticateToken, // Use the authenticateToken middleware
 async (req, // Ensure correct typing for `req` using CustomAuthRequest
 res, next) => {
     try {
@@ -23,4 +25,4 @@ res, next) => {
         return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 });
-export default router;
+exports.default = router;

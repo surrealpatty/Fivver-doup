@@ -1,5 +1,8 @@
+"use strict";
 // src/mockData.ts
-export const mockUsers = [
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mockUsers = void 0;
+exports.mockUsers = [
     {
         id: '1',
         username: 'user1',

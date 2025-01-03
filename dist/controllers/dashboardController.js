@@ -1,6 +1,12 @@
-import { Order } from '../models/order'; // Assuming this model exists
-import Service from '../models/services'; // Use default import
-export const getDashboardData = async (req, res) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDashboardData = void 0;
+const order_1 = require("../models/order"); // Assuming this model exists
+const services_1 = __importDefault(require("../models/services")); // Use default import
+const getDashboardData = async (req, res) => {
     try {
         // Ensure that req.user is defined before using it
         if (!req.user) {
@@ -8,8 +14,8 @@ export const getDashboardData = async (req, res) => {
         }
         const userId = req.user.id; // Extract user ID from the authenticated user
         // Fetch user services and orders (no ratings since there's no ratings model)
-        const services = await Service.findAll({ where: { userId } });
-        const orders = await Order.findAll({ where: { userId } });
+        const services = await services_1.default.findAll({ where: { userId } });
+        const orders = await order_1.Order.findAll({ where: { userId } });
         // Return the fetched data
         res.json({ services, orders });
     }
@@ -18,3 +24,4 @@ export const getDashboardData = async (req, res) => {
         res.status(500).json({ message: 'Error fetching dashboard data' });
     }
 };
+exports.getDashboardData = getDashboardData;

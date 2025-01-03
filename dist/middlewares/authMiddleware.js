@@ -1,4 +1,9 @@
-import jwt from 'jsonwebtoken'; // Importing jwt
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Importing jwt
 // Middleware to authenticate and decode JWT token
 const authenticateToken = (req, res, next) => {
     // Extract the token from the Authorization header (Bearer token)
@@ -9,7 +14,7 @@ const authenticateToken = (req, res, next) => {
         return; // Explicitly return here to stop further execution
     }
     // Verify the token using JWT secret key
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
         if (err) {
             res.status(403).json({ message: 'Token is not valid' });
             return; // Explicitly return here to stop further execution
@@ -20,4 +25,4 @@ const authenticateToken = (req, res, next) => {
         next(); // Use next to pass control to the next middleware
     });
 };
-export default authenticateToken;
+exports.default = authenticateToken;

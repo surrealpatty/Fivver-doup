@@ -1,6 +1,9 @@
+"use strict";
 // src/middlewares/roleMiddleware.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkRole = void 0;
 // Middleware to check user roles and tiers
-export const checkRole = (requiredRole, requiredTier) => {
+const checkRole = (requiredRole, requiredTier) => {
     return (req, res, next) => {
         const user = req.user; // `user` is populated by the authenticateToken middleware
         // Ensure the user is authenticated and exists
@@ -22,3 +25,4 @@ export const checkRole = (requiredRole, requiredTier) => {
         next(); // Continue to the next middleware or route handler
     };
 };
+exports.checkRole = checkRole;

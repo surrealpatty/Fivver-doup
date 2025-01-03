@@ -1,14 +1,16 @@
-import { Sequelize } from 'sequelize-typescript';
-import { User } from '../models/user';
-import { Service } from '../models/services';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_typescript_1 = require("sequelize-typescript");
+const user_1 = require("../models/user");
+const services_1 = require("../models/services");
 // Initialize Sequelize with models
-const sequelize = new Sequelize({
+const sequelize = new sequelize_typescript_1.Sequelize({
     dialect: 'mysql',
     host: 'localhost',
     username: 'root',
     password: 'password', // Use your actual password
     database: 'fivver_doup',
-    models: [User, Service], // Add models to Sequelize instance
+    models: [user_1.User, services_1.Service], // Add models to Sequelize instance
 });
 // Sync the models before running tests
 beforeAll(async () => {
@@ -22,5 +24,5 @@ afterAll(async () => {
 // Example test to check the association
 test('Service can be associated with User', () => {
     // Check if the 'belongsTo' association is defined for the Service model
-    expect(Service.belongsTo).toBeDefined();
+    expect(services_1.Service.belongsTo).toBeDefined();
 });

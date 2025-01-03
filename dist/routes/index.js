@@ -1,8 +1,10 @@
-import { Router } from 'express';
-const router = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const router = (0, express_1.Router)();
 // Define your routes here
 router.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
 // Export the router as the default export
-export default router;
+exports.default = router;

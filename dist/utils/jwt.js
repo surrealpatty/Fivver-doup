@@ -1,8 +1,14 @@
-import jwt from 'jsonwebtoken';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.verifyToken = exports.generateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Secret key for JWT generation and verification (ensure this is securely stored in environment variables)
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Fallback secret key for JWT
 // Utility function to generate JWT token
-export const generateToken = (user) => {
+const generateToken = (user) => {
     // Create the payload with user details
     const payload = {
         id: user.id,
@@ -12,13 +18,14 @@ export const generateToken = (user) => {
         role: user.role, // Include role if it's part of your user model
     };
     // Sign and return the token with 1 hour expiration
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token expires in 1 hour
+    return jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token expires in 1 hour
 };
+exports.generateToken = generateToken;
 // Function to verify JWT token and return the decoded user data
-export const verifyToken = (token) => {
+const verifyToken = (token) => {
     try {
         // Verify and decode the token, `JwtPayload` is used as it is the base type returned from `jwt.verify()`
-        const decoded = jwt.verify(token, SECRET_KEY);
+        const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         // Return the decoded user payload if verification is successful
         return decoded;
     }
@@ -28,3 +35,4 @@ export const verifyToken = (token) => {
         return null; // Return null if the token is invalid or expired
     }
 };
+exports.verifyToken = verifyToken;

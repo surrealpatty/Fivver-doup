@@ -1,5 +1,11 @@
-import Service from '../models/services'; // Use default import
-export class ServiceController {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ServiceController = void 0;
+const services_1 = __importDefault(require("../models/services")); // Use default import
+class ServiceController {
     // Method to handle access to premium services for paid users
     static premiumServiceAccess(req, res) {
         const user = req.user; // user object is attached by authenticateToken middleware
@@ -11,7 +17,7 @@ export class ServiceController {
     // Method to fetch all services (existing method)
     static async getServices(req, res) {
         try {
-            const services = await Service.findAll(); // Assuming you want to fetch all services
+            const services = await services_1.default.findAll(); // Assuming you want to fetch all services
             return res.status(200).json(services); // Send the services as the response
         }
         catch (error) {
@@ -20,3 +26,4 @@ export class ServiceController {
         }
     }
 }
+exports.ServiceController = ServiceController;

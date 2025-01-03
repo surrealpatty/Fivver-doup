@@ -1,0 +1,1 @@
+{"version":3,"file":"OrderPayload.d.ts","sourceRoot":"","sources":["../../src/types/OrderPayload.ts"],"names":[],"mappings":"AACA,MAAM,WAAW,YAAY;IACzB,EAAE,EAAE,MAAM,CAAC;IACX,MAAM,EAAE,MAAM,CAAC;IACf,IAAI,EAAE,MAAM,CAAC;IACb,QAAQ,EAAE,MAAM,CAAC;IACjB,KAAK,EAAE,MAAM,CAAC;CACf"}

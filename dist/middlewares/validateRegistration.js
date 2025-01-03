@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateRegistration = void 0;
 // Middleware to validate user registration input
-export const validateRegistration = (req, res, next) => {
+const validateRegistration = (req, res, next) => {
     const { username, email, password } = req.body;
     // Check if username, email, and password are provided
     if (!username || !email || !password) {
@@ -13,3 +16,4 @@ export const validateRegistration = (req, res, next) => {
     // If validation passes, proceed to the next middleware/controller
     next();
 };
+exports.validateRegistration = validateRegistration;
