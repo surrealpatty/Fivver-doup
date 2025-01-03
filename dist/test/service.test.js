@@ -1,8 +1,10 @@
 import request from 'supertest';
-import { app } from '../index'; // Ensure the correct path to your app entry point
+import { app } from '../index.js'; // Adjust the path to your app entry point with .js extension
+
 // Example JWT tokens (replace with actual valid tokens for testing)
 const paidToken = 'your-valid-paid-user-token'; // Replace with actual paid user token
 const freeToken = 'your-valid-free-user-token'; // Replace with actual free user token
+
 describe('Role-based Access for Premium Service', () => {
     it('should allow paid users to access premium services', async () => {
         // Make a request to the /premium-service endpoint as a paid user
@@ -13,6 +15,7 @@ describe('Role-based Access for Premium Service', () => {
         expect(response.status).toBe(200); // Status should be 200 for paid users
         expect(response.body.message).toBe('Premium service access granted.');
     });
+
     it('should deny free users from accessing premium services', async () => {
         // Make a request to the /premium-service endpoint as a free user
         const response = await request(app)

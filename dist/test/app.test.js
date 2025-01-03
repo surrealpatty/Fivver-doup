@@ -1,11 +1,12 @@
 import 'reflect-metadata'; // Ensure reflect-metadata is imported for decorators to work
 import { Sequelize } from 'sequelize-typescript'; // Correct import for Sequelize
-import { app } from '../index'; // Correct import for the app
+import { app } from '../index.js'; // Correct import for the app (with .js extension)
 import request from 'supertest';
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT verification
-import { sequelize } from '../config/database'; // Correct import for sequelize instance
+import { sequelize } from '../config/database.js'; // Correct import for sequelize instance (with .js extension)
 import User from '../models/user'; // Import User model to ensure it's added to Sequelize
 import Service from '../models/services'; // Import Service model to ensure it's added to Sequelize
+
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
     // Initialize Sequelize with models explicitly
@@ -25,6 +26,7 @@ beforeAll(async () => {
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
     await sequelizeInstance.sync({ force: false });
 });
+
 describe('Authentication Tests', () => {
     it('should authenticate and return a valid JWT token', async () => {
         // First, create a test user (for the purpose of the test)
@@ -52,6 +54,7 @@ describe('Authentication Tests', () => {
         expect(decoded).toHaveProperty('id');
         expect(decoded).toHaveProperty('email');
     });
+
     it('should reject invalid credentials', async () => {
         const response = await request(app)
             .post('/login') // Replace with your actual login route
@@ -61,6 +64,7 @@ describe('Authentication Tests', () => {
         expect(response.body.message).toBe('Invalid credentials.');
     });
 });
+
 // Clean up after tests
 afterAll(async () => {
     await sequelize.close(); // Close the Sequelize connection after tests

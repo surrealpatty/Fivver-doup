@@ -33,7 +33,8 @@ const sequelize = new _sequelizetypescript.Sequelize({
     ],
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
     define: {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: true
     },
     pool: {
         max: 10,
@@ -50,8 +51,18 @@ const sequelize = new _sequelizetypescript.Sequelize({
     }
 });
 // Test the database connection
-sequelize.authenticate().then(()=>{
-    console.log('Database connection established successfully.');
-}).catch((error)=>{
-    console.error('Unable to connect to the database:', error);
-});
+const testConnection = async ()=>{
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection established successfully.');
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Unable to connect to the database:', error.message);
+        } else {
+            console.error('An unknown error occurred during the connection test');
+        }
+        process.exit(1); // Exit the process if connection fails
+    }
+};
+// Call the test connection function
+testConnection();
