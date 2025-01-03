@@ -2,9 +2,9 @@ import { Sequelize } from 'sequelize-typescript';
 import config from './config'; // Import the configuration file
 import Service from '../models/services'; // Use default import
 
-import User from './models/user.ts';
-import Order from './models/order.ts';
-import Review from './models/review.ts';
+import User from './models/user';  // Remove the `.ts` extension
+import Order from './models/order';  // Remove the `.ts` extension
+import Review from './models/review';  // Remove the `.ts` extension
 
 
 // Initialize Sequelize instance with the necessary configuration

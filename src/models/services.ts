@@ -61,5 +61,8 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
 
+// Define the association between Service and User explicitly
+Service.belongsTo(User, { foreignKey: 'userId' });
+
 // Export the Service model
 export default Service;
