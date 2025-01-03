@@ -28,7 +28,7 @@ const config: Config.InitialOptions = {
   setupFiles: [],
 
   // Include the setup file for additional environment configuration
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Path to the setup file
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Path to the setup file
 
   // Automatically clear mocks before each test
   clearMocks: true,
