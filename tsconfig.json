@@ -1,30 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                          // Set the target JavaScript version
-    "module": "ESNext",                          // Use ESNext module system for ES modules
-    "moduleResolution": "node",                  // Resolve modules like Node.js
-    "strict": true,                              // Enable strict type-checking options
-    "esModuleInterop": true,                     // Enable interop between ES modules and CommonJS
-    "skipLibCheck": true,                        // Skip library checking for faster compilation
-    "forceConsistentCasingInFileNames": true,    // Enforce consistent casing of file names
-    "baseUrl": "./",                             // Base directory for relative imports
-    "outDir": "./dist",                          // Output directory for compiled files
-    "rootDir": "./src",                          // Root directory for source files
-    "noEmitOnError": true,                       // Don't emit output if there are errors
-    "resolveJsonModule": true,                   // Allow importing JSON modules
-    "experimentalDecorators": true,              // Enable decorators (required by some libraries like TypeORM)
-    "emitDecoratorMetadata": true,               // Emit metadata for decorators (required for sequelize-typescript)
-    "skipDefaultLibCheck": true,                 // Skip checking default lib.d.ts for performance
-    "allowJs": false,                            // Ensure only TypeScript files are compiled
-    "jsx": "react-jsx"                           // Required if you're using React with TypeScript
+    "target": "ESNext",                           // Set the target JavaScript version to ESNext
+    "module": "ESNext",                           // Use ESNext module system for ES modules
+    "moduleResolution": "node",                   // Resolve modules like Node.js
+    "strict": true,                               // Enable strict type-checking options
+    "esModuleInterop": true,                      // Enable interop between ES modules and CommonJS
+    "skipLibCheck": true,                         // Skip library checking for faster compilation
+    "forceConsistentCasingInFileNames": true,     // Enforce consistent casing of file names
+    "baseUrl": "./",                              // Base directory for relative imports
+    "outDir": "./dist",                           // Output directory for compiled files
+    "rootDir": "./src",                           // Root directory for source files
+    "noEmitOnError": true,                        // Don't emit output if there are errors
+    "resolveJsonModule": true,                    // Allow importing JSON modules
+    "experimentalDecorators": true,               // Enable decorators (required by some libraries like TypeORM)
+    "emitDecoratorMetadata": true,                // Emit metadata for decorators (required for sequelize-typescript)
+    "skipDefaultLibCheck": true,                  // Skip checking default lib.d.ts for performance
+    "allowJs": false                              // Ensure only TypeScript files are compiled
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
-    "tests/**/*.ts"                              // Include all TypeScript files in the tests folder
+    "tests/**/*.ts"                              // Include all TypeScript files in the tests folder (if tests are in this directory)
   ],
   "exclude": [
     "node_modules",                              // Exclude node_modules
-    "dist",                                      // Exclude dist folder
+    "dist",                                      // Exclude dist folder (compiled files)
     "**/*.js"                                    // Exclude all JavaScript files (ensure only TypeScript files are included)
   ]
 }
