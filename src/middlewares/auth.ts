@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express';
-import jwt, { JwtPayload, VerifyOptions } from 'jsonwebtoken'; // Correctly import VerifyOptions and JwtPayload
+import jwt from 'jsonwebtoken'; // Import only jwt here
 import config from '../config/config'; // Ensure the path is correct and properly typed
 import { Request } from 'express';
 
-// Define the expected JWT Payload structure
+// Define the expected JWT Payload structure, extending JwtPayload from jsonwebtoken
 interface JwtPayloadCustom {
   id: string; // User ID stored in the JWT payload
 }
@@ -29,7 +29,7 @@ export const verifyToken = (
   const jwtSecret = config[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
 
   // Define the options for verification
-  const verifyOptions: VerifyOptions = {  // Use VerifyOptions here
+  const verifyOptions = {  
     algorithms: ['HS256'], // Adjust algorithm as needed
   };
 
@@ -38,14 +38,14 @@ export const verifyToken = (
     token,
     jwtSecret, // Use the correct string type here
     verifyOptions, // Pass the options here
-    (err: Error | null, decoded: JwtPayload | null) => {  // Fixing the type here
+    (err: Error | null, decoded: any) => {  // Use `any` here temporarily
       if (err) {
         return res.status(401).json({ message: 'Unauthorized', error: err.message });
       }
 
       // Ensure decoded payload is valid and contains an ID
       if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-        const decodedToken = decoded as JwtPayloadCustom;
+        const decodedToken = decoded as JwtPayloadCustom;  // Now, we know the 'id' field exists in the decoded token
         req.userId = String(decodedToken.id); // Store the userId in the request object
         return next(); // Proceed to the next middleware
       } else {
