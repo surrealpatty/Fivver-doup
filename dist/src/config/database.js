@@ -14,14 +14,12 @@ const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _order = /*#__PURE__*/ _interop_require_default(require("../models/order"));
 const _review = require("../models/review");
-
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
 _dotenv.default.config(); // Load environment variables from .env
-
 // Initialize Sequelize instance with environment variables or defaults
 const sequelize = new _sequelizetypescript.Sequelize({
     username: process.env.DB_USERNAME || 'root',
@@ -56,17 +54,19 @@ const sequelize = new _sequelizetypescript.Sequelize({
         collate: 'utf8mb4_unicode_ci'
     }
 });
-
 // Test the database connection
-const testConnection = async ()=> {
+const testConnection = async ()=>{
     try {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
     } catch (error) {
-        console.error('An unknown error occurred during the connection test');
-        return; // Prevent abrupt termination during the test
+        if (error instanceof Error) {
+            console.error('Unable to connect to the database:', error.message);
+        } else {
+            console.error('An unknown error occurred during the connection test');
+        }
+        process.exit(1); // Exit the process if connection fails
     }
 };
-
 // Call the test connection function
 testConnection();
