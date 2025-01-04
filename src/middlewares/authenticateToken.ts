@@ -10,7 +10,7 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
  * Attaches the decoded user information to the `req.user` property.
  */
 export const authenticateToken = (
-  req: Request & { user?: UserPayload }, // Add `user` property to the `Request` type
+  req: Request & { user?: UserPayload }, // Ensure correct type for `user`
   res: Response,
   next: NextFunction
 ): Response | void => {
