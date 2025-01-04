@@ -1,4 +1,4 @@
-import { Request } from 'express';
+// src/types/index.ts
 
 // Define roles and tiers as needed
 export type UserRole = 'admin' | 'paid' | 'user'; // You can extend this with more roles

@@ -1,8 +1,9 @@
+// src/index.ts
 import express from 'express';
-import { CustomAuthRequest } from './types'; // Correct the import for CustomAuthRequest if needed
-import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path to premium service route
-import userRoutes from './routes/user'; // Path to user routes
-import serviceRoutes from './routes/service'; // Path to service routes
+import { sequelize } from './config/sequelize';
+import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
+import userRoutes from './routes/user'; // Ensure the correct path
+import serviceRoutes from './routes/service'; // Ensure the correct path
 
 const app = express();
 
@@ -26,4 +27,8 @@ app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
-export default app; // Export app for testing or further integration
+// Export the app for use in other files (like tests)
+export default app;
+
+// If you need to export the sequelize instance for testing or other purposes
+export { app, sequelize };

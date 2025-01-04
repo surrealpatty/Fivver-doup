@@ -1,5 +1,5 @@
 import express from 'express';
-import checkIfPaidUser from 'middleware/checkIfPaidUser'; // Import the middleware
+import checkIfPaidUser from '../middlewares/checkIfPaidUser'; // Adjust path accordingly
 
 const router = express.Router();
 
