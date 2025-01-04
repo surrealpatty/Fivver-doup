@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For generating mock JWT tokens
 const supertest_1 = __importDefault(require("supertest"));
 const index_1 = __importDefault(require("../index")); // Adjust path if necessary
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken explicitly
 // Mock JWT token generation for paid and free users
 const generateToken = (user, secretKey) => {
     return jsonwebtoken_1.default.sign(user, secretKey, { expiresIn: '1h' });
@@ -52,6 +52,13 @@ jest.mock('../middlewares/authenticateToken', () => {
         }
         next();
     };
+});
+// Mock process.exit to prevent tests from terminating
+beforeAll(() => {
+    // Mocking process.exit to avoid throwing any error while tests run
+    jest.spyOn(process, 'exit').mockImplementation((code) => {
+        throw new Error(`process.exit called with code: ${code}`);
+    });
 });
 describe('GET /premium-service', () => {
     it('should allow access to paid users', async () => {
