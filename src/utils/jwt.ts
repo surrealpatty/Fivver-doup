@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'; // Import the 'jsonwebtoken' library
 import { UserPayload } from '../types';  // Importing the UserPayload type for type safety
 
 // Secret key for JWT generation and verification (ensure this is securely stored in environment variables)
@@ -22,8 +22,8 @@ export const generateToken = (user: UserPayload): string => {
 // Function to verify JWT token and return the decoded user data
 export const verifyToken = (token: string): UserPayload | null => {
   try {
-    // Verify and decode the token, `JwtPayload` is used as it is the base type returned from `jwt.verify()`
-    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload & UserPayload;
+    // Verify and decode the token
+    const decoded = jwt.verify(token, SECRET_KEY) as { id: string, email: string, username?: string, tier?: string, role?: string }; // Manually specify the expected type
 
     // Return the decoded user payload if verification is successful
     return decoded;
