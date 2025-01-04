@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 Object.defineProperty(exports, "sequelize", {
     enumerable: true,
-    get: function () {
+    get: function() {
         return sequelize;
     }
 });
@@ -14,13 +14,12 @@ const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 const _order = /*#__PURE__*/ _interop_require_default(require("../models/order"));
 const _review = require("../models/review");
-
 function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
 }
-
 _dotenv.default.config(); // Load environment variables from .env
-
 // Initialize Sequelize instance with environment variables or defaults
 const sequelize = new _sequelizetypescript.Sequelize({
     username: process.env.DB_USERNAME || 'root',
@@ -49,14 +48,14 @@ const sequelize = new _sequelizetypescript.Sequelize({
         ssl: process.env.DB_USE_SSL === 'true' ? {
             require: true,
             rejectUnauthorized: false
-        } : undefined, // Enable SSL if required
+        } // Enable SSL if required
+         : undefined,
         charset: 'utf8mb4',
         collate: 'utf8mb4_unicode_ci'
     }
 });
-
 // Test the database connection
-const testConnection = async () => {
+const testConnection = async ()=>{
     try {
         await sequelize.authenticate();
         console.log('Database connection established successfully.');
@@ -66,12 +65,8 @@ const testConnection = async () => {
         } else {
             console.error('An unknown error occurred during the connection test');
         }
-
-        // Don't exit the process in this code
-        // Allow the calling code to handle failures
-        throw error;
+        process.exit(1); // Exit the process if connection fails
     }
 };
-
-// Export testConnection for use in tests or initialization scripts
-exports.testConnection = testConnection;
+// Call the test connection function
+testConnection();
