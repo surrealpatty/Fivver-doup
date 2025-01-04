@@ -1,3 +1,4 @@
+// src/middlewares/checkIfPaidUser.ts
 import { Request, Response, NextFunction } from 'express';
 import { UserPayload } from '../types'; // Ensure this type defines the expected structure of the JWT payload
 

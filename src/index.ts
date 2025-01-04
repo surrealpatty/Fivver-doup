@@ -26,11 +26,8 @@ const server = app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
-// Export the app for use in other files (like tests)
-export default app;  // For testing purposes
+// Export server for test purposes
+export { server, sequelize };
 
-// Export the server for use in globalTeardown or other test-related purposes
-export { server };
-
-// Optionally, you can export sequelize to be used in tests or elsewhere
-export { sequelize };
+// Export the app as the default export for other purposes, including tests
+export default app;  // Default export for app
