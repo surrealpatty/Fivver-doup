@@ -27,11 +27,11 @@ const sequelize = new Sequelize({
     idle: 10000,   // Time (ms) a connection can remain idle before release
   },
   dialectOptions: {
-    ssl: process.env.DB_USE_SSL === 'true'
-      ? { require: true, rejectUnauthorized: false } // Enable SSL if required
-      : undefined,
     charset: 'utf8mb4', // Use utf8mb4 for storing multi-byte characters like emojis
     collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci for proper character collation
+    ssl: process.env.DB_USE_SSL === 'true' 
+      ? { require: true, rejectUnauthorized: false } // Enable SSL if required
+      : undefined,
   },
 });
 
