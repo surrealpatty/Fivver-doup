@@ -6,12 +6,12 @@ require("reflect-metadata");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = require("../models/user");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+const _index = require("../../src/index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const _index = require("../../dist/index.js"); // Corrected import to use the transpiled file from dist folder
 // Mocking the User model and JWT methods
 jest.mock('../models/user', ()=>({
         User: {
@@ -39,7 +39,7 @@ describe('User Tests', ()=>{
                 role: 'user',
                 tier: 'free'
             });
-            // Send a POST request to register endpoint
+            // Send a POST request to the register endpoint
             const response = await (0, _supertest.default)(_index.app).post('/api/users/register').send({
                 email: 'test@example.com',
                 username: 'testuser',
