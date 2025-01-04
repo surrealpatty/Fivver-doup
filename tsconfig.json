@@ -23,7 +23,7 @@
       "dist/*": ["./dist/*"]                        // Resolve paths inside dist/ after compilation
     },
     "types": ["node", "jsonwebtoken", "jest", "nodemailer", "supertest"],  // Add supertest types here
-    "typeRoots": ["node_modules/@types"]          // Ensure custom type declarations are correctly found
+    "typeRoots": ["node_modules/@types"],          // Ensure custom type declarations are correctly found
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder

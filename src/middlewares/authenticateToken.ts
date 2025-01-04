@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jwt, { VerifyOptions, JsonWebTokenError, JwtPayload } from 'jsonwebtoken'; // Correct imports for VerifyOptions and JsonWebTokenError
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Import your custom UserPayload type
 
@@ -23,24 +23,31 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  const options: VerifyOptions = {
+  // Define options for token verification
+  const options: jwt.VerifyOptions = {
     algorithms: ['HS256'], // Specify the algorithm type correctly
   };
 
   try {
-    jwt.verify(token, SECRET_KEY, options, (err: JsonWebTokenError | null, decoded: JwtPayload | undefined) => {
-      if (err) {
-        return res.status(401).json({ message: 'Invalid or expired token' });
-      }
+    // Correct type for decoded token: Use jwt.verify's callback signature
+    jwt.verify(
+      token,
+      SECRET_KEY,
+      options,
+      (err: jwt.JsonWebTokenError | null, decoded: jwt.JwtPayload | undefined) => {
+        if (err) {
+          return res.status(401).json({ message: 'Invalid or expired token' });
+        }
 
-      if (decoded && typeof decoded === 'object' && decoded !== null) {
-        req.user = decoded as UserPayload; // Assign decoded user payload to the request object
-      } else {
-        return res.status(401).json({ message: 'Invalid token structure' });
-      }
+        if (decoded) {
+          req.user = decoded as UserPayload; // Assign decoded user payload to the request object
+        } else {
+          return res.status(401).json({ message: 'Invalid token structure' });
+        }
 
-      next(); // Proceed to the next middleware or route handler
-    });
+        next(); // Proceed to the next middleware or route handler
+      }
+    );
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
