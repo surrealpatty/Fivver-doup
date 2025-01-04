@@ -29,7 +29,9 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 3000;
 
-// Synchronize database and start the server only if the file is not imported as a module
+let server: any; // Declare a variable to hold the server instance
+
+// Synchronize database and start server only if the file is not imported as a module
 if (!module.parent) {
   sequelize
     .sync({ alter: true }) // Ensure the database schema is updated (optional)
@@ -37,7 +39,7 @@ if (!module.parent) {
       console.log('Database synchronized successfully.');
 
       // Start the server after the database is synchronized
-      app.listen(PORT, () => {
+      server = app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
       });
     })
@@ -46,5 +48,5 @@ if (!module.parent) {
     });
 }
 
-// Export the app for testing purposes
-export default app;
+// Export the server and app for testing purposes
+export { server, app, sequelize };

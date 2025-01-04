@@ -1,4 +1,6 @@
-import { sequelize } from '../config/database';  // Adjust path based on your project structure
+// src/test/globalTeardown.ts
+
+import { sequelize } from '../config/database'; // Adjust path based on your project structure
 import { server } from '../index';  // Adjust path based on your project structure
 
 // Global teardown to ensure cleanup of resources after all tests
