@@ -45,13 +45,13 @@ const sequelize = new _sequelizetypescript.Sequelize({
         idle: 10000
     },
     dialectOptions: {
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
         ssl: process.env.DB_USE_SSL === 'true' ? {
             require: true,
             rejectUnauthorized: false
         } // Enable SSL if required
-         : undefined,
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+         : undefined
     }
 });
 // Test the database connection

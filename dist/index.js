@@ -8,11 +8,13 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const sequelize_typescript_1 = require("sequelize-typescript");
+const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
+// Import your models
 const user_1 = __importDefault(require("./models/user")); // Path to the User model
 const services_1 = __importDefault(require("./models/services")); // Path to the Service model
+// Import routes
 const user_2 = __importDefault(require("./routes/user")); // User-related routes
 const service_1 = __importDefault(require("./routes/service")); // Service-related routes
-const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
 // Initialize environment variables
 dotenv_1.default.config();
 // Initialize Sequelize instance with database connection
