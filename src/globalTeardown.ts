@@ -1,4 +1,4 @@
-import { server } from './index';  // Ensure this path is correct and imports the server instance
+import { server } from './index';  // Correct path and export
 import { sequelize } from './config/database';  // Correct import
 
 export default async function globalTeardown() {

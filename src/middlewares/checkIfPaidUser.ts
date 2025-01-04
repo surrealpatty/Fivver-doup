@@ -6,11 +6,12 @@ const checkIfPaidUser = (req: Request, res: Response, next: NextFunction) => {
   // Ensure req.user is typed as UserPayload and contains the 'isPaid' property
   const user = req.user as UserPayload;
 
+  // Check if the user exists and has the 'isPaid' property set to true
   if (user && user.isPaid) {
     return next(); // User is paid, continue to the route handler
   }
 
-  // If user is not paid or not authenticated, return a 403 Forbidden response
+  // If the user is not paid or not authenticated, return a 403 Forbidden response
   return res.status(403).json({ message: 'Access forbidden for free users.' });
 };
 

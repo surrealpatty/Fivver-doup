@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 // Define roles and tiers as needed
 export type UserRole = 'admin' | 'paid' | 'user'; // You can extend this with more roles
 export type UserTier = 'free' | 'paid'; // You can extend this with more tiers

@@ -1,4 +1,3 @@
-// src/index.ts
 import express from 'express';
 import { sequelize } from './config/sequelize';
 import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
@@ -23,12 +22,15 @@ app.get('/', (req, res) => {
 });
 
 // Start the server on port 3000 (or from environment variables)
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
 // Export the app for use in other files (like tests)
-export default app;
+export default app;  // For testing purposes
 
-// If you need to export the sequelize instance for testing or other purposes
-export { app, sequelize };
+// Export the server for use in globalTeardown or other test-related purposes
+export { server };
+
+// Optionally, you can export sequelize to be used in tests or elsewhere
+export { sequelize };
