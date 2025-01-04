@@ -1,26 +1,17 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "default", {
-    enumerable: true,
-    get: function() {
-        return _default;
+// src/routes/premiumService.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct import path
+const router = (0, express_1.Router)();
+// Define the premium service route with authentication
+router.get('/premium-service', authenticateToken_1.authenticateToken, (req, res) => {
+    // Check if the user is authenticated and has a 'paid' tier
+    if (req.user && req.user.tier === 'paid') {
+        res.status(200).json({ message: 'Premium service access granted.' });
+    }
+    else {
+        res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
     }
 });
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _checkIfPaidUser = /*#__PURE__*/ _interop_require_default(require("../middlewares/checkIfPaidUser"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const router = _express.default.Router();
-// Apply the checkIfPaidUser middleware to this route
-router.get('/premium-service', _checkIfPaidUser.default, (req, res)=>{
-    // If the middleware passes, this route is executed for paid users
-    res.status(200).json({
-        message: 'You have access to the premium service.'
-    });
-});
-const _default = router;
+exports.default = router;

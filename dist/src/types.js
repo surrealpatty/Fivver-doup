@@ -1,13 +1,12 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "isUser", {
-    enumerable: true,
-    get: function() {
-        return isUser;
-    }
-});
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isUser = isUser;
+// Define a type guard to check if an object is a valid UserPayload
 function isUser(user) {
-    return user && typeof user.id === 'string' && typeof user.email === 'string' && (user.username === undefined || typeof user.username === 'string') && (user.role === undefined || typeof user.role === 'string') && (user.tier === undefined || typeof user.tier === 'string');
+    return (user &&
+        typeof user.id === 'string' &&
+        typeof user.email === 'string' &&
+        (user.username === undefined || typeof user.username === 'string') &&
+        (user.role === undefined || typeof user.role === 'string') &&
+        (user.tier === undefined || typeof user.tier === 'string'));
 }

@@ -1,46 +1,37 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "authenticateToken", {
-    enumerable: true,
-    get: function() {
-        return authenticateToken;
-    }
-});
-const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Define the secret key for JWT
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
-const authenticateToken = (req, res, next)=>{
-    // Extract the token from the Authorization header (Bearer token)
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+/**
+ * Middleware to authenticate users via JWT token.
+ * Attaches the decoded user information to the `req.user` property.
+ */
+const authenticateToken = (req, // Ensure correct type for `user`
+res, next) => {
+    // Extract the token from the Authorization header (Bearer token format)
+    const authHeader = req.header('Authorization');
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
-        // Log missing token for debugging purposes
-        console.log('Authorization token is missing');
-        return res.status(401).json({
-            message: 'Authorization token is missing'
-        });
+        console.error('Authorization token is missing'); // Log missing token for debugging
+        return res.status(401).json({ message: 'Authorization token is missing' });
     }
     try {
-        // Verify and decode the token
-        const decoded = _jsonwebtoken.default.verify(token, SECRET_KEY);
-        // Log the decoded token for debugging purposes
-        console.log('Decoded token:', decoded);
-        // Attach the decoded user information to the request object
+        // Verify and decode the JWT
+        const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
+        console.log('Decoded token:', decoded); // Log decoded token for debugging
+        // Attach the decoded user information to the `req.user` object
         req.user = decoded;
         // Proceed to the next middleware or route handler
         next();
-    } catch (error) {
-        // Log token verification failure for debugging purposes
-        console.log('Token verification failed:', error);
-        // Return a 403 status if the token is invalid or expired
-        return res.status(403).json({
-            message: 'Invalid or expired token'
-        });
+    }
+    catch (error) {
+        console.error('Token verification failed:', error); // Log verification failure
+        return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
+exports.authenticateToken = authenticateToken;

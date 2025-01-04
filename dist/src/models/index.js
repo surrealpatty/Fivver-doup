@@ -1,35 +1,15 @@
-// src/models/index.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    Order: function() {
-        return _order.Order;
-    },
-    Review: function() {
-        return _review.Review;
-    },
-    Service: function() {
-        return _services.default;
-    },
-    User: function() {
-        return _user.default;
-    }
-});
-const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
-const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
-const _order = require("./order");
-const _review = require("./review");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
- // Exporting models
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Review = exports.Order = exports.Service = exports.User = void 0;
+// src/models/index.ts
+const user_1 = __importDefault(require("./user")); // Named import for User
+exports.User = user_1.default;
+const services_1 = __importDefault(require("../models/services")); // Use default import
+exports.Service = services_1.default;
+const order_1 = require("./order"); // Default import for Order (if Order is the default export)
+Object.defineProperty(exports, "Order", { enumerable: true, get: function () { return order_1.Order; } });
+const review_1 = require("./review"); // Named import for Review
+Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return review_1.Review; } });

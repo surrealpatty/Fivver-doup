@@ -1,56 +1,40 @@
-// src/controllers/userController.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "registerUser", {
-    enumerable: true,
-    get: function() {
-        return registerUser;
-    }
-});
-const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
-const _user = require("../models/user");
-const _jwt = require("../utils/jwt");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const registerUser = async (req, res)=>{
+// src/controllers/userController.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerUser = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const user_1 = require("../models/user"); // Importing the User model
+const jwt_1 = require("../utils/jwt"); // Helper function to generate JWT
+// Controller for registering a new user
+const registerUser = async (req, res) => {
     const { email, username, password, tier = 'free' } = req.body;
     // Input validation: Ensure required fields are provided
     if (!email || !username || !password) {
-        return res.status(400).json({
-            message: 'Email, username, and password are required.'
-        });
+        return res.status(400).json({ message: 'Email, username, and password are required.' });
     }
     try {
         // Check if the user already exists by email
-        const existingUser = await _user.User.findOne({
-            where: {
-                email
-            }
-        });
+        const existingUser = await user_1.User.findOne({ where: { email } });
         if (existingUser) {
             // If a user exists with the given email, respond with a 400 status code
-            return res.status(400).json({
-                error: 'Email already exists'
-            });
+            return res.status(400).json({ error: 'Email already exists' });
         }
         // Hash the user's password before saving to the database
-        const hashedPassword = await _bcryptjs.default.hash(password, 10);
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         // Default role, tier, and isVerified properties (assumed defaults)
-        const newUser = await _user.User.create({
+        const newUser = await user_1.User.create({
             email,
             username,
             password: hashedPassword,
-            tier,
-            role: 'user',
-            isVerified: false
+            tier, // Optional tier (defaults to 'free')
+            role: 'user', // Default role
+            isVerified: false, // Default verification status
         });
         // Generate a JWT token for the new user
-        const token = (0, _jwt.generateToken)(newUser);
+        const token = (0, jwt_1.generateToken)(newUser);
         // Respond with the user data (excluding password) and the JWT token
         return res.status(201).json({
             message: 'User registered successfully',
@@ -58,32 +42,29 @@ const registerUser = async (req, res)=>{
                 id: newUser.id,
                 email: newUser.email,
                 username: newUser.username,
-                role: newUser.role,
-                tier: newUser.tier,
+                role: newUser.role, // Default role is 'user'
+                tier: newUser.tier, // The user's tier (e.g., 'free')
                 isVerified: newUser.isVerified,
-                createdAt: newUser.createdAt
+                createdAt: newUser.createdAt,
             },
-            token
+            token,
         });
-    } catch (error) {
+    }
+    catch (error) {
         // Type assertion for 'error' to be of type 'Error'
         if (error instanceof Error) {
             console.error('Error registering user:', error);
             // Check if the error is related to a database issue or something else
             if (error.name === 'SequelizeUniqueConstraintError') {
-                return res.status(400).json({
-                    error: 'Email already exists'
-                });
+                return res.status(400).json({ error: 'Email already exists' });
             }
-            return res.status(500).json({
-                message: 'Internal server error during registration.'
-            });
-        } else {
+            return res.status(500).json({ message: 'Internal server error during registration.' });
+        }
+        else {
             // In case the error is not of type 'Error', log and handle the unknown case
             console.error('Unknown error:', error);
-            return res.status(500).json({
-                message: 'Internal server error during registration.'
-            });
+            return res.status(500).json({ message: 'Internal server error during registration.' });
         }
     }
 };
+exports.registerUser = registerUser;

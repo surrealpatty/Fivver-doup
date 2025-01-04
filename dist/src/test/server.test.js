@@ -1,33 +1,29 @@
-// src/test/server.test.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const _http = /*#__PURE__*/ _interop_require_default(require("http"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
-const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _database = require("../config/database");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-describe('Server Tests', ()=>{
+// src/test/server.test.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const http_1 = __importDefault(require("http"));
+const index_1 = __importDefault(require("../index")); // Adjust the path to your app entry point
+const supertest_1 = __importDefault(require("supertest"));
+const database_1 = require("../config/database"); // Import sequelize instance to close connection
+describe('Server Tests', () => {
     let server;
-    beforeAll(()=>{
+    beforeAll(() => {
         // Create and start the server before tests
-        server = _http.default.createServer(_index.default);
+        server = http_1.default.createServer(index_1.default);
         server.listen(3000); // Start the server
     });
-    it('should respond to a GET request', async ()=>{
-        const res = await (0, _supertest.default)(_index.default).get('/some-route');
+    it('should respond to a GET request', async () => {
+        const res = await (0, supertest_1.default)(index_1.default).get('/some-route');
         expect(res.status).toBe(200);
     });
-    afterAll(async ()=>{
+    afterAll(async () => {
         // Close the Sequelize connection and the server after all tests
-        await _database.sequelize.close(); // Close the Sequelize connection after tests
-        await new Promise((resolve)=>{
-            server.close(()=>{
+        await database_1.sequelize.close(); // Close the Sequelize connection after tests
+        await new Promise((resolve) => {
+            server.close(() => {
                 resolve();
             });
         });

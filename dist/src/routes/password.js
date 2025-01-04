@@ -1,23 +1,13 @@
-// src/routes/password.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "default", {
-    enumerable: true,
-    get: function() {
-        return _default;
-    }
-});
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _passwordController = require("../controllers/passwordController");
-const _validatePasswordReset = require("../middlewares/validatePasswordReset");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const router = _express.default.Router();
+// src/routes/password.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const passwordController_1 = require("../controllers/passwordController");
+const validatePasswordReset_1 = require("../middlewares/validatePasswordReset"); // Correct import
+const router = express_1.default.Router();
 // Route for password reset
-router.post('/reset', _validatePasswordReset.validatePasswordReset, _passwordController.resetPassword);
-const _default = router;
+router.post('/reset', validatePasswordReset_1.validatePasswordReset, passwordController_1.resetPassword);
+exports.default = router;
