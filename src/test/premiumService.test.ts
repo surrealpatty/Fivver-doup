@@ -1,7 +1,7 @@
+import { UserPayload } from '../types'; // Adjust path if necessary
+import jwt from 'jsonwebtoken'; // For generating mock JWT tokens
 import request from 'supertest';
 import app from '../index'; // Adjust path if necessary
-import { UserPayload } from '../types'; // Ensure correct import path for UserPayload
-import jwt from 'jsonwebtoken'; // For generating mock JWT tokens
 
 // Mock JWT token generation for paid and free users
 const generateToken = (user: UserPayload, secretKey: string) => {
