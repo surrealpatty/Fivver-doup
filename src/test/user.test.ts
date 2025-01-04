@@ -1,8 +1,8 @@
 import 'reflect-metadata'; // Ensure Sequelize decorators work properly
 import request from 'supertest';
-import { User } from '../dist/models/user'; // Adjusted to point to the transpiled 'user.js' file in 'dist/models'
 import jwt from 'jsonwebtoken'; // For mocking token validation
-import { app } from '../dist/index'; // Adjusted import to match transpiled paths
+import { User } from 'src/models/user'; // Corrected to import from src/ instead of dist/
+import { app } from 'src/index';         // Corrected to import from src/ instead of dist/
 
 // Mocking the User model and JWT methods for testing
 jest.mock('../dist/models/user', () => ({
