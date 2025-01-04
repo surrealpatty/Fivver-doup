@@ -1,5 +1,5 @@
-import { sequelize } from './config/database'; // Use relative path to config
-import server from './index';  // Correct path to the server instance
+import { sequelize } from '../config/database';  // Adjust path based on your project structure
+import { server } from '../index';  // Adjust path based on your project structure
 
 // Global teardown to ensure cleanup of resources after all tests
 afterAll(async () => {

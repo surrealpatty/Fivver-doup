@@ -1,21 +1,9 @@
-import { sequelize } from './config/database'; // Use relative path to config
-import server from './index';  // Correct path to the server instance
+import { server } from './index';  // Import the server from index.ts
 
-// Global teardown to ensure cleanup of resources after all tests
-afterAll(async () => {
-  // Close the database connection if it exists
-  if (sequelize) {
-    await sequelize.close();
-    console.log('Database connection closed.');
-  }
-
-  // Close the server if it has a close method (now using the HTTP server)
-  if (server && typeof server.close === 'function') {
-    await new Promise<void>((resolve) => {
-      server.close(() => {
-        resolve();
-        console.log('Server closed.');
-      });
-    });
-  }
-});
+if (server && typeof server.close === 'function') {
+  server.close(() => {
+    console.log('Server closed successfully.');
+  });
+} else {
+  console.log('Server is not running or has already been closed.');
+}
