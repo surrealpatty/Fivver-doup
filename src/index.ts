@@ -1,8 +1,9 @@
+// src/index.ts
 import express from 'express';
-import { sequelize } from './config/sequelize';
-import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
-import userRoutes from './routes/user'; // Ensure the correct path
-import serviceRoutes from './routes/service'; // Ensure the correct path
+import { sequelize } from './config/sequelize';  // Ensure correct path
+import premiumServiceRoute from './routes/premiumService';  // Ensure the correct path
+import userRoutes from './routes/user';  // Ensure the correct path
+import serviceRoutes from './routes/service';  // Ensure the correct path
 
 const app = express();
 
@@ -13,8 +14,8 @@ app.use(express.json());
 app.use('/premium-service', premiumServiceRoute);
 
 // Register other routes
-app.use('/api/users', userRoutes); // Mount user routes
-app.use('/api/services', serviceRoutes); // Mount service routes
+app.use('/api/users', userRoutes);  // Mount user routes
+app.use('/api/services', serviceRoutes);  // Mount service routes
 
 // Root route to confirm server is running
 app.get('/', (req, res) => {
