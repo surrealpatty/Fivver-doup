@@ -6,8 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // Add this line at the very top to ensure Sequelize decorators work
 const supertest_1 = __importDefault(require("supertest"));
 const services_1 = require("../models/services"); // Corrected relative import
-const index_1 = require("../index.js"); // Corrected import to use the transpiled file from dist folder
-
+const index_1 = require("dist/index"); // Corrected import to use the transpiled file from dist folder
 // Mocking the Service model methods
 jest.mock('../models/services', () => ({
     Service: {
@@ -15,13 +14,11 @@ jest.mock('../models/services', () => ({
         findOne: jest.fn(),
     },
 }));
-
 describe('Service Tests', () => {
     // Apply retry logic to all tests in this suite
     beforeEach(() => {
         jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
     });
-    
     describe('POST /api/services/create', () => {
         it('should create a service successfully', async () => {
             // Mock resolved value for Service.create
@@ -48,7 +45,6 @@ describe('Service Tests', () => {
                 price: 100,
             });
         });
-        
         it('should return an error if service creation fails', async () => {
             // Mock rejected value for Service.create
             services_1.Service.create.mockRejectedValueOnce(new Error('Service creation failed'));

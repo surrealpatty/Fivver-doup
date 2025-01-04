@@ -7,7 +7,7 @@ require("reflect-metadata"); // Add this line at the very top to ensure Sequeliz
 const supertest_1 = __importDefault(require("supertest"));
 const user_1 = require("../models/user"); // Corrected relative import
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For mocking token validation
-const _index = require("../../index.js"); // Corrected import to use the transpiled file from dist folder
+const _index = require("../../dist/index.js"); // Corrected import to use the transpiled file from dist folder
 // Mocking the User model and JWT methods
 jest.mock('../models/user', () => ({
     User: {
