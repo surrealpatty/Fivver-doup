@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import authenticateToken from '../middlewares/authenticateToken'; // Ensure the correct path to the middleware
+import { authenticateToken } from '../middlewares/authenticateToken'; // Ensure the correct path to the middleware
 import { UserPayload } from '../types'; // Ensure the correct path to the type
 
 const router = Router();
