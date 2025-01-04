@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import 'reflect-metadata'; // To use decorators for Sequelize and other libraries
 import express, { Application, Request, Response } from 'express';
 import http from 'http';
 import { Sequelize } from 'sequelize-typescript';
@@ -76,4 +76,6 @@ sequelize.sync()
   });
 
 // Export the app and server for testing or further integration
-export { app, server };
+export { app, server }; // Ensure app and server are exported for testing
+
+export default app; // Default export for app in case you want to use it elsewhere
