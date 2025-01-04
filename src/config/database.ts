@@ -1,38 +1,40 @@
 import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
-import User from '../models/user'; // Ensure the path is correct
-import Service from '../models/services'; // Ensure the path is correct
-import Order from '../models/order'; // Ensure the Order model exists and is correctly defined
-import { Review } from '../models/review'; // Ensure the Review model exists and is correctly defined
+import User from '../models/user';
+import Service from '../models/services';
+import Order from '../models/order';
+import { Review } from '../models/review';
 
-dotenv.config(); // Load environment variables from .env
+dotenv.config(); // Load environment variables from .env file
 
-// Initialize Sequelize instance with environment variables or defaults
+// After fixing the last object or function declaration
+
 const sequelize = new Sequelize({
-  username: process.env.DB_USERNAME || 'root', // Replace 'root' if a different user is used
-  password: process.env.DB_PASSWORD || 'password', // Replace 'password' with your actual password
-  database: process.env.DB_NAME || 'fivver_doup', // Match your database name
-  host: process.env.DB_HOST || '127.0.0.1', // Default to localhost
-  dialect: 'mysql', // Use MySQL dialect
-  models: [User, Service, Order, Review], // Register your models here
-  logging: process.env.NODE_ENV === 'development' ? console.log : false, // Log queries only in development
+  username: process.env.DB_USERNAME || 'root', // Ensure no missing commas
+  password: process.env.DB_PASSWORD || 'password',
+  database: process.env.DB_NAME || 'fivver_doup',
+  host: process.env.DB_HOST || '127.0.0.1',
+  dialect: 'mysql',
+  models: [User, Service, Order, Review],
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,
   define: {
-    freezeTableName: true, // Prevent Sequelize from pluralizing table names
-    timestamps: true, // Enable timestamps for createdAt and updatedAt
+    freezeTableName: true,
+    timestamps: true,
   },
   pool: {
-    max: 10, // Maximum number of connections
-    min: 0,  // Minimum number of connections
-    acquire: 30000, // Maximum time (ms) to acquire a connection
-    idle: 10000,   // Time (ms) a connection can remain idle before release
+    max: 10,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
   },
   dialectOptions: {
-    charset: 'utf8mb4', // Use utf8mb4 for storing multi-byte characters like emojis
-    collate: 'utf8mb4_unicode_ci', // Use utf8mb4_unicode_ci for proper character collation
-    ssl: process.env.DB_USE_SSL === 'true' 
-      ? { require: true, rejectUnauthorized: false } // Enable SSL if required
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
+    ssl: process.env.DB_USE_SSL === 'true'
+      ? { require: true, rejectUnauthorized: false }
       : undefined,
-});
+}});  // Ensure the closing brace and parentheses are correct here
+
 
 // Test the database connection
 const testConnection = async () => {
