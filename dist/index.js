@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
-require("reflect-metadata");
+require("reflect-metadata"); // To use decorators for Sequelize and other libraries
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const sequelize_typescript_1 = require("sequelize-typescript");
@@ -70,3 +70,4 @@ sequelize.sync()
     console.error('Error syncing the database:', error);
     process.exit(1); // Exit with error if sync fails
 });
+exports.default = app; // Default export for app in case you want to use it elsewhere
