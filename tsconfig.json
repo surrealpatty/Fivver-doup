@@ -21,7 +21,8 @@
     "paths": {
       "src/*": ["./src/*"],                       // Resolve paths inside src/ directly
       "dist/*": ["./dist/*"]                       // Resolve paths inside dist/ after compilation
-    }
+    },
+    "types": ["node", "jest"]                     // Add jest here to include Jest's types
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder

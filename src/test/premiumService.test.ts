@@ -1,7 +1,7 @@
 import { UserPayload } from '../types'; // Adjust path if necessary
 import request from 'supertest';
 import app from '../index'; // Adjust path if necessary
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken explicitly
+import jwt from 'jsonwebtoken'; // Correctly import jsonwebtoken
 
 // Mock JWT token generation for paid and free users
 const generateToken = (user: UserPayload, secretKey: string): string => {
@@ -23,14 +23,17 @@ const mockFreeUser: UserPayload = {
   tier: 'free',
 };
 
-// Mock the `jsonwebtoken` module at the top of the file
+// Mock the `jsonwebtoken` module within the test scope
 jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn().mockImplementation((user: UserPayload, secret: string) => {
+    return `mocked-token-${user.id}`;  // Mocked token generation
+  }),
   verify: jest.fn().mockImplementation((token: string, secret: string) => {
     // Mock behavior based on the token (this is a simplified version for your case)
-    if (token === 'validPaidUserToken') {
+    if (token === 'mocked-token-1') {
       return { id: '1', username: 'paiduser', tier: 'paid' };
     }
-    if (token === 'validFreeUserToken') {
+    if (token === 'mocked-token-2') {
       return { id: '2', username: 'freeuser', tier: 'free' };
     }
     throw new Error('Invalid token');

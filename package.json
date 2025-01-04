@@ -21,5 +21,13 @@
     "lint-staged": "lint-staged",
     "clean": "rimraf dist/ build/",
     "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14"
   }
 }
