@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("src/index"); // Adjusted to point to the transpiled 'index.js' file in the 'dist' folder
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import the jsonwebtoken module
+const index_1 = require("src/index"); // Ensure the path is correct for your app entry file
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import the jwt module
 // Helper function to generate a JWT token with a user role
 const generateToken = (id, tier) => {
     return jsonwebtoken_1.default.sign({ id, tier }, process.env.JWT_SECRET_KEY || 'your-secret-key', // Use the environment variable or a fallback
