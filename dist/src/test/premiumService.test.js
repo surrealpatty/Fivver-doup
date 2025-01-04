@@ -1,12 +1,15 @@
-import jwt from 'jsonwebtoken'; // Correct import of jsonwebtoken
-import supertest from 'supertest';
-import app from '../index'; // Adjust path if necessary
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const supertest_1 = __importDefault(require("supertest"));
+const index_1 = __importDefault(require("../index")); // Adjust path if necessary
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken explicitly
 // Mock JWT token generation for paid and free users
 const generateToken = (user, secretKey) => {
-    return jwt.sign(user, secretKey, { expiresIn: '1h' });
+    return jsonwebtoken_1.default.sign(user, secretKey, { expiresIn: '1h' });
 };
-
 // Mock user data
 const mockPaidUser = {
     id: '1',
@@ -20,7 +23,6 @@ const mockFreeUser = {
     username: 'freeuser',
     tier: 'free',
 };
-
 // Mock the `jsonwebtoken` module at the top of the file
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn().mockImplementation((token, secret) => {
@@ -34,7 +36,6 @@ jest.mock('jsonwebtoken', () => ({
         throw new Error('Invalid token');
     }),
 }));
-
 // Mock the `authenticateToken` middleware to inject user data
 jest.mock('../middlewares/authenticateToken', () => {
     return (req, res, next) => {
@@ -42,7 +43,7 @@ jest.mock('../middlewares/authenticateToken', () => {
         if (authHeader) {
             const token = authHeader.split(' ')[1];
             try {
-                const user = jwt.verify(token, 'your-secret-key');
+                const user = jsonwebtoken_1.default.verify(token, 'your-secret-key');
                 req.user = user; // Attach the user to the request
             }
             catch (error) {
@@ -52,35 +53,32 @@ jest.mock('../middlewares/authenticateToken', () => {
         next();
     };
 });
-
 // Mock process.exit to prevent tests from terminating
 beforeAll(() => {
+    // Mocking process.exit to avoid throwing any error while tests run
     jest.spyOn(process, 'exit').mockImplementation((code) => {
         throw new Error(`process.exit called with code: ${code}`);
     });
 });
-
 describe('GET /premium-service', () => {
     it('should allow access to paid users', async () => {
         const token = generateToken(mockPaidUser, 'your-secret-key');
-        const response = await supertest(app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .get('/premium-service')
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Premium service access granted.');
     });
-
     it('should deny access to non-paid users', async () => {
         const token = generateToken(mockFreeUser, 'your-secret-key');
-        const response = await supertest(app)
+        const response = await (0, supertest_1.default)(index_1.default)
             .get('/premium-service')
             .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(403);
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
-
     it('should return 401 if no token is provided', async () => {
-        const response = await supertest(app).get('/premium-service');
+        const response = await (0, supertest_1.default)(index_1.default).get('/premium-service');
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Unauthorized. Please log in.');
     });
