@@ -1,6 +1,6 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Router, Request, Response, NextFunction } from 'express';
 import { User } from '../models/user'; // Correct relative path to the User model
-import  authenticateToken  from '../middlewares/authenticateToken'; // Middleware for token validation
+import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token validation
 import { validateRegistration } from '../middlewares/validateRegistration'; // Middleware for validating registration data
 
 // Create a new router instance
@@ -25,7 +25,7 @@ interface UserPayload {
 // Registration endpoint
 router.post(
   '/register',
-  validateRegistration,
+  validateRegistration, // Middleware validation
   async (req: Request<{}, {}, RegistrationBody>, res: Response): Promise<Response> => {
     const { email, username, password } = req.body;
 
@@ -62,7 +62,7 @@ router.post(
 // Premium service route
 router.get(
   '/premium-service',
-  authenticateToken,
+  authenticateToken, // Middleware for token validation
   (req: Request, res: Response): Response => {
     // Assume `req.user` is populated by `authenticateToken` middleware
     const user = req.user as UserPayload; // Cast req.user to UserPayload
