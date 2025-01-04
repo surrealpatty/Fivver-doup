@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import jwt from 'jsonwebtoken'; // Importing jwt
+import jwt, { JwtPayload } from 'jsonwebtoken'; // Correct import for JwtPayload
 import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
 import { UserPayload } from '../types';  // Import UserPayload type
 
@@ -15,7 +15,7 @@ const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunc
     }
 
     // Verify the token using JWT secret key
-    jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err: Error | null, user: JwtPayload | null) => {
         if (err) {
             res.status(403).json({ message: 'Token is not valid' });
             return;  // Explicitly return here to stop further execution

@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { VerifyOptions, JsonWebTokenError, JwtPayload } from 'jsonwebtoken'; // Correct imports for VerifyOptions and JsonWebTokenError
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Import your custom UserPayload type
 
@@ -23,12 +23,12 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  const options: jwt.VerifyOptions = {
+  const options: VerifyOptions = {
     algorithms: ['HS256'], // Specify the algorithm type correctly
   };
 
   try {
-    jwt.verify(token, SECRET_KEY, options, (err: jwt.JsonWebTokenError | null, decoded: jwt.JwtPayload | undefined) => {
+    jwt.verify(token, SECRET_KEY, options, (err: JsonWebTokenError | null, decoded: JwtPayload | undefined) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired token' });
       }

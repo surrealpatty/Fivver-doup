@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyOptions } from 'jsonwebtoken'; // Correctly import JwtPayload and VerifyOptions
 import { Request } from 'express';
 import { UserPayload } from '../types';
 
@@ -18,23 +18,23 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  const options: jwt.VerifyOptions = {
+  const options: VerifyOptions = {  // Correct type for options
     algorithms: ['HS256'], // Specify the algorithm type correctly
   };
 
   try {
-    jwt.verify(token, SECRET_KEY, options, (err: Error | null, decoded: jwt.JwtPayload | string | undefined) => {
+    jwt.verify(token, SECRET_KEY, options, (err: Error | null, decoded: JwtPayload | string | undefined) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired token' });
       }
 
       if (typeof decoded === 'object' && decoded !== null) {
-        req.user = decoded as UserPayload;
+        req.user = decoded as UserPayload;  // Attach user payload to request
       } else {
         return res.status(401).json({ message: 'Invalid token structure' });
       }
 
-      next();
+      next(); // Proceed to the next middleware or route handler
     });
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });

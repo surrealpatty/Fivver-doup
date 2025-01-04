@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import authenticateToken from './authenticateToken'; // Ensure the correct path to your middleware
+import { authenticateToken } from './authenticateToken'; // Correct import for named export
 import { UserPayload } from '../types'; // Ensure this is the correct type for your JWT payload
 
 // Mock jsonwebtoken module

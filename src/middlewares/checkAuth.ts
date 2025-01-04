@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';  // Correct import for JwtPayload
 
 // Define UserPayload to type the decoded token
 interface UserPayload extends JwtPayload {
@@ -10,7 +10,7 @@ interface UserPayload extends JwtPayload {
 
 // Middleware to authenticate the token and attach user information to req.user
 export const authenticateToken = (
-  req: Request,
+  req: Request & { user?: UserPayload },  // Extend Request type to include 'user' property
   res: Response,
   next: NextFunction
 ): void => {  // Returning void, no value from this function

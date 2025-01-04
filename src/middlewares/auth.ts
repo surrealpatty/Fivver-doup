@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jwt, { VerifyOptions } from 'jsonwebtoken'; // Import VerifyOptions from jsonwebtoken
+import jwt, { JwtPayload, VerifyOptions } from 'jsonwebtoken'; // Correctly import VerifyOptions and JwtPayload
 import config from '../config/config'; // Ensure the path is correct and properly typed
 import { Request } from 'express';
 
@@ -38,7 +38,7 @@ export const verifyToken = (
     token,
     jwtSecret, // Use the correct string type here
     verifyOptions, // Pass the options here
-    (err: Error | null, decoded: jwt.JwtPayload | null) => {  // Fixing the type here
+    (err: Error | null, decoded: JwtPayload | null) => {  // Fixing the type here
       if (err) {
         return res.status(401).json({ message: 'Unauthorized', error: err.message });
       }
