@@ -35,7 +35,10 @@ sequelize.authenticate()
   })
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit with error if the connection fails
+    // Prevent process.exit during tests
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1); // Only exit if it's not in a test environment
+    }
   });
 
 // Add associations after the models are initialized
@@ -72,7 +75,10 @@ sequelize.sync()
   })
   .catch((error) => {
     console.error('Error syncing the database:', error);
-    process.exit(1); // Exit with error if sync fails
+    // Prevent process.exit during tests
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1); // Only exit if it's not in a test environment
+    }
   });
 
 // Export the app and server for testing or further integration
