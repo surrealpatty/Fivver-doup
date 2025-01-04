@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken
+import jwt from 'jsonwebtoken'; // Correct import for jsonwebtoken
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Import your custom UserPayload type
 
@@ -24,12 +24,12 @@ export const authenticateToken = (
   }
 
   // Define options for token verification
-  const options: jwt.VerifyOptions = {
+  const options: jwt.JwtVerifyOptions = { // Use jwt.JwtVerifyOptions for the options
     algorithms: ['HS256'], // Specify the algorithm type correctly
   };
 
   try {
-    // Correct type for decoded token: Use jwt.verify's callback signature
+    // Use jwt.verify with correct callback signature
     jwt.verify(
       token,
       SECRET_KEY,
