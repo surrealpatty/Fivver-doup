@@ -10,7 +10,7 @@ export interface UserPayload {
   email?: string;     // User's email (optional)
   username?: string;  // User's username (optional)
   role?: UserRole;    // User's role (admin, paid, user)
-  tier?: UserTier;    // User's tier (free, paid)
+  tier?: 'free' | 'paid';
   // Removed isPaid property to avoid redundancy since tier handles it
 }
 

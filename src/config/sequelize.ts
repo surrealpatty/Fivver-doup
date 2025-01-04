@@ -8,30 +8,29 @@ import { Review } from '../models/review'; // Ensure the Review model exists and
 dotenv.config(); // Load environment variables from .env file
 
 const sequelize = new Sequelize({
-  username: process.env.DB_USERNAME || 'root', // Ensure no missing commas
-  password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'fivver_doup',
-  host: process.env.DB_HOST || '127.0.0.1',
-  dialect: 'mysql',
-  models: [User, Service, Order, Review], // Ensure your models are correctly defined and imported
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,
+  username: process.env.DB_USERNAME || 'root', // Database username
+  password: process.env.DB_PASSWORD || 'password', // Database password
+  database: process.env.DB_NAME || 'fivver_doup', // Database name
+  host: process.env.DB_HOST || '127.0.0.1', // Database host
+  dialect: 'mysql', // MySQL dialect
+  models: [User, Service, Order, Review], // Ensure models are correctly defined and imported
+  logging: process.env.NODE_ENV === 'development' ? console.log : false, // Log queries in development
   define: {
-    freezeTableName: true,
-    timestamps: true,
+    freezeTableName: true, // Prevent pluralized table names
+    timestamps: true, // Add createdAt and updatedAt fields
   },
   pool: {
-    max: 10,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
+    max: 10, // Maximum number of connections
+    min: 0, // Minimum number of connections
+    acquire: 30000, // Maximum time (ms) to acquire a connection
+    idle: 10000, // Maximum idle time (ms) before a connection is released
   },
   dialectOptions: {
-    charset: 'utf8mb4',
-    collate: 'utf8mb4_unicode_ci',
+    charset: 'utf8mb4', // Use UTF-8 with full Unicode support
     ssl: process.env.DB_USE_SSL === 'true'
       ? { require: true, rejectUnauthorized: false }
-      : undefined,
-  }
+      : undefined, // Use SSL if specified in environment variables
+  },
 });
 
 // Test the database connection
@@ -45,8 +44,7 @@ const testConnection = async () => {
     } else {
       console.error('An unknown error occurred during the connection test');
     }
-    // Removed process.exit(1) to prevent abrupt termination during testing
-    // process.exit(1); // Removed this line to allow Jest to handle the error gracefully
+    // Removed process.exit(1) to allow Jest to handle the error gracefully
   }
 };
 

@@ -11,14 +11,13 @@ const services_1 = __importDefault(require("../models/services")); // Ensure the
 const order_1 = __importDefault(require("../models/order")); // Ensure the Order model exists and is correctly defined
 const review_1 = require("../models/review"); // Ensure the Review model exists and is correctly defined
 dotenv_1.default.config(); // Load environment variables from .env file
-// After fixing the last object or function declaration
 const sequelize = new sequelize_typescript_1.Sequelize({
     username: process.env.DB_USERNAME || 'root', // Ensure no missing commas
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'mysql',
-    models: [user_1.default, services_1.default, order_1.default, review_1.Review],
+    models: [user_1.default, services_1.default, order_1.default, review_1.Review], // Ensure your models are correctly defined and imported
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
     define: {
         freezeTableName: true,
@@ -37,7 +36,7 @@ const sequelize = new sequelize_typescript_1.Sequelize({
             ? { require: true, rejectUnauthorized: false }
             : undefined,
     }
-}); // Ensure the closing brace and parentheses are correct here
+});
 exports.sequelize = sequelize;
 // Test the database connection
 const testConnection = async () => {
@@ -52,7 +51,8 @@ const testConnection = async () => {
         else {
             console.error('An unknown error occurred during the connection test');
         }
-        process.exit(1); // Exit the process if connection fails
+        // Removed process.exit(1) to prevent abrupt termination during testing
+        // process.exit(1); // Removed this line to allow Jest to handle the error gracefully
     }
 };
 // Call the test connection function
