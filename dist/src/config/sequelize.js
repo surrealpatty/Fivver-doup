@@ -41,7 +41,11 @@ exports.sequelize = sequelize;
 if (process.env.NODE_ENV === 'test') {
     beforeAll(async () => {
         try {
-            await sequelize.authenticate();
+            // Check if necessary environment variables are set
+            if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD || !process.env.DB_NAME || !process.env.DB_HOST) {
+                throw new Error('Missing required environment variables for database connection');
+            }
+            await sequelize.authenticate(); // Attempt to connect to the database
             console.log('Database connection established successfully.');
         }
         catch (error) {
@@ -59,7 +63,11 @@ else {
     // In non-test environments, establish the connection immediately
     const testConnection = async () => {
         try {
-            await sequelize.authenticate();
+            // Check if necessary environment variables are set
+            if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD || !process.env.DB_NAME || !process.env.DB_HOST) {
+                throw new Error('Missing required environment variables for database connection');
+            }
+            await sequelize.authenticate(); // Attempt to connect to the database
             console.log('Database connection established successfully.');
         }
         catch (error) {
