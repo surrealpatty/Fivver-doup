@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';  // Import required types
-import { authenticateToken } from '../middlewares/authenticateToken';  // Middleware for token verification
+import  authenticateToken  from '../middlewares/authenticateToken';  // Middleware for token verification
 import { UserPayload } from '../types';  // Import UserPayload interface
 
 const router = express.Router();

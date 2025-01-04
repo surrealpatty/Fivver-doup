@@ -9,11 +9,11 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
  * Middleware to authenticate users via JWT token.
  * Attaches the decoded user information to the `req.user` property.
  */
-export default function authenticateToken(
+const authenticateToken = (
   req: Request & { user?: UserPayload }, // Ensure correct type for `user`
   res: Response,
   next: NextFunction
-): Response | void {
+): Response | void => {
   // Extract the token from the Authorization header (Bearer token format)
   const authHeader = req.header('Authorization');
   const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
@@ -38,4 +38,6 @@ export default function authenticateToken(
     console.error('Token verification failed:', error); // Log verification failure
     return res.status(403).json({ message: 'Invalid or expired token' });
   }
-}
+};
+
+export default authenticateToken; // Default export

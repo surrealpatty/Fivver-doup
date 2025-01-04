@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { User } from '../models/user'; // Correct relative path to the User model
-import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token validation
+import  authenticateToken  from '../middlewares/authenticateToken'; // Middleware for token validation
 import { validateRegistration } from '../middlewares/validateRegistration'; // Middleware for validating registration data
 
 // Create a new router instance
