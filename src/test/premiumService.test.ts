@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { app } from '../src/index'; // Ensure the path is correct for your app entry file
-import jwt from 'jsonwebtoken'; // Import the jsonwebtoken module
+import { app } from 'src/index'; // Ensure the path is correct for your app entry file
+import jwt from 'jsonwebtoken'; // Import the jwt module
 
 // Helper function to generate a JWT token with a user role
 const generateToken = (id: string, tier: 'free' | 'paid') => {
