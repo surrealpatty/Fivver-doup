@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from './types'; // Ensure it points to the correct file
 
-
-
 // Middleware to authenticate the token
 export const authenticateToken = (
   req: Request,
