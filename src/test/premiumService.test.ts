@@ -23,6 +23,20 @@ const mockFreeUser: UserPayload = {
   tier: 'free',
 };
 
+// Mock the `jsonwebtoken` module at the top of the file
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn().mockImplementation((token: string, secret: string) => {
+    // Mock behavior based on the token (this is a simplified version for your case)
+    if (token === 'validPaidUserToken') {
+      return { id: '1', username: 'paiduser', tier: 'paid' };
+    }
+    if (token === 'validFreeUserToken') {
+      return { id: '2', username: 'freeuser', tier: 'free' };
+    }
+    throw new Error('Invalid token');
+  }),
+}));
+
 // Mock the `authenticateToken` middleware to inject user data
 jest.mock('../middlewares/authenticateToken', () => {
   return (req: any, res: any, next: any) => {
