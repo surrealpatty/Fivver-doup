@@ -1,90 +1,29 @@
-import 'reflect-metadata'; // To use decorators for Sequelize and other libraries
-import express, { Application, Request, Response } from 'express';
-import http from 'http';
-import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv'; // To load environment variables
+import express from 'express';
+import { CustomAuthRequest } from './types'; // Correct the import for CustomAuthRequest if needed
+import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path to premium service route
+import userRoutes from './routes/user'; // Path to user routes
+import serviceRoutes from './routes/service'; // Path to service routes
 
-// Import your models
-import User from './models/user'; // Path to the User model
-import Service from './models/services'; // Path to the Service model
-
-// Import routes
-import userRoutes from './routes/user'; // User-related routes
-import serviceRoutes from './routes/service'; // Service-related routes
-
-// Initialize environment variables
-dotenv.config();
-
-// Initialize Sequelize instance with database connection
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: process.env.DB_HOST || 'localhost',
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'fivver_doup',
-  models: [User, Service], // Load models
-  dialectOptions: {
-    charset: 'utf8mb4', // Ensure utf8mb4 is used for encoding
-  },
-});
-
-// Error handling for database connection
-sequelize.authenticate()
-  .then(() => {
-    console.log('Database connection established successfully');
-  })
-  .catch((error) => {
-    console.error('Unable to connect to the database:', error);
-    // Check if process.env.NODE_ENV is set to 'test' or undefined
-    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
-    if (nodeEnv !== 'test') {
-      process.exit(1); // Only exit if it's not in a test environment
-    }
-  });
-
-// Add associations after the models are initialized
-Service.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Service, { foreignKey: 'userId' });
-
-// Initialize Express application
-const app: Application = express();
-const server = http.createServer(app);
+const app = express();
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
+// Register the premium service route
+app.use('/premium-service', premiumServiceRoute);
+
+// Register other routes
+app.use('/api/users', userRoutes); // Mount user routes
+app.use('/api/services', serviceRoutes); // Mount service routes
+
 // Root route to confirm server is running
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
   res.status(200).send('Fiverr backend is running');
 });
 
-// Mount user routes at /api/users
-app.use('/api/users', userRoutes);
+// Start the server on port 3000 (or from environment variables)
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 
-// Mount service routes at /api/services
-app.use('/api/services', serviceRoutes);
-
-// Sync the database and start the server if not in a test environment
-sequelize.sync()
-  .then(() => {
-    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
-    if (nodeEnv !== 'test') {
-      const PORT = process.env.PORT || 3000;
-      server.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('Error syncing the database:', error);
-    // Check if process.env.NODE_ENV is set to 'test' or undefined
-    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
-    if (nodeEnv !== 'test') {
-      process.exit(1); // Only exit if it's not in a test environment
-    }
-  });
-
-// Export the app and server for testing or further integration
-export { app, server }; // Ensure app and server are exported for testing
-
-export default app; // Default export for app in case you want to use it elsewhere
+export default app; // Export app for testing or further integration

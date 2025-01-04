@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Ensure this type defines the expected structure of the JWT payload
+import { UserPayload } from '../types'; // Ensure this is the correct type for your JWT payload
 
 // Define the secret key for JWT
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';

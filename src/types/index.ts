@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 // Define roles and tiers as needed
 export type UserRole = 'admin' | 'paid' | 'user'; // You can extend this with more roles
 export type UserTier = 'free' | 'paid'; // You can extend this with more tiers
@@ -9,6 +11,7 @@ export interface UserPayload {
   username?: string; // Optional username
   role?: UserRole;   // Role of the user, can be 'admin', 'paid', 'user'
   tier?: UserTier;   // Tier of the user, can be 'free', 'paid'
+  isPaid?: boolean;  // Add the 'isPaid' property to indicate if the user is a paid user
 }
 
 // Extend the Request type to include the `user` property
