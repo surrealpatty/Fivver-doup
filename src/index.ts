@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 3000;
 let server: any; // Declare a variable to hold the server instance
 
 // Synchronize database and start server only if the file is not imported as a module
-if (!module.parent) {
+if (require.main === module) {  // Ensure this is the main module being executed
   sequelize
     .sync({ alter: true }) // Ensure the database schema is updated (optional)
     .then(() => {

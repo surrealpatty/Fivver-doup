@@ -1,81 +1,60 @@
-import express, { Router, Request, Response, NextFunction } from 'express';
-import { User } from '../models/user'; // Correct relative path to the User model
-import { authenticateToken } from '../middlewares/authenticateToken'; // Middleware for token validation
-import { validateRegistration } from '../middlewares/validateRegistration'; // Middleware for validating registration data
+import { Router, Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User, { UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
 
-// Create a new router instance
-const router: Router = express.Router();
+const router = Router();
 
-// Define the shape of the registration body for type safety
-interface RegistrationBody {
-  email: string;
-  username: string;
-  password: string;
-}
+// User Registration (Signup) Route
+router.post('/signup', async (req: Request, res: Response): Promise<Response> => {
+  const { email, username, password } = req.body;
 
-// Update the UserPayload interface to include `tier` and `role`
-interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-  tier?: 'free' | 'paid';  // Include the tier property
-  role?: string;
-}
-
-// Registration endpoint
-router.post(
-  '/register',
-  validateRegistration, // Middleware validation
-  async (req: Request<{}, {}, RegistrationBody>, res: Response): Promise<Response> => {
-    const { email, username, password } = req.body;
-
-    // Validate input fields
-    if (!email) {
-      return res.status(400).json({ errors: [{ msg: 'Email is required' }] });
-    }
-    if (!username) {
-      return res.status(400).json({ errors: [{ msg: 'Username is required' }] });
-    }
-    if (!password) {
-      return res.status(400).json({ errors: [{ msg: 'Password is required' }] });
-    }
-
-    try {
-      // Create a new user with default values
-      const user = await User.create({
-        email,
-        username,
-        password,
-        role: 'user',       // Default role
-        tier: 'free',       // Default tier
-        isVerified: false,  // Default verification status
-      });
-
-      return res.status(201).json(user); // Respond with the created user
-    } catch (error) {
-      console.error('Error creating user:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+  // Validate input
+  if (!email || !username || !password) {
+    return res.status(400).json({ message: 'Email, username, and password are required.' });
   }
-);
 
-// Premium service route
-router.get(
-  '/premium-service',
-  authenticateToken, // Middleware for token validation
-  (req: Request, res: Response): Response => {
-    // Assume `req.user` is populated by `authenticateToken` middleware
-    const user = req.user as UserPayload; // Cast req.user to UserPayload
-
-    // Check if user is on a free tier
-    if (user?.tier === 'free') {
-      return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      where: { email },
+    });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email is already in use.' });
     }
 
-    // Grant access to premium users
-    return res.status(200).json({ message: 'Premium service access granted.' });
-  }
-);
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
-// Export the router to be used in the main app
+    // Create the new user in the database (id is handled automatically)
+    const newUser: UserCreationAttributes = {
+      email,
+      username,
+      password: hashedPassword,
+      role: 'user', // Default role (can be modified)
+      tier: 'free', // Default tier should be "free"
+      isVerified: false, // Assuming user isn't verified initially
+    };
+
+    const user = await User.create(newUser); // Pass newUser as the object to create
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, username: user.username },
+      process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+      { expiresIn: '1h' } // Expiry time of the token
+    );
+
+    // Send back response with token
+    return res.status(201).json({
+      message: 'User registered successfully',
+      token,  // Send the generated token
+    });
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Export the router to use in the main app
 export default router;
