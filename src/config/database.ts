@@ -32,7 +32,6 @@ const sequelize = new Sequelize({
     ssl: process.env.DB_USE_SSL === 'true' 
       ? { require: true, rejectUnauthorized: false } // Enable SSL if required
       : undefined,
-  },
 });
 
 // Test the database connection
@@ -40,7 +39,7 @@ const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
-  } catch (error: unknown) {
+  } catch (error) {
     if (error instanceof Error) { // Type guard to ensure 'error' is of type Error
       console.error('Unable to connect to the database:', error.message);
     } else {

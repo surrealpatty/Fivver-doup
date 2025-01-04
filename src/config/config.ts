@@ -29,8 +29,8 @@ interface JwtConfig {
 // Merge both the Sequelize and JWT configurations into one final config
 const config: Record<string, SequelizeConfig & JwtConfig> = {
   development: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Replace with your secure value
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'password', // Replace with your secure value
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parsedDBPort,
@@ -39,7 +39,7 @@ const config: Record<string, SequelizeConfig & JwtConfig> = {
     JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h', // JWT_EXPIRATION, default to '1h'
   },
   test: {
-    username: process.env.TEST_DB_USER || 'root',
+    username: process.env.TEST_DB_USERNAME || 'root',
     password: process.env.TEST_DB_PASSWORD || 'test_password', // Replace with your secure test value
     database: process.env.TEST_DB_NAME || 'fivver_doup_test',
     host: process.env.TEST_DB_HOST || '127.0.0.1',
@@ -49,8 +49,8 @@ const config: Record<string, SequelizeConfig & JwtConfig> = {
     JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1h', // JWT_EXPIRATION, default to '1h'
   },
   production: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'X^SE4Jzp$qfd1Fs2qfT*', // Replace with your secure value
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'password', // Replace with your secure value
     database: process.env.DB_NAME || 'fivver_doup',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parsedDBPort,
