@@ -1,33 +1,34 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                           // Set the target JavaScript version to ESNext
+    "target": "ESNext",                            // Set the target JavaScript version to ESNext
     "module": "CommonJS",                          // Use CommonJS module system for Node.js compatibility
-    "moduleResolution": "node",                   // Resolve modules like Node.js
-    "strict": true,                               // Enable strict type-checking options
-    "esModuleInterop": true,                      // Enable interop between ES modules and CommonJS
-    "skipLibCheck": true,                         // Skip library checking for faster compilation
-    "forceConsistentCasingInFileNames": true,     // Enforce consistent casing of file names
-    "baseUrl": "./",                              // Base directory for relative imports
-    "outDir": "./dist",                           // Output directory for compiled files
-    "rootDir": "./",                              // Set rootDir to the root folder
-    "noEmitOnError": true,                        // Don't emit output if there are errors
-    "resolveJsonModule": true,                    // Allow importing JSON modules
-    "experimentalDecorators": true,               // Enable decorators (required by some libraries like TypeORM)
-    "emitDecoratorMetadata": true,                // Emit metadata for decorators (required for sequelize-typescript)
-    "skipDefaultLibCheck": true,                  // Skip checking default lib.d.ts for performance
-    "allowJs": false,                             // Ensure only TypeScript files are compiled
-    "declaration": false,                         // Remove the declaration option so .d.ts files aren't generated
-    "declarationMap": false,                      // Do not generate declaration maps
+    "moduleResolution": "node",                    // Resolve modules like Node.js
+    "strict": true,                                // Enable strict type-checking options
+    "esModuleInterop": true,                       // Enable interop between ES modules and CommonJS
+    "skipLibCheck": true,                          // Skip library checking for faster compilation
+    "forceConsistentCasingInFileNames": true,      // Enforce consistent casing of file names
+    "baseUrl": "./",                               // Base directory for relative imports
+    "outDir": "./dist",                            // Output directory for compiled files
+    "rootDir": "./",                               // Set rootDir to the root folder
+    "noEmitOnError": true,                         // Don't emit output if there are errors
+    "resolveJsonModule": true,                     // Allow importing JSON modules
+    "experimentalDecorators": true,                // Enable decorators (required by some libraries like TypeORM)
+    "emitDecoratorMetadata": true,                 // Emit metadata for decorators (required for sequelize-typescript)
+    "skipDefaultLibCheck": true,                   // Skip checking default lib.d.ts for performance
+    "allowJs": false,                              // Ensure only TypeScript files are compiled
+    "declaration": false,                          // Remove the declaration option so .d.ts files aren't generated
+    "declarationMap": false,                       // Do not generate declaration maps
     "paths": {
-      "src/*": ["./src/*"],                       // Resolve paths inside src/ directly
-      "dist/*": ["./dist/*"]                       // Resolve paths inside dist/ after compilation
+      "src/*": ["./src/*"],                        // Resolve paths inside src/ directly
+      "dist/*": ["./dist/*"]                        // Resolve paths inside dist/ after compilation
     },
-    "types": ["node", "jsonwebtoken", "jest", "nodemailer"]  // Add nodemailer types here
+    "types": ["node", "jsonwebtoken", "jest", "nodemailer", "supertest"],  // Add supertest types here
+    "typeRoots": ["node_modules/@types"]          // Ensure custom type declarations are correctly found
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
-    "tests/**/*.ts",                              // Include all TypeScript files in the tests folder (if tests are in this directory)
-    "index.ts"                                    // Explicitly include index.ts (outside src)
+    "tests/**/*.ts",                             // Include all TypeScript files in the tests folder (if tests are in this directory)
+    "index.ts"                                   // Explicitly include index.ts (outside src)
   ],
   "exclude": [
     "node_modules",                              // Exclude node_modules
