@@ -1,7 +1,7 @@
 import { UserPayload } from '../types'; // Adjust path if necessary
-import jwt from 'jsonwebtoken'; // For generating mock JWT tokens
 import request from 'supertest';
 import app from '../index'; // Adjust path if necessary
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken explicitly
 
 // Mock JWT token generation for paid and free users
 const generateToken = (user: UserPayload, secretKey: string): string => {
@@ -52,6 +52,14 @@ jest.mock('../middlewares/authenticateToken', () => {
     }
     next();
   };
+});
+
+// Mock process.exit to prevent tests from terminating
+beforeAll(() => {
+  // Mocking process.exit to avoid throwing any error while tests run
+  jest.spyOn(process, 'exit').mockImplementation((code?: string | number | null | undefined): never => {
+    throw new Error(`process.exit called with code: ${code}`);
+  });
 });
 
 describe('GET /premium-service', () => {
