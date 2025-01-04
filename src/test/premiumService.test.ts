@@ -4,7 +4,7 @@ import request from 'supertest';
 import app from '../index'; // Adjust path if necessary
 
 // Mock JWT token generation for paid and free users
-const generateToken = (user: UserPayload, secretKey: string) => {
+const generateToken = (user: UserPayload, secretKey: string): string => {
   return jwt.sign(user, secretKey, { expiresIn: '1h' });
 };
 
