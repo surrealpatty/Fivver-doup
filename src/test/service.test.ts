@@ -1,7 +1,7 @@
 import "reflect-metadata"; // Add this line at the very top to ensure Sequelize decorators work
 import request from "supertest";
 import { Service } from "../models/services"; // Corrected relative import
-import  app  from "../index";  // Adjusting to the source directory directly
+import  { app } from "../index";  // Adjusting to the source directory directly
 
 // Mocking the Service model methods
 jest.mock('../models/services', () => ({

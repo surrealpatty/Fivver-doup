@@ -1,5 +1,5 @@
 import { sequelize } from '../config/database'; // Import the sequelize instance
-import  app  from '../index'; // Import your Express app
+import  { app } from '../index'; // Import your Express app
 import request from 'supertest';
 import { Service } from '../models/services'; // Import your models
 import { User } from '../models/user'; // Import your models

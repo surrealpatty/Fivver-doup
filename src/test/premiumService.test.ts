@@ -1,6 +1,6 @@
 import { UserPayload } from '../types'; // Adjust path if necessary
 import request from 'supertest';
-import app from '../index'; // Adjust path if necessary
+import { app } from '../index'; // Adjust path if necessary
 import jwt from 'jsonwebtoken'; // Correctly import jsonwebtoken
 
 // Mock JWT token generation for paid and free users

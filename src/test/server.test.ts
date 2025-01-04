@@ -1,7 +1,7 @@
 // src/test/server.test.ts
 
 import http from 'http';
-import  app  from '../index'; // Adjust the path to your app entry point
+import  { app } from '../index'; // Adjust the path to your app entry point
 import request from 'supertest';
 import { sequelize } from '../config/database'; // Import sequelize instance to close connection
 
