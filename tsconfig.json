@@ -19,8 +19,8 @@
     "declaration": false,                         // Remove the declaration option so .d.ts files aren't generated
     "declarationMap": false,                      // Do not generate declaration maps
     "paths": {
-      "src/*": ["./src/*"],                       // Ensure that Jest resolves `src/` correctly
-      "dist/*": ["./dist/*"]                       // Ensure that Jest resolves `dist/` correctly
+      "src/*": ["./src/*"],                       // Resolve paths inside src/ directly
+      "dist/*": ["./dist/*"]                       // Resolve paths inside dist/ after compilation
     }
   },
   "include": [
