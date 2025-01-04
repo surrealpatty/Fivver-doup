@@ -1,6 +1,6 @@
 // src/index.ts
 import express from 'express';
-import { sequelize } from './config/sequelize';  // Ensure correct path
+import { sequelize } from './config/sequelize';  // Ensure the correct path
 import premiumServiceRoute from './routes/premiumService';  // Ensure the correct path
 import userRoutes from './routes/user';  // Ensure the correct path
 import serviceRoutes from './routes/service';  // Ensure the correct path
@@ -30,5 +30,5 @@ const server = app.listen(3000, () => {
 // Export server for test purposes
 export { server, sequelize };
 
-// Export the app as the default export for other purposes, including tests
+// Default export for app to be used in tests and other files
 export default app;  // Default export for app

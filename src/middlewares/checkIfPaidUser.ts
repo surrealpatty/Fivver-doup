@@ -1,6 +1,6 @@
 // src/middlewares/checkIfPaidUser.ts
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload, CustomAuthRequest } from '../types'; // Ensure the correct path to the types
+import { UserPayload, CustomAuthRequest } from '../types'; // Import the correct types
 
 // Middleware to check if the user is a paid user
 const checkIfPaidUser = (req: CustomAuthRequest, res: Response, next: NextFunction) => {
