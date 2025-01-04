@@ -20,7 +20,6 @@ const authenticateToken = (
 
   // If the token is missing, return an error response
   if (!token) {
-    console.error('Authorization token is missing'); // Log missing token for debugging
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
@@ -28,15 +27,12 @@ const authenticateToken = (
     // Verify and decode the JWT token using the secret key
     const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
 
-    console.log('Decoded token:', decoded); // Log the decoded token for debugging purposes
-
     // Attach the decoded user information to the `req.user` object
     req.user = decoded;
 
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
-    console.error('Token verification failed:', error); // Log any token verification failures
     return res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
