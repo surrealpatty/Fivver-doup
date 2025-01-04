@@ -1,16 +1,46 @@
-import { Router, Request, Response } from 'express';
-import { authenticateToken } from '../middlewares/authenticateToken'; // Correct the import path if needed
+import request from 'supertest';
+import app from 'src/index';  // Ensure the correct path to your app
+import { UserPayload } from 'src/types';  // Import UserPayload
 
-const router = Router();
+// Mock authenticated user data
+const mockUser: UserPayload = {
+  id: '1',
+  email: 'test@example.com',
+  username: 'testuser',
+  tier: 'paid',  // Mock the tier property here
+};
 
-// Define the premium service route with authentication
-router.get('/premium-service', authenticateToken, (req: Request, res: Response) => {
-  // Check if the user is authenticated and has a 'paid' tier
-  if (req.user && req.user.tier === 'paid') {
-    res.status(200).json({ message: 'Premium service access granted.' });
-  } else {
-    res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
-  }
+describe('GET /premium-service', () => {
+  it('should allow access to paid users', async () => {
+    const response = await request(app)
+      .get('/premium-service')
+      .set('Authorization', `Bearer valid-token`) // Provide valid JWT token
+      .use((req: any) => {
+        // Mock req.user inside the test middleware
+        req.user = mockUser;
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('Premium service access granted.');
+  });
+
+  it('should deny access to non-paid users', async () => {
+    const nonPaidUser: UserPayload = {
+      id: '2',
+      email: 'nonpaid@example.com',
+      username: 'nonpaiduser',
+      tier: 'free',  // Mock the tier as free
+    };
+
+    const response = await request(app)
+      .get('/premium-service')
+      .set('Authorization', `Bearer valid-token`) // Provide valid JWT token
+      .use((req: any) => {
+        // Mock req.user with a non-paid user inside the test middleware
+        req.user = nonPaidUser;
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+  });
 });
-
-export default router;

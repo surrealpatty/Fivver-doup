@@ -1,5 +1,5 @@
 import express from 'express';
-import { sequelize } from './config/sequelize';  // Ensure the correct path
+import { sequelize } from './config/sequelize';  // Ensure the correct path to sequelize config
 import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
 import userRoutes from './routes/user'; // Ensure the correct path
 import serviceRoutes from './routes/service'; // Ensure the correct path
