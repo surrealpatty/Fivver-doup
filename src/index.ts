@@ -35,8 +35,9 @@ sequelize.authenticate()
   })
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
-    // Prevent process.exit during tests
-    if (process.env.NODE_ENV !== 'test') {
+    // Check if process.env.NODE_ENV is set to 'test' or undefined
+    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
+    if (nodeEnv !== 'test') {
       process.exit(1); // Only exit if it's not in a test environment
     }
   });
@@ -66,7 +67,8 @@ app.use('/api/services', serviceRoutes);
 // Sync the database and start the server if not in a test environment
 sequelize.sync()
   .then(() => {
-    if (process.env.NODE_ENV !== 'test') {
+    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
+    if (nodeEnv !== 'test') {
       const PORT = process.env.PORT || 3000;
       server.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
@@ -75,8 +77,9 @@ sequelize.sync()
   })
   .catch((error) => {
     console.error('Error syncing the database:', error);
-    // Prevent process.exit during tests
-    if (process.env.NODE_ENV !== 'test') {
+    // Check if process.env.NODE_ENV is set to 'test' or undefined
+    const nodeEnv = process.env.NODE_ENV || 'development'; // Default to 'development' if undefined
+    if (nodeEnv !== 'test') {
       process.exit(1); // Only exit if it's not in a test environment
     }
   });

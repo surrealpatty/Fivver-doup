@@ -15,7 +15,7 @@
     "build": "swc src --out-dir dist --config-file .swcrc && cmd /c move dist\\src\\index.js dist\\index.js && npx tsc",
     "build:watch": "swc src -d dist --watch",
     "pretest": "npm run build",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 jest --runInBand",
+    "test": "cross-env NODE_ENV=test cross-env NODE_OPTIONS=--max-old-space-size=4096 jest --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "test:ci": "jest --ci --maxWorkers=4",
