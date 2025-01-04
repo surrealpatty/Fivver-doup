@@ -1,40 +1,42 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Ensure this is the correct type for your JWT payload
+import { Request } from 'express';
+import { UserPayload } from '../types';
 
-// Define the secret key for JWT, falling back to a default value if not found in environment variables
+// Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
-/**
- * Middleware to authenticate users via JWT token.
- * Attaches the decoded user information to the `req.user` property.
- */
-const authenticateToken = (
-  req: Request & { user?: UserPayload }, // Ensure correct type for `user`
+// Middleware to authenticate token and attach user data to the request
+export const authenticateToken = (
+  req: Request,
   res: Response,
   next: NextFunction
-): Response | void => {
-  // Extract the token from the Authorization header (Bearer token format)
-  const authHeader = req.header('Authorization');
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+): Response<any, Record<string, any>> | void => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from "Authorization" header
 
-  // If the token is missing, return an error response
   if (!token) {
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
+  const options: jwt.VerifyOptions = {
+    algorithms: ['HS256'], // Specify the algorithm type correctly
+  };
+
   try {
-    // Verify and decode the JWT token using the secret key
-    const decoded = jwt.verify(token, SECRET_KEY) as UserPayload;
+    jwt.verify(token, SECRET_KEY, options, (err: Error | null, decoded: jwt.JwtPayload | string | undefined) => {
+      if (err) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
+      }
 
-    // Attach the decoded user information to the `req.user` object
-    req.user = decoded;
+      if (typeof decoded === 'object' && decoded !== null) {
+        req.user = decoded as UserPayload;
+      } else {
+        return res.status(401).json({ message: 'Invalid token structure' });
+      }
 
-    // Proceed to the next middleware or route handler
-    next();
+      next();
+    });
   } catch (error) {
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
-
-export default authenticateToken; // Default export for use in route files
