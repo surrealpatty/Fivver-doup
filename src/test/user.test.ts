@@ -2,10 +2,10 @@ import 'reflect-metadata'; // Ensure Sequelize decorators work properly
 import request from 'supertest';
 import jwt from 'jsonwebtoken'; // For mocking token validation
 import { User } from 'src/models/user'; // Corrected to import from src/ instead of dist/
-import app  from 'src/index';         // Corrected to import from src/ instead of dist/
+import app from 'src/index'; // Corrected to import from src/ instead of dist/
 
 // Mocking the User model and JWT methods for testing
-jest.mock('../dist/models/user', () => ({
+jest.mock('src/models/user', () => ({
   User: {
     create: jest.fn(),
     findOne: jest.fn(),
@@ -15,6 +15,7 @@ jest.mock('../dist/models/user', () => ({
 // Mocking JWT methods for testing
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
+  sign: jest.fn(), // Add the sign method mock if needed
 }));
 
 describe('User Tests', () => {
@@ -39,7 +40,7 @@ describe('User Tests', () => {
       });
 
     // Verify the response
-    expect(response.status).toBe(201);  // Expecting a 201 Created status
+    expect(response.status).toBe(201); // Expecting a 201 Created status
     expect(response.body).toHaveProperty('id');
     expect(response.body.email).toBe('test@example.com');
 
@@ -63,7 +64,7 @@ describe('User Tests', () => {
         // No password field to simulate an error
       });
 
-    expect(response.status).toBe(400);  // Expecting a 400 Bad Request status
+    expect(response.status).toBe(400); // Expecting a 400 Bad Request status
     expect(response.body).toHaveProperty('error', 'Password is required');
   });
 
@@ -79,13 +80,14 @@ describe('User Tests', () => {
         password: 'password123',
       });
 
-    expect(response.status).toBe(400);  // Expecting a 400 Bad Request status
+    expect(response.status).toBe(400); // Expecting a 400 Bad Request status
     expect(response.body).toHaveProperty('error', 'Email already exists');
   });
 
   // Test: Access control based on JWT roles (Example for premium content access)
   describe('Role-based Access Control', () => {
     beforeEach(() => {
+      // Mock the jwt.verify method to return specific user roles
       (jwt.verify as jest.Mock).mockImplementation((token: string) => {
         if (token === 'valid_paid_user_token') {
           return { role: 'paid' };
@@ -103,7 +105,7 @@ describe('User Tests', () => {
         .get('/premium-content')
         .set('Authorization', 'Bearer valid_paid_user_token');
 
-      expect(response.status).toBe(200);  // Expecting a 200 OK status
+      expect(response.status).toBe(200); // Expecting a 200 OK status
       expect(response.body.message).toBe('Welcome to the premium content!');
     });
 
@@ -113,7 +115,7 @@ describe('User Tests', () => {
         .get('/premium-content')
         .set('Authorization', 'Bearer valid_free_user_token');
 
-      expect(response.status).toBe(403);  // Expecting a 403 Forbidden status
+      expect(response.status).toBe(403); // Expecting a 403 Forbidden status
       expect(response.body.message).toBe('Access forbidden: Insufficient role');
     });
 
@@ -123,7 +125,7 @@ describe('User Tests', () => {
         .get('/free-content')
         .set('Authorization', 'Bearer valid_free_user_token');
 
-      expect(response.status).toBe(200);  // Expecting a 200 OK status
+      expect(response.status).toBe(200); // Expecting a 200 OK status
       expect(response.body.message).toBe('Welcome to the free content!');
     });
 
@@ -133,7 +135,7 @@ describe('User Tests', () => {
         .get('/premium-content')
         .set('Authorization', 'Bearer invalid_token');
 
-      expect(response.status).toBe(401);  // Expecting a 401 Unauthorized status
+      expect(response.status).toBe(401); // Expecting a 401 Unauthorized status
       expect(response.body.message).toBe('Unauthorized');
     });
   });

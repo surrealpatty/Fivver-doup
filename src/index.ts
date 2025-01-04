@@ -1,8 +1,8 @@
 import express from 'express';
-import { sequelize } from './config/sequelize'; // Ensure the correct path to sequelize config
-import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
-import userRoutes from './routes/user'; // Ensure the correct path
-import serviceRoutes from './routes/service'; // Ensure the correct path
+import { sequelize } from './config/database'; // Ensure the correct path to your Sequelize config
+import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path to premium-service route
+import userRoutes from './routes/user'; // Ensure the correct path to user routes
+import serviceRoutes from './routes/service'; // Ensure the correct path to service routes
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env file
