@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = exports.server = void 0;
 const express_1 = __importDefault(require("express"));
-const sequelize_1 = require("./config/sequelize"); // Ensure the correct path to sequelize config
-Object.defineProperty(exports, "sequelize", { enumerable: true, get: function () { return sequelize_1.sequelize; } });
-const premiumService_1 = __importDefault(require("./routes/premiumService")); // Ensure the correct path
-const user_1 = __importDefault(require("./routes/user")); // Ensure the correct path
-const service_1 = __importDefault(require("./routes/service")); // Ensure the correct path
+const database_1 = require("./config/database"); // Ensure the correct path to your Sequelize config
+Object.defineProperty(exports, "sequelize", { enumerable: true, get: function () { return database_1.sequelize; } });
+const premiumService_1 = __importDefault(require("./routes/premiumService")); // Ensure the correct path to premium-service route
+const user_1 = __importDefault(require("./routes/user")); // Ensure the correct path to user routes
+const service_1 = __importDefault(require("./routes/service")); // Ensure the correct path to service routes
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config(); // Load environment variables from .env file
 const app = (0, express_1.default)();
@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 3000;
 let server; // Declare a variable to hold the server instance
 // Synchronize database and start server only if the file is not imported as a module
 if (!module.parent) {
-    sequelize_1.sequelize
+    database_1.sequelize
         .sync({ alter: true }) // Ensure the database schema is updated (optional)
         .then(() => {
         console.log('Database synchronized successfully.');

@@ -9,7 +9,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For mocking 
 const user_1 = require("src/models/user"); // Corrected to import from src/ instead of dist/
 const index_1 = __importDefault(require("src/index")); // Corrected to import from src/ instead of dist/
 // Mocking the User model and JWT methods for testing
-jest.mock('../dist/models/user', () => ({
+jest.mock('src/models/user', () => ({
     User: {
         create: jest.fn(),
         findOne: jest.fn(),
@@ -18,6 +18,7 @@ jest.mock('../dist/models/user', () => ({
 // Mocking JWT methods for testing
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
+    sign: jest.fn(), // Add the sign method mock if needed
 }));
 describe('User Tests', () => {
     // Test: Successful user registration
@@ -79,6 +80,7 @@ describe('User Tests', () => {
     // Test: Access control based on JWT roles (Example for premium content access)
     describe('Role-based Access Control', () => {
         beforeEach(() => {
+            // Mock the jwt.verify method to return specific user roles
             jsonwebtoken_1.default.verify.mockImplementation((token) => {
                 if (token === 'valid_paid_user_token') {
                     return { role: 'paid' };
