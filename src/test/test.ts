@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from 'src/index'; // Adjusted to point to the transpiled 'index.js' file in the 'dist' folder
+import  app  from 'src/index'; // Adjusted to point to the transpiled 'index.js' file in the 'dist' folder
 import jwt from 'jsonwebtoken'; // Import the jsonwebtoken module
 
 // Helper function to generate a JWT token with a user role
