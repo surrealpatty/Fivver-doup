@@ -10,6 +10,8 @@ Object.defineProperty(exports, "sequelize", { enumerable: true, get: function ()
 const premiumService_1 = __importDefault(require("./routes/premiumService")); // Ensure the correct path
 const user_1 = __importDefault(require("./routes/user")); // Ensure the correct path
 const service_1 = __importDefault(require("./routes/service")); // Ensure the correct path
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config(); // Load environment variables from .env file
 const app = (0, express_1.default)();
 // Middleware to parse incoming JSON requests
 app.use(express_1.default.json());
@@ -25,10 +27,18 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 3000;
 let server; // Declare a variable to hold the server instance
-// Start the server only if the file is not imported as a module
+// Synchronize database and start server only if the file is not imported as a module
 if (!module.parent) {
-    exports.server = server = app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+    sequelize_1.sequelize
+        .sync({ alter: true }) // Ensure the database schema is updated (optional)
+        .then(() => {
+        console.log('Database synchronized successfully.');
+        exports.server = server = app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+        .catch((error) => {
+        console.error('Error synchronizing the database:', error.message);
     });
 }
 // Default export for app to be used in tests and other files

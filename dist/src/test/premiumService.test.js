@@ -4,51 +4,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("src/index")); // Ensure the correct path to your app
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import JWT for token generation
+const index_1 = __importDefault(require("../index")); // Adjust path if necessary
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For generating mock JWT tokens
 // Mock JWT token generation for paid and free users
-const generatePaidUserToken = (user) => {
-    return jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username, tier: 'paid' }, 'your-secret-key', { expiresIn: '1h' });
+const generateToken = (user, secretKey) => {
+    return jsonwebtoken_1.default.sign(user, secretKey, { expiresIn: '1h' });
 };
-const generateFreeUserToken = (user) => {
-    return jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username, tier: 'free' }, 'your-secret-key', { expiresIn: '1h' });
-};
-// Mock authenticated user data
-const mockUser = {
+// Mock user data
+const mockPaidUser = {
     id: '1',
-    email: 'test@example.com',
-    username: 'testuser',
-    tier: 'paid', // Mock the tier property here
+    email: 'paiduser@example.com',
+    username: 'paiduser',
+    tier: 'paid',
 };
+const mockFreeUser = {
+    id: '2',
+    email: 'freeuser@example.com',
+    username: 'freeuser',
+    tier: 'free',
+};
+// Mock the `authenticateToken` middleware to inject user data
+jest.mock('../middlewares/authenticateToken', () => {
+    return (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        if (authHeader) {
+            const token = authHeader.split(' ')[1];
+            try {
+                const user = jsonwebtoken_1.default.verify(token, 'your-secret-key');
+                req.user = user; // Attach the user to the request
+            }
+            catch (error) {
+                req.user = undefined;
+            }
+        }
+        next();
+    };
+});
 describe('GET /premium-service', () => {
     it('should allow access to paid users', async () => {
-        const paidToken = generatePaidUserToken(mockUser); // Generate a paid user token
+        const token = generateToken(mockPaidUser, 'your-secret-key');
         const response = await (0, supertest_1.default)(index_1.default)
             .get('/premium-service')
-            .set('Authorization', `Bearer ${paidToken}`) // Provide valid JWT token for paid user
-            .use((req) => {
-            // Mock req.user inside the test middleware
-            req.user = mockUser;
-        });
+            .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Premium service access granted.');
     });
     it('should deny access to non-paid users', async () => {
-        const nonPaidUser = {
-            id: '2',
-            email: 'nonpaid@example.com',
-            username: 'nonpaiduser',
-            tier: 'free', // Mock the tier as free
-        };
-        const freeToken = generateFreeUserToken(nonPaidUser); // Generate a free user token
+        const token = generateToken(mockFreeUser, 'your-secret-key');
         const response = await (0, supertest_1.default)(index_1.default)
             .get('/premium-service')
-            .set('Authorization', `Bearer ${freeToken}`) // Provide valid JWT token for non-paid user
-            .use((req) => {
-            // Mock req.user with a non-paid user inside the test middleware
-            req.user = nonPaidUser;
-        });
+            .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(403);
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+    });
+    it('should return 401 if no token is provided', async () => {
+        const response = await (0, supertest_1.default)(index_1.default).get('/premium-service');
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe('Unauthorized. Please log in.');
     });
 });
