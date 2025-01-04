@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Define the secret key for JWT
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
@@ -34,4 +33,4 @@ res, next) => {
         return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
-exports.authenticateToken = authenticateToken;
+exports.default = authenticateToken; // Default export

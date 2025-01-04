@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = require("../models/user"); // Correct relative path to the User model
-const authenticateToken_1 = require("../middlewares/authenticateToken"); // Middleware for token validation
+const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken")); // Middleware for token validation
 const validateRegistration_1 = require("../middlewares/validateRegistration"); // Middleware for validating registration data
 // Create a new router instance
 const router = express_1.default.Router();
@@ -40,7 +40,7 @@ router.post('/register', validateRegistration_1.validateRegistration, async (req
     }
 });
 // Premium service route
-router.get('/premium-service', authenticateToken_1.authenticateToken, (req, res) => {
+router.get('/premium-service', authenticateToken_1.default, (req, res) => {
     // Assume `req.user` is populated by `authenticateToken` middleware
     const user = req.user; // Cast req.user to UserPayload
     // Check if user is on a free tier

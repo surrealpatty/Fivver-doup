@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authenticateToken_1 = require("../middlewares/authenticateToken"); // Correct path for authenticateToken middleware
+const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken")); // Correct path for authenticateToken middleware
 const router = (0, express_1.Router)();
 // POST route to create a new review
-router.post('/', authenticateToken_1.authenticateToken, async (req, res, next) => {
+router.post('/', authenticateToken_1.default, async (req, res, next) => {
     try {
         const user = req.user; // Type casting to CustomAuthRequest
         if (!user || !user.tier) {
@@ -25,7 +28,7 @@ router.post('/', authenticateToken_1.authenticateToken, async (req, res, next) =
     }
 });
 // GET route to fetch reviews for a specific service
-router.get('/:serviceId', authenticateToken_1.authenticateToken, async (req, res, next) => {
+router.get('/:serviceId', authenticateToken_1.default, async (req, res, next) => {
     try {
         const user = req.user;
         if (!user) {
