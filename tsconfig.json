@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,     // Enforce consistent casing of file names
     "baseUrl": "./",                              // Base directory for relative imports
     "outDir": "./dist",                           // Output directory for compiled files
-    "rootDir": "./src",                           // Root directory for source files
+    "rootDir": "./",                              // Set rootDir to the root folder
     "noEmitOnError": true,                        // Don't emit output if there are errors
     "resolveJsonModule": true,                    // Allow importing JSON modules
     "experimentalDecorators": true,               // Enable decorators (required by some libraries like TypeORM)
@@ -25,7 +25,8 @@
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
-    "tests/**/*.ts"                              // Include all TypeScript files in the tests folder (if tests are in this directory)
+    "tests/**/*.ts",                              // Include all TypeScript files in the tests folder (if tests are in this directory)
+    "index.ts"                                    // Explicitly include index.ts (outside src)
   ],
   "exclude": [
     "node_modules",                              // Exclude node_modules
