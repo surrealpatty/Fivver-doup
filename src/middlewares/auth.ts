@@ -1,10 +1,10 @@
 import { Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken'; // Import JwtPayload as type
+import jwt, { VerifyOptions } from 'jsonwebtoken'; // Import VerifyOptions type from jsonwebtoken
 import config from '../config/config'; // Ensure the path is correct and properly typed
 import { Request } from 'express';
 
 // Define the expected JWT Payload structure
-interface JwtPayloadCustom extends JwtPayload {
+interface JwtPayloadCustom {
   id: string; // User ID stored in the JWT payload
 }
 
@@ -28,11 +28,17 @@ export const verifyToken = (
   // Ensure config.JWT_SECRET is typed as a string
   const jwtSecret = config[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
 
-  // Verify the token using the secret from config
+  // Define the options for verification
+  const verifyOptions: VerifyOptions = {
+    algorithms: ['HS256'], // Adjust algorithm as needed
+  };
+
+  // Verify the token using the secret from config and options
   jwt.verify(
     token,
     jwtSecret, // Use the correct string type here
-    (err: Error | null, decoded: JwtPayload | undefined) => { // Use JwtPayload from jsonwebtoken as type here
+    verifyOptions, // Pass the options here
+    (err: Error | null, decoded: jwt.JwtPayload | undefined) => { // Use jwt.JwtPayload as type here
       if (err) {
         return res.status(401).json({ message: 'Unauthorized', error: err.message });
       }

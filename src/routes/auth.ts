@@ -6,7 +6,7 @@ import User, { UserCreationAttributes } from '../models/user';  // Import User m
 const router = Router();
 
 // User Registration (Signup) Route
-router.post('/signup', async (req: Request, res: Response) => {
+router.post('/signup', async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
 
   // Validate input
@@ -46,13 +46,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     );
 
     // Send back response with token
-    res.status(201).json({
+    return res.status(201).json({
       message: 'User registered successfully',
       token,  // Send the generated token
     });
   } catch (error) {
     console.error('Error during user registration:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 

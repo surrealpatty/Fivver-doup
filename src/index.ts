@@ -1,9 +1,12 @@
 import express from 'express';
 import { sequelize } from './config/database'; // Ensure the correct path to your Sequelize config
-import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path to premium-service route
-import userRoutes from './routes/user'; // Ensure the correct path to user routes
-import serviceRoutes from './routes/service'; // Ensure the correct path to service routes
 import dotenv from 'dotenv';
+
+// Import route files
+import premiumServiceRoute from './routes/premiumService';
+import userRoutes from './routes/user';
+import serviceRoutes from './routes/service';
+import authRouter from './routes/auth'; // Import the auth router
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -12,12 +15,11 @@ const app = express();
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// Register the premium service route
-app.use('/api/premium-service', premiumServiceRoute); // Mount the route under '/api/premium-service'
-
-// Register other routes
+// Register the routes
+app.use('/api/premium-service', premiumServiceRoute); // Mount premium service routes under '/api/premium-service'
 app.use('/api/users', userRoutes); // Mount user routes under '/api/users'
 app.use('/api/services', serviceRoutes); // Mount service routes under '/api/services'
+app.use('/auth', authRouter); // Mount auth routes under '/auth'
 
 // Root route to confirm server is running
 app.get('/', (req, res) => {
@@ -27,16 +29,15 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 3000;
 
-let server: any; // Declare a variable to hold the server instance
-
-// Synchronize database and start server only if the file is not imported as a module
+// Synchronize database and start the server only if the file is not imported as a module
 if (!module.parent) {
   sequelize
     .sync({ alter: true }) // Ensure the database schema is updated (optional)
     .then(() => {
       console.log('Database synchronized successfully.');
 
-      server = app.listen(PORT, () => {
+      // Start the server after the database is synchronized
+      app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
       });
     })
@@ -45,8 +46,5 @@ if (!module.parent) {
     });
 }
 
-// Export the server instance and sequelize for testing purposes
-export { server, sequelize };
-
-// Default export for app to be used in tests and other files
+// Export the app for testing purposes
 export default app;
