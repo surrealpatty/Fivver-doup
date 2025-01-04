@@ -1,60 +1,72 @@
 import request from 'supertest';
-import app from 'src/index';  // Ensure the correct path to your app
-import { UserPayload } from 'src/types';  // Import UserPayload
-import jwt from 'jsonwebtoken';  // Import JWT for token generation
+import app from '../index'; // Adjust path if necessary
+import { UserPayload } from '../types'; // Ensure correct import path for UserPayload
+import jwt from 'jsonwebtoken'; // For generating mock JWT tokens
 
 // Mock JWT token generation for paid and free users
-const generatePaidUserToken = (user: UserPayload) => {
-  return jwt.sign({ id: user.id, email: user.email, username: user.username, tier: 'paid' }, 'your-secret-key', { expiresIn: '1h' });
+const generateToken = (user: UserPayload, secretKey: string) => {
+  return jwt.sign(user, secretKey, { expiresIn: '1h' });
 };
 
-const generateFreeUserToken = (user: UserPayload) => {
-  return jwt.sign({ id: user.id, email: user.email, username: user.username, tier: 'free' }, 'your-secret-key', { expiresIn: '1h' });
-};
-
-// Mock authenticated user data
-const mockUser: UserPayload = {
+// Mock user data
+const mockPaidUser: UserPayload = {
   id: '1',
-  email: 'test@example.com',
-  username: 'testuser',
-  tier: 'paid',  // Mock the tier property here
+  email: 'paiduser@example.com',
+  username: 'paiduser',
+  tier: 'paid',
 };
+
+const mockFreeUser: UserPayload = {
+  id: '2',
+  email: 'freeuser@example.com',
+  username: 'freeuser',
+  tier: 'free',
+};
+
+// Mock the `authenticateToken` middleware to inject user data
+jest.mock('../middlewares/authenticateToken', () => {
+  return (req: any, res: any, next: any) => {
+    const authHeader = req.headers['authorization'];
+    if (authHeader) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const user = jwt.verify(token, 'your-secret-key') as UserPayload;
+        req.user = user; // Attach the user to the request
+      } catch (error) {
+        req.user = undefined;
+      }
+    }
+    next();
+  };
+});
 
 describe('GET /premium-service', () => {
   it('should allow access to paid users', async () => {
-    const paidToken = generatePaidUserToken(mockUser);  // Generate a paid user token
+    const token = generateToken(mockPaidUser, 'your-secret-key');
 
     const response = await request(app)
       .get('/premium-service')
-      .set('Authorization', `Bearer ${paidToken}`)  // Provide valid JWT token for paid user
-      .use((req: any) => {
-        // Mock req.user inside the test middleware
-        req.user = mockUser;
-      });
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Premium service access granted.');
   });
 
   it('should deny access to non-paid users', async () => {
-    const nonPaidUser: UserPayload = {
-      id: '2',
-      email: 'nonpaid@example.com',
-      username: 'nonpaiduser',
-      tier: 'free',  // Mock the tier as free
-    };
-
-    const freeToken = generateFreeUserToken(nonPaidUser);  // Generate a free user token
+    const token = generateToken(mockFreeUser, 'your-secret-key');
 
     const response = await request(app)
       .get('/premium-service')
-      .set('Authorization', `Bearer ${freeToken}`)  // Provide valid JWT token for non-paid user
-      .use((req: any) => {
-        // Mock req.user with a non-paid user inside the test middleware
-        req.user = nonPaidUser;
-      });
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(403);
     expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
+  });
+
+  it('should return 401 if no token is provided', async () => {
+    const response = await request(app).get('/premium-service');
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Unauthorized. Please log in.');
   });
 });

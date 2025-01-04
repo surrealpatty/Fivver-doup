@@ -1,8 +1,11 @@
 import express from 'express';
-import { sequelize } from './config/sequelize';  // Ensure the correct path to sequelize config
+import { sequelize } from './config/sequelize'; // Ensure the correct path to sequelize config
 import premiumServiceRoute from './routes/premiumService'; // Ensure the correct path
 import userRoutes from './routes/user'; // Ensure the correct path
 import serviceRoutes from './routes/service'; // Ensure the correct path
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
@@ -24,13 +27,22 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 3000;
 
-let server: any;  // Declare a variable to hold the server instance
+let server: any; // Declare a variable to hold the server instance
 
-// Start the server only if the file is not imported as a module
+// Synchronize database and start server only if the file is not imported as a module
 if (!module.parent) {
-  server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  sequelize
+    .sync({ alter: true }) // Ensure the database schema is updated (optional)
+    .then(() => {
+      console.log('Database synchronized successfully.');
+
+      server = app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    })
+    .catch((error) => {
+      console.error('Error synchronizing the database:', error.message);
+    });
 }
 
 // Export the server instance and sequelize for testing purposes
