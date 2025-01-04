@@ -22,7 +22,7 @@
       "src/*": ["./src/*"],                       // Resolve paths inside src/ directly
       "dist/*": ["./dist/*"]                       // Resolve paths inside dist/ after compilation
     },
-    "types": ["node", "jsonwebtoken", "jest"]      // Add jsonwebtoken types here for correct type resolution
+    "types": ["node", "jsonwebtoken", "jest", "nodemailer"]  // Add nodemailer types here
   },
   "include": [
     "src/**/*.ts",                               // Include all TypeScript files in the src folder
