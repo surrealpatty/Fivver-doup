@@ -1,6 +1,16 @@
 import request from 'supertest';
 import app from 'src/index';  // Ensure the correct path to your app
 import { UserPayload } from 'src/types';  // Import UserPayload
+import jwt from 'jsonwebtoken';  // Import JWT for token generation
+
+// Mock JWT token generation for paid and free users
+const generatePaidUserToken = (user: UserPayload) => {
+  return jwt.sign({ id: user.id, email: user.email, username: user.username, tier: 'paid' }, 'your-secret-key', { expiresIn: '1h' });
+};
+
+const generateFreeUserToken = (user: UserPayload) => {
+  return jwt.sign({ id: user.id, email: user.email, username: user.username, tier: 'free' }, 'your-secret-key', { expiresIn: '1h' });
+};
 
 // Mock authenticated user data
 const mockUser: UserPayload = {
@@ -12,9 +22,11 @@ const mockUser: UserPayload = {
 
 describe('GET /premium-service', () => {
   it('should allow access to paid users', async () => {
+    const paidToken = generatePaidUserToken(mockUser);  // Generate a paid user token
+
     const response = await request(app)
       .get('/premium-service')
-      .set('Authorization', `Bearer valid-token`) // Provide valid JWT token
+      .set('Authorization', `Bearer ${paidToken}`)  // Provide valid JWT token for paid user
       .use((req: any) => {
         // Mock req.user inside the test middleware
         req.user = mockUser;
@@ -32,9 +44,11 @@ describe('GET /premium-service', () => {
       tier: 'free',  // Mock the tier as free
     };
 
+    const freeToken = generateFreeUserToken(nonPaidUser);  // Generate a free user token
+
     const response = await request(app)
       .get('/premium-service')
-      .set('Authorization', `Bearer valid-token`) // Provide valid JWT token
+      .set('Authorization', `Bearer ${freeToken}`)  // Provide valid JWT token for non-paid user
       .use((req: any) => {
         // Mock req.user with a non-paid user inside the test middleware
         req.user = nonPaidUser;

@@ -37,21 +37,39 @@ const sequelize = new sequelize_typescript_1.Sequelize({
     },
 });
 exports.sequelize = sequelize;
-// Test the database connection
-const testConnection = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Database connection established successfully.');
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error('Unable to connect to the database:', error.message);
+// Ensure the database connection is tested before running tests, especially in Jest
+if (process.env.NODE_ENV === 'test') {
+    beforeAll(async () => {
+        try {
+            await sequelize.authenticate();
+            console.log('Database connection established successfully.');
         }
-        else {
-            console.error('An unknown error occurred during the connection test');
+        catch (error) {
+            if (error instanceof Error) {
+                console.error('Unable to connect to the database during tests:', error.message);
+            }
+            else {
+                console.error('An unknown error occurred during the connection test');
+            }
+            // Don't exit the process, allow Jest to handle the error gracefully
         }
-        // Removed process.exit(1) to allow Jest to handle the error gracefully
-    }
-};
-// Call the test connection function
-testConnection();
+    });
+}
+else {
+    // In non-test environments, establish the connection immediately
+    const testConnection = async () => {
+        try {
+            await sequelize.authenticate();
+            console.log('Database connection established successfully.');
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.error('Unable to connect to the database:', error.message);
+            }
+            else {
+                console.error('An unknown error occurred during the connection test');
+            }
+        }
+    };
+    testConnection();
+}
