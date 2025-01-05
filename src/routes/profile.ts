@@ -1,3 +1,4 @@
+// src/routes/profile.ts
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { CustomAuthRequest } from '../types'; // Ensure correct import
@@ -28,7 +29,6 @@ router.get(
       });
     } catch (error) {
       next(error); // Pass error to global error handler
-      // If needed, return a response here as a fallback for errors
       return res.status(500).json({ message: 'Internal server error' });
     }
   }

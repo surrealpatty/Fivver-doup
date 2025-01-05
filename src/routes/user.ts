@@ -1,3 +1,4 @@
+// src/routes/user.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -56,5 +57,4 @@ router.post('/signup', async (req: Request, res: Response): Promise<Response> =>
   }
 });
 
-// Export the router to use in the main app
 export default router;

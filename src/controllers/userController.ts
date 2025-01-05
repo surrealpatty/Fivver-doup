@@ -1,70 +1,79 @@
 // src/controllers/userController.ts
-
-import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user'; // Importing the User model
-import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
+import jwt from 'jsonwebtoken';
+import User, { UserCreationAttributes } from '../models/user'; // Import the User model
 
-// Controller for registering a new user
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, username, password, tier = 'free' } = req.body;
+// Controller for User Registration (Signup)
+export const registerUser = async (req: any, res: any): Promise<any> => {
+  const { email, username, password } = req.body;
 
-  // Input validation: Ensure required fields are provided
+  // Validate input
   if (!email || !username || !password) {
     return res.status(400).json({ message: 'Email, username, and password are required.' });
   }
 
   try {
-    // Check if the user already exists by email
-    const existingUser = await User.findOne({ where: { email } });
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      where: { email },
+    });
     if (existingUser) {
-      // If a user exists with the given email, respond with a 400 status code
-      return res.status(400).json({ error: 'Email already exists' });
+      return res.status(400).json({ message: 'Email is already in use.' });
     }
 
-    // Hash the user's password before saving to the database
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
-    // Default role, tier, and isVerified properties (assumed defaults)
-    const newUser = await User.create({
+    // Create the new user in the database (id is handled automatically)
+    const newUser: UserCreationAttributes = {
       email,
       username,
       password: hashedPassword,
-      tier,  // Optional tier (defaults to 'free')
-      role: 'user',  // Default role
-      isVerified: false,  // Default verification status
-    });
+      role: 'user', // Default role (can be modified)
+      tier: 'free', // Default tier should be "free"
+      isVerified: false, // Assuming user isn't verified initially
+    };
 
-    // Generate a JWT token for the new user
-    const token = generateToken(newUser);
+    const user = await User.create(newUser); // Pass newUser as the object to create
 
-    // Respond with the user data (excluding password) and the JWT token
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, username: user.username },
+      process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+      { expiresIn: '1h' } // Expiry time of the token
+    );
+
+    // Send back response with token
     return res.status(201).json({
       message: 'User registered successfully',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        role: newUser.role,  // Default role is 'user'
-        tier: newUser.tier,  // The user's tier (e.g., 'free')
-        isVerified: newUser.isVerified,
-        createdAt: newUser.createdAt,
-      },
-      token,
+      token,  // Send the generated token
     });
-  } catch (error: unknown) {
-    // Type assertion for 'error' to be of type 'Error'
-    if (error instanceof Error) {
-      console.error('Error registering user:', error);
-      // Check if the error is related to a database issue or something else
-      if (error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).json({ error: 'Email already exists' });
-      }
-      return res.status(500).json({ message: 'Internal server error during registration.' });
-    } else {
-      // In case the error is not of type 'Error', log and handle the unknown case
-      console.error('Unknown error:', error);
-      return res.status(500).json({ message: 'Internal server error during registration.' });
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Controller for fetching user profile
+export const getUserProfile = async (req: any, res: any): Promise<any> => {
+  try {
+    const user = req.user; // User should be added to the request object by the authenticateToken middleware
+
+    if (!user) {
+      return res.status(401).json({ message: 'User not authenticated' });
     }
+
+    return res.status(200).json({
+      message: 'Profile fetched successfully',
+      user: {
+        id: user.id,
+        email: user.email || 'No email provided',
+        username: user.username || 'Anonymous',
+        tier: user.tier || 'Free', // Fallback to 'Free' if no tier provided
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
