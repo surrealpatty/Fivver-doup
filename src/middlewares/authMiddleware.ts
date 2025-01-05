@@ -1,32 +1,41 @@
-import { NextFunction, Response } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken'; // Correct import for JwtPayload
-import { CustomAuthRequest } from '../types';  // Correct import for CustomAuthRequest
-import { UserPayload } from '../types';  // Import UserPayload type
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 
-// Middleware to authenticate and decode JWT token
-const authenticateToken = (req: CustomAuthRequest, res: Response, next: NextFunction): void => {
-    // Extract the token from the Authorization header (Bearer token)
-    const token = req.headers['authorization']?.split(' ')[1];  // "Bearer <token>"
+// Define the structure of the JWT payload (user)
+interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+}
 
-    // If no token is provided, return a 401 Unauthorized error
-    if (!token) {
-        res.status(401).json({ message: 'Token missing' });
-        return;  // Explicitly return here to stop further execution
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+// Extend Request to include the user field with the appropriate type
+interface AuthRequest extends Request {
+  user?: UserPayload; // Ensure the user is of type UserPayload, not null or Record<string, any>
+}
+
+export const authenticateToken = (
+  req: AuthRequest, // Use AuthRequest interface to extend the user field
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+
+  if (!token) {
+    return res.status(401).json({ message: 'Authorization token is missing' });
+  }
+
+  // Verify the token and decode the payload
+  jwt.verify(token, SECRET_KEY, (err: Error | null, decoded: UserPayload | undefined) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
-    // Verify the token using JWT secret key
-    jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err: Error | null, user: JwtPayload | null) => {
-        if (err) {
-            res.status(403).json({ message: 'Token is not valid' });
-            return;  // Explicitly return here to stop further execution
-        }
+    // Attach decoded user data to the request
+    req.user = decoded; 
 
-        // Ensure the decoded token (user) matches the UserPayload interface
-        req.user = user as UserPayload; // Attach decoded user to the req object
-
-        // Proceed to the next middleware or route handler
-        next();  // Use next to pass control to the next middleware
-    });
+    // Proceed to the next middleware
+    next();
+  });
 };
-
-export default authenticateToken;
