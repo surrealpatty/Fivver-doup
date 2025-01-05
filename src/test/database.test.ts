@@ -1,14 +1,29 @@
-import { sequelize } from '../config/database'; // Import the sequelize instance
-import  { app } from '../index'; // Import your Express app
+import 'reflect-metadata';  // Ensure reflect-metadata is imported for decorators to work
+import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
+import { app } from '../index';                     // Correct import for the app
 import request from 'supertest';
-import { Service } from '../models/services'; // Import your models
-import { User } from '../models/user'; // Import your models
+import { sequelize } from '../config/database';  // Correct import for sequelize instance
+import User from '../models/user';  // Import User model to ensure it's added to Sequelize
+import Service from '../models/services';  // Import Service model to ensure it's added to Sequelize
+
+// Ensure the models are added and synced before running the tests
+beforeAll(async () => {
+  // Add models to Sequelize instance before associations
+  sequelize.addModels([User, Service]);
+
+  // Define the associations after models are loaded
+  Service.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(Service, { foreignKey: 'userId' });
+
+  // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
+  await sequelize.sync({ force: false });
+});
 
 describe('Database connection and API routes', () => {
   // Async test to check if the database connection is successful
   test('should establish database connection', async () => {
     // Ensure the database connection is established before the test
-    await sequelize.authenticate(); // This ensures the connection is successful
+    await sequelize.authenticate();  // This ensures the connection is successful
     console.log('Database connection established');
   });
 
@@ -19,17 +34,6 @@ describe('Database connection and API routes', () => {
     expect(res.text).toBe('Fiverr backend is running');
   });
 
-  // Test database synchronization and associations
-  beforeAll(async () => {
-    // Sync the models with the database before running tests
-    await sequelize.sync({ force: true }); // 'force: true' to drop and re-create tables for a clean state
-  });
-
-  afterAll(async () => {
-    // Clean up after tests
-    await sequelize.close();  // Close the Sequelize connection after tests
-  });
-
   // Test if Service can be associated with User
   test('Service can be associated with User', () => {
     // Check if the 'belongsTo' association is defined for the Service model
@@ -38,4 +42,9 @@ describe('Database connection and API routes', () => {
     const association = Service.associations.User;
     expect(association).toBeDefined();
   });
+});
+
+// Clean up after tests
+afterAll(async () => {
+  await sequelize.close();  // Close the Sequelize connection after tests
 });
