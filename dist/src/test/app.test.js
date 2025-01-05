@@ -68,5 +68,6 @@ describe('Authentication Tests', () => {
 });
 // Clean up after tests
 afterAll(async () => {
-    await database_1.sequelize.close(); // Close the Sequelize connection after tests
+    // Gracefully close the Sequelize connection after all tests
+    await database_1.sequelize.close();
 });
