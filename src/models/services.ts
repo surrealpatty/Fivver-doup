@@ -58,6 +58,3 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
-
-// Remove this import if you are defining the Service class here
-// import { Service } from '../models/services';  
