@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken'; // Correct import for jsonwebtoken
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Import your custom UserPayload type
+import jwt, { JwtPayload, JwtVerifyOptions, JsonWebTokenError } from 'jsonwebtoken';
 
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
@@ -24,7 +24,7 @@ export const authenticateToken = (
   }
 
   // Define options for token verification
-  const options: jwt.JwtVerifyOptions = { // Use jwt.JwtVerifyOptions for the options
+  const options: JwtVerifyOptions = { // Use JwtVerifyOptions for the options
     algorithms: ['HS256'], // Specify the algorithm type correctly
   };
 
@@ -34,7 +34,7 @@ export const authenticateToken = (
       token,
       SECRET_KEY,
       options,
-      (err: jwt.JsonWebTokenError | null, decoded: jwt.JwtPayload | undefined) => {
+      (err: JsonWebTokenError | null, decoded: JwtPayload | undefined) => {
         if (err) {
           return res.status(401).json({ message: 'Invalid or expired token' });
         }
