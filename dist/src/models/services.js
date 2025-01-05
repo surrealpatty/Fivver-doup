@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
-require("reflect-metadata");
-const sequelize_typescript_1 = require("sequelize-typescript");
+require("reflect-metadata"); // Ensure reflect-metadata is imported for sequelize-typescript
+const sequelize_typescript_1 = require("sequelize-typescript"); // Correct decorators from sequelize-typescript
 const user_1 = require("./user"); // Correct import of User model with named import
 let Service = class Service extends sequelize_typescript_1.Model {
     title;

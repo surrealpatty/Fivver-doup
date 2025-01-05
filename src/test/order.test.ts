@@ -1,9 +1,10 @@
 import { Order } from '../models/order'; // Import the Order model
 import { sequelize } from '../config/database'; // Correct import of sequelize
-import  { app } from '../index'; // Correct import of app
+import { app } from '../index'; // Correct import of app
 import request from 'supertest'; // Import supertest for API requests
 import { User } from '../models/user'; // Import User model
 import Service from '../models/services'; // Import Service model as default
+import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
@@ -27,6 +28,7 @@ jest.mock('../config/database', () => ({
     sync: jest.fn().mockResolvedValue(null),
     close: jest.fn().mockResolvedValue(null),
     authenticate: jest.fn().mockResolvedValue(null), // Mock authenticate
+    addModels: jest.fn(), // Mock addModels method to include models in tests
   },
 }));
 
@@ -34,6 +36,10 @@ beforeAll(async () => {
   try {
     await sequelize.authenticate(); // Mock database connection
     console.log('Mock database connected successfully!');
+    
+    // Mock adding models to sequelize
+    sequelize.addModels([Order, User, Service]); // Add necessary models here
+    
     await sequelize.sync({ force: true }); // Ensure a clean state before tests
   } catch (error) {
     console.error('Error during database setup:', error);

@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 require("reflect-metadata"); // Ensure this is the first import
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import Sequelize from sequelize-typescript
-const dotenv_1 = __importDefault(require("dotenv"));
-const user_1 = require("../models/user"); // Ensure these models are imported
-const services_1 = require("../models/services");
-const order_1 = require("../models/order");
-const review_1 = require("../models/review");
+const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
+const user_1 = require("../models/user"); // Import User model
+const services_1 = require("../models/services"); // Import Service model
+const order_1 = require("../models/order"); // Import Order model
+const review_1 = require("../models/review"); // Import Review model
 dotenv_1.default.config(); // Load environment variables from .env file
 // Determine environment and use appropriate database config
 const isTestEnv = process.env.NODE_ENV === 'test';

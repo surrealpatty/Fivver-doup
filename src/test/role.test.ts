@@ -1,5 +1,5 @@
 import request from 'supertest';
-import  { app } from '../index';  // Ensure correct import for your app
+import { app } from '../index'; // Ensure correct import for your app
 import { User } from '../models/user';  // Adjust the path as necessary
 
 describe('Role-based Access Tests', () => {

@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Correct import path to your app
+const index_1 = require("../index"); // Ensure this is the correct import path to your app
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const database_1 = require("../config/database"); // Make sure this is the correct path to your sequelize instance
+const database_1 = require("../config/database"); // Correct path to your sequelize instance
 // Mock JWT token generation for paid and free users
 const generateToken = (user, secretKey) => {
     return jsonwebtoken_1.default.sign(user, secretKey, { expiresIn: '1h' });
@@ -61,6 +61,7 @@ jest.mock('../middlewares/authenticateToken', () => {
 beforeAll(async () => {
     // Connect to the database before running the tests
     await database_1.sequelize.authenticate();
+    await database_1.sequelize.sync({ force: true }); // Ensure models are synced before tests
 });
 afterAll(async () => {
     // Close the database connection after tests
