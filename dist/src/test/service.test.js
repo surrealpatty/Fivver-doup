@@ -3,10 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Add this line at the very top to ensure Sequelize decorators work
+require("reflect-metadata"); // Ensure this is the first import in the test file
 const supertest_1 = __importDefault(require("supertest"));
 const services_1 = require("../models/services"); // Corrected relative import
 const index_1 = require("../index"); // Adjusting to the source directory directly
+const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
+const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import of Sequelize
 // Mocking the Service model methods
 jest.mock('../models/services', () => ({
     Service: {
@@ -14,11 +16,26 @@ jest.mock('../models/services', () => ({
         findOne: jest.fn(),
     },
 }));
+// Load environment variables from .env file
+dotenv_1.default.config();
+// Sequelize initialization for test database
+const sequelize = new sequelize_typescript_1.Sequelize({
+    username: process.env.TEST_DB_USERNAME, // Use test DB credentials
+    password: process.env.TEST_DB_PASSWORD,
+    database: process.env.TEST_DB_NAME,
+    host: process.env.TEST_DB_HOST, // Ensure correct host for the test DB
+    dialect: 'mysql',
+    models: [services_1.Service], // Add models to Sequelize initialization for tests
+});
+// Sync database before tests
+beforeAll(async () => {
+    await sequelize.sync({ force: true }); // This will drop and recreate tables for each test
+});
+// Retry logic for all tests in this suite
+beforeEach(() => {
+    jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
+});
 describe('Service Tests', () => {
-    // Apply retry logic to all tests in this suite
-    beforeEach(() => {
-        jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
-    });
     describe('POST /api/services/create', () => {
         it('should create a service successfully', async () => {
             // Mock resolved value for Service.create
