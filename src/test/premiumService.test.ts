@@ -1,7 +1,8 @@
-import { UserPayload } from '../types'; // Adjust path if necessary
 import request from 'supertest';
-import { app } from '../index'; // Adjust path if necessary
-import jwt from 'jsonwebtoken'; // Correctly import jsonwebtoken
+import { app } from '../index'; // Correct import path to your app
+import jwt from 'jsonwebtoken';
+import { sequelize } from '../config/database'; // Make sure this is the correct path to your sequelize instance
+import { UserPayload } from '../types';
 
 // Mock JWT token generation for paid and free users
 const generateToken = (user: UserPayload, secretKey: string): string => {
@@ -57,12 +58,15 @@ jest.mock('../middlewares/authenticateToken', () => {
   };
 });
 
-// Mock process.exit to prevent tests from terminating
-beforeAll(() => {
-  // Mocking process.exit to avoid throwing any error while tests run
-  jest.spyOn(process, 'exit').mockImplementation((code?: string | number | null | undefined): never => {
-    throw new Error(`process.exit called with code: ${code}`);
-  });
+// Setup and teardown hooks for database connection
+beforeAll(async () => {
+  // Connect to the database before running the tests
+  await sequelize.authenticate();
+});
+
+afterAll(async () => {
+  // Close the database connection after tests
+  await sequelize.close();
 });
 
 describe('GET /premium-service', () => {
