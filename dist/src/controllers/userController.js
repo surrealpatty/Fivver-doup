@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserProfile = exports.registerUser = void 0;
-// src/controllers/userController.ts
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user")); // Import the User model
@@ -54,7 +53,8 @@ exports.registerUser = registerUser;
 // Controller for fetching user profile
 const getUserProfile = async (req, res) => {
     try {
-        const user = req.user; // User should be added to the request object by the authenticateToken middleware
+        // Type the user correctly to include `tier`
+        const user = req.user; // Cast `req.user` to UserPayload to include `tier`
         if (!user) {
             return res.status(401).json({ message: 'User not authenticated' });
         }

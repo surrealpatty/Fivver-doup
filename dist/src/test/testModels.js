@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../models/user"));
 const database_1 = require("../config/database"); // Correct import
 const uuid_1 = require("uuid");
-const services_1 = __importDefault(require("../models/services")); // Use default import
+const services_1 = require("../models/services"); // Correct named import
 describe('Service Model Tests', () => {
     let user; // Declare user at the top to use across tests
     beforeAll(async () => {
@@ -35,7 +35,7 @@ describe('Service Model Tests', () => {
             price: 10,
             userId: user.id, // user.id is a string (UUID)
         };
-        const service = await services_1.default.create(serviceData);
+        const service = await services_1.Service.create(serviceData);
         // Ensure that the userId is correctly compared as a string
         expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
         expect(service.title).toBe('Test Service');

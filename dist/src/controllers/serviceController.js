@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceController = void 0;
-const services_1 = __importDefault(require("../models/services")); // Use default import
+const services_1 = require("../models/services"); // Correct named import
 class ServiceController {
     // Method to handle access to premium services for paid users
     static premiumServiceAccess(req, res) {
@@ -17,7 +14,7 @@ class ServiceController {
     // Method to fetch all services (existing method)
     static async getServices(req, res) {
         try {
-            const services = await services_1.default.findAll(); // Assuming you want to fetch all services
+            const services = await services_1.Service.findAll(); // Assuming you want to fetch all services
             return res.status(200).json(services); // Send the services as the response
         }
         catch (error) {

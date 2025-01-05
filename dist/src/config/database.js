@@ -4,9 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
-const dotenv_1 = __importDefault(require("dotenv")); // Load environment variables from the .env file
+const dotenv_1 = __importDefault(require("dotenv")); // Load environment variables from .env file
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import Sequelize with TypeScript support
-dotenv_1.default.config(); // Load environment variables
+const user_1 = require("../models/user"); // Correct import for User model
+const services_1 = require("../models/services"); // Correct import for Service model
+const order_1 = require("../models/order"); // Correct import for Order model
+const review_1 = require("../models/review"); // Correct import for Review model
+dotenv_1.default.config(); // Load environment variables from .env file
 // Extract current environment and set defaults
 const environment = process.env.NODE_ENV || 'development';
 // Map environment variables for database configuration
@@ -24,12 +28,7 @@ const sequelize = new sequelize_typescript_1.Sequelize({
     host: DB_HOST,
     port: DB_PORT,
     dialect: 'mysql',
-    models: [
-        require('../models/user').User,
-        require('../models/services').Service,
-        require('../models/order').Order,
-        require('../models/review').Review,
-    ],
+    models: [user_1.User, services_1.Service, order_1.Order, review_1.Review], // Correctly include models for sequelize-typescript
     logging: environment === 'development' ? console.log : false, // Enable logging only in development
     define: {
         freezeTableName: true, // Prevent table name pluralization

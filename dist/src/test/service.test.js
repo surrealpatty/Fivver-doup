@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // Ensure this is the first import
 const supertest_1 = __importDefault(require("supertest"));
-const services_1 = require("../models/services"); // Corrected relative import
+const services_1 = require("../models/services"); // Correct relative import of Service model
 const index_1 = require("../index"); // Adjusting to the source directory directly
 const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
 const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import of Sequelize

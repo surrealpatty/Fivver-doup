@@ -8,15 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 require("reflect-metadata"); // Required for decorators
 const sequelize_typescript_1 = require("sequelize-typescript");
 const uuid_1 = require("uuid");
-const services_1 = __importDefault(require("./services")); // Ensure the correct import (relative path fixed)
+const services_1 = require("../models/services"); // Correct named import
 let User = class User extends sequelize_typescript_1.Model {
     username;
     email;
@@ -100,7 +97,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => services_1.default) // A User has many Services
+    (0, sequelize_typescript_1.HasMany)(() => services_1.Service) // A User has many Services
     ,
     __metadata("design:type", Array)
 ], User.prototype, "services", void 0);

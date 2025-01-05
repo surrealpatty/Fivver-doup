@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/user.ts
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -51,4 +50,33 @@ router.post('/signup', async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
+// User Login Route (Optional, just as an example)
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required.' });
+    }
+    try {
+        const user = await user_1.default.findOne({ where: { email } });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password.' });
+        }
+        // Compare the provided password with the stored hashed password
+        const isPasswordValid = await bcryptjs_1.default.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid email or password.' });
+        }
+        // Generate JWT token
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
+        return res.status(200).json({
+            message: 'Login successful',
+            token, // Send the generated token
+        });
+    }
+    catch (error) {
+        console.error('Error during user login:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+// Export router to be used in the main app
 exports.default = router;

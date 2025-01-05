@@ -7,12 +7,12 @@ const http_1 = __importDefault(require("http"));
 const index_1 = require("../index"); // Correct import path for the app entry point
 const supertest_1 = __importDefault(require("supertest"));
 const database_1 = require("../config/database"); // Import sequelize instance to close connection
-const services_1 = __importDefault(require("../models/services")); // Correct import path for the Service model
+const services_1 = require("../models/services"); // Correct named import
 describe('Server Tests', () => {
     let server;
     beforeAll(async () => {
         // Ensure that the Service model is added to sequelize
-        database_1.sequelize.addModels([services_1.default]);
+        database_1.sequelize.addModels([services_1.Service]);
         // Sync the models with the database (use force: true if you want to reset the DB)
         await database_1.sequelize.sync({ force: false });
         // Create and start the server before tests

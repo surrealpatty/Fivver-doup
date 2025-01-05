@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database"); // Correct import
 const uuid_1 = require("uuid"); // UUID generator
 const user_1 = __importDefault(require("../models/user")); // Ensure the path is correct
-const services_1 = __importDefault(require("../models/services")); // Ensure the path is correct
+const services_1 = require("../models/services"); // Correct named import
 describe('Service Model Tests', () => {
     let user; // Declare a user variable to be used across tests
     beforeAll(async () => {
@@ -39,7 +39,7 @@ describe('Service Model Tests', () => {
             userId: user.id, // Associate the service with the created user
         };
         // Create the service and save it in the database
-        const service = await services_1.default.create(serviceData);
+        const service = await services_1.Service.create(serviceData);
         // Validate the created service's attributes
         expect(service.userId).toBe(user.id); // Ensure the userId matches
         expect(service.title).toBe('Test Service');

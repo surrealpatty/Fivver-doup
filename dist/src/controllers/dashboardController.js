@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDashboardData = void 0;
 const order_1 = require("../models/order"); // Assuming this model exists
-const services_1 = __importDefault(require("../models/services")); // Use default import
+const services_1 = require("../models/services"); // Correct named import
 const getDashboardData = async (req, res) => {
     try {
         // Ensure that req.user is defined before using it
@@ -14,7 +11,7 @@ const getDashboardData = async (req, res) => {
         }
         const userId = req.user.id; // Extract user ID from the authenticated user
         // Fetch user services and orders (no ratings since there's no ratings model)
-        const services = await services_1.default.findAll({ where: { userId } });
+        const services = await services_1.Service.findAll({ where: { userId } });
         const orders = await order_1.Order.findAll({ where: { userId } });
         // Return the fetched data
         res.json({ services, orders });

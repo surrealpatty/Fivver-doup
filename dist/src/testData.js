@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("./models/user")); // Correct import path for the User model
-const services_1 = __importDefault(require("./models/services")); // Use default import
+const services_1 = require("./models/services"); // Correct named import
 // Insert a test user
 user_1.default.create({
     id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',
@@ -18,7 +18,7 @@ user_1.default.create({
     .then((user) => {
     console.log('User created:', user);
     // Optionally, insert a test service for the created user
-    return services_1.default.create({
+    return services_1.Service.create({
         title: 'Web Development', // Correct property name
         description: 'Full-stack web development services.',
         price: 500,
