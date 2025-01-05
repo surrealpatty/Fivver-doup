@@ -23,21 +23,21 @@ const sequelize = new Sequelize({
   models: [User, Service, Order, Review], // Define all your models here
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   define: {
-    freezeTableName: true,
-    timestamps: true,
+    freezeTableName: true,  // Prevent Sequelize from pluralizing table names
+    timestamps: true,  // Ensure timestamp fields (createdAt, updatedAt) are automatically handled
   },
   pool: {
     max: 10,
     min: 0,
-    acquire: 30000,
-    idle: 10000,
+    acquire: 30000, // Max time, in ms, before throwing an error
+    idle: 10000, // Max time, in ms, before an idle connection is released
   },
   dialectOptions: {
-    charset: 'utf8mb4',
+    charset: 'utf8mb4',  // Ensures support for extended characters, such as emojis
     collate: 'utf8mb4_unicode_ci',
     ssl: DB_USE_SSL === 'true'
-      ? { require: true, rejectUnauthorized: false }
-      : undefined,
+      ? { require: true, rejectUnauthorized: false } // Enables SSL if DB_USE_SSL is true
+      : undefined,  // Disables SSL if DB_USE_SSL is false
   },
 });
 
