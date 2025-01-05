@@ -16,7 +16,7 @@ exports.User = void 0;
 require("reflect-metadata"); // Required for decorators
 const sequelize_typescript_1 = require("sequelize-typescript");
 const uuid_1 = require("uuid");
-const services_1 = __importDefault(require("../models/services")); // Ensure the correct import
+const services_1 = __importDefault(require("./services")); // Ensure the correct import (relative path fixed)
 let User = class User extends sequelize_typescript_1.Model {
     username;
     email;

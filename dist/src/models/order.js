@@ -17,8 +17,8 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const user_1 = require("./user"); // Import User model for foreign key relationship
 const services_1 = __importDefault(require("../models/services")); // Use default import
 let Order = class Order extends sequelize_typescript_1.Model {
-    userId; // Foreign key to the user who made the order
-    serviceId; // Foreign key to the service ordered
+    userId; // Use UUID type for userId
+    serviceId; // Use UUID type for serviceId
     orderDetails; // Details of the order
     status; // Status of the order (e.g., pending, completed)
     item; // The item related to the order
@@ -34,14 +34,16 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_1.User) // Foreign key to User model
     ,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
-    __metadata("design:type", Number)
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Foreign key should be UUID for consistency
+    ,
+    __metadata("design:type", String)
 ], Order.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => services_1.default) // Foreign key to Service model
     ,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
-    __metadata("design:type", Number)
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Foreign key should be UUID for consistency
+    ,
+    __metadata("design:type", String)
 ], Order.prototype, "serviceId", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
@@ -60,6 +62,6 @@ __decorate([
     __metadata("design:type", Number)
 ], Order.prototype, "quantity", void 0);
 exports.Order = Order = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'orders', timestamps: false }) // Disable timestamps if not using createdAt and updatedAt
+    (0, sequelize_typescript_1.Table)({ tableName: 'orders', timestamps: true }) // Enable timestamps if you'd like to track createdAt and updatedAt
 ], Order);
 exports.default = Order;
