@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure reflect-metadata is imported for decorators to work
+require("reflect-metadata"); // Ensure this is the first import in the test file
 const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import for Sequelize
 const index_1 = require("../index"); // Correct import for the app
 const supertest_1 = __importDefault(require("supertest"));
@@ -11,15 +11,18 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonw
 const database_1 = require("../config/database"); // Correct import for sequelize instance
 const user_1 = __importDefault(require("../models/user")); // Import User model to ensure it's added to Sequelize
 const services_1 = __importDefault(require("../models/services")); // Import Service model to ensure it's added to Sequelize
+const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
+// Load environment variables from .env file
+dotenv_1.default.config();
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
     // Initialize Sequelize with models explicitly
     const sequelizeInstance = new sequelize_typescript_1.Sequelize({
         dialect: 'mysql',
-        host: 'localhost',
-        username: 'root',
-        password: 'password', // Use your actual password here
-        database: 'fivver_doup',
+        host: process.env.TEST_DB_HOST, // Use environment variables for DB configuration
+        username: process.env.TEST_DB_USERNAME,
+        password: process.env.TEST_DB_PASSWORD,
+        database: process.env.TEST_DB_NAME,
         models: [user_1.default, services_1.default], // Add models to Sequelize instance
     });
     // Add models to Sequelize instance and define associations
