@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Adjust path if necessary
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Correctly import jsonwebtoken
+const index_1 = require("../index"); // Correct import path to your app
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const database_1 = require("../config/database"); // Make sure this is the correct path to your sequelize instance
 // Mock JWT token generation for paid and free users
 const generateToken = (user, secretKey) => {
     return jsonwebtoken_1.default.sign(user, secretKey, { expiresIn: '1h' });
@@ -56,12 +57,14 @@ jest.mock('../middlewares/authenticateToken', () => {
         next();
     };
 });
-// Mock process.exit to prevent tests from terminating
-beforeAll(() => {
-    // Mocking process.exit to avoid throwing any error while tests run
-    jest.spyOn(process, 'exit').mockImplementation((code) => {
-        throw new Error(`process.exit called with code: ${code}`);
-    });
+// Setup and teardown hooks for database connection
+beforeAll(async () => {
+    // Connect to the database before running the tests
+    await database_1.sequelize.authenticate();
+});
+afterAll(async () => {
+    // Close the database connection after tests
+    await database_1.sequelize.close();
 });
 describe('GET /premium-service', () => {
     it('should allow access to paid users', async () => {

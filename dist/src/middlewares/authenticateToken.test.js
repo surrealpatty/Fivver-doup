@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const authenticateToken_1 = require("./authenticateToken"); // Correct import for named export
+const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken"));
 // Mock jsonwebtoken module
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
@@ -27,7 +30,7 @@ describe('authenticateToken Middleware', () => {
             header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
         };
         // Call the middleware
-        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
         // Check if next() was called, meaning the middleware passed successfully
         expect(mockNext).toHaveBeenCalled();
         // Check if the user was attached to req.user
@@ -35,7 +38,7 @@ describe('authenticateToken Middleware', () => {
     });
     it('should return 401 if no token is provided', () => {
         mockRequest = { header: jest.fn().mockReturnValue(null) }; // No token
-        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(401);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Authorization token is missing' });
     });
@@ -48,7 +51,7 @@ describe('authenticateToken Middleware', () => {
         mockRequest = {
             header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
         };
-        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(403);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Invalid or expired token' });
     });
