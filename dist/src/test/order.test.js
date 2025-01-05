@@ -28,12 +28,15 @@ jest.mock('../config/database', () => ({
         sync: jest.fn().mockResolvedValue(null),
         close: jest.fn().mockResolvedValue(null),
         authenticate: jest.fn().mockResolvedValue(null), // Mock authenticate
+        addModels: jest.fn(), // Mock addModels method to include models in tests
     },
 }));
 beforeAll(async () => {
     try {
         await database_1.sequelize.authenticate(); // Mock database connection
         console.log('Mock database connected successfully!');
+        // Mock adding models to sequelize
+        database_1.sequelize.addModels([order_1.Order, user_1.User, services_1.default]); // Add necessary models here
         await database_1.sequelize.sync({ force: true }); // Ensure a clean state before tests
     }
     catch (error) {

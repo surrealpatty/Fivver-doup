@@ -1,22 +1,26 @@
 "use strict";
-// src/test/server.test.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
-const index_1 = require("../index"); // Adjust the path to your app entry point
+const index_1 = require("../index"); // Correct import path for the app entry point
 const supertest_1 = __importDefault(require("supertest"));
 const database_1 = require("../config/database"); // Import sequelize instance to close connection
+const services_1 = __importDefault(require("../models/services")); // Correct import path for the Service model
 describe('Server Tests', () => {
     let server;
-    beforeAll(() => {
+    beforeAll(async () => {
+        // Ensure that the Service model is added to sequelize
+        database_1.sequelize.addModels([services_1.default]);
+        // Sync the models with the database (use force: true if you want to reset the DB)
+        await database_1.sequelize.sync({ force: false });
         // Create and start the server before tests
         server = http_1.default.createServer(index_1.app);
         server.listen(3000); // Start the server
     });
     it('should respond to a GET request', async () => {
-        const res = await (0, supertest_1.default)(index_1.app).get('/some-route');
+        const res = await (0, supertest_1.default)(index_1.app).get('/some-route'); // Replace with an actual route for the test
         expect(res.status).toBe(200);
     });
     afterAll(async () => {

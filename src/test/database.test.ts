@@ -1,9 +1,9 @@
 import 'reflect-metadata';  // Ensure this is the first import in the test file
 import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
+import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import User from '../models/user';  // Import User model to ensure it's added to Sequelize
 import Service from '../models/services';  // Ensure Service is properly imported
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
