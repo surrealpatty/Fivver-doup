@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure this is the first import in the test file
+require("reflect-metadata"); // Ensure this is the first import
 const supertest_1 = __importDefault(require("supertest"));
 const services_1 = require("../models/services"); // Corrected relative import
 const index_1 = require("../index"); // Adjusting to the source directory directly

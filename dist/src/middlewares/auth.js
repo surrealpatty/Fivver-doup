@@ -4,31 +4,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateJWT = exports.generateToken = exports.verifyToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import only jwt here
-const config_1 = __importDefault(require("../config/config")); // Ensure the path is correct and properly typed
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Use only the default import
+const config_1 = __importDefault(require("../config/config"));
+// Utility function to get the configuration for the current environment
+const getConfig = () => {
+    const env = process.env.NODE_ENV || 'development';
+    if (env in config_1.default) {
+        return config_1.default[env];
+    }
+    throw new Error(`Invalid NODE_ENV: ${env}`);
+};
 // Middleware to verify the JWT
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Extract the token from the "Bearer token" format
     if (!token) {
         return res.status(403).json({ message: 'No token provided' });
     }
-    // Ensure config.JWT_SECRET is typed as a string
-    const jwtSecret = config_1.default[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
-    // Define the options for verification
-    const verifyOptions = {
-        algorithms: ['HS256'], // Adjust algorithm as needed
-    };
-    // Verify the token using the secret from config and options
-    jsonwebtoken_1.default.verify(token, jwtSecret, // Use the correct string type here
-    verifyOptions, // Pass the options here
-    (err, decoded) => {
+    const { JWT_SECRET } = getConfig();
+    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Unauthorized', error: err.message });
         }
-        // Ensure decoded payload is valid and contains an ID
         if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-            const decodedToken = decoded; // Now, we know the 'id' field exists in the decoded token
-            req.userId = String(decodedToken.id); // Store the userId in the request object
+            req.userId = decoded.id; // Store the userId in the request object
             return next(); // Proceed to the next middleware
         }
         else {
@@ -39,11 +37,9 @@ const verifyToken = (req, res, next) => {
 exports.verifyToken = verifyToken;
 // Function to generate a JWT for a user
 const generateToken = (userId) => {
-    const jwtSecret = config_1.default[process.env.NODE_ENV || 'development'].JWT_SECRET; // Access JWT_SECRET from the correct environment config
-    return jsonwebtoken_1.default.sign({ id: userId }, // Payload containing the user ID
-    jwtSecret, // Use the correct secret string here
-    {
-        expiresIn: config_1.default[process.env.NODE_ENV || 'development'].JWT_EXPIRATION, // Ensure JWT_EXPIRATION is valid
+    const { JWT_SECRET, JWT_EXPIRATION } = getConfig();
+    return jsonwebtoken_1.default.sign({ id: userId }, JWT_SECRET, {
+        expiresIn: JWT_EXPIRATION,
     });
 };
 exports.generateToken = generateToken;

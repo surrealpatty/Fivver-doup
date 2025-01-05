@@ -1,13 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken"));
+const authenticateToken_1 = require("../middlewares/authenticateToken");
 const router = (0, express_1.Router)();
 // Define the protected route with authentication
-router.get('/protected-route', authenticateToken_1.default, // Use the authenticateToken middleware
+router.get('/protected-route', authenticateToken_1.authenticateToken, // Use the authenticateToken middleware
 async (req, // Ensure correct typing for req using CustomAuthRequest
 res, next) => {
     try {

@@ -10,7 +10,9 @@ const services_1 = __importDefault(require("../models/services")); // Ensure the
 describe('Service Model Tests', () => {
     let user; // Declare a user variable to be used across tests
     beforeAll(async () => {
-        // Ensure the database is ready before running tests
+        // Ensure the test database (fivver_doup_test) is used and ready
+        await database_1.sequelize.authenticate(); // Test connection
+        // Sync the database and force recreation of tables in the test database
         await database_1.sequelize.sync({ force: true });
         // Create a test user before running the tests
         user = await user_1.default.create({

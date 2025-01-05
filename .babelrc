@@ -5,7 +5,8 @@
   ],
   "plugins": [
     "@babel/plugin-transform-runtime", // For handling async/await and other runtime features
-    "@babel/plugin-transform-modules-commonjs" // To transform ES modules to CommonJS
+    "@babel/plugin-transform-modules-commonjs", // To transform ES modules to CommonJS
+    "@babel/plugin-proposal-class-properties"  // Add support for class properties
   ],
   "env": {
     "test": {

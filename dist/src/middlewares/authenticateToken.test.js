@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const authenticateToken_1 = __importDefault(require("../middlewares/authenticateToken"));
+const authenticateToken_1 = require("../middlewares/authenticateToken");
 // Mock jsonwebtoken module
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
@@ -32,7 +29,7 @@ describe('authenticateToken Middleware', () => {
             },
         };
         // Call the middleware
-        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
         // Check if next() was called, meaning the middleware passed successfully
         expect(mockNext).toHaveBeenCalled();
         // Check if the user was attached to req.user
@@ -44,7 +41,7 @@ describe('authenticateToken Middleware', () => {
                 authorization: '', // No token provided
             },
         };
-        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(401);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Authorization token is missing' });
     });
@@ -59,7 +56,7 @@ describe('authenticateToken Middleware', () => {
                 authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
             },
         };
-        (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
+        (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(403);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Invalid or expired token' });
     });
