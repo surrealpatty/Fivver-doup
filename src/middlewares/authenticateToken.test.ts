@@ -30,7 +30,9 @@ describe('authenticateToken Middleware', () => {
 
     // Mock request and set Authorization header
     mockRequest = {
-      header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
+      headers: {
+        authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
+      },
     };
 
     // Call the middleware
@@ -44,7 +46,11 @@ describe('authenticateToken Middleware', () => {
   });
 
   it('should return 401 if no token is provided', () => {
-    mockRequest = { header: jest.fn().mockReturnValue(null) }; // No token
+    mockRequest = {
+      headers: {
+        authorization: '', // No token provided
+      },
+    };
 
     authenticateToken(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
@@ -61,7 +67,9 @@ describe('authenticateToken Middleware', () => {
     });
 
     mockRequest = {
-      header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
+      headers: {
+        authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
+      },
     };
 
     authenticateToken(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);

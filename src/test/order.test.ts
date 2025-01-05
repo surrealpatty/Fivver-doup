@@ -9,18 +9,18 @@ import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
   findByPk: jest.fn(),
-}));
+})); // Mock findByPk method for Service model
 
 jest.mock('../models/user', () => ({
   findByPk: jest.fn(),
-}));
+})); // Mock findByPk method for User model
 
 jest.mock('../models/order', () => ({
   create: jest.fn(),
   findAll: jest.fn(),
   findByPk: jest.fn(),
   destroy: jest.fn(),
-}));
+})); // Mock the methods for Order model
 
 // Mock the sequelize instance to avoid interacting with a real database
 jest.mock('../config/database', () => ({
@@ -36,10 +36,10 @@ beforeAll(async () => {
   try {
     await sequelize.authenticate(); // Mock database connection
     console.log('Mock database connected successfully!');
-    
+
     // Mock adding models to sequelize
     sequelize.addModels([Order, User, Service]); // Add necessary models here
-    
+
     await sequelize.sync({ force: true }); // Ensure a clean state before tests
   } catch (error) {
     console.error('Error during database setup:', error);

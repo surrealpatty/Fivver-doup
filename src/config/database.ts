@@ -1,14 +1,9 @@
-import 'reflect-metadata';  // Ensure this is the first import
-import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
-import dotenv from 'dotenv';  // Import dotenv to load environment variables
-import { User } from '../models/user';  // Import User model
-import { Service } from '../models/services';  // Import Service model
-import { Order } from '../models/order';  // Import Order model
-import { Review } from '../models/review';  // Import Review model
+import { Sequelize } from 'sequelize-typescript'; // Import Sequelize from sequelize-typescript
+import dotenv from 'dotenv'; // Import dotenv to load environment variables
 
-dotenv.config();  // Load environment variables from .env file
+dotenv.config(); // Load environment variables from .env file
 
-// Determine environment and use appropriate database config
+// Determine the environment (development or test)
 const isTestEnv = process.env.NODE_ENV === 'test';
 
 // Fetch database credentials from environment variables or fallback to defaults
@@ -19,7 +14,7 @@ const DB_HOST = isTestEnv ? process.env.TEST_DB_HOST : process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;  // Default port 3306
 const DB_USE_SSL = process.env.DB_USE_SSL === 'true';  // Convert DB_USE_SSL to boolean
 
-// Initialize Sequelize with sequelize-typescript
+// Initialize Sequelize with sequelize-typescript for both dev and test environments
 const sequelize = new Sequelize({
   username: DB_USERNAME as string,
   password: DB_PASSWORD as string,
@@ -27,7 +22,12 @@ const sequelize = new Sequelize({
   host: DB_HOST as string,
   port: DB_PORT,
   dialect: 'mysql',  // Specify MySQL as the dialect
-  models: [User, Service, Order, Review],  // Include models for sequelize-typescript to use
+  models: [ // Include models for sequelize-typescript to use
+    require('../models/user').User,
+    require('../models/services').Service,
+    require('../models/order').Order,
+    require('../models/review').Review
+  ],
   logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Enable logging only in development
   define: {
     freezeTableName: true,  // Prevent Sequelize from pluralizing table names
@@ -45,23 +45,6 @@ const sequelize = new Sequelize({
     ssl: DB_USE_SSL ? { require: true, rejectUnauthorized: false } : undefined,  // Enable SSL if configured
   },
 });
-
-// Test the database connection
-const testConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection established successfully.');
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error('Unable to connect to the database:', error.message);
-    } else {
-      console.error('An unknown error occurred during the connection test');
-    }
-  }
-};
-
-// Call the test connection function
-testConnection();
 
 // Export the Sequelize instance for use in other parts of the application
 export { sequelize };
