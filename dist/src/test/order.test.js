@@ -7,8 +7,8 @@ const order_1 = require("../models/order"); // Import the Order model
 const database_1 = require("../config/database"); // Correct import of sequelize
 const index_1 = require("../index"); // Correct import of app
 const supertest_1 = __importDefault(require("supertest")); // Import supertest for API requests
-const user_1 = require("../models/user"); // Import User model
-const services_1 = require("../models/services"); // Corrected import of Service model
+const user_1 = require("../models/user"); // User model import
+const services_1 = require("../models/services"); // Service model import
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),

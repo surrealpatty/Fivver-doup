@@ -7,7 +7,7 @@ const http_1 = __importDefault(require("http"));
 const index_1 = require("../index"); // Correct import path for the app entry point
 const supertest_1 = __importDefault(require("supertest"));
 const database_1 = require("../config/database"); // Import sequelize instance to close connection
-const services_1 = require("../models/services"); // Correct named import
+const services_1 = require("../models/services"); // Only if testing routes related to services
 describe('Server Tests', () => {
     let server;
     beforeAll(async () => {

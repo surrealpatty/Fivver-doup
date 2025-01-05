@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // Ensure Sequelize decorators work properly
 const supertest_1 = __importDefault(require("supertest"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For mocking token validation
-const user_1 = require("src/models/user"); // Corrected to import from src/ instead of dist/
 const index_1 = require("src/index"); // Corrected to import from src/ instead of dist/
+const user_1 = require("../models/user"); // User model import
 // Mocking the User model and JWT methods for testing
 jest.mock('src/models/user', () => ({
     User: {

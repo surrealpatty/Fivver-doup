@@ -1,12 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database"); // Correct import
 const uuid_1 = require("uuid"); // UUID generator
-const user_1 = __importDefault(require("../models/user")); // Ensure the path is correct
-const services_1 = require("../models/services"); // Correct named import
+const services_1 = require("../models/services"); // Service model import
+const user_1 = require("../models/user"); // User model import
 describe('Service Model Tests', () => {
     let user; // Declare a user variable to be used across tests
     beforeAll(async () => {
@@ -15,7 +12,7 @@ describe('Service Model Tests', () => {
         // Sync the database and force recreation of tables in the test database
         await database_1.sequelize.sync({ force: true });
         // Create a test user before running the tests
-        user = await user_1.default.create({
+        user = await user_1.User.create({
             id: '176019c7-46ea-4e86-aa00-caf519a26b3e', // Predefined UUID for the test
             username: 'testuser',
             email: 'testuser@example.com',
