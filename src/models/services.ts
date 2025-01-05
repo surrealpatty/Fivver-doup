@@ -14,7 +14,6 @@ import {
 import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 
-
 // Define Service attributes interface
 export interface ServiceAttributes {
   id: string;  // Use string for UUIDs (UUID should be a string)
@@ -60,4 +59,5 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
 
-// You no longer need the separate `export { Service };` line.
+// Remove this import if you are defining the Service class here
+// import { Service } from '../models/services';  

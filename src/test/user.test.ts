@@ -1,7 +1,7 @@
-import 'reflect-metadata'; // Ensure Sequelize decorators work properly
+import 'reflect-metadata';  // Ensure Sequelize decorators work properly
 import request from 'supertest';
 import jwt from 'jsonwebtoken'; // For mocking token validation
-import { app }from 'src/index'; // Corrected to import from src/ instead of dist/
+import { app } from '../index'; // Corrected import to point to src/ index
 import { User } from '../models/user';  // User model import
 
 // Mocking the User model and JWT methods for testing
@@ -15,10 +15,11 @@ jest.mock('src/models/user', () => ({
 // Mocking JWT methods for testing
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
-  sign: jest.fn(), // Add the sign method mock if needed
+  sign: jest.fn(),  // Mock the sign method if needed
 }));
 
 describe('User Tests', () => {
+  
   // Test: Successful user registration
   it('should register a user successfully', async () => {
     // Mock resolved value for User.create
@@ -137,6 +138,29 @@ describe('User Tests', () => {
 
       expect(response.status).toBe(401); // Expecting a 401 Unauthorized status
       expect(response.body.message).toBe('Unauthorized');
+    });
+  });
+
+  // Test: Token verification in a protected route
+  describe('Token Verification in Protected Routes', () => {
+    it('should return user data when token is valid', async () => {
+      const token = 'valid-token';  // Replace with an actual valid token string for testing
+      const response = await request(app)
+        .get('/protected-route')  // The route protected by authenticateToken
+        .set('Authorization', `Bearer ${token}`);  // Set the Authorization header
+
+      expect(response.status).toBe(200);
+      expect(response.body.user).toHaveProperty('id');  // Ensure user data is in the response
+    });
+
+    it('should return 403 if token is invalid', async () => {
+      const token = 'invalid-token';
+      const response = await request(app)
+        .get('/protected-route')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(403);  // Ensure it returns 403 for invalid token
+      expect(response.body.message).toBe('Invalid or expired token');
     });
   });
 });

@@ -1,5 +1,7 @@
-import dotenv from 'dotenv'; // Load environment variables from .env file
-dotenv.config(); // Ensure environment variables are loaded
+// src/config/config.ts
+import dotenv from 'dotenv';  // Load environment variables from .env file
+
+dotenv.config();  // Ensure environment variables are loaded
 
 // Define configuration for different environments
 const config = {

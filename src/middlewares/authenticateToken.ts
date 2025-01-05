@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken
+import jwt from 'jsonwebtoken';  // Import jsonwebtoken
 
 // Middleware to authenticate the JWT token and attach user to the request object
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {

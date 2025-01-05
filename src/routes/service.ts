@@ -1,25 +1,18 @@
-import express, { Request, Response } from 'express';  // Import required types
-import { authenticateToken } from '../middlewares/authenticateToken';
-import { UserPayload } from '../types';  // Import UserPayload interface
+// src/index.ts
+import express from 'express';
+import serviceRoutes from './routes/serviceRoutes';  // Correct path to your service routes
 
-const router = express.Router();
+const app = express();
 
-// Example middleware to check user roles
-const checkRole = (role: 'Free' | 'Paid') => {
-  return (req: Request, res: Response, next: Function) => {
-    const user = req.user as UserPayload;  // Type the user as UserPayload
-    const userRole = user.role; // Now TypeScript knows that user has a 'role' property
+// Middleware setup, like body parsers, error handlers, etc.
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    if (userRole !== role) {
-      return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
-    }
-    next();
-  };
-};
+// Register the routes for the service API
+app.use('/api', serviceRoutes);  // All service-related routes will be prefixed with /api
 
-// Premium service route for paid users only
-router.get('/premium', authenticateToken, checkRole('Paid'), (req: Request, res: Response) => {
-  res.status(200).json({ message: 'Premium service access granted.' });
+// Define the port and start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-export default router;

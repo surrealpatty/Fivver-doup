@@ -1,26 +1,56 @@
-import { Request, Response } from 'express'; // Import necessary types
-import { Service } from '../models/services'; // Correct named import
+import { Request, Response } from 'express';
+import { AuthRequest } from '../types'; // Import AuthRequest interface to ensure correct typing
+import { User } from '../models/user'; // Import User model to access user-related services
 
-import { CustomAuthRequest } from '../types'; // Import the custom request type
-
-export class ServiceController {
-  // Method to handle access to premium services for paid users
-  static premiumServiceAccess(req: CustomAuthRequest, res: Response): Response {
-    const user = req.user; // user object is attached by authenticateToken middleware
-    if (user?.role === 'paid') {
-      return res.status(200).json({ message: 'Premium service access granted.' });
+/**
+ * Get the service profile for the authenticated user.
+ * @param req - Request object, including user information from JWT.
+ * @param res - Response object.
+ * @returns The service data or an error message.
+ */
+export const getServiceProfile = async (req: AuthRequest, res: Response) => {
+  try {
+    // Access the authenticated user from the request (user attached by middleware)
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized, user not found.' });
     }
-    return res.status(403).json({ message: 'Access denied. Only paid users can access this service.' });
-  }
 
-  // Method to fetch all services (existing method)
-  static async getServices(req: Request, res: Response): Promise<Response> {
-    try {
-      const services = await Service.findAll();  // Assuming you want to fetch all services
-      return res.status(200).json(services);  // Send the services as the response
-    } catch (error) {
-      console.error('Error fetching services:', error);
-      return res.status(500).json({ message: 'Internal server error while fetching services.' });
+    // Fetch the user's service profile (replace with actual service fetching logic)
+    const services = await User.findOne({
+      where: { id: userId },  // Fetch user by ID (or adjust based on your DB schema)
+      include: ['services'],  // Assuming there's a relationship between User and Service
+    });
+
+    if (!services) {
+      return res.status(404).json({ message: 'No services found for this user.' });
     }
+
+    // Return the services associated with the authenticated user
+    return res.status(200).json(services);
+  } catch (error) {
+    console.error('Error fetching user services:', error);
+    return res.status(500).json({ message: 'Failed to fetch user services' });
   }
-}
+};
+
+/**
+ * Get all services (public endpoint).
+ * @param req - Request object.
+ * @param res - Response object.
+ * @returns A list of available services.
+ */
+export const getServices = async (req: Request, res: Response) => {
+  try {
+    // Simulate getting services (replace with real database logic)
+    const services = [
+      { id: 1, title: 'Web Development' },
+      { id: 2, title: 'Graphic Design' },
+    ];
+
+    return res.status(200).json(services); // Send the services data as a JSON response
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    return res.status(500).json({ message: 'Failed to fetch services' });
+  }
+};
