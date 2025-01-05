@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import 'reflect-metadata';  // Ensure reflect-metadata is imported for sequelize-typescript
 import { sequelize } from '../config/database'; // Correct import of sequelize instance
 import { 
   Table, 
@@ -10,8 +10,8 @@ import {
   UpdatedAt, 
   ForeignKey, 
   BelongsTo 
-} from 'sequelize-typescript';
-import { Optional } from 'sequelize';
+} from 'sequelize-typescript';  // Correct decorators from sequelize-typescript
+import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 
 // Define Service attributes interface

@@ -1,10 +1,10 @@
 import 'reflect-metadata';  // Ensure this is the first import
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
-import dotenv from 'dotenv';
-import { User } from '../models/user';  // Ensure these models are imported
-import { Service } from '../models/services';
-import { Order } from '../models/order';
-import { Review } from '../models/review';
+import dotenv from 'dotenv';  // Import dotenv to load environment variables
+import { User } from '../models/user';  // Import User model
+import { Service } from '../models/services';  // Import Service model
+import { Order } from '../models/order';  // Import Order model
+import { Review } from '../models/review';  // Import Review model
 
 dotenv.config();  // Load environment variables from .env file
 

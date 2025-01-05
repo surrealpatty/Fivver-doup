@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { app } from '../index'; // Correct import path to your app
+import { app } from '../index'; // Ensure this is the correct import path to your app
 import jwt from 'jsonwebtoken';
-import { sequelize } from '../config/database'; // Make sure this is the correct path to your sequelize instance
+import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { UserPayload } from '../types';
 
 // Mock JWT token generation for paid and free users
@@ -62,6 +62,7 @@ jest.mock('../middlewares/authenticateToken', () => {
 beforeAll(async () => {
   // Connect to the database before running the tests
   await sequelize.authenticate();
+  await sequelize.sync({ force: true }); // Ensure models are synced before tests
 });
 
 afterAll(async () => {
