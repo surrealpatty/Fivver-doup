@@ -1,10 +1,10 @@
-import { Order } from '../models/order'; // Import the Order model
-import { sequelize } from '../config/database'; // Correct import of sequelize
-import { app } from '../index'; // Correct import of app
+import { Order } from '../models/order'; // Correct path for Order model
+import { sequelize } from '../config/database'; // Correct import for sequelize instance
+import { app } from '../index'; // Correct import for the app
 import request from 'supertest'; // Import supertest for API requests
 import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
-import { User } from '../models/user';  // User model import
-import { Service } from '../models/services';  // Service model import
+import { User } from '../models/user'; // Correct path for User model
+import { Service } from '../models/services'; // Correct path for Service model
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
@@ -133,7 +133,7 @@ describe('Order Controller Tests', () => {
       serviceId: mockService.id,
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(400); // Missing order details should return 400 Bad Request
     expect(response.body.message).toBe('Order details are required');
   });
 });

@@ -25,7 +25,7 @@ const mockFreeUser: UserPayload = {
   tier: 'free',
 };
 
-// Mock the `jsonwebtoken` module within the test scope
+// Mock the `jsonwebtoken` module before any tests run
 jest.mock('jsonwebtoken', () => ({
   sign: jest.fn().mockImplementation((user: UserPayload, secret: string) => {
     return `mocked-token-${user.id}`;  // Mocked token generation
