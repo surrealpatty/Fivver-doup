@@ -16,6 +16,8 @@ const authenticateToken = (req, res, next) => {
     // Verify the token using jsonwebtoken's verify function
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || 'yourSecretKey', (err, user) => {
         if (err) {
+            // Log the error for debugging purposes
+            console.error('Token verification failed:', err);
             // If token is invalid or expired, respond with a 403 Forbidden status
             return res.status(403).json({ message: 'Invalid or expired token' });
         }

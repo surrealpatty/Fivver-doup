@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Use ts-jest preset for TypeScript support
   testEnvironment: 'node',  // Test environment is Node.js
   transform: {
@@ -24,4 +26,11 @@ module.exports = {
   verbose: false,       // Less detailed output
   noStackTrace: true,   // Suppress stack traces in output
   collectCoverage: true, // Enable coverage collection
+  globals: {
+    'ts-jest': {
+      isolatedModules: true, // Improves the speed of testing with TypeScript
+    },
+  },
 };
+
+export default config;
