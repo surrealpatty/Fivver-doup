@@ -1,18 +1,16 @@
-// src/index.ts
-import express from 'express';
-import serviceRoutes from './routes/serviceRoutes';  // Correct path to your service routes
+import { Router, Request, Response } from 'express';
+import { authenticateToken } from '../middlewares/authenticateToken';
+import { ServiceController } from '../controllers/serviceController';  // Correct import of ServiceController
 
-const app = express();
+const router = Router();
 
-// Middleware setup, like body parsers, error handlers, etc.
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Example route with authentication middleware
+router.get('/services', authenticateToken, ServiceController.getServices);
 
-// Register the routes for the service API
-app.use('/api', serviceRoutes);  // All service-related routes will be prefixed with /api
-
-// Define the port and start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Example route without authentication
+router.get('/some-route', (req: Request, res: Response) => {
+  res.status(200).send('Success');
 });
+
+// Export the router using default export so it can be imported correctly in src/index.ts
+export default router;
