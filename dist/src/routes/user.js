@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/user.ts
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -50,5 +51,4 @@ router.post('/signup', async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
-// Export the router to use in the main app
 exports.default = router;

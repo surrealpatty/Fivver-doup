@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/routes/profile.ts
 const express_1 = __importDefault(require("express"));
 const authenticateToken_1 = require("../middlewares/authenticateToken");
 const router = express_1.default.Router();
@@ -27,7 +28,6 @@ async (req, res, next) => {
     }
     catch (error) {
         next(error); // Pass error to global error handler
-        // If needed, return a response here as a fallback for errors
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
