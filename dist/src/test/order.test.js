@@ -8,7 +8,7 @@ const database_1 = require("../config/database"); // Correct import of sequelize
 const index_1 = require("../index"); // Correct import of app
 const supertest_1 = __importDefault(require("supertest")); // Import supertest for API requests
 const user_1 = require("../models/user"); // Import User model
-const services_1 = __importDefault(require("../models/services")); // Import Service model as default
+const services_1 = require("../models/services"); // Corrected import of Service model
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),
@@ -36,7 +36,7 @@ beforeAll(async () => {
         await database_1.sequelize.authenticate(); // Mock database connection
         console.log('Mock database connected successfully!');
         // Mock adding models to sequelize
-        database_1.sequelize.addModels([order_1.Order, user_1.User, services_1.default]); // Add necessary models here
+        database_1.sequelize.addModels([order_1.Order, user_1.User, services_1.Service]); // Add necessary models here
         await database_1.sequelize.sync({ force: true }); // Ensure a clean state before tests
     }
     catch (error) {
@@ -56,7 +56,7 @@ describe('Order Controller Tests', () => {
         const mockService = { id: 1, name: 'Test Service' };
         // Mock User and Service responses
         user_1.User.findByPk.mockResolvedValueOnce(mockUser);
-        services_1.default.findByPk.mockResolvedValueOnce(mockService);
+        services_1.Service.findByPk.mockResolvedValueOnce(mockService);
         // Mock Order.create method
         order_1.Order.create.mockResolvedValueOnce({
             id: 1,
@@ -82,7 +82,7 @@ describe('Order Controller Tests', () => {
     it('should return an error if user is not found', async () => {
         const mockService = { id: 1, name: 'Test Service' };
         user_1.User.findByPk.mockResolvedValueOnce(null); // Mock no user found
-        services_1.default.findByPk.mockResolvedValueOnce(mockService);
+        services_1.Service.findByPk.mockResolvedValueOnce(mockService);
         const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
             userId: 999,
             serviceId: mockService.id,
@@ -94,7 +94,7 @@ describe('Order Controller Tests', () => {
     it('should return an error if service is not found', async () => {
         const mockUser = { id: 1, username: 'testuser', email: 'user@example.com' };
         user_1.User.findByPk.mockResolvedValueOnce(mockUser);
-        services_1.default.findByPk.mockResolvedValueOnce(null); // Mock no service found
+        services_1.Service.findByPk.mockResolvedValueOnce(null); // Mock no service found
         const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: 999,
@@ -107,7 +107,7 @@ describe('Order Controller Tests', () => {
         const mockUser = { id: 1, username: 'testuser', email: 'user@example.com' };
         const mockService = { id: 1, name: 'Test Service' };
         user_1.User.findByPk.mockResolvedValueOnce(mockUser);
-        services_1.default.findByPk.mockResolvedValueOnce(mockService);
+        services_1.Service.findByPk.mockResolvedValueOnce(mockService);
         const response = await (0, supertest_1.default)(index_1.app).post('/api/orders').send({
             userId: mockUser.id,
             serviceId: mockService.id,

@@ -7,7 +7,10 @@ describe('Service Model Tests', () => {
   let user: User; // Declare a user variable to be used across tests
 
   beforeAll(async () => {
-    // Ensure the database is ready before running tests
+    // Ensure the test database (fivver_doup_test) is used and ready
+    await sequelize.authenticate(); // Test connection
+
+    // Sync the database and force recreation of tables in the test database
     await sequelize.sync({ force: true });
 
     // Create a test user before running the tests

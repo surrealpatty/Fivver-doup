@@ -1,4 +1,4 @@
-import 'reflect-metadata';  // Ensure this is the first import in the test file
+import 'reflect-metadata';  // Ensure this is the first import
 import request from 'supertest';
 import { Service } from '../models/services';  // Corrected relative import
 import { app } from '../index';  // Adjusting to the source directory directly
