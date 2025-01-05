@@ -1,23 +1,37 @@
-import 'reflect-metadata';  // Ensure reflect-metadata is imported for decorators to work
+import 'reflect-metadata';  // Ensure this is the first import in the test file
 import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
-import { app } from '../index';                     // Correct import for the app
+import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import User from '../models/user';  // Import User model to ensure it's added to Sequelize
-import Service from '../models/services';  // Import Service model to ensure it's added to Sequelize
+import Service from '../models/services';  // Ensure Service is properly imported
+import dotenv from 'dotenv';  // Import dotenv to load environment variables
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
-  // Add models to Sequelize instance before associations
-  sequelize.addModels([User, Service]);
+  // Initialize Sequelize with models explicitly
+  const sequelizeInstance = new Sequelize({
+    dialect: 'mysql',
+    host: process.env.TEST_DB_HOST,  // Use environment variables for DB configuration
+    username: process.env.TEST_DB_USERNAME as string,
+    password: process.env.TEST_DB_PASSWORD as string,
+    database: process.env.TEST_DB_NAME as string,
+    models: [User, Service],  // Add models to Sequelize instance
+  });
+
+  // Add models to Sequelize instance and define associations
+  sequelizeInstance.addModels([User, Service]);
 
   // Define the associations after models are loaded
   Service.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(Service, { foreignKey: 'userId' });
+  User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
   // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-  await sequelize.sync({ force: false });
+  await sequelizeInstance.sync({ force: false });
 });
 
 describe('Authentication Tests', () => {

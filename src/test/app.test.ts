@@ -2,38 +2,82 @@ import 'reflect-metadata';  // Ensure this is the first import in the test file
 import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
 import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
+import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import User from '../models/user';  // Import User model to ensure it's added to Sequelize
 import Service from '../models/services';  // Ensure Service is properly imported
+import dotenv from 'dotenv';  // Import dotenv to load environment variables
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
-  // Add models to Sequelize instance before associations
-  sequelize.addModels([User, Service]);
+  // Initialize Sequelize with models explicitly
+  const sequelizeInstance = new Sequelize({
+    dialect: 'mysql',
+    host: process.env.TEST_DB_HOST,  // Use environment variables for DB configuration
+    username: process.env.TEST_DB_USERNAME as string,
+    password: process.env.TEST_DB_PASSWORD as string,
+    database: process.env.TEST_DB_NAME as string,
+    models: [User, Service],  // Add models to Sequelize instance
+  });
+
+  // Add models to Sequelize instance and define associations
+  sequelizeInstance.addModels([User, Service]);
 
   // Define the associations after models are loaded
   Service.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(Service, { foreignKey: 'userId' });
+  User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
   // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-  await sequelize.sync({ force: false });
+  await sequelizeInstance.sync({ force: false });
 });
 
-describe('API Routes Tests', () => {
-  test('should return 200 OK on root route', async () => {
-    const res = await request(app).get('/');
-    expect(res.status).toBe(200);
-    expect(res.text).toBe('Fiverr backend is running');  // Adjust this according to your route
+describe('Authentication Tests', () => {
+  it('should authenticate and return a valid JWT token', async () => {
+    // First, create a test user (for the purpose of the test)
+    const userResponse = await request(app)
+      .post('/register')  // Assuming you have a route for user registration
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      });
+
+    // Check if the user was successfully created
+    expect(userResponse.status).toBe(201);
+
+    // Example request to authenticate and get a token
+    const response = await request(app)  // Use supertest to make a request to the app
+      .post('/login')  // Adjust the route based on your actual login route
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+
+    // Ensure the response includes a valid token
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
+
+    // Decode the token to verify its contents (if JWT is used)
+    const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+    expect(decoded).toHaveProperty('id');
+    expect(decoded).toHaveProperty('email');
   });
 
-  test('should return 404 for undefined routes', async () => {
-    const res = await request(app).get('/nonexistent');
-    expect(res.status).toBe(404);
+  it('should reject invalid credentials', async () => {
+    const response = await request(app)
+      .post('/login')  // Replace with your actual login route
+      .send({ email: 'invalid@example.com', password: 'wrongpassword' });
+
+    // Assert the response status and message
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Invalid credentials.');
   });
 });
 
 // Clean up after tests
 afterAll(async () => {
-  // Gracefully close the Sequelize connection after all tests
-  await sequelize.close();
+  await sequelize.close();  // Close the Sequelize connection after tests
 });
