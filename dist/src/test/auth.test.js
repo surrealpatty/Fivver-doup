@@ -3,22 +3,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure reflect-metadata is imported for decorators to work
+require("reflect-metadata"); // Ensure this is the first import in the test file
+const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import for Sequelize
 const index_1 = require("../index"); // Correct import for the app
 const supertest_1 = __importDefault(require("supertest"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken for JWT verification
 const database_1 = require("../config/database"); // Correct import for sequelize instance
 const user_1 = __importDefault(require("../models/user")); // Import User model to ensure it's added to Sequelize
-const services_1 = __importDefault(require("../models/services")); // Import Service model to ensure it's added to Sequelize
+const services_1 = __importDefault(require("../models/services")); // Ensure Service is properly imported
+const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
+// Load environment variables from .env file
+dotenv_1.default.config();
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
-    // Add models to Sequelize instance before associations
-    database_1.sequelize.addModels([user_1.default, services_1.default]);
+    // Initialize Sequelize with models explicitly
+    const sequelizeInstance = new sequelize_typescript_1.Sequelize({
+        dialect: 'mysql',
+        host: process.env.TEST_DB_HOST, // Use environment variables for DB configuration
+        username: process.env.TEST_DB_USERNAME,
+        password: process.env.TEST_DB_PASSWORD,
+        database: process.env.TEST_DB_NAME,
+        models: [user_1.default, services_1.default], // Add models to Sequelize instance
+    });
+    // Add models to Sequelize instance and define associations
+    sequelizeInstance.addModels([user_1.default, services_1.default]);
     // Define the associations after models are loaded
     services_1.default.belongsTo(user_1.default, { foreignKey: 'userId' });
-    user_1.default.hasMany(services_1.default, { foreignKey: 'userId' });
+    user_1.default.hasMany(services_1.default, { foreignKey: 'userId' }); // Define the reverse association (optional)
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-    await database_1.sequelize.sync({ force: false });
+    await sequelizeInstance.sync({ force: false });
 });
 describe('Authentication Tests', () => {
     it('should authenticate and return a valid JWT token', async () => {
