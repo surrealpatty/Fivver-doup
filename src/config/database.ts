@@ -1,7 +1,11 @@
-import dotenv from 'dotenv'; // Load environment variables from the .env file
-import { Sequelize } from 'sequelize-typescript'; // Import Sequelize with TypeScript support
+import dotenv from 'dotenv';  // Load environment variables from .env file
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize with TypeScript support
+import { User } from '../models/user';  // Correct import for User model
+import { Service } from '../models/services';  // Correct import for Service model
+import { Order } from '../models/order';  // Correct import for Order model
+import { Review } from '../models/review';  // Correct import for Review model
 
-dotenv.config(); // Load environment variables
+dotenv.config();  // Load environment variables from .env file
 
 // Extract current environment and set defaults
 const environment = process.env.NODE_ENV || 'development';
@@ -25,28 +29,23 @@ const sequelize = new Sequelize({
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'mysql',
-  models: [ // Include models for sequelize-typescript
-    require('../models/user').User,
-    require('../models/services').Service,
-    require('../models/order').Order,
-    require('../models/review').Review,
-  ],
-  logging: environment === 'development' ? console.log : false, // Enable logging only in development
+  models: [User, Service, Order, Review],  // Correctly include models for sequelize-typescript
+  logging: environment === 'development' ? console.log : false,  // Enable logging only in development
   define: {
-    freezeTableName: true, // Prevent table name pluralization
-    timestamps: true, // Enable timestamps (createdAt, updatedAt)
+    freezeTableName: true,  // Prevent table name pluralization
+    timestamps: true,  // Enable timestamps (createdAt, updatedAt)
   },
   pool: {
     max: 10,
     min: 0,
-    acquire: 30000, // Max time (ms) before throwing an error
-    idle: 10000, // Max time (ms) before releasing an idle connection
+    acquire: 30000,  // Max time (ms) before throwing an error
+    idle: 10000,  // Max time (ms) before releasing an idle connection
   },
   dialectOptions: {
-    charset: 'utf8mb4', // Support extended characters
+    charset: 'utf8mb4',  // Support extended characters
     collate: 'utf8mb4_unicode_ci',
     ssl: DB_USE_SSL
-      ? { require: true, rejectUnauthorized: false } // Enable SSL if required
+      ? { require: true, rejectUnauthorized: false }  // Enable SSL if required
       : undefined,
   },
 });

@@ -1,10 +1,11 @@
-// src/controllers/userController.ts
+import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User, { UserCreationAttributes } from '../models/user'; // Import the User model
+import { UserPayload } from '../types';  // Import UserPayload to use for type definition
 
 // Controller for User Registration (Signup)
-export const registerUser = async (req: any, res: any): Promise<any> => {
+export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, username, password } = req.body;
 
   // Validate input
@@ -55,9 +56,10 @@ export const registerUser = async (req: any, res: any): Promise<any> => {
 };
 
 // Controller for fetching user profile
-export const getUserProfile = async (req: any, res: any): Promise<any> => {
+export const getUserProfile = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const user = req.user; // User should be added to the request object by the authenticateToken middleware
+    // Type the user correctly to include `tier`
+    const user = req.user as UserPayload; // Cast `req.user` to UserPayload to include `tier`
 
     if (!user) {
       return res.status(401).json({ message: 'User not authenticated' });

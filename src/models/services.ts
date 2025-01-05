@@ -1,5 +1,5 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported for sequelize-typescript
-import { sequelize } from '../config/database'; // Correct import of sequelize instance
+import { sequelize } from '../config/database';  // Correct import of sequelize instance
 import { 
   Table, 
   Column, 
@@ -59,5 +59,4 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   declare updatedAt: Date;  // Declare updatedAt as a Date
 }
 
-// Export the Service model
-export default Service;
+// You no longer need the separate `export { Service };` line.

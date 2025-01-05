@@ -15,6 +15,7 @@ module.exports = {
     ],
     '@babel/plugin-proposal-class-properties',  // Support for class properties (e.g., public/private)
     'babel-plugin-transform-es2015-modules-commonjs', // Convert ES Modules to CommonJS for compatibility
+    '@babel/plugin-transform-modules-commonjs' // Ensure ES Modules are transpiled to CommonJS (new addition)
   ],
   overrides: [
     {

@@ -1,6 +1,6 @@
 import 'reflect-metadata';  // Ensure this is the first import
 import request from 'supertest';
-import { Service } from '../models/services';  // Corrected relative import
+import { Service } from '../models/services';  // Correct relative import of Service model
 import { app } from '../index';  // Adjusting to the source directory directly
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 import { Sequelize } from 'sequelize-typescript';  // Correct import of Sequelize
