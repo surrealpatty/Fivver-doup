@@ -4,13 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = exports.app = exports.server = void 0;
-require("reflect-metadata"); // Add this at the top
+require("reflect-metadata"); // Ensure reflect-metadata is imported first
 const express_1 = __importDefault(require("express"));
-const database_1 = require("./config/database"); // Ensure the correct path to your Sequelize config
-Object.defineProperty(exports, "sequelize", { enumerable: true, get: function () { return database_1.sequelize; } });
+const sequelize_typescript_1 = require("sequelize-typescript");
 const dotenv_1 = __importDefault(require("dotenv"));
+const user_1 = require("./models/user"); // Import the User model
+const review_1 = require("./models/review"); // Import the Review model
 const premiumService_1 = __importDefault(require("./routes/premiumService"));
-const user_1 = __importDefault(require("./routes/user"));
+const user_2 = __importDefault(require("./routes/user"));
 const service_1 = __importDefault(require("./routes/service"));
 const auth_1 = __importDefault(require("./routes/auth")); // Import the auth router
 dotenv_1.default.config(); // Load environment variables from .env file
@@ -20,25 +21,32 @@ exports.app = app;
 app.use(express_1.default.json());
 // Register the routes
 app.use('/api/premium-service', premiumService_1.default); // Mount premium service routes under '/api/premium-service'
-app.use('/api/users', user_1.default); // Mount user routes under '/api/users'
+app.use('/api/users', user_2.default); // Mount user routes under '/api/users'
 app.use('/api/services', service_1.default); // Mount service routes under '/api/services'
 app.use('/auth', auth_1.default); // Mount auth routes under '/auth'
 // Root route to confirm server is running
 app.get('/', (req, res) => {
     res.status(200).send('Fiverr backend is running');
 });
-// Port configuration
-const PORT = process.env.PORT || 3000;
-let server; // Declare a variable to hold the server instance
+// Sequelize initialization
+const sequelize = new sequelize_typescript_1.Sequelize({
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    models: [user_1.User, review_1.Review], // Add your models here
+    dialect: 'mysql', // Set the database dialect
+});
+exports.sequelize = sequelize;
 // Synchronize database and start server only if the file is not imported as a module
+let server; // Declare a variable to hold the server instance
 if (require.main === module) { // Ensure this is the main module being executed
-    database_1.sequelize
+    sequelize
         .sync({ alter: true }) // Ensure the database schema is updated (optional)
         .then(() => {
         console.log('Database synchronized successfully.');
         // Start the server after the database is synchronized
-        exports.server = server = app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        exports.server = server = app.listen(process.env.PORT || 3000, () => {
+            console.log(`Server is running on port ${process.env.PORT || 3000}`);
         });
     })
         .catch((error) => {
