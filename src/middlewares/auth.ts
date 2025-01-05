@@ -8,7 +8,7 @@ interface AuthRequest extends Request {
 }
 
 // Define the expected JWT payload structure
-interface JwtPayloadCustom extends jwt.JwtPayload {
+interface JwtPayloadCustom {
   id: string; // User ID stored in the JWT payload
 }
 
@@ -40,14 +40,13 @@ export const verifyToken = (
   jwt.verify(
     token,
     JWT_SECRET,
-    (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | undefined) => { // Use `VerifyErrors` and `JwtPayload` from `jwt`
+    (err: any, decoded: JwtPayloadCustom | undefined) => { // Use custom type instead of jwt.JwtPayload
       if (err) {
         return res.status(401).json({ message: 'Unauthorized', error: err.message });
       }
 
       if (decoded && typeof decoded === 'object' && 'id' in decoded) {
-        const decodedToken = decoded as JwtPayloadCustom;
-        req.userId = decodedToken.id; // Store the userId in the request object
+        req.userId = decoded.id; // Store the userId in the request object
         return next(); // Proceed to the next middleware
       } else {
         return res.status(401).json({ message: 'Invalid token' });
