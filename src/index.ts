@@ -4,12 +4,13 @@ import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
 import { User } from './models/user';  // Import the User model
 import { Review } from './models/review';  // Import the Review model
-import premiumServiceRoute from './routes/premiumService';
-import userRoutes from './routes/user';
-import serviceRoutes from './routes/service';
+import premiumServiceRoute from './routes/premiumService';  // Import the premium service routes
+import userRoutes from './routes/user';  // Import the user routes
+import serviceRoutes from './routes/service';  // Import the service routes
 import authRouter from './routes/auth';  // Import the auth router
 
-dotenv.config(); // Load environment variables from .env file
+// Load environment variables from .env file
+dotenv.config(); 
 
 const app = express();
 
@@ -17,10 +18,10 @@ const app = express();
 app.use(express.json());
 
 // Register the routes
-app.use('/api/premium-service', premiumServiceRoute); // Mount premium service routes under '/api/premium-service'
-app.use('/api/users', userRoutes); // Mount user routes under '/api/users'
-app.use('/api/services', serviceRoutes); // Mount service routes under '/api/services'
-app.use('/auth', authRouter); // Mount auth routes under '/auth'
+app.use('/api/premium-service', premiumServiceRoute);  // Mount premium service routes under '/api/premium-service'
+app.use('/api/users', userRoutes);  // Mount user routes under '/api/users'
+app.use('/api/services', serviceRoutes);  // Mount service routes under '/api/services'
+app.use('/auth', authRouter);  // Mount auth routes under '/auth'
 
 // Root route to confirm server is running
 app.get('/', (req, res) => {
@@ -32,11 +33,12 @@ const sequelize = new Sequelize({
   username: process.env.DB_USERNAME as string,
   password: process.env.DB_PASSWORD as string,
   database: process.env.DB_NAME as string,
-  models: [User, Review],  // Add your models here
+  host: process.env.DB_HOST, // Add host from .env for flexibility
   dialect: 'mysql',  // Set the database dialect
+  models: [User, Review],  // Add your models here
 });
 
-// Synchronize database and start server only if the file is not imported as a module
+// Synchronize database and start the server only if the file is not imported as a module
 let server: any;  // Declare a variable to hold the server instance
 
 if (require.main === module) {  // Ensure this is the main module being executed
