@@ -24,10 +24,10 @@
       "jest",                                       // Add jest types for testing
       "nodemailer",                                  // Add nodemailer types
       "supertest"                                    // Add supertest types for testing
-    ], 
+    ],
     "typeRoots": [
       "node_modules/@types"                         // Ensure custom type declarations are correctly found
-    ], 
+    ],
     "paths": {
       "src/*": ["./src/*"],                         // Resolve paths inside src/ directly
       "dist/*": ["./dist/*"]                         // Resolve paths inside dist/ after compilation

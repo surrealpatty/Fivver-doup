@@ -31,7 +31,7 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 @Table({ tableName: 'services', timestamps: true })
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.STRING)  // Use STRING for UUID if you're using UUIDs
+  @Column(DataType.UUID)  // Use UUID for the id field (updated to UUID instead of STRING for clarity)
   declare id: string;  // Declare id as a string for UUID
 
   @Column(DataType.STRING)
@@ -44,7 +44,7 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   price!: number;
 
   @ForeignKey(() => User) // Foreign key to User
-  @Column(DataType.STRING)  // Ensure the foreign key is of the same type as User's id (string for UUIDs)
+  @Column(DataType.UUID)  // Ensure the foreign key is of the same type as User's id (UUID)
   userId!: string;
 
   @BelongsTo(() => User) // Define association to User
