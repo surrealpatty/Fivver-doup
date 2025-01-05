@@ -1,6 +1,4 @@
-import type { JestConfigWithTsJest } from 'ts-jest';
-
-const config: JestConfigWithTsJest = {
+module.exports = {
   preset: 'ts-jest',  // Use ts-jest preset for TypeScript support
   testEnvironment: 'node',  // Test environment is Node.js
   transform: {
@@ -22,6 +20,8 @@ const config: JestConfigWithTsJest = {
     // Map src to the correct directory in your project
     '^src/(.*)$': '<rootDir>/src/$1',
   },
+  silent: true,         // Suppress unnecessary output
+  verbose: false,       // Less detailed output
+  noStackTrace: true,   // Suppress stack traces in output
+  coverage: false,      // Disable coverage reporting
 };
-
-export default config;

@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // Ensure this is the first import in the test file
 const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import for Sequelize
+const database_1 = require("../config/database"); // Correct import for sequelize instance
 const index_1 = require("../index"); // Correct import for the app
 const supertest_1 = __importDefault(require("supertest"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken for JWT verification
-const database_1 = require("../config/database"); // Correct import for sequelize instance
 const user_1 = __importDefault(require("../models/user")); // Import User model to ensure it's added to Sequelize
 const services_1 = __importDefault(require("../models/services")); // Ensure Service is properly imported
 const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
