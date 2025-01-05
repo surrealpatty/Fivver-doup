@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';
+import { authenticateToken } from '../middlewares/authenticateToken';
 import { ServiceController } from '../controllers/serviceController';  // Named import of ServiceController
 
 const router = Router();

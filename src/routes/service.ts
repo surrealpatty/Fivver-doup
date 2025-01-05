@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';  // Import required types
-import authenticateToken from '../middlewares/authenticateToken';
+import { authenticateToken } from '../middlewares/authenticateToken';
 import { UserPayload } from '../types';  // Import UserPayload interface
 
 const router = express.Router();

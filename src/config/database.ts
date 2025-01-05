@@ -1,88 +1,55 @@
-import dotenv from 'dotenv';  // Import dotenv to load environment variables
-import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
-import { Dialect } from 'sequelize';  // Import Dialect from sequelize package
+import dotenv from 'dotenv'; // Load environment variables from the .env file
+import { Sequelize } from 'sequelize-typescript'; // Import Sequelize with TypeScript support
 
-dotenv.config();  // Load environment variables from .env file
+dotenv.config(); // Load environment variables
 
-// Define the possible values for the environment type
-type Environment = 'development' | 'test' | 'production';
+// Extract current environment and set defaults
+const environment = process.env.NODE_ENV || 'development';
 
-// Determine the environment (development, test, or production)
-const environment: Environment = (process.env.NODE_ENV as Environment) || 'development';
+// Map environment variables for database configuration
+const DB_USERNAME = 
+  environment === 'test' ? process.env.TEST_DB_USERNAME || 'test_user' : process.env.DB_USERNAME || 'root';
+const DB_PASSWORD = 
+  environment === 'test' ? process.env.TEST_DB_PASSWORD || 'test_password' : process.env.DB_PASSWORD || 'password';
+const DB_NAME = 
+  environment === 'test' ? process.env.TEST_DB_NAME || 'fivver_doup_test' : process.env.DB_NAME || 'fivver_doup';
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_PORT = parseInt(process.env.DB_PORT || '3306', 10);
+const DB_USE_SSL = process.env.DB_USE_SSL === 'true';
 
-// Configuration for all environments (development, test, production)
-const config: Record<Environment, {
-  username: string;
-  password: string;
-  database: string;
-  host: string;
-  port: number;
-  dialect: Dialect;  // Change from string to Dialect
-  ssl: boolean;
-}> = {
-  development: {
-    username: process.env.DB_USERNAME || 'root',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,  // Default to MySQL port 3306
-    dialect: 'mysql',  // Dialect is now correctly typed as 'mysql'
-    ssl: process.env.DB_USE_SSL === 'true',  // Convert DB_USE_SSL to boolean
-  },
-  test: {
-    username: process.env.TEST_DB_USERNAME || 'root',
-    password: process.env.TEST_DB_PASSWORD || 'password',
-    database: process.env.TEST_DB_NAME || 'fivver_doup_test',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,  // Default to MySQL port 3306
-    dialect: 'mysql',  // Dialect is now correctly typed as 'mysql'
-    ssl: process.env.DB_USE_SSL === 'true',  // Convert DB_USE_SSL to boolean
-  },
-  production: {
-    username: process.env.DB_USERNAME || 'root',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'fivver_doup',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,  // Default to MySQL port 3306
-    dialect: 'mysql',  // Dialect is now correctly typed as 'mysql'
-    ssl: process.env.DB_USE_SSL === 'true',  // Convert DB_USE_SSL to boolean
-  },
-};
-
-// Select the correct config based on environment
-const environmentConfig = config[environment];
-
-// Initialize Sequelize with the selected environment configuration
+// Configure Sequelize with options
 const sequelize = new Sequelize({
-  username: environmentConfig.username,
-  password: environmentConfig.password,
-  database: environmentConfig.database,
-  host: environmentConfig.host,
-  port: environmentConfig.port,
-  dialect: environmentConfig.dialect,  // This is now correctly typed as a Dialect
-  models: [  // Include models for sequelize-typescript to use
+  username: DB_USERNAME,
+  password: DB_PASSWORD,
+  database: DB_NAME,
+  host: DB_HOST,
+  port: DB_PORT,
+  dialect: 'mysql',
+  models: [ // Include models for sequelize-typescript
     require('../models/user').User,
     require('../models/services').Service,
     require('../models/order').Order,
     require('../models/review').Review,
   ],
-  logging: environment === 'development' ? console.log : false,  // Enable logging only in development
+  logging: environment === 'development' ? console.log : false, // Enable logging only in development
   define: {
-    freezeTableName: true,  // Prevent Sequelize from pluralizing table names
-    timestamps: true,  // Enable timestamp fields (createdAt and updatedAt)
+    freezeTableName: true, // Prevent table name pluralization
+    timestamps: true, // Enable timestamps (createdAt, updatedAt)
   },
   pool: {
     max: 10,
     min: 0,
-    acquire: 30000,  // Maximum time (ms) before throwing an error
-    idle: 10000,  // Maximum time (ms) before releasing an idle connection
+    acquire: 30000, // Max time (ms) before throwing an error
+    idle: 10000, // Max time (ms) before releasing an idle connection
   },
   dialectOptions: {
-    charset: 'utf8mb4',  // Ensures support for extended characters like emojis
+    charset: 'utf8mb4', // Support extended characters
     collate: 'utf8mb4_unicode_ci',
-    ssl: environmentConfig.ssl ? { require: true, rejectUnauthorized: false } : undefined,  // Enable SSL if configured
+    ssl: DB_USE_SSL
+      ? { require: true, rejectUnauthorized: false } // Enable SSL if required
+      : undefined,
   },
 });
 
-// Export the Sequelize instance for use in other parts of the application
+// Export the Sequelize instance for use across the application
 export { sequelize };

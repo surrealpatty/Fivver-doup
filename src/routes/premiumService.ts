@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'; // Correct import for express
-import authenticateToken from '../middlewares/authenticateToken';
+import { authenticateToken } from '../middlewares/authenticateToken';
 import { UserPayload } from '../types'; // Ensure the correct path to the type
 
 const router = express.Router();

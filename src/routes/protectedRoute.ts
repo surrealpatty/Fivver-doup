@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';
+import { authenticateToken } from '../middlewares/authenticateToken';
 import { CustomAuthRequest } from '../types'; // Ensure proper typing for req.user
 
 const router = Router();

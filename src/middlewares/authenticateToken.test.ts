@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import authenticateToken from '../middlewares/authenticateToken';
+import { authenticateToken } from '../middlewares/authenticateToken';
 import { UserPayload } from '../types'; // Ensure this is the correct type for your JWT payload
 
 // Mock jsonwebtoken module
