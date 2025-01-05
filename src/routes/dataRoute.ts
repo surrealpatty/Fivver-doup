@@ -1,7 +1,7 @@
 // src/routes/dataRoute.ts
 import express, { Request, Response } from 'express';
 import axios from 'axios';
-import authenticateToken from '../middlewares/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
