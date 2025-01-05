@@ -27,7 +27,9 @@ describe('authenticateToken Middleware', () => {
         require('jsonwebtoken').verify.mockReturnValue(mockPayload);
         // Mock request and set Authorization header
         mockRequest = {
-            header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
+            headers: {
+                authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
+            },
         };
         // Call the middleware
         (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
@@ -37,7 +39,11 @@ describe('authenticateToken Middleware', () => {
         expect(mockRequest.user).toEqual(mockPayload);
     });
     it('should return 401 if no token is provided', () => {
-        mockRequest = { header: jest.fn().mockReturnValue(null) }; // No token
+        mockRequest = {
+            headers: {
+                authorization: '', // No token provided
+            },
+        };
         (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(401);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Authorization token is missing' });
@@ -49,7 +55,9 @@ describe('authenticateToken Middleware', () => {
             throw new Error('Invalid token');
         });
         mockRequest = {
-            header: jest.fn().mockReturnValue(`Bearer ${mockToken}`),
+            headers: {
+                authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
+            },
         };
         (0, authenticateToken_1.default)(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalledWith(403);

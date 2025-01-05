@@ -12,16 +12,16 @@ const services_1 = __importDefault(require("../models/services")); // Import Ser
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),
-}));
+})); // Mock findByPk method for Service model
 jest.mock('../models/user', () => ({
     findByPk: jest.fn(),
-}));
+})); // Mock findByPk method for User model
 jest.mock('../models/order', () => ({
     create: jest.fn(),
     findAll: jest.fn(),
     findByPk: jest.fn(),
     destroy: jest.fn(),
-}));
+})); // Mock the methods for Order model
 // Mock the sequelize instance to avoid interacting with a real database
 jest.mock('../config/database', () => ({
     sequelize: {
