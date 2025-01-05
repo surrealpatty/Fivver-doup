@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';  // Import jwt for token handling
 
-// Define a custom interface that extends JwtPayload
+// Define a custom interface that extends jwt.JwtPayload
 interface CustomJwtPayload extends jwt.JwtPayload {
   id: string;
   email: string;

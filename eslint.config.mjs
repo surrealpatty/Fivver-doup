@@ -1,23 +1,35 @@
-import { ESLint } from 'eslint';
-import parser from '@typescript-eslint/parser'; // Ensure you're importing the right version
+// eslint.config.mjs
 
-export default [
-  {
-    files: ['*.ts', '*.tsx', '*.vue'], // Include .tsx as well for React components if needed
-    languageOptions: {
-      parser, // Use the parser function
-      parserOptions: {
-        ecmaVersion: 2020, // Set ECMAScript version (optional, you can customize as needed)
-        sourceType: 'module', // Use modules
-        ecmaFeatures: {
-          jsx: true, // Enable JSX parsing for .tsx files (React)
-        },
-      },
-    },
-    rules: {
-      // Define specific rules for .ts, .tsx, and .vue files
-      'no-console': 'warn', // Example rule
+import parser from '@typescript-eslint/parser';
+
+export default {
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended', // TypeScript linting rules
+    'plugin:vue/vue3-recommended',            // Vue 3 linting rules
+  ],
+  parser, // Use the TypeScript parser
+  parserOptions: {
+    ecmaVersion: 2020,    // Set ECMAScript version
+    sourceType: 'module', // Enable ES Modules
+    ecmaFeatures: {
+      jsx: true, // Enable JSX parsing for .tsx files (React)
     },
   },
-  // Additional configurations can go here for other file types or environments
-];
+  plugins: ['@typescript-eslint', 'vue'], // Add TypeScript and Vue plugins
+  rules: {
+    // Define your custom linting rules
+    'no-console': 'warn',  // Example rule: warn on console statements
+    '@typescript-eslint/no-explicit-any': 'warn', // Allow 'any' with warning
+    'vue/no-unused-vars': 'warn', // Warn on unused variables in Vue
+    // Add more rules as needed
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'], // For TypeScript and TSX files
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off', // Disable explicit return type rule for convenience
+      },
+    },
+  ],
+};
