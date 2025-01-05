@@ -1,11 +1,12 @@
+import 'reflect-metadata';  // Add this import to enable reflection metadata
 import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
-import User from '../models/user';
-import Service from '../models/services';
-import Order from '../models/order';
-import { Review } from '../models/review';
+import { User } from '../models/user';  // Import your User model
+import { Service } from '../models/services';  // Import other models as necessary
+import { Order } from '../models/order';  // Example import for Order model
+import { Review } from '../models/review';  // Example import for Review model
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();  // Load environment variables from .env file
 
 // Determine environment and use appropriate database config
 const isTestEnv = process.env.NODE_ENV === 'test';
@@ -15,18 +16,18 @@ const DB_USERNAME = isTestEnv ? process.env.TEST_DB_USERNAME : process.env.DB_US
 const DB_PASSWORD = isTestEnv ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD;
 const DB_NAME = isTestEnv ? process.env.TEST_DB_NAME : process.env.DB_NAME;
 const DB_HOST = isTestEnv ? process.env.TEST_DB_HOST : process.env.DB_HOST;
-const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306; // Provide fallback if DB_PORT is undefined
-const DB_USE_SSL = process.env.DB_USE_SSL === 'true'; // Convert DB_USE_SSL to boolean
+const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306;  // Provide fallback if DB_PORT is undefined
+const DB_USE_SSL = process.env.DB_USE_SSL === 'true';  // Convert DB_USE_SSL to boolean
 
-// Initialize Sequelize
+// Initialize Sequelize with proper configurations
 const sequelize = new Sequelize({
-  username: DB_USERNAME as string, // Ensure DB_USERNAME is treated as a string
-  password: DB_PASSWORD as string, // Ensure DB_PASSWORD is treated as a string
-  database: DB_NAME as string, // Ensure DB_NAME is treated as a string
-  host: DB_HOST as string, // Ensure DB_HOST is treated as a string
+  username: DB_USERNAME as string,  // Ensure DB_USERNAME is treated as a string
+  password: DB_PASSWORD as string,  // Ensure DB_PASSWORD is treated as a string
+  database: DB_NAME as string,  // Ensure DB_NAME is treated as a string
+  host: DB_HOST as string,  // Ensure DB_HOST is treated as a string
   port: DB_PORT,  // Use parsed DB_PORT value
-  dialect: 'mysql',
-  models: [User, Service, Order, Review], // Define all your models here
+  dialect: 'mysql',  // Specify the database dialect (e.g., mysql, postgres)
+  models: [User, Service, Order, Review],  // Define all your models here
   logging: process.env.NODE_ENV === 'development' ? console.log : false,  // Only log in development
   define: {
     freezeTableName: true,  // Prevent Sequelize from pluralizing table names

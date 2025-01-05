@@ -1,8 +1,7 @@
+import 'reflect-metadata';  // Add this at the top
 import express from 'express';
 import { sequelize } from './config/database'; // Ensure the correct path to your Sequelize config
 import dotenv from 'dotenv';
-
-// Import route files
 import premiumServiceRoute from './routes/premiumService';
 import userRoutes from './routes/user';
 import serviceRoutes from './routes/service';

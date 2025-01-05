@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = exports.app = exports.server = void 0;
+require("reflect-metadata"); // Add this at the top
 const express_1 = __importDefault(require("express"));
 const database_1 = require("./config/database"); // Ensure the correct path to your Sequelize config
 Object.defineProperty(exports, "sequelize", { enumerable: true, get: function () { return database_1.sequelize; } });
 const dotenv_1 = __importDefault(require("dotenv"));
-// Import route files
 const premiumService_1 = __importDefault(require("./routes/premiumService"));
 const user_1 = __importDefault(require("./routes/user"));
 const service_1 = __importDefault(require("./routes/service"));
