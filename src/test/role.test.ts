@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app } from '../index'; // Ensure correct import for your app
-import { User } from '../models/user';  // Adjust the path as necessary
+import { User } from '../models/user';  // User model import
 
 describe('Role-based Access Tests', () => {
   let testUser: { id: string; token: string };

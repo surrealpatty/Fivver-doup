@@ -3,6 +3,7 @@ import { app } from '../index'; // Ensure this is the correct import path to you
 import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { UserPayload } from '../types';
+import { Service } from '../models/services';  // Service model import
 
 // Mock JWT token generation for paid and free users
 const generateToken = (user: UserPayload, secretKey: string): string => {

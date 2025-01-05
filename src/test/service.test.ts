@@ -1,9 +1,9 @@
 import 'reflect-metadata';  // Ensure this is the first import
 import request from 'supertest';
-import { Service } from '../models/services';  // Correct relative import of Service model
 import { app } from '../index';  // Adjusting to the source directory directly
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 import { Sequelize } from 'sequelize-typescript';  // Correct import of Sequelize
+import { Service } from '../models/services';  // Service model import
 
 // Mocking the Service model methods
 jest.mock('../models/services', () => ({

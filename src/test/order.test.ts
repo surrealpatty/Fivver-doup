@@ -2,9 +2,9 @@ import { Order } from '../models/order'; // Import the Order model
 import { sequelize } from '../config/database'; // Correct import of sequelize
 import { app } from '../index'; // Correct import of app
 import request from 'supertest'; // Import supertest for API requests
-import { User } from '../models/user'; // Import User model
-import { Service } from '../models/services'; // Corrected import of Service model
 import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
+import { User } from '../models/user';  // User model import
+import { Service } from '../models/services';  // Service model import
 
 // Mock the methods of the models
 jest.mock('../models/services', () => ({

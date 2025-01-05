@@ -3,7 +3,8 @@ import { app } from '../index'; // Correct import path for the app entry point
 import request from 'supertest';
 import { Sequelize } from 'sequelize-typescript'; // Correct import for Sequelize
 import { sequelize } from '../config/database'; // Import sequelize instance to close connection
-import { Service } from '../models/services'; // Correct named import
+import { Service } from '../models/services';  // Only if testing routes related to services
+import { User } from '../models/user';  // Only if testing routes related to users
 
 describe('Server Tests', () => {
   let server: http.Server;

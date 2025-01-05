@@ -14,6 +14,7 @@ import {
 import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 
+
 // Define Service attributes interface
 export interface ServiceAttributes {
   id: string;  // Use string for UUIDs (UUID should be a string)
