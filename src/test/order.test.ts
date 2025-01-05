@@ -3,7 +3,7 @@ import { sequelize } from '../config/database'; // Correct import of sequelize
 import { app } from '../index'; // Correct import of app
 import request from 'supertest'; // Import supertest for API requests
 import { User } from '../models/user'; // Import User model
-import Service from '../models/services'; // Import Service model as default
+import { Service } from '../models/services'; // Corrected import of Service model
 import { Sequelize } from 'sequelize'; // Ensure Sequelize is imported
 
 // Mock the methods of the models

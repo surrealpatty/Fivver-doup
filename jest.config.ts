@@ -23,5 +23,5 @@ module.exports = {
   silent: true,         // Suppress unnecessary output
   verbose: false,       // Less detailed output
   noStackTrace: true,   // Suppress stack traces in output
-  coverage: false,      // Disable coverage reporting
+  collectCoverage: true, // Enable coverage collection
 };
