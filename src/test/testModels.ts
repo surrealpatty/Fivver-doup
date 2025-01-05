@@ -2,7 +2,7 @@ import { ServiceAttributes } from '../models/services';
 import User from '../models/user';
 import { sequelize } from '../config/database';  // Correct import
 import { v4 as uuidv4 } from 'uuid';
-import Service from '../models/services'; // Use default import
+import { Service } from '../models/services'; // Correct named import
 describe('Service Model Tests', () => {
   let user: User;  // Declare user at the top to use across tests
 

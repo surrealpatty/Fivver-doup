@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
 import { User } from './user';  // Import User model for foreign key relationship
-import Service from '../models/services'; // Use default import
+import { Service } from '../models/services'; // Correct named import
 
 @Table({ tableName: 'orders', timestamps: true })  // Enable timestamps if you'd like to track createdAt and updatedAt
 export class Order extends Model<Order> {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'; // Import necessary types
-import Service from '../models/services'; // Use default import
+import { Service } from '../models/services'; // Correct named import
 
 import { CustomAuthRequest } from '../types'; // Import the custom request type
 

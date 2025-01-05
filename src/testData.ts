@@ -1,5 +1,5 @@
 import  User  from './models/user'; // Correct import path for the User model
-import Service from './models/services'; // Use default import
+import { Service } from './models/services'; // Correct named import
 
 // Insert a test user
 User.create({

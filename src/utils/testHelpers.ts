@@ -1,8 +1,7 @@
 // Import necessary dependencies
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
 import  User  from '../models/user';  // Correct relative path to User model
-import Service from '../models/services'; // Use default import
-
+import { Service } from '../models/services'; // Correct named import
 
 // Function to generate a mock JWT token for a user
 export const createMockUserToken = (user: { id: string; email: string; username: string }): string => {

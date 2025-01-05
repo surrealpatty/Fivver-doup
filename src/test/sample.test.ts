@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid'; // UUID generator
 import User from '../models/user'; // Ensure the path is correct
-import Service from '../models/services'; // Ensure the path is correct
+import { Service } from '../models/services'; // Correct named import
 
 describe('Service Model Tests', () => {
   let user: User; // Declare a user variable to be used across tests
