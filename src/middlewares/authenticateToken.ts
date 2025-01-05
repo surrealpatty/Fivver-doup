@@ -1,7 +1,7 @@
+import jwt from 'jsonwebtoken'; // Default import
 import { Response, NextFunction } from 'express';
 import { Request } from 'express';
 import { UserPayload } from '../types'; // Import your custom UserPayload type
-import jwt, { JwtPayload, JwtVerifyOptions, JsonWebTokenError } from 'jsonwebtoken';
 
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
@@ -23,29 +23,29 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Authorization token is missing' });
   }
 
-  // Define options for token verification
-  const options: JwtVerifyOptions = { // Use JwtVerifyOptions for the options
-    algorithms: ['HS256'], // Specify the algorithm type correctly
+  // Define options for token verification using jwt.VerifyOptions
+  const options: jwt.VerifyOptions = {  // Correct type for options
+    algorithms: ['HS256'],  // Specify the algorithm
   };
 
   try {
-    // Use jwt.verify with correct callback signature
+    // Use jwt.verify with the correct types
     jwt.verify(
       token,
       SECRET_KEY,
       options,
-      (err: JsonWebTokenError | null, decoded: JwtPayload | undefined) => {
+      (err: jwt.JsonWebTokenError | null, decoded: jwt.JwtPayload | undefined) => {
         if (err) {
           return res.status(401).json({ message: 'Invalid or expired token' });
         }
 
         if (decoded) {
-          req.user = decoded as UserPayload; // Assign decoded user payload to the request object
+          req.user = decoded as UserPayload; // Attach user data to the request
         } else {
           return res.status(401).json({ message: 'Invalid token structure' });
         }
 
-        next(); // Proceed to the next middleware or route handler
+        next();  // Proceed to the next middleware
       }
     );
   } catch (error) {
