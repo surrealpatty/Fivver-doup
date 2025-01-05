@@ -1,6 +1,6 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported for decorators to work
 import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
-import  { app } from '../index';                     // Correct import for the app
+import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
