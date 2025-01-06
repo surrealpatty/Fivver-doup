@@ -1,5 +1,5 @@
-import 'reflect-metadata';  // Ensure reflect-metadata is imported for sequelize-typescript
-import { sequelize } from '../config/database';  // Correct import of sequelize instance
+import 'reflect-metadata'; // Ensure reflect-metadata is imported for sequelize-typescript
+import { sequelize } from '../config/database'; // Correct import of sequelize instance
 import { 
   Table, 
   Column, 
@@ -16,11 +16,11 @@ import { User } from './user';  // Correct import of User model with named impor
 
 // Define Service attributes interface
 export interface ServiceAttributes {
-  id: string;  // Use string for UUIDs (UUID should be a string)
+  id: string;  // UUID type for the id
   title: string;
   description: string;
   price: number;
-  userId: string;  // userId should match the type of User's id
+  userId: string;  // userId matches the type of User's id (UUID)
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -31,8 +31,8 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 @Table({ tableName: 'services', timestamps: true })
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.UUID)  // Use UUID for the id field (updated to UUID instead of STRING for clarity)
-  declare id: string;  // Declare id as a string for UUID
+  @Column(DataType.UUID)  // Use UUID for the id field (UUIDV4)
+  declare id: string;
 
   @Column(DataType.STRING)
   title!: string;
@@ -44,7 +44,7 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   price!: number;
 
   @ForeignKey(() => User) // Foreign key to User
-  @Column(DataType.UUID)  // Ensure the foreign key is of the same type as User's id (UUID)
+  @Column(DataType.UUID)  // Ensure the foreign key is UUID (same type as User's id)
   userId!: string;
 
   @BelongsTo(() => User) // Define association to User
@@ -52,9 +52,9 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
 
   @CreatedAt
   @Column(DataType.DATE)
-  declare createdAt: Date;  // Declare createdAt as a Date
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  declare updatedAt: Date;  // Declare updatedAt as a Date
+  declare updatedAt: Date;
 }

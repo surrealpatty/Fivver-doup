@@ -1,16 +1,16 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported first
 import express from 'express';
-import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize-typescript';
 import { User } from './models/user';  // Import the User model
 import { Review } from './models/review';  // Import the Review model
-import premiumServiceRoute from './routes/premiumService';  // Import the premium service routes
+import { premiumServiceRoutes } from './routes/premiumService';  // Named import for premiumServiceRoutes
 import userRoutes from './routes/user';  // Import the user routes
 import serviceRoutes from './routes/service';  // Import the service routes
 import authRouter from './routes/auth';  // Import the auth router
 
 // Load environment variables from .env file
-dotenv.config(); 
+dotenv.config();
 
 const app = express();
 
@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 
 // Register the routes
-app.use('/api/premium-service', premiumServiceRoute);  // Mount premium service routes under '/api/premium-service'
+app.use('/api/premium-service', premiumServiceRoutes);  // Correct use of premiumServiceRoutes
 app.use('/api/users', userRoutes);  // Mount user routes under '/api/users'
 app.use('/api/services', serviceRoutes);  // Mount service routes under '/api/services'
 app.use('/auth', authRouter);  // Mount auth routes under '/auth'

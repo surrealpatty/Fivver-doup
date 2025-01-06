@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid'; // UUID generator
-import { Service } from '../models/services';  // Service model import
-import { User } from '../models/user';  // User model import
+import { Service } from '../models/services'; // Service model import
+import { User } from '../models/user'; // User model import
 
 describe('Service Model Tests', () => {
   let user: User; // Declare a user variable to be used across tests
@@ -44,6 +44,7 @@ describe('Service Model Tests', () => {
     const service = await Service.create(serviceData);
 
     // Validate the created service's attributes
+    expect(service.id).toBeDefined(); // Ensure the service has an ID
     expect(service.userId).toBe(user.id); // Ensure the userId matches
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(10);
