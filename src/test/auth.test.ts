@@ -25,7 +25,7 @@ beforeAll(async () => {
     models: [User, Service],  // Add models to Sequelize instance
   });
 
-  // Ensure models are correctly imported
+  // Log models to check if they are correctly imported
   console.log('User Model:', User);
   console.log('Service Model:', Service);
 

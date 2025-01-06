@@ -25,6 +25,9 @@ beforeAll(async () => {
         database: process.env.TEST_DB_NAME,
         models: [user_1.User, services_1.default], // Add models to Sequelize instance
     });
+    // Ensure models are correctly imported
+    console.log('User Model:', user_1.User);
+    console.log('Service Model:', services_1.default);
     // Add models to Sequelize instance and define associations
     sequelizeInstance.addModels([user_1.User, services_1.default]);
     // Define the associations after models are loaded

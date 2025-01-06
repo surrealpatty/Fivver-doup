@@ -7,7 +7,7 @@ const config: Config.InitialOptions = {
     '^.+\\.ts$': 'ts-jest',  // Transform TypeScript files with ts-jest
     '^.+\\.js$': 'babel-jest', // Transform JavaScript files with babel-jest
   },
-  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts', 'd.js'], // Include d.js for declaration files
+  moduleFileExtensions: ['ts', 'js', 'json', 'd.ts'], // Include .d.ts for declaration files
   coverageDirectory: 'coverage',  // Directory to store coverage reports
   collectCoverageFrom: [
     'src/**/*.{ts,js}',  // Collect coverage from both TypeScript and JavaScript files
