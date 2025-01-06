@@ -13,6 +13,7 @@ exports.Service = void 0;
 require("reflect-metadata"); // Ensure reflect-metadata is imported for sequelize-typescript
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import necessary decorators
 const user_1 = require("./user"); // Correctly import User model
+const uuid_1 = require("uuid"); // Import uuid to generate UUIDs
 let Service = class Service extends sequelize_typescript_1.Model {
     title; // Define title as a string
     description; // Define description as text
@@ -23,8 +24,7 @@ let Service = class Service extends sequelize_typescript_1.Model {
 exports.Service = Service;
 __decorate([
     sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the id field
-    ,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID),
     __metadata("design:type", String)
 ], Service.prototype, "id", void 0);
 __decorate([
@@ -67,5 +67,11 @@ exports.Service = Service = __decorate([
         timestamps: true, // Ensure timestamps are enabled
     })
 ], Service);
+// Ensure the UUID is generated if it's not provided when creating a new Service instance
+Service.beforeCreate((service) => {
+    if (!service.id) {
+        service.id = (0, uuid_1.v4)(); // Generate UUID if not already set
+    }
+});
 // Export the model using a default export
 exports.default = Service;
