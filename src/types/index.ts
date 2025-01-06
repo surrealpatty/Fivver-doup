@@ -1,5 +1,7 @@
-// Define roles and tiers as needed
+// Define UserRole type for user roles
 export type UserRole = 'admin' | 'paid' | 'user';  // Roles that can be assigned to a user
+
+// Define UserTier type for user tiers
 export type UserTier = 'free' | 'paid';  // User tiers indicating free or paid access
 
 // Define the user payload structure
@@ -9,5 +11,5 @@ export interface UserPayload {
   username?: string;  // User's username (optional)
   role?: UserRole;    // User's role (admin, paid, user)
   tier: UserTier;     // User's tier (free or paid)
-  // Removed isPaid property to avoid redundancy since tier handles it
+  isVerified?: boolean;  // Whether the user's email is verified (optional)
 }
