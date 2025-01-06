@@ -25,6 +25,10 @@ beforeAll(async () => {
     models: [User, Service],  // Add models to Sequelize instance
   });
 
+  // Ensure models are correctly imported
+  console.log('User Model:', User);
+  console.log('Service Model:', Service);
+
   // Add models to Sequelize instance and define associations
   sequelizeInstance.addModels([User, Service]);
 

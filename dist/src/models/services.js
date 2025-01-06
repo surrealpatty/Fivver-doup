@@ -62,7 +62,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Service.prototype, "updatedAt", void 0);
 exports.Service = Service = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'services', timestamps: true }) // Define the table and timestamps
+    (0, sequelize_typescript_1.Table)({
+        tableName: 'services',
+        timestamps: true, // Ensure timestamps are enabled
+    })
 ], Service);
 // Export the model properly using default export
-exports.default = Service; // Ensure you're using 'default' export if you're importing it using 'import Service from ...'
+exports.default = Service;
