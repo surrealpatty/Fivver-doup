@@ -1,5 +1,5 @@
 import 'reflect-metadata'; // Ensure reflect-metadata is imported for sequelize-typescript
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';  // Correct decorators from sequelize-typescript
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript'; // Correct decorators from sequelize-typescript
 import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 
@@ -47,3 +47,6 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date; // Automatically set the updated date
 }
+
+// Export the model properly using default export
+export default Service; // Ensure you're using 'default' export if you're importing it using 'import Service from ...'

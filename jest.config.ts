@@ -19,8 +19,7 @@ const config: Config.InitialOptions = {
   transformIgnorePatterns: ['node_modules/(?!your-esm-package/)'],  // Ensure ESM packages are transformed
   moduleDirectories: ['node_modules', 'dist', 'src'],  // Ensure Jest can resolve files from src and dist directories
   moduleNameMapper: {
-    // Map src to the correct directory in your project
-    '^src/(.*)$': '<rootDir>/src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',  // Map src to the correct directory in your project
   },
   silent: true,         // Suppress unnecessary output
   verbose: false,       // Less detailed output
@@ -28,9 +27,11 @@ const config: Config.InitialOptions = {
   collectCoverage: true, // Enable coverage collection
   globals: {
     'ts-jest': {
-      isolatedModules: true, // Improves the speed of testing with TypeScript
+      isolatedModules: true,  // Improves the speed of testing with TypeScript
     },
   },
+  setupFiles: ['dotenv/config'],  // Load environment variables from .env
+  testMatch: ['**/src/test/**/*.ts'],  // Match test files under src/test
 };
 
 export default config;

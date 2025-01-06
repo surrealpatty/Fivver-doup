@@ -14,11 +14,11 @@ require("reflect-metadata"); // Ensure reflect-metadata is imported for sequeliz
 const sequelize_typescript_1 = require("sequelize-typescript"); // Correct decorators from sequelize-typescript
 const user_1 = require("./user"); // Correct import of User model with named import
 let Service = class Service extends sequelize_typescript_1.Model {
-    title;
-    description;
-    price;
-    userId;
-    user;
+    title; // Define title as a string
+    description; // Define description as text
+    price; // Define price as a float
+    userId; // Ensure the userId matches the User model's id type
+    user; // Define user as a relation to the User model
 };
 exports.Service = Service;
 __decorate([
@@ -62,5 +62,5 @@ __decorate([
     __metadata("design:type", Date)
 ], Service.prototype, "updatedAt", void 0);
 exports.Service = Service = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'services', timestamps: true })
+    (0, sequelize_typescript_1.Table)({ tableName: 'services', timestamps: true }) // Define the table and timestamps
 ], Service);
