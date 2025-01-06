@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';
 import { User } from './models/user';  // Import the User model
 import { Review } from './models/review';  // Import the Review model
-import { premiumServiceRoutes } from './routes/premiumService';  // Named import for premiumServiceRoutes
+import premiumServiceRoutes from './routes/premiumService';  // Default import
 import userRoutes from './routes/user';  // Import the user routes
 import serviceRoutes from './routes/service';  // Import the service routes
 import authRouter from './routes/auth';  // Import the auth router
