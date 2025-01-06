@@ -1,4 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+// src/middlewares/authenticateToken.ts
+
+import { Request, Response, NextFunction } from 'express';  // Import Request from express
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken
 
 // Middleware to authenticate the JWT token and attach user to the request object

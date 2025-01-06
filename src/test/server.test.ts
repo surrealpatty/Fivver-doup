@@ -1,38 +1,24 @@
-import http from 'http';
-import { app } from '../index'; // Correct import path for the app entry point
-import request from 'supertest';
-import { Sequelize } from 'sequelize-typescript'; // Correct import for Sequelize
-import { sequelize } from '../config/database'; // Import sequelize instance to close connection
-import { Service } from '../models/services';  // Only if testing routes related to services
-import { User } from '../models/user';  // Only if testing routes related to users
+// src/test/sample.test.ts
+import { Service } from '../models/services';  // Ensure Service model is imported
 
-describe('Server Tests', () => {
-  let server: http.Server;
+describe('Service Creation Tests', () => {
+  it('should create a service with required fields', async () => {
+    // Add the missing `role` field to serviceData
+    const serviceData = {
+      id: 'someId',          // Replace with an actual ID or logic to generate one
+      title: 'Web Development',  // Example title
+      description: 'Full-stack web development',  // Example description
+      price: 100,             // Example price
+      userId: 'someUserId',   // Replace with an actual user ID or logic to generate one
+      role: 'user'            // Add the required `role` field
+    };
 
-  beforeAll(async () => {
-    // Ensure that the Service model is added to sequelize
-    sequelize.addModels([Service]);
+    // Create the service and expect a successful creation
+    const service = await Service.create(serviceData);
 
-    // Sync the models with the database (use force: true if you want to reset the DB)
-    await sequelize.sync({ force: false });
-
-    // Create and start the server before tests
-    server = http.createServer(app);
-    server.listen(3000); // Start the server
-  });
-
-  it('should respond to a GET request', async () => {
-    const res = await request(app).get('/some-route');  // Replace with an actual route for the test
-    expect(res.status).toBe(200);
-  });
-
-  afterAll(async () => {
-    // Close the Sequelize connection and the server after all tests
-    await sequelize.close();  // Close the Sequelize connection after tests
-    await new Promise<void>((resolve) => {
-      server.close(() => {
-        resolve();
-      });
-    });
+    // Check if the service was created successfully
+    expect(service).toHaveProperty('id');
+    expect(service.title).toBe(serviceData.title);
+    expect(service.role).toBe(serviceData.role);  // Verify that the role is correctly set
   });
 });

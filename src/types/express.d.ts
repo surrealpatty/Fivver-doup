@@ -7,8 +7,8 @@ import { UserPayload } from './index';  // Import your UserPayload interface fro
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;  // Augmenting the Request type to include user information
-      file?: Multer.File;  // Augmenting the Request type to handle Multer file uploads
+      user?: UserPayload;  // Augmenting the Request type to include user information (UserPayload)
+      file?: Multer.File;   // Augmenting the Request type to handle Multer file uploads
     }
   }
 }
