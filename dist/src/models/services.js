@@ -67,5 +67,5 @@ exports.Service = Service = __decorate([
         timestamps: true, // Ensure timestamps are enabled
     })
 ], Service);
-// Export the model properly using default export
+// Export the model using default export
 exports.default = Service;
