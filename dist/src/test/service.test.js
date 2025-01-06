@@ -1,78 +1,51 @@
 "use strict";
-// src/test/service.test.ts
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure this is the first import
-const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Adjusting to the source directory directly
-const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
-const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import of Sequelize
-const services_1 = require("../models/services"); // Correct import path for Service model
-// Mocking the Service model methods
-jest.mock('../models/services', () => ({
-    Service: {
-        create: jest.fn(),
-        findOne: jest.fn(),
-    },
-}));
-// Load environment variables from .env file
-dotenv_1.default.config();
-// Sequelize initialization for test database
-const sequelize = new sequelize_typescript_1.Sequelize({
-    username: process.env.TEST_DB_USERNAME, // Use test DB credentials
-    password: process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME,
-    host: process.env.TEST_DB_HOST, // Ensure correct host for the test DB
-    dialect: 'mysql',
-    models: [services_1.Service], // Add models to Sequelize initialization for tests
-});
-// Sync database before tests
-beforeAll(async () => {
-    await sequelize.sync({ force: true }); // This will drop and recreate tables for each test
-});
-// Retry logic for all tests in this suite
-beforeEach(() => {
-    jest.retryTimes(3); // Retries failed tests 3 times before reporting an error
-});
-describe('Service Tests', () => {
-    describe('POST /api/services/create', () => {
-        it('should create a service successfully', async () => {
-            // Mock resolved value for Service.create
-            services_1.Service.create.mockResolvedValueOnce({
-                id: '1',
-                title: 'Test Service',
-                description: 'This is a test service',
-                price: 100,
-            });
-            // Send a POST request to create service endpoint
-            const response = await (0, supertest_1.default)(index_1.app).post('/api/services/create').send({
-                title: 'Test Service',
-                description: 'This is a test service',
-                price: 100,
-            });
-            // Verify the response
-            expect(response.status).toBe(201); // Expecting a 201 Created status
-            expect(response.body).toHaveProperty('id');
-            expect(response.body.title).toBe('Test Service');
-            // Verify that Service.create was called with the correct parameters
-            expect(services_1.Service.create).toHaveBeenCalledWith({
-                title: 'Test Service',
-                description: 'This is a test service',
-                price: 100,
-            });
+const database_1 = require("../config/database"); // Import the Sequelize instance
+const services_1 = require("../models/services"); // Import the Service model
+describe('Service Model Tests', () => {
+    beforeAll(async () => {
+        // Sync the database before running the tests
+        await database_1.sequelize.sync({ force: true }); // Use `force: true` to recreate tables
+    });
+    afterAll(async () => {
+        // Close the Sequelize connection after all tests
+        await database_1.sequelize.close();
+    });
+    it('should define the Service model', () => {
+        expect(services_1.Service).toBeDefined(); // Sanity check: Ensure the Service model is defined
+    });
+    it('should create a new service', async () => {
+        const service = await services_1.Service.create({
+            id: '123e4567-e89b-12d3-a456-426614174000', // UUID for testing
+            title: 'Web Development',
+            description: 'Full-stack web development services',
+            price: 500,
+            userId: '456e4567-e89b-12d3-a456-426614174001', // UUID for the user
         });
-        it('should return an error if service creation fails', async () => {
-            // Mock rejected value for Service.create
-            services_1.Service.create.mockRejectedValueOnce(new Error('Service creation failed'));
-            const response = await (0, supertest_1.default)(index_1.app).post('/api/services/create').send({
-                title: 'Test Service',
-                description: 'This is a test service',
-                price: 100,
-            });
-            expect(response.status).toBe(400); // Correcting the expected status
-            expect(response.body).toHaveProperty('error', 'Service creation failed');
+        expect(service).toBeDefined();
+        expect(service.title).toBe('Web Development');
+        expect(service.description).toBe('Full-stack web development services');
+        expect(service.price).toBe(500);
+        expect(service.userId).toBe('456e4567-e89b-12d3-a456-426614174001');
+    });
+    it('should retrieve a service by ID', async () => {
+        const service = await services_1.Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
+        expect(service).not.toBeNull();
+        expect(service?.title).toBe('Web Development');
+    });
+    it('should update a service', async () => {
+        const [updatedRowsCount] = await services_1.Service.update({ price: 600 }, // New price
+        { where: { id: '123e4567-e89b-12d3-a456-426614174000' } });
+        expect(updatedRowsCount).toBe(1);
+        const updatedService = await services_1.Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
+        expect(updatedService?.price).toBe(600);
+    });
+    it('should delete a service', async () => {
+        const deletedRowsCount = await services_1.Service.destroy({
+            where: { id: '123e4567-e89b-12d3-a456-426614174000' },
         });
+        expect(deletedRowsCount).toBe(1);
+        const deletedService = await services_1.Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
+        expect(deletedService).toBeNull();
     });
 });

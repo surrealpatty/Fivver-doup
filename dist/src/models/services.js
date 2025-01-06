@@ -11,19 +11,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
 require("reflect-metadata"); // Ensure reflect-metadata is imported for sequelize-typescript
-const sequelize_typescript_1 = require("sequelize-typescript"); // Correct decorators from sequelize-typescript
-const user_1 = require("./user"); // Correct import of User model with named import
+const sequelize_typescript_1 = require("sequelize-typescript"); // Import necessary decorators
+const user_1 = require("./user"); // Correctly import User model
 let Service = class Service extends sequelize_typescript_1.Model {
     title; // Define title as a string
     description; // Define description as text
     price; // Define price as a float
-    userId; // Ensure the userId matches the User model's id type
+    userId; // userId matches User model's id type
     user; // Define user as a relation to the User model
 };
 exports.Service = Service;
 __decorate([
     sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the id field (UUIDV4)
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the id field
     ,
     __metadata("design:type", String)
 ], Service.prototype, "id", void 0);
@@ -67,5 +67,5 @@ exports.Service = Service = __decorate([
         timestamps: true, // Ensure timestamps are enabled
     })
 ], Service);
-// Export the model using default export
+// Export the model using a default export
 exports.default = Service;

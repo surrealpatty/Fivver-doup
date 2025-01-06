@@ -50,3 +50,5 @@ const sequelize = new sequelize_typescript_1.Sequelize({
     },
 });
 exports.sequelize = sequelize;
+// Add models explicitly for Sequelize to recognize them
+sequelize.addModels([user_1.User, services_1.Service, order_1.Order, review_1.Review]);
