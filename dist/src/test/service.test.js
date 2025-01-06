@@ -1,11 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../config/database"); // Import the Sequelize instance
-const services_1 = require("../models/services"); // Import the Service model
+const services_1 = require("../models/services"); // Adjust the import path as needed
+const user_1 = require("../models/user"); // Import the User model to ensure the `userId` is valid
+const database_1 = require("../config/database"); // Ensure Sequelize instance is correctly imported
 describe('Service Model Tests', () => {
+    let user;
     beforeAll(async () => {
         // Sync the database before running the tests
         await database_1.sequelize.sync({ force: true }); // Use `force: true` to recreate tables
+        // Set up a user before running tests
+        user = await user_1.User.create({
+            email: 'test@example.com',
+            username: 'testuser',
+            password: 'testpassword', // Make sure this is hashed in a real scenario
+            role: 'user', // Assuming "role" is a required field
+            tier: 'Tier 1', // Assuming "tier" is a required field
+            isVerified: true, // Assuming "isVerified" is a required field
+        });
     });
     afterAll(async () => {
         // Close the Sequelize connection after all tests
@@ -15,23 +26,28 @@ describe('Service Model Tests', () => {
         expect(services_1.Service).toBeDefined(); // Sanity check: Ensure the Service model is defined
     });
     it('should create a new service', async () => {
-        const service = await services_1.Service.create({
-            id: '123e4567-e89b-12d3-a456-426614174000', // UUID for testing
-            title: 'Web Development',
-            description: 'Full-stack web development services',
-            price: 500,
-            userId: '456e4567-e89b-12d3-a456-426614174001', // UUID for the user
-        });
-        expect(service).toBeDefined();
-        expect(service.title).toBe('Web Development');
-        expect(service.description).toBe('Full-stack web development services');
-        expect(service.price).toBe(500);
-        expect(service.userId).toBe('456e4567-e89b-12d3-a456-426614174001');
+        // Define service attributes without setting the ID manually
+        const serviceData = {
+            title: 'Test Service',
+            description: 'A test service',
+            price: 10,
+            userId: user.id, // Ensure user.id is valid and exists in the database
+        };
+        // Create the service using the defined attributes
+        const service = await services_1.Service.create(serviceData);
+        // Logging to check if the service is created and if the ID is set correctly
+        console.log('Created service ID:', service.id); // Log the generated ID
+        // Assertions to validate the creation of the service
+        expect(service.id).toBeDefined(); // Ensure the ID is generated
+        expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
+        expect(service.title).toBe('Test Service');
+        expect(service.price).toBe(10);
+        expect(service.description).toBe('A test service');
     });
     it('should retrieve a service by ID', async () => {
         const service = await services_1.Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
         expect(service).not.toBeNull();
-        expect(service?.title).toBe('Web Development');
+        expect(service?.title).toBe('Test Service');
     });
     it('should update a service', async () => {
         const [updatedRowsCount] = await services_1.Service.update({ price: 600 }, // New price

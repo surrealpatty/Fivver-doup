@@ -39,10 +39,10 @@ describe('Service Model Tests', () => {
     console.log('Created service ID:', service.id); // Log the generated ID
 
     // Assertions to validate the creation of the service
-    expect(service.id).toBeDefined();
-    expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
-    expect(service.title).toBe('Test Service');
-    expect(service.price).toBe(10);
-    expect(service.description).toBe('A test service');
+    expect(service.id).toBeDefined(); // Ensure service has an id assigned
+    expect(service.userId).toBe(user.id); // Ensure the userId is correct
+    expect(service.title).toBe('Test Service'); // Ensure the title is correct
+    expect(service.price).toBe(10); // Ensure the price is correct
+    expect(service.description).toBe('A test service'); // Ensure the description is correct
   });
 });
