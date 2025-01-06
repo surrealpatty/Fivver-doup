@@ -10,7 +10,7 @@ const supertest_1 = __importDefault(require("supertest")); // For making HTTP re
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For verifying JWT tokens
 const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
 const user_1 = require("../models/user"); // Correct import for the User model
-const services_1 = require("../models/services"); // Use named import if needed
+const services_1 = require("../models/services"); // Correct import for the Service model
 dotenv_1.default.config(); // Load environment variables from .env file
 let sequelizeInstance;
 beforeAll(async () => {
@@ -45,17 +45,17 @@ describe('Authentication Tests', () => {
         // Ensure the user was created successfully
         expect(userResponse.status).toBe(201);
         // Now, attempt to log in and get a token
-        const response = await (0, supertest_1.default)(index_1.app)
+        const loginResponse = await (0, supertest_1.default)(index_1.app)
             .post('/login') // Adjust the login route based on your app's setup
             .send({
             email: 'test@example.com',
             password: 'password123',
         });
         // Ensure the login was successful and the token is returned
-        expect(response.status).toBe(200);
-        expect(response.body.token).toBeDefined(); // Ensure a token is returned
+        expect(loginResponse.status).toBe(200);
+        expect(loginResponse.body.token).toBeDefined(); // Ensure a token is returned
         // Decode the token to verify its contents
-        const decoded = jsonwebtoken_1.default.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+        const decoded = jsonwebtoken_1.default.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
         expect(decoded).toHaveProperty('id'); // Ensure the decoded token contains 'id'
         expect(decoded).toHaveProperty('email'); // Ensure the decoded token contains 'email'
     });

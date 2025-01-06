@@ -10,7 +10,7 @@ const supertest_1 = __importDefault(require("supertest"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken for JWT verification
 const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
 const user_1 = require("../models/user"); // User model import
-const services_1 = require("../models/services"); // Use named import if needed
+const services_1 = require("../models/services"); // Use named import if necessary
 // Load environment variables from .env file
 dotenv_1.default.config();
 // Initialize Sequelize instance for testing
