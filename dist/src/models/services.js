@@ -20,6 +20,12 @@ let Service = class Service extends sequelize_typescript_1.Model {
     price; // Define price as a float
     userId; // userId matches User model's id type
     user; // Define user as a relation to the User model
+    // beforeCreate hook to generate UUID if it's not already set
+    static async setDefaults(instance) {
+        if (!instance.id) {
+            instance.id = (0, uuid_1.v4)(); // Generate UUID if not already set
+        }
+    }
 };
 exports.Service = Service;
 __decorate([
@@ -61,17 +67,17 @@ __decorate([
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
     __metadata("design:type", Date)
 ], Service.prototype, "updatedAt", void 0);
+__decorate([
+    sequelize_typescript_1.BeforeCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Service]),
+    __metadata("design:returntype", Promise)
+], Service, "setDefaults", null);
 exports.Service = Service = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: 'services',
         timestamps: true, // Ensure timestamps are enabled
     })
 ], Service);
-// Ensure the UUID is generated if it's not provided when creating a new Service instance
-Service.beforeCreate((service) => {
-    if (!service.id) {
-        service.id = (0, uuid_1.v4)(); // Generate UUID if not already set
-    }
-});
 // Export the model using a default export
 exports.default = Service;

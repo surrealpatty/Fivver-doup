@@ -40,6 +40,9 @@ describe('Service Model Tests', () => {
     // Create the service using the defined attributes
     const service = await Service.create(serviceData);
 
+    // Logging to check if the service is created and if the ID is set correctly
+    console.log('Created service ID:', service.id); // Log the generated ID
+
     // Assertions to validate the creation of the service
     expect(service.id).toBeDefined(); // Ensure the ID is generated
     expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
