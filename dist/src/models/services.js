@@ -30,7 +30,10 @@ let Service = class Service extends sequelize_typescript_1.Model {
 exports.Service = Service;
 __decorate([
     sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID),
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.UUID,
+        defaultValue: sequelize_typescript_1.DataType.UUIDV4, // Automatically generate UUID if not provided
+    }),
     __metadata("design:type", String)
 ], Service.prototype, "id", void 0);
 __decorate([
