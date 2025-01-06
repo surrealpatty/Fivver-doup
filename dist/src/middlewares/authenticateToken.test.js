@@ -1,95 +1,71 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure reflect-metadata is imported for sequelize-typescript
-const authenticateToken_1 = require("./authenticateToken"); // Adjust path if necessary
+require("reflect-metadata");
+const authenticateToken_1 = require("./authenticateToken");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Mock jsonwebtoken module
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
 describe('authenticateToken Middleware', () => {
-    const mockNext = jest.fn(); // Mock next function
-    let mockRequest; // Use the custom RequestWithUser type as a Partial
+    const mockNext = jest.fn();
+    let mockRequest;
     let mockResponse;
     beforeEach(() => {
-        mockRequest = {}; // Reset the mock request object
+        mockRequest = {};
         mockResponse = {
-            status: jest.fn().mockReturnThis(), // Mock the status function to chain
-            json: jest.fn().mockReturnThis(), // Mock the json function to chain
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis(),
         };
-        mockNext.mockClear(); // Clear previous calls to next()
-    });
-    // Helper function to mock request with a user
-    const mockRequestWithUser = (user) => ({
-        headers: {
-            authorization: 'Bearer validToken', // Add a valid token for testing
-        },
-        user, // Attach a user to the request if provided
-        // Mocking just the methods used in the middleware
-        get: jest.fn().mockReturnValue('Bearer validToken'), // Mock get() method
-        header: jest.fn().mockReturnValue('Bearer validToken'), // Mock header() method
-        accepts: jest.fn().mockReturnValue(true), // Mock accepts() method
-        acceptsCharsets: jest.fn(), // Mock acceptsCharsets() method
-        acceptsEncodings: jest.fn(), // Mock acceptsEncodings() method
-        app: {}, // Mock the app property as an empty object of type Application
-        cookies: {},
-        params: {},
-        query: {},
-        body: {},
-        acceptsLanguages: jest.fn(), // Mock acceptsLanguages method
-        range: jest.fn(), // Mock range method
-        accepted: ['application/json'], // Cast to MediaType[]
-        param: jest.fn(), // Mock param method
-        // Mock additional properties to prevent TypeScript errors (using empty or mock values)
-        // These are the only properties needed to prevent TypeScript errors related to missing fields
-        protocol: 'http', // Add a mock value for protocol
-        secure: false, // Add a mock value for secure
-        ip: '127.0.0.1', // Add a mock value for ip
-        originalUrl: '/', // Add a mock value for originalUrl
-        method: 'GET', // Add a mock value for method
-        url: '/', // Add a mock value for url
-        baseUrl: '/', // Add a mock value for baseUrl
-        path: '/', // Add a mock value for path
-        subdomains: [], // Add a mock value for subdomains
-        hostname: 'localhost', // Add a mock value for hostname
-        host: 'localhost', // Add a mock value for host
+        mockNext.mockClear();
     });
     it('should attach user to req.user if token is valid', () => {
         const mockToken = 'validToken';
-        const mockPayload = { id: '123', email: 'user@example.com' }; // Define the expected payload
-        // Set up the mock for jwt.verify to return the mockPayload
-        require('jsonwebtoken').verify.mockReturnValue(mockPayload);
-        // Mock request and set Authorization header
-        mockRequest = mockRequestWithUser(mockPayload);
-        // Call the middleware
+        const mockPayload = { id: '123', email: 'user@example.com' };
+        // Mock jwt.verify to return the expected payload
+        jsonwebtoken_1.default.verify.mockReturnValue(mockPayload);
+        // Mock request with Authorization header
+        mockRequest = {
+            headers: {
+                authorization: `Bearer ${mockToken}`,
+            },
+        };
         (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
-        // Check if next() was called, meaning the middleware passed successfully
+        // Verify that next() was called
         expect(mockNext).toHaveBeenCalled();
-        // Check if the user was attached to req.user
+        // Verify that the user was attached to req.user
         expect(mockRequest.user).toEqual(mockPayload);
     });
     it('should return 401 if no token is provided', () => {
         mockRequest = {
             headers: {
-                authorization: '', // No token provided
+                authorization: '',
             },
         };
         (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
+        // Verify response for missing token
         expect(mockResponse.status).toHaveBeenCalledWith(401);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Authorization token is missing' });
+        expect(mockNext).not.toHaveBeenCalled();
     });
     it('should return 403 if token is invalid or expired', () => {
         const mockToken = 'invalidToken';
-        // Simulate jwt.verify throwing an error for invalid token
-        require('jsonwebtoken').verify.mockImplementation(() => {
+        // Mock jwt.verify to throw an error for invalid token
+        jsonwebtoken_1.default.verify.mockImplementation(() => {
             throw new Error('Invalid token');
         });
         mockRequest = {
             headers: {
-                authorization: `Bearer ${mockToken}`, // Ensure headers are properly mocked
+                authorization: `Bearer ${mockToken}`,
             },
         };
         (0, authenticateToken_1.authenticateToken)(mockRequest, mockResponse, mockNext);
+        // Verify response for invalid token
         expect(mockResponse.status).toHaveBeenCalledWith(403);
         expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Invalid or expired token' });
+        expect(mockNext).not.toHaveBeenCalled();
     });
 });

@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = exports.app = exports.server = void 0;
 require("reflect-metadata"); // Ensure reflect-metadata is imported first
 const express_1 = __importDefault(require("express"));
-const sequelize_typescript_1 = require("sequelize-typescript");
 const dotenv_1 = __importDefault(require("dotenv"));
+const sequelize_typescript_1 = require("sequelize-typescript");
 const user_1 = require("./models/user"); // Import the User model
 const review_1 = require("./models/review"); // Import the Review model
-const premiumService_1 = __importDefault(require("./routes/premiumService")); // Import the premium service routes
+const premiumService_1 = __importDefault(require("./routes/premiumService")); // Default import
 const user_2 = __importDefault(require("./routes/user")); // Import the user routes
 const service_1 = __importDefault(require("./routes/service")); // Import the service routes
 const auth_1 = __importDefault(require("./routes/auth")); // Import the auth router
@@ -21,7 +21,7 @@ exports.app = app;
 // Middleware to parse incoming JSON requests
 app.use(express_1.default.json());
 // Register the routes
-app.use('/api/premium-service', premiumService_1.default); // Mount premium service routes under '/api/premium-service'
+app.use('/api/premium-service', premiumService_1.default); // Correct use of premiumServiceRoutes
 app.use('/api/users', user_2.default); // Mount user routes under '/api/users'
 app.use('/api/services', service_1.default); // Mount service routes under '/api/services'
 app.use('/auth', auth_1.default); // Mount auth routes under '/auth'

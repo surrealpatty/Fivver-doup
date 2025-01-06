@@ -1,16 +1,5 @@
 import 'reflect-metadata'; // Ensure reflect-metadata is imported for sequelize-typescript
-import { sequelize } from '../config/database'; // Correct import of sequelize instance
-import { 
-  Table, 
-  Column, 
-  Model, 
-  PrimaryKey, 
-  DataType, 
-  CreatedAt, 
-  UpdatedAt, 
-  ForeignKey, 
-  BelongsTo 
-} from 'sequelize-typescript';  // Correct decorators from sequelize-typescript
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';  // Correct decorators from sequelize-typescript
 import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 

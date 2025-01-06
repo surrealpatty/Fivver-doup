@@ -23,7 +23,7 @@ let Service = class Service extends sequelize_typescript_1.Model {
 exports.Service = Service;
 __decorate([
     sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the id field (updated to UUID instead of STRING for clarity)
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the id field (UUIDV4)
     ,
     __metadata("design:type", String)
 ], Service.prototype, "id", void 0);
@@ -42,7 +42,7 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_1.User) // Foreign key to User
     ,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Ensure the foreign key is of the same type as User's id (UUID)
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Ensure the foreign key is UUID (same type as User's id)
     ,
     __metadata("design:type", String)
 ], Service.prototype, "userId", void 0);

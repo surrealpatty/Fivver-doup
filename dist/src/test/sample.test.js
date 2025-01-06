@@ -38,6 +38,7 @@ describe('Service Model Tests', () => {
         // Create the service and save it in the database
         const service = await services_1.Service.create(serviceData);
         // Validate the created service's attributes
+        expect(service.id).toBeDefined(); // Ensure the service has an ID
         expect(service.userId).toBe(user.id); // Ensure the userId matches
         expect(service.title).toBe('Test Service');
         expect(service.price).toBe(10);
