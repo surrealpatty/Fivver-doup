@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
 require("reflect-metadata"); // Ensure reflect-metadata is imported for sequelize-typescript
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import necessary decorators
-const user_1 = require("./user"); // Correctly import User model
+const user_1 = require("./user"); // Correctly import User model (ensure path is correct)
 const uuid_1 = require("uuid"); // Import uuid to generate UUIDs
 let Service = class Service extends sequelize_typescript_1.Model {
     title; // Define title as a string
