@@ -1,5 +1,5 @@
 import { ServiceAttributes } from '../models/services';
-import { User } from '../models/user'; // Ensure correct import for User model
+import User from '../models/user'; // Ensure correct import for User model
 import { sequelize } from '../config/database'; // Correct import for sequelize
 import { v4 as uuidv4 } from 'uuid'; // Ensure uuidv4 is imported
 import { Service } from '../models/services'; // Correct named import for Service
@@ -28,7 +28,7 @@ describe('Service Model Tests', () => {
   });
 
   it('should create a new service', async () => {
-    // Define service attributes with a valid UUID (generate UUID here)
+    // Define service attributes with a valid UUID
     const serviceData: ServiceAttributes = {
       id: uuidv4(), // Generate a valid UUID string for the service id
       title: 'Test Service',

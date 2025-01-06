@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import { Service } from '../models/services'; // Correct named import
+import { Service } from './services'; // Correct named import for Service model
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
