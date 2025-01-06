@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const order_1 = require("../models/order"); // Import the Order model
-const database_1 = require("../config/database"); // Correct import of sequelize
-const index_1 = require("../index"); // Correct import of app
+const order_1 = require("../models/order"); // Correct path for Order model
+const database_1 = require("../config/database"); // Correct import for sequelize instance
+const index_1 = require("../index"); // Correct import for the app
 const supertest_1 = __importDefault(require("supertest")); // Import supertest for API requests
-const user_1 = require("../models/user"); // User model import
-const services_1 = require("../models/services"); // Service model import
+const user_1 = require("../models/user"); // Correct path for User model
+const services_1 = require("../models/services"); // Correct path for Service model
 // Mock the methods of the models
 jest.mock('../models/services', () => ({
     findByPk: jest.fn(),
@@ -112,7 +112,7 @@ describe('Order Controller Tests', () => {
             userId: mockUser.id,
             serviceId: mockService.id,
         });
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(400); // Missing order details should return 400 Bad Request
         expect(response.body.message).toBe('Order details are required');
     });
 });

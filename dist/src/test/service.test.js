@@ -8,7 +8,7 @@ const supertest_1 = __importDefault(require("supertest"));
 const index_1 = require("../index"); // Adjusting to the source directory directly
 const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv to load environment variables
 const sequelize_typescript_1 = require("sequelize-typescript"); // Correct import of Sequelize
-const services_1 = require("../models/services"); // Service model import
+const services_1 = require("../models/services"); // Correct import path for Service model
 // Mocking the Service model methods
 jest.mock('../models/services', () => ({
     Service: {
