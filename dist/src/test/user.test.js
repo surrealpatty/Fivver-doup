@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Adjust path as needed
-const user_1 = require("../models/user"); // Correct import for User model
+const index_1 = require("../index"); // Ensure the path to your app is correct
+const user_1 = require("../models/user"); // Correct import for the User model
 jest.mock('../models/user', () => ({
     User: {
         create: jest.fn(),
@@ -17,12 +17,16 @@ jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }));
 beforeAll(async () => {
-    // Any database setup or mock initialization can be done here
+    // Any database setup or mock initialization can be done here, such as Sequelize model sync
+    // If you are using Sequelize, ensure models are synced with the database before running tests
+    // Example:
+    // await sequelize.sync({ force: true }); // Uncomment and ensure sequelize is imported correctly
 });
 describe('User Tests', () => {
     it('should register a user successfully', async () => {
+        // Mocking Sequelize's create method
         user_1.User.create.mockResolvedValueOnce({
-            id: '1',
+            id: '1', // UUID should be returned here
             email: 'test@example.com',
             username: 'testuser',
             isVerified: false,
@@ -36,9 +40,11 @@ describe('User Tests', () => {
             username: 'testuser',
             password: 'password123',
         });
+        // Test that the response status is correct
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
         expect(response.body.email).toBe('test@example.com');
+        // Ensure that the `User.create` method was called with the correct parameters
         expect(user_1.User.create).toHaveBeenCalledWith({
             email: 'test@example.com',
             username: 'testuser',
@@ -48,4 +54,5 @@ describe('User Tests', () => {
             tier: 'free',
         });
     });
+    // You can add more test cases for other functionalities here
 });

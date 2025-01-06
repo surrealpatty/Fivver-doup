@@ -49,5 +49,8 @@ const sequelize = new Sequelize({
   },
 });
 
+// Add models explicitly for Sequelize to recognize them
+sequelize.addModels([User, Service, Order, Review]);
+
 // Export the Sequelize instance for use across the application
 export { sequelize };
