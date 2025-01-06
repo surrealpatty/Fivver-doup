@@ -1,5 +1,5 @@
-import 'reflect-metadata'; // Ensure reflect-metadata is imported for sequelize-typescript
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript'; // Correct decorators from sequelize-typescript
+import 'reflect-metadata';  // Ensure reflect-metadata is imported for sequelize-typescript
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';  // Correct decorators from sequelize-typescript
 import { Optional } from 'sequelize';  // Import Optional from sequelize
 import { User } from './user';  // Correct import of User model with named import
 
@@ -17,7 +17,10 @@ export interface ServiceAttributes {
 // Define creation attributes for the Service model
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-@Table({ tableName: 'services', timestamps: true }) // Define the table and timestamps
+@Table({ 
+  tableName: 'services', 
+  timestamps: true,  // Ensure timestamps are enabled
+})
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
   @Column(DataType.UUID)  // Use UUID for the id field (UUIDV4)
@@ -32,21 +35,21 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.FLOAT)
   price!: number; // Define price as a float
 
-  @ForeignKey(() => User) // Foreign key to User
+  @ForeignKey(() => User)  // Foreign key to User
   @Column(DataType.UUID)  // Ensure the foreign key is UUID (same type as User's id)
-  userId!: string; // Ensure the userId matches the User model's id type
+  userId!: string;  // Ensure the userId matches the User model's id type
 
-  @BelongsTo(() => User) // Define association to User
-  user!: User; // Define user as a relation to the User model
+  @BelongsTo(() => User)  // Define association to User
+  user!: User;  // Define user as a relation to the User model
 
   @CreatedAt
   @Column(DataType.DATE)
-  declare createdAt: Date; // Automatically set the created date
+  declare createdAt: Date;  // Automatically set the created date
 
   @UpdatedAt
   @Column(DataType.DATE)
-  declare updatedAt: Date; // Automatically set the updated date
+  declare updatedAt: Date;  // Automatically set the updated date
 }
 
 // Export the model properly using default export
-export default Service; // Ensure you're using 'default' export if you're importing it using 'import Service from ...'
+export default Service;

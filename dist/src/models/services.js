@@ -64,3 +64,5 @@ __decorate([
 exports.Service = Service = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'services', timestamps: true }) // Define the table and timestamps
 ], Service);
+// Export the model properly using default export
+exports.default = Service; // Ensure you're using 'default' export if you're importing it using 'import Service from ...'

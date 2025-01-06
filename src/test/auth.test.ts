@@ -3,18 +3,20 @@ import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequeli
 import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import { sequelize } from '../config/database';  // Correct import for sequelize instance
-import { Service } from '../models/services'; // Correct named import
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
+import { sequelize } from '../config/database';  // Correct import for sequelize instance
+import Service from '../models/services';  // Ensure this import path is correct
 import { User } from '../models/user';  // User model import
 
 // Load environment variables from .env file
 dotenv.config();
 
-// Ensure the models are added and synced before running the tests
+// Initialize Sequelize instance for testing
+let sequelizeInstance: Sequelize;
+
 beforeAll(async () => {
   // Initialize Sequelize with models explicitly
-  const sequelizeInstance = new Sequelize({
+  sequelizeInstance = new Sequelize({
     dialect: 'mysql',
     host: process.env.TEST_DB_HOST,  // Use environment variables for DB configuration
     username: process.env.TEST_DB_USERNAME as string,
@@ -30,8 +32,11 @@ beforeAll(async () => {
   Service.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
+  // Check database connection
+  await sequelizeInstance.authenticate();
+
   // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-  await sequelizeInstance.sync({ force: false });
+  await sequelizeInstance.sync({ force: true });
 });
 
 describe('Authentication Tests', () => {
@@ -79,5 +84,6 @@ describe('Authentication Tests', () => {
 
 // Clean up after tests
 afterAll(async () => {
-  await sequelize.close();  // Close the Sequelize connection after tests
+  // Close the Sequelize connection after tests
+  await sequelizeInstance.close();  // Close the test database connection
 });
