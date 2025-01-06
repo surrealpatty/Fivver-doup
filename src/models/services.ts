@@ -17,33 +17,33 @@ export interface ServiceAttributes {
 // Define creation attributes for the Service model
 export interface ServiceCreationAttributes extends Optional<ServiceAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-@Table({ tableName: 'services', timestamps: true })
+@Table({ tableName: 'services', timestamps: true }) // Define the table and timestamps
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
   @Column(DataType.UUID)  // Use UUID for the id field (UUIDV4)
   declare id: string;
 
   @Column(DataType.STRING)
-  title!: string;
+  title!: string; // Define title as a string
 
   @Column(DataType.TEXT)
-  description!: string;
+  description!: string; // Define description as text
 
   @Column(DataType.FLOAT)
-  price!: number;
+  price!: number; // Define price as a float
 
   @ForeignKey(() => User) // Foreign key to User
   @Column(DataType.UUID)  // Ensure the foreign key is UUID (same type as User's id)
-  userId!: string;
+  userId!: string; // Ensure the userId matches the User model's id type
 
   @BelongsTo(() => User) // Define association to User
-  user!: User;
+  user!: User; // Define user as a relation to the User model
 
   @CreatedAt
   @Column(DataType.DATE)
-  declare createdAt: Date;
+  declare createdAt: Date; // Automatically set the created date
 
   @UpdatedAt
   @Column(DataType.DATE)
-  declare updatedAt: Date;
+  declare updatedAt: Date; // Automatically set the updated date
 }
