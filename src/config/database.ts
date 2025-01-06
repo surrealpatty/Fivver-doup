@@ -4,7 +4,6 @@ import { User } from '../models/user';  // Correct import for User model
 import { Service } from '../models/services';  // Correct import for Service model
 import { Order } from '../models/order';  // Correct import for Order model
 import { Review } from '../models/review';  // Correct import for Review model
-import config from './config';  // Import the config file to access environment variables
 
 dotenv.config();  // Load environment variables from .env file
 

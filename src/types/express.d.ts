@@ -1,17 +1,13 @@
 // src/types/express.d.ts
 import { Request } from 'express';
-import { Multer } from 'multer';
+import { Multer } from 'multer';  // Importing Multer for file handling
+import { UserPayload } from './index';  // Ensure UserPayload interface is correctly imported
 
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        id: string;
-        email?: string;
-        username?: string;
-        role: 'Free' | 'Paid'; // Ensure this matches the role types you use
-      };
-      file?: Multer.File; // This is for the file property you are augmenting
+      user?: UserPayload;  // Augmenting the Request type to include user information
+      file?: Multer.File;  // Augmenting the Request type to handle Multer file uploads
     }
   }
 }

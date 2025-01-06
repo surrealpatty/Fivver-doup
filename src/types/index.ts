@@ -11,11 +11,3 @@ export interface UserPayload {
   tier: UserTier;     // User's tier (free or paid)
   // Removed isPaid property to avoid redundancy since tier handles it
 }
-
-// Import Request from express to extend it
-import { Request } from 'express';
-
-// Extend the Request type to include the `user` property
-export interface CustomAuthRequest extends Request {
-  user?: UserPayload;  // Optional user property in the request
-}
