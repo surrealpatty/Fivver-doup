@@ -1,10 +1,11 @@
 // src/types/express/index.d.ts
-declare namespace Express {
-  export interface Request {
-    user?: {
-      id: string;
-      email?: string;
-      username?: string;
-    };
+
+import { User } from '../../models/user';  // Adjust the path to match your project structure
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;  // Augment the Request type to include the `user` property of type User
+    }
   }
 }

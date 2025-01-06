@@ -27,7 +27,8 @@
       "supertest"                                    // Add supertest types for testing
     ],
     "typeRoots": [
-      "node_modules/@types"                         // Ensure custom type declarations are correctly found
+      "node_modules/@types",                        // Ensure custom type declarations are correctly found
+      "./src/types"                                  // Add the custom types folder in src/types
     ],
     "paths": {
       "src/*": ["./src/*"],                         // Resolve paths inside src/ directly

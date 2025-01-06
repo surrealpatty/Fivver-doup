@@ -20,7 +20,7 @@ let Service = class Service extends sequelize_typescript_1.Model {
     price; // Define price as a float
     userId; // userId matches User model's id type
     user; // Define user as a relation to the User model
-    // beforeCreate hook to generate UUID if it's not already set
+    role; // Define role field with validation
     static async setDefaults(instance) {
         if (!instance.id) {
             instance.id = (0, uuid_1.v4)(); // Generate UUID if not already set
@@ -70,6 +70,15 @@ __decorate([
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
     __metadata("design:type", Date)
 ], Service.prototype, "updatedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.STRING,
+        validate: {
+            isIn: [['admin', 'user']], // Allow only 'admin' or 'user' as valid roles
+        },
+    }),
+    __metadata("design:type", String)
+], Service.prototype, "role", void 0);
 __decorate([
     sequelize_typescript_1.BeforeCreate,
     __metadata("design:type", Function),
