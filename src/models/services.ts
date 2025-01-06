@@ -11,6 +11,7 @@ export interface ServiceAttributes {
   description: string;
   price: number;
   userId: string;  // userId matches the type of User's id (UUID)
+  role: string;  // Add role field
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -54,7 +55,14 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date;  // Automatically set the updated date
 
-  // beforeCreate hook to generate UUID if it's not already set
+  @Column({
+    type: DataType.STRING,
+    validate: {
+      isIn: [['admin', 'user']],  // Allow only 'admin' or 'user' as valid roles
+    },
+  })
+  role!: string;  // Define role field with validation
+
   @BeforeCreate
   static async setDefaults(instance: Service) {
     if (!instance.id) {

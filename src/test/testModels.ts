@@ -14,9 +14,9 @@ describe('Service Model', () => {
       email: 'test@example.com',
       username: 'testuser',
       password: 'testpassword',  // In a real scenario, this should be hashed
-      role: 'user',  // Assuming role is a required field
-      tier: 'Tier 1',  // Assuming tier is a required field
-      isVerified: true,  // Assuming isVerified is required
+      role: 'user',  // Assuming role is a required field for the user model
+      tier: 'Tier 1',  // Assuming tier is a required field for the user model
+      isVerified: true,  // Assuming isVerified is required for the user model
     });
   });
 
@@ -35,6 +35,7 @@ describe('Service Model', () => {
       description: 'A test service',
       price: 10,
       userId: user.id,  // Associating the service with the user
+      role: 'user',  // Valid role
     };
 
     // Create a new service
@@ -48,6 +49,7 @@ describe('Service Model', () => {
     expect(service.title).toBe('Test Service');  // Ensure title is set correctly
     expect(service.price).toBe(10);  // Ensure price is set correctly
     expect(service.description).toBe('A test service');  // Ensure description is correct
+    expect(service.role).toBe('user');  // Ensure role is set correctly
   });
 
   it('should retrieve a service by ID', async () => {
@@ -57,6 +59,7 @@ describe('Service Model', () => {
       description: 'A service for retrieving test',
       price: 20,
       userId: user.id,
+      role: 'user',  // Valid role
     });
 
     const retrievedService = await Service.findByPk(service.id);  // Retrieve using the created ID
@@ -71,6 +74,7 @@ describe('Service Model', () => {
       description: 'A service that will be updated',
       price: 30,
       userId: user.id,
+      role: 'user',  // Valid role
     });
 
     // Update the service price
@@ -93,6 +97,7 @@ describe('Service Model', () => {
       description: 'A service that will be deleted',
       price: 40,
       userId: user.id,
+      role: 'user',  // Valid role
     });
 
     // Delete the service
