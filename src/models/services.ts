@@ -1,17 +1,8 @@
 import 'reflect-metadata'; // Ensure reflect-metadata is imported for sequelize-typescript
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript'; // Import necessary decorators
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript'; // Import necessary decorators
 import { Optional } from 'sequelize'; // Import Optional for defining creation attributes
 import { User } from './user'; // Correctly import User model
+import { v4 as uuidv4 } from 'uuid'; // Import uuid to generate UUIDs
 
 // Define Service attributes interface
 export interface ServiceAttributes {
@@ -33,7 +24,7 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 })
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.UUID) // Use UUID for the id field
+  @Column(DataType.UUID)
   declare id: string;
 
   @Column(DataType.STRING)
@@ -60,6 +51,13 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   @Column(DataType.DATE)
   declare updatedAt: Date; // Automatically set the updated date
 }
+
+// Ensure the UUID is generated if it's not provided when creating a new Service instance
+Service.beforeCreate((service) => {
+  if (!service.id) {
+    service.id = uuidv4(); // Generate UUID if not already set
+  }
+});
 
 // Export the model using a default export
 export default Service;
