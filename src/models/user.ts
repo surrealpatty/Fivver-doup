@@ -1,14 +1,14 @@
-import 'reflect-metadata'; // Required for decorators
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  BeforeCreate,
-  HasMany,
+import 'reflect-metadata';  // Required for decorators
+import { 
+  Table, 
+  Column, 
+  Model, 
+  PrimaryKey, 
+  DataType, 
+  CreatedAt, 
+  UpdatedAt, 
+  BeforeCreate, 
+  HasMany 
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,7 @@ export interface UserAttributes {
   email: string;
   username: string;
   password: string;
-  role: 'free' | 'paid'; // Restrict role to 'free' or 'paid'
+  role: string;
   tier: string;
   isVerified: boolean;
   passwordResetToken?: string | null;
@@ -48,10 +48,13 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   password!: string;
 
   @Column({
-    type: DataType.ENUM('free', 'paid'), // Restrict role to 'free' or 'paid'
+    type: DataType.STRING,
     defaultValue: 'free', // Default role is 'free'
+    validate: {
+      isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
+    },
   })
-  declare role: 'free' | 'paid';
+  declare role: string;
 
   @Column(DataType.STRING)
   tier!: string;
@@ -89,7 +92,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
    * Set the role of the user, ensuring it is valid.
    * @param role - The role to assign ('free' or 'paid').
    */
-  setRole(role: 'free' | 'paid'): void {
+  setRole(role: string): void {
     if (!['free', 'paid'].includes(role)) {
       throw new Error('Invalid role assignment');
     }
