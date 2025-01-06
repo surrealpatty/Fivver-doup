@@ -1,22 +1,17 @@
-import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types';  // Correct import from index.ts
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
 // Define the structure of the JWT payload (user)
-interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
+interface AuthRequest extends Request {
+  user?: UserPayload;  // Ensure the user field is typed as UserPayload or undefined
 }
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
-// Extend Request to include the user field with the appropriate type
-interface AuthRequest extends Request {
-  user?: UserPayload; // Ensure the user is of type UserPayload, not null or Record<string, any>
-}
-
+// Middleware to authenticate token
 export const authenticateToken = (
-  req: AuthRequest, // Use AuthRequest interface to extend the user field
+  req: AuthRequest,  // Use the extended AuthRequest interface
   res: Response,
   next: NextFunction
 ) => {
