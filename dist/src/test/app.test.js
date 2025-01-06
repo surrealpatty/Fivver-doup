@@ -9,8 +9,8 @@ const index_1 = require("../index"); // Import the app to be tested
 const supertest_1 = __importDefault(require("supertest")); // For making HTTP requests to your app
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For verifying JWT tokens
 const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
-const services_1 = __importDefault(require("../models/services")); // Correct import for the Service model
 const user_1 = require("../models/user"); // Correct import for the User model
+const services_1 = require("../models/services"); // Use named import if needed
 dotenv_1.default.config(); // Load environment variables from .env file
 let sequelizeInstance;
 beforeAll(async () => {
@@ -21,13 +21,13 @@ beforeAll(async () => {
         username: process.env.TEST_DB_USERNAME,
         password: process.env.TEST_DB_PASSWORD,
         database: process.env.TEST_DB_NAME,
-        models: [user_1.User, services_1.default], // Add models to Sequelize instance
+        models: [user_1.User, services_1.Service], // Add models to Sequelize instance
     });
     // Add models and define associations after models are loaded
-    sequelizeInstance.addModels([user_1.User, services_1.default]);
+    sequelizeInstance.addModels([user_1.User, services_1.Service]);
     // Define associations explicitly (belongsTo and hasMany)
-    services_1.default.belongsTo(user_1.User, { foreignKey: 'userId' });
-    user_1.User.hasMany(services_1.default, { foreignKey: 'userId' });
+    services_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' });
+    user_1.User.hasMany(services_1.Service, { foreignKey: 'userId' });
     // Check the database connection and sync with the DB
     await sequelizeInstance.authenticate(); // Ensure connection is successful
     await sequelizeInstance.sync({ force: true }); // Sync the database (force: true resets the database)

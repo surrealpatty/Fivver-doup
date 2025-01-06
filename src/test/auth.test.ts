@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import { User } from '../models/user';  // User model import
-import { Service } from '../models/services';  // Use named import if needed
+import { Service } from '../models/services';  // Use named import if necessary
 
 // Load environment variables from .env file
 dotenv.config();

@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';  // For verifying JWT tokens
 import dotenv from 'dotenv';  // To load environment variables
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import { User } from '../models/user';  // Correct import for the User model
-import { Service } from '../models/services';  // Use named import if needed
+import { Service } from '../models/services';  // Correct import for the Service model
 
 dotenv.config();  // Load environment variables from .env file
 
@@ -50,7 +50,7 @@ describe('Authentication Tests', () => {
     expect(userResponse.status).toBe(201);
 
     // Now, attempt to log in and get a token
-    const response = await request(app)
+    const loginResponse = await request(app)
       .post('/login')  // Adjust the login route based on your app's setup
       .send({
         email: 'test@example.com',
@@ -58,11 +58,11 @@ describe('Authentication Tests', () => {
       });
 
     // Ensure the login was successful and the token is returned
-    expect(response.status).toBe(200);
-    expect(response.body.token).toBeDefined();  // Ensure a token is returned
+    expect(loginResponse.status).toBe(200);
+    expect(loginResponse.body.token).toBeDefined();  // Ensure a token is returned
 
     // Decode the token to verify its contents
-    const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
     expect(decoded).toHaveProperty('id');  // Ensure the decoded token contains 'id'
     expect(decoded).toHaveProperty('email');  // Ensure the decoded token contains 'email'
   });
