@@ -1,10 +1,11 @@
 import { ServiceAttributes } from '../models/services';
 import User from '../models/user';
-import { sequelize } from '../config/database';  // Correct import
+import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from '../models/services'; // Correct named import
+
 describe('Service Model Tests', () => {
-  let user: User;  // Declare user at the top to use across tests
+  let user: User; // Declare user at the top to use across tests
 
   beforeAll(async () => {
     // Sync the database (ensure it's ready before tests)
@@ -18,7 +19,6 @@ describe('Service Model Tests', () => {
       role: 'free',
       tier: 'free',
       isVerified: true,
-      id: uuidv4(),
     });
   });
 
@@ -28,19 +28,23 @@ describe('Service Model Tests', () => {
   });
 
   it('should create a new service', async () => {
+    // Define service attributes with a valid UUID
     const serviceData: ServiceAttributes = {
-      id: uuidv4(),  // Generate a valid UUID string
+      id: uuidv4(), // Generate a valid UUID string
       title: 'Test Service',
       description: 'A test service',
       price: 10,
-      userId: user.id,  // user.id is a string (UUID)
+      userId: user.id, // user.id is a string (UUID)
     };
 
+    // Create the service using the defined attributes
     const service = await Service.create(serviceData);
 
-    // Ensure that the userId is correctly compared as a string
-    expect(service.userId).toBe(user.id);  // Compare UUID string to UUID string
+    // Assertions to validate the creation of the service
+    expect(service.id).toBeDefined(); // Ensure the ID is generated
+    expect(service.userId).toBe(user.id); // Compare UUID string to UUID string
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(10);
+    expect(service.description).toBe('A test service');
   });
 });
