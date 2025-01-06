@@ -1,8 +1,10 @@
+// src/types/index.ts
+
 // Define UserRole type for user roles
-export type UserRole = 'admin' | 'paid' | 'user';  // Roles that can be assigned to a user
+export type UserRole = 'admin' | 'paid' | 'user'; // Roles that can be assigned to a user
 
 // Define UserTier type for user tiers
-export type UserTier = 'free' | 'paid';  // User tiers indicating free or paid access
+export type UserTier = 'free' | 'paid'; // User tiers indicating free or paid access
 
 // Define the user payload structure
 export interface UserPayload {

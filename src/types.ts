@@ -1,15 +1,22 @@
-import { Request } from 'express';
+// Define the UserRole type for user roles (more specific than a string)
+export type UserRole = 'admin' | 'paid' | 'user'; // Specific roles
 
+// Define the UserTier type for user tiers
+export type UserTier = 'free' | 'paid';  // User tiers indicating free or paid access
+
+// UserPayload interface
 export interface UserPayload {
   id: string;          // Required: User ID
-  email?: string;       // Required: Email (string)
+  email?: string;      // Optional: Email (string)
   username?: string;   // Optional: Username (string or undefined)
-  role?: string;       // Optional: Role (string)
-  tier?: string;       // Optional: Subscription tier (string)
+  role?: UserRole;     // Optional: Role (restricts to 'admin', 'paid', or 'user')
+  tier?: UserTier;     // Optional: Subscription tier (restricts to 'free' or 'paid')
+  isVerified?: boolean; // Optional: Whether the user is verified
 }
 
+// CustomAuthRequest interface extends Request and adds the user field typed as UserPayload
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // Ensure user is always typed as UserPayload
+  user?: UserPayload; // Optional user field of type UserPayload
 }
 
 // Define a type guard to check if an object is a valid UserPayload
@@ -19,13 +26,9 @@ export function isUser(user: any): user is UserPayload {
     typeof user.id === 'string' &&
     typeof user.email === 'string' &&
     (user.username === undefined || typeof user.username === 'string') &&
-    (user.role === undefined || typeof user.role === 'string') &&
-    (user.tier === undefined || typeof user.tier === 'string')
+    (user.role === undefined || ['admin', 'paid', 'user'].includes(user.role)) && // Check if role is valid
+    (user.tier === undefined || ['free', 'paid'].includes(user.tier)) // Check if tier is valid
   );
 }
 
-// Define AuthRequest interface for additional typing needs
-// This is used when we are sure that the 'user' property is not undefined
-export interface AuthRequest extends Request {
-  user: UserPayload;  // 'user' is required here
-}
+// Define AuthRequest interface for additional typing needs when user is guar

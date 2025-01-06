@@ -1,3 +1,5 @@
+// src/api.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from './types'; // Ensure it points to the correct file
@@ -30,7 +32,9 @@ export const authenticateToken = (
     // Decode the JWT and cast it to the UserPayload type
     const decoded = jwt.verify(token, jwtSecret) as UserPayload;
 
+    // Explicitly type the req.user as UserPayload
     req.user = decoded;
+
     next();
   } catch (error) {
     console.error('Token authentication failed:', error);
