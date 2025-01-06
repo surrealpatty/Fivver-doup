@@ -1,4 +1,3 @@
-// src/config/database.ts
 import dotenv from 'dotenv';  // Load environment variables from .env file
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize with TypeScript support
 import { User } from '../models/user';  // Correct import for User model
@@ -48,9 +47,6 @@ const sequelize = new Sequelize({
       : undefined,
   },
 });
-
-// Add models explicitly for Sequelize to recognize them
-sequelize.addModels([User, Service, Order, Review]);
 
 // Export the Sequelize instance for use across the application
 export { sequelize };
