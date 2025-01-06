@@ -24,8 +24,11 @@ export interface ServiceCreationAttributes extends Optional<ServiceAttributes, '
 })
 export class Service extends Model<ServiceAttributes, ServiceCreationAttributes> {
   @PrimaryKey
-  @Column(DataType.UUID)
-  declare id: string;
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,  // Automatically generate UUID if not provided
+  })
+  declare id: string;  // Define the primary key (UUID) for the service
 
   @Column(DataType.STRING)
   title!: string;  // Define title as a string
