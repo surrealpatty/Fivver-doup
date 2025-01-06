@@ -8,6 +8,7 @@ describe('Service Model Tests', () => {
   beforeAll(async () => {
     // Sync the database before running the tests
     await sequelize.sync({ force: true });  // Use `force: true` to recreate tables
+
     // Set up a user before running tests
     user = await User.create({
       email: 'test@example.com',
@@ -29,12 +30,13 @@ describe('Service Model Tests', () => {
   });
 
   it('should create a new service', async () => {
-    // Define service attributes without setting the ID manually
+    // Define service attributes including 'role'
     const serviceData = {
       title: 'Test Service',
       description: 'A test service',
       price: 10,
       userId: user.id,  // Ensure user.id is valid and exists in the database
+      role: 'user',  // Add the role field here
     };
 
     // Create the service using the defined attributes
@@ -49,6 +51,7 @@ describe('Service Model Tests', () => {
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(10);
     expect(service.description).toBe('A test service');
+    expect(service.role).toBe('user');  // Ensure role is set correctly
   });
 
   it('should retrieve a service by ID', async () => {
@@ -58,25 +61,41 @@ describe('Service Model Tests', () => {
   });
 
   it('should update a service', async () => {
+    const service = await Service.create({
+      title: 'Test Service for Update',
+      description: 'Test description',
+      price: 100,
+      userId: user.id,
+      role: 'user',
+    });
+
     const [updatedRowsCount] = await Service.update(
       { price: 600 }, // New price
-      { where: { id: '123e4567-e89b-12d3-a456-426614174000' } }
+      { where: { id: service.id } }  // Use dynamic service ID
     );
 
     expect(updatedRowsCount).toBe(1);
 
-    const updatedService = await Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
+    const updatedService = await Service.findByPk(service.id);
     expect(updatedService?.price).toBe(600);
   });
 
   it('should delete a service', async () => {
+    const service = await Service.create({
+      title: 'Test Service for Deletion',
+      description: 'Test description',
+      price: 100,
+      userId: user.id,
+      role: 'user',
+    });
+
     const deletedRowsCount = await Service.destroy({
-      where: { id: '123e4567-e89b-12d3-a456-426614174000' },
+      where: { id: service.id },
     });
 
     expect(deletedRowsCount).toBe(1);
 
-    const deletedService = await Service.findByPk('123e4567-e89b-12d3-a456-426614174000');
+    const deletedService = await Service.findByPk(service.id);
     expect(deletedService).toBeNull();
   });
 });
