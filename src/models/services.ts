@@ -51,5 +51,5 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
   declare updatedAt: Date;  // Automatically set the updated date
 }
 
-// Export the model properly using default export
+// Export the model using default export
 export default Service;

@@ -1,94 +1,89 @@
-// src/test/app.test.ts
-
-import 'reflect-metadata';  // Ensure this is the first import in the test file
-import { Sequelize } from 'sequelize-typescript';  // Correct import for Sequelize
-import { app } from '../index';  // Correct import for the app
-import request from 'supertest';
-import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import dotenv from 'dotenv';  // Import dotenv to load environment variables
+import 'reflect-metadata';  // Ensure reflect-metadata is imported first for sequelize-typescript
+import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
+import { app } from '../index';  // Import the app to be tested
+import request from 'supertest';  // For making HTTP requests to your app
+import jwt from 'jsonwebtoken';  // For verifying JWT tokens
+import dotenv from 'dotenv';  // To load environment variables
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
-import Service from '../models/services';  // Ensure this import path is correct
-import { User } from '../models/user';  // Correct import for User model
+import Service from '../models/services';  // Correct import for the Service model
+import { User } from '../models/user';  // Correct import for the User model
 
-dotenv.config();
+dotenv.config();  // Load environment variables from .env file
 
-// Initialize Sequelize instance for testing
 let sequelizeInstance: Sequelize;
 
 beforeAll(async () => {
   // Initialize Sequelize with models explicitly
   sequelizeInstance = new Sequelize({
     dialect: 'mysql',
-    host: process.env.TEST_DB_HOST,  // Use environment variables for DB configuration
+    host: process.env.TEST_DB_HOST,
     username: process.env.TEST_DB_USERNAME as string,
     password: process.env.TEST_DB_PASSWORD as string,
     database: process.env.TEST_DB_NAME as string,
     models: [User, Service],  // Add models to Sequelize instance
   });
 
-  // Log models to check if they are correctly imported
-  console.log('User Model:', User);
-  console.log('Service Model:', Service);
-
-  // Add models to Sequelize instance and define associations
+  // Add models and define associations after models are loaded
   sequelizeInstance.addModels([User, Service]);
 
-  // Define the associations after models are loaded
+  // Define associations explicitly (belongsTo and hasMany)
   Service.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
+  User.hasMany(Service, { foreignKey: 'userId' });
 
-  // Check database connection
-  await sequelizeInstance.authenticate();
-
-  // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-  await sequelizeInstance.sync({ force: true });
+  // Check the database connection and sync with the DB
+  await sequelizeInstance.authenticate();  // Ensure connection is successful
+  await sequelizeInstance.sync({ force: true });  // Sync the database (force: true resets the database)
 });
 
 describe('Authentication Tests', () => {
   it('should authenticate and return a valid JWT token', async () => {
-    // First, create a test user (for the purpose of the test)
+    // First, create a test user (for registration)
     const userResponse = await request(app)
-      .post('/register')  // Assuming you have a route for user registration
+      .post('/register')  // Make sure the registration route is correct
       .send({
         email: 'test@example.com',
         password: 'password123',
         username: 'testuser',
       });
 
-    // Check if the user was successfully created
+    // Ensure the user was created successfully
     expect(userResponse.status).toBe(201);
 
-    // Example request to authenticate and get a token
-    const response = await request(app)  // Use supertest to make a request to the app
-      .post('/login')  // Adjust the route based on your actual login route
+    // Now, attempt to log in and get a token
+    const response = await request(app)
+      .post('/login')  // Adjust the login route based on your app's setup
       .send({
         email: 'test@example.com',
         password: 'password123',
       });
 
-    // Ensure the response includes a valid token
+    // Ensure the login was successful and the token is returned
     expect(response.status).toBe(200);
-    expect(response.body.token).toBeDefined();
+    expect(response.body.token).toBeDefined();  // Ensure a token is returned
 
-    // Decode the token to verify its contents (if JWT is used)
+    // Decode the token to verify its contents
     const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
-    expect(decoded).toHaveProperty('id');
-    expect(decoded).toHaveProperty('email');
+    expect(decoded).toHaveProperty('id');  // Ensure the decoded token contains 'id'
+    expect(decoded).toHaveProperty('email');  // Ensure the decoded token contains 'email'
   });
 
   it('should reject invalid credentials', async () => {
+    // Attempt to login with incorrect credentials
     const response = await request(app)
-      .post('/login')  // Replace with your actual login route
-      .send({ email: 'invalid@example.com', password: 'wrongpassword' });
+      .post('/login')  // Ensure this route matches your app's login endpoint
+      .send({
+        email: 'invalid@example.com',
+        password: 'wrongpassword',
+      });
 
-    // Assert the response status and message
+    // Ensure the response is a 401 Unauthorized with the correct error message
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe('Invalid credentials.');
+    expect(response.body.message).toBe('Invalid credentials.');  // Adjust message if necessary
   });
 });
 
 // Clean up after tests
 afterAll(async () => {
-  // Close the Sequelize connection after tests
-  await sequelizeInstance.close();  // Close the test database connection
+  // Close the Sequelize connection after all tests are completed
+  await sequelizeInstance.close();
 });
