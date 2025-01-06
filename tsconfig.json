@@ -37,6 +37,7 @@
   "include": [
     "src/**/*.ts",                                  // Include all TypeScript files in the src folder
     "src/test/**/*.ts",                             // Include all TypeScript files in the tests folder
+    "src/types/**/*.d.ts",                          // Ensure custom type declarations are included
     "index.ts"                                      // Explicitly include index.ts (outside src)
   ],
   "exclude": [

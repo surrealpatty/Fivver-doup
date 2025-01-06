@@ -1,7 +1,8 @@
 // src/types/express.d.ts
+
 import { Request } from 'express';
 import { Multer } from 'multer';  // Importing Multer for file handling
-import { UserPayload } from './index';  // Ensure UserPayload interface is correctly imported
+import { UserPayload } from './index';  // Import your UserPayload interface from index.ts
 
 declare global {
   namespace Express {
