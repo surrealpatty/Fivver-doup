@@ -1,4 +1,4 @@
-import 'reflect-metadata';  // Required for decorators
+import 'reflect-metadata'; // Required for decorators
 import { 
   Table, 
   Column, 
