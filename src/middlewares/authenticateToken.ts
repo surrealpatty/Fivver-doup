@@ -1,8 +1,6 @@
-// src/middlewares/authenticateToken.ts
-
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Ensure correct import
+import { verifyToken } from '../utils/jwt';  // Import the verifyToken function from the utils
+import { UserPayload } from '../types';  // Import UserPayload type from the appropriate file
 
 // Middleware to authenticate token and attach user data to the request
 export const authenticateToken = (
@@ -10,27 +8,26 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ): Response<any, Record<string, any>> | void => {
+  // Get the token from the Authorization header
   const authHeader = req.headers['authorization'];
-  const token = authHeader?.split(' ')[1]; // Extract the token from the "Authorization" header
+  const token = authHeader?.split(' ')[1]; // Extract the token from "Bearer <token>"
 
   if (!token) {
+    // If token is missing, send an error response
     return res.status(401).json({ message: 'Access token is missing.' });
   }
 
-  try {
-    // Verify the token
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET_KEY || 'your-secret-key'
-    ) as UserPayload;
+  // Verify the token using the utility function
+  const decoded = verifyToken(token);
 
-    // Attach the decoded user payload to the request
-    req.user = decoded;
-
-    // Proceed to the next middleware or route handler
-    next();
-  } catch (error) {
-    console.error('Token verification error:', error);
+  if (!decoded) {
+    // If token verification fails, send an error response
     return res.status(403).json({ message: 'Invalid or expired token.' });
   }
+
+  // Attach the decoded user payload to the request object
+  req.user = decoded;
+
+  // Proceed to the next middleware or route handler
+  next();
 };
