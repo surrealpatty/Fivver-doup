@@ -2,7 +2,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import  User  from '../models/user';
+import { User } from '../models/user';
 import { Op } from 'sequelize';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
