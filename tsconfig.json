@@ -8,9 +8,9 @@
     "esModuleInterop": true,                        // Ensure compatibility between CommonJS and ES Modules
     "skipLibCheck": true,                           // Skip checking type definitions of libraries for faster compilation
     "forceConsistentCasingInFileNames": true,       // Enforce consistent casing of file names
-    "baseUrl": "./",                                // Base directory for relative imports
+    "baseUrl": "./src",                             // Set baseUrl to src folder
     "outDir": "./dist",                             // Output directory for compiled files
-    "rootDir": "./",                                // Set rootDir to the root folder (your TypeScript files)
+    "rootDir": "./src",                             // Set rootDir to the src folder
     "noEmitOnError": true,                          // Don't emit output if there are errors
     "resolveJsonModule": true,                      // Allow importing JSON modules
     "experimentalDecorators": true,                 // Enable decorators (needed for TypeORM, Sequelize, etc.)
@@ -32,7 +32,8 @@
     ],
     "paths": {
       "src/*": ["./src/*"],                         // Resolve paths inside src/ directly
-      "dist/*": ["./dist/*"]                         // Resolve paths inside dist/ after compilation
+      "dist/*": ["./dist/*"],                        // Resolve paths inside dist/ after compilation
+      "types/*": ["./src/types/*"]                   // Resolve paths to types/ folder correctly
     }
   },
   "include": [
