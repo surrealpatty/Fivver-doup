@@ -75,6 +75,9 @@ __decorate([
         type: sequelize_typescript_1.DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
         allowNull: false, // Ensure tier is not nullable
         defaultValue: 'free', // Default to 'free' tier
+        validate: {
+            isIn: [['free', 'paid']], // Ensures only 'free' or 'paid' are valid values
+        },
     }),
     __metadata("design:type", String)
 ], User.prototype, "tier", void 0);
