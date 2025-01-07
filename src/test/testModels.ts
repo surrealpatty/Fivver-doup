@@ -1,6 +1,6 @@
 import { User } from '../models/user'; // Correct import for User model
 import { sequelize } from '../config/database'; // Correct import for sequelize
-import { UserRole, UserTier } from '../types/UserRoles'; // Correct import path for enums
+import { UserRole, UserTier } from '../types/UserRoles'; // Correct import for enums
 
 describe('User Model', () => {
   beforeAll(async () => {
@@ -50,15 +50,14 @@ describe('User Model', () => {
     }
   });
 
-  it('should handle missing tier gracefully', async () => {
+  it('should handle missing tier gracefully and use default', async () => {
     const userDataWithoutTier = {
       email: 'notier@example.com',
       username: 'notieruser',
       password: 'testpassword',
       role: UserRole.User, // Role is valid
       isVerified: true,
-      // Explicitly set tier to undefined
-      tier: undefined, 
+      // Tier is missing and will default to 'free'
     };
 
     const user = await User.create(userDataWithoutTier);
@@ -66,5 +65,31 @@ describe('User Model', () => {
     // Default tier should be applied (if defined in the model)
     expect(user.id).toBeDefined();
     expect(user.tier).toBe(UserTier.Free); // Ensure the default tier is correctly set
+  });
+
+  it('should create a user with the correct tier when tier is not passed', async () => {
+    const user = await User.create({
+      email: 'defaulttier@example.com',
+      username: 'defaulttieruser',
+      password: 'testpassword',
+      role: UserRole.User, // Role is valid
+      isVerified: true,
+      // No tier is passed, so it should default to 'free'
+    });
+
+    expect(user.tier).toBe(UserTier.Free); // The default tier should be 'free'
+  });
+
+  it('should create a user with a specified tier', async () => {
+    const user = await User.create({
+      email: 'paidtier@example.com',
+      username: 'paidtieruser',
+      password: 'testpassword',
+      role: UserRole.User, // Role is valid
+      tier: UserTier.Paid, // Explicitly passing tier as 'paid'
+      isVerified: true,
+    });
+
+    expect(user.tier).toBe(UserTier.Paid); // The specified tier value is 'paid'
   });
 });

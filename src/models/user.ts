@@ -30,8 +30,8 @@ export interface UserAttributes {
   updatedAt?: Date;
 }
 
-// Define the UserCreationAttributes interface for creation attributes (excluding `id` as it is auto-generated)
-// Mark `tier` as optional here
+// Define the UserCreationAttributes interface for creation attributes (excluding id as it is auto-generated)
+// Mark tier as optional here
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'tier'> {}
 
 @Table({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
@@ -62,6 +62,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     type: DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
     allowNull: false, // Ensure tier is not nullable
     defaultValue: 'free', // Default to 'free' tier
+    validate: {
+      isIn: [['free', 'paid']], // Ensures only 'free' or 'paid' are valid values
+    },
   })
   tier!: UserTier;
 
