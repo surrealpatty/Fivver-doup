@@ -35,5 +35,16 @@ export class ServiceController {
     }
   };
 
-  // Other methods...
+  // Fetch all services
+  static getServices = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const services = await Service.findAll();  // Fetch all services
+      return res.json(services);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      return res.status(500).json({ message: 'Failed to fetch services', error });
+    }
+  };
+
+  // Other methods (if any)...
 }
