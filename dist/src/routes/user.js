@@ -1,82 +1,121 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user"); // Import User model and UserCreationAttributes
-const router = (0, express_1.Router)();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, // Export router to be used in the main app
+"default", {
+    enumerable: true,
+    get: function() {
+        return _default;
+    }
+});
+const _express = require("express");
+const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
+const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+const _user = require("../models/user");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const router = (0, _express.Router)();
 // User Registration (Signup) Route
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res)=>{
     const { email, username, password } = req.body;
     // Validate input
     if (!email || !username || !password) {
-        return res.status(400).json({ message: 'Email, username, and password are required.' });
+        return res.status(400).json({
+            message: 'Email, username, and password are required.'
+        });
     }
     try {
         // Check if user already exists
-        const existingUser = await user_1.User.findOne({
-            where: { email },
+        const existingUser = await _user.User.findOne({
+            where: {
+                email
+            }
         });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email is already in use.' });
+            return res.status(400).json({
+                message: 'Email is already in use.'
+            });
         }
         // Hash the password using bcrypt
-        const hashedPassword = await bcryptjs_1.default.hash(password, 10); // Salt rounds = 10
+        const hashedPassword = await _bcryptjs.default.hash(password, 10); // Salt rounds = 10
         // Create the new user in the database (id is handled automatically)
         const newUser = {
             email,
             username,
             password: hashedPassword,
-            role: 'user', // Default role (can be modified)
-            tier: 'free', // Default tier should be "free"
-            isVerified: false, // Assuming user isn't verified initially
+            role: 'user',
+            tier: 'free',
+            isVerified: false
         };
-        const user = await user_1.User.create(newUser); // Pass newUser as the object to create
+        const user = await _user.User.create(newUser); // Pass newUser as the object to create
         // Generate JWT token
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
-        { expiresIn: '1h' } // Expiry time of the token
+        const token = _jsonwebtoken.default.sign({
+            userId: user.id,
+            email: user.email,
+            username: user.username
+        }, process.env.JWT_SECRET || 'your_jwt_secret', {
+            expiresIn: '1h'
+        } // Expiry time of the token
         );
         // Send back response with token
         return res.status(201).json({
             message: 'User registered successfully',
-            token, // Send the generated token
+            token
         });
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error during user registration:', error);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({
+            message: 'Server error'
+        });
     }
 });
 // User Login Route (Optional, just as an example)
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res)=>{
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required.' });
-    }
-    try {
-        const user = await user_1.User.findOne({ where: { email } });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid email or password.' });
-        }
-        // Compare the provided password with the stored hashed password
-        const isPasswordValid = await bcryptjs_1.default.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Invalid email or password.' });
-        }
-        // Generate JWT token
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-        return res.status(200).json({
-            message: 'Login successful',
-            token, // Send the generated token
+        return res.status(400).json({
+            message: 'Email and password are required.'
         });
     }
-    catch (error) {
+    try {
+        const user = await _user.User.findOne({
+            where: {
+                email
+            }
+        });
+        if (!user) {
+            return res.status(400).json({
+                message: 'Invalid email or password.'
+            });
+        }
+        // Compare the provided password with the stored hashed password
+        const isPasswordValid = await _bcryptjs.default.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                message: 'Invalid email or password.'
+            });
+        }
+        // Generate JWT token
+        const token = _jsonwebtoken.default.sign({
+            userId: user.id,
+            email: user.email,
+            username: user.username
+        }, process.env.JWT_SECRET || 'your_jwt_secret', {
+            expiresIn: '1h'
+        });
+        return res.status(200).json({
+            message: 'Login successful',
+            token
+        });
+    } catch (error) {
         console.error('Error during user login:', error);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({
+            message: 'Server error'
+        });
     }
 });
-// Export router to be used in the main app
-exports.default = router;
+const _default = router;

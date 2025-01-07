@@ -1,71 +1,71 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Ensure correct import for your app
-describe('Role-based Access Tests', () => {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
+const _index = require("../index");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+describe('Role-based Access Tests', ()=>{
     let testUser;
-    beforeAll(async () => {
-        // Here, you can create a user in the database or mock the user data.
-        const response = await (0, supertest_1.default)(index_1.app)
-            .post('/register') // Replace with your registration route
-            .send({
+    beforeAll(async ()=>{
+        // Register a new user with the role 'free'
+        const response = await (0, _supertest.default)(_index.app).post('/register') // Replace with your actual registration route
+        .send({
             username: 'testuser',
             email: 'testuser@example.com',
             password: 'password',
-            role: 'free', // Set role to 'free' for the test
+            role: 'free'
         });
-        // Store the id and token correctly from response.body
+        // Extract the user id and token from the response
         testUser = {
             id: response.body.id,
-            token: response.body.token,
+            token: response.body.token
         };
         // Ensure the response contains token and id
+        expect(response.statusCode).toBe(201); // Expect successful user creation
         expect(testUser).toHaveProperty('id');
         expect(testUser).toHaveProperty('token');
     });
-    afterAll(async () => {
-        // Clean up the database or reset state if necessary.
+    afterAll(async ()=>{
+        // Clean up the database by deleting the test user
         if (testUser && testUser.id) {
-            await (0, supertest_1.default)(index_1.app).delete(`/users/${testUser.id}`); // Example cleanup, adjust as needed
+            await (0, _supertest.default)(_index.app).delete(`/users/${testUser.id}`) // Replace with your actual user deletion route
+            .set('Authorization', `Bearer ${testUser.token}`); // Authenticate the request
         }
     });
-    it('should run the test file successfully', () => {
+    it('should confirm the test file is running successfully', ()=>{
         console.log('Test file is running successfully!');
-        expect(true).toBe(true); // Simple test to verify the test file is running
+        expect(true).toBe(true); // Basic sanity check
     });
-    // Test to check if the root endpoint is responding correctly
-    it('should respond with a message from the root endpoint', async () => {
-        const response = await (0, supertest_1.default)(index_1.app).get('/'); // Send a GET request to the root endpoint
-        expect(response.statusCode).toBe(200); // Expect a status code of 200 (OK)
-        expect(response.text).toBe('Fiverr backend is running'); // Expect the correct response message
+    it('should respond with a message from the root endpoint', async ()=>{
+        const response = await (0, _supertest.default)(_index.app).get('/'); // Test the root endpoint
+        expect(response.statusCode).toBe(200); // Expect success
+        expect(response.text).toBe('Fiverr backend is running'); // Confirm the correct message
     });
-    // Test to check role-based access (for example, 'free' role user trying to access premium service)
-    it('should deny access to premium service for free users', async () => {
-        const response = await (0, supertest_1.default)(index_1.app)
-            .get('/premium-service') // Assuming your endpoint for premium access
-            .set('Authorization', `Bearer ${testUser.token}`); // Add the token for the created test user
-        expect(response.statusCode).toBe(403); // Expect a 403 Forbidden status
+    it('should deny access to premium service for free users', async ()=>{
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Replace with your actual premium service route
+        .set('Authorization', `Bearer ${testUser.token}`); // Authenticate with the test user token
+        expect(response.statusCode).toBe(403); // Expect forbidden status
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
-    // Test for allowed access with 'paid' role user
-    it('should allow access to premium service for paid users', async () => {
-        // Modify the user role to 'paid' and test again
-        const paidUserResponse = await (0, supertest_1.default)(index_1.app)
-            .post('/update-role') // Assuming you have an endpoint for updating role
-            .send({
+    it('should allow access to premium service for paid users', async ()=>{
+        // Update the user role to 'paid'
+        const paidUserResponse = await (0, _supertest.default)(_index.app).post('/update-role') // Replace with your actual role update route
+        .send({
             userId: testUser.id,
-            role: 'paid',
-        });
-        // Ensure the response contains the updated token
+            role: 'paid'
+        }).set('Authorization', `Bearer ${testUser.token}`); // Authenticate the role update request
+        // Extract the updated token for the paid user
         const paidUserToken = paidUserResponse.body.token;
+        expect(paidUserResponse.statusCode).toBe(200); // Expect role update success
         expect(paidUserResponse.body).toHaveProperty('token');
-        const response = await (0, supertest_1.default)(index_1.app)
-            .get('/premium-service') // Assuming your endpoint for premium access
-            .set('Authorization', `Bearer ${paidUserToken}`); // Use updated role user token
-        expect(response.statusCode).toBe(200); // Expect a successful access
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service') // Replace with your actual premium service route
+        .set('Authorization', `Bearer ${paidUserToken}`); // Authenticate with the updated token
+        expect(response.statusCode).toBe(200); // Expect successful access
         expect(response.body.message).toBe('Premium service access granted.');
     });
 });

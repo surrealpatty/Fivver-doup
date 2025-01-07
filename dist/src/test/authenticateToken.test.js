@@ -1,35 +1,43 @@
-"use strict";
 // src/test/authenticateToken.test.ts
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const supertest_1 = __importDefault(require("supertest"));
-const index_1 = require("../index"); // Import your app
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken to mock its behavior
-jest.mock('jsonwebtoken', () => ({
-    verify: jest.fn(() => ({ userId: 'some-user-id' })), // Mock verify to return a fake userId
-}));
-describe('Authentication Middleware Tests', () => {
-    it('should allow access with a valid token', async () => {
-        // Mock a valid JWT token
-        const validToken = jsonwebtoken_1.default.sign({ userId: 'some-user-id' }, process.env.JWT_SECRET || 'secret');
-        const response = await (0, supertest_1.default)(index_1.app)
-            .get('/api/protected') // Your protected route
-            .set('Authorization', `Bearer ${validToken}`); // Pass the token in the Authorization header
-        expect(response.status).toBe(200); // Expect the response to be 200 for valid token
-        expect(jsonwebtoken_1.default.verify).toHaveBeenCalledTimes(1); // Ensure the jwt.verify was called
-        expect(jsonwebtoken_1.default.verify).toHaveBeenCalledWith(validToken, process.env.JWT_SECRET || 'secret'); // Check token validation
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
+const _index = require("../index");
+const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Mock jsonwebtoken methods
+jest.mock('jsonwebtoken', ()=>({
+        sign: jest.fn(()=>'mocked-token'),
+        verify: jest.fn(()=>({
+                userId: 'some-user-id'
+            }))
+    }));
+describe('Authentication Middleware Tests', ()=>{
+    const secret = process.env.JWT_SECRET || 'secret';
+    it('should allow access with a valid token', async ()=>{
+        const validToken = _jsonwebtoken.default.sign({
+            userId: 'some-user-id'
+        }, secret); // Use the mocked sign function
+        const response = await (0, _supertest.default)(_index.app).get('/api/protected') // Replace with your actual protected route
+        .set('Authorization', `Bearer ${validToken}`); // Add the mocked token in the Authorization header
+        expect(response.status).toBe(200); // Expect 200 status for valid token
+        expect(_jsonwebtoken.default.verify).toHaveBeenCalledTimes(1); // Ensure jwt.verify was called
+        expect(_jsonwebtoken.default.verify).toHaveBeenCalledWith(validToken, secret); // Ensure jwt.verify was called with the correct arguments
     });
-    it('should deny access with an invalid token', async () => {
-        // Mock an invalid JWT token scenario
-        jest.mock('jsonwebtoken', () => ({
-            verify: jest.fn(() => { throw new Error('Invalid token'); }),
-        }));
-        const response = await (0, supertest_1.default)(index_1.app)
-            .get('/api/protected') // Your protected route
-            .set('Authorization', 'Bearer invalid-token');
+    it('should deny access with an invalid token', async ()=>{
+        // Update the mock for the verify method to throw an error
+        _jsonwebtoken.default.verify.mockImplementationOnce(()=>{
+            throw new Error('Invalid token');
+        });
+        const response = await (0, _supertest.default)(_index.app).get('/api/protected') // Replace with your actual protected route
+        .set('Authorization', 'Bearer invalid-token'); // Use an invalid token
         expect(response.status).toBe(401); // Expect 401 Unauthorized status
-        expect(response.body.message).toBe('Invalid or expired token'); // Assuming your middleware sends this message
+        expect(response.body.message).toBe('Invalid or expired token'); // Check for the correct error message
     });
 });

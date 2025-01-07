@@ -1,94 +1,106 @@
 "use strict";
-// src/test/server.test.ts
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("../index"); // Ensure your app is properly imported
-const database_1 = require("../config/database"); // Sequelize connection
-const services_1 = require("../models/services");
-const user_1 = require("../models/user");
-let server; // Explicitly define the type of the server
-let user;
-beforeAll(async () => {
-    // Sync the database before running tests
-    await database_1.sequelize.sync({ force: true });
-    // Setup the server
-    server = index_1.app.listen(3000); // Start the server on port 3000
-    // Create a user before running tests
-    user = await user_1.User.create({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'testpassword', // In a real scenario, this should be hashed
-        role: 'user',
-        tier: 'paid', // Use 'paid' instead of 'Tier 2'
-        isVerified: true,
-    });
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
-afterAll(async () => {
-    // Ensure the server is closed after all tests
-    server.close();
-    // Close the Sequelize connection after all tests
-    await database_1.sequelize.close();
-});
-describe('Service API', () => {
-    it('should define the Service model', () => {
-        expect(services_1.Service).toBeDefined(); // Ensure Service model is defined
+const _services = require("../models/services");
+const _user = require("../models/user");
+const _database = require("../config/database");
+describe('Service Model', ()=>{
+    let user;
+    beforeAll(async ()=>{
+        // Sync the database before running tests
+        await _database.sequelize.sync({
+            force: true
+        });
+        // Create a user before running tests
+        user = await _user.User.create({
+            email: 'test@example.com',
+            username: 'testuser',
+            password: 'testpassword',
+            role: 'user',
+            tier: 'paid',
+            isVerified: true
+        });
     });
-    it('should create a new service and return a generated ID', async () => {
+    afterAll(async ()=>{
+        // Close the Sequelize connection after all tests
+        await _database.sequelize.close();
+    });
+    it('should define the Service model', ()=>{
+        expect(_services.Service).toBeDefined(); // Sanity check: Ensure the Service model is defined
+    });
+    it('should create a new service and return a generated ID', async ()=>{
         const serviceData = {
             title: 'Test Service',
             description: 'A test service',
             price: 10,
-            userId: user.id, // Associate service with user
-            role: 'user', // Valid role
+            userId: user.id,
+            role: 'user'
         };
         // Create a new service
-        const service = await services_1.Service.create(serviceData);
-        console.log('Created service ID:', service.id);
-        // Assertions
-        expect(service.id).toBeDefined();
-        expect(service.userId).toBe(user.id);
-        expect(service.title).toBe('Test Service');
-        expect(service.price).toBe(10);
-        expect(service.description).toBe('A test service');
-        expect(service.role).toBe('user');
+        const service = await _services.Service.create(serviceData);
+        // Assertions to validate that the service has been created successfully
+        expect(service.id).toBeDefined(); // Ensure the ID is generated and not undefined
+        expect(service.userId).toBe(user.id); // Ensure userId is correctly set
+        expect(service.title).toBe('Test Service'); // Ensure title is set correctly
+        expect(service.price).toBe(10); // Ensure price is set correctly
+        expect(service.description).toBe('A test service'); // Ensure description is correct
+        expect(service.role).toBe('user'); // Ensure role is set correctly
     });
-    it('should retrieve a service by ID', async () => {
-        const service = await services_1.Service.create({
+    it('should retrieve a service by ID', async ()=>{
+        // Create a service to retrieve
+        const service = await _services.Service.create({
             title: 'Test Service to Retrieve',
             description: 'A service for retrieving test',
             price: 20,
             userId: user.id,
-            role: 'user',
+            role: 'user'
         });
-        const retrievedService = await services_1.Service.findByPk(service.id);
-        expect(retrievedService).not.toBeNull();
-        expect(retrievedService?.title).toBe('Test Service to Retrieve');
+        const retrievedService = await _services.Service.findByPk(service.id); // Retrieve using the created ID
+        expect(retrievedService).not.toBeNull(); // Ensure the service exists
+        expect(retrievedService?.title).toBe('Test Service to Retrieve'); // Ensure title matches
     });
-    it('should update a service', async () => {
-        const service = await services_1.Service.create({
+    it('should update a service', async ()=>{
+        // Create a service to update
+        const service = await _services.Service.create({
             title: 'Service to Update',
             description: 'A service that will be updated',
             price: 30,
             userId: user.id,
-            role: 'user',
+            role: 'user'
         });
-        const [updatedRowsCount] = await services_1.Service.update({ price: 600 }, { where: { id: service.id } });
-        expect(updatedRowsCount).toBe(1);
-        const updatedService = await services_1.Service.findByPk(service.id);
-        expect(updatedService?.price).toBe(600);
+        // Update the service price
+        const [updatedRowsCount] = await _services.Service.update({
+            price: 600
+        }, {
+            where: {
+                id: service.id
+            }
+        } // Use the created service ID
+        );
+        expect(updatedRowsCount).toBe(1); // Ensure one row was updated
+        // Retrieve the updated service
+        const updatedService = await _services.Service.findByPk(service.id);
+        expect(updatedService?.price).toBe(600); // Ensure the price was updated correctly
     });
-    it('should delete a service', async () => {
-        const service = await services_1.Service.create({
+    it('should delete a service', async ()=>{
+        // Create a service to delete
+        const service = await _services.Service.create({
             title: 'Service to Delete',
             description: 'A service that will be deleted',
             price: 40,
             userId: user.id,
-            role: 'user',
+            role: 'user'
         });
-        const deletedRowsCount = await services_1.Service.destroy({
-            where: { id: service.id },
+        // Delete the service
+        const deletedRowsCount = await _services.Service.destroy({
+            where: {
+                id: service.id
+            }
         });
-        expect(deletedRowsCount).toBe(1);
-        const deletedService = await services_1.Service.findByPk(service.id);
-        expect(deletedService).toBeNull();
+        expect(deletedRowsCount).toBe(1); // Ensure one row was deleted
+        // Attempt to retrieve the deleted service
+        const deletedService = await _services.Service.findByPk(service.id);
+        expect(deletedService).toBeNull(); // Ensure the service is no longer found
     });
 });

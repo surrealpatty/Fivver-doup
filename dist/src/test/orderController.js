@@ -1,69 +1,77 @@
+// src/test/orderController.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const userController_1 = require("../controllers/userController"); // Example import of the registerUser controller
-const user_1 = require("../models/user"); // If you need to mock the User model
-// Mock User with proper type for role
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _userController = require("../controllers/userController");
+const _user = require("../models/user");
+// Mock user payload for testing
 const mockUser = {
     id: '123',
     email: 'test@example.com',
     username: 'testuser',
-    role: 'user', // Ensure this matches the UserRole type
+    role: 'user',
     tier: 'free',
-    isVerified: false,
+    isVerified: false
 };
-// Example test case
-describe('User Registration Controller', () => {
-    it('should register a user successfully', async () => {
-        // Mock the User.create method to return the mock user
-        jest.spyOn(user_1.User, 'create').mockResolvedValue(mockUser);
-        // Define the body type for the mock Request object
+describe('User Registration Controller', ()=>{
+    it('should register a user successfully', async ()=>{
+        // Mock the User.create method
+        jest.spyOn(_user.User, 'create').mockResolvedValue({
+            ...mockUser,
+            createdAt: new Date().toISOString()
+        });
+        // Mock request and response objects
         const req = {
             body: {
                 email: 'test@example.com',
                 username: 'testuser',
-                password: 'password123',
-            },
-        }; // Mocking the Request type correctly
+                password: 'password123'
+            }
+        };
         const res = {
             status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
+            json: jest.fn()
         };
-        // Call the registerUser function
-        await (0, userController_1.registerUser)(req, res);
-        // Assert that the correct status and response are returned
-        expect(res.status).toHaveBeenCalledWith(201);
+        // Call the controller
+        await (0, _userController.registerUser)(req, res);
+        // Assert the response
+        expect(res.status).toHaveBeenCalledWith(201); // Expect 201 Created
         expect(res.json).toHaveBeenCalledWith({
             message: 'User registered successfully',
             user: {
                 id: '123',
                 email: 'test@example.com',
                 username: 'testuser',
-                role: 'user', // Ensure this is correct
+                role: 'user',
                 tier: 'free',
                 isVerified: false,
-                createdAt: expect.any(String), // Assuming createdAt is returned as a string
+                createdAt: expect.any(String)
             },
-            token: expect.any(String), // Assuming a token is generated
+            token: expect.any(String)
         });
     });
-    it('should handle user registration failure due to existing email', async () => {
-        // Mock the User.findOne method to simulate existing user
-        jest.spyOn(user_1.User, 'findOne').mockResolvedValue(mockUser);
+    it('should handle user registration failure due to existing email', async ()=>{
+        // Mock User.findOne to simulate an existing user
+        jest.spyOn(_user.User, 'findOne').mockResolvedValue(mockUser);
+        // Mock request and response objects
         const req = {
             body: {
                 email: 'test@example.com',
                 username: 'testuser',
-                password: 'password123',
-            },
-        }; // Mocking the Request type correctly
+                password: 'password123'
+            }
+        };
         const res = {
             status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
+            json: jest.fn()
         };
-        // Call the registerUser function
-        await (0, userController_1.registerUser)(req, res);
-        // Assert that the correct status and error message are returned
-        expect(res.status).toHaveBeenCalledWith(409);
-        expect(res.json).toHaveBeenCalledWith({ message: 'User already exists with this email.' });
+        // Call the controller
+        await (0, _userController.registerUser)(req, res);
+        // Assert the response
+        expect(res.status).toHaveBeenCalledWith(409); // Expect 409 Conflict
+        expect(res.json).toHaveBeenCalledWith({
+            message: 'User already exists with this email.'
+        });
     });
 });
