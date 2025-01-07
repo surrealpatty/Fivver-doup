@@ -1,12 +1,16 @@
 import 'reflect-metadata';  // Ensure reflect-metadata is imported first for sequelize-typescript
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
-import { app } from '../index';  // Import the app to be tested
 import request from 'supertest';  // For making HTTP requests to your app
 import jwt from 'jsonwebtoken';  // For verifying JWT tokens
 import dotenv from 'dotenv';  // To load environment variables
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
 import { User } from '../models/user';  // Correct import for the User model
 import { Service } from '../models/services';  // Correct import for the Service model
+
+// Import the app based on your export in src/index.ts
+import app from '../index';  // If app is exported as default
+// Or, if app is a named export
+// import { app } from '../index';
 
 dotenv.config();  // Load environment variables from .env file
 
@@ -62,7 +66,10 @@ describe('Authentication Tests', () => {
     expect(loginResponse.body.token).toBeDefined();  // Ensure a token is returned
 
     // Decode the token to verify its contents
-    const decoded = jwt.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(
+      loginResponse.body.token,
+      process.env.JWT_SECRET || 'your-secret-key'
+    );
     expect(decoded).toHaveProperty('id');  // Ensure the decoded token contains 'id'
     expect(decoded).toHaveProperty('email');  // Ensure the decoded token contains 'email'
   });

@@ -1,15 +1,36 @@
-// Define the user role types
-export type UserRole = 'admin' | 'paid' | 'user'; // User roles, adjust as needed
+import express from 'express'; // Import Express
+import dotenv from 'dotenv'; // Load environment variables
+import cors from 'cors'; // Enable CORS
+import bodyParser from 'body-parser'; // Parse request bodies
 
-// Define the user tier types indicating free or paid access
-export type UserTier = 'free' | 'paid'; // User tiers indicating free or paid access
+// Import your routes (adjust the paths based on your project structure)
+import userRoutes from './routes/user';
+import serviceRoutes from './routes/service';
 
-// Define the user payload structure
-export interface UserPayload {
-  id: string;           // Unique identifier for the user
-  email?: string;       // User's email (optional)
-  username?: string;    // User's username (optional)
-  tier: UserTier;       // User's tier (free or paid) [Required, no longer optional]
-  role?: UserRole;      // User's role (optional, admin/paid/user)
-  isVerified?: boolean; // Whether the user's email is verified (optional)
+// Load environment variables from .env file
+dotenv.config();
+
+// Create an Express application
+export const app = express(); // Export the app for testing and production use
+
+// Middleware
+app.use(cors()); // Enable CORS
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+// Define your routes
+app.use('/api/users', userRoutes); // User-related routes
+app.use('/api/services', serviceRoutes); // Service-related routes
+
+// Default route for health check
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
+
+// Start the server if not in a test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
 }
