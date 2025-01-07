@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/user';  // Correct way to import default exports
+import { User } from '../models/user';  // Correct way to import default exports
 import { v4 as uuidv4 } from 'uuid';  // UUID for generating unique user ID
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import User, { UserRole } from '../models/user'; // Importing User, UserRole, and UserTier
+import { User,  UserRole } from '../models/user'; // Importing User, UserRole, and UserTier
 import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
 import { UserTier } from '../models/user'; // Ensure this is correct
 

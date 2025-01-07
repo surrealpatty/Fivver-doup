@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/user';
+import { User } from '../models/user';
 import { Op } from 'sequelize'; // Import Op for Sequelize operators
 import { sendResetEmail } from '../services/emailService'; // Assume you have a service to send emails
 

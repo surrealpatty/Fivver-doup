@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UserPayload } from '../types'; // Assuming UserPayload is defined in your types
 import { registerUser } from '../controllers/userController'; // Example import of the registerUser controller
 import { generateToken } from '../utils/jwt'; // If needed for your tests
-import User from '../models/user'; // If you need to mock the User model
+import { User } from '../models/user'; // If you need to mock the User model
 
 // Mock User with proper type for role
 const mockUser: UserPayload = {

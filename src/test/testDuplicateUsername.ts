@@ -1,4 +1,4 @@
-import  User  from '../models/user'; // Adjust the path to your User model
+import { User } from '../models/user'; // Adjust the path to your User model
 
 const testDuplicateUsername = async () => {
   try {

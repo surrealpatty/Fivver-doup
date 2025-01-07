@@ -4,7 +4,7 @@ import { sequelize } from '../config/database';  // Correct import for sequelize
 import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import User from '../models/user';  // Import User model to ensure it's added to Sequelize
+import { User } from '../models/user';  // Import User model to ensure it's added to Sequelize
 import { Service } from '../models/services'; // Correct named import
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 

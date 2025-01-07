@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import  User  from '../models/user'; // Import the User model
+import { User } from '../models/user'; // Import the User model
 
 export const resetPassword = async (req: Request, res: Response): Promise<Response> => {
     const { email, newPassword } = req.body;
