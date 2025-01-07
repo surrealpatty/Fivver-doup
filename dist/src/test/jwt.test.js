@@ -1,24 +1,22 @@
-// src/test/jwt.test.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const _jwt = require("../utils/jwt");
+// src/test/jwt.test.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+const jwt_1 = require("../utils/jwt"); // Adjust the import path if necessary
 // Example user object with the correct properties
 const user = {
     id: '123',
     email: 'user@example.com',
     username: 'username',
     tier: 'paid',
-    role: 'user'
+    role: 'user',
 };
-describe('JWT Token Generation and Verification', ()=>{
-    it('should generate and verify a JWT token correctly', ()=>{
+describe('JWT Token Generation and Verification', () => {
+    it('should generate and verify a JWT token correctly', () => {
         // Generate token
-        const token = (0, _jwt.generateToken)(user);
+        const token = (0, jwt_1.generateToken)(user);
         console.log('Generated Token:', token);
         // Verify the token
-        const decoded = (0, _jwt.verifyToken)(token);
+        const decoded = (0, jwt_1.verifyToken)(token);
         console.log('Decoded User:', decoded);
         // Assert that the decoded token matches the user information
         if (decoded) {
@@ -27,7 +25,8 @@ describe('JWT Token Generation and Verification', ()=>{
             expect(decoded.username).toBe(user.username);
             expect(decoded.tier).toBe(user.tier);
             expect(decoded.role).toBe(user.role);
-        } else {
+        }
+        else {
             fail('Token verification failed'); // Fail the test if the token could not be decoded
         }
     });
