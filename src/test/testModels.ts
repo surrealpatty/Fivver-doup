@@ -1,4 +1,3 @@
-// src/test/testModels.ts
 import { sequelize } from '../config/database'; // Correct import for sequelize
 import { User } from '../models/user'; // Import User model
 import { UserRole, UserTier } from '../types/UserRoles'; // Import UserTier and UserRole enums
