@@ -48,7 +48,8 @@ describe('Authentication Tests', () => {
         });
         // Validate user creation
         expect(userResponse.status).toBe(201);
-        // Authenticate the user
+        expect(userResponse.body.token).toBeDefined(); // Ensure token is returned
+        // Authenticate the user (login)
         const response = await (0, supertest_1.default)(index_1.app)
             .post('/users/login') // Ensure the correct login route
             .send({
@@ -57,7 +58,7 @@ describe('Authentication Tests', () => {
         });
         // Validate login response
         expect(response.status).toBe(200);
-        expect(response.body.token).toBeDefined();
+        expect(response.body.token).toBeDefined(); // Ensure token is returned
         // Verify the JWT token
         const decoded = jsonwebtoken_1.default.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
         expect(decoded).toHaveProperty('id');

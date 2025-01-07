@@ -10,7 +10,7 @@ describe('Role-based Access Tests', () => {
     beforeAll(async () => {
         // Register a new user with the role 'free'
         const response = await (0, supertest_1.default)(index_1.app)
-            .post('/register') // Replace with your actual registration route
+            .post('/api/register') // Adjust to your actual registration route
             .send({
             username: 'testuser',
             email: 'testuser@example.com',
@@ -31,7 +31,7 @@ describe('Role-based Access Tests', () => {
         // Clean up the database by deleting the test user
         if (testUser && testUser.id) {
             await (0, supertest_1.default)(index_1.app)
-                .delete(`/users/${testUser.id}`) // Replace with your actual user deletion route
+                .delete(`/api/users/${testUser.id}`) // Adjust to your actual user deletion route
                 .set('Authorization', `Bearer ${testUser.token}`); // Authenticate the request
         }
     });
@@ -46,7 +46,7 @@ describe('Role-based Access Tests', () => {
     });
     it('should deny access to premium service for free users', async () => {
         const response = await (0, supertest_1.default)(index_1.app)
-            .get('/premium-service') // Replace with your actual premium service route
+            .get('/api/premium-service') // Adjust to your actual premium service route
             .set('Authorization', `Bearer ${testUser.token}`); // Authenticate with the test user token
         expect(response.statusCode).toBe(403); // Expect forbidden status
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
@@ -54,7 +54,7 @@ describe('Role-based Access Tests', () => {
     it('should allow access to premium service for paid users', async () => {
         // Update the user role to 'paid'
         const paidUserResponse = await (0, supertest_1.default)(index_1.app)
-            .post('/update-role') // Replace with your actual role update route
+            .post('/api/update-role') // Adjust to your actual role update route
             .send({
             userId: testUser.id,
             role: 'paid',
@@ -65,7 +65,7 @@ describe('Role-based Access Tests', () => {
         expect(paidUserResponse.statusCode).toBe(200); // Expect role update success
         expect(paidUserResponse.body).toHaveProperty('token');
         const response = await (0, supertest_1.default)(index_1.app)
-            .get('/premium-service') // Replace with your actual premium service route
+            .get('/api/premium-service') // Adjust to your actual premium service route
             .set('Authorization', `Bearer ${paidUserToken}`); // Authenticate with the updated token
         expect(response.statusCode).toBe(200); // Expect successful access
         expect(response.body.message).toBe('Premium service access granted.');

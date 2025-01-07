@@ -1,31 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = require("../models/user"); // Correct import for User model
+// src/test/testModels.ts
 const database_1 = require("../config/database"); // Correct import for sequelize
-const UserRoles_1 = require("../types/UserRoles"); // Correct import for enums
-describe('User Model', () => {
+const user_1 = require("../models/user"); // Import User model
+const UserRoles_1 = require("../types/UserRoles"); // Import UserTier and UserRole enums
+describe('User Model Tests', () => {
     beforeAll(async () => {
-        // Sync the database before running tests
+        // Sync the database before tests
         await database_1.sequelize.sync({ force: true });
     });
     afterAll(async () => {
-        // Close the Sequelize connection after all tests
+        // Close the database connection after tests
         await database_1.sequelize.close();
     });
-    it('should create a user with valid tier', async () => {
-        const userData = {
+    it('should create a user with the default tier of "free" when tier is not provided', async () => {
+        // Create a user without specifying the tier
+        const user = await user_1.User.create({
             email: 'test@example.com',
             username: 'testuser',
-            password: 'testpassword', // In a real scenario, this should be hashed
-            role: UserRoles_1.UserRole.User, // Correct usage of enum value for role
-            tier: UserRoles_1.UserTier.Paid, // Correct usage of enum value for tier
-            isVerified: true,
-        };
-        const user = await user_1.User.create(userData);
-        // Assertions to validate that the user has been created successfully
-        expect(user.id).toBeDefined(); // Ensure the ID is generated
-        expect(user.tier).toBe(UserRoles_1.UserTier.Paid); // Ensure the tier is set correctly
-        expect(user.role).toBe(UserRoles_1.UserRole.User); // Ensure the role is set correctly
+            password: 'password123',
+            role: UserRoles_1.UserRole.User, // Use default 'user' role
+            isVerified: false,
+        });
+        // Validate the default tier
+        expect(user.tier).toBe(UserRoles_1.UserTier.Free); // Ensure the default tier is 'free'
+    });
+    it('should create a user with a specified tier', async () => {
+        // Create a user with a specified tier
+        const user = await user_1.User.create({
+            email: 'test2@example.com',
+            username: 'testuser2',
+            password: 'password123',
+            role: UserRoles_1.UserRole.User,
+            tier: UserRoles_1.UserTier.Paid, // Set tier to 'paid'
+            isVerified: false,
+        });
+        // Validate the specified tier
+        expect(user.tier).toBe(UserRoles_1.UserTier.Paid); // Ensure the tier is 'paid'
     });
     it('should fail to create a user with an invalid tier', async () => {
         const invalidUserData = {
@@ -45,32 +56,20 @@ describe('User Model', () => {
             expect(error.name).toBe('SequelizeValidationError'); // Validate the error type
         }
     });
-    it('should handle missing tier gracefully and use default', async () => {
+    it('should handle missing tier gracefully and use default tier of "free"', async () => {
         const userDataWithoutTier = {
             email: 'notier@example.com',
             username: 'notieruser',
             password: 'testpassword',
             role: UserRoles_1.UserRole.User, // Role is valid
             isVerified: true,
-            // Tier is missing and will default to 'free'
+            // Tier is missing and should default to 'free'
         };
         const user = await user_1.User.create(userDataWithoutTier);
         // Default tier should be applied (if defined in the model)
-        expect(user.id).toBeDefined();
-        expect(user.tier).toBe(UserRoles_1.UserTier.Free); // Ensure the default tier is correctly set
+        expect(user.tier).toBe(UserRoles_1.UserTier.Free); // Ensure the default tier is 'free'
     });
-    it('should create a user with the correct tier when tier is not passed', async () => {
-        const user = await user_1.User.create({
-            email: 'defaulttier@example.com',
-            username: 'defaulttieruser',
-            password: 'testpassword',
-            role: UserRoles_1.UserRole.User, // Role is valid
-            isVerified: true,
-            // No tier is passed, so it should default to 'free'
-        });
-        expect(user.tier).toBe(UserRoles_1.UserTier.Free); // The default tier should be 'free'
-    });
-    it('should create a user with a specified tier', async () => {
+    it('should create a user with the correct tier when tier is explicitly set', async () => {
         const user = await user_1.User.create({
             email: 'paidtier@example.com',
             username: 'paidtieruser',
@@ -79,6 +78,6 @@ describe('User Model', () => {
             tier: UserRoles_1.UserTier.Paid, // Explicitly passing tier as 'paid'
             isVerified: true,
         });
-        expect(user.tier).toBe(UserRoles_1.UserTier.Paid); // The specified tier value is 'paid'
+        expect(user.tier).toBe(UserRoles_1.UserTier.Paid); // The specified tier should be 'paid'
     });
 });

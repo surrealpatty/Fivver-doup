@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.server = exports.app = void 0;
+// src/index.ts
 const express_1 = __importDefault(require("express")); // Import Express
 const dotenv_1 = __importDefault(require("dotenv")); // Load environment variables
 const cors_1 = __importDefault(require("cors")); // Enable CORS
