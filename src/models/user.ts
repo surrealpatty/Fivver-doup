@@ -31,7 +31,8 @@ export interface UserAttributes {
 }
 
 // Define the UserCreationAttributes interface for creation attributes (excluding `id` as it is auto-generated)
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+// Mark `tier` as optional here
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'tier'> {}
 
 @Table({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
