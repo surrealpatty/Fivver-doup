@@ -1,15 +1,12 @@
-// src/types/index.ts (or src/types.ts)
+// src/types/index.ts
 
-export type UserRole = 'admin' | 'paid' | 'user'; // User roles, adjust as needed
+// Define the UserTier type
+export type UserTier = 'free' | 'paid';  // You can adjust the tiers as needed
 
-export type UserTier = 'free' | 'paid'; // User tiers indicating free or paid access
-
-// Define the user payload structure
+// Define the UserPayload interface with tier as a required property
 export interface UserPayload {
-  id: string;           // Unique identifier for the user
-  email?: string;       // User's email (optional)
-  username?: string;    // User's username (optional)
-  tier: UserTier;       // User's tier (free or paid) [Required]
-  role?: UserRole;      // User's role (optional, admin/paid/user)
-  isVerified?: boolean; // Whether the user's email is verified (optional)
+    id: string;            // User's ID
+    email: string;         // User's email
+    username: string;      // User's username
+    tier: UserTier;        // Tier is now required (no longer optional)
 }
