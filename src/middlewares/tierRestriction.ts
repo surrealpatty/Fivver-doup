@@ -1,10 +1,10 @@
 // src/middlewares/tierRestriction.ts
 
 import { NextFunction, Request, Response } from 'express';
-import { AuthRequest } from '../types'; // Correct named import
+import { AuthRequest } from '../types'; // Correct import for AuthRequest
 
 export const tierMiddleware = (
-  req: AuthRequest,
+  req: AuthRequest,  // Use AuthRequest here
   res: Response,
   next: NextFunction
 ): void => {
