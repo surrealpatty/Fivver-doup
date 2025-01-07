@@ -1,5 +1,3 @@
-// src/index.ts
-
 import express from 'express'; // Import Express
 import dotenv from 'dotenv'; // Load environment variables
 import cors from 'cors'; // Enable CORS
@@ -36,4 +34,5 @@ const server = app.listen(process.env.PORT || 3000, () => {
   }
 });
 
-export { server };  // Export the server object to be used in tests
+// Export the app and server for use in tests and other files
+export { app, server };

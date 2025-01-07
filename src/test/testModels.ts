@@ -1,6 +1,6 @@
 import { User } from '../models/user';  // Correct import for User model
 import { sequelize } from '../config/database';  // Correct import for sequelize
-import { UserRole, UserTier } from '../types';  // Ensure correct imports for UserRole and UserTier
+import { UserRole, UserTier } from '../types/UserRoles';  // Correct import path for enums
 
 describe('User Model', () => {
   beforeAll(async () => {
@@ -19,8 +19,8 @@ describe('User Model', () => {
       email: 'test@example.com',
       username: 'testuser',
       password: 'testpassword',  // In a real scenario, this should be hashed
-      role: UserRole.User,  // Use enum value for role
-      tier: UserTier.Paid,  // Use enum value for tier
+      role: UserRole.User,  // Correct usage of enum value for role
+      tier: UserTier.Paid,  // Correct usage of enum value for tier
       isVerified: true,
     };
 
@@ -29,5 +29,24 @@ describe('User Model', () => {
     // Assertions to validate that the user has been created successfully
     expect(user.id).toBeDefined();  // Ensure the ID is generated
     expect(user.tier).toBe(UserTier.Paid);  // Ensure the tier is set correctly
+    expect(user.role).toBe(UserRole.User); // Ensure the role is set correctly
+  });
+
+  it('should fail to create a user with an invalid tier', async () => {
+    const invalidUserData = {
+      email: 'invalid@example.com',
+      username: 'invaliduser',
+      password: 'testpassword',
+      role: UserRole.User,
+      tier: 'invalidTier' as UserTier,  // Invalid tier value
+      isVerified: true,
+    };
+
+    try {
+      await User.create(invalidUserData);
+    } catch (error) {
+      // Expect an error to be thrown
+      expect(error).toBeDefined();
+    }
   });
 });

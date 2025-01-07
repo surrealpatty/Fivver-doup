@@ -1,3 +1,5 @@
+// src/test/app.test.ts
+
 import 'reflect-metadata';  // Ensure reflect-metadata is imported first for sequelize-typescript
 import { Sequelize } from 'sequelize-typescript';  // Import Sequelize from sequelize-typescript
 import request from 'supertest';  // For making HTTP requests to your app
