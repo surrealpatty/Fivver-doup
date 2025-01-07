@@ -1,30 +1,26 @@
 "use strict";
-// src/middlewares/authenticateToken.ts
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const jwt_1 = require("../utils/jwt"); // Import the verifyToken function from the utils
 // Middleware to authenticate token and attach user data to the request
 const authenticateToken = (req, // Extending the Request type with the optional user property
 res, next) => {
+    // Get the token from the Authorization header
     const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1]; // Extract the token from the "Authorization" header
+    const token = authHeader?.split(' ')[1]; // Extract the token from "Bearer <token>"
     if (!token) {
+        // If token is missing, send an error response
         return res.status(401).json({ message: 'Access token is missing.' });
     }
-    try {
-        // Verify the token
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_KEY || 'your-secret-key');
-        // Attach the decoded user payload to the request
-        req.user = decoded;
-        // Proceed to the next middleware or route handler
-        next();
-    }
-    catch (error) {
-        console.error('Token verification error:', error);
+    // Verify the token using the utility function
+    const decoded = (0, jwt_1.verifyToken)(token);
+    if (!decoded) {
+        // If token verification fails, send an error response
         return res.status(403).json({ message: 'Invalid or expired token.' });
     }
+    // Attach the decoded user payload to the request object
+    req.user = decoded;
+    // Proceed to the next middleware or route handler
+    next();
 };
 exports.authenticateToken = authenticateToken;

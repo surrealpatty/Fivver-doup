@@ -31,7 +31,7 @@ beforeAll(async () => {
     services_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' });
     user_1.User.hasMany(services_1.Service, { foreignKey: 'userId' }); // Define the reverse association (optional)
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-    await sequelizeInstance.sync({ force: false }); // Set force: true to reset the DB if needed
+    await sequelizeInstance.sync({ force: true }); // Reset DB to ensure a clean state
 });
 describe('Authentication Tests', () => {
     it('should authenticate and return a valid JWT token', async () => {

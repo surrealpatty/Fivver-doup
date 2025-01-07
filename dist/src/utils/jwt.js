@@ -9,16 +9,23 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use environment variable for security
 // Utility function to generate a JWT token
 const generateToken = (user) => {
-    // Create the payload with user details
+    // Ensure user object contains required properties
     const payload = {
         id: user.id,
-        email: user.email, // Include email as part of the payload
+        email: user.email, // Ensure email is part of the payload
         username: user.username,
-        tier: user.tier, // Ensure tier is included
-        role: user.role, // Include role in the payload
+        tier: user.tier, // Include tier if it's part of the user model
+        role: user.role, // Include role for authorization purposes
     };
-    // Sign and return the token with a 1-hour expiration
-    return jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    try {
+        // Sign and return the token with a 1-hour expiration
+        return jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    }
+    catch (err) {
+        // Log the error and throw a custom error if token generation fails
+        console.error('Token generation failed:', err);
+        throw new Error('Failed to generate token');
+    }
 };
 exports.generateToken = generateToken;
 // Function to verify a JWT token and return the decoded user data
