@@ -1,30 +1,31 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = require("../models/user"); // Adjust the path to your User model
-const testDuplicateUsername = async () => {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _user = require("../models/user");
+const testDuplicateUsername = async ()=>{
     try {
         // First user creation with all required properties
-        const user1 = await user_1.User.create({
-            username: 'duplicateuser', // Test username
+        const user1 = await _user.User.create({
+            username: 'duplicateuser',
             email: 'user1@example.com',
             password: 'password1',
-            role: 'user', // Assuming 'user' is the default role
-            tier: "free", // Default tier should be "free"
-            isVerified: false, // Assuming the default value for verification is false
+            role: 'user',
+            tier: "free",
+            isVerified: false
         });
         console.log('First user created:', user1);
         // Attempt to create another user with the same username
-        const user2 = await user_1.User.create({
-            username: 'duplicateuser', // Same username as the first user
+        const user2 = await _user.User.create({
+            username: 'duplicateuser',
             email: 'user2@example.com',
             password: 'password2',
-            role: 'user', // Same role
-            tier: "free", // Default tier should be "free"
-            isVerified: false, // Same verification status
+            role: 'user',
+            tier: "free",
+            isVerified: false
         });
         console.log('Second user created:', user2);
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error creating user (duplicate username):', error);
     }
 };

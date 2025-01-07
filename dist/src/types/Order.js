@@ -1,3 +1,6 @@
-"use strict";
 // src/types/Order.ts
-Object.defineProperty(exports, "__esModule", { value: true });
+// Importing Optional from Sequelize for partial model attributes
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});

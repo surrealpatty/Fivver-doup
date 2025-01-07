@@ -1,119 +1,99 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-require("reflect-metadata"); // Required for decorators
-const sequelize_typescript_1 = require("sequelize-typescript");
-const uuid_1 = require("uuid");
-const services_1 = require("./services"); // Correct named import for Service model
-let User = class User extends sequelize_typescript_1.Model {
-    username;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    User: function() {
+        return User;
+    },
+    UserRole: function() {
+        return _UserRoles.UserRole;
+    },
+    UserTier: function() {
+        return _UserRoles.UserTier;
+    }
+});
+const _sequelize = require("sequelize");
+const _database = require("../config/database");
+const _UserRoles = require("../types/UserRoles");
+const _uuid = require("uuid");
+class User extends _sequelize.Model {
+    id;
     email;
+    username;
     password;
+    role;
     tier;
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
-    /**
-     * Automatically generate UUID for new user records
-     */
-    static assignUuid(user) {
-        user.id = (0, uuid_1.v4)(); // Generate UUID if not already provided
+    createdAt;
+    updatedAt;
+    // Define the model with validation and default values
+    static initModel() {
+        User.init({
+            id: {
+                type: _sequelize.DataTypes.UUID,
+                defaultValue: _uuid.v4,
+                primaryKey: true,
+                allowNull: false
+            },
+            email: {
+                type: _sequelize.DataTypes.STRING,
+                allowNull: false,
+                unique: true
+            },
+            username: {
+                type: _sequelize.DataTypes.STRING,
+                allowNull: false,
+                unique: true
+            },
+            password: {
+                type: _sequelize.DataTypes.STRING,
+                allowNull: false
+            },
+            role: {
+                type: _sequelize.DataTypes.STRING,
+                allowNull: false,
+                defaultValue: _UserRoles.UserRole.User,
+                validate: {
+                    isIn: [
+                        [
+                            'user',
+                            'admin'
+                        ]
+                    ]
+                }
+            },
+            tier: {
+                type: _sequelize.DataTypes.ENUM('free', 'paid'),
+                allowNull: false,
+                defaultValue: _UserRoles.UserTier.Free,
+                validate: {
+                    isIn: [
+                        [
+                            'free',
+                            'paid'
+                        ]
+                    ]
+                }
+            },
+            isVerified: {
+                type: _sequelize.DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
+            }
+        }, {
+            sequelize: _database.sequelize,
+            modelName: 'User'
+        });
     }
-    // Define the association to the Service model
-    services;
-    /**
-     * Set the role of the user, ensuring it is valid.
-     * @param role - The role to assign ('user' or 'admin').
-     */
-    setRole(role) {
-        if (!['user', 'admin'].includes(role)) {
-            throw new Error('Invalid role assignment');
-        }
-        this.role = role;
-    }
-};
-exports.User = User;
-__decorate([
-    sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID) // Use UUID for the ID
-    ,
-    __metadata("design:type", String)
-], User.prototype, "id", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], User.prototype, "username", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], User.prototype, "email", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
-        defaultValue: 'user', // Default role is 'user'
-        validate: {
-            isIn: [['user', 'admin']], // Allow only 'user' or 'admin' as valid roles
-        },
-    }),
-    __metadata("design:type", String)
-], User.prototype, "role", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
-        allowNull: false, // Ensure tier is not nullable
-        defaultValue: 'free', // Default to 'free' tier
-        validate: {
-            isIn: [['free', 'paid']], // Ensures only 'free' or 'paid' are valid values
-        },
-    }),
-    __metadata("design:type", String)
-], User.prototype, "tier", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.BOOLEAN),
-    __metadata("design:type", Boolean)
-], User.prototype, "isVerified", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", Object)
-], User.prototype, "passwordResetToken", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
-    __metadata("design:type", Object)
-], User.prototype, "passwordResetTokenExpiry", void 0);
-__decorate([
-    sequelize_typescript_1.CreatedAt,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
-    __metadata("design:type", Date)
-], User.prototype, "createdAt", void 0);
-__decorate([
-    sequelize_typescript_1.UpdatedAt,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
-    __metadata("design:type", Date)
-], User.prototype, "updatedAt", void 0);
-__decorate([
-    (0, sequelize_typescript_1.HasMany)(() => services_1.Service) // A User has many Services
-    ,
-    __metadata("design:type", Array)
-], User.prototype, "services", void 0);
-__decorate([
-    sequelize_typescript_1.BeforeCreate,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [User]),
-    __metadata("design:returntype", void 0)
-], User, "assignUuid", null);
-exports.User = User = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
-], User);
+}
+// Initialize the model
+User.initModel();

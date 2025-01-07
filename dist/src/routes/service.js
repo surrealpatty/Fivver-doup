@@ -1,14 +1,22 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const authenticateToken_1 = require("../middlewares/authenticateToken");
-const serviceController_1 = require("../controllers/serviceController"); // Correct import of ServiceController
-const router = (0, express_1.Router)();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, // Export the router using default export so it can be imported correctly in src/index.ts
+"default", {
+    enumerable: true,
+    get: function() {
+        return _default;
+    }
+});
+const _express = require("express");
+const _authenticateToken = require("../middlewares/authenticateToken");
+const _serviceController = require("../controllers/serviceController");
+const router = (0, _express.Router)();
 // Example route with authentication middleware
-router.get('/services', authenticateToken_1.authenticateToken, serviceController_1.ServiceController.getServices);
+router.get('/services', _authenticateToken.authenticateToken, _serviceController.ServiceController.getServices);
 // Example route without authentication
-router.get('/some-route', (req, res) => {
+router.get('/some-route', (req, res)=>{
     res.status(200).send('Success');
 });
-// Export the router using default export so it can be imported correctly in src/index.ts
-exports.default = router;
+const _default = router;
