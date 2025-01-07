@@ -1,4 +1,3 @@
-// src/routes/profile.ts
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { CustomAuthRequest } from '../types'; // Ensure correct import
@@ -9,10 +8,11 @@ const router = express.Router();
 router.get(
   '/profile',
   authenticateToken, // Middleware to authenticate user
-  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<Response> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
-      // Access the user property with correct typing from CustomAuthRequest
-      const user = req.user;
+      // Cast req to CustomAuthRequest to access user
+      const customReq = req as CustomAuthRequest;
+      const user = customReq.user;
 
       if (!user) {
         return res.status(401).json({ message: 'User not authenticated' });

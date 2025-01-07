@@ -1,3 +1,5 @@
+// src/index.ts
+
 import express from 'express'; // Import Express
 import dotenv from 'dotenv'; // Load environment variables
 import cors from 'cors'; // Enable CORS
@@ -11,7 +13,7 @@ import serviceRoutes from './routes/service';
 dotenv.config();
 
 // Create an Express application
-export const app = express(); // Export the app for testing and production use
+const app = express(); // Create the app instance
 
 // Middleware
 app.use(cors()); // Enable CORS
@@ -28,9 +30,10 @@ app.get('/', (req, res) => {
 });
 
 // Start the server if not in a test environment
-if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-}
+const server = app.listen(process.env.PORT || 3000, () => {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(`Server is running on http://localhost:${process.env.PORT || 3000}`);
+  }
+});
+
+export { server };  // Export the server object to be used in tests

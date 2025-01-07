@@ -9,18 +9,21 @@ router.get(
   '/protected-route',
   authenticateToken, // Use the authenticateToken middleware
   async (
-    req: CustomAuthRequest, // Ensure correct typing for req using CustomAuthRequest
+    req: Request, // Default to the generic Request type here
     res: Response,
     next: NextFunction
   ): Promise<Response> => {
     try {
+      // Type assertion to CustomAuthRequest to access req.user
+      const customReq = req as CustomAuthRequest;
+
       // Ensure req.user is available, as it's injected by authenticateToken middleware
-      if (!req.user) {
+      if (!customReq.user) {
         // Return early if user is not present
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      const { id, email, username } = req.user;
+      const { id, email, username } = customReq.user;
 
       // Return a response with user data
       return res.status(200).json({

@@ -15,7 +15,7 @@ import {
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services'; // Correct named import for Service model
-import { UserTier, UserRole } from '../types'; // Import UserTier from src/types
+import { UserTier, UserRole } from '../types'; // Import UserTier and UserRole from src/types
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
@@ -105,3 +105,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     this.role = role;
   }
 }
+
+// Export UserRole and UserTier so that they are available for other files
+export { UserRole, UserTier };

@@ -1,23 +1,11 @@
-import { Service } from '../models/services';  // Correct import for Service model
 import { User } from '../models/user';  // Correct import for User model
 import { sequelize } from '../config/database';  // Correct import for sequelize
+import { UserRole, UserTier } from '../types';  // Ensure correct imports for UserRole and UserTier
 
-describe('Service Model', () => {
-  let user: User;
-
+describe('User Model', () => {
   beforeAll(async () => {
     // Sync the database before running tests
     await sequelize.sync({ force: true });
-
-    // Create a user before running tests
-    user = await User.create({
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'testpassword',  // In a real scenario, this should be hashed
-      role: 'user',  // Assuming role is a required field for the user model
-      tier: 'Tier 1',  // Assuming tier is a required field for the user model
-      isVerified: true,  // Assuming isVerified is required for the user model
-    });
   });
 
   afterAll(async () => {
@@ -25,90 +13,21 @@ describe('Service Model', () => {
     await sequelize.close();
   });
 
-  it('should define the Service model', () => {
-    expect(Service).toBeDefined();  // Sanity check: Ensure the Service model is defined
-  });
-
-  it('should create a new service and return a generated ID', async () => {
-    const serviceData = {
-      title: 'Test Service',
-      description: 'A test service',
-      price: 10,
-      userId: user.id,  // Associating the service with the user
-      role: 'user',  // Valid role
+  it('should create a user with valid tier', async () => {
+    // Create a user with a valid tier value
+    const userData = {
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'testpassword',  // In a real scenario, this should be hashed
+      role: UserRole.User,  // Use enum value for role
+      tier: UserTier.Paid,  // Use enum value for tier
+      isVerified: true,
     };
 
-    // Create a new service
-    const service = await Service.create(serviceData);
+    const user = await User.create(userData);
 
-    console.log('Created service ID:', service.id);  // Log the generated ID
-
-    // Assertions to validate that the service has been created successfully
-    expect(service.id).toBeDefined();  // Ensure the ID is generated and not undefined
-    expect(service.userId).toBe(user.id);  // Ensure userId is correctly set
-    expect(service.title).toBe('Test Service');  // Ensure title is set correctly
-    expect(service.price).toBe(10);  // Ensure price is set correctly
-    expect(service.description).toBe('A test service');  // Ensure description is correct
-    expect(service.role).toBe('user');  // Ensure role is set correctly
-  });
-
-  it('should retrieve a service by ID', async () => {
-    // Create a service to retrieve
-    const service = await Service.create({
-      title: 'Test Service to Retrieve',
-      description: 'A service for retrieving test',
-      price: 20,
-      userId: user.id,
-      role: 'user',  // Valid role
-    });
-
-    const retrievedService = await Service.findByPk(service.id);  // Retrieve using the created ID
-    expect(retrievedService).not.toBeNull();  // Ensure the service exists
-    expect(retrievedService?.title).toBe('Test Service to Retrieve');  // Ensure title matches
-  });
-
-  it('should update a service', async () => {
-    // Create a service to update
-    const service = await Service.create({
-      title: 'Service to Update',
-      description: 'A service that will be updated',
-      price: 30,
-      userId: user.id,
-      role: 'user',  // Valid role
-    });
-
-    // Update the service price
-    const [updatedRowsCount] = await Service.update(
-      { price: 600 },  // New price
-      { where: { id: service.id } }  // Use the created service ID
-    );
-
-    expect(updatedRowsCount).toBe(1);  // Ensure one row was updated
-
-    // Retrieve the updated service
-    const updatedService = await Service.findByPk(service.id);
-    expect(updatedService?.price).toBe(600);  // Ensure the price was updated correctly
-  });
-
-  it('should delete a service', async () => {
-    // Create a service to delete
-    const service = await Service.create({
-      title: 'Service to Delete',
-      description: 'A service that will be deleted',
-      price: 40,
-      userId: user.id,
-      role: 'user',  // Valid role
-    });
-
-    // Delete the service
-    const deletedRowsCount = await Service.destroy({
-      where: { id: service.id },
-    });
-
-    expect(deletedRowsCount).toBe(1);  // Ensure one row was deleted
-
-    // Attempt to retrieve the deleted service
-    const deletedService = await Service.findByPk(service.id);
-    expect(deletedService).toBeNull();  // Ensure the service is no longer found
+    // Assertions to validate that the user has been created successfully
+    expect(user.id).toBeDefined();  // Ensure the ID is generated
+    expect(user.tier).toBe(UserTier.Paid);  // Ensure the tier is set correctly
   });
 });

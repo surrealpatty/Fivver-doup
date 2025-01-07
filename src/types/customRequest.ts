@@ -1,11 +1,7 @@
 // src/types/customRequest.ts
 import { Request } from 'express';
+import { UserPayload } from './index'; // Import the UserPayload interface
 
 export interface CustomAuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    username: string;
-    tier: string;
-  };
+  user?: UserPayload; // Ensure that `user` is correctly typed as `UserPayload`
 }
