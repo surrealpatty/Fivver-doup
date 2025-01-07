@@ -1,27 +1,16 @@
-// Import necessary dependencies
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "createMockUserToken", {
-    enumerable: true,
-    get: function() {
-        return createMockUserToken;
-    }
-});
-const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const createMockUserToken = (user)=>{
-    return _jsonwebtoken.default.sign({
-        id: user.id,
-        email: user.email,
-        username: user.username
-    }, 'your_secret_key', {
-        expiresIn: '1h'
-    } // Token expiration time
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createMockUserToken = void 0;
+// Import necessary dependencies
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jsonwebtoken for token generation
+// Function to generate a mock JWT token for a user
+const createMockUserToken = (user) => {
+    return jsonwebtoken_1.default.sign({ id: user.id, email: user.email, username: user.username }, // Payload
+    'your_secret_key', // Secret key (should be stored securely, not hardcoded)
+    { expiresIn: '1h' } // Token expiration time
     );
 };
+exports.createMockUserToken = createMockUserToken;

@@ -1,12 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const _index = require("./index");
-if (_index.server && typeof _index.server.close === 'function') {
-    _index.server.close(()=>{
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("./index"); // Import the server from index.ts
+if (index_1.server && typeof index_1.server.close === 'function') {
+    index_1.server.close(() => {
         console.log('Server closed successfully.');
     });
-} else {
+}
+else {
     console.log('Server is not running or has already been closed.');
 }

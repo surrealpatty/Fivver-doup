@@ -1,50 +1,24 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "default", {
-    enumerable: true,
-    get: function() {
-        return _default;
-    }
-});
-const _sequelize = require("sequelize");
-const _database = require("../config/database");
-class Service extends _sequelize.Model {
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const database_1 = require("../config/database"); // Correct import
+class Service extends sequelize_1.Model {
     id;
     userId;
     name;
     description;
     price;
-    image;
+    image; // Add image property to your model
 }
 Service.init({
-    id: {
-        type: _sequelize.DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    userId: {
-        type: _sequelize.DataTypes.INTEGER,
-        allowNull: false
-    },
-    name: {
-        type: _sequelize.DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: _sequelize.DataTypes.STRING,
-        allowNull: false
-    },
-    price: {
-        type: _sequelize.DataTypes.FLOAT,
-        allowNull: false
-    },
-    image: {
-        type: _sequelize.DataTypes.STRING
-    }
+    id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
+    name: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    description: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    price: { type: sequelize_1.DataTypes.FLOAT, allowNull: false },
+    image: { type: sequelize_1.DataTypes.STRING }, // Make sure this matches your DB schema
 }, {
-    sequelize: _database.sequelize,
-    modelName: 'Service'
+    sequelize: database_1.sequelize,
+    modelName: 'Service',
 });
-const _default = Service;
+exports.default = Service;

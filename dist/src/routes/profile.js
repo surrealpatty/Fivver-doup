@@ -1,31 +1,20 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "default", {
-    enumerable: true,
-    get: function() {
-        return _default;
-    }
-});
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _authenticateToken = require("../middlewares/authenticateToken");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const router = _express.default.Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authenticateToken_1 = require("../middlewares/authenticateToken");
+const router = express_1.default.Router();
 // GET /profile - Fetch profile information
-router.get('/profile', _authenticateToken.authenticateToken, async (req, res, next)=>{
+router.get('/profile', authenticateToken_1.authenticateToken, // Middleware to authenticate user
+async (req, res, next) => {
     try {
         // Cast req to CustomAuthRequest to access user
         const customReq = req;
         const user = customReq.user;
         if (!user) {
-            return res.status(401).json({
-                message: 'User not authenticated'
-            });
+            return res.status(401).json({ message: 'User not authenticated' });
         }
         return res.status(200).json({
             message: 'Profile fetched successfully',
@@ -33,14 +22,13 @@ router.get('/profile', _authenticateToken.authenticateToken, async (req, res, ne
                 id: user.id,
                 email: user.email || 'No email provided',
                 username: user.username || 'Anonymous',
-                tier: user.tier || 'Free'
-            }
-        });
-    } catch (error) {
-        next(error); // Pass error to global error handler
-        return res.status(500).json({
-            message: 'Internal server error'
+                tier: user.tier || 'Free', // Fallback to 'Free' if no tier provided
+            },
         });
     }
+    catch (error) {
+        next(error); // Pass error to global error handler
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 });
-const _default = router;
+exports.default = router;
