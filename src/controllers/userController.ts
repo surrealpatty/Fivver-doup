@@ -1,19 +1,28 @@
-// src/controllers/userController.ts
 import { Request, Response } from 'express';
 import { User } from '../models/user'; // Assuming User is a Sequelize model
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { email, password, username }: { email: string, password: string, username: string } = req.body;
+    const { email, password, username, role, tier }: { email: string, password: string, username: string, role?: string, tier?: string } = req.body;
 
     // Validate required fields
     if (!email || !password || !username) {
       return res.status(400).json({ message: 'Email, password, and username are required.' });
     }
 
+    // Default values for role and tier if not provided
+    const userRole = role || 'User'; // Default to 'User' role
+    const userTier = tier || 'Free'; // Default to 'Free' tier
+
     // Create new user in the database
-    const user = await User.create({ email, password, username });
+    const user = await User.create({ 
+      email, 
+      password, 
+      username, 
+      role: userRole, 
+      tier: userTier 
+    });
 
     return res.status(201).json({
       message: 'User registered successfully',

@@ -1,15 +1,14 @@
-// src/models/associations.ts
 import { sequelize } from '../config/database';  // Correct import
 import { User } from './user';        // Import the User model
-import { Service } from '../models/services'; // Correct named import
-import Order from './order';      // Import the Order model
+import { Service } from './services'; // Correct named import (relative path corrected)
+import { Order } from './order';      // Import the Order model
 import { Review } from './review';    // Import the Review model
 
 // Register models with Sequelize
 sequelize.addModels([User, Service, Order, Review]);
 
 // User can have many services (a user can post many services)
-User.hasMany(Service, { foreignKey: 'userId' });   // Foreign key in Service will be userId
+User.hasMany(Service, { foreignKey: 'userId' });  // Foreign key in Service will be userId
 Service.belongsTo(User, { foreignKey: 'userId' });  // A service belongs to one user
 
 // User can have many reviews (a user can leave many reviews)

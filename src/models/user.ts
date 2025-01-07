@@ -1,101 +1,54 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Assuming this is where sequelize instance is configured
+// src/models/user.ts
+import { Model, DataTypes } from 'sequelize';
+import sequelize from '../config/database';
 
-// Define UserRole and UserTier Enums
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
+export class User extends Model {
+  public id!: string;
+  public username!: string;
+  public email!: string;
+  public password!: string;
+  public role!: string;
+  public tier!: string;
+  public isVerified!: boolean;
 }
 
-export enum UserTier {
-  FREE = 'free',
-  PAID = 'paid',
-}
-
-// Define the UserAttributes interface which reflects the fields in the database
-export interface UserAttributes {
-  id: string;
-  email: string;
-  username: string;
-  password: string;
-  role: UserRole;
-  tier: UserTier;
-  isVerified: boolean;
-  passwordResetToken?: string | null;
-  passwordResetTokenExpiry?: Date | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-// Define the UserCreationAttributes interface for creation attributes (excluding id as it is auto-generated)
-// Mark 'id' as optional here as it will be auto-generated
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  id!: string;
-  email!: string;
-  username!: string;
-  password!: string;
-  role!: UserRole;
-  tier!: UserTier;
-  isVerified!: boolean;
-  passwordResetToken?: string | null;
-  passwordResetTokenExpiry?: Date | null;
-  createdAt!: Date;
-  updatedAt!: Date;
-}
-
-// Define the User model
 User.init(
   {
     id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4, // Automatically generate UUID for the id
-    },
-    email: {
       type: DataTypes.STRING,
+      primaryKey: true,
       allowNull: false,
-      unique: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     username: {
       type: DataTypes.STRING,
+      unique: true, // Ensure uniqueness for username
       allowNull: false,
-      unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true, // Email should also be unique
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM(...Object.values(UserRole)),
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: UserRole.USER, // Default to 'user' role
     },
     tier: {
-      type: DataTypes.ENUM(...Object.values(UserTier)),
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: UserTier.FREE, // Default to 'free' tier
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false, // Default to false
-    },
-    passwordResetToken: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    passwordResetTokenExpiry: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      defaultValue: false,
     },
   },
   {
-    sequelize, // Sequelize instance
+    sequelize,
     tableName: 'users',
-    timestamps: true, // Enable createdAt and updatedAt
   }
 );
-
-export { UserRole, UserTier };

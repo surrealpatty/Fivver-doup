@@ -22,8 +22,9 @@ describe('User Controller', () => {
       isVerified: true,  // Add the missing isVerified field
     };
 
-    const response = await request(app).post('/api/users').send(userPayload);
+    const response = await request(app).post('/api/users/signup').send(userPayload);
 
+    // Ensure that the response status is 201 (Created)
     expect(response.status).toBe(201);
     expect(response.body.message).toBe('User registered successfully');
     expect(response.body.user.username).toBe(userPayload.username);
@@ -50,8 +51,9 @@ describe('User Controller', () => {
       isVerified: true,  // Add missing field
     };
 
-    const response = await request(app).post('/api/users').send(userPayload);
+    const response = await request(app).post('/api/users/signup').send(userPayload);
 
+    // Expect a conflict (409) status due to duplicate email
     expect(response.status).toBe(409);
     expect(response.body.message).toBe('User already exists with this email.');
   });
@@ -78,7 +80,7 @@ describe('User Controller', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Login successful');
-    expect(response.body.token).toBeDefined();
+    expect(response.body.token).toBeDefined();  // Check that the token is returned
   });
 
   it('should not login a user with invalid credentials', async () => {
@@ -89,7 +91,7 @@ describe('User Controller', () => {
 
     const response = await request(app).post('/api/users/login').send(loginPayload);
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(401);  // Unauthorized status for invalid credentials
     expect(response.body.message).toBe('Invalid credentials');
   });
 });
