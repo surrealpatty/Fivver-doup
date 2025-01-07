@@ -1,68 +1,47 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    getProfile: function() {
-        return getProfile;
-    },
-    updateProfile: function() {
-        return updateProfile;
-    }
-});
-const _user = require("../models/user");
-const getProfile = async (req, res)=>{
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateProfile = exports.getProfile = void 0;
+const user_1 = require("../models/user"); // Correct import for the User model
+// GET /profile - Get user profile
+const getProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
     if (!userId) {
-        return res.status(400).json({
-            message: 'User not authenticated or invalid user data'
-        });
+        return res.status(400).json({ message: 'User not authenticated or invalid user data' });
     }
     try {
         // Find the user by their ID
-        const user = await _user.User.findByPk(userId);
+        const user = await user_1.User.findByPk(userId);
         if (!user) {
-            return res.status(404).json({
-                message: 'User not found'
-            });
+            return res.status(404).json({ message: 'User not found' });
         }
         // Return the user profile details, including new fields like role and isVerified
         return res.status(200).json({
             id: user.id,
             email: user.email,
             username: user.username,
-            role: user.role,
-            tier: user.tier,
-            isVerified: user.isVerified
-        });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({
-            message: 'Internal server error'
+            role: user.role, // Include the role property
+            tier: user.tier, // Include the tier property
+            isVerified: user.isVerified, // Include isVerified if applicable
         });
     }
+    catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 };
-const updateProfile = async (req, res)=>{
+exports.getProfile = getProfile;
+// PUT /profile - Update user profile
+const updateProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
     if (!userId) {
-        return res.status(400).json({
-            message: 'User not authenticated or invalid user data'
-        });
+        return res.status(400).json({ message: 'User not authenticated or invalid user data' });
     }
     const { email, username, role, tier, isVerified } = req.body; // Get all updateable fields from the request body
     try {
         // Find the user and update their details
-        const user = await _user.User.findByPk(userId);
+        const user = await user_1.User.findByPk(userId);
         if (!user) {
-            return res.status(404).json({
-                message: 'User not found'
-            });
+            return res.status(404).json({ message: 'User not found' });
         }
         // Update user properties if provided
         if (email) {
@@ -89,15 +68,15 @@ const updateProfile = async (req, res)=>{
                 id: user.id,
                 email: user.email,
                 username: user.username,
-                role: user.role,
-                tier: user.tier,
-                isVerified: user.isVerified
-            }
-        });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({
-            message: 'Internal server error'
+                role: user.role, // Include role in the updated response
+                tier: user.tier, // Include tier in the updated response
+                isVerified: user.isVerified, // Include isVerified in the updated response
+            },
         });
     }
+    catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 };
+exports.updateProfile = updateProfile;

@@ -1,30 +1,31 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const _user = require("./models/user");
-const _services = require("./models/services");
+Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = require("./models/user"); // Correct import path for User model
+const services_1 = require("./models/services"); // Correct named import for Service model
 // Insert a test user
-_user.User.create({
+user_1.User.create({
     id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',
     email: 'test@example.com',
-    password: 'hashedPasswordHere',
+    password: 'hashedPasswordHere', // Ensure you hash passwords before inserting
     username: 'testuser',
-    tier: "free",
-    role: 'user',
-    isVerified: false
-}).then((user)=>{
+    tier: "free", // Default tier should be "free"
+    role: 'user', // Correct role field
+    isVerified: false, // Correct property name (camelCase)
+})
+    .then((user) => {
     console.log('User created:', user);
     // Optionally, insert a test service for the created user
-    return _services.Service.create({
-        title: 'Web Development',
-        description: 'Full-stack web development services.',
-        price: 500,
-        userId: user.id,
-        role: 'user'
+    return services_1.Service.create({
+        title: 'Web Development', // Service title
+        description: 'Full-stack web development services.', // Service description
+        price: 500, // Service price
+        userId: user.id, // Link the service to the created user
+        role: 'user', // Add the role field here for the service
     });
-}).then((service)=>{
+})
+    .then((service) => {
     console.log('Service created:', service); // Log service creation
-}).catch((error)=>{
+})
+    .catch((error) => {
     console.error('Error:', error); // Catch and log any errors
 });

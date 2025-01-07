@@ -1,29 +1,14 @@
-// src/types/UserRoles.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    UserRole: function() {
-        return UserRole;
-    },
-    UserTier: function() {
-        return UserTier;
-    }
-});
-var UserRole = /*#__PURE__*/ function(UserRole) {
+// src/types/UserRoles.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserTier = exports.UserRole = void 0;
+var UserRole;
+(function (UserRole) {
     UserRole["Admin"] = "admin";
     UserRole["User"] = "user";
-    return UserRole;
-}({});
-var UserTier = /*#__PURE__*/ function(UserTier) {
+})(UserRole || (exports.UserRole = UserRole = {}));
+var UserTier;
+(function (UserTier) {
     UserTier["Free"] = "free";
     UserTier["Paid"] = "paid";
-    return UserTier;
-}({});
+})(UserTier || (exports.UserTier = UserTier = {}));

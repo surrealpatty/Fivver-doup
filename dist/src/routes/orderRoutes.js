@@ -1,16 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const getOrderDetailsHandler = async (req, res, next)=>{
+Object.defineProperty(exports, "__esModule", { value: true });
+const getOrderDetailsHandler = async (req, res, next) => {
     // Handler logic here
-    return res.json({
-        orderDetails: {}
-    });
+    return res.json({ orderDetails: {} });
 };
-const createOrderHandler = async (req, res, next)=>{
+const createOrderHandler = async (req, res, next) => {
     // Handler logic here
-    return res.json({
-        orderCreated: true
-    });
+    return res.json({ orderCreated: true });
 };

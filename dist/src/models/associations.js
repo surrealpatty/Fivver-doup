@@ -1,81 +1,40 @@
-// src/models/associations.ts
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    Order: function() {
-        return _order.default;
-    },
-    Review: function() {
-        return _review.Review;
-    },
-    Service: function() {
-        return _services.Service;
-    },
-    User: function() {
-        return _user.User;
-    }
-});
-const _database = require("../config/database");
-const _user = require("./user");
-const _services = require("../models/services");
-const _order = /*#__PURE__*/ _interop_require_default(require("./order"));
-const _review = require("./review");
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Review = exports.Order = exports.Service = exports.User = void 0;
+// src/models/associations.ts
+const database_1 = require("../config/database"); // Correct import
+const user_1 = require("./user"); // Import the User model
+Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_1.User; } });
+const services_1 = require("../models/services"); // Correct named import
+Object.defineProperty(exports, "Service", { enumerable: true, get: function () { return services_1.Service; } });
+const order_1 = __importDefault(require("./order")); // Import the Order model
+exports.Order = order_1.default;
+const review_1 = require("./review"); // Import the Review model
+Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return review_1.Review; } });
 // Register models with Sequelize
-_database.sequelize.addModels([
-    _user.User,
-    _services.Service,
-    _order.default,
-    _review.Review
-]);
+database_1.sequelize.addModels([user_1.User, services_1.Service, order_1.default, review_1.Review]);
 // User can have many services (a user can post many services)
-_user.User.hasMany(_services.Service, {
-    foreignKey: 'userId'
-}); // Foreign key in Service will be userId
-_services.Service.belongsTo(_user.User, {
-    foreignKey: 'userId'
-}); // A service belongs to one user
+user_1.User.hasMany(services_1.Service, { foreignKey: 'userId' }); // Foreign key in Service will be userId
+services_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' }); // A service belongs to one user
 // User can have many reviews (a user can leave many reviews)
-_user.User.hasMany(_review.Review, {
-    foreignKey: 'userId'
-}); // Foreign key in Review will be userId
-_review.Review.belongsTo(_user.User, {
-    foreignKey: 'userId'
-}); // A review belongs to one user
+user_1.User.hasMany(review_1.Review, { foreignKey: 'userId' }); // Foreign key in Review will be userId
+review_1.Review.belongsTo(user_1.User, { foreignKey: 'userId' }); // A review belongs to one user
 // Service can have many reviews (a service can have many reviews)
-_services.Service.hasMany(_review.Review, {
-    foreignKey: 'serviceId'
-}); // Foreign key in Review will be serviceId
-_review.Review.belongsTo(_services.Service, {
-    foreignKey: 'serviceId'
-}); // A review belongs to one service
+services_1.Service.hasMany(review_1.Review, { foreignKey: 'serviceId' }); // Foreign key in Review will be serviceId
+review_1.Review.belongsTo(services_1.Service, { foreignKey: 'serviceId' }); // A review belongs to one service
 // Order belongs to a user and a service (an order is linked to one user and one service)
-_order.default.belongsTo(_user.User, {
-    foreignKey: 'userId'
-}); // An order belongs to one user
-_order.default.belongsTo(_services.Service, {
-    foreignKey: 'serviceId'
-}); // An order belongs to one service
+order_1.default.belongsTo(user_1.User, { foreignKey: 'userId' }); // An order belongs to one user
+order_1.default.belongsTo(services_1.Service, { foreignKey: 'serviceId' }); // An order belongs to one service
 // Optionally, you can sync models here if needed (but this should typically be done in a separate initialization file)
-(async ()=>{
+(async () => {
     try {
-        await _database.sequelize.sync({
-            force: false
-        }); // Use { force: false } to avoid overwriting existing data
+        await database_1.sequelize.sync({ force: false }); // Use { force: false } to avoid overwriting existing data
         console.log('Model associations are successfully set up.');
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error setting up model associations:', error);
     }
 })();

@@ -1,66 +1,64 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    app: function() {
-        return app;
-    },
-    server: function() {
-        return server;
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.server = exports.app = void 0;
+require("reflect-metadata"); // Ensure reflect-metadata is imported to enable decorators for Sequelize models
+const express_1 = __importDefault(require("express"));
+const http_1 = __importDefault(require("http"));
+const database_1 = require("./src/config/database"); // Correct the path to src/config/database
+const server_1 = __importDefault(require("./src/routes/server")); // Correct the path to src/routes/server
+const dotenv = __importStar(require("dotenv")); // To load environment variables from .env file
+dotenv.config(); // Load environment variables from the .env file
+const app = (0, express_1.default)();
+exports.app = app;
+const server = http_1.default.createServer(app);
+exports.server = server;
+// Middleware setup
+app.use(express_1.default.json()); // To parse incoming JSON requests
+// Use the server routes and mount them under '/api'
+app.use('/api', server_1.default);
+// Sync database and start the server if not in the test environment
+database_1.sequelize.sync({ alter: true }).then(() => {
+    // Only start the server if we are not in the 'test' environment
+    if (process.env.NODE_ENV !== 'test') {
+        const PORT = process.env.PORT || 3000;
+        server.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
     }
 });
-const _express = /*#__PURE__*/ _interop_require_default(require("express"));
-const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-const _cors = /*#__PURE__*/ _interop_require_default(require("cors"));
-const _bodyparser = /*#__PURE__*/ _interop_require_default(require("body-parser"));
-const _user = /*#__PURE__*/ _interop_require_default(require("./routes/user"));
-const _service = /*#__PURE__*/ _interop_require_default(require("./routes/service"));
-function _interop_require_default(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Load environment variables from .env file
-_dotenv.default.config();
-// Create an Express application
-const app = (0, _express.default)(); // Create the app instance
-// Middleware
-app.use((0, _cors.default)()); // Enable CORS
-app.use(_bodyparser.default.json()); // Parse JSON bodies
-app.use(_bodyparser.default.urlencoded({
-    extended: true
-})); // Parse URL-encoded bodies
-// Define your routes
-app.use('/api/users', _user.default); // User-related routes
-app.use('/api/services', _service.default); // Service-related routes
-// Default route for health check
-app.get('/', (req, res)=>{
-    res.send('Welcome to the API');
-});
-// Start the server if not in a test environment
-const PORT = process.env.PORT || 3000;
-let server; // Declare the server variable
-if (process.env.NODE_ENV !== 'test') {
-    server = app.listen(PORT, ()=>{
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-} else {
-    console.log('Running in test mode. Server initialization is deferred to tests.');
-}
-// Gracefully shut down the server after tests
-if (process.env.NODE_ENV === 'test') {
-    afterAll(()=>{
-        if (server) {
-            server.close(()=>{
-                console.log('Test server closed');
-            });
-        }
-    });
-}
