@@ -6,13 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_1 = require("../models/user");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Importing jwt for token generation
-// Function to generate JWT token
-const generateToken = (user) => {
-    return jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT
-    { expiresIn: '1h' } // Token expires in 1 hour
-    );
-};
+const jwt_1 = require("../utils/jwt"); // Import the token generation function
 // Authenticate User Function
 const authenticateUser = async (req, res) => {
     // Log request body to help with debugging
@@ -35,8 +29,16 @@ const authenticateUser = async (req, res) => {
             console.log('Password mismatch for user:', email);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        // Generate a JWT token for the user
-        const token = generateToken(user);
+        // Create the user payload for the token (exclude password)
+        const userPayload = {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            tier: user.tier, // Add tier if available
+            role: user.role, // Add role if available
+        };
+        // Generate the JWT token for the user
+        const token = (0, jwt_1.generateToken)(userPayload);
         // Return the success message and the generated token
         return res.status(200).json({
             message: 'Authentication successful',

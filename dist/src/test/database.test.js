@@ -31,7 +31,7 @@ beforeAll(async () => {
     services_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' });
     user_1.User.hasMany(services_1.Service, { foreignKey: 'userId' }); // Define the reverse association (optional)
     // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-    await sequelizeInstance.sync({ force: false });
+    await sequelizeInstance.sync({ force: false }); // Set force: true to reset the DB if needed
 });
 describe('Authentication Tests', () => {
     it('should authenticate and return a valid JWT token', async () => {
@@ -45,6 +45,7 @@ describe('Authentication Tests', () => {
         });
         // Check if the user was successfully created
         expect(userResponse.status).toBe(201);
+        console.log('User registration response:', userResponse.body);
         // Example request to authenticate and get a token
         const response = await (0, supertest_1.default)(index_1.app) // Use supertest to make a request to the app
             .post('/login') // Adjust the route based on your actual login route
@@ -55,10 +56,17 @@ describe('Authentication Tests', () => {
         // Ensure the response includes a valid token
         expect(response.status).toBe(200);
         expect(response.body.token).toBeDefined();
+        console.log('Login response with token:', response.body);
         // Decode the token to verify its contents (if JWT is used)
-        const decoded = jsonwebtoken_1.default.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
-        expect(decoded).toHaveProperty('id');
-        expect(decoded).toHaveProperty('email');
+        try {
+            const decoded = jsonwebtoken_1.default.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+            expect(decoded).toHaveProperty('id');
+            expect(decoded).toHaveProperty('email');
+        }
+        catch (err) {
+            console.error('Error decoding JWT:', err);
+            throw new Error('Invalid token or JWT decoding error');
+        }
     });
     it('should reject invalid credentials', async () => {
         const response = await (0, supertest_1.default)(index_1.app)

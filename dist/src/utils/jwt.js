@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = exports.generateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import the 'jsonwebtoken' library
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Secret key for JWT generation and verification
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use environment variable for security
 // Utility function to generate a JWT token
