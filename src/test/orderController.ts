@@ -1,84 +1,81 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import User from '../models/user'; // Importing the User model
-import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
+import { UserPayload } from '../types'; // Assuming UserPayload is defined in your types
+import { registerUser } from '../controllers/userController'; // Example import of the registerUser controller
+import { generateToken } from '../utils/jwt'; // If needed for your tests
+import User from '../models/user'; // If you need to mock the User model
 
-// Controller for registering a new user
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, username, password, tier = 'free' } = req.body;
+// Mock User with proper type for role
+const mockUser: UserPayload = {
+  id: '123',
+  email: 'test@example.com',
+  username: 'testuser',
+  role: 'user',  // Ensure this matches the UserRole type
+  tier: 'free',
+  isVerified: false,
+};
 
-  // Input validation: Ensure required fields are provided
-  if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Email, username, and password are required.' });
-  }
+// Example test case
+describe('User Registration Controller', () => {
+  it('should register a user successfully', async () => {
+    // Mock the User.create method to return the mock user
+    jest.spyOn(User, 'create').mockResolvedValue(mockUser as any);
 
-  try {
-    // Check if the user already exists by email
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(409).json({ message: 'User already exists with this email.' });
-    }
+    // Define the body type for the mock Request object
+    const req = {
+      body: {
+        email: 'test@example.com',
+        username: 'testuser',
+        password: 'password123',
+      },
+    } as Request<{}, {}, { email: string; username: string; password: string }>; // Mocking the Request type correctly
 
-    // Hash the user's password before saving to the database
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
 
-    // Default role, tier, and isVerified properties (assumed defaults)
-    const newUser = await User.create({
-      email,
-      username,
-      password: hashedPassword,
-      tier,  // Optional tier (defaults to 'free')
-      role: 'user',  // Default role
-      isVerified: false,  // Default verification status
-    });
+    // Call the registerUser function
+    await registerUser(req, res);
 
-    // Generate a JWT token for the new user
-    const token = generateToken(newUser);
-
-    // Respond with the user data (excluding password) and the JWT token
-    return res.status(201).json({
+    // Assert that the correct status and response are returned
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
       message: 'User registered successfully',
       user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        role: newUser.role,  // Default role is 'user'
-        tier: newUser.tier,  // The user's tier (e.g., 'free')
-        isVerified: newUser.isVerified,
-        createdAt: newUser.createdAt,
+        id: '123',
+        email: 'test@example.com',
+        username: 'testuser',
+        role: 'user',  // Ensure this is correct
+        tier: 'free',
+        isVerified: false,
+        createdAt: expect.any(String), // Assuming createdAt is returned as a string
       },
-      token,
+      token: expect.any(String), // Assuming a token is generated
     });
-  } catch (error) {
-    // Log the error and respond with a generic server error message
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Internal server error during registration.' });
-  }
-};
+  });
 
-// Example function to get a user by ID
-export const getUserById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const user = await User.findByPk(req.params.id);  // Or another method to find the user
+  it('should handle user registration failure due to existing email', async () => {
+    // Mock the User.findOne method to simulate existing user
+    jest.spyOn(User, 'findOne').mockResolvedValue(mockUser as any);
 
-    if (!user) {
-      // Return a 404 status with the correct message
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const req = {
+      body: {
+        email: 'test@example.com',
+        username: 'testuser',
+        password: 'password123',
+      },
+    } as Request<{}, {}, { email: string; username: string; password: string }>; // Mocking the Request type correctly
 
-    // Return the user data (excluding sensitive data like password)
-    return res.status(200).json({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      tier: user.tier,
-      isVerified: user.isVerified,
-      createdAt: user.createdAt,
-    });
-  } catch (error) {
-    // Handle any unexpected errors
-    console.error('Error fetching user by ID:', error);
-    return res.status(500).json({ message: 'Internal server error while fetching user.' });
-  }
-};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+
+    // Call the registerUser function
+    await registerUser(req, res);
+
+    // Assert that the correct status and error message are returned
+    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.json).toHaveBeenCalledWith({ message: 'User already exists with this email.' });
+  });
+});

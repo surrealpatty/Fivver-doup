@@ -14,13 +14,16 @@ import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services'; // Correct named import for Service model
 
+// Define the UserRole type (enum or union type)
+export type UserRole = 'user' | 'admin'; // Example roles, adjust based on your needs
+
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
   id: string;
   email: string;
   username: string;
   password: string;
-  role: string;
+  role: UserRole;  // Updated to UserRole type
   tier: string;
   isVerified: boolean;
   passwordResetToken?: string | null;
@@ -49,12 +52,12 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
   @Column({
     type: DataType.STRING,
-    defaultValue: 'free', // Default role is 'free'
+    defaultValue: 'user', // Default role is 'user' instead of 'free'
     validate: {
-      isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
+      isIn: [['user', 'admin']], // Allow only 'user' or 'admin' as valid roles
     },
   })
-  declare role: string;
+  declare role: UserRole;  // Role type is now UserRole
 
   @Column(DataType.STRING)
   tier!: string;
@@ -90,10 +93,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
   /**
    * Set the role of the user, ensuring it is valid.
-   * @param role - The role to assign ('free' or 'paid').
+   * @param role - The role to assign ('user' or 'admin').
    */
-  setRole(role: string): void {
-    if (!['free', 'paid'].includes(role)) {
+  setRole(role: UserRole): void {
+    if (!['user', 'admin'].includes(role)) {
       throw new Error('Invalid role assignment');
     }
     this.role = role;
