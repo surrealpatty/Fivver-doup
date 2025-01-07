@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'; // Import the 'jsonwebtoken' library
-import { UserPayload } from '../types'; // Importing the UserPayload type for type safety
+import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types'; // Import UserPayload type for consistency
 
 // Secret key for JWT generation and verification
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key'; // Use environment variable for security

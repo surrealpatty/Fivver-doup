@@ -1,16 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user';
-import jwt from 'jsonwebtoken'; // Importing jwt for token generation
-
-// Function to generate JWT token
-const generateToken = (user: any): string => {
-  return jwt.sign(
-    { userId: user.id, email: user.email, username: user.username },
-    process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT
-    { expiresIn: '1h' } // Token expires in 1 hour
-  );
-};
+import { generateToken } from '../utils/jwt'; // Import the token generation function
+import { UserPayload } from '../types'; // Import UserPayload type for consistency
 
 // Authenticate User Function
 export const authenticateUser = async (req: Request, res: Response): Promise<Response> => {
@@ -41,8 +33,17 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate a JWT token for the user
-    const token = generateToken(user);
+    // Create the user payload for the token (exclude password)
+    const userPayload: UserPayload = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      tier: user.tier, // Add tier if available
+      role: user.role, // Add role if available
+    };
+
+    // Generate the JWT token for the user
+    const token = generateToken(userPayload);
 
     // Return the success message and the generated token
     return res.status(200).json({
