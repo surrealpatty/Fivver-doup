@@ -1,4 +1,5 @@
 "use strict";
+// src/globalTeardown.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./index"); // Import the server from index.ts
 if (index_1.server && typeof index_1.server.close === 'function') {

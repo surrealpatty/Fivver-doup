@@ -1,5 +1,4 @@
 "use strict";
-// src/test/app.test.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -72,6 +71,40 @@ describe('Authentication Tests', () => {
         // Ensure the response is a 401 Unauthorized with the correct error message
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Invalid credentials.'); // Adjust message if necessary
+    });
+    // Authentication Middleware Tests
+    it('should return 401 when no token is provided', async () => {
+        const response = await (0, supertest_1.default)(index_1.app).get('/protected-route'); // Adjust this route if needed
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe('Authorization token is missing or invalid');
+    });
+    it('should return 403 when an invalid token is provided', async () => {
+        const response = await (0, supertest_1.default)(index_1.app)
+            .get('/protected-route') // Adjust this route if needed
+            .set('Authorization', 'Bearer invalidtoken');
+        expect(response.status).toBe(403);
+        expect(response.body.message).toBe('Invalid or expired token');
+    });
+    it('should pass authentication when a valid token is provided', async () => {
+        // First, create a test user and log in to get a valid token
+        const userResponse = await (0, supertest_1.default)(index_1.app)
+            .post('/register')
+            .send({
+            email: 'testprotected@example.com',
+            password: 'password123',
+            username: 'protecteduser',
+        });
+        const loginResponse = await (0, supertest_1.default)(index_1.app)
+            .post('/login')
+            .send({
+            email: 'testprotected@example.com',
+            password: 'password123',
+        });
+        const token = loginResponse.body.token;
+        const response = await (0, supertest_1.default)(index_1.app)
+            .get('/protected-route') // Adjust this route if needed
+            .set('Authorization', `Bearer ${token}`);
+        expect(response.status).toBe(200); // Assuming success here
     });
 });
 // Clean up after tests
