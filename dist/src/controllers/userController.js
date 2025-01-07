@@ -50,9 +50,26 @@ const registerUser = async (req, res) => {
         });
     }
     catch (error) {
-        // Log the error and respond with a generic server error message
-        console.error('Error registering user:', error);
-        return res.status(500).json({ message: 'Internal server error during registration.' });
+        // Type guard to check if error is an instance of Error
+        if (error instanceof Error) {
+            // Enhanced error logging: Log error message and stack trace
+            console.error('Error registering user:', error.message);
+            console.error('Stack trace:', error.stack);
+            // Return a generic 500 error response to the client
+            return res.status(500).json({
+                message: 'Internal server error during registration.',
+                error: error.message, // Optionally send error message for debugging (can be omitted in production)
+            });
+        }
+        else {
+            // Handle unexpected error types
+            console.error('Unexpected error:', error);
+            // Return a generic 500 error response for unknown error types
+            return res.status(500).json({
+                message: 'Internal server error during registration.',
+                error: 'An unexpected error occurred.',
+            });
+        }
     }
 };
 exports.registerUser = registerUser;
@@ -76,9 +93,26 @@ const getUserById = async (req, res) => {
         });
     }
     catch (error) {
-        // Handle any unexpected errors
-        console.error('Error fetching user by ID:', error);
-        return res.status(500).json({ message: 'Internal server error while fetching user.' });
+        // Type guard to check if error is an instance of Error
+        if (error instanceof Error) {
+            // Enhanced error logging for unexpected errors
+            console.error('Error fetching user by ID:', error.message);
+            console.error('Stack trace:', error.stack);
+            // Handle any unexpected errors
+            return res.status(500).json({
+                message: 'Internal server error while fetching user.',
+                error: error.message, // Optionally send error message for debugging (can be omitted in production)
+            });
+        }
+        else {
+            // Handle unexpected error types
+            console.error('Unexpected error:', error);
+            // Return a generic 500 error response for unknown error types
+            return res.status(500).json({
+                message: 'Internal server error while fetching user.',
+                error: 'An unexpected error occurred.',
+            });
+        }
     }
 };
 exports.getUserById = getUserById;

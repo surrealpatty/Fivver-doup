@@ -8,11 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 require("reflect-metadata"); // Required for decorators
 const sequelize_typescript_1 = require("sequelize-typescript");
 const uuid_1 = require("uuid");
+const bcryptjs_1 = __importDefault(require("bcryptjs")); // Import bcryptjs for password hashing
 const services_1 = require("./services"); // Correct named import for Service model
 let User = class User extends sequelize_typescript_1.Model {
     username;
@@ -27,6 +31,14 @@ let User = class User extends sequelize_typescript_1.Model {
      */
     static assignUuid(user) {
         user.id = (0, uuid_1.v4)(); // Generate UUID if not already provided
+    }
+    /**
+     * Hook to hash the password before saving
+     */
+    static async hashPassword(user) {
+        if (user.password) {
+            user.password = await bcryptjs_1.default.hash(user.password, 10); // Hash the password
+        }
     }
     // Define the association to the Service model
     services;
@@ -114,6 +126,12 @@ __decorate([
     __metadata("design:paramtypes", [User]),
     __metadata("design:returntype", void 0)
 ], User, "assignUuid", null);
+__decorate([
+    sequelize_typescript_1.BeforeCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [User]),
+    __metadata("design:returntype", Promise)
+], User, "hashPassword", null);
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
 ], User);
