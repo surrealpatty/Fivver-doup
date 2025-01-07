@@ -1,5 +1,5 @@
 import { sequelize } from './config/database';  // Correct import
-import User from './models/user';  // Make sure this is the correct path
+import { User }from './models/user';  // Make sure this is the correct path
 
 async function syncDatabase() {
   try {

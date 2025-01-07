@@ -7,10 +7,8 @@ import { sequelize } from '../config/database';  // Correct import for sequelize
 import { User } from '../models/user';  // Correct import for the User model
 import { Service } from '../models/services';  // Correct import for the Service model
 
-// Import the app based on your export in src/index.ts
-import app from '../index';  // If app is exported as default
-// Or, if app is a named export
-// import { app } from '../index';
+// Import the app as a named export
+import { app } from '../index';  // Corrected to use named export
 
 dotenv.config();  // Load environment variables from .env file
 
