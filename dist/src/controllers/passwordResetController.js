@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = exports.requestPasswordReset = void 0;
-const user_1 = __importDefault(require("../models/user"));
+const user_1 = require("../models/user");
 const sequelize_1 = require("sequelize"); // Import Op for Sequelize operators
 const emailService_1 = require("../services/emailService"); // Assume you have a service to send emails
 // Request password reset
@@ -12,7 +9,7 @@ const requestPasswordReset = async (req, res) => {
     const { email } = req.body;
     try {
         // Find user by email
-        const user = await user_1.default.findOne({ where: { email } });
+        const user = await user_1.User.findOne({ where: { email } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -36,7 +33,7 @@ const resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
     try {
         // Find user by the token and check if the token is not expired
-        const user = await user_1.default.findOne({
+        const user = await user_1.User.findOne({
             where: {
                 passwordResetToken: token,
                 passwordResetTokenExpiry: { [sequelize_1.Op.gt]: new Date() }, // Token should be valid and not expired

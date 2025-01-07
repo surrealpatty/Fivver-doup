@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const user_1 = __importDefault(require("../models/user")); // Import the User model
+const user_1 = require("../models/user"); // Import the User model
 const resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
     try {
         // Find the user by email
-        const user = await user_1.default.findOne({ where: { email } });
+        const user = await user_1.User.findOne({ where: { email } });
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }

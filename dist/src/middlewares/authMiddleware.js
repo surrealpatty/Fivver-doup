@@ -5,22 +5,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
-const authenticateToken = (req, // Use AuthRequest interface to extend the user field
-res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
-    if (!token) {
-        return res.status(401).json({ message: 'Authorization token is missing' });
-    }
-    // Verify the token and decode the payload
-    jsonwebtoken_1.default.verify(token, SECRET_KEY, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Invalid or expired token' });
+// Middleware to authenticate the token
+const authenticateToken = (req, res, next) => {
+    try {
+        const authorizationHeader = req.headers['authorization'];
+        if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ message: 'Authorization token is missing or invalid' });
         }
-        // Attach decoded user data to the request
-        req.user = decoded;
-        // Proceed to the next middleware
+        const token = authorizationHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Authorization token is missing' });
+        }
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            console.error('JWT_SECRET is not configured in the environment variables');
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        // Decode the JWT and cast it to the UserPayload type
+        const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
+        req.user = decoded; // Ensure req.user is of type UserPayload
         next();
-    });
+    }
+    catch (error) {
+        console.error('Token authentication failed:', error);
+        return res.status(403).json({ message: 'Invalid or expired token' });
+    }
 };
 exports.authenticateToken = authenticateToken;

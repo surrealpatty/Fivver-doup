@@ -1,4 +1,5 @@
 "use strict";
+// src/models/user.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -32,10 +33,10 @@ let User = class User extends sequelize_typescript_1.Model {
     services;
     /**
      * Set the role of the user, ensuring it is valid.
-     * @param role - The role to assign ('free' or 'paid').
+     * @param role - The role to assign ('user' or 'admin').
      */
     setRole(role) {
-        if (!['free', 'paid'].includes(role)) {
+        if (!['user', 'admin'].includes(role)) {
             throw new Error('Invalid role assignment');
         }
         this.role = role;
@@ -63,15 +64,18 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING,
-        defaultValue: 'free', // Default role is 'free'
+        defaultValue: 'user', // Default role is 'user'
         validate: {
-            isIn: [['free', 'paid']], // Allow only 'free' or 'paid' as valid roles
+            isIn: [['user', 'admin']], // Allow only 'user' or 'admin' as valid roles
         },
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
+        defaultValue: 'free', // Default to 'free' tier
+    }),
     __metadata("design:type", String)
 ], User.prototype, "tier", void 0);
 __decorate([
@@ -110,4 +114,3 @@ __decorate([
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users', timestamps: true }) // Define the table and timestamp fields
 ], User);
-exports.default = User;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const dotenv_1 = __importDefault(require("dotenv"));
-const user_1 = __importDefault(require("../models/user")); // Ensure the path is correct
+const user_1 = require("../models/user"); // Ensure the path is correct
 const services_1 = require("../models/services"); // Corrected import for named export
 const order_1 = __importDefault(require("../models/order")); // Ensure the Order model exists and is correctly defined
 const review_1 = require("../models/review"); // Ensure the Review model exists and is correctly defined
@@ -22,7 +22,7 @@ exports.sequelize = new sequelize_typescript_1.Sequelize({
     database: process.env.DB_NAME || "fivver_doup", // Database name (default: fivver_doup)
     host: process.env.DB_HOST || "127.0.0.1", // Database host (default: localhost)
     dialect: "mysql", // MySQL dialect
-    models: [user_1.default, services_1.Service, order_1.default, review_1.Review], // Corrected reference from Services to Service
+    models: [user_1.User, services_1.Service, order_1.default, review_1.Review], // Corrected reference from Services to Service
     logging: process.env.NODE_ENV === "development" ? console.log : false, // Log queries in development
     define: {
         freezeTableName: true, // Prevent pluralized table names

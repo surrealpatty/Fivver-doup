@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.registerUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("../models/user")); // Correct way to import default exports
+const user_1 = require("../models/user"); // Correct way to import default exports
 const uuid_1 = require("uuid"); // UUID for generating unique user ID
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 // User registration handler
@@ -18,14 +18,14 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Please provide all fields' });
         }
         // Check if user already exists
-        const existingUser = await user_1.default.findOne({ where: { email } });
+        const existingUser = await user_1.User.findOne({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
         // Hash the password before saving it
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         // Create a new user 
-        const user = await user_1.default.create({
+        const user = await user_1.User.create({
             id: (0, uuid_1.v4)(), // Use UUID for unique user ID
             email,
             username,
@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Please provide email and password' });
         }
         // Check if user exists
-        const user = await user_1.default.findOne({ where: { email } });
+        const user = await user_1.User.findOne({ where: { email } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }

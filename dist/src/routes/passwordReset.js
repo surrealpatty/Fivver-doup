@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crypto_1 = __importDefault(require("crypto"));
-const user_1 = __importDefault(require("../models/user"));
+const user_1 = require("../models/user");
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
@@ -26,7 +26,7 @@ router.post('/reset-password/request', async (req, res) => {
     const { email } = req.body;
     try {
         // Find the user by email
-        const user = await user_1.default.findOne({ where: { email } });
+        const user = await user_1.User.findOne({ where: { email } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -58,7 +58,7 @@ router.post('/reset-password/:token', async (req, res) => {
     const { newPassword } = req.body;
     try {
         // Find the user by token and check if the token is valid (not expired)
-        const user = await user_1.default.findOne({
+        const user = await user_1.User.findOne({
             where: {
                 passwordResetToken: token,
                 passwordResetTokenExpiry: { [sequelize_1.Op.gte]: new Date() }, // Token must not be expired

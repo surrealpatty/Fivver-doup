@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("../models/user")); // Import User model and UserCreationAttributes
+const user_1 = require("../models/user"); // Import User model and UserCreationAttributes
 const router = (0, express_1.Router)();
 // User Registration (Signup) Route
 router.post('/signup', async (req, res) => {
@@ -17,7 +17,7 @@ router.post('/signup', async (req, res) => {
     }
     try {
         // Check if user already exists
-        const existingUser = await user_1.default.findOne({
+        const existingUser = await user_1.User.findOne({
             where: { email },
         });
         if (existingUser) {
@@ -34,7 +34,7 @@ router.post('/signup', async (req, res) => {
             tier: 'free', // Default tier should be "free"
             isVerified: false, // Assuming user isn't verified initially
         };
-        const user = await user_1.default.create(newUser); // Pass newUser as the object to create
+        const user = await user_1.User.create(newUser); // Pass newUser as the object to create
         // Generate JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
         { expiresIn: '1h' } // Expiry time of the token

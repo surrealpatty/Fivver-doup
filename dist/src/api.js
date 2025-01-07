@@ -1,4 +1,5 @@
 "use strict";
+// src/api.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -23,6 +24,7 @@ const authenticateToken = (req, res, next) => {
         }
         // Decode the JWT and cast it to the UserPayload type
         const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
+        // Explicitly type the req.user as UserPayload
         req.user = decoded;
         next();
     }

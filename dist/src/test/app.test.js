@@ -1,16 +1,18 @@
 "use strict";
+// src/test/app.test.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata"); // Ensure reflect-metadata is imported first for sequelize-typescript
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import Sequelize from sequelize-typescript
-const index_1 = require("../index"); // Import the app to be tested
 const supertest_1 = __importDefault(require("supertest")); // For making HTTP requests to your app
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For verifying JWT tokens
 const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
 const user_1 = require("../models/user"); // Correct import for the User model
 const services_1 = require("../models/services"); // Correct import for the Service model
+// Import the app as a named export
+const index_1 = require("../index"); // Corrected to use named export
 dotenv_1.default.config(); // Load environment variables from .env file
 let sequelizeInstance;
 beforeAll(async () => {

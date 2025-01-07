@@ -1,4 +1,4 @@
-// src/types/express/index.d.ts
+// src/types/request.d.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

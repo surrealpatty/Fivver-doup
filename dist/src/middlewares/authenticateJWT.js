@@ -1,10 +1,11 @@
 "use strict";
+// src/middlewares/authenticateJWT.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Import jwt
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Importing jwt
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
 // Middleware to authenticate token and attach user data to the request
@@ -22,8 +23,12 @@ const authenticateToken = (req, res, next) => {
             }
             // Check if the decoded token is an object and contains the user payload
             if (decoded && typeof decoded === 'object' && decoded !== null) {
-                // Casting decoded to UserPayload
-                req.user = decoded; // Attach user payload to request
+                // Ensure 'tier' is always defined as UserTier (fix the type mismatch)
+                const decodedUser = decoded;
+                if (!decodedUser.tier) {
+                    decodedUser.tier = 'free'; // Set a default tier if it's undefined
+                }
+                req.user = decodedUser; // Attach user payload to request
             }
             else {
                 return res.status(401).json({ message: 'Invalid token structure' });

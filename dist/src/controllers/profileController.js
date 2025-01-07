@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfile = exports.getProfile = void 0;
-const user_1 = __importDefault(require("../models/user")); // Correct import for the User model
+const user_1 = require("../models/user"); // Correct import for the User model
 // GET /profile - Get user profile
 const getProfile = async (req, res) => {
     const userId = req.user?.id; // Access user id from req.user
@@ -13,7 +10,7 @@ const getProfile = async (req, res) => {
     }
     try {
         // Find the user by their ID
-        const user = await user_1.default.findByPk(userId);
+        const user = await user_1.User.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -42,7 +39,7 @@ const updateProfile = async (req, res) => {
     const { email, username, role, tier, isVerified } = req.body; // Get all updateable fields from the request body
     try {
         // Find the user and update their details
-        const user = await user_1.default.findByPk(userId);
+        const user = await user_1.User.findByPk(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

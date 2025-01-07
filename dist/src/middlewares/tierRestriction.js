@@ -1,7 +1,9 @@
 "use strict";
+// src/middlewares/tierRestriction.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tierMiddleware = void 0;
-const tierMiddleware = (req, res, next) => {
+const tierMiddleware = (req, // Use AuthRequest here
+res, next) => {
     const user = req.user;
     // Check if the user exists and if their tier is 'paid'
     if (!user || user.tier !== 'paid') {

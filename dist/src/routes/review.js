@@ -1,4 +1,5 @@
 "use strict";
+// src/routes/review.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authenticateToken_1 = require("../middlewares/authenticateToken");
@@ -6,7 +7,7 @@ const router = (0, express_1.Router)();
 // POST route to create a new review
 router.post('/', authenticateToken_1.authenticateToken, async (req, res, next) => {
     try {
-        const user = req.user; // Type casting to CustomAuthRequest
+        const user = req.user; // Access the user property from the custom request type
         if (!user || !user.tier) {
             return res.status(400).json({ message: 'User tier is missing or user is not authenticated.' });
         }
@@ -27,7 +28,7 @@ router.post('/', authenticateToken_1.authenticateToken, async (req, res, next) =
 // GET route to fetch reviews for a specific service
 router.get('/:serviceId', authenticateToken_1.authenticateToken, async (req, res, next) => {
     try {
-        const user = req.user;
+        const user = req.user; // Access the user property from the custom request type
         if (!user) {
             return res.status(401).json({ message: 'User not authenticated.' });
         }

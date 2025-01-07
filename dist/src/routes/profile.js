@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/profile.ts
 const express_1 = __importDefault(require("express"));
 const authenticateToken_1 = require("../middlewares/authenticateToken");
 const router = express_1.default.Router();
@@ -11,8 +10,9 @@ const router = express_1.default.Router();
 router.get('/profile', authenticateToken_1.authenticateToken, // Middleware to authenticate user
 async (req, res, next) => {
     try {
-        // Access the user property with correct typing from CustomAuthRequest
-        const user = req.user;
+        // Cast req to CustomAuthRequest to access user
+        const customReq = req;
+        const user = customReq.user;
         if (!user) {
             return res.status(401).json({ message: 'User not authenticated' });
         }

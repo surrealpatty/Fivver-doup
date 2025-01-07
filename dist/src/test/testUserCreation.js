@@ -1,13 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = __importDefault(require("../models/user")); // Ensure the path is correct
+const user_1 = require("../models/user"); // Ensure the path is correct
 // Example test for user creation
 describe('User creation test', () => {
     it('should create a new user', async () => {
-        const newUser = await user_1.default.create({
+        const newUser = await user_1.User.create({
             username: 'testuser', // Change this to your test username
             email: 'testuser@example.com', // Ensure this email is valid
             password: 'testpassword', // Make sure this matches your model's requirements

@@ -18,7 +18,7 @@ describe('Service Model Tests', () => {
             username: 'testuser',
             email: 'testuser@example.com',
             password: 'password123',
-            role: 'free',
+            role: 'user', // Change from 'free' to 'user'
             tier: 'free',
             isVerified: true,
         });
@@ -35,7 +35,7 @@ describe('Service Model Tests', () => {
             description: 'A test service',
             price: 10,
             userId: user.id, // Associate the service with the created user
-            role: 'user' // Add the role field here
+            role: 'user' // Valid role ('user')
         };
         // Create the service and save it in the database
         const service = await services_1.Service.create(serviceData);
