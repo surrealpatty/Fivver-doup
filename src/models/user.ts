@@ -1,5 +1,3 @@
-// src/models/user.ts
-
 import 'reflect-metadata';  // Required for decorators
 import { 
   Table, 
@@ -61,6 +59,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
   @Column({
     type: DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
+    allowNull: false, // Ensure tier is not nullable
     defaultValue: 'free', // Default to 'free' tier
   })
   tier!: UserTier;

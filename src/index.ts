@@ -28,11 +28,27 @@ app.get('/', (req, res) => {
 });
 
 // Start the server if not in a test environment
-const server = app.listen(process.env.PORT || 3000, () => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(`Server is running on http://localhost:${process.env.PORT || 3000}`);
-  }
-});
+const PORT = process.env.PORT || 3000;
+let server: any; // Declare the server variable
+
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+} else {
+  console.log('Running in test mode. Server initialization is deferred to tests.');
+}
+
+// Gracefully shut down the server after tests
+if (process.env.NODE_ENV === 'test') {
+  afterAll(() => {
+    if (server) {
+      server.close(() => {
+        console.log('Test server closed');
+      });
+    }
+  });
+}
 
 // Export the app and server for use in tests and other files
 export { app, server };

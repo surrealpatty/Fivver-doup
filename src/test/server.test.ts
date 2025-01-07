@@ -1,43 +1,32 @@
-// src/test/server.test.ts
+import { Service } from '../models/services';  // Ensure Service model is imported
+import { User } from '../models/user';  // Correct import for User model
+import { sequelize } from '../config/database';  // Correct import for sequelize
 
-import { app } from '../index';  // Ensure your app is properly imported
-import { sequelize } from '../config/database';  // Sequelize connection
-import { Service } from '../models/services';
-import { User } from '../models/user';
-import { Server } from 'http';  // Import Server from the http module
+describe('Service Model', () => {
+  let user: User;
 
-let server: Server;  // Explicitly define the type of the server
-let user: User;
+  beforeAll(async () => {
+    // Sync the database before running tests
+    await sequelize.sync({ force: true });
 
-beforeAll(async () => {
-  // Sync the database before running tests
-  await sequelize.sync({ force: true });
-
-  // Setup the server
-  server = app.listen(3000);  // Start the server on port 3000
-
-  // Create a user before running tests
-  user = await User.create({
-    email: 'test@example.com',
-    username: 'testuser',
-    password: 'testpassword',  // In a real scenario, this should be hashed
-    role: 'user',
-    tier: 'paid',  // Use 'paid' instead of 'Tier 2'
-    isVerified: true,
+    // Create a user before running tests
+    user = await User.create({
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'testpassword',  // In a real scenario, this should be hashed
+      role: 'user',  // Assuming role is a required field for the user model
+      tier: 'paid',  // Change from 'Tier 1' to 'paid'
+      isVerified: true,  // Assuming isVerified is required for the user model
+    });
   });
-});
 
-afterAll(async () => {
-  // Ensure the server is closed after all tests
-  server.close();
+  afterAll(async () => {
+    // Close the Sequelize connection after all tests
+    await sequelize.close();
+  });
 
-  // Close the Sequelize connection after all tests
-  await sequelize.close();
-});
-
-describe('Service API', () => {
   it('should define the Service model', () => {
-    expect(Service).toBeDefined();  // Ensure Service model is defined
+    expect(Service).toBeDefined();  // Sanity check: Ensure the Service model is defined
   });
 
   it('should create a new service and return a generated ID', async () => {
@@ -45,74 +34,79 @@ describe('Service API', () => {
       title: 'Test Service',
       description: 'A test service',
       price: 10,
-      userId: user.id,  // Associate service with user
+      userId: user.id,  // Associating the service with the user
       role: 'user',  // Valid role
     };
 
     // Create a new service
     const service = await Service.create(serviceData);
 
-    console.log('Created service ID:', service.id);
-
-    // Assertions
-    expect(service.id).toBeDefined();
-    expect(service.userId).toBe(user.id);
-    expect(service.title).toBe('Test Service');
-    expect(service.price).toBe(10);
-    expect(service.description).toBe('A test service');
-    expect(service.role).toBe('user');
+    // Assertions to validate that the service has been created successfully
+    expect(service.id).toBeDefined(); // Ensure the ID is generated and not undefined
+    expect(service.userId).toBe(user.id); // Ensure userId is correctly set
+    expect(service.title).toBe('Test Service'); // Ensure title is set correctly
+    expect(service.price).toBe(10); // Ensure price is set correctly
+    expect(service.description).toBe('A test service'); // Ensure description is correct
+    expect(service.role).toBe('user'); // Ensure role is set correctly
   });
 
   it('should retrieve a service by ID', async () => {
+    // Create a service to retrieve
     const service = await Service.create({
       title: 'Test Service to Retrieve',
       description: 'A service for retrieving test',
       price: 20,
       userId: user.id,
-      role: 'user',
+      role: 'user',  // Valid role
     });
 
-    const retrievedService = await Service.findByPk(service.id);
-    expect(retrievedService).not.toBeNull();
-    expect(retrievedService?.title).toBe('Test Service to Retrieve');
+    const retrievedService = await Service.findByPk(service.id);  // Retrieve using the created ID
+    expect(retrievedService).not.toBeNull();  // Ensure the service exists
+    expect(retrievedService?.title).toBe('Test Service to Retrieve');  // Ensure title matches
   });
 
   it('should update a service', async () => {
+    // Create a service to update
     const service = await Service.create({
       title: 'Service to Update',
       description: 'A service that will be updated',
       price: 30,
       userId: user.id,
-      role: 'user',
+      role: 'user',  // Valid role
     });
 
+    // Update the service price
     const [updatedRowsCount] = await Service.update(
-      { price: 600 },
-      { where: { id: service.id } }
+      { price: 600 },  // New price
+      { where: { id: service.id } }  // Use the created service ID
     );
 
-    expect(updatedRowsCount).toBe(1);
+    expect(updatedRowsCount).toBe(1);  // Ensure one row was updated
 
+    // Retrieve the updated service
     const updatedService = await Service.findByPk(service.id);
-    expect(updatedService?.price).toBe(600);
+    expect(updatedService?.price).toBe(600);  // Ensure the price was updated correctly
   });
 
   it('should delete a service', async () => {
+    // Create a service to delete
     const service = await Service.create({
       title: 'Service to Delete',
       description: 'A service that will be deleted',
       price: 40,
       userId: user.id,
-      role: 'user',
+      role: 'user',  // Valid role
     });
 
+    // Delete the service
     const deletedRowsCount = await Service.destroy({
       where: { id: service.id },
     });
 
-    expect(deletedRowsCount).toBe(1);
+    expect(deletedRowsCount).toBe(1);  // Ensure one row was deleted
 
+    // Attempt to retrieve the deleted service
     const deletedService = await Service.findByPk(service.id);
-    expect(deletedService).toBeNull();
+    expect(deletedService).toBeNull();  // Ensure the service is no longer found
   });
 });
