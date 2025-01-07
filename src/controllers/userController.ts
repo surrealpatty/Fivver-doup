@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { User,  UserRole } from '../models/user'; // Importing User, UserRole, and UserTier
+import { User, UserRole, UserTier } from '../models/user'; // Importing User, UserRole, and UserTier
 import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
-import { UserTier } from '../models/user'; // Ensure this is correct
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
@@ -51,10 +50,28 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       },
       token,
     });
-  } catch (error) {
-    // Log the error and respond with a generic server error message
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Internal server error during registration.' });
+  } catch (error: unknown) {
+    // Type guard to check if error is an instance of Error
+    if (error instanceof Error) {
+      // Enhanced error logging: Log error message and stack trace
+      console.error('Error registering user:', error.message);
+      console.error('Stack trace:', error.stack);
+
+      // Return a generic 500 error response to the client
+      return res.status(500).json({
+        message: 'Internal server error during registration.',
+        error: error.message,  // Optionally send error message for debugging (can be omitted in production)
+      });
+    } else {
+      // Handle unexpected error types
+      console.error('Unexpected error:', error);
+
+      // Return a generic 500 error response for unknown error types
+      return res.status(500).json({
+        message: 'Internal server error during registration.',
+        error: 'An unexpected error occurred.',
+      });
+    }
   }
 };
 
@@ -78,9 +95,27 @@ export const getUserById = async (req: Request, res: Response): Promise<Response
       isVerified: user.isVerified,
       createdAt: user.createdAt,
     });
-  } catch (error) {
-    // Handle any unexpected errors
-    console.error('Error fetching user by ID:', error);
-    return res.status(500).json({ message: 'Internal server error while fetching user.' });
+  } catch (error: unknown) {
+    // Type guard to check if error is an instance of Error
+    if (error instanceof Error) {
+      // Enhanced error logging for unexpected errors
+      console.error('Error fetching user by ID:', error.message);
+      console.error('Stack trace:', error.stack);
+
+      // Handle any unexpected errors
+      return res.status(500).json({
+        message: 'Internal server error while fetching user.',
+        error: error.message,  // Optionally send error message for debugging (can be omitted in production)
+      });
+    } else {
+      // Handle unexpected error types
+      console.error('Unexpected error:', error);
+
+      // Return a generic 500 error response for unknown error types
+      return res.status(500).json({
+        message: 'Internal server error while fetching user.',
+        error: 'An unexpected error occurred.',
+      });
+    }
   }
 };

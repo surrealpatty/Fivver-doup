@@ -12,6 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs'; // Import bcryptjs for password hashing
 import { Service } from './services'; // Correct named import for Service model
 import { UserTier, UserRole } from '../types'; // Import UserTier and UserRole from src/types
 
@@ -91,6 +92,16 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   @BeforeCreate
   static assignUuid(user: User): void {
     user.id = uuidv4(); // Generate UUID if not already provided
+  }
+
+  /**
+   * Hook to hash the password before saving
+   */
+  @BeforeCreate
+  static async hashPassword(user: User): Promise<void> {
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, 10); // Hash the password
+    }
   }
 
   // Define the association to the Service model
