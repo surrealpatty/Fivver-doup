@@ -1,3 +1,5 @@
+// src/models/user.ts
+
 import 'reflect-metadata';  // Required for decorators
 import { 
   Table, 
@@ -13,15 +15,7 @@ import {
 import { Optional } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { Service } from './services'; // Correct named import for Service model
-
-// Define the UserRole type (enum or union type)
-export type UserRole = 'user' | 'admin'; // Example roles, adjust based on your needs
-
-// Define the UserTier enum for user tiers
-export enum UserTier {
-  Free = 'free',
-  Paid = 'paid',
-}
+import { UserTier, UserRole } from '../types'; // Import UserTier from src/types
 
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
@@ -29,8 +23,8 @@ export interface UserAttributes {
   email: string;
   username: string;
   password: string;
-  role: UserRole;  // Updated to UserRole type
-  tier: UserTier;  // Use UserTier enum here
+  role: UserRole;
+  tier: UserTier;
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
@@ -66,8 +60,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   declare role: UserRole;
 
   @Column({
-    type: DataType.ENUM('free', 'paid'), // Enum for UserTier
-    defaultValue: UserTier.Free, // Default to free tier
+    type: DataType.ENUM('free', 'paid'), // Enum for UserTier (with literal values)
+    defaultValue: 'free', // Default to 'free' tier
   })
   tier!: UserTier;
 
@@ -111,5 +105,3 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     this.role = role;
   }
 }
-
-// Export
