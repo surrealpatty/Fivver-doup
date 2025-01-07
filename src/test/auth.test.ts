@@ -1,10 +1,9 @@
 import 'reflect-metadata'; // Ensure this is the first import in the test file
-import { Sequelize } from 'sequelize-typescript'; // Correct import for Sequelize
-import { app } from '../index'; // Correct import for the app
 import request from 'supertest';
+import { app } from '../index';  // Import your app instance from index.ts
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for JWT verification
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
-import { sequelize } from '../config/database'; // Correct import for sequelize instance
+import { Sequelize } from 'sequelize'; // Import Sequelize from the sequelize package
 import { User } from '../models/user'; // User model import
 import { Service } from '../models/services'; // Service model import
 
@@ -12,78 +11,72 @@ import { Service } from '../models/services'; // Service model import
 dotenv.config();
 
 // Initialize Sequelize instance for testing
-let sequelizeInstance: Sequelize;
+let sequelizeInstance: Sequelize; // Explicitly define the type as Sequelize
 
 beforeAll(async () => {
+  // Initialize Sequelize instance for testing without models option
   sequelizeInstance = new Sequelize({
     dialect: 'mysql',
-    host: process.env.TEST_DB_HOST, // Use environment variables for DB configuration
+    host: process.env.TEST_DB_HOST,
     username: process.env.TEST_DB_USERNAME as string,
     password: process.env.TEST_DB_PASSWORD as string,
     database: process.env.TEST_DB_NAME as string,
-    models: [User, Service], // Add models to Sequelize instance
   });
 
-  // Log models to check if they are correctly imported
-  console.log('User Model:', User);
-  console.log('Service Model:', Service);
+  // Manually set models after Sequelize instance initialization
+  sequelizeInstance.models.User = User; // Manually assign models
+  sequelizeInstance.models.Service = Service;
 
-  // Add models to Sequelize instance and define associations
-  sequelizeInstance.addModels([User, Service]);
-
-  // Define associations
+  // Define associations manually
   Service.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Service, { foreignKey: 'userId' });
 
   // Test database connection and sync models
   await sequelizeInstance.authenticate();
-  await sequelizeInstance.sync({ force: true });
+  await sequelizeInstance.sync({ force: true }); // Force sync to ensure clean database state
 });
 
 describe('Authentication Tests', () => {
   it('should authenticate and return a valid JWT token', async () => {
-    // Create a test user
+    // Step 1: Create a test user
     const userResponse = await request(app)
       .post('/users/register') // Ensure the correct registration route
       .send({
-        email: 'test@example.com',
-        password: 'password123',
+        email: 'testuser@example.com',
+        password: 'validpassword',
         username: 'testuser',
       });
 
-    // Validate user creation
-    expect(userResponse.status).toBe(201);
+    expect(userResponse.status).toBe(201);  // Validate user creation
     expect(userResponse.body.token).toBeDefined(); // Ensure token is returned
 
-    // Authenticate the user (login)
-    const response = await request(app)
+    // Step 2: Authenticate the user (login)
+    const loginResponse = await request(app)
       .post('/users/login') // Ensure the correct login route
       .send({
-        email: 'test@example.com',
-        password: 'password123',
+        email: 'testuser@example.com',
+        password: 'validpassword',
       });
 
-    // Validate login response
-    expect(response.status).toBe(200);
-    expect(response.body.token).toBeDefined(); // Ensure token is returned
+    expect(loginResponse.status).toBe(200);  // Adjusted to expect 200 (success)
+    expect(loginResponse.body.token).toBeDefined(); // Ensure token is returned
 
-    // Verify the JWT token
-    const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET || 'your-secret-key');
+    // Step 3: Verify the JWT token
+    const decoded = jwt.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
     expect(decoded).toHaveProperty('id');
     expect(decoded).toHaveProperty('email');
   });
 
   it('should reject invalid credentials', async () => {
-    const response = await request(app)
+    const invalidLoginResponse = await request(app)
       .post('/users/login') // Ensure the correct login route
       .send({
-        email: 'invalid@example.com',
+        email: 'invaliduser@example.com',
         password: 'wrongpassword',
       });
 
-    // Validate error response
-    expect(response.status).toBe(401);
-    expect(response.body.message).toBe('Invalid credentials.');
+    expect(invalidLoginResponse.status).toBe(401); // Check for unauthorized status
+    expect(invalidLoginResponse.body.message).toBe('Invalid credentials'); // Validate error message
   });
 });
 

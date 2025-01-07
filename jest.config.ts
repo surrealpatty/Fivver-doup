@@ -1,4 +1,4 @@
-import type { Config } from '@jest/types';
+import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   preset: 'ts-jest',  // Use ts-jest preset for TypeScript support
@@ -32,6 +32,9 @@ const config: Config.InitialOptions = {
   },
   setupFiles: ['dotenv/config'],  // Load environment variables from .env
   testMatch: ['**/src/test/**/*.ts'],  // Match test files under src/test
+
+  // Optional setup file for Jest if needed (uncomment if you need one)
+  setupFilesAfterEnv: ['./src/test/setup.ts'],  // Optional setup file, if you have custom setup logic
 };
 
 export default config;

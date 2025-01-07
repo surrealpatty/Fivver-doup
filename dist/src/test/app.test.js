@@ -1,73 +1,85 @@
-"use strict";
 // src/test/app.test.ts
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata"); // Ensure reflect-metadata is imported first for sequelize-typescript
-const sequelize_typescript_1 = require("sequelize-typescript"); // Import Sequelize from sequelize-typescript
-const supertest_1 = __importDefault(require("supertest")); // For making HTTP requests to your app
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // For verifying JWT tokens
-const dotenv_1 = __importDefault(require("dotenv")); // To load environment variables
-const user_1 = require("../models/user"); // Correct import for the User model
-const services_1 = require("../models/services"); // Correct import for the Service model
-// Import the app as a named export
-const index_1 = require("../index"); // Corrected to use named export
-dotenv_1.default.config(); // Load environment variables from .env file
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+require("reflect-metadata");
+const _sequelizetypescript = require("sequelize-typescript");
+const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
+const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
+const _user = require("../models/user");
+const _services = require("../models/services");
+const _index = require("../index");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+_dotenv.default.config(); // Load environment variables from .env file
 let sequelizeInstance;
-beforeAll(async () => {
+beforeAll(async ()=>{
     // Initialize Sequelize with models explicitly
-    sequelizeInstance = new sequelize_typescript_1.Sequelize({
+    sequelizeInstance = new _sequelizetypescript.Sequelize({
         dialect: 'mysql',
         host: process.env.TEST_DB_HOST,
         username: process.env.TEST_DB_USERNAME,
         password: process.env.TEST_DB_PASSWORD,
         database: process.env.TEST_DB_NAME,
-        models: [user_1.User, services_1.Service], // Add models to Sequelize instance
+        models: [
+            _user.User,
+            _services.Service
+        ]
     });
     // Add models and define associations after models are loaded
-    sequelizeInstance.addModels([user_1.User, services_1.Service]);
+    sequelizeInstance.addModels([
+        _user.User,
+        _services.Service
+    ]);
     // Define associations explicitly (belongsTo and hasMany)
-    services_1.Service.belongsTo(user_1.User, { foreignKey: 'userId' });
-    user_1.User.hasMany(services_1.Service, { foreignKey: 'userId' });
+    _services.Service.belongsTo(_user.User, {
+        foreignKey: 'userId'
+    });
+    _user.User.hasMany(_services.Service, {
+        foreignKey: 'userId'
+    });
     // Check the database connection and sync with the DB
     await sequelizeInstance.authenticate(); // Ensure connection is successful
-    await sequelizeInstance.sync({ force: true }); // Sync the database (force: true resets the database)
+    await sequelizeInstance.sync({
+        force: true
+    }); // Sync the database (force: true resets the database)
 });
-describe('Authentication Tests', () => {
-    it('should authenticate and return a valid JWT token', async () => {
+describe('Authentication Tests', ()=>{
+    it('should authenticate and return a valid JWT token', async ()=>{
         // First, create a test user (for registration)
-        const userResponse = await (0, supertest_1.default)(index_1.app)
-            .post('/register') // Make sure the registration route is correct
-            .send({
+        const userResponse = await (0, _supertest.default)(_index.app).post('/register') // Make sure the registration route is correct
+        .send({
             email: 'test@example.com',
             password: 'password123',
-            username: 'testuser',
+            username: 'testuser'
         });
         // Ensure the user was created successfully
         expect(userResponse.status).toBe(201);
         // Now, attempt to log in and get a token
-        const loginResponse = await (0, supertest_1.default)(index_1.app)
-            .post('/login') // Adjust the login route based on your app's setup
-            .send({
+        const loginResponse = await (0, _supertest.default)(_index.app).post('/login') // Adjust the login route based on your app's setup
+        .send({
             email: 'test@example.com',
-            password: 'password123',
+            password: 'password123'
         });
         // Ensure the login was successful and the token is returned
         expect(loginResponse.status).toBe(200);
         expect(loginResponse.body.token).toBeDefined(); // Ensure a token is returned
         // Decode the token to verify its contents
-        const decoded = jsonwebtoken_1.default.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
+        const decoded = _jsonwebtoken.default.verify(loginResponse.body.token, process.env.JWT_SECRET || 'your-secret-key');
         expect(decoded).toHaveProperty('id'); // Ensure the decoded token contains 'id'
         expect(decoded).toHaveProperty('email'); // Ensure the decoded token contains 'email'
     });
-    it('should reject invalid credentials', async () => {
+    it('should reject invalid credentials', async ()=>{
         // Attempt to login with incorrect credentials
-        const response = await (0, supertest_1.default)(index_1.app)
-            .post('/login') // Ensure this route matches your app's login endpoint
-            .send({
+        const response = await (0, _supertest.default)(_index.app).post('/login') // Ensure this route matches your app's login endpoint
+        .send({
             email: 'invalid@example.com',
-            password: 'wrongpassword',
+            password: 'wrongpassword'
         });
         // Ensure the response is a 401 Unauthorized with the correct error message
         expect(response.status).toBe(401);
@@ -75,7 +87,7 @@ describe('Authentication Tests', () => {
     });
 });
 // Clean up after tests
-afterAll(async () => {
+afterAll(async ()=>{
     // Close the Sequelize connection after all tests are completed
     await sequelizeInstance.close();
 });

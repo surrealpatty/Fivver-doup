@@ -1,21 +1,30 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createMockUserToken = void 0;
 // src/test/testHelpers.ts
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Helper function to create a mock JWT token
-const createMockUserToken = (userId) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "createMockUserToken", {
+    enumerable: true,
+    get: function() {
+        return createMockUserToken;
+    }
+});
+const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const createMockUserToken = (userId)=>{
     const payload = {
         id: userId,
-        email: 'user@example.com', // Mock email, adjust as needed
-        username: 'username', // Mock username, adjust as needed
+        email: 'user@example.com',
+        username: 'username'
     };
     const secretKey = 'your-secret-key'; // Use your secret key, replace with actual one for testing
     // Create the token with the payload and secret key
-    const token = jsonwebtoken_1.default.sign(payload, secretKey, { expiresIn: '1h' });
+    const token = _jsonwebtoken.default.sign(payload, secretKey, {
+        expiresIn: '1h'
+    });
     return token;
 };
-exports.createMockUserToken = createMockUserToken;
