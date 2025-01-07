@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/user';
 import { generateToken } from '../utils/jwt'; // Import the token generation function
 import { UserPayload } from '../types'; // Import UserPayload type for consistency
+import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums
 
 // Authenticate User Function
 export const authenticateUser = async (req: Request, res: Response): Promise<Response> => {
@@ -33,8 +34,8 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
       id: user.id,
       email: user.email,
       username: user.username,
-      tier: user.tier, // Add tier if available
-      role: user.role, // Add role if available
+      tier: user.tier as UserTier, // Ensure tier is of type UserTier
+      role: user.role as UserRole, // Ensure role is of type UserRole
     };
 
     // Generate the JWT token for the user

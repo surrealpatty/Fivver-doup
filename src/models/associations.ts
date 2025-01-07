@@ -1,8 +1,8 @@
-import { sequelize } from '../config/database';  // Correct import
-import { User } from './user';        // Import the User model
-import { Service } from './services'; // Correct named import (relative path corrected)
-import { Order } from './order';      // Import the Order model
-import { Review } from './review';    // Import the Review model
+import { sequelize } from '../config/database';  // Correct import of sequelize instance
+import { User } from './user';        // Correct import of the User model class
+import { Service } from './services'; // Correct import of the Service model class
+import { Order } from './order';      // Correct import of the Order model class
+import { Review } from './review';    // Correct import of the Review model class
 
 // Register models with Sequelize
 sequelize.addModels([User, Service, Order, Review]);

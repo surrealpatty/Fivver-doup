@@ -1,4 +1,3 @@
-// src/models/user.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
 
@@ -10,6 +9,8 @@ export class User extends Model {
   public role!: string;
   public tier!: string;
   public isVerified!: boolean;
+  public passwordResetToken!: string; // Add passwordResetToken field
+  public passwordResetTokenExpiry!: Date; // Add passwordResetTokenExpiry field
 }
 
 User.init(
@@ -46,9 +47,18 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    passwordResetToken: {
+      type: DataTypes.STRING, // Define passwordResetToken field
+      allowNull: true, // Can be null initially
+    },
+    passwordResetTokenExpiry: {
+      type: DataTypes.DATE, // Define passwordResetTokenExpiry field
+      allowNull: true, // Can be null initially
+    },
   },
   {
     sequelize,
     tableName: 'users',
   }
 );
+
