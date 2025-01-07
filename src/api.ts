@@ -2,7 +2,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from './types'; // Ensure it points to the correct file
+import { UserPayload } from './types';
 
 // Middleware to authenticate the token
 export const authenticateToken = (
