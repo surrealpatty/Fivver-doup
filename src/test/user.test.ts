@@ -1,84 +1,95 @@
-import { Request, Response } from 'express';
+import request from 'supertest';
+import { app } from '../index';  // Import your Express app
+import { User } from '../models/user';  // Assuming User is the Sequelize model
 import bcrypt from 'bcryptjs';
-import { User,  UserRole, UserTier } from '../models/user'; // Importing User and UserRole
-import { generateToken } from '../utils/jwt'; // Helper function to generate JWT
 
-// Controller for registering a new user
-export const registerUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, username, password, tier = 'free', role = 'user' }: { email: string, username: string, password: string, tier: UserTier, role: UserRole } = req.body;
+describe('User Controller', () => {
+  beforeAll(async () => {
+    // Optional: Set up any needed preconditions before tests run
+  });
 
-  // Input validation: Ensure required fields are provided
-  if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Email, username, and password are required.' });
-  }
+  afterAll(async () => {
+    // Optional: Clean up database after tests run
+    await User.destroy({ where: {} });  // Example cleanup of users table
+  });
 
-  try {
-    // Check if the user already exists by email
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(409).json({ message: 'User already exists with this email.' });
-    }
+  it('should create a new user', async () => {
+    const userPayload = {
+      username: 'testuser',
+      email: 'testuser@example.com',
+      password: 'password123',
+      role: 'user',  // Add the missing role field
+      isVerified: true,  // Add the missing isVerified field
+    };
 
-    // Hash the user's password before saving to the database
+    const response = await request(app).post('/api/users').send(userPayload);
+
+    expect(response.status).toBe(201);
+    expect(response.body.message).toBe('User registered successfully');
+    expect(response.body.user.username).toBe(userPayload.username);
+    expect(response.body.token).toBeDefined();  // Check that the token is returned
+    // Ensure password is not included in the response
+    expect(response.body.user.password).toBeUndefined();
+  });
+
+  it('should not create a user if email already exists', async () => {
+    // First, create a user
+    await User.create({
+      username: 'existinguser',
+      email: 'existinguser@example.com',
+      password: 'password123',
+      role: 'user',  // Add missing field
+      isVerified: true,  // Add missing field
+    });
+
+    const userPayload = {
+      username: 'testuser',
+      email: 'existinguser@example.com',  // Same email
+      password: 'password123',
+      role: 'user',  // Add missing field
+      isVerified: true,  // Add missing field
+    };
+
+    const response = await request(app).post('/api/users').send(userPayload);
+
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe('User already exists with this email.');
+  });
+
+  it('should login a user with valid credentials', async () => {
+    const password = 'password123';
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Default role, tier, and isVerified properties (assumed defaults)
-    const newUser = await User.create({
-      email,
-      username,
+    // Create a new user with a hashed password
+    const existingUser = await User.create({
+      username: 'loginuser',
+      email: 'loginuser@example.com',
       password: hashedPassword,
-      tier,  // Optional tier (defaults to 'free')
-      role,  // Assign the role from the request body, ensuring it matches the UserRole type
-      isVerified: false,  // Default verification status
+      role: 'user',  // Add missing field
+      isVerified: true,  // Add missing field
     });
 
-    // Generate a JWT token for the new user
-    const token = generateToken(newUser);
+    const loginPayload = {
+      email: existingUser.email,
+      password: 'password123',  // Correct password
+    };
 
-    // Respond with the user data (excluding password) and the JWT token
-    return res.status(201).json({
-      message: 'User registered successfully',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-        role: newUser.role,  // Default role is 'user'
-        tier: newUser.tier,  // The user's tier (e.g., 'free')
-        isVerified: newUser.isVerified,
-        createdAt: newUser.createdAt,
-      },
-      token,
-    });
-  } catch (error) {
-    // Log the error and respond with a generic server error message
-    console.error('Error registering user:', error);
-    return res.status(500).json({ message: 'Internal server error during registration.' });
-  }
-};
+    const response = await request(app).post('/api/users/login').send(loginPayload);
 
-// Example function to get a user by ID
-export const getUserById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const user = await User.findByPk(req.params.id);  // Or another method to find the user
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('Login successful');
+    expect(response.body.token).toBeDefined();
+  });
 
-    if (!user) {
-      // Return a 404 status with the correct message
-      return res.status(404).json({ message: 'User not found' });
-    }
+  it('should not login a user with invalid credentials', async () => {
+    const loginPayload = {
+      email: 'nonexistentuser@example.com',
+      password: 'wrongpassword',
+    };
 
-    // Return the user data (excluding sensitive data like password)
-    return res.status(200).json({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      tier: user.tier,
-      isVerified: user.isVerified,
-      createdAt: user.createdAt,
-    });
-  } catch (error) {
-    // Handle any unexpected errors
-    console.error('Error fetching user by ID:', error);
-    return res.status(500).json({ message: 'Internal server error while fetching user.' });
-  }
-};
+    const response = await request(app).post('/api/users/login').send(loginPayload);
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Invalid credentials');
+  });
+});

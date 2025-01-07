@@ -34,8 +34,17 @@ export const verifyToken = (token: string): UserPayload | null => {
     // Return the decoded user payload if verification is successful
     return decoded;
   } catch (err) {
-    // Log the error and return null if verification fails
+    // Log the error with specific details for debugging
     console.error('Token verification failed:', err);
-    return null;  // Return null for invalid or expired tokens
+
+    // Handle specific error cases for expired or malformed tokens
+    if (err instanceof jwt.TokenExpiredError) {
+      console.error('Token has expired');
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      console.error('Malformed token');
+    }
+
+    // Return null for invalid or expired tokens
+    return null;
   }
 };

@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User,  UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
-import { UserPayload, CustomAuthRequest, isUser } from '../types';
+import { User, UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
+import { UserPayload, CustomAuthRequest, isUser } from '../types'; // Ensure the necessary types are imported
 
 const router = Router();
 

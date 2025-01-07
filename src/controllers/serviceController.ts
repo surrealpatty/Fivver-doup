@@ -1,49 +1,39 @@
 import { Request, Response } from 'express';
+import { Service } from '../models/services'; // Assuming Service is a Sequelize model
 
-// Controller for fetching services (public endpoint)
 export class ServiceController {
-  // Get all services (public endpoint)
-  static getServices = async (req: Request, res: Response): Promise<Response> => {
+  // Create a new service
+  static createService = async (req: Request, res: Response): Promise<Response> => {
     try {
-      // Simulate fetching services (replace with actual DB logic)
-      const services = [
-        { id: 1, title: 'Web Development' },
-        { id: 2, title: 'Graphic Design' },
-      ];
+      const { title, description, price } = req.body;
+      const userId = req.user?.id; // Assuming userId is set in the request (e.g., via authentication middleware)
 
-      return res.status(200).json(services);
-    } catch (error) {
-      console.error('Error fetching services:', error);
-      return res.status(500).json({ message: 'Failed to fetch services' });
-    }
-  };
-
-  // Get service profile for an authenticated user
-  static getServiceProfile = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const userId = req.user?.id; // Assuming user ID is set in req.user by middleware
-
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized, user not found.' });
+      // Validate the incoming data
+      if (!title || !description || !price || !userId) {
+        return res.status(400).json({ message: 'All fields (title, description, price) and userId are required.' });
       }
 
-      // Simulate fetching user's service profile (replace with actual DB logic)
-      const userServiceProfile = { id: userId, services: ['Web Development', 'SEO Services'] };
+      // Add a role field if it's required in your Service model
+      const role = 'user';  // Add a default or dynamically determined role here
 
-      return res.status(200).json(userServiceProfile);
+      // Create the service in the database
+      const service = await Service.create({
+        title,
+        description,
+        price,
+        userId, // Include userId as part of the service creation
+        role,   // Include role field
+      });
+
+      return res.status(201).json({
+        message: 'Service created successfully',
+        service,
+      });
     } catch (error) {
-      console.error('Error fetching user service profile:', error);
-      return res.status(500).json({ message: 'Failed to fetch user service profile' });
+      console.error('Error creating service:', error);
+      return res.status(500).json({ message: 'Service creation failed', error });
     }
   };
 
-  // Handle premium service access (e.g., for paid users)
-  static premiumServiceAccess = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      return res.status(200).json({ message: 'Premium service access granted.' });
-    } catch (error) {
-      console.error('Error granting premium service access:', error);
-      return res.status(500).json({ message: 'Failed to grant access to premium services' });
-    }
-  };
+  // Other methods...
 }

@@ -17,17 +17,23 @@ export const authenticateToken = (
     return res.status(401).json({ message: 'Access token is missing.' });
   }
 
-  // Verify the token using the utility function
-  const decoded = verifyToken(token);
+  try {
+    // Verify the token using the utility function
+    const decoded = verifyToken(token);
 
-  if (!decoded) {
-    // If token verification fails, send an error response
-    return res.status(403).json({ message: 'Invalid or expired token.' });
+    // If verification fails, send an error response
+    if (!decoded) {
+      return res.status(403).json({ message: 'Invalid or expired token.' });
+    }
+
+    // Attach the decoded user payload to the request object
+    req.user = decoded;
+
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (error) {
+    // Catch any unexpected errors during token verification
+    console.error('Token verification error:', error);
+    return res.status(500).json({ message: 'Token verification failed. Please try again later.' });
   }
-
-  // Attach the decoded user payload to the request object
-  req.user = decoded;
-
-  // Proceed to the next middleware or route handler
-  next();
 };

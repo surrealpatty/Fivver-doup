@@ -1,4 +1,4 @@
-import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, BeforeCreate } from 'sequelize-typescript'; // Import necessary decorators
+import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, BeforeCreate } from 'sequelize-typescript';  // Import necessary decorators
 import { Optional } from 'sequelize';  // Import Optional for defining creation attributes
 import { User } from './user';  // Correctly import User model (ensure path is correct)
 import { v4 as uuidv4 } from 'uuid';  // Import uuid to generate UUIDs
@@ -59,8 +59,9 @@ export class Service extends Model<ServiceAttributes, ServiceCreationAttributes>
     validate: {
       isIn: [['admin', 'user']],  // Allow only 'admin' or 'user' as valid roles
     },
+    defaultValue: 'user',  // Set default role to 'user'
   })
-  role!: string;  // Define role field with validation
+  role!: string;  // Define role field with validation and default value
 
   @BeforeCreate
   static async setDefaults(instance: Service) {

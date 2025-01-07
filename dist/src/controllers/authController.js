@@ -9,7 +9,7 @@ const user_1 = require("../models/user");
 const jwt_1 = require("../utils/jwt"); // Import the token generation function
 // Authenticate User Function
 const authenticateUser = async (req, res) => {
-    // Log request body to help with debugging
+    // Log request body to help with debugging (consider removing in production)
     console.log('Authentication request data:', req.body);
     const { email, password } = req.body;
     if (!email || !password) {
@@ -39,8 +39,8 @@ const authenticateUser = async (req, res) => {
         };
         // Generate the JWT token for the user
         const token = (0, jwt_1.generateToken)(userPayload);
-        // Return the success message and the generated token
-        return res.status(200).json({
+        // Return the success message and the generated token with a 201 status code
+        return res.status(201).json({
             message: 'Authentication successful',
             token, // Send back the generated token
         });

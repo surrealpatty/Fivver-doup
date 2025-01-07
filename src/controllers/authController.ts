@@ -6,13 +6,10 @@ import { UserPayload } from '../types'; // Import UserPayload type for consisten
 
 // Authenticate User Function
 export const authenticateUser = async (req: Request, res: Response): Promise<Response> => {
-  // Log request body to help with debugging (consider removing in production)
-  console.log('Authentication request data:', req.body);
-
   const { email, password }: { email: string, password: string } = req.body;
 
+  // Ensure email and password are provided
   if (!email || !password) {
-    console.log('Missing email or password');
     return res.status(400).json({ message: 'Email and password are required.' });
   }
 
@@ -21,7 +18,6 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      console.log('User not found for email:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -29,7 +25,6 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      console.log('Password mismatch for user:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -45,8 +40,8 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
     // Generate the JWT token for the user
     const token = generateToken(userPayload);
 
-    // Return the success message and the generated token with a 201 status code
-    return res.status(201).json({
+    // Return the success message and the generated token with a 200 status code
+    return res.status(200).json({
       message: 'Authentication successful',
       token, // Send back the generated token
     });
