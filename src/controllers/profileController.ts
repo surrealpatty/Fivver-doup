@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/user'; // Correct import for the User model
-import { UserPayload } from '../types'; // Correctly import UserPayload from the correct file
+import { UserPayload } from '../types'; // or adjust according to your folder structure
 
 interface AuthRequest extends Request {
   user: UserPayload | undefined;  // Type is incompatible
