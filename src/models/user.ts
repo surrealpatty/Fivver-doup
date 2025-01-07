@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database'; // Assuming this is where sequelize instance is configured
 
-// Define and export UserRole and UserTier Enums at the top of the file
+// Define UserRole and UserTier Enums
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
@@ -98,3 +98,4 @@ User.init(
   }
 );
 
+export { UserRole, UserTier };
