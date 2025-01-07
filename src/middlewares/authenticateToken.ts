@@ -1,32 +1,36 @@
 // src/middlewares/authenticateToken.ts
 
-import { Request, Response, NextFunction } from 'express';  // Import Request from express
-import jwt from 'jsonwebtoken';  // Import jsonwebtoken
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { UserPayload } from '../types'; // Ensure correct import
 
-// Middleware to authenticate the JWT token and attach user to the request object
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  // Extract the token from the Authorization header (Bearer <token>)
-  const token = req.headers['authorization']?.split(' ')[1];
+// Middleware to authenticate token and attach user data to the request
+export const authenticateToken = (
+  req: Request & { user?: UserPayload }, // Extending the Request type with the optional user property
+  res: Response,
+  next: NextFunction
+): Response<any, Record<string, any>> | void => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader?.split(' ')[1]; // Extract the token from the "Authorization" header
 
-  // If no token is provided, respond with a 401 Unauthorized status
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token is missing' });
+    return res.status(401).json({ message: 'Access token is missing.' });
   }
 
-  // Verify the token using jsonwebtoken's verify function
-  jwt.verify(token, process.env.JWT_SECRET || 'yourSecretKey', (err: any, user: any) => {
-    if (err) {
-      // Log the error for debugging purposes
-      console.error('Token verification failed:', err);
+  try {
+    // Verify the token
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY || 'your-secret-key'
+    ) as UserPayload;
 
-      // If token is invalid or expired, respond with a 403 Forbidden status
-      return res.status(403).json({ message: 'Invalid or expired token' });
-    }
+    // Attach the decoded user payload to the request
+    req.user = decoded;
 
-    // Attach the decoded user information to the request object
-    req.user = user;
-
-    // Pass control to the next middleware or route handler
+    // Proceed to the next middleware or route handler
     next();
-  });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return res.status(403).json({ message: 'Invalid or expired token.' });
+  }
 };
