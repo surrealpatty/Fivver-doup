@@ -17,6 +17,12 @@ import { Service } from './services'; // Correct named import for Service model
 // Define the UserRole type (enum or union type)
 export type UserRole = 'user' | 'admin'; // Example roles, adjust based on your needs
 
+// Define the UserTier enum for user tiers
+export enum UserTier {
+  Free = 'free',
+  Paid = 'paid',
+}
+
 // Define the UserAttributes interface which reflects the fields in the database
 export interface UserAttributes {
   id: string;
@@ -24,7 +30,7 @@ export interface UserAttributes {
   username: string;
   password: string;
   role: UserRole;  // Updated to UserRole type
-  tier: string;
+  tier: UserTier;  // Use UserTier enum here
   isVerified: boolean;
   passwordResetToken?: string | null;
   passwordResetTokenExpiry?: Date | null;
@@ -52,15 +58,18 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
   @Column({
     type: DataType.STRING,
-    defaultValue: 'user', // Default role is 'user' instead of 'free'
+    defaultValue: 'user', // Default role is 'user'
     validate: {
       isIn: [['user', 'admin']], // Allow only 'user' or 'admin' as valid roles
     },
   })
-  declare role: UserRole;  // Role type is now UserRole
+  declare role: UserRole;
 
-  @Column(DataType.STRING)
-  tier!: string;
+  @Column({
+    type: DataType.ENUM('free', 'paid'), // Enum for UserTier
+    defaultValue: UserTier.Free, // Default to free tier
+  })
+  tier!: UserTier;
 
   @Column(DataType.BOOLEAN)
   isVerified!: boolean;
@@ -103,4 +112,4 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   }
 }
 
-export default User;
+// Export
