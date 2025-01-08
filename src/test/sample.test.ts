@@ -4,6 +4,7 @@ import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid'; // UUID generator
 import { Service } from '../models/services'; // Service model import
 import { User } from '../models/user'; // User model import
+import { UserRole, UserTier } from '../types/UserRoles'; // Import enums for role and tier
 
 describe('Service Model Tests', () => {
   let user: User; // Declare a user variable to be used across tests
@@ -17,12 +18,11 @@ describe('Service Model Tests', () => {
 
     // Create a test user before running the tests
     user = await User.create({
-      id: '176019c7-46ea-4e86-aa00-caf519a26b3e', // Predefined UUID for the test
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
-      role: 'user', // Change from 'free' to 'user'
-      tier: 'free',
+      role: UserRole.User, // Use the enum for role
+      tier: UserTier.Free, // Use the enum for tier
       isVerified: true,
     });
   });
@@ -39,8 +39,8 @@ describe('Service Model Tests', () => {
       title: 'Test Service',
       description: 'A test service',
       price: 10,
-      userId: user.id, // Associate the service with the created user
-      role: 'user' // Valid role ('user')
+      userId: user.id.toString(), // Ensure userId is a string (UUID format)
+      role: UserRole.User, // Use the enum for role
     };
 
     // Create the service and save it in the database
@@ -48,9 +48,9 @@ describe('Service Model Tests', () => {
 
     // Validate the created service's attributes
     expect(service.id).toBeDefined(); // Ensure the service has an ID
-    expect(service.userId).toBe(user.id); // Ensure the userId matches
+    expect(service.userId).toBe(user.id.toString()); // Ensure the userId matches (as string)
     expect(service.title).toBe('Test Service');
     expect(service.price).toBe(10);
-    expect(service.role).toBe('user'); // Ensure the role is correctly set
+    expect(service.role).toBe(UserRole.User); // Ensure the role is correctly set
   });
 });
