@@ -1,7 +1,7 @@
 // src/test/authenticateToken.test.ts
 
 import request from 'supertest';
-import { app } from '../index'; // Ensure this is the correct path to your app
+import  app  from '../index'; // Ensure this is the correct path to your app
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken to mock its behavior
 
 // Mock jsonwebtoken methods

@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../index';  // Import your Express app
+import  app  from '../index';  // Import your Express app
 import { User } from '../models/user';  // Assuming User is the Sequelize model
 import bcrypt from 'bcryptjs';
 import { UserRole, UserTier } from '../types/UserRoles'; // Import the enums

@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../index'; // Ensure the correct path to your app entry point
+import  app  from '../index'; // Ensure the correct path to your app entry point
 import { Service } from '../models/services'; // Ensure the correct path to Service model
 import { sequelize } from '../config/database'; // Ensure sequelize instance is correctly imported
 
