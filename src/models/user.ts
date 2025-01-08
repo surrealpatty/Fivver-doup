@@ -1,12 +1,13 @@
 import { Column, Model, Table, DataType, ForeignKey } from 'sequelize-typescript';
-import { UserRole, UserTier } from '../types'; // Import enums for role and tier
-import { Service } from './services'; // Assuming you have a Service model
+import { UserRole, UserTier } from '../types';  // Import enums for role and tier
+import { Service } from './services';  // Assuming you have a Service model
 
 // Define the User model
 @Table({ tableName: 'users', timestamps: true })
-export class User extends Model<User> {
+export default class User extends Model<User> {
+  // Declare 'id' to avoid TypeScript overwriting the base class property
   @Column({ type: DataType.UUID, primaryKey: true, defaultValue: DataType.UUIDV4 })
-  id!: string;
+  declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email!: string;
@@ -51,5 +52,3 @@ export class User extends Model<User> {
 
 // Initialize associations
 User.associate();
-
-export { User };

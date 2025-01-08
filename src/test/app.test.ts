@@ -22,14 +22,14 @@ beforeAll(async () => {
     username: process.env.TEST_DB_USERNAME as string,
     password: process.env.TEST_DB_PASSWORD as string,
     database: process.env.TEST_DB_NAME as string,
-    models: [User, Service],  // Ensure the models are correctly passed
+    models: [User, Service],  // Ensure the models are correctly passed here
     logging: false,  // Disable logging in tests
   });
 
   // Add models explicitly after Sequelize instance is created
   sequelizeInstance.addModels([User, Service]);
 
-  // Define associations explicitly
+  // Define associations explicitly (belongsTo and hasMany)
   Service.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Service, { foreignKey: 'userId' });
 
