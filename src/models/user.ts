@@ -15,7 +15,7 @@ export interface UserAttributes {
 }
 
 // Define UserCreationAttributes interface, which represents the attributes when creating a User
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'isVerified'> {} // Make 'isVerified' optional
 
 // Define the User model, extending Sequelize's Model with UserAttributes and UserCreationAttributes
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -63,15 +63,15 @@ User.init(
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false, // Default to 'false' but it's optional when creating a user
     },
     passwordResetToken: {
-      type: DataTypes.STRING, // Define passwordResetToken field
-      allowNull: true, // Can be null initially
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     passwordResetTokenExpiry: {
-      type: DataTypes.DATE, // Define passwordResetTokenExpiry field
-      allowNull: true, // Can be null initially
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
