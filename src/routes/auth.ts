@@ -1,7 +1,10 @@
+// src/routes/auth.ts
+
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User, UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
+import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums
 
 const router = express.Router();
 
@@ -13,7 +16,7 @@ const logRequestBody = (req: Request, res: Response, next: () => void): void => 
 
 // User Registration (Signup) Route
 router.post('/signup', logRequestBody, async (req: Request, res: Response): Promise<Response> => {
-  const { email, username, password } = req.body;
+  const { email, username, password, role, tier } = req.body;
 
   // Validate input
   if (!email || !username || !password) {
@@ -32,13 +35,17 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
     // Hash the password using bcrypt
     const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
+    // Default values for role and tier if not provided, casting to enums
+    const userRole = (role || 'user') as UserRole; // Default to 'user' role
+    const userTier = (tier || 'free') as UserTier; // Default to 'free' tier
+
     // Create the new user in the database (id is handled automatically)
     const newUser: UserCreationAttributes = {
       email,
       username,
       password: hashedPassword,
-      role: 'user', // Default role (can be modified)
-      tier: 'free', // Default tier should be "free"
+      role: userRole,
+      tier: userTier,
       isVerified: false, // Assuming user isn't verified initially
     };
 

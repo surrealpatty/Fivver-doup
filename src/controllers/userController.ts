@@ -1,5 +1,4 @@
-// src/controllers/authController.ts
-
+// Import necessary modules and types
 import { Request, Response } from 'express';
 import { User } from '../models/user'; // Assuming User is a Sequelize model
 import { UserRole, UserTier } from '../types'; // Import enums for role and tier

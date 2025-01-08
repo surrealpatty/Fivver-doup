@@ -1,5 +1,8 @@
+// src/test/testUserDelete.ts
+
 import { sequelize } from '../config/database'; // Import the sequelize instance
 import { User } from '../models/user'; // Import the User model
+import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 
 describe('User Deletion', () => {
   beforeAll(async () => {
@@ -13,14 +16,14 @@ describe('User Deletion', () => {
   });
 
   it('should delete a user', async () => {
-    // Create a new user for testing deletion
+    // Create a new user for testing deletion using the enums for role and tier
     const user = await User.create({
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
-      role: 'user', // Add the required 'role' field
-      tier: 'free', // Add the required 'tier' field
-      isVerified: false, // Add the required 'isVerified' field
+      role: UserRole.User,  // Use UserRole enum for type safety
+      tier: UserTier.Free,  // Use UserTier enum for default tier
+      isVerified: false, // Default verification status
     });
 
     const userId = user.id; // Get the ID of the created user

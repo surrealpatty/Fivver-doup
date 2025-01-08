@@ -1,3 +1,5 @@
+// src/testData.ts
+
 import { User } from './models/user';  // Correct import path for User model
 import { Service } from './models/services'; // Correct named import for Service model
 import { UserTier, UserRole } from './types'; // Import the correct types from a single file
@@ -8,8 +10,8 @@ User.create({
   email: 'test@example.com',
   password: 'hashedPasswordHere',  // Ensure you hash passwords before inserting
   username: 'testuser',
-  tier: 'free' as UserTier,  // Ensure the tier is a valid UserTier type (if union type or enum)
-  role: 'user' as UserRole,  // Ensure the role is a valid UserRole type (if union type or enum)
+  tier: UserTier.Free,  // Use the correct enum value for tier (UserTier.Free)
+  role: UserRole.User,  // Use the correct enum value for role (UserRole.User)
   isVerified: false,  // Correct property name (camelCase)
 })
   .then((user) => {
@@ -21,7 +23,7 @@ User.create({
       description: 'Full-stack web development services.',  // Service description
       price: 500,  // Service price
       userId: user.id.toString(),  // Ensure userId is a string (convert if necessary)
-      role: 'user',  // Add the role field here for the service
+      role: UserRole.User,  // Add the role field here for the service (should be the same role)
     });
   })
   .then((service) => {
