@@ -1,5 +1,8 @@
+// src/controllers/authController.ts
+
 import { Request, Response } from 'express';
 import { User } from '../models/user'; // Assuming User is a Sequelize model
+import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
@@ -11,9 +14,9 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       return res.status(400).json({ message: 'Email, password, and username are required.' });
     }
 
-    // Default values for role and tier if not provided
-    const userRole = role || 'User'; // Default to 'User' role
-    const userTier = tier || 'Free'; // Default to 'Free' tier
+    // Default values for role and tier if not provided, casting to enums
+    const userRole = (role || 'User') as UserRole; // Default to 'User' role
+    const userTier = (tier || 'Free') as UserTier; // Default to 'Free' tier
 
     // Create new user in the database
     const user = await User.create({ 
@@ -21,7 +24,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       password, 
       username, 
       role: userRole, 
-      tier: userTier 
+      tier: userTier,
     });
 
     return res.status(201).json({
