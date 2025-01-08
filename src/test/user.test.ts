@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../index';  // Import your Express app
 import { User } from '../models/user';  // Assuming User is the Sequelize model
 import bcrypt from 'bcryptjs';
+import { UserRole, UserTier } from '../types/UserRoles'; // Import the enums
 
 describe('User Controller', () => {
   beforeAll(async () => {
@@ -18,9 +19,9 @@ describe('User Controller', () => {
       username: 'testuser',
       email: 'testuser@example.com',
       password: 'password123',
-      role: 'user',  // Add the missing role field
+      role: UserRole.User,  // Use UserRole.User enum value
       isVerified: true,  // Add the missing isVerified field
-      tier: 'free',  // Ensure the tier is included
+      tier: UserTier.Free,  // Use UserTier.Free enum value
     };
 
     const response = await request(app).post('/api/users/signup').send(userPayload);
@@ -40,18 +41,18 @@ describe('User Controller', () => {
       username: 'existinguser',
       email: 'existinguser@example.com',
       password: 'password123',
-      role: 'user',  // Add missing field
+      role: UserRole.User,  // Use UserRole.User enum value
       isVerified: true,  // Add missing field
-      tier: 'free', // Ensure tier is included
+      tier: UserTier.Free,  // Use UserTier.Free enum value
     });
 
     const userPayload = {
       username: 'testuser',
       email: 'existinguser@example.com',  // Same email
       password: 'password123',
-      role: 'user',  // Add missing field
+      role: UserRole.User,  // Use UserRole.User enum value
       isVerified: true,  // Add missing field
-      tier: 'free', // Ensure tier is included
+      tier: UserTier.Free,  // Use UserTier.Free enum value
     };
 
     const response = await request(app).post('/api/users/signup').send(userPayload);
@@ -70,9 +71,9 @@ describe('User Controller', () => {
       username: 'loginuser',
       email: 'loginuser@example.com',
       password: hashedPassword,
-      role: 'user',  // Add missing field
+      role: UserRole.User,  // Use UserRole.User enum value
       isVerified: true,  // Add missing field
-      tier: 'free',  // Ensure tier is included
+      tier: UserTier.Free,  // Use UserTier.Free enum value
     });
 
     const loginPayload = {
