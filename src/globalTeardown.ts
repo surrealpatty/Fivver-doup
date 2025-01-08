@@ -1,5 +1,4 @@
 // src/globalTeardown.ts
-
 import { server } from './index';  // Import the server from index.ts
 
 if (server && typeof server.close === 'function') {

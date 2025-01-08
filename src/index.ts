@@ -1,4 +1,3 @@
-// src/index.ts
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
@@ -28,13 +27,19 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Start server if not in test environment
+// Create and start the server, but only if not in test mode
+let server: any;
+
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
 } else {
   console.log('Running in test mode.');
 }
 
-export { app };  // Ensure `app` is exported as a named export
+// Export the server for global teardown
+export { server };
+
+// Export the app as a default export (useful for testing or reusability)
+export default app;
