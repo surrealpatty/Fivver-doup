@@ -1,9 +1,9 @@
-"use strict";
+// src/config/sequelize.ts
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
 import { User } from "../models/user"; // Ensure the path is correct
-import { Service } from '../models/services'; // Corrected import for named export
-import Order from "../models/order"; // Ensure the Order model exists and is correctly defined
+import { Service } from "../models/services"; // Corrected import for named export
+import { Order } from "../models/order"; // Ensure the Order model exists and is correctly defined
 import { Review } from "../models/review"; // Ensure the Review model exists and is correctly defined
 
 dotenv.config(); // Load environment variables from .env file
@@ -20,7 +20,7 @@ export const sequelize = new Sequelize({
     database: process.env.DB_NAME || "fivver_doup", // Database name (default: fivver_doup)
     host: process.env.DB_HOST || "127.0.0.1", // Database host (default: localhost)
     dialect: "mysql", // MySQL dialect
-    models: [User, Service, Order, Review], // Corrected reference from Services to Service
+    models: [User, Service, Order, Review], // Ensure all models are correctly imported
     logging: process.env.NODE_ENV === "development" ? console.log : false, // Log queries in development
     define: {
         freezeTableName: true, // Prevent pluralized table names
