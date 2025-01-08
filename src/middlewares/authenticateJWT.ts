@@ -1,9 +1,7 @@
-// src/middlewares/authenticateJWT.ts
-
 import { Response, NextFunction } from 'express';  // Importing required types from express
 import jwt from 'jsonwebtoken';  // Importing jwt
 import { Request } from 'express';  // Importing Request type from express
-import { UserPayload } from '../types'; // Ensure this matches the correct path
+import { UserPayload, UserTier } from '../types'; // Ensure this matches the correct path
 
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
@@ -33,7 +31,7 @@ export const authenticateToken = (
         // Ensure 'tier' is always defined as UserTier (fix the type mismatch)
         const decodedUser = decoded as UserPayload;
         if (!decodedUser.tier) {
-          decodedUser.tier = 'free';  // Set a default tier if it's undefined
+          decodedUser.tier = UserTier.Free;  // Set a default tier using the enum value
         }
 
         req.user = decodedUser;  // Attach user payload to request
