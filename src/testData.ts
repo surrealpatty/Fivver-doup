@@ -1,12 +1,9 @@
-// src/testData.ts
-
 import { User } from './models/user';  // Correct import path for User model
 import { Service } from './models/services'; // Correct named import for Service model
 import { UserTier, UserRole } from './types'; // Import the correct enums
 
-// Insert a test user
+// Insert a test user without specifying the 'id' field
 User.create({
-  id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',  // Ensure 'id' is part of UserCreationAttributes
   email: 'test@example.com',
   password: 'hashedPasswordHere',  // Ensure you hash passwords before inserting
   username: 'testuser',
