@@ -1,22 +1,40 @@
-// src/types/index.ts
+// src/index.ts
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors'; 
+import bodyParser from 'body-parser';
+import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
+import serviceRoutes from './routes/service';
 
-export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-  tier: UserTier; // Ensure tier is always defined, use 'UserTier' enum
-  role: UserRole; // Ensure role is always defined, use 'UserRole' enum
+dotenv.config();  // Load environment variables from .env file
+
+const app = express();
+
+// Middleware setup
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Routes setup
+app.use('/api/users', userRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/auth', authRoutes);
+
+// Default route for testing the API
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
+
+const PORT = process.env.PORT || 3000;
+
+// Start server if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+} else {
+  console.log('Running in test mode.');
 }
 
-// Enum to define user tiers
-export enum UserTier {
-  Free = 'free', // For free-tier users
-  Paid = 'paid', // For paid-tier users
-}
-
-// Enum to define user roles
-export enum UserRole {
-  Admin = 'admin', // For admin users
-  User = 'user',   // For regular users
-  Guest = 'guest', // For guest users
-}
+export { app };  // Ensure `app` is exported as a named export

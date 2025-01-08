@@ -1,10 +1,11 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../config/database'; // Import sequelize instance
+// src/models/user.ts
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Correct import for the sequelize instance
 import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 import { Service } from './services'; // Assuming you have a Service model
 
 // Define the attributes for the User model
-export interface UserAttributes {
+interface UserAttributes {
   id: string;  // Use string for UUID
   email: string;
   username: string;
@@ -16,19 +17,19 @@ export interface UserAttributes {
   passwordResetTokenExpiry?: Date | null;
 }
 
-// Define the attributes required for creating a User
-export interface UserCreationAttributes extends Omit<UserAttributes, 'id'> {}
+// Define the attributes required for creating a User (excluding the 'id' field)
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  id!: string;  // UUID for user ID
-  email!: string;
-  username!: string;
-  password!: string;
-  role!: UserRole;
-  tier!: UserTier;
-  isVerified!: boolean;
-  passwordResetToken!: string | null;
-  passwordResetTokenExpiry!: Date | null;
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: string;  // UUID for user ID
+  public email!: string;
+  public username!: string;
+  public password!: string;
+  public role!: UserRole;
+  public tier!: UserTier;
+  public isVerified!: boolean;
+  public passwordResetToken!: string | null;
+  public passwordResetTokenExpiry!: Date | null;
 
   // Define the relationship with the Service model
   static associate() {
@@ -61,12 +62,12 @@ User.init(
     },
     tier: {
       type: DataTypes.ENUM,
-      values: Object.values(UserTier),
+      values: Object.values(UserTier),  // Ensure enum values are passed correctly
       defaultValue: UserTier.Free,
     },
     role: {
       type: DataTypes.ENUM,
-      values: Object.values(UserRole),
+      values: Object.values(UserRole),  // Ensure enum values are passed correctly
       defaultValue: UserRole.User,
     },
     isVerified: {
@@ -93,4 +94,4 @@ User.init(
 // Initialize associations
 User.associate();
 
-export default User;
+export { User };
