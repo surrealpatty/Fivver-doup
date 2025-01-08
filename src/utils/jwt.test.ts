@@ -1,6 +1,7 @@
 import { generateToken, verifyToken } from './jwt';
 import jwt from 'jsonwebtoken';
 import { UserPayload } from '../types';
+import { UserRole, UserTier } from '../types'; // Import enums for UserRole and UserTier
 
 // Mock the JWT methods to avoid actual signing and verifying during tests
 jest.mock('jsonwebtoken', () => ({
@@ -13,8 +14,8 @@ describe('JWT Utility Functions', () => {
     id: '123',
     email: 'user@example.com',
     username: 'testuser',
-    tier: 'free',
-    role: 'user',
+    tier: UserTier.Free, // Use the correct enum value for tier
+    role: UserRole.User, // Use the correct enum value for role
   };
 
   beforeAll(() => {
@@ -32,8 +33,8 @@ describe('JWT Utility Functions', () => {
           id: '123',
           email: 'user@example.com',
           username: 'testuser',
-          tier: 'free',
-          role: 'user',
+          tier: UserTier.Free, // Use enum value here
+          role: UserRole.User, // Use enum value here
         },
         process.env.JWT_SECRET_KEY || 'your-secret-key',
         { expiresIn: '1h' }
@@ -60,8 +61,8 @@ describe('JWT Utility Functions', () => {
         id: '123',
         email: 'user@example.com',
         username: 'testuser',
-        tier: 'free',
-        role: 'user',
+        tier: UserTier.Free, // Use enum value here
+        role: UserRole.User, // Use enum value here
       };
 
       (jwt.verify as jest.Mock).mockReturnValue(mockDecoded);
