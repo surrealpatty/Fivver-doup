@@ -1,3 +1,4 @@
+// src/models/associations.ts
 import { sequelize } from '../config/database';  // Correct import of sequelize instance
 import { User } from './user';        // Correct import of the User model class
 import { Service } from './services'; // Correct import of the Service model class

@@ -1,6 +1,6 @@
 import 'reflect-metadata'; // Ensure this is the first import
 import request from 'supertest';
-import { app } from '../index'; // Import your app instance
+import  app  from '../index'; // Import your app instance
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token verification
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import { Sequelize } from 'sequelize'; // Import Sequelize for database operations
