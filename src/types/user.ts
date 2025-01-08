@@ -1,5 +1,6 @@
 // src/types/user.ts
 import { Request } from 'express';
+import { UserRole } from './index'; // Import UserRole from the common file
 
 // Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
@@ -7,7 +8,7 @@ export interface UserPayload {
   email: string;            // Email address of the user (optional)
   username: string;         // Username of the user (optional)
   tier: 'free' | 'paid';    // Tier (either 'free' or 'paid')
-  role?: 'admin' | 'user';  // Optional role
+  role?: UserRole;          // Optional role (use the imported UserRole type)
 }
 
 // Define the AuthRequest interface (extends Express' Request with an optional user field)

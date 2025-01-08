@@ -26,10 +26,10 @@ beforeAll(async () => {
     logging: false,  // Disable logging in tests
   });
 
-  // Add models and define associations after models are loaded
+  // Add models explicitly after Sequelize instance is created
   sequelizeInstance.addModels([User, Service]);
 
-  // Define associations explicitly (belongsTo and hasMany)
+  // Define associations explicitly
   Service.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Service, { foreignKey: 'userId' });
 

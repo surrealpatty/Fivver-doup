@@ -29,7 +29,7 @@ const sequelize = new Sequelize({
   password: DB_PASSWORD, // Database password
   database: DB_NAME, // Database name
   port: DB_PORT, // Database port
-  models: [User, Service, Order, Review], // Include all models here
+  models: [User, Service, Order, Review], // Ensure these are the models with TypeScript support
   logging: environment === 'development' ? console.log : false, // Enable logging only in development
   define: {
     freezeTableName: true, // Prevent table name pluralization

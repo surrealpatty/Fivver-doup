@@ -1,8 +1,12 @@
 // src/types/index.ts
+
+// Define the possible subscription tiers for a user
 export type UserTier = 'free' | 'paid';
+
+// Define the possible roles for a user
 export type UserRole = 'user' | 'admin';
 
-// UserPayload interface
+// Define the UserPayload interface (for authenticated user details)
 export interface UserPayload {
   id: string;          // Required: User ID
   email?: string;      // Optional: Email (string)
@@ -12,7 +16,7 @@ export interface UserPayload {
   isVerified?: boolean; // Optional: Whether the user is verified
 }
 
-// CustomAuthRequest interface extends Request and adds the user field typed as UserPayload
+// CustomAuthRequest interface extends Express' Request and adds the user field typed as UserPayload
 export interface CustomAuthRequest extends Request {
   user?: UserPayload; // Optional user field of type UserPayload
 }
@@ -22,9 +26,10 @@ export function isUser(user: any): user is UserPayload {
   return (
     user &&
     typeof user.id === 'string' &&
-    typeof user.email === 'string' &&
+    (user.email === undefined || typeof user.email === 'string') &&
     (user.username === undefined || typeof user.username === 'string') &&
-    (user.role === undefined || ['admin', 'paid', 'user'].includes(user.role)) && // Check if role is valid
-    (user.tier === undefined || ['free', 'paid'].includes(user.tier)) // Check if tier is valid
+    (user.role === undefined || ['admin', 'user'].includes(user.role)) && // Check if role is valid
+    (user.tier === undefined || ['free', 'paid'].includes(user.tier)) && // Check if tier is valid
+    (user.isVerified === undefined || typeof user.isVerified === 'boolean') // Check if isVerified is boolean (optional)
   );
 }
