@@ -1,18 +1,25 @@
 import { Request } from 'express'; // Ensure correct import of Request
 
-// Define the UserRole type for user roles
-export type UserRole = 'admin' | 'paid' | 'user';
+// Define the UserRole enum for user roles
+export enum UserRole {
+  Admin = 'Admin',
+  Paid = 'Paid',
+  User = 'User',
+}
 
-// Define the UserTier type for user tiers
-export type UserTier = 'free' | 'paid';
+// Define the UserTier enum for user tiers
+export enum UserTier {
+  Free = 'Free',
+  Paid = 'Paid',
+}
 
 // Define the UserPayload interface
 export interface UserPayload {
   id: string;
   email?: string;
   username?: string;
-  role?: UserRole;
-  tier?: UserTier;
+  role?: UserRole; // Enum type for role
+  tier?: UserTier; // Enum type for tier
   isVerified?: boolean;
 }
 
@@ -28,8 +35,8 @@ export function isUser(user: any): user is UserPayload {
     typeof user.id === 'string' &&
     (user.email === undefined || typeof user.email === 'string') &&
     (user.username === undefined || typeof user.username === 'string') &&
-    (user.role === undefined || ['admin', 'paid', 'user'].includes(user.role)) &&
-    (user.tier === undefined || ['free', 'paid'].includes(user.tier))
+    (user.role === undefined || Object.values(UserRole).includes(user.role)) && // Using enum values for validation
+    (user.tier === undefined || Object.values(UserTier).includes(user.tier)) // Using enum values for validation
   );
 }
 

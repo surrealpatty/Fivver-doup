@@ -2,7 +2,7 @@
 
 import { User } from './models/user';  // Correct import path for User model
 import { Service } from './models/services'; // Correct named import for Service model
-import { UserTier, UserRole } from './types'; // Import the correct types from a single file
+import { UserTier, UserRole } from './types'; // Import the correct enums
 
 // Insert a test user
 User.create({
