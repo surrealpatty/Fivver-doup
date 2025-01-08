@@ -1,7 +1,7 @@
 // Import necessary modules and types
 import { Request, Response } from 'express';
 import { User } from '../models/user'; // Assuming User is a Sequelize model
-import { UserRole, UserTier } from '../types'; // Import enums for role and tier
+import { UserRole, UserTier } from '../types/UserRoles';  // Adjust path as needed
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
@@ -17,6 +17,9 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     const userRole = (role || 'User') as UserRole; // Default to 'User' role
     const userTier = (tier || 'Free') as UserTier; // Default to 'Free' tier
 
+    // Set the default value for isVerified
+    const isVerified = false; // Assuming new users are not verified
+
     // Create new user in the database
     const user = await User.create({ 
       email, 
@@ -24,6 +27,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       username, 
       role: userRole, 
       tier: userTier,
+      isVerified, // Include the isVerified field
     });
 
     return res.status(201).json({
