@@ -1,81 +1,48 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../config/database'; // Adjust the import as necessary
+import { Table, Column, Model, DataType, PrimaryKey, Default, AllowNull, HasMany, AutoIncrement } from 'sequelize-typescript';
+import { Service } from './services'; // Assuming you have a Service model
 
-// Define UserAttributes interface, which represents the attributes of a User model
-export interface UserAttributes {
-    id: string;
-    username: string;
-    email: string;
-    password: string;
-    role: string;
-    tier: string;
-    isVerified: boolean;
-    passwordResetToken: string | null;
-    passwordResetTokenExpiry: Date | null;
+// Define the User model with Sequelize decorators
+@Table({
+  tableName: 'users', // Specify the table name
+})
+export class User extends Model<User> {
+  // Declare the 'id' property to prevent overwriting Sequelize's base property
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  declare id: number; // Use 'declare' to avoid overwriting the base property
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  email!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  username!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  password!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  role!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  tier!: string;
+
+  @Default(false)
+  @Column(DataType.BOOLEAN)
+  isVerified!: boolean;
+
+  @Column(DataType.STRING)
+  passwordResetToken!: string | null;
+
+  @Column(DataType.DATE)
+  passwordResetTokenExpiry!: Date | null;
+
+  // Assuming you have a Service model related to User
+  @HasMany(() => Service)
+  services!: Service[];
 }
-
-// Define UserCreationAttributes interface, which represents the attributes when creating a User
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'isVerified'> {} // Make 'isVerified' optional
-
-// Define the User model, extending Sequelize's Model with UserAttributes and UserCreationAttributes
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-    public id!: string;
-    public username!: string;
-    public email!: string;
-    public password!: string;
-    public role!: string;
-    public tier!: string;
-    public isVerified!: boolean;
-    public passwordResetToken!: string | null;
-    public passwordResetTokenExpiry!: Date | null;
-}
-
-// Initialize the User model with the correct column definitions
-User.init(
-  {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    username: {
-      type: DataTypes.STRING,
-      unique: true, // Ensure uniqueness for username
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      unique: true, // Email should also be unique
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    tier: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false, // Default to 'false' but it's optional when creating a user
-    },
-    passwordResetToken: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    passwordResetTokenExpiry: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'users',
-  }
-);

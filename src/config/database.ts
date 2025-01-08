@@ -23,13 +23,13 @@ const DB_USE_SSL = process.env.DB_USE_SSL === 'true';
 
 // Configure Sequelize with options
 const sequelize = new Sequelize({
-  username: DB_USERNAME,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-  host: DB_HOST,
-  port: DB_PORT,
-  dialect: 'mysql',
-  models: [User, Service, Order, Review], // Include models for sequelize-typescript
+  dialect: 'mysql', // Set dialect to MySQL
+  host: DB_HOST, // Database host
+  username: DB_USERNAME, // Database username
+  password: DB_PASSWORD, // Database password
+  database: DB_NAME, // Database name
+  port: DB_PORT, // Database port
+  models: [User, Service, Order, Review], // Include all models here
   logging: environment === 'development' ? console.log : false, // Enable logging only in development
   define: {
     freezeTableName: true, // Prevent table name pluralization
