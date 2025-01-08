@@ -8,7 +8,7 @@ import { User } from '../models/user';  // Correct import for the User model
 import { Service } from '../models/services';  // Correct import for the Service model
 
 // Import the app as a named export
-import { app } from '../index';  // Corrected to use named export
+import app from '../index';  // Default import
 
 dotenv.config();  // Load environment variables from .env file
 
@@ -67,7 +67,7 @@ describe('Authentication Tests', () => {
     // Decode the token to verify its contents
     const decoded = jwt.verify(
       loginResponse.body.token,
-      process.env.JWT_SECRET || 'your-secret-key'
+      process.env.JWT_SECRET_KEY || 'your-secret-key'
     );
     expect(decoded).toHaveProperty('id');  // Ensure the decoded token contains 'id'
     expect(decoded).toHaveProperty('email');  // Ensure the decoded token contains 'email'
