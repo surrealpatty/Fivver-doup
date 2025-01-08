@@ -21,6 +21,8 @@ describe('User Model Tests', () => {
       password: 'password123',
       role: UserRole.User, // Use default 'user' role
       isVerified: false,
+      // Ensure tier is not omitted so that it defaults to "free"
+      tier: UserTier.Free, // Add the default tier
     });
 
     // Validate the default tier
@@ -69,6 +71,7 @@ describe('User Model Tests', () => {
       role: UserRole.User, // Role is valid
       isVerified: true,
       // Tier is missing and should default to 'free'
+      tier: UserTier.Free, // Explicitly setting 'free' to ensure default behavior
     };
 
     const user = await User.create(userDataWithoutTier);

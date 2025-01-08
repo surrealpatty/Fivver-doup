@@ -20,6 +20,7 @@ describe('User Controller', () => {
       password: 'password123',
       role: 'user',  // Add the missing role field
       isVerified: true,  // Add the missing isVerified field
+      tier: 'free',  // Ensure the tier is included
     };
 
     const response = await request(app).post('/api/users/signup').send(userPayload);
@@ -41,6 +42,7 @@ describe('User Controller', () => {
       password: 'password123',
       role: 'user',  // Add missing field
       isVerified: true,  // Add missing field
+      tier: 'free', // Ensure tier is included
     });
 
     const userPayload = {
@@ -49,6 +51,7 @@ describe('User Controller', () => {
       password: 'password123',
       role: 'user',  // Add missing field
       isVerified: true,  // Add missing field
+      tier: 'free', // Ensure tier is included
     };
 
     const response = await request(app).post('/api/users/signup').send(userPayload);
@@ -69,6 +72,7 @@ describe('User Controller', () => {
       password: hashedPassword,
       role: 'user',  // Add missing field
       isVerified: true,  // Add missing field
+      tier: 'free',  // Ensure tier is included
     });
 
     const loginPayload = {
