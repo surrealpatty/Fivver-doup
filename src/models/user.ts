@@ -1,18 +1,36 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from '../config/database'; // Adjust the import as necessary
 
-export class User extends Model {
-  public id!: string;
-  public username!: string;
-  public email!: string;
-  public password!: string;
-  public role!: string;
-  public tier!: string;
-  public isVerified!: boolean;
-  public passwordResetToken!: string; // Add passwordResetToken field
-  public passwordResetTokenExpiry!: Date; // Add passwordResetTokenExpiry field
+// Define UserAttributes interface, which represents the attributes of a User model
+export interface UserAttributes {
+    id: string;
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+    tier: string;
+    isVerified: boolean;
+    passwordResetToken: string | null;
+    passwordResetTokenExpiry: Date | null;
 }
 
+// Define UserCreationAttributes interface, which represents the attributes when creating a User
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+// Define the User model, extending Sequelize's Model with UserAttributes and UserCreationAttributes
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+    public id!: string;
+    public username!: string;
+    public email!: string;
+    public password!: string;
+    public role!: string;
+    public tier!: string;
+    public isVerified!: boolean;
+    public passwordResetToken!: string | null;
+    public passwordResetTokenExpiry!: Date | null;
+}
+
+// Initialize the User model with the correct column definitions
 User.init(
   {
     id: {
@@ -61,4 +79,3 @@ User.init(
     tableName: 'users',
   }
 );
-

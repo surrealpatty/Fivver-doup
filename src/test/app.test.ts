@@ -12,17 +12,18 @@ import { app } from '../index';  // Corrected to use named export
 
 dotenv.config();  // Load environment variables from .env file
 
-let sequelizeInstance: Sequelize;
+let sequelizeInstance: Sequelize;  // Declare sequelizeInstance with correct typing
 
 beforeAll(async () => {
-  // Initialize Sequelize with models explicitly
+  // Initialize Sequelize with models explicitly and correct types
   sequelizeInstance = new Sequelize({
     dialect: 'mysql',
     host: process.env.TEST_DB_HOST,
     username: process.env.TEST_DB_USERNAME as string,
     password: process.env.TEST_DB_PASSWORD as string,
     database: process.env.TEST_DB_NAME as string,
-    models: [User, Service],  // Add models to Sequelize instance
+    models: [User, Service],  // Ensure the models are correctly passed
+    logging: false,  // Disable logging in tests
   });
 
   // Add models and define associations after models are loaded
