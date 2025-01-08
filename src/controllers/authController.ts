@@ -1,3 +1,5 @@
+// src/controllers/authController.ts
+
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user';
@@ -31,7 +33,7 @@ export const authenticateUser = async (req: Request, res: Response): Promise<Res
 
     // Create the user payload for the token (exclude password)
     const userPayload: UserPayload = {
-      id: user.id,
+      id: String(user.id), // Convert id to string
       email: user.email,
       username: user.username,
       tier: user.tier as UserTier, // Ensure tier is of type UserTier
