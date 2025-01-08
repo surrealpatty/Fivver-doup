@@ -1,10 +1,11 @@
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, AllowNull, Default, Unique, CreatedAt, UpdatedAt, HasMany } from 'sequelize-typescript';
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../config/database'; // Import sequelize instance
+import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 import { Service } from './services'; // Assuming you have a Service model
-import { UserRole, UserTier } from '../types/UserRoles'; // Import enums for role and tier
 
 // Define the attributes for the User model
 export interface UserAttributes {
-  id: number;
+  id: string;  // Use string for UUID
   email: string;
   username: string;
   password: string;
@@ -18,69 +19,78 @@ export interface UserAttributes {
 // Define the attributes required for creating a User
 export interface UserCreationAttributes extends Omit<UserAttributes, 'id'> {}
 
-@Table({
-  tableName: 'users', // Specify the table name
-  timestamps: true, // Enable createdAt and updatedAt
-})
-export class User extends Model<UserAttributes, UserCreationAttributes> {
-  // Primary key
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER)
-  declare id: number;
-
-  // Email column
-  @AllowNull(false)
-  @Unique
-  @Column(DataType.STRING)
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  id!: string;  // UUID for user ID
   email!: string;
-
-  // Username column
-  @AllowNull(false)
-  @Column(DataType.STRING)
   username!: string;
-
-  // Password column
-  @AllowNull(false)
-  @Column(DataType.STRING)
   password!: string;
-
-  // Role column
-  @AllowNull(false)
-  @Column(DataType.ENUM(...Object.values(UserRole)))
   role!: UserRole;
-
-  // Tier column
-  @AllowNull(false)
-  @Default(UserTier.Free)
-  @Column(DataType.ENUM(...Object.values(UserTier)))
   tier!: UserTier;
-
-  // IsVerified column
-  @Default(false)
-  @AllowNull(false)
-  @Column(DataType.BOOLEAN)
   isVerified!: boolean;
-
-  // Password reset token column
-  @Column(DataType.STRING)
   passwordResetToken!: string | null;
-
-  // Password reset token expiry column
-  @Column(DataType.DATE)
   passwordResetTokenExpiry!: Date | null;
 
-  // CreatedAt column
-  @CreatedAt
-  @Column(DataType.DATE)
-  declare createdAt: Date; // Use declare to avoid overwriting the base property
-
-  // UpdatedAt column
-  @UpdatedAt
-  @Column(DataType.DATE)
-  declare updatedAt: Date; // Use declare to avoid overwriting the base property
-
   // Define the relationship with the Service model
-  @HasMany(() => Service)
-  services!: Service[];
+  static associate() {
+    this.hasMany(Service, {
+      foreignKey: 'userId', // Assuming the foreign key in Service is userId
+      as: 'services',
+    });
+  }
 }
+
+User.init(
+  {
+    id: {
+      type: DataTypes.UUID,  // Use UUID for the id field
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,  // Automatically generate UUID
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    tier: {
+      type: DataTypes.ENUM,
+      values: Object.values(UserTier),
+      defaultValue: UserTier.Free,
+    },
+    role: {
+      type: DataTypes.ENUM,
+      values: Object.values(UserRole),
+      defaultValue: UserRole.User,
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    passwordResetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    passwordResetTokenExpiry: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'User',  // Model name
+    tableName: 'users',  // Specify the table name
+    timestamps: true,  // Enable createdAt and updatedAt
+  }
+);
+
+// Initialize associations
+User.associate();
+
+export default User;

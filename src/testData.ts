@@ -6,12 +6,12 @@ import { UserTier, UserRole } from './types'; // Import the correct enums
 
 // Insert a test user
 User.create({
-  id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',
+  id: 'b6e01bc7-0f64-421b-b4dd-a8aa2b339b57',  // Ensure 'id' is part of UserCreationAttributes
   email: 'test@example.com',
   password: 'hashedPasswordHere',  // Ensure you hash passwords before inserting
   username: 'testuser',
-  tier: UserTier.Free,  // Use the correct enum value for tier (UserTier.Free)
-  role: UserRole.User,  // Use the correct enum value for role (UserRole.User)
+  tier: UserTier.Free,  // Use the correct enum value for tier
+  role: UserRole.User,  // Use the correct enum value for role
   isVerified: false,  // Correct property name (camelCase)
 })
   .then((user) => {

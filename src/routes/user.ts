@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User, UserCreationAttributes } from '../models/user';  // Import User model and UserCreationAttributes
-import { UserPayload, CustomAuthRequest, isUser } from '../types'; // Ensure the necessary types are imported
+import { UserRole, UserTier } from '../types'; // Ensure the necessary types are imported
 
 const router = Router();
 
@@ -32,8 +32,8 @@ router.post('/signup', async (req: Request, res: Response): Promise<Response> =>
       email,
       username,
       password: hashedPassword,
-      role: 'user', // Default role (can be modified)
-      tier: 'free', // Default tier should be "free"
+      role: UserRole.User, // Use the UserRole enum
+      tier: UserTier.Free, // Use the UserTier enum
       isVerified: false, // Assuming user isn't verified initially
     };
 

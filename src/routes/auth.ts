@@ -36,8 +36,8 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
     const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
     // Default values for role and tier if not provided, casting to enums
-    const userRole = (role || 'user') as UserRole; // Default to 'user' role
-    const userTier = (tier || 'free') as UserTier; // Default to 'free' tier
+    const userRole = (role || UserRole.User) as UserRole; // Default to 'User' role
+    const userTier = (tier || UserTier.Free) as UserTier; // Default to 'Free' tier
 
     // Create the new user in the database (id is handled automatically)
     const newUser: UserCreationAttributes = {
