@@ -1,54 +1,22 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors'; // Enable CORS
-import bodyParser from 'body-parser'; // Parse request bodies
-import authRoutes from './routes/auth'; // Import authentication routes
-import userRoutes from './routes/user'; // Import user routes
-import serviceRoutes from './routes/service'; // Import service routes
+// src/types/index.ts
 
-// Load environment variables from .env file
-dotenv.config();
-
-// Create the Express application
-const app = express();
-
-// Middleware
-app.use(cors()); // Enable CORS
-app.use(bodyParser.json()); // Parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
-
-// Define your routes
-app.use('/api/users', userRoutes); // User-related routes
-app.use('/api/services', serviceRoutes); // Service-related routes
-app.use('/auth', authRoutes); // Authentication routes
-
-// Default route for health check
-app.get('/', (req, res) => {
-  res.send('Welcome to the API');
-});
-
-// Start the server only in non-test environments
-const PORT = process.env.PORT || 3000;
-let server: any; // Declare the server variable
-
-if (process.env.NODE_ENV !== 'test') {
-  server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-} else {
-  console.log('Running in test mode. Server initialization is deferred to tests.');
+export interface UserPayload {
+  id: string;
+  email?: string;
+  username?: string;
+  tier: UserTier; // Ensure tier is always defined, use 'UserTier' enum
+  role: UserRole; // Ensure role is always defined, use 'UserRole' enum
 }
 
-// Gracefully shut down the server after tests
-if (process.env.NODE_ENV === 'test') {
-  afterAll(() => {
-    if (server) {
-      server.close(() => {
-        console.log('Test server closed');
-      });
-    }
-  });
+// Enum to define user tiers
+export enum UserTier {
+  Free = 'free', // For free-tier users
+  Paid = 'paid', // For paid-tier users
 }
 
-// Export the app and server for use in tests and other files
-export { app, server };
+// Enum to define user roles
+export enum UserRole {
+  Admin = 'admin', // For admin users
+  User = 'user',   // For regular users
+  Guest = 'guest', // For guest users
+}

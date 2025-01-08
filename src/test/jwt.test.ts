@@ -1,7 +1,5 @@
-// src/test/jwt.test.ts
-
 import { generateToken, verifyToken } from '../utils/jwt';  // Adjust the import path if necessary
-import { UserPayload } from '../types';  // Correctly import from '../types'
+import { UserPayload, UserTier, UserRole } from '../types';  // Correctly import from '../types'
 import jwt from 'jsonwebtoken';
 
 // Mocking jwt functions
@@ -15,8 +13,8 @@ const user: UserPayload = {
   id: '123',
   email: 'user@example.com',
   username: 'username',
-  tier: 'paid',
-  role: 'user',
+  tier: UserTier.Paid,  // Use the correct enum value for tier
+  role: UserRole.User,  // Use the correct enum value for role
 };
 
 describe('JWT Utility Functions', () => {
