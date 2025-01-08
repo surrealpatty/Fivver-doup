@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 import { UserPayload } from '../types'; // Assuming UserPayload is defined in your types
 import { registerUser } from '../controllers/userController'; // Adjust import if needed
-import { User } from '../models/user'; // Import the User model
+import  User  from '../models/user'; // Import the User model
 
 // Mock user payload for testing
 const mockUser: UserPayload = {

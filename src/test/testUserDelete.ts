@@ -1,7 +1,7 @@
 // src/test/testUserDelete.ts
 
 import { sequelize } from '../config/database'; // Import the sequelize instance
-import { User } from '../models/user'; // Import the User model
+import  User  from '../models/user'; // Import the User model
 import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 
 describe('User Deletion', () => {

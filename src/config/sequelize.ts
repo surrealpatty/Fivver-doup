@@ -1,7 +1,7 @@
 // src/config/sequelize.ts
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
-import { User } from "../models/user"; // Ensure the path is correct
+import  User  from "../models/user"; // Ensure the path is correct
 import { Service } from "../models/services"; // Corrected import for named export
 import { Order } from "../models/order"; // Ensure the Order model exists and is correctly defined
 import { Review } from "../models/review"; // Ensure the Review model exists and is correctly defined

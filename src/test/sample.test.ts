@@ -3,7 +3,7 @@
 import { sequelize } from '../config/database'; // Correct import
 import { v4 as uuidv4 } from 'uuid'; // UUID generator
 import { Service } from '../models/services'; // Service model import
-import { User } from '../models/user'; // User model import
+import  User  from '../models/user'; // User model import
 import { UserRole, UserTier } from '../types/UserRoles'; // Import enums for role and tier
 
 describe('Service Model Tests', () => {

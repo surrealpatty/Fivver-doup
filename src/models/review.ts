@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
-import { User } from './user';  // Import the User model to set up foreign key relationship
+import  User  from './user';  // Import the User model to set up foreign key relationship
 
 @Table({ tableName: 'reviews', timestamps: true })  // Enable timestamps if you want to track createdAt and updatedAt
 export class Review extends Model<Review> {

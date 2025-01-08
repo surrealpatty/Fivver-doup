@@ -4,7 +4,7 @@ import request from 'supertest';  // For making HTTP requests to your app
 import jwt from 'jsonwebtoken';  // For verifying JWT tokens
 import dotenv from 'dotenv';  // To load environment variables
 import { sequelize } from '../config/database';  // Correct import for sequelize instance
-import { User } from '../models/user';  // Correct import for the User model
+import  User  from '../models/user';  // Correct import for the User model
 import { Service } from '../models/services';  // Correct import for the Service model
 
 // Import the app as a named export

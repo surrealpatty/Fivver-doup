@@ -1,5 +1,5 @@
 import { sequelize } from '../config/database';
-import { User } from '../models/user';
+import  User  from '../models/user';
 import { UserRole, UserTier } from '../types/UserRoles';
 
 describe('User Model Tests', () => {

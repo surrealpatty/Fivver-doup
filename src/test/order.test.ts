@@ -1,9 +1,9 @@
 import { Order } from "../models/order"; // Correct path for Order model
 import { sequelize } from "../config/database"; // Correct import for sequelize instance
-import { app } from "../../index"; // Correct import for the app
+import  app  from "../index"; // Correct import for the app
 import request from "supertest"; // Import supertest for API requests
 import { Sequelize } from "sequelize"; // Ensure Sequelize is imported
-import { User } from "../models/user"; // Correct path for User model
+import  User  from "../models/user"; // Correct path for User model
 import { Service } from "../models/services"; // Correct path for Service model
 
 // Mock the methods of the models

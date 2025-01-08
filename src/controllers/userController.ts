@@ -1,6 +1,6 @@
 // Import necessary modules and types
 import { Request, Response } from 'express';
-import { User } from '../models/user'; // Assuming User is a Sequelize model
+import  User  from '../models/user'; // Assuming User is a Sequelize model
 import { UserRole, UserTier } from '../types/UserRoles';  // Adjust path as needed
 
 // Controller for registering a new user

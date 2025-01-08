@@ -1,6 +1,6 @@
 // src/models/associations.ts
 import { sequelize } from '../config/database';  // Correct import of sequelize instance
-import { User } from './user';        // Correct import of the User model class
+import  User  from './user';        // Correct import of the User model class
 import { Service } from './services'; // Correct import of the Service model class
 import { Order } from './order';      // Correct import of the Order model class
 import { Review } from './review';    // Correct import of the Review model class

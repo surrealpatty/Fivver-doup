@@ -4,7 +4,7 @@ import  app  from '../index'; // Import your app instance
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token verification
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import { Sequelize } from 'sequelize'; // Import Sequelize for database operations
-import { User } from '../models/user'; // Import User model
+import  User  from '../models/user'; // Import User model
 import { Service } from '../models/services'; // Import Service model
 
 dotenv.config(); // Load environment variables

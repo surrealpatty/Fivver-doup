@@ -1,6 +1,6 @@
 // src/test/testUserCreation.ts
 
-import { User } from '../models/user'; // Ensure the path is correct
+import  User  from '../models/user'; // Ensure the path is correct
 import { UserRole, UserTier } from '../types'; // Import enums for role and tier
 
 // Example test for user creation

@@ -3,7 +3,7 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
+import  User, { UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
 import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums
 
 const router = express.Router();

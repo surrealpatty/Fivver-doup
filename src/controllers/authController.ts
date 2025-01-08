@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user';
+import  User  from '../models/user';
 import { generateToken } from '../utils/jwt'; // Import the token generation function
 import { UserPayload } from '../types'; // Import UserPayload type for consistency
 import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums

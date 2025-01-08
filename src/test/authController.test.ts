@@ -1,8 +1,8 @@
 import request from 'supertest';
-import { app } from '../index';  // Adjust to the path where your Express app is initialized
+import  app  from '../index';  // Adjust to the path where your Express app is initialized
 import { authenticateUser } from '../controllers/authController'; // Adjust to your actual controller import
 import { generateToken } from '../utils/jwt';
-import { User } from '../models/user'; // Assuming the User model is imported from this path
+import  User  from '../models/user'; // Assuming the User model is imported from this path
 import bcrypt from 'bcryptjs';
 
 // Mocking dependencies
