@@ -1,48 +1,48 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                              // Use the latest JavaScript features
-    "module": "CommonJS",                            // CommonJS for Node.js compatibility
-    "moduleResolution": "node",                      // Resolve modules like Node.js
-    "strict": true,                                  // Enable strict type-checking options
-    "noImplicitAny": true,                           // Disallow variables with implicit 'any' type
-    "esModuleInterop": true,                         // Ensure compatibility between CommonJS and ES Modules
-    "skipLibCheck": true,                            // Skip type-checking of declaration files
-    "forceConsistentCasingInFileNames": true,        // Enforce consistent casing of file names
-    "baseUrl": "./",                                 // Set base URL to project root
-    "outDir": "./dist",                              // Directory for compiled output
-    "rootDir": "./src",                              // Root directory for input files
-    "noEmitOnError": true,                           // Don't emit files if there are compilation errors
-    "resolveJsonModule": true,                       // Allow importing JSON files
-    "experimentalDecorators": true,                  // Enable decorators
-    "emitDecoratorMetadata": true,                   // Emit metadata for decorators
-    "allowJs": false,                                // Compile only TypeScript files
-    "declaration": true,                             // Generate .d.ts files for type declarations
-    "declarationMap": false,                         // Disable declaration maps
-    "types": [                                       // Include specific type definitions
+    "target": "ESNext",                             
+    "module": "CommonJS",                           
+    "moduleResolution": "node",                    
+    "strict": true,                                
+    "noImplicitAny": true,                         
+    "esModuleInterop": true,                       
+    "skipLibCheck": true,                         
+    "forceConsistentCasingInFileNames": true,       
+    "baseUrl": "./",                               
+    "outDir": "./dist",                           
+    "rootDir": "./src",                           
+    "noEmitOnError": true,                        
+    "resolveJsonModule": true,                    
+    "experimentalDecorators": true,               
+    "emitDecoratorMetadata": true,               
+    "allowJs": false,                             
+    "declaration": true,                         
+    "declarationMap": false,                     
+    "types": [                                   
       "node",
       "jsonwebtoken",
       "jest",
       "nodemailer",
       "supertest"
     ],
-    "typeRoots": [                                   // Directories to search for type definitions
-      "node_modules/@types",
-      "./src/types"
+    "typeRoots": [                               
+      "node_modules/@types",                     
+      "./src/types"                              
     ],
-    "paths": {                                       // Path mappings for module resolution
+    "paths": {                                   
       "@src/*": ["src/*"],
       "@dist/*": ["dist/*"],
       "@types/*": ["src/types/*"]
     }
   },
   "include": [
-    "src/**/*.ts",                                   // Include all .ts files in src
-    "src/test/**/*.ts",                              // Include test files
-    "src/types/**/*.d.ts"                            // Include custom type definitions
+    "src/**/*.ts",                               
+    "src/test/**/*.ts",                         
+    "src/types/**/*.d.ts"                       
   ],
   "exclude": [
-    "node_modules",                                  // Exclude node_modules folder
-    "dist",                                          // Exclude dist folder
-    "**/*.js"                                        // Exclude JavaScript files
+    "node_modules",                              
+    "dist",                                     
+    "**/*.js"                                   
   ]
 }

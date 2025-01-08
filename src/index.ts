@@ -2,18 +2,18 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
 import bodyParser from 'body-parser';
-import authRoutes from './routes/auth';
-import userRoutes from './routes/user';
-import serviceRoutes from './routes/service';
+import authRoutes from './routes/auth'; // Ensure this path is correct
+import userRoutes from './routes/user'; // Ensure this path is correct
+import serviceRoutes from './routes/service'; // Ensure this path is correct
 
-dotenv.config();  // Load environment variables from .env file
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
 // Middleware setup
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
 // Routes setup
 app.use('/api/users', userRoutes);
