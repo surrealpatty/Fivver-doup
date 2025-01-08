@@ -1,4 +1,10 @@
-// src/types/UserRoles.ts
-
-export type UserRole = 'user' | 'admin'; // Example roles
-export type UserTier = 'free' | 'paid'; // Example tiers
+export enum UserRole {
+    Admin = 'admin',
+    User = 'user',
+  }
+  
+  export enum UserTier {
+    Free = 'free',
+    Paid = 'paid',
+  }
+  

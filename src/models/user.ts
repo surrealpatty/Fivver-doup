@@ -1,17 +1,4 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  Default,
-  AllowNull,
-  HasMany,
-  AutoIncrement,
-  Unique,
-  CreatedAt,
-  UpdatedAt,
-} from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, AllowNull, Default, Unique, CreatedAt, UpdatedAt, HasMany } from 'sequelize-typescript';
 import { Service } from './services'; // Assuming you have a Service model
 import { UserRole, UserTier } from '../types/UserRoles'; // Import enums for role and tier
 

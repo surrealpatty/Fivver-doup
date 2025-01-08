@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User, UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
+import { User, UserCreationAttributes } from '../models/user'; // Sequelize User model
+import { UserRole, UserTier } from '../types'; // Enums for role and tier
 
 const router = express.Router();
 
-// Log incoming request body to debug
+// Middleware to log incoming request body
 const logRequestBody = (req: Request, res: Response, next: () => void): void => {
   console.log(`${req.method} request to ${req.url}:`, req.body);
   next(); // Proceed to the next middleware or route handler
@@ -13,7 +14,7 @@ const logRequestBody = (req: Request, res: Response, next: () => void): void => 
 
 // User Registration (Signup) Route
 router.post('/signup', logRequestBody, async (req: Request, res: Response): Promise<Response> => {
-  const { email, username, password } = req.body;
+  const { email, username, password, role, tier } = req.body;
 
   // Validate input
   if (!email || !username || !password) {
@@ -22,9 +23,7 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
 
   try {
     // Check if user already exists
-    const existingUser = await User.findOne({
-      where: { email },
-    });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: 'Email is already in use.' });
     }
@@ -32,29 +31,32 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
     // Hash the password using bcrypt
     const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
 
-    // Create the new user in the database (id is handled automatically)
+    // Type-safe defaults for role and tier
+    const userRole: UserRole = UserRole[role as keyof typeof UserRole] || UserRole.User;
+    const userTier: UserTier = UserTier[tier as keyof typeof UserTier] || UserTier.Free;
+
+    // Create the new user in the database
     const newUser: UserCreationAttributes = {
       email,
       username,
       password: hashedPassword,
-      role: 'user', // Default role (can be modified)
-      tier: 'free', // Default tier should be "free"
+      role: userRole,
+      tier: userTier,
       isVerified: false, // Assuming user isn't verified initially
     };
 
-    const user = await User.create(newUser); // Pass newUser as the object to create
+    const user = await User.create(newUser);
 
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT (use environment variable)
+      process.env.JWT_SECRET || 'your_jwt_secret', // Use environment variable for secret key
       { expiresIn: '1h' } // Expiry time of the token
     );
 
-    // Send back response with token
     return res.status(201).json({
       message: 'User registered successfully',
-      token,  // Send the generated token
+      token,
     });
   } catch (error) {
     console.error('Error during user registration:', error);
@@ -73,9 +75,7 @@ router.post('/login', logRequestBody, async (req: Request, res: Response): Promi
 
   try {
     // Find user by email
-    const user = await User.findOne({
-      where: { email },
-    });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -91,14 +91,13 @@ router.post('/login', logRequestBody, async (req: Request, res: Response): Promi
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email, username: user.username },
-      process.env.JWT_SECRET || 'your_jwt_secret', // Secret key for JWT
+      process.env.JWT_SECRET || 'your_jwt_secret', // Use environment variable for secret key
       { expiresIn: '1h' } // Expiry time of the token
     );
 
-    // Send back response with token
     return res.status(200).json({
       message: 'Authentication successful',
-      token,  // Send the generated token
+      token,
     });
   } catch (error) {
     console.error('Error during user login:', error);
@@ -106,5 +105,5 @@ router.post('/login', logRequestBody, async (req: Request, res: Response): Promi
   }
 });
 
-// Export the router to use in the main app
+// Export the router
 export default router;
