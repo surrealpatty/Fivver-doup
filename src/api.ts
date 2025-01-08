@@ -2,7 +2,16 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserPayload } from './types';
+import { UserPayload } from './types'; // Ensure this is the correct path and matches other imports
+
+// Augment the Express Request type to include the user field
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload;
+    }
+  }
+}
 
 // Middleware to authenticate the token
 export const authenticateToken = (
