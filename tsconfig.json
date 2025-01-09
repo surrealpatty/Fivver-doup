@@ -26,13 +26,11 @@
       "supertest"
     ],
     "typeRoots": [
-      "node_modules/@types",
+      "node_modules/@types", // Default type roots for node_modules
       "./src/types" // Include custom types directory
     ],
     "paths": {
-      "@src/*": ["*"], // Shortcuts for importing from src
-      "@dist/*": ["../dist/*"], // Adjusted to resolve from baseUrl
-      "@types/*": ["types/*"] // Consistent path for types
+      "@types/*": ["types/*"] // Custom path for types directory
     }
   },
   "include": [
