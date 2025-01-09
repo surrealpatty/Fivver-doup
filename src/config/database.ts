@@ -1,11 +1,9 @@
-import dotenv from 'dotenv'; // Load environment variables from .env file
-import { Sequelize } from 'sequelize-typescript'; // Import Sequelize with TypeScript support
-import  User  from '../models/user'; // Import User model
-import { Service } from '../models/services'; // Import Service model
-import { Order } from '../models/order'; // Import Order model
-import { Review } from '../models/review'; // Import Review model
+import { Sequelize } from 'sequelize-typescript';
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config(); // Load environment variables from .env file
+// Load environment variables from the .env file
+dotenv.config();
 
 // Extract the current environment and set defaults
 const environment = process.env.NODE_ENV || 'development';
@@ -21,7 +19,7 @@ const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = parseInt(process.env.DB_PORT || '3306', 10);
 const DB_USE_SSL = process.env.DB_USE_SSL === 'true';
 
-// Configure Sequelize with options
+// Configure Sequelize instance
 const sequelize = new Sequelize({
   dialect: 'mysql', // Set dialect to MySQL
   host: DB_HOST, // Database host
@@ -29,17 +27,17 @@ const sequelize = new Sequelize({
   password: DB_PASSWORD, // Database password
   database: DB_NAME, // Database name
   port: DB_PORT, // Database port
-  models: [User, Service, Order, Review], // Ensure these are the models with TypeScript support
+  models: [path.resolve(__dirname, '../models')], // Adjust path to include all models
   logging: environment === 'development' ? console.log : false, // Enable logging only in development
   define: {
     freezeTableName: true, // Prevent table name pluralization
     timestamps: true, // Enable timestamps (createdAt, updatedAt)
   },
   pool: {
-    max: 10,
-    min: 0,
-    acquire: 30000, // Max time (ms) before throwing an error
-    idle: 10000, // Max time (ms) before releasing an idle connection
+    max: 10, // Maximum number of connections in the pool
+    min: 0, // Minimum number of connections in the pool
+    acquire: 30000, // Maximum time (ms) to acquire a connection
+    idle: 10000, // Maximum time (ms) a connection can remain idle
   },
   dialectOptions: {
     charset: 'utf8mb4', // Support extended characters
@@ -49,14 +47,6 @@ const sequelize = new Sequelize({
       : undefined,
   },
 });
-
-// Utility function for test mocks
-export const mockDatabase = async (): Promise<void> => {
-  if (environment === 'test') {
-    await sequelize.sync({ force: true }); // Sync and reset the database for testing
-    console.log('Test database synchronized successfully');
-  }
-};
 
 // Export the Sequelize instance for use across the application
 export { sequelize };

@@ -1,13 +1,19 @@
-import { Column, Model, Table, DataType, ForeignKey } from 'sequelize-typescript';
-import { UserRole, UserTier } from '../types';  // Import enums for role and tier
-import { Service } from './services';  // Assuming you have a Service model
+import {
+  Table,
+  Model,
+  Column,
+  DataType,
+  HasMany,
+  Default,
+} from 'sequelize-typescript';
+import { UserRole, UserTier } from '../types'; // Import enums
+import { Service } from './services'; // Import Service model
 
-// Define the User model
 @Table({ tableName: 'users', timestamps: true })
-export default class User extends Model<User> {
-  // Declare 'id' to avoid TypeScript overwriting the base class property
+export default class User extends Model {
+  // Explicitly initialize id to avoid overwriting base property
   @Column({ type: DataType.UUID, primaryKey: true, defaultValue: DataType.UUIDV4 })
-  declare id: string;
+  id: string = ''; // Initialize id to an empty string (or your desired default)
 
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email!: string;
@@ -19,36 +25,30 @@ export default class User extends Model<User> {
   username!: string;
 
   @Column({
-    type: DataType.ENUM,
-    values: Object.values(UserTier),
+    type: DataType.ENUM(...Object.values(UserTier)),
+    allowNull: false,
     defaultValue: UserTier.Free,
   })
   tier!: UserTier;
 
   @Column({
-    type: DataType.ENUM,
-    values: Object.values(UserRole),
+    type: DataType.ENUM(...Object.values(UserRole)),
+    allowNull: false,
     defaultValue: UserRole.User,
   })
   role!: UserRole;
 
-  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
   isVerified!: boolean;
 
   @Column({ type: DataType.STRING, allowNull: true })
-  passwordResetToken!: string | null;
+  passwordResetToken?: string | null;
 
   @Column({ type: DataType.DATE, allowNull: true })
-  passwordResetTokenExpiry!: Date | null;
+  passwordResetTokenExpiry?: Date | null;
 
-  // Define the relationship with the Service model
-  static associate() {
-    this.hasMany(Service, {
-      foreignKey: 'userId',
-      as: 'services',
-    });
-  }
+  // Define the one-to-many relationship with the Service model
+  @HasMany(() => Service)
+  services!: Service[];
 }
-
-// Initialize associations
-User.associate();
