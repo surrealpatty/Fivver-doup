@@ -1,4 +1,3 @@
-// src/middlewares/validatePasswordReset.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -17,7 +16,19 @@ const validatePasswordReset = (req, res, next)=>{
             message: 'Missing required fields: email, token, or newPassword'
         });
     }
-    // You can add more validation logic here as needed (e.g., email format validation, password strength check)
-    // If validation passes, proceed to the next middleware/controller
+    // Example additional validation: Check if the email is in a valid format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            message: 'Invalid email format'
+        });
+    }
+    // Example additional validation: Check the password strength (this is just a simple example)
+    if (newPassword.length < 8) {
+        return res.status(400).json({
+            message: 'Password must be at least 8 characters long'
+        });
+    }
+    // If all validations pass, proceed to the next middleware/controller
     next();
 };

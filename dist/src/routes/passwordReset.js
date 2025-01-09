@@ -12,7 +12,7 @@ Object.defineProperty(exports, "default", {
 const _express = require("express");
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _crypto = /*#__PURE__*/ _interop_require_default(require("crypto"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _sequelize = require("sequelize");
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _nodemailer = /*#__PURE__*/ _interop_require_default(require("nodemailer"));
@@ -36,7 +36,7 @@ router.post('/reset-password/request', async (req, res)=>{
     const { email } = req.body;
     try {
         // Find the user by email
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 email
             }
@@ -77,7 +77,7 @@ router.post('/reset-password/:token', async (req, res)=>{
     const { newPassword } = req.body;
     try {
         // Find the user by token and check if the token is valid (not expired)
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 passwordResetToken: token,
                 passwordResetTokenExpiry: {

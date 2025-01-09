@@ -11,7 +11,7 @@ Object.defineProperty(exports, "sequelize", {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
 const _order = require("../models/order");
 const _review = require("../models/review");
@@ -32,7 +32,7 @@ const sequelize = new _sequelizetypescript.Sequelize({
     host: process.env.DB_HOST || "127.0.0.1",
     dialect: "mysql",
     models: [
-        _user.User,
+        _user.default,
         _services.Service,
         _order.Order,
         _review.Review

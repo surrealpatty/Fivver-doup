@@ -1,22 +1,27 @@
 // Import necessary modules and types
 import { Request, Response } from 'express';
-import  User  from '../models/user'; // Assuming User is a Sequelize model
-import { UserTier } from '../types/UserRoles';  // Adjust path as needed
-import { UserRole } from 'types/user';
+import User from '../models/user'; // Assuming User is a Sequelize model
+import { UserRole, UserTier } from '../types'; // Import consolidated types
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { email, password, username, role, tier }: { email: string, password: string, username: string, role?: string, tier?: string } = req.body;
+    const { email, password, username, role, tier }: { 
+      email: string; 
+      password: string; 
+      username: string; 
+      role?: UserRole; 
+      tier?: UserTier; 
+    } = req.body;
 
     // Validate required fields
     if (!email || !password || !username) {
       return res.status(400).json({ message: 'Email, password, and username are required.' });
     }
 
-    // Default values for role and tier if not provided, casting to enums
-    const userRole = (role || 'User') as UserRole; // Default to 'User' role
-    const userTier = (tier || 'Free') as UserTier; // Default to 'Free' tier
+    // Default values for role and tier if not provided
+    const userRole: UserRole = role || 'user'; // Default to 'user' role
+    const userTier: UserTier = tier || 'Free'; // Default to 'Free' tier
 
     // Set the default value for isVerified
     const isVerified = false; // Assuming new users are not verified
@@ -28,7 +33,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       username, 
       role: userRole, 
       tier: userTier,
-      isVerified, // Include the isVerified field
+      isVerified,
     });
 
     return res.status(201).json({
@@ -65,7 +70,7 @@ export const getUserDetails = async (req: Request, res: Response): Promise<Respo
 // Controller for updating user details (e.g., username, email)
 export const updateUserDetails = async (req: Request, res: Response): Promise<Response> => {
   const userId = req.params.id;
-  const { email, username }: { email: string, username: string } = req.body;
+  const { email, username }: { email: string; username: string } = req.body;
 
   if (!email || !username) {
     return res.status(400).json({ message: 'Email and username are required.' });

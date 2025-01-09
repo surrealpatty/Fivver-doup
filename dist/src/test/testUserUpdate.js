@@ -2,10 +2,15 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const testUpdateUser = async (userId)=>{
     try {
-        const updatedUser = await _user.User.update({
+        const updatedUser = await _user.default.update({
             username: 'updatedusername'
         }, {
             where: {

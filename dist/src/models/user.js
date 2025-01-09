@@ -1,82 +1,105 @@
-// src/models/user.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, "User", {
+Object.defineProperty(exports, "default", {
     enumerable: true,
     get: function() {
         return User;
     }
 });
-const _sequelize = require("sequelize");
-const _database = require("../config/database");
+const _sequelizetypescript = require("sequelize-typescript");
 const _types = require("../types");
 const _services = require("./services");
-class User extends _sequelize.Model {
-    id;
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+}
+class User extends _sequelizetypescript.Model {
+    // Remove the explicit `id` declaration to let Sequelize handle it
+    // Sequelize will automatically generate and manage the `id` property as UUID
     email;
-    username;
     password;
-    role;
+    username;
     tier;
+    role;
     isVerified;
     passwordResetToken;
     passwordResetTokenExpiry;
-    // Define the relationship with the Service model
-    static associate() {
-        this.hasMany(_services.Service, {
-            foreignKey: 'userId',
-            as: 'services'
-        });
-    }
+    // Define the one-to-many relationship with the Service model
+    services;
 }
-User.init({
-    id: {
-        type: _sequelize.DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: _sequelize.DataTypes.UUIDV4
-    },
-    email: {
-        type: _sequelize.DataTypes.STRING,
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.STRING,
         allowNull: false,
         unique: true
-    },
-    password: {
-        type: _sequelize.DataTypes.STRING,
+    }),
+    _ts_metadata("design:type", String)
+], User.prototype, "email", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.STRING,
         allowNull: false
-    },
-    username: {
-        type: _sequelize.DataTypes.STRING,
+    }),
+    _ts_metadata("design:type", String)
+], User.prototype, "password", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.STRING,
         allowNull: false
-    },
-    tier: {
-        type: _sequelize.DataTypes.ENUM,
-        values: Object.values(_types.UserTier),
+    }),
+    _ts_metadata("design:type", String)
+], User.prototype, "username", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.ENUM(...Object.values(_types.UserTier)),
+        allowNull: false,
         defaultValue: _types.UserTier.Free
-    },
-    role: {
-        type: _sequelize.DataTypes.ENUM,
-        values: Object.values(_types.UserRole),
+    }),
+    _ts_metadata("design:type", typeof _types.UserTier === "undefined" ? Object : _types.UserTier)
+], User.prototype, "tier", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.ENUM(...Object.values(_types.UserRole)),
+        allowNull: false,
         defaultValue: _types.UserRole.User
-    },
-    isVerified: {
-        type: _sequelize.DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    passwordResetToken: {
-        type: _sequelize.DataTypes.STRING,
+    }),
+    _ts_metadata("design:type", typeof _types.UserRole === "undefined" ? Object : _types.UserRole)
+], User.prototype, "role", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Default)(false),
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.BOOLEAN
+    }),
+    _ts_metadata("design:type", Boolean)
+], User.prototype, "isVerified", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.STRING,
         allowNull: true
-    },
-    passwordResetTokenExpiry: {
-        type: _sequelize.DataTypes.DATE,
+    }),
+    _ts_metadata("design:type", Object)
+], User.prototype, "passwordResetToken", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.Column)({
+        type: _sequelizetypescript.DataType.DATE,
         allowNull: true
-    }
-}, {
-    sequelize: _database.sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true
-});
-// Initialize associations
-User.associate();
+    }),
+    _ts_metadata("design:type", Object)
+], User.prototype, "passwordResetTokenExpiry", void 0);
+_ts_decorate([
+    (0, _sequelizetypescript.HasMany)(()=>_services.Service),
+    _ts_metadata("design:type", Array)
+], User.prototype, "services", void 0);
+User = _ts_decorate([
+    (0, _sequelizetypescript.Table)({
+        tableName: 'users',
+        timestamps: true
+    })
+], User);

@@ -3,9 +3,14 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _services = require("../models/services");
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _database = require("../config/database");
 const _UserRoles = require("../types/UserRoles");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 describe('Service Model', ()=>{
     let user;
     beforeAll(async ()=>{
@@ -14,7 +19,7 @@ describe('Service Model', ()=>{
             force: true
         });
         // Create a user before running tests
-        user = await _user.User.create({
+        user = await _user.default.create({
             email: 'test@example.com',
             username: 'testuser',
             password: 'testpassword',

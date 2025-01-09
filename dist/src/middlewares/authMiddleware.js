@@ -37,7 +37,8 @@ const authenticateToken = (req, res, next)=>{
         }
         // Decode the JWT and cast it to the UserPayload type
         const decoded = _jsonwebtoken.default.verify(token, jwtSecret);
-        req.user = decoded; // Ensure req.user is of type UserPayload
+        // Attach the decoded user information to the request
+        req.user = decoded;
         next();
     } catch (error) {
         console.error('Token authentication failed:', error);

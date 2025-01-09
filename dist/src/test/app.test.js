@@ -7,7 +7,7 @@ const _sequelizetypescript = require("sequelize-typescript");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
 const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
 function _interop_require_default(obj) {
@@ -26,21 +26,21 @@ beforeAll(async ()=>{
         password: process.env.TEST_DB_PASSWORD,
         database: process.env.TEST_DB_NAME,
         models: [
-            _user.User,
+            _user.default,
             _services.Service
         ],
         logging: false
     });
-    // Add models and define associations after models are loaded
+    // Add models explicitly after Sequelize instance is created
     sequelizeInstance.addModels([
-        _user.User,
+        _user.default,
         _services.Service
     ]);
     // Define associations explicitly (belongsTo and hasMany)
-    _services.Service.belongsTo(_user.User, {
+    _services.Service.belongsTo(_user.default, {
         foreignKey: 'userId'
     });
-    _user.User.hasMany(_services.Service, {
+    _user.default.hasMany(_services.Service, {
         foreignKey: 'userId'
     });
     // Check the database connection and sync with the DB

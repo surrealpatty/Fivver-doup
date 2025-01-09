@@ -1,4 +1,3 @@
-// src/routes/auth.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -13,7 +12,7 @@ Object.defineProperty(exports, // Export the router to use in the main app
 const _express = /*#__PURE__*/ _interop_require_default(require("express"));
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _types = require("../types");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -31,21 +30,23 @@ router.post('/signup', logRequestBody, async (req, res)=>{
     const { email, username, password, role, tier } = req.body;
     // Validate input
     if (!email || !username || !password) {
-        return res.status(400).json({
+        res.status(400).json({
             message: 'Email, username, and password are required.'
         });
+        return;
     }
     try {
         // Check if user already exists
-        const existingUser = await _user.User.findOne({
+        const existingUser = await _user.default.findOne({
             where: {
                 email
             }
         });
         if (existingUser) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: 'Email is already in use.'
             });
+            return;
         }
         // Hash the password using bcrypt
         const hashedPassword = await _bcryptjs.default.hash(password, 10); // Salt rounds = 10
@@ -61,7 +62,7 @@ router.post('/signup', logRequestBody, async (req, res)=>{
             tier: userTier,
             isVerified: false
         };
-        const user = await _user.User.create(newUser); // Pass newUser as the object to create
+        const user = await _user.default.create(newUser); // Pass newUser as the object to create
         // Generate JWT token
         const token = _jsonwebtoken.default.sign({
             userId: user.id,
@@ -72,13 +73,13 @@ router.post('/signup', logRequestBody, async (req, res)=>{
         } // Expiry time of the token
         );
         // Send back response with token
-        return res.status(201).json({
+        res.status(201).json({
             message: 'User registered successfully',
             token
         });
     } catch (error) {
         console.error('Error during user registration:', error);
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Server error'
         });
     }
@@ -88,28 +89,31 @@ router.post('/login', logRequestBody, async (req, res)=>{
     const { email, password } = req.body;
     // Validate input
     if (!email || !password) {
-        return res.status(400).json({
+        res.status(400).json({
             message: 'Email and password are required.'
         });
+        return;
     }
     try {
         // Find user by email
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 email
             }
         });
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 message: 'Invalid credentials'
             });
+            return;
         }
         // Compare the provided password with the stored hashed password
         const isMatch = await _bcryptjs.default.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({
+            res.status(401).json({
                 message: 'Invalid credentials'
             });
+            return;
         }
         // Generate JWT token
         const token = _jsonwebtoken.default.sign({
@@ -121,13 +125,13 @@ router.post('/login', logRequestBody, async (req, res)=>{
         } // Expiry time of the token
         );
         // Send back response with token
-        return res.status(200).json({
+        res.status(200).json({
             message: 'Authentication successful',
             token
         });
     } catch (error) {
         console.error('Error during user login:', error);
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Server error'
         });
     }

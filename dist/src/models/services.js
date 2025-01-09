@@ -18,8 +18,13 @@ _export(exports, {
     }
 });
 const _sequelizetypescript = require("sequelize-typescript");
-const _user = require("./user");
+const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 const _uuid = require("uuid");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -63,13 +68,13 @@ _ts_decorate([
     _ts_metadata("design:type", Number)
 ], Service.prototype, "price", void 0);
 _ts_decorate([
-    (0, _sequelizetypescript.ForeignKey)(()=>_user.User),
+    (0, _sequelizetypescript.ForeignKey)(()=>_user.default),
     (0, _sequelizetypescript.Column)(_sequelizetypescript.DataType.UUID),
     _ts_metadata("design:type", String)
 ], Service.prototype, "userId", void 0);
 _ts_decorate([
-    (0, _sequelizetypescript.BelongsTo)(()=>_user.User),
-    _ts_metadata("design:type", typeof _user.User === "undefined" ? Object : _user.User)
+    (0, _sequelizetypescript.BelongsTo)(()=>_user.default),
+    _ts_metadata("design:type", typeof _user.default === "undefined" ? Object : _user.default)
 ], Service.prototype, "user", void 0);
 _ts_decorate([
     _sequelizetypescript.CreatedAt,

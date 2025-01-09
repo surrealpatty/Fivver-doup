@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _UserRoles = require("../types/UserRoles");
 function _interop_require_default(obj) {
@@ -18,7 +18,7 @@ describe('User Controller', ()=>{
     });
     afterAll(async ()=>{
         // Optional: Clean up database after tests run
-        await _user.User.destroy({
+        await _user.default.destroy({
             where: {}
         }); // Example cleanup of users table
     });
@@ -42,7 +42,7 @@ describe('User Controller', ()=>{
     });
     it('should not create a user if email already exists', async ()=>{
         // First, create a user
-        await _user.User.create({
+        await _user.default.create({
             username: 'existinguser',
             email: 'existinguser@example.com',
             password: 'password123',
@@ -67,7 +67,7 @@ describe('User Controller', ()=>{
         const password = 'password123';
         const hashedPassword = await _bcryptjs.default.hash(password, 10);
         // Create a new user with a hashed password
-        const existingUser = await _user.User.create({
+        const existingUser = await _user.default.create({
             username: 'loginuser',
             email: 'loginuser@example.com',
             password: hashedPassword,

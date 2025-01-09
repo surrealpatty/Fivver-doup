@@ -4,7 +4,12 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _userController = require("../controllers/userController");
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 // Mock user payload for testing
 const mockUser = {
     id: '123',
@@ -17,7 +22,7 @@ const mockUser = {
 describe('User Registration Controller', ()=>{
     it('should register a user successfully', async ()=>{
         // Mock the User.create method to return the mock user
-        jest.spyOn(_user.User, 'create').mockResolvedValue({
+        jest.spyOn(_user.default, 'create').mockResolvedValue({
             ...mockUser,
             createdAt: new Date().toISOString()
         });
@@ -53,7 +58,7 @@ describe('User Registration Controller', ()=>{
     });
     it('should handle user registration failure due to existing email', async ()=>{
         // Mock User.findOne to simulate an existing user
-        jest.spyOn(_user.User, 'findOne').mockResolvedValue(mockUser);
+        jest.spyOn(_user.default, 'findOne').mockResolvedValue(mockUser);
         // Mock request and response objects
         const req = {
             body: {
@@ -97,7 +102,7 @@ describe('User Registration Controller', ()=>{
     });
     it('should handle internal server errors gracefully', async ()=>{
         // Mock the User.create method to throw an error
-        jest.spyOn(_user.User, 'create').mockRejectedValue(new Error('Database error'));
+        jest.spyOn(_user.default, 'create').mockRejectedValue(new Error('Database error'));
         // Mock request and response objects
         const req = {
             body: {

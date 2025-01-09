@@ -16,14 +16,19 @@ _export(exports, {
         return resetPassword;
     }
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _sequelize = require("sequelize");
 const _emailService = require("../services/emailService");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const requestPasswordReset = async (req, res)=>{
     const { email } = req.body;
     try {
         // Find user by email
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 email
             }
@@ -54,7 +59,7 @@ const resetPassword = async (req, res)=>{
     const { token, newPassword } = req.body;
     try {
         // Find user by the token and check if the token is not expired
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 passwordResetToken: token,
                 passwordResetTokenExpiry: {

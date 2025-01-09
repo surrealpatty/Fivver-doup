@@ -3,13 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _types = require("../types");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 // Example test for user creation
 describe('User creation test', ()=>{
     it('should create a new user', async ()=>{
         // Create a new user instance using the enums for role and tier
-        const newUser = await _user.User.create({
+        const newUser = await _user.default.create({
             username: 'testuser',
             email: 'testuser@example.com',
             password: 'testpassword',

@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _authController = require("../controllers/authController");
 const _jwt = require("../utils/jwt");
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -47,7 +47,7 @@ describe('Auth Controller Tests', ()=>{
                 role: 'user'
             };
             // Mocking User.findOne to return the mock user
-            _user.User.findOne.mockResolvedValue(mockUser);
+            _user.default.findOne.mockResolvedValue(mockUser);
             const mockToken = 'mock-token';
             _jwt.generateToken.mockReturnValue(mockToken);
             await (0, _authController.authenticateUser)(req, res);
@@ -71,7 +71,7 @@ describe('Auth Controller Tests', ()=>{
             });
             const res = mockResponse();
             // Simulating user not found
-            _user.User.findOne.mockResolvedValue(null);
+            _user.default.findOne.mockResolvedValue(null);
             await (0, _authController.authenticateUser)(req, res);
             expect(res.status).toHaveBeenCalledWith(401);
             expect(res.json).toHaveBeenCalledWith({
@@ -93,7 +93,7 @@ describe('Auth Controller Tests', ()=>{
                 tier: 'free',
                 role: 'user'
             };
-            _user.User.findOne.mockResolvedValue(mockUser);
+            _user.default.findOne.mockResolvedValue(mockUser);
             await (0, _authController.authenticateUser)(req, res);
             expect(res.status).toHaveBeenCalledWith(401);
             expect(res.json).toHaveBeenCalledWith({

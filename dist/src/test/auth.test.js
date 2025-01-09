@@ -8,7 +8,7 @@ const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _sequelize = require("sequelize");
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -26,12 +26,12 @@ beforeAll(async ()=>{
         database: process.env.TEST_DB_NAME
     });
     // Set models and define associations
-    sequelizeInstance.models.User = _user.User;
+    sequelizeInstance.models.User = _user.default;
     sequelizeInstance.models.Service = _services.Service;
-    _services.Service.belongsTo(_user.User, {
+    _services.Service.belongsTo(_user.default, {
         foreignKey: 'userId'
     });
-    _user.User.hasMany(_services.Service, {
+    _user.default.hasMany(_services.Service, {
         foreignKey: 'userId'
     });
     // Authenticate and sync models

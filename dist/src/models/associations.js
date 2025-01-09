@@ -20,33 +20,38 @@ _export(exports, {
         return _services.Service;
     },
     User: function() {
-        return _user.User;
+        return _user.default;
     }
 });
 const _database = require("../config/database");
-const _user = require("./user");
+const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 const _services = require("./services");
 const _order = require("./order");
 const _review = require("./review");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 // Register models with Sequelize
 _database.sequelize.addModels([
-    _user.User,
+    _user.default,
     _services.Service,
     _order.Order,
     _review.Review
 ]);
 // User can have many services (a user can post many services)
-_user.User.hasMany(_services.Service, {
+_user.default.hasMany(_services.Service, {
     foreignKey: 'userId'
 }); // Foreign key in Service will be userId
-_services.Service.belongsTo(_user.User, {
+_services.Service.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // A service belongs to one user
 // User can have many reviews (a user can leave many reviews)
-_user.User.hasMany(_review.Review, {
+_user.default.hasMany(_review.Review, {
     foreignKey: 'userId'
 }); // Foreign key in Review will be userId
-_review.Review.belongsTo(_user.User, {
+_review.Review.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // A review belongs to one user
 // Service can have many reviews (a service can have many reviews)
@@ -57,7 +62,7 @@ _review.Review.belongsTo(_services.Service, {
     foreignKey: 'serviceId'
 }); // A review belongs to one service
 // Order belongs to a user and a service (an order is linked to one user and one service)
-_order.Order.belongsTo(_user.User, {
+_order.Order.belongsTo(_user.default, {
     foreignKey: 'userId'
 }); // An order belongs to one user
 _order.Order.belongsTo(_services.Service, {

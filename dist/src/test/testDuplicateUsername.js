@@ -2,12 +2,17 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _UserRoles = require("../types/UserRoles");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const testDuplicateUsername = async ()=>{
     try {
         // First user creation with all required properties
-        const user1 = await _user.User.create({
+        const user1 = await _user.default.create({
             username: 'duplicateuser',
             email: 'user1@example.com',
             password: 'password1',
@@ -17,7 +22,7 @@ const testDuplicateUsername = async ()=>{
         });
         console.log('First user created:', user1);
         // Attempt to create another user with the same username
-        const user2 = await _user.User.create({
+        const user2 = await _user.default.create({
             username: 'duplicateuser',
             email: 'user2@example.com',
             password: 'password2',

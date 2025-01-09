@@ -23,7 +23,12 @@ _export(exports, {
         return updateUserDetails;
     }
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const registerUser = async (req, res)=>{
     try {
         const { email, password, username, role, tier } = req.body;
@@ -39,7 +44,7 @@ const registerUser = async (req, res)=>{
         // Set the default value for isVerified
         const isVerified = false; // Assuming new users are not verified
         // Create new user in the database
-        const user = await _user.User.create({
+        const user = await _user.default.create({
             email,
             password,
             username,
@@ -62,7 +67,7 @@ const registerUser = async (req, res)=>{
 const getUserDetails = async (req, res)=>{
     try {
         const userId = req.params.id;
-        const user = await _user.User.findByPk(userId);
+        const user = await _user.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
@@ -87,7 +92,7 @@ const updateUserDetails = async (req, res)=>{
         });
     }
     try {
-        const user = await _user.User.findByPk(userId);
+        const user = await _user.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
@@ -112,7 +117,7 @@ const updateUserDetails = async (req, res)=>{
 const deleteUser = async (req, res)=>{
     const userId = req.params.id;
     try {
-        const user = await _user.User.findByPk(userId);
+        const user = await _user.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'

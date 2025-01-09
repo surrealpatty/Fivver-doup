@@ -2,32 +2,22 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    mockDatabase: function() {
-        return mockDatabase;
-    },
-    sequelize: function() {
+Object.defineProperty(exports, "sequelize", {
+    enumerable: true,
+    get: function() {
         return sequelize;
     }
 });
-const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _sequelizetypescript = require("sequelize-typescript");
-const _user = require("../models/user");
-const _services = require("../models/services");
-const _order = require("../models/order");
-const _review = require("../models/review");
+const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
+const _path = /*#__PURE__*/ _interop_require_default(require("path"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-_dotenv.default.config(); // Load environment variables from .env file
+// Load environment variables from the .env file
+_dotenv.default.config();
 // Extract the current environment and set defaults
 const environment = process.env.NODE_ENV || 'development';
 // Map environment variables for database configuration
@@ -37,7 +27,7 @@ const DB_NAME = environment === 'test' ? process.env.TEST_DB_NAME || 'fivver_dou
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = parseInt(process.env.DB_PORT || '3306', 10);
 const DB_USE_SSL = process.env.DB_USE_SSL === 'true';
-// Configure Sequelize with options
+// Configure Sequelize instance
 const sequelize = new _sequelizetypescript.Sequelize({
     dialect: 'mysql',
     host: DB_HOST,
@@ -46,10 +36,7 @@ const sequelize = new _sequelizetypescript.Sequelize({
     database: DB_NAME,
     port: DB_PORT,
     models: [
-        _user.User,
-        _services.Service,
-        _order.Order,
-        _review.Review
+        _path.default.resolve(__dirname, '../models')
     ],
     logging: environment === 'development' ? console.log : false,
     define: {
@@ -72,11 +59,3 @@ const sequelize = new _sequelizetypescript.Sequelize({
          : undefined
     }
 });
-const mockDatabase = async ()=>{
-    if (environment === 'test') {
-        await sequelize.sync({
-            force: true
-        }); // Sync and reset the database for testing
-        console.log('Test database synchronized successfully');
-    }
-};

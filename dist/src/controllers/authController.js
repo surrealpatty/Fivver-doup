@@ -10,7 +10,7 @@ Object.defineProperty(exports, "authenticateUser", {
     }
 });
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _jwt = require("../utils/jwt");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -27,7 +27,7 @@ const authenticateUser = async (req, res)=>{
     }
     try {
         // Check if the user exists in the database
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 email
             }

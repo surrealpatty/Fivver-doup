@@ -3,8 +3,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _database = require("../config/database");
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _UserRoles = require("../types/UserRoles");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 describe('User Model Tests', ()=>{
     beforeAll(async ()=>{
         // Sync the database before tests
@@ -25,7 +30,7 @@ describe('User Model Tests', ()=>{
             tier: _UserRoles.UserTier.Free,
             isVerified: false
         };
-        const user = await _user.User.create(userData);
+        const user = await _user.default.create(userData);
         expect(user.tier).toBe(_UserRoles.UserTier.Free);
     });
     it('should create a user with a specified tier', async ()=>{
@@ -37,7 +42,7 @@ describe('User Model Tests', ()=>{
             tier: _UserRoles.UserTier.Paid,
             isVerified: false
         };
-        const user = await _user.User.create(userData);
+        const user = await _user.default.create(userData);
         expect(user.tier).toBe(_UserRoles.UserTier.Paid);
     });
     it('should fail to create a user with an invalid tier', async ()=>{
@@ -49,7 +54,7 @@ describe('User Model Tests', ()=>{
             tier: 'invalidTier',
             isVerified: true
         };
-        await expect(_user.User.create(invalidUserData)).rejects.toThrow('SequelizeValidationError');
+        await expect(_user.default.create(invalidUserData)).rejects.toThrow('SequelizeValidationError');
     });
     it('should handle missing tier gracefully and use default tier of "free"', async ()=>{
         const userData = {
@@ -60,7 +65,7 @@ describe('User Model Tests', ()=>{
             tier: _UserRoles.UserTier.Free,
             isVerified: true
         };
-        const user = await _user.User.create(userData);
+        const user = await _user.default.create(userData);
         expect(user.tier).toBe(_UserRoles.UserTier.Free);
     });
     it('should create a user with the correct tier when tier is explicitly set', async ()=>{
@@ -72,7 +77,7 @@ describe('User Model Tests', ()=>{
             tier: _UserRoles.UserTier.Paid,
             isVerified: true
         };
-        const user = await _user.User.create(userData);
+        const user = await _user.default.create(userData);
         expect(user.tier).toBe(_UserRoles.UserTier.Paid);
     });
 });

@@ -20,11 +20,16 @@ _export(exports, {
         return _services.Service;
     },
     User: function() {
-        return _user.User;
+        return _user.default;
     }
 });
-const _user = require("./user");
+const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 const _services = require("../models/services");
 const _order = require("./order");
 const _review = require("./review");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
  // Exporting models

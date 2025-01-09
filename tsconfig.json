@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "strict": true,
-    "noImplicitAny": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src", // Base directory for resolving paths (set to 'src')
+    "target": "ESNext", // Use the latest ECMAScript features
+    "module": "CommonJS", // Module system
+    "moduleResolution": "node", // Resolve modules as Node.js would
+    "strict": true, // Enable all strict type-checking options
+    "noImplicitAny": true, // Raise an error if variables have an implicit 'any' type
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing of filenames
+    "baseUrl": "./src", // Set base directory for resolving paths to './src'
     "outDir": "./dist", // Output directory for compiled files
-    "rootDir": "./src", // Root directory of your TypeScript files
-    "noEmitOnError": true,
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowJs": false,
-    "declaration": true,
-    "declarationMap": false,
+    "rootDir": "./src", // Root directory for your TypeScript files
+    "noEmitOnError": true, // Prevent emitting output files if there's a type error
+    "resolveJsonModule": true, // Allow JSON imports if needed
+    "experimentalDecorators": true, // Enable experimental support for decorators
+    "emitDecoratorMetadata": true, // Enable decorator metadata generation
+    "allowJs": false, // Don't allow JavaScript files
+    "declaration": true, // Generate .d.ts files alongside .js files
+    "declarationMap": false, // Disable declaration map generation
     "types": [
       "node",
       "jsonwebtoken",
@@ -27,7 +27,7 @@
     ],
     "typeRoots": [
       "node_modules/@types",
-      "./src/types"
+      "./src/types" // Include custom types directory
     ],
     "paths": {
       "@src/*": ["*"], // Shortcuts for importing from src
@@ -36,13 +36,13 @@
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/test/**/*.ts",
-    "src/types/**/*.d.ts"
+    "src/**/*.ts", // Include all TypeScript files inside src
+    "src/test/**/*.ts", // Include all test files inside src/test
+    "src/types/**/*.d.ts" // Include TypeScript declaration files
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.js"
+    "node_modules", // Exclude node_modules directory
+    "dist", // Exclude dist directory (compiled files)
+    "**/*.js" // Exclude JavaScript files
   ]
 }

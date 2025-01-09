@@ -16,7 +16,12 @@ _export(exports, {
         return updateProfile;
     }
 });
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 const getProfile = async (req, res)=>{
     const userId = req.user?.id; // Access user id from req.user
     if (!userId) {
@@ -26,7 +31,7 @@ const getProfile = async (req, res)=>{
     }
     try {
         // Find the user by their ID
-        const user = await _user.User.findByPk(userId);
+        const user = await _user.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
@@ -58,7 +63,7 @@ const updateProfile = async (req, res)=>{
     const { email, username, role, tier, isVerified } = req.body; // Get all updateable fields from the request body
     try {
         // Find the user and update their details
-        const user = await _user.User.findByPk(userId);
+        const user = await _user.default.findByPk(userId);
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'

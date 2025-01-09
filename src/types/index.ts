@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 // Define the possible subscription tiers for a user
 export type UserTier = 'free' | 'paid';
 

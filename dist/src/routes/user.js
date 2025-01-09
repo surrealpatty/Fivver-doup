@@ -12,7 +12,7 @@ Object.defineProperty(exports, // Export router to be used in the main app
 const _express = require("express");
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
-const _user = require("../models/user");
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _types = require("../types");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -31,7 +31,7 @@ router.post('/signup', async (req, res)=>{
     }
     try {
         // Check if user already exists
-        const existingUser = await _user.User.findOne({
+        const existingUser = await _user.default.findOne({
             where: {
                 email
             }
@@ -52,7 +52,7 @@ router.post('/signup', async (req, res)=>{
             tier: _types.UserTier.Free,
             isVerified: false
         };
-        const user = await _user.User.create(newUser); // Pass newUser as the object to create
+        const user = await _user.default.create(newUser); // Pass newUser as the object to create
         // Generate JWT token
         const token = _jsonwebtoken.default.sign({
             userId: user.id,
@@ -83,7 +83,7 @@ router.post('/login', async (req, res)=>{
         });
     }
     try {
-        const user = await _user.User.findOne({
+        const user = await _user.default.findOne({
             where: {
                 email
             }
