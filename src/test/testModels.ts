@@ -1,6 +1,12 @@
 import { sequelize } from '../config/database';
-import  User  from '../models/user';
+import User from '../models/user';
 import { UserRole, UserTier } from '../types/UserRoles';
+
+// Import Sequelize's CreationAttributes type for model creation
+import { CreationAttributes, Optional } from 'sequelize/types';
+
+// Define the correct type for User creation attributes
+type UserCreationAttributes = Optional<CreationAttributes<User>, 'id' | '$add' | '$set' | '_creationAttributes'>;
 
 describe('User Model Tests', () => {
   beforeAll(async () => {
@@ -14,7 +20,7 @@ describe('User Model Tests', () => {
   });
 
   it('should create a user with the default tier of "free" when tier is not provided', async () => {
-    const userData = {
+    const userData: UserCreationAttributes = {
       email: 'test@example.com',
       username: 'testuser',
       password: 'password123',
@@ -29,7 +35,7 @@ describe('User Model Tests', () => {
   });
 
   it('should create a user with a specified tier', async () => {
-    const userData = {
+    const userData: UserCreationAttributes = {
       email: 'test2@example.com',
       username: 'testuser2',
       password: 'password123',
@@ -44,12 +50,12 @@ describe('User Model Tests', () => {
   });
 
   it('should fail to create a user with an invalid tier', async () => {
-    const invalidUserData = {
+    const invalidUserData: UserCreationAttributes = {
       email: 'invalid@example.com',
       username: 'invaliduser',
       password: 'testpassword',
       role: UserRole.User,
-      tier: 'invalidTier' as UserTier,
+      tier: 'invalidTier' as UserTier, // This should cause validation failure
       isVerified: true,
     };
 
@@ -57,7 +63,7 @@ describe('User Model Tests', () => {
   });
 
   it('should handle missing tier gracefully and use default tier of "free"', async () => {
-    const userData = {
+    const userData: UserCreationAttributes = {
       email: 'notier@example.com',
       username: 'notieruser',
       password: 'testpassword',
@@ -72,7 +78,7 @@ describe('User Model Tests', () => {
   });
 
   it('should create a user with the correct tier when tier is explicitly set', async () => {
-    const userData = {
+    const userData: UserCreationAttributes = {
       email: 'paidtier@example.com',
       username: 'paidtieruser',
       password: 'testpassword',
