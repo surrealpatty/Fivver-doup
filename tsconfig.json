@@ -19,18 +19,19 @@
     "declaration": true, // Generate .d.ts files alongside .js files
     "declarationMap": false, // Disable declaration map generation
     "types": [
-      "node",
-      "jsonwebtoken",
-      "jest",
-      "nodemailer",
-      "supertest"
+      "node", // Include Node.js types
+      "jsonwebtoken", // Include JSON Web Token types
+      "jest", // Include Jest types for testing
+      "nodemailer", // Include Nodemailer types for email handling
+      "supertest" // Include Supertest types for HTTP assertions
     ],
     "typeRoots": [
       "node_modules/@types", // Default type roots for node_modules
       "./src/types" // Include custom types directory
     ],
     "paths": {
-      "@types/*": ["types/*"] // Custom path for types directory
+      "@types/*": ["types/*"], // Map @types/* to the types directory
+      "*": ["node_modules/*", "src/types/*"] // Resolve modules and custom types
     }
   },
   "include": [

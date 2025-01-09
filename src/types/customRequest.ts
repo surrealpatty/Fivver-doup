@@ -1,8 +1,8 @@
 // src/types/customRequest.ts
 import { Request } from 'express';
-import { UserPayload } from './index'; // Import the UserPayload interface correctly from the centralized types
+import { UserPayload } from './index'; // Import UserPayload from the central index file
 
-// Interface extends Request to add the optional user field typed as UserPayload
-export interface CustomAuthRequest extends Request {
-  user?: UserPayload; // Correctly typing the `user` field with UserPayload
+// Extend the Request interface to include the user field with the correct type
+export interface CustomAuthRequest extends Omit<Request, 'user'> {
+  user?: UserPayload; // Add an optional user field typed as UserPayload
 }

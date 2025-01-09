@@ -29,7 +29,7 @@ export interface CustomAuthRequest extends Request {
 // Type guard to check if an object is a valid UserPayload
 export function isUser(user: any): user is UserPayload {
   return (
-    user &&
+    user !== null && user !== undefined && // Ensure the user is neither null nor undefined
     typeof user.id === 'string' &&
     (user.email === undefined || typeof user.email === 'string') &&
     (user.username === undefined || typeof user.username === 'string') &&
