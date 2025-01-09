@@ -2,11 +2,14 @@ import { sequelize } from '../config/database';
 import User from '../models/user';
 import { UserRole, UserTier } from '../types/UserRoles';
 
-// Import Sequelize's CreationAttributes type for model creation
-import { CreationAttributes, Optional } from 'sequelize/types';
-
-// Define the correct type for User creation attributes
-type UserCreationAttributes = Optional<CreationAttributes<User>, 'id' | '$add' | '$set' | '_creationAttributes'>;
+type UserCreationAttributes = {
+  email: string;
+  username: string;
+  password: string;
+  role: UserRole;
+  tier: UserTier;
+  isVerified: boolean;
+};
 
 describe('User Model Tests', () => {
   beforeAll(async () => {
@@ -25,11 +28,11 @@ describe('User Model Tests', () => {
       username: 'testuser',
       password: 'password123',
       role: UserRole.User,
-      tier: UserTier.Free, // Explicitly set the default tier
+      tier: UserTier.Free,
       isVerified: false,
     };
 
-    const user = await User.create(userData);
+    const user = await User.create(userData as any);
 
     expect(user.tier).toBe(UserTier.Free);
   });
@@ -44,13 +47,13 @@ describe('User Model Tests', () => {
       isVerified: false,
     };
 
-    const user = await User.create(userData);
+    const user = await User.create(userData as any);
 
     expect(user.tier).toBe(UserTier.Paid);
   });
 
   it('should fail to create a user with an invalid tier', async () => {
-    const invalidUserData: UserCreationAttributes = {
+    const invalidUserData = {
       email: 'invalid@example.com',
       username: 'invaliduser',
       password: 'testpassword',
@@ -59,7 +62,7 @@ describe('User Model Tests', () => {
       isVerified: true,
     };
 
-    await expect(User.create(invalidUserData)).rejects.toThrow('SequelizeValidationError');
+    await expect(User.create(invalidUserData as any)).rejects.toThrow('SequelizeValidationError');
   });
 
   it('should handle missing tier gracefully and use default tier of "free"', async () => {
@@ -68,11 +71,11 @@ describe('User Model Tests', () => {
       username: 'notieruser',
       password: 'testpassword',
       role: UserRole.User,
-      tier: UserTier.Free, // Explicitly set the default tier
+      tier: UserTier.Free,
       isVerified: true,
     };
 
-    const user = await User.create(userData);
+    const user = await User.create(userData as any);
 
     expect(user.tier).toBe(UserTier.Free);
   });
@@ -87,7 +90,7 @@ describe('User Model Tests', () => {
       isVerified: true,
     };
 
-    const user = await User.create(userData);
+    const user = await User.create(userData as any);
 
     expect(user.tier).toBe(UserTier.Paid);
   });
