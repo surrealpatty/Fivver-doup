@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user'; // Correct import for the User model
+import  User  from '../models/user'; // Correct import for the User model
 import { UserPayload } from '../types'; // Ensure this matches the correct path
 
 interface AuthRequest extends Request {
