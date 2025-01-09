@@ -1,12 +1,12 @@
 import User from './models/user'; // Correct default import for the User model
 import { Service } from './models/services'; // Correct named import for the Service model
 import { UserTier, UserRole } from './types'; // Import the correct enums
-import { InferCreationAttributes } from 'sequelize'; // Use InferCreationAttributes for type-safe creation
+import { UserCreationAttributes } from './models/user'; // Import UserCreationAttributes from the model
 
 async function createTestUserAndService() {
   try {
-    // Insert a test user with only the necessary attributes
-    const userAttributes: Partial<InferCreationAttributes<User>> = {
+    // Insert a test user with the necessary attributes
+    const userAttributes: UserCreationAttributes = {
       email: 'test@example.com',
       password: 'hashedPasswordHere', // Ensure you hash passwords before inserting
       username: 'testuser',

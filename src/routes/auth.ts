@@ -1,9 +1,7 @@
-// src/routes/auth.ts
-
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import  User, { UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
+import User, { UserCreationAttributes } from '../models/user'; // Import User model and UserCreationAttributes
 import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums
 
 const router = express.Router();
@@ -15,12 +13,13 @@ const logRequestBody = (req: Request, res: Response, next: () => void): void => 
 };
 
 // User Registration (Signup) Route
-router.post('/signup', logRequestBody, async (req: Request, res: Response): Promise<Response> => {
+router.post('/signup', logRequestBody, async (req: Request, res: Response): Promise<void> => {
   const { email, username, password, role, tier } = req.body;
 
   // Validate input
   if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Email, username, and password are required.' });
+    res.status(400).json({ message: 'Email, username, and password are required.' });
+    return;
   }
 
   try {
@@ -29,7 +28,8 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
       where: { email },
     });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email is already in use.' });
+      res.status(400).json({ message: 'Email is already in use.' });
+      return;
     }
 
     // Hash the password using bcrypt
@@ -59,23 +59,24 @@ router.post('/signup', logRequestBody, async (req: Request, res: Response): Prom
     );
 
     // Send back response with token
-    return res.status(201).json({
+    res.status(201).json({
       message: 'User registered successfully',
       token,  // Send the generated token
     });
   } catch (error) {
     console.error('Error during user registration:', error);
-    return res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 // User Login Route
-router.post('/login', logRequestBody, async (req: Request, res: Response): Promise<Response> => {
+router.post('/login', logRequestBody, async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   // Validate input
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+    res.status(400).json({ message: 'Email and password are required.' });
+    return;
   }
 
   try {
@@ -85,14 +86,16 @@ router.post('/login', logRequestBody, async (req: Request, res: Response): Promi
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
     }
 
     // Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
     }
 
     // Generate JWT token
@@ -103,13 +106,13 @@ router.post('/login', logRequestBody, async (req: Request, res: Response): Promi
     );
 
     // Send back response with token
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Authentication successful',
       token,  // Send the generated token
     });
   } catch (error) {
     console.error('Error during user login:', error);
-    return res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

@@ -9,11 +9,20 @@ import {
 import { UserRole, UserTier } from '../types'; // Import enums
 import { Service } from './services'; // Import Service model
 
+// Define the UserCreationAttributes interface
+export interface UserCreationAttributes {
+  email: string;
+  username: string;
+  password: string;
+  role: UserRole;
+  tier: UserTier;
+  isVerified: boolean;
+}
+
 @Table({ tableName: 'users', timestamps: true })
-export default class User extends Model {
-  // Explicitly initialize id to avoid overwriting base property
-  @Column({ type: DataType.UUID, primaryKey: true, defaultValue: DataType.UUIDV4 })
-  id: string = ''; // Initialize id to an empty string (or your desired default)
+export default class User extends Model<User, UserCreationAttributes> {
+  // Remove the explicit `id` declaration to let Sequelize handle it
+  // Sequelize will automatically generate and manage the `id` property as UUID
 
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email!: string;
