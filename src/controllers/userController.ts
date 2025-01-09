@@ -1,7 +1,8 @@
 // Import necessary modules and types
 import { Request, Response } from 'express';
 import  User  from '../models/user'; // Assuming User is a Sequelize model
-import { UserRole, UserTier } from '../types/UserRoles';  // Adjust path as needed
+import { UserTier } from '../types/UserRoles';  // Adjust path as needed
+import { UserRole } from 'types/user';
 
 // Controller for registering a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {

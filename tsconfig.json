@@ -1,48 +1,48 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                             
-    "module": "CommonJS",                           
-    "moduleResolution": "node",                    
-    "strict": true,                                
-    "noImplicitAny": true,                         
-    "esModuleInterop": true,                       
-    "skipLibCheck": true,                         
-    "forceConsistentCasingInFileNames": true,       
-    "baseUrl": "./",                               
-    "outDir": "./dist",                           
-    "rootDir": "./src",                           
-    "noEmitOnError": true,                        
-    "resolveJsonModule": true,                    
-    "experimentalDecorators": true,               
-    "emitDecoratorMetadata": true,               
-    "allowJs": false,                             
-    "declaration": true,                         
-    "declarationMap": false,                     
-    "types": [                                   
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src", // Base directory for resolving paths (set to 'src')
+    "outDir": "./dist", // Output directory for compiled files
+    "rootDir": "./src", // Root directory of your TypeScript files
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": false,
+    "declaration": true,
+    "declarationMap": false,
+    "types": [
       "node",
       "jsonwebtoken",
       "jest",
       "nodemailer",
       "supertest"
     ],
-    "typeRoots": [                               
-      "node_modules/@types",                     
-      "./src/types"                              
+    "typeRoots": [
+      "node_modules/@types",
+      "./src/types"
     ],
-    "paths": {                                   
-      "@src/*": ["src/*"],
-      "@dist/*": ["dist/*"],
-      "@types/*": ["src/types/*"]
+    "paths": {
+      "@src/*": ["*"], // Shortcuts for importing from src
+      "@dist/*": ["../dist/*"], // Adjusted to resolve from baseUrl
+      "@types/*": ["types/*"] // Consistent path for types
     }
   },
   "include": [
-    "src/**/*.ts",                               
-    "src/test/**/*.ts",                         
-    "src/types/**/*.d.ts"                       
+    "src/**/*.ts",
+    "src/test/**/*.ts",
+    "src/types/**/*.d.ts"
   ],
   "exclude": [
-    "node_modules",                              
-    "dist",                                     
-    "**/*.js"                                   
+    "node_modules",
+    "dist",
+    "**/*.js"
   ]
 }
