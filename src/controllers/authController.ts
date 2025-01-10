@@ -1,6 +1,6 @@
 // src/controllers/authController.ts
 
-import { Request, Response } from 'express';
+import  Request, { Response }  from 'express';
 import bcrypt from 'bcryptjs';
 import  User  from '../models/user';
 import { generateToken } from '../utils/jwt'; // Import the token generation function
