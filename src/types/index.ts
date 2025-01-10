@@ -11,7 +11,7 @@ export interface UserPayload {
   id: string;              // User ID (required)
   email?: string;          // User email (optional)
   username?: string;       // Username (optional)
-  role: UserRole;          // User role (required, updated to ensure it's always present)
-  tier: UserTier;          // Tier is required (updated)
+  role: UserRole;          // User role (required, ensures that `role` is always present)
+  tier: UserTier;          // Tier is required (ensures the user always has a tier assigned)
   isVerified?: boolean;    // Whether the user is verified (optional)
 }
