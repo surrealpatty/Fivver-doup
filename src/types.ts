@@ -1,37 +1,36 @@
 // src/types.ts
 
-// Import necessary modules
-import { Request } from 'express'; // Ensure correct import of Request
-
-// Define the UserRole enum for user roles
+// Define UserRole enum for user's role (user, admin, moderator)
 export enum UserRole {
-  Admin = 'admin',
-  Paid = 'paid',
   User = 'user',
+  Admin = 'admin',
+  Moderator = 'moderator',
 }
 
-// Define the UserTier enum for user tiers
+// Define UserTier enum for user's subscription tier (free or paid)
 export enum UserTier {
   Free = 'free',
   Paid = 'paid',
 }
 
-// Define the UserPayload interface
+// Define the UserPayload interface for user-related data
 export interface UserPayload {
-  id: string;
-  email?: string;
-  username?: string;
-  role?: UserRole;
-  tier?: UserTier;
-  isVerified?: boolean;
+  id: string;              // User ID (required)
+  email?: string;          // User email (optional)
+  username?: string;       // Username (optional)
+  role?: UserRole;         // User role (optional)
+  tier: UserTier;          // Tier is now required, no longer optional
+  isVerified?: boolean;    // Whether the user is verified (optional)
 }
 
-// Define the CustomAuthRequest interface
+// Ensure the CustomAuthRequest extends Request correctly
+import { Request } from 'express';
+
 export interface CustomAuthRequest extends Request {
   user?: UserPayload; // Optional user field of type UserPayload
 }
 
-// Define a type guard to check if an object is a valid UserPayload
+// Type guard to check if the user is a valid UserPayload
 export function isUser(user: any): user is UserPayload {
   return (
     user &&
@@ -43,7 +42,7 @@ export function isUser(user: any): user is UserPayload {
   );
 }
 
-// Define the AuthRequest interface for when a user is guaranteed to exist
+// AuthRequest for when a user is guaranteed to exist
 export interface AuthRequest extends Request {
   user: UserPayload; // Non-optional user field
 }
