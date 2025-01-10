@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserPayload } from './index'; // Ensure this is consistent with your types file
+import { UserPayload } from './index';  // Import from correct path
 
 // AuthRequest interface where user is optional (could be undefined if not authenticated)
 export interface AuthRequest extends Request {
