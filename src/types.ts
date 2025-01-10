@@ -1,3 +1,6 @@
+// src/types.ts
+
+// Import necessary modules
 import { Request } from 'express'; // Ensure correct import of Request
 
 // Define the UserRole enum for user roles
