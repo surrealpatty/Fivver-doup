@@ -1,5 +1,3 @@
-// src/test/premiumService.test.ts
-
 import request from 'supertest';
 import app from '../index'; // Ensure this is the correct import path to your app
 import jwt from 'jsonwebtoken';
