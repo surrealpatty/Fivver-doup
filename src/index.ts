@@ -1,10 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import bodyParser from 'body-parser';
-import authRoutes from './routes/auth'; // Ensure this path is correct
 import userRoutes from './routes/user'; // Ensure this path is correct
 import serviceRoutes from './routes/service'; // Ensure this path is correct
+import authRoutes from './routes/auth'; // Ensure this path is correct
 import passwordResetRoutes from './routes/passwordReset'; // Import password reset routes
 
 dotenv.config(); // Load environment variables from .env file
@@ -13,25 +12,26 @@ const app = express();
 
 // Middleware setup
 app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(bodyParser.json()); // Parse JSON request bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+app.use(express.json()); // Parse JSON request bodies (Built-in middleware in Express 4.16.0+)
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
 // Routes setup
-app.use('/api/users', userRoutes);
-app.use('/api/services', serviceRoutes);
-app.use('/auth', authRoutes);
-app.use('/api/password-reset', passwordResetRoutes); // Set up password reset routes
+app.use('/api/users', userRoutes); // User routes
+app.use('/api/services', serviceRoutes); // Service routes
+app.use('/auth', authRoutes); // Auth routes
+app.use('/api/password-reset', passwordResetRoutes); // Password reset routes
 
 // Default route for testing the API
 app.get('/', (req, res) => {
   res.send('Welcome to the API');
 });
 
+// Set up server listening logic
 const PORT = process.env.PORT || 3000;
 
-// Create and start the server, but only if not in test mode
 let server: any;
 
+// Create and start the server, but only if not in test mode
 if (process.env.NODE_ENV !== 'test') {
   server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

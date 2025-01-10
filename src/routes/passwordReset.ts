@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 
 // Request Password Reset Route
 router.post('/reset-password/request', async (req: Request, res: Response): Promise<Response> => {
-  const { email } = req.body;
+  const { email }: { email: string } = req.body; // Explicitly type the email
 
   try {
     // Find the user by email
@@ -59,7 +59,7 @@ router.post('/reset-password/request', async (req: Request, res: Response): Prom
 // Handle Password Reset with Token Route
 router.post('/reset-password/:token', async (req: Request, res: Response): Promise<Response> => {
   const { token } = req.params;
-  const { newPassword } = req.body;
+  const { newPassword }: { newPassword: string } = req.body; // Explicitly type newPassword
 
   try {
     // Find the user by token and check if the token is valid (not expired)
