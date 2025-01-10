@@ -1,6 +1,5 @@
-// src/types/authRequest.ts
 import { Request } from 'express';
-import { UserPayload } from './user';  // Correct path to UserPayload
+import { UserPayload } from './index';  // Ensure this path is consistent and correct
 
 // AuthRequest interface where user is optional (could be undefined if not authenticated)
 export interface AuthRequest extends Request {
