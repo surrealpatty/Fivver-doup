@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Request, Response, NextFunction } from 'express';
 import { authenticateToken } from './authenticateToken';
-import { UserPayload } from '../types';
+import { UserPayload, UserRole, UserTier } from '../types'; // Ensure correct imports for UserRole and UserTier
 import jwt from 'jsonwebtoken';
 
 // Mock jsonwebtoken module
@@ -30,7 +30,14 @@ describe('authenticateToken Middleware', () => {
 
   it('should attach user to req.user if token is valid', () => {
     const mockToken = 'validToken';
-    const mockPayload: UserPayload = { id: '123', email: 'user@example.com' };
+    
+    // Add the missing role and tier properties
+    const mockPayload: UserPayload = {
+      id: '123',
+      email: 'user@example.com',
+      role: UserRole.User,    // Add role
+      tier: UserTier.Free     // Add tier
+    };
 
     // Mock jwt.verify to return the expected payload
     (jwt.verify as jest.Mock).mockReturnValue(mockPayload);

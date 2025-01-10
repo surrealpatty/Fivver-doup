@@ -1,9 +1,11 @@
+// src/test/premiumService.test.ts
+
 import request from 'supertest';
 import app from '../index'; // Ensure this is the correct import path to your app
 import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { UserPayload } from '../types'; // Correct import path for UserPayload
-import { UserTier } from '../types'; // Import UserTier enum for correct tier values
+import { UserTier, UserRole } from '../types'; // Import UserTier and UserRole enums for correct tier and role values
 import { Service } from '../models/services';  // Service model import
 
 // Mock JWT token generation for paid and free users
@@ -11,12 +13,13 @@ const generateToken = (user: UserPayload, secretKey: string): string => {
   return jwt.sign(user, secretKey, { expiresIn: '1h' });
 };
 
-// Mock user data
+// Mock user data with the added `role` property
 const mockPaidUser: UserPayload = {
   id: '1',
   email: 'paiduser@example.com',
   username: 'paiduser',
   tier: UserTier.Paid, // Use UserTier.Paid instead of 'paid'
+  role: UserRole.User, // Add the role property
 };
 
 const mockFreeUser: UserPayload = {
@@ -24,6 +27,7 @@ const mockFreeUser: UserPayload = {
   email: 'freeuser@example.com',
   username: 'freeuser',
   tier: UserTier.Free, // Use UserTier.Free instead of 'free'
+  role: UserRole.User, // Add the role property
 };
 
 // Mock the `jsonwebtoken` module before any tests run
@@ -34,10 +38,10 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn().mockImplementation((token: string, secret: string) => {
     // Mock behavior based on the token (this is a simplified version for your case)
     if (token === 'mocked-token-1') {
-      return { id: '1', username: 'paiduser', tier: UserTier.Paid };  // Ensure tier is valid
+      return { id: '1', username: 'paiduser', tier: UserTier.Paid, role: UserRole.User };  // Ensure role and tier are valid
     }
     if (token === 'mocked-token-2') {
-      return { id: '2', username: 'freeuser', tier: UserTier.Free };  // Ensure tier is valid
+      return { id: '2', username: 'freeuser', tier: UserTier.Free, role: UserRole.User };  // Ensure role and tier are valid
     }
     throw new Error('Invalid token');
   }),

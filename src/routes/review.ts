@@ -20,8 +20,13 @@ const createReviewHandler: RequestHandler = async (
   try {
     const user = req.user; // Access the user property from the custom request type
 
-    if (!user || !user.tier) {
-      res.status(400).json({ message: 'User tier is missing or user is not authenticated.' });
+    if (!user) {
+      res.status(401).json({ message: 'User not authenticated.' });
+      return; // Ensure the function returns here
+    }
+
+    if (!user.tier) {
+      res.status(400).json({ message: 'User tier is missing.' });
       return; // Ensure the function returns here
     }
 
