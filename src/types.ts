@@ -18,8 +18,8 @@ export interface UserPayload {
   id: string;              // User ID (required)
   email?: string;          // User email (optional)
   username?: string;       // Username (optional)
-  role?: UserRole;         // User role (optional)
-  tier: UserTier;          // Tier is now required, no longer optional
+  role: UserRole;          // User role (required, no longer optional)
+  tier: UserTier;          // Tier is required, no longer optional
   isVerified?: boolean;    // Whether the user is verified (optional)
 }
 
@@ -37,8 +37,8 @@ export function isUser(user: any): user is UserPayload {
     typeof user.id === 'string' &&
     (user.email === undefined || typeof user.email === 'string') &&
     (user.username === undefined || typeof user.username === 'string') &&
-    (user.role === undefined || Object.values(UserRole).includes(user.role)) &&
-    (user.tier === undefined || Object.values(UserTier).includes(user.tier))
+    Object.values(UserRole).includes(user.role) &&  // Ensuring role is valid
+    Object.values(UserTier).includes(user.tier) // Ensuring tier is valid
   );
 }
 
