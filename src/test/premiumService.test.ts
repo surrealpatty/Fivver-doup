@@ -3,6 +3,7 @@ import app from '../index'; // Ensure this is the correct import path to your ap
 import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { UserPayload } from '../types'; // Correct import path for UserPayload
+import { UserTier } from '../types'; // Import UserTier enum for correct tier values
 import { Service } from '../models/services';  // Service model import
 
 // Mock JWT token generation for paid and free users
@@ -15,14 +16,14 @@ const mockPaidUser: UserPayload = {
   id: '1',
   email: 'paiduser@example.com',
   username: 'paiduser',
-  tier: 'paid', // Correct tier value from 'free' | 'paid'
+  tier: UserTier.Paid, // Use UserTier.Paid instead of 'paid'
 };
 
 const mockFreeUser: UserPayload = {
   id: '2',
   email: 'freeuser@example.com',
   username: 'freeuser',
-  tier: 'free', // Correct tier value from 'free' | 'paid'
+  tier: UserTier.Free, // Use UserTier.Free instead of 'free'
 };
 
 // Mock the `jsonwebtoken` module before any tests run
@@ -33,10 +34,10 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn().mockImplementation((token: string, secret: string) => {
     // Mock behavior based on the token (this is a simplified version for your case)
     if (token === 'mocked-token-1') {
-      return { id: '1', username: 'paiduser', tier: 'paid' };  // Ensure tier is valid
+      return { id: '1', username: 'paiduser', tier: UserTier.Paid };  // Ensure tier is valid
     }
     if (token === 'mocked-token-2') {
-      return { id: '2', username: 'freeuser', tier: 'free' };  // Ensure tier is valid
+      return { id: '2', username: 'freeuser', tier: UserTier.Free };  // Ensure tier is valid
     }
     throw new Error('Invalid token');
   }),
