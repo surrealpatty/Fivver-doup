@@ -26,12 +26,12 @@
       "supertest" // Supertest types for HTTP assertions
     ],
     "typeRoots": [
-      "node_modules/@types", // Default type roots
-      "./types" // Custom types directory
+      "./node_modules/@types", // Default type roots
+      "./src/types" // Custom types directory
     ],
     "paths": {
-      "@types/*": ["types/*"], // Map @types/* to the custom types directory
-      "*": ["node_modules/*", "types/*"] // Resolve modules and custom types
+      "@types/*": ["src/types/*"], // Map @types/* to the custom types directory
+      "*": ["node_modules/*", "src/types/*"] // Resolve modules and custom types
     }
   },
   "include": [
