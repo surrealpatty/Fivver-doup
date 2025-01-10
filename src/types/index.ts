@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 // Define UserTier type for user's subscription tier (free or paid)
 export type UserTier = 'free' | 'paid';  
 
@@ -12,7 +10,7 @@ export interface UserPayload {
     email?: string;                  // User email (optional)
     username?: string;               // Username (optional)
     role?: UserRole;                 // User role (optional)
-    tier: UserTier;                  // tier is now required, no longer optional
+    tier: UserTier;                  // Tier is now required, no longer optional
     isVerified?: boolean;            // Whether the user is verified (optional)
 }
 
