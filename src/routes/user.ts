@@ -1,18 +1,19 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import  User, { UserCreationAttributes } from '../models/user';  // Import User model and UserCreationAttributes
+import User, { UserCreationAttributes } from '../models/user';  // Import User model and UserCreationAttributes
 import { UserRole, UserTier } from '../types'; // Ensure the necessary types are imported
 
 const router = Router();
 
 // User Registration (Signup) Route
-router.post('/signup', async (req: Request, res: Response): Promise<Response> => {
+router.post('/signup', async (req: Request, res: Response): Promise<void> => {
   const { email, username, password } = req.body;
 
   // Validate input
   if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Email, username, and password are required.' });
+    res.status(400).json({ message: 'Email, username, and password are required.' });
+    return; // Return to stop further code execution
   }
 
   try {
@@ -21,7 +22,8 @@ router.post('/signup', async (req: Request, res: Response): Promise<Response> =>
       where: { email },
     });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email is already in use.' });
+      res.status(400).json({ message: 'Email is already in use.' });
+      return;
     }
 
     // Hash the password using bcrypt
@@ -47,34 +49,37 @@ router.post('/signup', async (req: Request, res: Response): Promise<Response> =>
     );
 
     // Send back response with token
-    return res.status(201).json({
+    res.status(201).json({
       message: 'User registered successfully',
       token,  // Send the generated token
     });
   } catch (error) {
     console.error('Error during user registration:', error);
-    return res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 // User Login Route (Optional, just as an example)
-router.post('/login', async (req: Request, res: Response): Promise<Response> => {
+router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+    res.status(400).json({ message: 'Email and password are required.' });
+    return; // Return to stop further code execution
   }
 
   try {
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      res.status(400).json({ message: 'Invalid email or password.' });
+      return;
     }
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      res.status(400).json({ message: 'Invalid email or password.' });
+      return;
     }
 
     // Generate JWT token
@@ -84,13 +89,13 @@ router.post('/login', async (req: Request, res: Response): Promise<Response> => 
       { expiresIn: '1h' }
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Login successful',
       token,  // Send the generated token
     });
   } catch (error) {
     console.error('Error during user login:', error);
-    return res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
