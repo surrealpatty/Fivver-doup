@@ -1,10 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors'; 
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import authRoutes from './routes/auth'; // Ensure this path is correct
 import userRoutes from './routes/user'; // Ensure this path is correct
 import serviceRoutes from './routes/service'; // Ensure this path is correct
+import passwordResetRoutes from './routes/passwordReset'; // Import password reset routes
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/auth', authRoutes);
+app.use('/api/password-reset', passwordResetRoutes); // Set up password reset routes
 
 // Default route for testing the API
 app.get('/', (req, res) => {
@@ -38,7 +40,7 @@ if (process.env.NODE_ENV !== 'test') {
   console.log('Running in test mode.');
 }
 
-// Export the server for global teardown
+// Export the server for global teardown (for testing purposes)
 export { server };
 
 // Export the app as a default export (useful for testing or reusability)

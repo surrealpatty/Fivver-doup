@@ -1,8 +1,7 @@
-// src/routes/passwordReset.ts
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import  User  from '../models/user';
+import User from '../models/user';
 import { Op } from 'sequelize';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
@@ -21,7 +20,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Request Password Reset Route
-router.post('/reset-password/request', async (req: Request, res: Response) => {
+router.post('/reset-password/request', async (req: Request, res: Response): Promise<Response> => {
   const { email } = req.body;
 
   try {
@@ -50,15 +49,15 @@ router.post('/reset-password/request', async (req: Request, res: Response) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: 'Password reset link sent to your email.' });
+    return res.status(200).json({ message: 'Password reset link sent to your email.' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error while processing password reset request' });
+    return res.status(500).json({ message: 'Server error while processing password reset request' });
   }
 });
 
 // Handle Password Reset with Token Route
-router.post('/reset-password/:token', async (req: Request, res: Response) => {
+router.post('/reset-password/:token', async (req: Request, res: Response): Promise<Response> => {
   const { token } = req.params;
   const { newPassword } = req.body;
 
@@ -85,10 +84,10 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
 
     await user.save();
 
-    res.status(200).json({ message: 'Password successfully reset' });
+    return res.status(200).json({ message: 'Password successfully reset' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error while resetting password' });
+    return res.status(500).json({ message: 'Server error while resetting password' });
   }
 });
 

@@ -1,15 +1,16 @@
-// src/controllers/authController.ts
-
-import  Request, { Response }  from 'express';
+import { Request, Response } from 'express'; // Fixed import statement
 import bcrypt from 'bcryptjs';
-import  User  from '../models/user';
+import User from '../models/user';
 import { generateToken } from '../utils/jwt'; // Import the token generation function
 import { UserPayload } from '../types'; // Import UserPayload type for consistency
 import { UserRole, UserTier } from '../types'; // Import UserRole and UserTier enums
 
 // Authenticate User Function
 export const authenticateUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password }: { email: string, password: string } = req.body;
+  const { email, password }: { email: string, password: string } = (req.body || {}) as {
+    email: string;
+    password: string;
+  };
 
   // Ensure email and password are provided
   if (!email || !password) {

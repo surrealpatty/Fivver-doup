@@ -21,7 +21,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 
     // Default values for role and tier if not provided
     const userRole: UserRole = role || 'user'; // Default to 'user' role
-    const userTier: UserTier = tier || 'Free'; // Default to 'Free' tier
+    const userTier: UserTier = tier || UserTier.Free; // Default to 'Free' tier using enum reference
 
     // Set the default value for isVerified
     const isVerified = false; // Assuming new users are not verified
