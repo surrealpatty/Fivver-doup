@@ -1,5 +1,6 @@
 // src/types/customRequest.ts
 import { Request } from 'express';
+
 import { UserPayload, UserRole } from './index'; // Use the same path for both files
 
 // Extend the Request interface to include the user field with the correct type
