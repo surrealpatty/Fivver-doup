@@ -43,3 +43,5 @@ if (process.env.NODE_ENV !== 'test') {
 // Export the server for global teardown (for testing purposes)
 export { server };
 
+// Export app as default for easier testing
+export default app;
