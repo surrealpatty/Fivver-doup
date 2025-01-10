@@ -12,7 +12,7 @@ router.get(
     req: Request, // Default to the generic Request type here
     res: Response,
     next: NextFunction
-  ): Promise<Response> => {
+  ): Promise<void> => { // Explicitly return Promise<void>
     try {
       // Type assertion to CustomAuthRequest to access req.user
       const customReq = req as CustomAuthRequest;
@@ -20,19 +20,22 @@ router.get(
       // Ensure req.user is available, as it's injected by authenticateToken middleware
       if (!customReq.user) {
         // Return early if user is not present
-        return res.status(401).json({ error: 'Unauthorized' });
+        res.status(401).json({ error: 'Unauthorized' });
+        return; // Prevent further code execution
       }
 
       const { id, email, username } = customReq.user;
 
-      // Return a response with user data
-      return res.status(200).json({
+      // Send the response without returning the Response object
+      res.status(200).json({
         message: 'Protected route accessed',
         user: { id, email, username },
       });
+
+      // No need to return the response object from here
     } catch (error: any) {  // Explicitly type the error as 'any' or 'Error'
       // Return error response instead of calling next(error)
-      return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+      res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
   }
 );
