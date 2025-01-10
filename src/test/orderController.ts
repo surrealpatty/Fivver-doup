@@ -1,17 +1,15 @@
-// src/test/orderController.ts
-
 import { Request, Response } from 'express';
-import { UserPayload } from '../types'; // Assuming UserPayload is defined in your types
+import { UserPayload, UserRole, UserTier } from '../types'; // Import UserPayload, UserRole, and UserTier from the same module
 import { registerUser } from '../controllers/userController'; // Adjust import if needed
-import  User  from '../models/user'; // Import the User model
+import User from '../models/user'; // Import the User model
 
 // Mock user payload for testing
 const mockUser: UserPayload = {
   id: '123',
   email: 'test@example.com',
   username: 'testuser',
-  role: 'user',
-  tier: 'free',
+  role: 'user' as UserRole,  // Explicitly assert the value is of type UserRole
+  tier: 'free' as UserTier,  // Explicitly assert the value is of type UserTier
   isVerified: false,
 };
 
@@ -48,8 +46,8 @@ describe('User Registration Controller', () => {
         id: '123',
         email: 'test@example.com',
         username: 'testuser',
-        role: 'user',
-        tier: 'free',
+        role: 'user',  // Ensure role is treated as UserRole
+        tier: 'free',  // Ensure tier is treated as UserTier
         isVerified: false,
         createdAt: expect.any(String), // Validate createdAt
       },

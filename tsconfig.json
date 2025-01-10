@@ -1,47 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                     // Use the latest ECMAScript features
-    "module": "CommonJS",                   // Module system for Node.js
-    "moduleResolution": "node",             // Resolve modules as Node.js would
-    "strict": true,                         // Enable all strict type-checking options
-    "noImplicitAny": true,                  // Raise an error if variables have an implicit 'any' type
-    "esModuleInterop": true,                // Enable compatibility with CommonJS modules
-    "skipLibCheck": true,                   // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing of filenames
-    "baseUrl": "./src",                     // Base directory for resolving paths
-    "outDir": "./dist",                     // Output directory for compiled files
-    "rootDir": "./src",                     // Root directory for TypeScript files
-    "noEmitOnError": true,                  // Prevent emitting output files on type errors
-    "resolveJsonModule": true,              // Allow JSON imports
-    "experimentalDecorators": true,         // Enable support for decorators
-    "emitDecoratorMetadata": true,          // Enable decorator metadata generation
-    "allowJs": false,                       // Disallow JavaScript files
-    "declaration": true,                    // Generate .d.ts files alongside .js files
-    "declarationMap": false,                // Disable declaration map generation
+    "target": "ESNext",                        // Use the latest ECMAScript features
+    "module": "CommonJS",                      // Module system for Node.js
+    "moduleResolution": "node",                // Resolve modules as Node.js would
+    "strict": true,                            // Enable all strict type-checking options
+    "noImplicitAny": true,                     // Raise an error if variables have an implicit 'any' type
+    "esModuleInterop": true,                   // Enable compatibility with CommonJS modules
+    "skipLibCheck": true,                      // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,  // Ensure consistent casing of filenames
+    "baseUrl": "./src",                        // Base directory for resolving paths
+    "outDir": "./dist",                        // Output directory for compiled files
+    "rootDir": "./src",                        // Root directory for TypeScript files
+    "noEmitOnError": true,                     // Prevent emitting output files on type errors
+    "resolveJsonModule": true,                 // Allow JSON imports
+    "experimentalDecorators": true,            // Enable support for decorators
+    "emitDecoratorMetadata": true,             // Enable decorator metadata generation
+    "allowJs": false,                          // Disallow JavaScript files
+    "declaration": true,                       // Generate .d.ts files alongside .js files
+    "declarationMap": true,                    // Generate declaration maps for better debugging
     "types": [
-      "node",                               // Node.js types
-      "jsonwebtoken",                       // JSON Web Token types
-      "jest",                               // Jest types for testing
-      "nodemailer",                         // Nodemailer types for email handling
-      "supertest"                            // Supertest types for HTTP assertions
+      "node",                                  // Node.js types
+      "jsonwebtoken",                          // JSON Web Token types
+      "jest",                                  // Jest types for testing
+      "nodemailer",                            // Nodemailer types for email handling
+      "supertest"                               // Supertest types for HTTP assertions
     ],
     "typeRoots": [
-      "./node_modules/@types",              // Default type roots
-      "./src/types"                          // Custom types directory
+      "./node_modules/@types",                 // Default type roots
+      "./src/types"                             // Custom types directory
     ],
     "paths": {
-      "@types/*": ["src/types/*"],           // Map @types/* to the custom types directory
-      "*": ["node_modules/*", "src/types/*"] // Resolve modules and custom types
+      "@types/*": ["src/types/*"],              // Map @types/* to the custom types directory
+      "*": ["node_modules/*", "src/types/*"]    // Resolve modules and custom types
     }
   },
   "include": [
-    "src/**/*.ts",                         // Include all TypeScript files in src
-    "src/test/**/*.ts",                    // Include all test files
-    "src/types/**/*.d.ts"                   // Include declaration files
+    "src/**/*.ts",                             // Include all TypeScript files in src
+    "src/test/**/*.ts",                        // Include all test files
+    "src/types/**/*.d.ts"                      // Include declaration files
   ],
   "exclude": [
-    "node_modules",                        // Exclude node_modules
-    "dist",                                // Exclude compiled files in dist
-    "**/*.js"                              // Exclude JavaScript files
+    "node_modules",                            // Exclude node_modules
+    "dist",                                    // Exclude compiled files in dist
+    "**/*.js"                                  // Exclude JavaScript files
   ]
 }
