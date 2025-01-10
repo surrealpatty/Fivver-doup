@@ -13,13 +13,3 @@ export interface UserPayload {
     tier: UserTier;                  // Tier is now required, no longer optional
     isVerified?: boolean;            // Whether the user is verified (optional)
 }
-
-// Define the AuthRequest interface extending Express Request with optional user payload
-export interface AuthRequest extends Request {
-    user?: UserPayload;              // Optional user payload attached to the request
-}
-
-// Define the CustomAuthRequest interface extending Express Request with a required user payload
-export interface CustomAuthRequest extends Request {
-    user: UserPayload;               // User payload is required
-}
