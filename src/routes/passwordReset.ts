@@ -20,14 +20,15 @@ const transporter = nodemailer.createTransport({
 });
 
 // Request Password Reset Route
-router.post('/reset-password/request', async (req: Request, res: Response): Promise<Response> => {
+router.post('/reset-password/request', async (req: Request, res: Response): Promise<void> => {
   const { email }: { email: string } = req.body; // Explicitly type the email
 
   try {
     // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'User not found' });
+      return; // End the request handler here after sending the response
     }
 
     // Generate a password reset token securely
@@ -49,15 +50,15 @@ router.post('/reset-password/request', async (req: Request, res: Response): Prom
 
     await transporter.sendMail(mailOptions);
 
-    return res.status(200).json({ message: 'Password reset link sent to your email.' });
+    res.status(200).json({ message: 'Password reset link sent to your email.' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Server error while processing password reset request' });
+    res.status(500).json({ message: 'Server error while processing password reset request' });
   }
 });
 
 // Handle Password Reset with Token Route
-router.post('/reset-password/:token', async (req: Request, res: Response): Promise<Response> => {
+router.post('/reset-password/:token', async (req: Request, res: Response): Promise<void> => {
   const { token } = req.params;
   const { newPassword }: { newPassword: string } = req.body; // Explicitly type newPassword
 
@@ -71,7 +72,8 @@ router.post('/reset-password/:token', async (req: Request, res: Response): Promi
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
+      res.status(400).json({ message: 'Invalid or expired token' });
+      return; // End the request handler here after sending the response
     }
 
     // Hash the new password before saving it
@@ -84,10 +86,10 @@ router.post('/reset-password/:token', async (req: Request, res: Response): Promi
 
     await user.save();
 
-    return res.status(200).json({ message: 'Password successfully reset' });
+    res.status(200).json({ message: 'Password successfully reset' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Server error while resetting password' });
+    res.status(500).json({ message: 'Server error while resetting password' });
   }
 });
 
