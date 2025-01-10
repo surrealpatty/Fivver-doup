@@ -1,3 +1,5 @@
+// src/types/index.ts
+
 // Define UserRole type for user's role (user, admin, moderator)
 export type UserRole = 'user' | 'admin' | 'moderator';
 
