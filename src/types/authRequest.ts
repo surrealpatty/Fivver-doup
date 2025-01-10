@@ -1,6 +1,6 @@
-import { UserPayload } from './index';  // Ensure correct import path for UserPayload
-import { Request } from 'express';      // Import Request from Express
+import { UserPayload } from './index'; // Ensure './index' is used consistently
+import { Request } from 'express';
 
 export interface AuthRequest extends Request {
-  user?: UserPayload;  // Explicitly define 'user' property with UserPayload type
+  user?: UserPayload; // Optional user property with UserPayload type
 }

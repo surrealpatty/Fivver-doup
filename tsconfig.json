@@ -30,7 +30,10 @@
       "./src/types"                              // Custom types directory
     ],
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]     // Resolve modules and custom types
+      "*": [
+        "./*",                                  // Resolve all modules relative to the base URL
+        "./types/*"                             // Resolve custom types within the src/types directory
+      ]
     }
   },
   "include": [
