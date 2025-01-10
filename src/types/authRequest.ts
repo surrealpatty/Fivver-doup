@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserPayload } from './index'; // Ensure the path is correct
+import { UserPayload, UserRole } from './index'; // Use the same path for both files
 
 // AuthRequest interface where user is optional (could be undefined if not authenticated)
 export interface AuthRequest extends Request {
