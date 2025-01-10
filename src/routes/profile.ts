@@ -8,17 +8,18 @@ const router = express.Router();
 router.get(
   '/profile',
   authenticateToken, // Middleware to authenticate user
-  async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+  async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<void> => { // Explicitly return Promise<void>
     try {
-      // Cast req to CustomAuthRequest to access user
-      const customReq = req as CustomAuthRequest;
-      const user = customReq.user;
+      const user = req.user;
 
       if (!user) {
-        return res.status(401).json({ message: 'User not authenticated' });
+        // Ensure we just send the response without returning it
+        res.status(401).json({ message: 'User not authenticated' });
+        return; // Return early to ensure no further code executes
       }
 
-      return res.status(200).json({
+      // Send response without returning anything
+      res.status(200).json({
         message: 'Profile fetched successfully',
         user: {
           id: user.id,
@@ -27,9 +28,11 @@ router.get(
           tier: user.tier || 'Free', // Fallback to 'Free' if no tier provided
         },
       });
+
+      // No need to return anything from here, ensure code doesn't continue after sending response
     } catch (error) {
-      next(error); // Pass error to global error handler
-      return res.status(500).json({ message: 'Internal server error' });
+      // Pass error to the global error handler
+      next(error);
     }
   }
 );
