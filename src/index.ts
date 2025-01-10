@@ -1,4 +1,4 @@
-import express from 'express';
+import express from 'express';  // Correct import for express
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/user'; // Ensure this path is correct
@@ -43,5 +43,3 @@ if (process.env.NODE_ENV !== 'test') {
 // Export the server for global teardown (for testing purposes)
 export { server };
 
-// Export the app as a default export (useful for testing or reusability)
-export default app;
