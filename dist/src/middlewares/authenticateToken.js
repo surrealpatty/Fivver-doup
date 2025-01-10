@@ -9,24 +9,26 @@ Object.defineProperty(exports, "authenticateToken", {
     }
 });
 const _jwt = require("../utils/jwt");
-const authenticateToken = (req, res, next)=>{
+const authenticateToken = async (req, res, next)=>{
     // Get the token from the Authorization header
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1]; // Extract the token from "Bearer <token>"
     if (!token) {
         // If token is missing, send an error response
-        return res.status(401).json({
+        res.status(401).json({
             message: 'Access token is missing.'
         });
+        return; // Exit function after sending the response
     }
     try {
         // Verify the token using the utility function
-        const decoded = (0, _jwt.verifyToken)(token);
-        // If verification fails, send an error response
+        const decoded = (0, _jwt.verifyToken)(token); // Assuming `verifyToken` returns decoded user payload
+        // If verification fails or decoded is undefined, send an error response
         if (!decoded) {
-            return res.status(403).json({
+            res.status(403).json({
                 message: 'Invalid or expired token.'
             });
+            return; // Exit function after sending the response
         }
         // Attach the decoded user payload to the request object
         req.user = decoded;
@@ -35,7 +37,7 @@ const authenticateToken = (req, res, next)=>{
     } catch (error) {
         // Catch any unexpected errors during token verification
         console.error('Token verification error:', error);
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Token verification failed. Please try again later.'
         });
     }

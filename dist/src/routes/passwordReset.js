@@ -1,4 +1,3 @@
-// src/routes/passwordReset.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -33,7 +32,7 @@ const transporter = _nodemailer.default.createTransport({
 });
 // Request Password Reset Route
 router.post('/reset-password/request', async (req, res)=>{
-    const { email } = req.body;
+    const { email } = req.body; // Explicitly type the email
     try {
         // Find the user by email
         const user = await _user.default.findOne({
@@ -42,9 +41,10 @@ router.post('/reset-password/request', async (req, res)=>{
             }
         });
         if (!user) {
-            return res.status(404).json({
+            res.status(404).json({
                 message: 'User not found'
             });
+            return; // End the request handler here after sending the response
         }
         // Generate a password reset token securely
         const resetToken = _crypto.default.randomBytes(20).toString('hex');
@@ -74,7 +74,7 @@ router.post('/reset-password/request', async (req, res)=>{
 // Handle Password Reset with Token Route
 router.post('/reset-password/:token', async (req, res)=>{
     const { token } = req.params;
-    const { newPassword } = req.body;
+    const { newPassword } = req.body; // Explicitly type newPassword
     try {
         // Find the user by token and check if the token is valid (not expired)
         const user = await _user.default.findOne({
@@ -86,9 +86,10 @@ router.post('/reset-password/:token', async (req, res)=>{
             }
         });
         if (!user) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: 'Invalid or expired token'
             });
+            return; // End the request handler here after sending the response
         }
         // Hash the new password before saving it
         const hashedPassword = await _bcryptjs.default.hash(newPassword, 10);

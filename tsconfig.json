@@ -23,7 +23,8 @@
       "jsonwebtoken",                           // JSON Web Token types
       "jest",                                   // Jest types for testing
       "nodemailer",                             // Nodemailer types for email handling
-      "supertest"                                // Supertest types for HTTP assertions
+      "supertest",                               // Supertest types for HTTP assertions
+      "express"                                 // Ensure express types are available globally
     ],
     "typeRoots": [
       "./node_modules/@types",                  // Default type roots

@@ -19,13 +19,14 @@ router.get('/protected-route', _authenticateToken.authenticateToken, async (req,
         // Ensure req.user is available, as it's injected by authenticateToken middleware
         if (!customReq.user) {
             // Return early if user is not present
-            return res.status(401).json({
+            res.status(401).json({
                 error: 'Unauthorized'
             });
+            return; // Prevent further code execution
         }
         const { id, email, username } = customReq.user;
-        // Return a response with user data
-        return res.status(200).json({
+        // Send the response without returning the Response object
+        res.status(200).json({
             message: 'Protected route accessed',
             user: {
                 id,
@@ -33,9 +34,10 @@ router.get('/protected-route', _authenticateToken.authenticateToken, async (req,
                 username
             }
         });
+    // No need to return the response object from here
     } catch (error) {
         // Return error response instead of calling next(error)
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Internal Server Error',
             error: error.message
         });

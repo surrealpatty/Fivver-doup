@@ -6,6 +6,7 @@ const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _database = require("../config/database");
+const _types = require("../types");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -22,13 +23,13 @@ const mockPaidUser = {
     id: '1',
     email: 'paiduser@example.com',
     username: 'paiduser',
-    tier: 'paid'
+    tier: _types.UserTier.Paid
 };
 const mockFreeUser = {
     id: '2',
     email: 'freeuser@example.com',
     username: 'freeuser',
-    tier: 'free'
+    tier: _types.UserTier.Free
 };
 // Mock the `jsonwebtoken` module before any tests run
 jest.mock('jsonwebtoken', ()=>({
@@ -41,15 +42,15 @@ jest.mock('jsonwebtoken', ()=>({
                 return {
                     id: '1',
                     username: 'paiduser',
-                    tier: 'paid'
-                };
+                    tier: _types.UserTier.Paid
+                }; // Ensure tier is valid
             }
             if (token === 'mocked-token-2') {
                 return {
                     id: '2',
                     username: 'freeuser',
-                    tier: 'free'
-                };
+                    tier: _types.UserTier.Free
+                }; // Ensure tier is valid
             }
             throw new Error('Invalid token');
         })

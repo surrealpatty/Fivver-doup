@@ -24,6 +24,7 @@ _export(exports, {
     }
 });
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+const _types = require("../types");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -38,9 +39,9 @@ const registerUser = async (req, res)=>{
                 message: 'Email, password, and username are required.'
             });
         }
-        // Default values for role and tier if not provided, casting to enums
-        const userRole = role || 'User'; // Default to 'User' role
-        const userTier = tier || 'Free'; // Default to 'Free' tier
+        // Default values for role and tier if not provided
+        const userRole = role ?? _types.UserRole.User; // Default to 'User' role (enum value)
+        const userTier = tier ?? _types.UserTier.Free; // Default to 'Free' tier (enum value)
         // Set the default value for isVerified
         const isVerified = false; // Assuming new users are not verified
         // Create new user in the database

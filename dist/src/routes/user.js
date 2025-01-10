@@ -25,9 +25,10 @@ router.post('/signup', async (req, res)=>{
     const { email, username, password } = req.body;
     // Validate input
     if (!email || !username || !password) {
-        return res.status(400).json({
+        res.status(400).json({
             message: 'Email, username, and password are required.'
         });
+        return; // Return to stop further code execution
     }
     try {
         // Check if user already exists
@@ -37,9 +38,10 @@ router.post('/signup', async (req, res)=>{
             }
         });
         if (existingUser) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: 'Email is already in use.'
             });
+            return;
         }
         // Hash the password using bcrypt
         const hashedPassword = await _bcryptjs.default.hash(password, 10); // Salt rounds = 10
@@ -63,13 +65,13 @@ router.post('/signup', async (req, res)=>{
         } // Expiry time of the token
         );
         // Send back response with token
-        return res.status(201).json({
+        res.status(201).json({
             message: 'User registered successfully',
             token
         });
     } catch (error) {
         console.error('Error during user registration:', error);
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Server error'
         });
     }
@@ -78,9 +80,10 @@ router.post('/signup', async (req, res)=>{
 router.post('/login', async (req, res)=>{
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({
+        res.status(400).json({
             message: 'Email and password are required.'
         });
+        return; // Return to stop further code execution
     }
     try {
         const user = await _user.default.findOne({
@@ -89,16 +92,18 @@ router.post('/login', async (req, res)=>{
             }
         });
         if (!user) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: 'Invalid email or password.'
             });
+            return;
         }
         // Compare the provided password with the stored hashed password
         const isPasswordValid = await _bcryptjs.default.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: 'Invalid email or password.'
             });
+            return;
         }
         // Generate JWT token
         const token = _jsonwebtoken.default.sign({
@@ -108,13 +113,13 @@ router.post('/login', async (req, res)=>{
         }, process.env.JWT_SECRET || 'your_jwt_secret', {
             expiresIn: '1h'
         });
-        return res.status(200).json({
+        res.status(200).json({
             message: 'Login successful',
             token
         });
     } catch (error) {
         console.error('Error during user login:', error);
-        return res.status(500).json({
+        res.status(500).json({
             message: 'Server error'
         });
     }

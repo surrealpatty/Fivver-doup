@@ -1,24 +1,13 @@
-// src/api.ts
-
-import { Request, Response, NextFunction } from 'express';
+import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express-serve-static-core'; // Correct import for Express types
 import jwt from 'jsonwebtoken';
-import { UserPayload } from './types'; // Ensure this is the correct path and matches other imports
-
-// Augment the Express Request type to include the user field
-declare global {
-  namespace Express {
-    interface Request {
-      user?: UserPayload;
-    }
-  }
-}
+import { UserPayload } from './types/index'; // Ensure consistent import from 'index' file
 
 // Middleware to authenticate the token
 export const authenticateToken = (
-  req: Request,
-  res: Response,
+  req: ExpressRequest,  // Using the correctly imported ExpressRequest type
+  res: ExpressResponse, // Using the correctly imported ExpressResponse type
   next: NextFunction
-): Response<any, Record<string, any>> | void => {
+): ExpressResponse<any, Record<string, any>> | void => {
   try {
     const authorizationHeader = req.headers['authorization'];
 

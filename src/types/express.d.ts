@@ -1,14 +1,15 @@
 // src/types/express.d.ts
-
-import { Request } from 'express';
-import { Multer } from 'multer';  // Importing Multer for file handling
-import { UserPayload } from './index';  // Import your UserPayload interface from index.ts
+import { UserPayload } from './index'; // Import your UserPayload interface
+import { Multer } from 'multer'; // Import Multer types for file uploads
 
 declare global {
   namespace Express {
+    // Augmenting the Request interface to include 'user' and 'file'
     interface Request {
-      user?: UserPayload;  // Augmenting the Request type to include user information (UserPayload)
-      file?: Multer.File;   // Augmenting the Request type to handle Multer file uploads
+      user?: UserPayload;  // Add the 'user' property from UserPayload
+      file?: Multer.File;   // Add the 'file' property for Multer file uploads
     }
   }
 }
+
+export {}; // This ensures the file is treated as a module

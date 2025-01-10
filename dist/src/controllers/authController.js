@@ -1,4 +1,3 @@
-// src/controllers/authController.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -18,7 +17,7 @@ function _interop_require_default(obj) {
     };
 }
 const authenticateUser = async (req, res)=>{
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
     // Ensure email and password are provided
     if (!email || !password) {
         return res.status(400).json({
