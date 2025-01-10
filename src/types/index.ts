@@ -12,7 +12,7 @@ export interface UserPayload {
     email?: string;                  // User email (optional)
     username?: string;               // Username (optional)
     role?: UserRole;                 // User role (optional)
-    tier?: UserTier;                 // User subscription tier (optional)
+    tier: UserTier;                  // User subscription tier (required)
     isVerified?: boolean;            // Whether the user is verified (optional)
 }
 
