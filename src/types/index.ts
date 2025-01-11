@@ -1,4 +1,6 @@
-import { Request } from 'express'; // Import Request from Express
+// src/types/index.ts
+
+import { Request } from 'express';
 
 // Define possible roles with correct string values
 export type UserRole = 'user' | 'admin' | 'moderator'; // UserRole defines user roles
