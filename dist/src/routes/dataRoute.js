@@ -11,6 +11,7 @@ Object.defineProperty(exports, "default", {
 });
 const _express = /*#__PURE__*/ _interop_require_default(require("express"));
 const _axios = /*#__PURE__*/ _interop_require_default(require("axios"));
+const _authenticateToken = require("../middlewares/authenticateToken");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -18,7 +19,7 @@ function _interop_require_default(obj) {
 }
 const router = _express.default.Router();
 // Define a route to fetch data from an external API
-router.get('/fetch-data', async (req, res)=>{
+router.get('/fetch-data', _authenticateToken.authenticateToken, async (req, res)=>{
     try {
         const response = await _axios.default.get('http://example.com/api/data');
         res.json(response.data); // Send back the fetched data

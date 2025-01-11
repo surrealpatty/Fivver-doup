@@ -9,7 +9,7 @@ const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtok
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -52,7 +52,7 @@ beforeAll(async ()=>{
 describe('Authentication Tests', ()=>{
     it('should authenticate and return a valid JWT token', async ()=>{
         // First, create a test user (for registration)
-        const userResponse = await (0, _supertest.default)(_index.default).post('/register') // Make sure the registration route is correct
+        const userResponse = await (0, _supertest.default)(_index.app).post('/register') // Make sure the registration route is correct
         .send({
             email: 'test@example.com',
             password: 'password123',
@@ -61,7 +61,7 @@ describe('Authentication Tests', ()=>{
         // Ensure the user was created successfully
         expect(userResponse.status).toBe(201);
         // Now, attempt to log in and get a token
-        const loginResponse = await (0, _supertest.default)(_index.default).post('/login') // Adjust the login route based on your app's setup
+        const loginResponse = await (0, _supertest.default)(_index.app).post('/login') // Adjust the login route based on your app's setup
         .send({
             email: 'test@example.com',
             password: 'password123'
@@ -76,7 +76,7 @@ describe('Authentication Tests', ()=>{
     });
     it('should reject invalid credentials', async ()=>{
         // Attempt to login with incorrect credentials
-        const response = await (0, _supertest.default)(_index.default).post('/login') // Ensure this route matches your app's login endpoint
+        const response = await (0, _supertest.default)(_index.app).post('/login') // Ensure this route matches your app's login endpoint
         .send({
             email: 'invalid@example.com',
             password: 'wrongpassword'
@@ -87,29 +87,29 @@ describe('Authentication Tests', ()=>{
     });
     // Authentication Middleware Tests
     it('should return 401 when no token is provided', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/protected-route'); // Adjust this route if needed
+        const response = await (0, _supertest.default)(_index.app).get('/protected-route'); // Adjust this route if needed
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Authorization token is missing or invalid');
     });
     it('should return 403 when an invalid token is provided', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/protected-route') // Adjust this route if needed
+        const response = await (0, _supertest.default)(_index.app).get('/protected-route') // Adjust this route if needed
         .set('Authorization', 'Bearer invalidtoken');
         expect(response.status).toBe(403);
         expect(response.body.message).toBe('Invalid or expired token');
     });
     it('should pass authentication when a valid token is provided', async ()=>{
         // First, create a test user and log in to get a valid token
-        const userResponse = await (0, _supertest.default)(_index.default).post('/register').send({
+        const userResponse = await (0, _supertest.default)(_index.app).post('/register').send({
             email: 'testprotected@example.com',
             password: 'password123',
             username: 'protecteduser'
         });
-        const loginResponse = await (0, _supertest.default)(_index.default).post('/login').send({
+        const loginResponse = await (0, _supertest.default)(_index.app).post('/login').send({
             email: 'testprotected@example.com',
             password: 'password123'
         });
         const token = loginResponse.body.token;
-        const response = await (0, _supertest.default)(_index.default).get('/protected-route') // Adjust this route if needed
+        const response = await (0, _supertest.default)(_index.app).get('/protected-route') // Adjust this route if needed
         .set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200); // Assuming success here
     });

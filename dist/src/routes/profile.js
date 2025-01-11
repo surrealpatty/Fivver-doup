@@ -20,27 +20,25 @@ const router = _express.default.Router();
 router.get('/profile', _authenticateToken.authenticateToken, async (req, res, next)=>{
     try {
         const user = req.user;
+        // If user is not authenticated, respond with a 401 error
         if (!user) {
-            // Ensure we just send the response without returning it
             res.status(401).json({
                 message: 'User not authenticated'
             });
             return; // Return early to ensure no further code executes
         }
-        // Send response without returning anything
+        // Respond with profile details
         res.status(200).json({
             message: 'Profile fetched successfully',
             user: {
                 id: user.id,
                 email: user.email || 'No email provided',
                 username: user.username || 'Anonymous',
-                tier: user.tier || 'Free'
+                tier: user.tier
             }
         });
-    // No need to return anything from here, ensure code doesn't continue after sending response
     } catch (error) {
-        // Pass error to the global error handler
-        next(error);
+        next(error); // Pass error to the global error handler
     }
 });
 const _default = router;

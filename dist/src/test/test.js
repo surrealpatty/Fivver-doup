@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _services = require("../models/services");
 const _database = require("../config/database");
 function _interop_require_default(obj) {
@@ -44,7 +44,7 @@ describe('Service Tests', ()=>{
             createdAt: new Date(),
             updatedAt: new Date()
         });
-        const response = await (0, _supertest.default)(_index.default).post('/api/services/create').send({
+        const response = await (0, _supertest.default)(_index.app).post('/api/services/create').send({
             title: 'Test Service',
             description: 'This is a test service',
             price: 100

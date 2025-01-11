@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 require("reflect-metadata");
 const _sequelizetypescript = require("sequelize-typescript");
 const _database = require("../config/database");
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
@@ -52,7 +52,7 @@ beforeAll(async ()=>{
 describe('Authentication Tests', ()=>{
     it('should authenticate and return a valid JWT token', async ()=>{
         // First, create a test user (for the purpose of the test)
-        const userResponse = await (0, _supertest.default)(_index.default).post('/register') // Assuming you have a route for user registration
+        const userResponse = await (0, _supertest.default)(_index.app).post('/register') // Assuming you have a route for user registration
         .send({
             email: 'test@example.com',
             password: 'password123',
@@ -62,7 +62,7 @@ describe('Authentication Tests', ()=>{
         expect(userResponse.status).toBe(201);
         console.log('User registration response:', userResponse.body);
         // Example request to authenticate and get a token
-        const response = await (0, _supertest.default)(_index.default) // Use supertest to make a request to the app
+        const response = await (0, _supertest.default)(_index.app) // Use supertest to make a request to the app
         .post('/login') // Adjust the route based on your actual login route
         .send({
             email: 'test@example.com',
@@ -83,7 +83,7 @@ describe('Authentication Tests', ()=>{
         }
     });
     it('should reject invalid credentials', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).post('/login') // Replace with your actual login route
+        const response = await (0, _supertest.default)(_index.app).post('/login') // Replace with your actual login route
         .send({
             email: 'invalid@example.com',
             password: 'wrongpassword'

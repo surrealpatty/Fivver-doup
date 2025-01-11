@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -24,7 +24,7 @@ describe('Authentication Middleware Tests', ()=>{
         const validToken = _jsonwebtoken.default.sign({
             userId: 'some-user-id'
         }, secret); // Use the mocked sign function
-        const response = await (0, _supertest.default)(_index.default).get('/api/protected') // Replace with your actual protected route
+        const response = await (0, _supertest.default)(_index.app).get('/api/protected') // Replace with your actual protected route
         .set('Authorization', `Bearer ${validToken}`); // Add the mocked token in the Authorization header
         expect(response.status).toBe(200); // Expect 200 status for valid token
         expect(_jsonwebtoken.default.verify).toHaveBeenCalledTimes(1); // Ensure jwt.verify was called
@@ -35,7 +35,7 @@ describe('Authentication Middleware Tests', ()=>{
         _jsonwebtoken.default.verify.mockImplementationOnce(()=>{
             throw new Error('Invalid token');
         });
-        const response = await (0, _supertest.default)(_index.default).get('/api/protected') // Replace with your actual protected route
+        const response = await (0, _supertest.default)(_index.app).get('/api/protected') // Replace with your actual protected route
         .set('Authorization', 'Bearer invalid-token'); // Use an invalid token
         expect(response.status).toBe(401); // Expect 401 Unauthorized status
         expect(response.body.message).toBe('Invalid or expired token'); // Check for the correct error message

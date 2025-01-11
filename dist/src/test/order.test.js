@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _order = require("../models/order");
 const _database = require("../config/database");
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _services = require("../models/services");
@@ -81,7 +81,7 @@ describe("Order Controller Tests", ()=>{
             orderDetails: "Test order details",
             status: "Pending"
         });
-        const response = await (0, _supertest.default)(_index.default).post("/api/orders").send({
+        const response = await (0, _supertest.default)(_index.app).post("/api/orders").send({
             userId: mockUser.id,
             serviceId: mockService.id,
             orderDetails: "Test order details"
@@ -102,7 +102,7 @@ describe("Order Controller Tests", ()=>{
         };
         _user.default.findByPk.mockResolvedValueOnce(null); // Mock no user found
         _services.Service.findByPk.mockResolvedValueOnce(mockService);
-        const response = await (0, _supertest.default)(_index.default).post("/api/orders").send({
+        const response = await (0, _supertest.default)(_index.app).post("/api/orders").send({
             userId: 999,
             serviceId: mockService.id,
             orderDetails: "Test order details"
@@ -118,7 +118,7 @@ describe("Order Controller Tests", ()=>{
         };
         _user.default.findByPk.mockResolvedValueOnce(mockUser);
         _services.Service.findByPk.mockResolvedValueOnce(null); // Mock no service found
-        const response = await (0, _supertest.default)(_index.default).post("/api/orders").send({
+        const response = await (0, _supertest.default)(_index.app).post("/api/orders").send({
             userId: mockUser.id,
             serviceId: 999,
             orderDetails: "Test order details"
@@ -138,7 +138,7 @@ describe("Order Controller Tests", ()=>{
         };
         _user.default.findByPk.mockResolvedValueOnce(mockUser);
         _services.Service.findByPk.mockResolvedValueOnce(mockService);
-        const response = await (0, _supertest.default)(_index.default).post("/api/orders").send({
+        const response = await (0, _supertest.default)(_index.app).post("/api/orders").send({
             userId: mockUser.id,
             serviceId: mockService.id
         });

@@ -1,9 +1,10 @@
+// src/test/premiumService.test.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _database = require("../config/database");
 const _types = require("../types");
@@ -18,18 +19,20 @@ const generateToken = (user, secretKey)=>{
         expiresIn: '1h'
     });
 };
-// Mock user data
+// Mock user data with the added `role` property
 const mockPaidUser = {
     id: '1',
     email: 'paiduser@example.com',
     username: 'paiduser',
-    tier: _types.UserTier.Paid
+    tier: _types.UserTier.Paid,
+    role: _types.UserRole.User
 };
 const mockFreeUser = {
     id: '2',
     email: 'freeuser@example.com',
     username: 'freeuser',
-    tier: _types.UserTier.Free
+    tier: _types.UserTier.Free,
+    role: _types.UserRole.User
 };
 // Mock the `jsonwebtoken` module before any tests run
 jest.mock('jsonwebtoken', ()=>({
@@ -42,15 +45,17 @@ jest.mock('jsonwebtoken', ()=>({
                 return {
                     id: '1',
                     username: 'paiduser',
-                    tier: _types.UserTier.Paid
-                }; // Ensure tier is valid
+                    tier: _types.UserTier.Paid,
+                    role: _types.UserRole.User
+                }; // Ensure role and tier are valid
             }
             if (token === 'mocked-token-2') {
                 return {
                     id: '2',
                     username: 'freeuser',
-                    tier: _types.UserTier.Free
-                }; // Ensure tier is valid
+                    tier: _types.UserTier.Free,
+                    role: _types.UserRole.User
+                }; // Ensure role and tier are valid
             }
             throw new Error('Invalid token');
         })
@@ -86,18 +91,18 @@ afterAll(async ()=>{
 describe('GET /premium-service', ()=>{
     it('should allow access to paid users', async ()=>{
         const token = generateToken(mockPaidUser, 'your-secret-key');
-        const response = await (0, _supertest.default)(_index.default).get('/premium-service').set('Authorization', `Bearer ${token}`);
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service').set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Premium service access granted.');
     });
     it('should deny access to non-paid users', async ()=>{
         const token = generateToken(mockFreeUser, 'your-secret-key');
-        const response = await (0, _supertest.default)(_index.default).get('/premium-service').set('Authorization', `Bearer ${token}`);
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service').set('Authorization', `Bearer ${token}`);
         expect(response.status).toBe(403);
         expect(response.body.message).toBe('Access denied. Only paid users can access this service.');
     });
     it('should return 401 if no token is provided', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/premium-service');
+        const response = await (0, _supertest.default)(_index.app).get('/premium-service');
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Unauthorized. Please log in.');
     });

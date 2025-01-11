@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 require("reflect-metadata");
 const _authenticateToken = require("./authenticateToken");
+const _types = require("../types");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -28,9 +29,12 @@ describe('authenticateToken Middleware', ()=>{
     });
     it('should attach user to req.user if token is valid', ()=>{
         const mockToken = 'validToken';
+        // Add the missing role and tier properties
         const mockPayload = {
             id: '123',
-            email: 'user@example.com'
+            email: 'user@example.com',
+            role: _types.UserRole.User,
+            tier: _types.UserTier.Free // Add tier
         };
         // Mock jwt.verify to return the expected payload
         _jsonwebtoken.default.verify.mockReturnValue(mockPayload);

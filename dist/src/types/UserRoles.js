@@ -1,4 +1,4 @@
-// src/types/UserRoles.ts
+// Define UserRole enum to represent user roles like 'user', 'admin'
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -20,6 +20,7 @@ _export(exports, {
 var UserRole = /*#__PURE__*/ function(UserRole) {
     UserRole["User"] = "user";
     UserRole["Admin"] = "admin";
+    UserRole["Moderator"] = "moderator";
     return UserRole;
 }({});
 var UserTier = /*#__PURE__*/ function(UserTier) {

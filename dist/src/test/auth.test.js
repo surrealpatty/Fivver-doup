@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 require("reflect-metadata");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
-const _index = /*#__PURE__*/ _interop_require_default(require("../index"));
+const _index = require("../index");
 const _jsonwebtoken = /*#__PURE__*/ _interop_require_default(require("jsonwebtoken"));
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
 const _sequelize = require("sequelize");
@@ -42,7 +42,7 @@ beforeAll(async ()=>{
 });
 describe('Authentication Tests', ()=>{
     it('should register a user and return a valid JWT token', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).post('/users/register').send({
+        const response = await (0, _supertest.default)(_index.app).post('/users/register').send({
             email: 'authuser@example.com',
             password: 'securepassword',
             username: 'authuser'
@@ -53,7 +53,7 @@ describe('Authentication Tests', ()=>{
         expect(decoded).toHaveProperty('id'); // Verify token contains user ID
     });
     it('should login a user and return a valid JWT token', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).post('/users/login').send({
+        const response = await (0, _supertest.default)(_index.app).post('/users/login').send({
             email: 'authuser@example.com',
             password: 'securepassword'
         });
@@ -64,7 +64,7 @@ describe('Authentication Tests', ()=>{
         expect(decoded).toHaveProperty('email'); // Verify token contains email
     });
     it('should reject login with invalid credentials', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).post('/users/login').send({
+        const response = await (0, _supertest.default)(_index.app).post('/users/login').send({
             email: 'invaliduser@example.com',
             password: 'wrongpassword'
         });
@@ -79,13 +79,13 @@ describe('Authentication Tests', ()=>{
             expiresIn: '-1s'
         } // Token is already expired
         );
-        const response = await (0, _supertest.default)(_index.default).get('/protected-route') // Replace with your protected route
+        const response = await (0, _supertest.default)(_index.app).get('/protected-route') // Replace with your protected route
         .set('Authorization', `Bearer ${expiredToken}`);
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Unauthorized');
     });
     it('should reject a request with a malformed token', async ()=>{
-        const response = await (0, _supertest.default)(_index.default).get('/protected-route') // Replace with your protected route
+        const response = await (0, _supertest.default)(_index.app).get('/protected-route') // Replace with your protected route
         .set('Authorization', 'Bearer malformed.token.value');
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('Unauthorized');
