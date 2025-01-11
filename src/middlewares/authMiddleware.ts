@@ -1,41 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { UserPayload } from '../types'; // Corrected import path to the centralized source
+// src/middlewares/authMiddleware.ts
 
-// Middleware to authenticate the token
-export const authenticateToken = (
-  req: Request,
+import { Response, NextFunction } from 'express';
+import { CustomAuthRequest } from '../types'; // Import the correct type for CustomAuthRequest
+
+/**
+ * Middleware to ensure the user is authenticated.
+ * Checks if the user property exists on the request object, which is set by the authenticateToken middleware.
+ */
+export const authenticateUser = (
+  req: CustomAuthRequest,
   res: Response,
   next: NextFunction
-): Response<any, Record<string, any>> | void => {
-  try {
-    const authorizationHeader = req.headers['authorization'];
-
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Authorization token is missing or invalid' });
-    }
-
-    const token = authorizationHeader.split(' ')[1];
-
-    if (!token) {
-      return res.status(401).json({ message: 'Authorization token is missing' });
-    }
-
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      console.error('JWT_SECRET is not configured in the environment variables');
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    // Decode the JWT and cast it to the UserPayload type
-    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
-
-    // Attach the decoded user information to the request
-    (req as Request & { user: UserPayload }).user = decoded;
-
-    next();
-  } catch (error) {
-    console.error('Token authentication failed:', error);
-    return res.status(403).json({ message: 'Invalid or expired token' });
+): void => {
+  if (!req.user) {
+    // If the user is not authenticated, respond with a 401 status
+    res.status(401).json({ error: 'Unauthorized' });
+    return; // Ensure the function returns early
   }
+
+  // If the user is authenticated, proceed to the next middleware or route handler
+  next();
 };
