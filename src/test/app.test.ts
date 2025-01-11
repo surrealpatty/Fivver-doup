@@ -8,7 +8,7 @@ import  User  from '../models/user';  // Correct import for the User model
 import { Service } from '../models/services';  // Correct import for the Service model
 
 // Import the app as a named export
-import app from '../index';  // Default import
+import { app } from '../index';  // Default import
 
 dotenv.config();  // Load environment variables from .env file
 
