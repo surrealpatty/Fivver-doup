@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';  // Importing required types from express
 import jwt from 'jsonwebtoken';  // Importing jwt
 import { Request } from 'express';  // Importing Request type from express
-import { UserPayload, UserTier } from '../types'; // Ensure this matches the correct path
+import { UserPayload, UserTier } from '../types'; // Correctly import from index.ts
 
 // Secret key for JWT verification, should be in environment variables for security
 const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';

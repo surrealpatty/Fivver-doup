@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import  User  from '../models/user'; // Correct import for the User model
-import { UserPayload } from '../types'; // Ensure this matches the correct path
+import User from '../models/user';  // Correct import for the User model
+import { UserPayload } from '../types'; // Correct import from index.ts
 
 interface AuthRequest extends Request {
-  user: UserPayload | undefined;  // Type is incompatible
+  user?: UserPayload;  // Optional user field (UserPayload or undefined)
 }
 
 // GET /profile - Get user profile

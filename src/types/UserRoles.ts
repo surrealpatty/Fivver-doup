@@ -2,6 +2,7 @@
 export enum UserRole {
   User = 'user',
   Admin = 'admin',
+  Moderator = 'moderator',  // Add 'moderator' if needed
 }
 
 // Define UserTier enum to represent subscription tiers like 'free' and 'paid'
@@ -19,3 +20,6 @@ export interface UserPayload {
   tier: UserTier;           // Tier (free or paid) (required)
   isVerified?: boolean;     // Verification status (optional)
 }
+
+// Export the types for use in other files
+export { UserPayload, UserRole, UserTier };
