@@ -4,7 +4,7 @@ import { sequelize } from '../config/database';  // Correct import for sequelize
 import { app } from '../index';  // Correct import for the app
 import request from 'supertest';
 import jwt from 'jsonwebtoken';  // Import jsonwebtoken for JWT verification
-import  User  from '../models/user';  // Import User model to ensure it's added to Sequelize
+import User from '../models/user';  // Import User model to ensure it's added to Sequelize
 import { Service } from '../models/services'; // Correct named import
 import dotenv from 'dotenv';  // Import dotenv to load environment variables
 
@@ -13,25 +13,15 @@ dotenv.config();
 
 // Ensure the models are added and synced before running the tests
 beforeAll(async () => {
-  // Initialize Sequelize with models explicitly
-  const sequelizeInstance = new Sequelize({
-    dialect: 'mysql',
-    host: process.env.TEST_DB_HOST,  // Use environment variables for DB configuration
-    username: process.env.TEST_DB_USERNAME as string,
-    password: process.env.TEST_DB_PASSWORD as string,
-    database: process.env.TEST_DB_NAME as string,
-    models: [User, Service],  // Add models to Sequelize instance
-  });
+  // Add models to Sequelize instance if not already added
+  await sequelize.addModels([User, Service]);
 
-  // Add models to Sequelize instance and define associations
-  sequelizeInstance.addModels([User, Service]);
-
-  // Define the associations after models are loaded
+  // Define associations after models are loaded
   Service.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Service, { foreignKey: 'userId' });  // Define the reverse association (optional)
 
-  // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-  await sequelizeInstance.sync({ force: true });  // Reset DB to ensure a clean state
+  // Sync the database (use force: true only if you want to reset the DB)
+  await sequelize.sync({ force: true });  // Reset DB to ensure a clean state
 });
 
 describe('Authentication Tests', () => {

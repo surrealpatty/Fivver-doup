@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';  // Use 'sequelize-typescript' for model loading
 import dotenv from 'dotenv';
 import path from 'path';
 

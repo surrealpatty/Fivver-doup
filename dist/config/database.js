@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
-const sequelize_typescript_1 = require("sequelize-typescript");
+const sequelize_typescript_1 = require("sequelize-typescript"); // Use 'sequelize-typescript' for model loading
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 // Load environment variables from the .env file
