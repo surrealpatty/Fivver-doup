@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript"); // Use 'sequelize-typescript' for model loading
 const dotenv_1 = __importDefault(require("dotenv"));
-const path_1 = __importDefault(require("path"));
+const user_1 = __importDefault(require("../models/user")); // Import your models
+const services_1 = __importDefault(require("../models/services")); // Import other models as needed
 // Load environment variables from the .env file
 dotenv_1.default.config();
 // Extract the current environment and set defaults
@@ -26,7 +27,7 @@ const sequelize = new sequelize_typescript_1.Sequelize({
     password: DB_PASSWORD, // Database password
     database: DB_NAME, // Database name
     port: DB_PORT, // Database port
-    models: [path_1.default.resolve(__dirname, '../models')], // Adjust path to include all models
+    models: [user_1.default, services_1.default], // Include your models here
     logging: environment === 'development' ? console.log : false, // Enable logging only in development
     define: {
         freezeTableName: true, // Prevent table name pluralization

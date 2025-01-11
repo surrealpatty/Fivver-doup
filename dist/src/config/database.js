@@ -10,7 +10,8 @@ Object.defineProperty(exports, "sequelize", {
 });
 const _sequelizetypescript = require("sequelize-typescript");
 const _dotenv = /*#__PURE__*/ _interop_require_default(require("dotenv"));
-const _path = /*#__PURE__*/ _interop_require_default(require("path"));
+const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
+const _services = /*#__PURE__*/ _interop_require_default(require("../models/services"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -36,7 +37,8 @@ const sequelize = new _sequelizetypescript.Sequelize({
     database: DB_NAME,
     port: DB_PORT,
     models: [
-        _path.default.resolve(__dirname, '../models')
+        _user.default,
+        _services.default
     ],
     logging: environment === 'development' ? console.log : false,
     define: {

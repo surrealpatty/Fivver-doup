@@ -5,16 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const index_1 = require("../index"); // Import your Express app
-const user_1 = __importDefault(require("../models/user")); // Assuming User is the Sequelize model
+const database_1 = require("../config/database"); // Import the Sequelize instance for syncing
+const user_1 = __importDefault(require("../models/user")); // Import the User model
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const UserRoles_1 = require("../types/UserRoles"); // Import the enums
 describe('User Controller', () => {
     beforeAll(async () => {
-        // Optional: Set up any needed preconditions before tests run
+        // Sync the Sequelize models with the database before tests run
+        await database_1.sequelize.sync({ force: true }); // force: true will drop tables and recreate them
     });
     afterAll(async () => {
-        // Optional: Clean up database after tests run
-        await user_1.default.destroy({ where: {} }); // Example cleanup of users table
+        // Close the Sequelize connection after tests are done
+        await database_1.sequelize.close();
     });
     it('should create a new user', async () => {
         const userPayload = {

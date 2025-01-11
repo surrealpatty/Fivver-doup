@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
 const _index = require("../index");
+const _database = require("../config/database");
 const _user = /*#__PURE__*/ _interop_require_default(require("../models/user"));
 const _bcryptjs = /*#__PURE__*/ _interop_require_default(require("bcryptjs"));
 const _UserRoles = require("../types/UserRoles");
@@ -14,13 +15,14 @@ function _interop_require_default(obj) {
 }
 describe('User Controller', ()=>{
     beforeAll(async ()=>{
-    // Optional: Set up any needed preconditions before tests run
+        // Sync the Sequelize models with the database before tests run
+        await _database.sequelize.sync({
+            force: true
+        }); // force: true will drop tables and recreate them
     });
     afterAll(async ()=>{
-        // Optional: Clean up database after tests run
-        await _user.default.destroy({
-            where: {}
-        }); // Example cleanup of users table
+        // Close the Sequelize connection after tests are done
+        await _database.sequelize.close();
     });
     it('should create a new user', async ()=>{
         const userPayload = {

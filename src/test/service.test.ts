@@ -1,7 +1,7 @@
 // src/test/service.test.ts
 
 import { Service } from '../models/services'; // Ensure Service model is imported
-import  User  from '../models/user'; // Correct import for User model
+import User from '../models/user'; // Correct import for User model
 import { sequelize } from '../config/database'; // Correct import for sequelize
 import { UserRole, UserTier } from '../types/UserRoles'; // Import enums for roles and tiers
 

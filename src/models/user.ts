@@ -1,11 +1,6 @@
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  HasMany,
-  Default,
-} from 'sequelize-typescript';
+// src/models/user.ts
+
+import { Table, Model, Column, DataType, HasMany, Default } from 'sequelize-typescript'; 
 import { UserRole, UserTier } from '../types'; // Import enums
 import { Service } from './services'; // Import Service model
 
@@ -21,9 +16,6 @@ export interface UserCreationAttributes {
 
 @Table({ tableName: 'users', timestamps: true })
 export default class User extends Model<User, UserCreationAttributes> {
-  // Remove the explicit `id` declaration to let Sequelize handle it
-  // Sequelize will automatically generate and manage the `id` property as UUID
-
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email!: string;
 
