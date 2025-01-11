@@ -1,4 +1,5 @@
 "use strict";
+// src/models/user.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13,8 +14,6 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const types_1 = require("../types"); // Import enums
 const services_1 = require("./services"); // Import Service model
 let User = class User extends sequelize_typescript_1.Model {
-    // Remove the explicit `id` declaration to let Sequelize handle it
-    // Sequelize will automatically generate and manage the `id` property as UUID
     email;
     password;
     username;
