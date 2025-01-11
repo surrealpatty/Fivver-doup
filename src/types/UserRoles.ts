@@ -20,6 +20,3 @@ export interface UserPayload {
   tier: UserTier;           // Tier (free or paid) (required)
   isVerified?: boolean;     // Verification status (optional)
 }
-
-// Export the types for use in other files
-export { UserPayload, UserRole, UserTier };
