@@ -1,6 +1,6 @@
 import express, { Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
+import { CustomAuthRequest } from '../types'; // Import the correct CustomAuthRequest
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.get(
   authenticateToken, // Middleware to authenticate user
   async (req: CustomAuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const user = req.user;
+      const user = req.user; // Get the user from the request
 
       // If user is not authenticated, respond with a 401 error
       if (!user) {
