@@ -1,3 +1,4 @@
+// src/models/user.ts
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -21,8 +22,6 @@ function _ts_metadata(k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 }
 class User extends _sequelizetypescript.Model {
-    // Remove the explicit `id` declaration to let Sequelize handle it
-    // Sequelize will automatically generate and manage the `id` property as UUID
     email;
     password;
     username;
