@@ -2,7 +2,7 @@ import { Order } from '../models/order';  // Correct path for the Order model
 import { Request, Response } from 'express';
 import { sequelize } from '../config/database';  // Correct import
 
-import authenticateToken from '../middlewares/authMiddleware';  // Fixed default import
+import { authenticateToken } from '../middlewares/authenticateToken';
 
 // Interface to type the structure of the request body
 interface CreateOrderRequest {
