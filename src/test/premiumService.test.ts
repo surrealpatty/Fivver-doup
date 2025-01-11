@@ -1,7 +1,7 @@
 // src/test/premiumService.test.ts
 
 import request from 'supertest';
-import app from '../index'; // Ensure this is the correct import path to your app
+import { app } from '../index'; // Ensure this is the correct import path to your app
 import jwt from 'jsonwebtoken';
 import { sequelize } from '../config/database'; // Correct path to your sequelize instance
 import { UserPayload } from '../types'; // Correct import path for UserPayload
