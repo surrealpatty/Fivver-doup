@@ -2,7 +2,7 @@ import { Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt, Forei
 import { Optional } from 'sequelize';  // Import Optional for defining creation attributes
 import { v4 as uuidv4 } from 'uuid';  // Import uuid to generate UUIDs
 import { sequelize } from '../config/database';  // Correctly import sequelize instance
-import User from './user';  // Correctly import User model (ensure path is correct)
+import User from '../models/user';
 
 // Define Service attributes interface
 export interface ServiceAttributes {
