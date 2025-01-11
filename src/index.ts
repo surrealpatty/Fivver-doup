@@ -1,18 +1,12 @@
-// src/types/index.ts
+import express from 'express';
+import { sequelize } from './config/database'; // Example of your Sequelize import
 
-// Define possible roles with correct string values
-export type UserRole = 'user' | 'admin'; // UserRole defines user roles
+const app = express();
 
-// Ensure UserPayload contains the proper structure and role type
-export interface UserPayload {
-    id: string;              // User ID (required)
-    email?: string;          // Email is optional
-    username?: string;       // Username is optional
-    tier?: string;           // Tier is optional, can be used for distinguishing between free/paid users
-    role?: UserRole;         // Role is optional and matches UserRole
-}
+// Create the server after app initialization
+const server = app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
 
-// Extend the Express Request type to include the user object (CustomAuthRequest)
-export interface CustomAuthRequest extends Request {
-    user?: UserPayload;      // `user` is optional and matches the UserPayload interface
-}
+// Export app and server as named exports
+export { app, server }; // Corrected order of exports

@@ -1,8 +1,6 @@
-// src/routes/profile.ts
-
 import express, { Response, NextFunction } from 'express';
 import { authenticateToken } from '../middlewares/authenticateToken';
-import { CustomAuthRequest } from '../types'; // Ensure this import path matches exactly with where CustomAuthRequest is defined
+import { CustomAuthRequest } from '../types'; // Correct import for CustomAuthRequest
 
 const router = express.Router();
 
