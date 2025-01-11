@@ -1,6 +1,8 @@
-import { Sequelize } from 'sequelize-typescript';  // Use 'sequelize-typescript' for model loading
+import { Sequelize } from 'sequelize-typescript'; // Use 'sequelize-typescript' for model loading
 import dotenv from 'dotenv';
 import path from 'path';
+import User from '../models/user'; // Import your models
+import Service from '../models/services'; // Import other models as needed
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -27,7 +29,7 @@ const sequelize = new Sequelize({
   password: DB_PASSWORD, // Database password
   database: DB_NAME, // Database name
   port: DB_PORT, // Database port
-  models: [path.resolve(__dirname, '../models')], // Adjust path to include all models
+  models: [User, Service], // Include your models here
   logging: environment === 'development' ? console.log : false, // Enable logging only in development
   define: {
     freezeTableName: true, // Prevent table name pluralization

@@ -1,17 +1,19 @@
 import request from 'supertest';
 import { app } from '../index';  // Import your Express app
-import  User  from '../models/user';  // Assuming User is the Sequelize model
+import { sequelize } from '../config/database';  // Import the Sequelize instance for syncing
+import User from '../models/user';  // Import the User model
 import bcrypt from 'bcryptjs';
 import { UserRole, UserTier } from '../types/UserRoles'; // Import the enums
 
 describe('User Controller', () => {
   beforeAll(async () => {
-    // Optional: Set up any needed preconditions before tests run
+    // Sync the Sequelize models with the database before tests run
+    await sequelize.sync({ force: true });  // force: true will drop tables and recreate them
   });
 
   afterAll(async () => {
-    // Optional: Clean up database after tests run
-    await User.destroy({ where: {} });  // Example cleanup of users table
+    // Close the Sequelize connection after tests are done
+    await sequelize.close();
   });
 
   it('should create a new user', async () => {
