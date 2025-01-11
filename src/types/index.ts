@@ -1,24 +1,25 @@
 // src/types/index.ts
 
-import { Request } from 'express';
+// Define UserRole to represent user roles like 'user', 'admin', and 'moderator'
+export type UserRole = 'user' | 'admin' | 'moderator';
 
-// Define possible roles with correct string values
-export type UserRole = 'user' | 'admin' | 'moderator'; // UserRole defines user roles
+// Define UserTier to represent subscription tiers like 'free' or 'paid'
+export type UserTier = 'free' | 'paid';
 
-// Define UserTier type for user's subscription tier (free or paid)
-export type UserTier = 'free' | 'paid';  // Defining the user tier
-
-// Define the UserPayload interface for user-related data
+// Define UserPayload interface for user-related data
 export interface UserPayload {
   id: string;               // User ID (required)
   email?: string;           // User email (optional)
   username?: string;        // Username (optional)
   role: UserRole;           // User role (required)
-  tier: UserTier;           // Tier is required
-  isVerified?: boolean;     // Whether the user is verified (optional)
+  tier: UserTier;           // Tier (free or paid) (required)
+  isVerified?: boolean;     // Verification status (optional)
 }
 
-// Define CustomAuthRequest by extending the Request object from express
+// Import the base `Request` type from Express
+import { Request } from 'express';
+
+// Define CustomAuthRequest to extend the Request object and include the user field
 export interface CustomAuthRequest extends Request {
-  user?: UserPayload;       // Attach UserPayload to the request, optional
+  user?: UserPayload;       // user field to hold the `UserPayload` (optional)
 }

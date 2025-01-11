@@ -12,11 +12,13 @@ router.get(
     try {
       const user = req.user;
 
+      // If user is not authenticated, respond with a 401 error
       if (!user) {
         res.status(401).json({ message: 'User not authenticated' });
         return; // Return early to ensure no further code executes
       }
 
+      // Respond with profile details
       res.status(200).json({
         message: 'Profile fetched successfully',
         user: {
