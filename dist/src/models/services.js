@@ -18,8 +18,8 @@ _export(exports, {
     }
 });
 const _sequelizetypescript = require("sequelize-typescript");
-const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 const _uuid = require("uuid");
+const _user = /*#__PURE__*/ _interop_require_default(require("./user"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj

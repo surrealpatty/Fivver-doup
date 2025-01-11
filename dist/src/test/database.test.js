@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 require("reflect-metadata");
-const _sequelizetypescript = require("sequelize-typescript");
 const _database = require("../config/database");
 const _index = require("../index");
 const _supertest = /*#__PURE__*/ _interop_require_default(require("supertest"));
@@ -20,32 +19,20 @@ function _interop_require_default(obj) {
 _dotenv.default.config();
 // Ensure the models are added and synced before running the tests
 beforeAll(async ()=>{
-    // Initialize Sequelize with models explicitly
-    const sequelizeInstance = new _sequelizetypescript.Sequelize({
-        dialect: 'mysql',
-        host: process.env.TEST_DB_HOST,
-        username: process.env.TEST_DB_USERNAME,
-        password: process.env.TEST_DB_PASSWORD,
-        database: process.env.TEST_DB_NAME,
-        models: [
-            _user.default,
-            _services.Service
-        ]
-    });
-    // Add models to Sequelize instance and define associations
-    sequelizeInstance.addModels([
+    // Add models to Sequelize instance if not already added
+    await _database.sequelize.addModels([
         _user.default,
         _services.Service
     ]);
-    // Define the associations after models are loaded
+    // Define associations after models are loaded
     _services.Service.belongsTo(_user.default, {
         foreignKey: 'userId'
     });
     _user.default.hasMany(_services.Service, {
         foreignKey: 'userId'
     }); // Define the reverse association (optional)
-    // Sync the database (use force: true only if you want to reset the DB, set force: false to preserve data)
-    await sequelizeInstance.sync({
+    // Sync the database (use force: true only if you want to reset the DB)
+    await _database.sequelize.sync({
         force: true
     }); // Reset DB to ensure a clean state
 });

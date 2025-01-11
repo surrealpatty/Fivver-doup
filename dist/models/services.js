@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript"); // Import necessary decorators
-const user_1 = __importDefault(require("./user")); // Correctly import User model (ensure path is correct)
 const uuid_1 = require("uuid"); // Import uuid to generate UUIDs
+const user_1 = __importDefault(require("./user")); // Correctly import User model (ensure path is correct)
 let Service = class Service extends sequelize_typescript_1.Model {
     title; // Define title as a string
     description; // Define description as text
